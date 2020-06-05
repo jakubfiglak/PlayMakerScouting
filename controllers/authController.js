@@ -8,7 +8,7 @@ const sendEmail = require('../utils/sendEmail');
 // @route POST /api/v1/auth/register
 // @access Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, passwordConfirm } = req.body;
+  const { email, password, passwordConfirm } = req.body;
 
   let user = await User.findOne({ email });
 
@@ -20,7 +20,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Passwords do not match', 400));
   }
 
-  user = await User.create({ name, email, password });
+  user = await User.create(req.body);
 
   const token = user.getJwt();
 

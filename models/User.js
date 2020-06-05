@@ -1,14 +1,20 @@
 const mongoose = require('mongoose');
-const isEmail = require('validator/lib/isEmail');
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const geocoder = require('../utils/geocoder');
 
 const { Schema, model } = mongoose;
 
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: 'Please supply a name',
+    required: 'Proszę podać imię',
+    trim: true,
+  },
+  surname: {
+    type: String,
+    required: 'Proszę podać nazwisko',
     trim: true,
   },
   email: {
@@ -16,22 +22,50 @@ const UserSchema = new Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    validate: [isEmail, 'Invalid email address'],
-    required: 'Please supply email address',
+    validate: [validator.isEmail, 'Adres email jest niepoprawny'],
+    required: 'Proszę podać adres email',
+  },
+  phone: {
+    type: String,
+    trim: true,
+    validate: [validator.isMobilePhone, 'Numer telefonu jest niepoprawny'],
+  },
+  address: {
+    type: String,
+    required: 'Proszę podać adres',
+  },
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+    },
+    coordinates: {
+      type: [Number],
+      index: '2dsphere',
+    },
+    formattedAddress: String,
+    street: String,
+    city: String,
+    voivodeship: String,
+    zipcode: String,
+  },
+  activeRadius: {
+    type: Number,
+    required: 'Proszę podać maksymalny zasięg działania w km',
   },
   password: {
     type: String,
-    required: 'Please supply a password',
-    minlength: [6, 'Password has to be min 6 chars long'],
+    required: 'Proszę podać hasło',
+    minlength: [6, 'Hasło musi zawierać co najmniej 6 znaków'],
     match: [
       /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
-      'Password has to contain at least 1 lowercase letter, at least 1 uppercase letter and at least 1 numeric character',
+      'Hasło musi zawierać co najmniej jedną małą literę, jedną wielką literę oraz jedna cyfrę',
     ],
     select: false,
   },
   role: {
     type: String,
-    default: 'user',
+    default: 'scout',
   },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
@@ -48,6 +82,25 @@ UserSchema.pre('save', async function (next) {
   }
 
   this.password = await bcrypt.hash(this.password, 10);
+});
+
+// Geocode & create location field
+UserSchema.pre('save', async function (next) {
+  const loc = await geocoder.geocode(this.address);
+  console.log(loc);
+  this.location = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    street: loc[0].streetName,
+    city: loc[0].city,
+    voivodeship: loc[0].stateCode,
+    zipcode: loc[0].zipcode,
+  };
+
+  this.address = undefined;
+
+  next();
 });
 
 // Get JWT token
