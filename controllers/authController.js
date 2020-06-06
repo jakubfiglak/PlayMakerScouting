@@ -80,19 +80,15 @@ exports.account = asyncHandler(async (req, res) => {
 // @route PUT /api/v1/auth/updatedetails
 // @access Private
 exports.updateDetails = asyncHandler(async (req, res) => {
-  const updates = {
-    name: req.body.name,
-    email: req.body.email,
-  };
+  const user = await User.findById(req.user._id);
 
-  const user = await User.findByIdAndUpdate(req.user.id, updates, {
-    new: true,
-    runValidators: true,
-  });
+  Object.keys(req.body).forEach((key) => (user[key] = req.body[key]));
+
+  await user.save();
 
   res.status(200).json({
     success: true,
-    message: `${req.user.name}'s account details successfully updated!`,
+    message: 'Account details successfully updated!',
     data: user,
   });
 });

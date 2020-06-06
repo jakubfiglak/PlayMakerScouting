@@ -9,12 +9,12 @@ const { Schema, model } = mongoose;
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: 'Proszę podać imię',
+    required: 'please add a name',
     trim: true,
   },
   surname: {
     type: String,
-    required: 'Proszę podać nazwisko',
+    required: 'please add a surname',
     trim: true,
   },
   email: {
@@ -22,17 +22,17 @@ const UserSchema = new Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    validate: [validator.isEmail, 'Adres email jest niepoprawny'],
-    required: 'Proszę podać adres email',
+    validate: [validator.isEmail, 'email address is not valid'],
+    required: 'please add an email address',
   },
   phone: {
     type: String,
     trim: true,
-    validate: [validator.isMobilePhone, 'Numer telefonu jest niepoprawny'],
+    validate: [validator.isMobilePhone, 'phone number is not valid'],
   },
   address: {
     type: String,
-    required: 'Proszę podać adres',
+    required: 'please add an address',
   },
   location: {
     type: {
@@ -51,15 +51,15 @@ const UserSchema = new Schema({
   },
   activeRadius: {
     type: Number,
-    required: 'Proszę podać maksymalny zasięg działania w km',
+    required: 'please add max operating distance [km]',
   },
   password: {
     type: String,
-    required: 'Proszę podać hasło',
-    minlength: [6, 'Hasło musi zawierać co najmniej 6 znaków'],
+    required: 'please add a password',
+    minlength: [6, 'password must be at least 6 characters long'],
     match: [
       /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
-      'Hasło musi zawierać co najmniej jedną małą literę, jedną wielką literę oraz jedna cyfrę',
+      'password must contain at least 1 lowercase letter, 1 uppercase letter and 1 digit',
     ],
     select: false,
   },
@@ -87,7 +87,6 @@ UserSchema.pre('save', async function (next) {
 // Geocode & create location field
 UserSchema.pre('save', async function (next) {
   const loc = await geocoder.geocode(this.address);
-  console.log(loc);
   this.location = {
     type: 'Point',
     coordinates: [loc[0].longitude, loc[0].latitude],

@@ -27,8 +27,13 @@ describe(path, () => {
     beforeEach(() => {
       payload = {
         name: 'John',
+        surname: 'Doe',
         email: 'john@gmail.com',
+        phone: '123456789',
+        address: 'ul. Cicha 132/16 62-200 Gniezno',
+        activeRadius: 100,
         password: 'Abc123',
+        passwordConfirm: 'Abc123',
       };
     });
 

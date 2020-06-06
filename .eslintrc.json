@@ -42,6 +42,7 @@
         "ImportDeclaration": "never",
         "ExportDeclaration": { "multiline": true, "minProperties": 3 }
       }
-    ]
+    ],
+    "no-return-assign": "off"
   }
 }
