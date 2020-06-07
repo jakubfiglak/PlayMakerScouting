@@ -15,8 +15,8 @@ const router = express.Router();
 router.post('/', [protect, authorize('admin')], createClub);
 router.get('/', protect, getClubs);
 router.get('/:id', protect, getClub);
-router.put('/:id', protect, updateClub);
-router.delete('/:id', protect, deleteClub);
+router.put('/:id', [protect, authorize('admin')], updateClub);
+router.delete('/:id', [protect, authorize('admin')], deleteClub);
 router.get('/voivodeship/:voivodeship', protect, getClubsInVoivodeship);
 router.get('/radius/activeradius', protect, getClubsInRadius);
 
