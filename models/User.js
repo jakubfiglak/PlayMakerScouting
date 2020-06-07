@@ -89,9 +89,18 @@ UserSchema.pre('save', geocode);
 
 // Get JWT token
 UserSchema.methods.getJwt = function () {
-  return jwt.sign({ _id: this._id, role: this.role }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
+  return jwt.sign(
+    {
+      _id: this._id,
+      role: this.role,
+      activeRadius: this.activeRadius,
+      coords: this.location.coordinates,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRE,
+    }
+  );
 };
 
 // Password comparison

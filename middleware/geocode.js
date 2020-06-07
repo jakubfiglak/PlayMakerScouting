@@ -1,3 +1,4 @@
+const slugify = require('slugify');
 const geocoder = require('../utils/geocoder');
 
 async function geocode(next) {
@@ -10,6 +11,7 @@ async function geocode(next) {
     city: loc[0].city,
     voivodeship: loc[0].stateCode,
     zipcode: loc[0].zipcode,
+    voivodeshipSlug: slugify(loc[0].stateCode, { lower: true }),
   };
 
   this.address = undefined;

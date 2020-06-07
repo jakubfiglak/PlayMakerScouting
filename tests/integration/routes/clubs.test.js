@@ -8,6 +8,8 @@ let server;
 const path = '/api/v1/clubs';
 
 describe(path, () => {
+  let token;
+
   beforeEach(async () => {
     // eslint-disable-next-line global-require
     server = require('../../../server');
@@ -21,7 +23,6 @@ describe(path, () => {
   describe('POST /', () => {
     let clubId;
     let newClub;
-    let token;
 
     const exec = () => {
       const res = request(server)
@@ -33,7 +34,11 @@ describe(path, () => {
 
     beforeEach(async () => {
       clubId = mongoose.Types.ObjectId().toHexString();
-      token = new User().getJwt();
+      token = new User({
+        role: 'admin',
+        location: { coordinates: [16.888641, 52.372821] },
+        activeRadius: 100,
+      }).getJwt();
 
       newClub = new Club({
         _id: clubId,
@@ -41,12 +46,6 @@ describe(path, () => {
         address: 'Opalińskich 54, 64-100 Leszno',
         division: 'IV liga',
       });
-    });
-
-    it('should return 401 if the user is not logged in', async () => {
-      token = '';
-      const res = await exec();
-      expect(res.status).toBe(401);
     });
 
     it('should return 400 if the club already exists', async () => {
@@ -100,6 +99,148 @@ describe(path, () => {
       expect(res.body.data.location).toHaveProperty('city');
       expect(res.body.data.location).toHaveProperty('voivodeship');
       expect(res.body.data.location).toHaveProperty('zipcode');
+    });
+  });
+
+  describe('GET /', () => {
+    const exec = () => {
+      const res = request(server)
+        .get(path)
+        .set('authorization', `Bearer ${token}`);
+      return res;
+    };
+
+    it('should return all clubs', async () => {
+      const clubs = [{ name: 'club1' }, { name: 'club2' }];
+
+      await Club.collection.insertMany(clubs);
+
+      const res = await exec();
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.length).toBe(2);
+      expect(res.body.data.some((club) => club.name === 'club1')).toBeTruthy();
+      expect(res.body.data.some((club) => club.name === 'club2')).toBeTruthy();
+    });
+  });
+
+  describe('GET /:id', () => {
+    let id;
+
+    const exec = () => {
+      const res = request(server)
+        .get(`${path}/${id}`)
+        .set('authorization', `Bearer ${token}`);
+      return res;
+    };
+
+    it('should return 404 if invalid id is passed', async () => {
+      id = 1;
+
+      const res = await exec();
+      expect(res.status).toBe(404);
+    });
+
+    it('should return 404 if no club with the given id exists', async () => {
+      id = mongoose.Types.ObjectId();
+
+      const res = await exec();
+      expect(res.status).toBe(404);
+    });
+
+    it('should return a club if valid id is passed', async () => {
+      const club = new Club({
+        name: 'Klub Sportowy Polonia 1912 Leszno',
+        address: 'Opalińskich 54, 64-100 Leszno',
+        division: 'IV liga',
+      });
+      await club.save();
+
+      id = club._id;
+
+      const res = await exec();
+
+      expect(res.status).toBe(200);
+    });
+  });
+
+  describe('GET /voivodeship/:voivodeship', () => {
+    let voivodeship;
+
+    const exec = () => {
+      const res = request(server)
+        .get(`${path}/voivodeship/${voivodeship}`)
+        .set('authorization', `Bearer ${token}`);
+      return res;
+    };
+
+    it('should return all clubs in the given voivodeship if request is valid', async () => {
+      const firstClub = new Club({
+        name: 'club1',
+        address: 'Opalińskich 54, 64-100 Leszno',
+        division: 'IV liga',
+      });
+      const secondClub = new Club({
+        name: 'club2',
+        address: 'Kościuszki 26, 99-300 Kutno',
+        division: 'IV liga',
+      });
+      const thirdClub = new Club({
+        name: 'club3',
+        address: 'Maya 26, 64-000 Kościan',
+        division: 'IV liga',
+      });
+
+      await firstClub.save();
+      await secondClub.save();
+      await thirdClub.save();
+
+      voivodeship = 'greater-poland-voivodeship';
+
+      const res = await exec();
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.length).toBe(2);
+      expect(res.body.data.some((club) => club.name === 'club1')).toBeTruthy();
+      expect(res.body.data.some((club) => club.name === 'club3')).toBeTruthy();
+    });
+  });
+
+  describe('GET /radius/activeradius', () => {
+    const exec = () => {
+      const res = request(server)
+        .get(`${path}/radius/activeradius`)
+        .set('authorization', `Bearer ${token}`);
+      return res;
+    };
+
+    it('should return all clubs within active radius', async () => {
+      const firstClub = new Club({
+        name: 'club1',
+        address: 'Opalińskich 54, 64-100 Leszno',
+        division: 'IV liga',
+      });
+      const secondClub = new Club({
+        name: 'club2',
+        address: 'Kościuszki 26, 99-300 Kutno',
+        division: 'IV liga',
+      });
+      const thirdClub = new Club({
+        name: 'club3',
+        address: 'Maya 26, 64-000 Kościan',
+        division: 'IV liga',
+      });
+
+      await firstClub.save();
+      await secondClub.save();
+      await thirdClub.save();
+
+      const res = await exec();
+
+      expect(res.status).toBe(200);
+      expect(res.body.count).toBe(2);
+      expect(res.body.data.some((club) => club.name === 'club1')).toBeTruthy();
+      expect(res.body.data.some((club) => club.name === 'club3')).toBeTruthy();
     });
   });
 });

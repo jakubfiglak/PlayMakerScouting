@@ -28,6 +28,7 @@ const ClubSchema = new Schema({
     city: String,
     voivodeship: String,
     zipcode: String,
+    voivodeshipSlug: String,
   },
   division: {
     type: String,
