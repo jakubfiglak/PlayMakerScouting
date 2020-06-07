@@ -132,6 +132,25 @@ describe(path, () => {
       expect(res.status).toBe(201);
     });
 
+    it('should not save address provided by user to the database', async () => {
+      const res = await exec();
+
+      expect(res.body.data.address).toBeUndefined();
+    });
+
+    it('should populate user object with properly formatted location field', async () => {
+      const res = await exec();
+
+      expect(res.body.data.location).toBeDefined();
+      expect(res.body.data.location).toHaveProperty('type');
+      expect(res.body.data.location).toHaveProperty('coordinates');
+      expect(res.body.data.location).toHaveProperty('formattedAddress');
+      expect(res.body.data.location).toHaveProperty('street');
+      expect(res.body.data.location).toHaveProperty('city');
+      expect(res.body.data.location).toHaveProperty('voivodeship');
+      expect(res.body.data.location).toHaveProperty('zipcode');
+    });
+
     it('should return a token if the request is valid', async () => {
       const res = await exec();
       expect(res.body).toHaveProperty('token');
