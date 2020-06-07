@@ -12,15 +12,15 @@ describe(path, () => {
   });
 
   afterEach(async () => {
-    server.close();
+    await server.close();
     await User.deleteMany({});
   });
 
   describe('POST /', () => {
     let payload;
 
-    const exec = async () => {
-      const res = await request(server).post(path).send(payload);
+    const exec = () => {
+      const res = request(server).post(path).send(payload);
       return res;
     };
 

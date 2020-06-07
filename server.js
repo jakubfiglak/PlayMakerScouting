@@ -18,6 +18,7 @@ connectDB();
 // Route files
 const auth = require('./routes/auth');
 const users = require('./routes/users');
+const clubs = require('./routes/clubs');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(xss());
 // Mount routers
 app.use(`${process.env.BASE_URL}/auth`, auth);
 app.use(`${process.env.BASE_URL}/users`, users);
+app.use(`${process.env.BASE_URL}/clubs`, clubs);
 
 app.use(errorHandler);
 

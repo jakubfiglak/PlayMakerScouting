@@ -13,7 +13,7 @@ describe(path, () => {
   });
 
   afterEach(async () => {
-    server.close();
+    await server.close();
     await User.deleteMany({});
   });
 

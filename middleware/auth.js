@@ -29,7 +29,7 @@ exports.protect = (req, res, next) => {
     return next(
       new ErrorResponse(
         'User not authorized to access this route. Invalid token.',
-        400
+        401
       )
     );
   }
