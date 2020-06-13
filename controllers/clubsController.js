@@ -93,7 +93,6 @@ exports.getClubsInRadius = asyncHandler(async (req, res) => {
   });
 });
 
-// TODO:
 // @desc Update club details
 // @route PUT /api/v1/clubs/:id
 // @access Private (admin only)
