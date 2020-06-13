@@ -19,6 +19,7 @@ connectDB();
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const clubs = require('./routes/clubs');
+const players = require('./routes/players');
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use(xss());
 app.use(`${process.env.BASE_URL}/auth`, auth);
 app.use(`${process.env.BASE_URL}/users`, users);
 app.use(`${process.env.BASE_URL}/clubs`, clubs);
+app.use(`${process.env.BASE_URL}/players`, players);
 
 app.use(errorHandler);
 

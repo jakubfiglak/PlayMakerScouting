@@ -5,37 +5,38 @@ const { Schema, model } = mongoose;
 const PlayerSchema = new Schema({
   firstName: {
     type: String,
-    required: 'Please supply a First Name',
+    required: 'Please add a first Name',
     trim: true,
   },
   lastName: {
     type: String,
-    required: 'Please supply a Last Name',
+    required: 'Please add a last Name',
     trim: true,
   },
   club: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.ObjectId,
+    ref: 'Club',
   },
   position: {
     type: String,
     required: 'Please choose a position',
     enum: ['GK', 'D', 'M', 'F'],
   },
-  DateOfBirth: {
+  dateOfBirth: {
     type: Date,
-    required: 'Please enter a date of birth',
+    required: 'Please add a date of birth',
   },
   height: {
     type: Number,
-    required: 'Please enter Your height',
+    required: 'Please enter players height [cm]',
   },
   weight: {
     type: Number,
-    required: 'Please enter Your weight',
+    required: 'Please enter players weight [kg]',
   },
-  preferredLeg: {
+  footed: {
     type: String,
-    required: 'Please choose Your preferred leg',
+    required: 'Please choose players preferred leg',
     enum: ['L', 'R'],
   },
 });
