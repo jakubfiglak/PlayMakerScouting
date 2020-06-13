@@ -1,0 +1,50 @@
+[
+  {
+    "_id": "5d7a514b5d2c12c7449be042",
+    "name": "Admin",
+    "surname": "Account",
+    "role": "admin",
+    "email": "admin@gmail.com",
+    "phone": "123456789",
+    "address": "Cicha 132/16 62-200 Gniezno",
+    "activeRadius": 100,
+    "password": "Password123",
+    "passwordConfirm": "Password123"
+  },
+  {
+    "_id": "5d7a514b5d2c12c7449be045",
+    "name": "John",
+    "surname": "Doe",
+    "role": "scout",
+    "email": "john@gmail.com",
+    "phone": "123456789",
+    "address": "Gdańska 173/175, 85-674 Bydgoszcz",
+    "activeRadius": 300,
+    "password": "Password123",
+    "passwordConfirm": "Password123"
+  },
+  {
+    "_id": "5d7a514b5d2c12c7449be046",
+    "name": "Kevin",
+    "surname": "Smith",
+    "role": "scout",
+    "email": "kevin@gmail.com",
+    "phone": "123456789",
+    "address": "Wrocławska 31, 55-093 Kiełczów",
+    "activeRadius": 150,
+    "password": "Password123",
+    "passwordConfirm": "Password123"
+  },
+  {
+    "_id": "5c8a1d5b0190b214360dc031",
+    "name": "Mary",
+    "surname": "Williams",
+    "role": "scout",
+    "email": "mary@gmail.com",
+    "phone": "123456789",
+    "address": "Włodarzewska 22, 02-384 Warszawa",
+    "activeRadius": 50,
+    "password": "Password123",
+    "passwordConfirm": "Password123"
+  }
+]
