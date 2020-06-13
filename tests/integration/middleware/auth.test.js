@@ -35,12 +35,12 @@ describe('auth middlewares', () => {
       expect(res.body.error).toContain('No token');
     });
 
-    it('should return 400 if token is invalid', async () => {
+    it('should return 401 if token is invalid', async () => {
       token = 'a';
 
       const res = await exec();
 
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(401);
       expect(res.body.error).toContain('Invalid token');
     });
 

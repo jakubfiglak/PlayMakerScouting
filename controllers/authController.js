@@ -8,7 +8,7 @@ const sendEmail = require('../utils/sendEmail');
 // @route POST /api/v1/auth/register
 // @access Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, passwordConfirm } = req.body;
+  const { email, password, passwordConfirm } = req.body;
 
   let user = await User.findOne({ email });
 
@@ -20,13 +20,14 @@ exports.register = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Passwords do not match', 400));
   }
 
-  user = await User.create({ name, email, password });
+  user = await User.create(req.body);
 
   const token = user.getJwt();
 
   res.status(201).json({
     success: true,
     message: 'Successfully created new user!',
+    data: user,
     token,
   });
 });
@@ -80,19 +81,15 @@ exports.account = asyncHandler(async (req, res) => {
 // @route PUT /api/v1/auth/updatedetails
 // @access Private
 exports.updateDetails = asyncHandler(async (req, res) => {
-  const updates = {
-    name: req.body.name,
-    email: req.body.email,
-  };
+  const user = await User.findById(req.user._id);
 
-  const user = await User.findByIdAndUpdate(req.user.id, updates, {
-    new: true,
-    runValidators: true,
-  });
+  Object.keys(req.body).forEach((key) => (user[key] = req.body[key]));
+
+  await user.save();
 
   res.status(200).json({
     success: true,
-    message: `${req.user.name}'s account details successfully updated!`,
+    message: 'Account details successfully updated!',
     data: user,
   });
 });

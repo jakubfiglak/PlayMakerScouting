@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "test-coverage": "jest --watchAll --verbose --runInBand --detectOpenHandles --coverage",
-    "test": "jest --watchAll --verbose --runInBand --detectOpenHandles"
+    "test": "jest --watchAll --verbose --runInBand --detectOpenHandles",
+    "testOne": "jest --watch --detectOpenHandles"
   },
   "author": "Jakub Figlak",
   "license": "ISC",
@@ -20,7 +21,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.13",
     "morgan": "^1.10.0",
+    "node-geocoder": "^3.27.0",
     "nodemailer": "^6.4.6",
+    "slugify": "^1.4.0",
     "validator": "^13.0.0",
     "xss-clean": "^0.1.1"
   },
