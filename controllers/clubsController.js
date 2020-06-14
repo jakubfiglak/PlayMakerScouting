@@ -120,18 +120,18 @@ exports.updateClub = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/v1/clubs/:id
 // @access Private (admin only)
 exports.deleteClub = asyncHandler(async (req, res, next) => {
-  const club = await Club.findById(req.params.id);
+  const { id } = req.params;
+
+  const club = await Club.findById(id);
 
   if (!club) {
-    return next(
-      new ErrorResponse(`Club not found with id of ${req.params.id}`, 404)
-    );
+    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
   }
 
   await club.remove();
 
   res.status(200).json({
     success: true,
-    data: {},
+    message: `Club with the id of ${id} successfully removed!`,
   });
 });

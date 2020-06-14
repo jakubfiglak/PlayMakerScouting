@@ -1,11 +1,22 @@
 const asyncHandler = require('express-async-handler');
 const Player = require('../models/Player');
+const Club = require('../models/Club');
 const ErrorResponse = require('../utils/errorResponse');
 
-// @desc Create new club
+// @desc Create new player
 // @route POST /api/v1/players
 // @access Private
-exports.createPlayer = asyncHandler(async (req, res) => {
+exports.createPlayer = asyncHandler(async (req, res, next) => {
+  const clubId = req.body.club;
+
+  const club = await Club.findById(clubId);
+
+  if (!club) {
+    return next(
+      new ErrorResponse(`No club found with the id of ${clubId}`, 404)
+    );
+  }
+
   const player = await Player.create(req.body);
 
   res.status(201).json({
@@ -15,7 +26,7 @@ exports.createPlayer = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc Get players
+// @desc Get all players
 // @route GET /api/v1/players
 // @route GET /api/v1/clubs/:clubId/players
 // @access Private

@@ -14,7 +14,7 @@ const playerRouter = require('./players');
 
 const router = express.Router();
 
-router.use('/:clubId/players', playerRouter);
+router.use('/:clubId/players', protect, playerRouter);
 
 router.post('/', [protect, authorize('admin')], createClub);
 router.get('/', protect, getClubs);
