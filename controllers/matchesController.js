@@ -44,7 +44,12 @@ exports.getMatches = asyncHandler(async (req, res) => {
   if (clubId) {
     const matches = await Match.find({
       $or: [{ homeTeam: clubId }, { awayTeam: clubId }],
-    });
+    })
+      .populate({
+        path: 'homeTeam',
+        select: 'name',
+      })
+      .populate({ path: 'awayTeam', select: 'name' });
 
     return res.status(200).json({
       success: true,
@@ -53,7 +58,14 @@ exports.getMatches = asyncHandler(async (req, res) => {
     });
   }
 
-  const matches = await Match.find().sort('date');
+  const matches = await Match.find()
+    .populate({
+      path: 'homeTeam',
+      select: 'name',
+    })
+    .populate({ path: 'awayTeam', select: 'name' })
+    .sort('-date');
+
   res.status(200).json({
     success: true,
     count: matches.length,
