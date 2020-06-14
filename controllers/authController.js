@@ -85,7 +85,7 @@ exports.updateDetails = asyncHandler(async (req, res) => {
 
   Object.keys(req.body).forEach((key) => (user[key] = req.body[key]));
 
-  await user.save();
+  await user.save({ validateModifiedOnly: true });
 
   res.status(200).json({
     success: true,
