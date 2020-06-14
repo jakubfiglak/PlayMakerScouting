@@ -69,7 +69,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/auth/account
 // @access Private
 exports.account = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user._id);
 
   res.status(200).json({
     success: true,
@@ -100,9 +100,11 @@ exports.updateDetails = asyncHandler(async (req, res) => {
 exports.updatePassword = asyncHandler(async (req, res, next) => {
   const { oldPassword, newPassword, newPasswordConfirm } = req.body;
 
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user._id).select('+password');
 
-  if (!user.comparePasswords(oldPassword)) {
+  const match = await user.comparePasswords(oldPassword);
+
+  if (!match) {
     return next(new ErrorResponse('Incorrect password', 401));
   }
 
@@ -111,7 +113,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   }
 
   user.password = newPassword;
-  await user.save();
+  await user.save({ validateModifiedOnly: true });
 
   const token = user.getJwt();
 
@@ -136,7 +138,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
   user.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
 
-  await user.save();
+  await user.save({ validateBeforeSave: false });
 
   const resetURL = `http://${req.headers.host}${process.env.BASE_URL}/auth/resetpassword/${user.resetPasswordToken}`;
 
@@ -189,7 +191,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   user.password = newPassword;
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
-  await user.save();
+  await user.save({ validateModifiedOnly: true });
 
   const token = user.getJwt();
 
