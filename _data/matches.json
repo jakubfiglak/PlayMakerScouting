@@ -1,0 +1,51 @@
+[
+  {
+    "_id": "5ee62cf93d7b3e49dab466c5",
+    "homeTeam": "5ee50570f75bec032c291c33",
+    "awayTeam": "5ee5060ad784b010395a756e",
+    "competition": "league",
+    "date": "2020-06-20"
+  },
+  {
+    "_id": "5ee62d506bcfc8ae3fabc5f2",
+    "homeTeam": "5ee50640f75f558bc1fa5fbf",
+    "awayTeam": "5ee50570f75bec032c291c33",
+    "competition": "cup",
+    "date": "2020-06-25"
+  },
+  {
+    "_id": "5ee62d53a29bc0279e9b351c",
+    "homeTeam": "5ee50570f75bec032c291c33",
+    "awayTeam": "5ee50703d1aeb981e0ea7c15",
+    "competition": "league",
+    "date": "2020-06-27"
+  },
+  {
+    "_id": "5ee62d6177bd9171edd4858d",
+    "homeTeam": "5ee5073106bbf18cb5217d47",
+    "awayTeam": "5ee50703d1aeb981e0ea7c15",
+    "competition": "friendly",
+    "date": "2020-06-22"
+  },
+  {
+    "_id": "5ee62d75387daadd46915679",
+    "homeTeam": "5ee5069a48e704cd7e434f1a",
+    "awayTeam": "5ee5065ca84f5c2e6a18d3ca",
+    "competition": "cup",
+    "date": "2020-06-27"
+  },
+  {
+    "_id": "5ee62d93de595d003142f231",
+    "homeTeam": "5ee50678b381dd897dd5be4c",
+    "awayTeam": "5ee5069a48e704cd7e434f1a",
+    "competition": "league",
+    "date": "2020-07-01"
+  },
+  {
+    "_id": "5ee62dab16051c8f8ee39546",
+    "homeTeam": "5ee5062436d322bff641683d",
+    "awayTeam": "5ee50570f75bec032c291c33",
+    "competition": "league",
+    "date": "2020-06-27"
+  }
+]

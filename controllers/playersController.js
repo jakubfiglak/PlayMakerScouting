@@ -55,15 +55,15 @@ exports.getPlayers = asyncHandler(async (req, res) => {
 // @route GET /api/v1/players/:id
 // @access Private
 exports.getPlayer = asyncHandler(async (req, res, next) => {
-  const player = await Player.findById(req.params.id).populate({
+  const { id } = req.params;
+
+  const player = await Player.findById(id).populate({
     path: 'club',
     select: 'name division',
   });
 
   if (!player) {
-    return next(
-      new ErrorResponse(`No player found with the id of ${req.params.id}`, 404)
-    );
+    return next(new ErrorResponse(`No player found with the id of ${id}`, 404));
   }
 
   res.status(200).json({
@@ -99,18 +99,18 @@ exports.updatePlayer = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/v1/clubs/:id
 // @access Private (admin only)
 exports.deletePlayer = asyncHandler(async (req, res, next) => {
-  const player = await Player.findById(req.params.id);
+  const { id } = req.params;
+
+  const player = await Player.findById(id);
 
   if (!player) {
-    return next(
-      new ErrorResponse(`No player found with the id of ${req.params.id}`, 404)
-    );
+    return next(new ErrorResponse(`No player found with the id of ${id}`, 404));
   }
 
   await player.remove();
 
   res.status(200).json({
     success: true,
-    data: {},
+    message: `Player with the id of ${id} successfully removed!`,
   });
 });

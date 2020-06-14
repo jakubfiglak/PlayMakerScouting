@@ -10,11 +10,13 @@ const {
 } = require('../controllers/clubsController');
 const { protect, authorize } = require('../middleware/auth');
 
-const playerRouter = require('./players');
+const playersRouter = require('./players');
+const matchesRouter = require('./matches');
 
 const router = express.Router();
 
-router.use('/:clubId/players', protect, playerRouter);
+router.use('/:clubId/players', protect, playersRouter);
+router.use('/:clubId/matches', protect, matchesRouter);
 
 router.post('/', [protect, authorize('admin')], createClub);
 router.get('/', protect, getClubs);

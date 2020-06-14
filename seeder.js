@@ -8,6 +8,7 @@ dotenv.config({ path: './config/config.env' });
 const User = require('./models/User');
 const Club = require('./models/Club');
 const Player = require('./models/Player');
+const Match = require('./models/Match');
 
 mongoose.connect(process.env.DB_CONNECT, {
   useNewUrlParser: true,
@@ -28,11 +29,16 @@ const players = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/players.json`, 'utf-8')
 );
 
+const matches = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/matches.json`, 'utf-8')
+);
+
 const importData = async () => {
   try {
     await User.create(users);
     await Club.create(clubs);
     await Player.create(players);
+    await Match.create(matches);
 
     console.log('Data imported...'.green.inverse);
     process.exit();
@@ -46,6 +52,7 @@ const deleteData = async () => {
     await User.deleteMany();
     await Club.deleteMany();
     await Player.deleteMany();
+    await Match.deleteMany();
 
     console.log('Data destroyed...'.red.inverse);
     process.exit();
