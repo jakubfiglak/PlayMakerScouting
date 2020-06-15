@@ -14,7 +14,7 @@ const PlayerSchema = new Schema({
     trim: true,
   },
   club: {
-    type: mongoose.Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: 'Club',
   },
   position: {

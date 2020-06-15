@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 
 const OrderSchema = new Schema({
   player: {
-    type: mongoose.Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: 'Player',
     required: 'Please add a player',
   },
@@ -13,7 +13,7 @@ const OrderSchema = new Schema({
     default: true,
   },
   scout: {
-    type: mongoose.Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: 'User',
   },
   createdAt: {

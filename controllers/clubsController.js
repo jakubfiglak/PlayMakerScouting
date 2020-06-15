@@ -97,18 +97,17 @@ exports.getClubsInRadius = asyncHandler(async (req, res) => {
 // @route PUT /api/v1/clubs/:id
 // @access Private (admin only)
 exports.updateClub = asyncHandler(async (req, res, next) => {
-  let club = await Club.findById(req.params.id);
+  const { id } = req.params;
+
+  const club = await Club.findById(id);
 
   if (!club) {
-    return next(
-      new ErrorResponse(`Club not found with id of ${req.params.id}`, 404)
-    );
+    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
   }
 
-  club = await Club.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  Object.keys(req.body).forEach((key) => (club[key] = req.body[key]));
+
+  await club.save({ validateModifiedOnly: true });
 
   res.status(200).json({
     success: true,

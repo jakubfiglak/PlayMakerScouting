@@ -9,10 +9,12 @@ const {
 const { protect, authorize } = require('../middleware/auth');
 
 const ordersRouter = require('./orders');
+const reportsRouter = require('./reports');
 
 const router = express.Router({ mergeParams: true });
 
 router.use('/:playerId/orders', protect, ordersRouter);
+router.use('/:playerId/reports', protect, reportsRouter);
 
 router.post('/', protect, createPlayer);
 router.get('/', protect, getPlayers);
