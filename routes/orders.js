@@ -10,7 +10,7 @@ const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router({ mergeParams: true });
 
-router.post('/', protect, createOrder);
+router.post('/', [protect, authorize('admin')], createOrder);
 router.get('/', protect, getOrders);
 router.get('/:id', protect, getOrder);
 router.post('/:id/accept', protect, acceptOrder);

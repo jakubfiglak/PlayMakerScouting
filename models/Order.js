@@ -20,6 +20,9 @@ const OrderSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  acceptDate: {
+    type: Date,
+  },
 });
 
 module.exports = model('Order', OrderSchema);

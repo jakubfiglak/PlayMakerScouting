@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Order = require('../models/Order');
-const Club = require('../models/Club');
+const Player = require('../models/Player');
 const ErrorResponse = require('../utils/errorResponse');
 
 // @desc Create new order
@@ -9,7 +9,7 @@ const ErrorResponse = require('../utils/errorResponse');
 exports.createOrder = asyncHandler(async (req, res, next) => {
   const playerId = req.body.player;
 
-  const player = await Club.findById(playerId);
+  const player = await Player.findById(playerId);
 
   if (!player) {
     return next(
@@ -96,6 +96,7 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
 
   order.open = false;
   order.scout = req.user._id;
+  order.acceptDate = Date.now();
 
   await order.save();
 
