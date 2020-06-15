@@ -21,6 +21,7 @@ const users = require('./routes/users');
 const clubs = require('./routes/clubs');
 const players = require('./routes/players');
 const matches = require('./routes/matches');
+const orders = require('./routes/orders');
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use(`${process.env.BASE_URL}/users`, users);
 app.use(`${process.env.BASE_URL}/clubs`, clubs);
 app.use(`${process.env.BASE_URL}/players`, players);
 app.use(`${process.env.BASE_URL}/matches`, matches);
+app.use(`${process.env.BASE_URL}/orders`, orders);
 
 app.use(errorHandler);
 

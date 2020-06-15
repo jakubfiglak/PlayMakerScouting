@@ -8,7 +8,11 @@ const {
 } = require('../controllers/playersController');
 const { protect, authorize } = require('../middleware/auth');
 
+const ordersRouter = require('./orders');
+
 const router = express.Router({ mergeParams: true });
+
+router.use('/:playerId/orders', protect, ordersRouter);
 
 router.post('/', protect, createPlayer);
 router.get('/', protect, getPlayers);
