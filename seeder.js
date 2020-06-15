@@ -10,6 +10,7 @@ const Club = require('./models/Club');
 const Player = require('./models/Player');
 const Match = require('./models/Match');
 const Order = require('./models/Order');
+const Report = require('./models/Report');
 
 mongoose.connect(process.env.DB_CONNECT, {
   useNewUrlParser: true,
@@ -38,6 +39,10 @@ const orders = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/orders.json`, 'utf-8')
 );
 
+const reports = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/reports.json`, 'utf-8')
+);
+
 const importData = async () => {
   try {
     await User.create(users);
@@ -45,6 +50,7 @@ const importData = async () => {
     await Player.create(players);
     await Match.create(matches);
     await Order.create(orders);
+    await Report.create(reports);
 
     console.log('Data imported...'.green.inverse);
     process.exit();
@@ -60,6 +66,7 @@ const deleteData = async () => {
     await Player.deleteMany();
     await Match.deleteMany();
     await Order.deleteMany();
+    await Report.deleteMany();
 
     console.log('Data destroyed...'.red.inverse);
     process.exit();

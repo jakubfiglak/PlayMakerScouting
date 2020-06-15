@@ -4,12 +4,12 @@ const { Schema, model } = mongoose;
 
 const MatchSchema = new Schema({
   homeTeam: {
-    type: mongoose.Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: 'Club',
     required: 'Please add home team',
   },
   awayTeam: {
-    type: mongoose.Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: 'Club',
     required: 'Please add away team',
   },

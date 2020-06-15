@@ -47,7 +47,6 @@ const ClubSchema = new Schema({
   },
 });
 
-// Geocode & create location field
 ClubSchema.pre('save', geocode);
 
 module.exports = model('Club', ClubSchema);
