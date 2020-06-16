@@ -1,5 +1,5 @@
 const calculateObjAvg = (object) => {
-  const filtered = object;
+  const filtered = { ...object };
 
   Object.keys(filtered).forEach((key) => {
     if (filtered[key] === undefined) delete filtered[key];

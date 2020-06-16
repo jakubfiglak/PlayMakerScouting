@@ -53,6 +53,8 @@ exports.getClub = asyncHandler(async (req, res, next) => {
   });
 });
 
+// TODO: get rid of this route, it can be accomplished by query params
+
 // @desc Get clubs in a voivodeship
 // @route GET /api/v1/clubs/voivodeship/:voivodeship
 // @access Private
