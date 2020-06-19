@@ -52,10 +52,12 @@ exports.getPlayers = asyncHandler(async (req, res) => {
 exports.getPlayer = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const player = await Player.findById(id).populate({
-    path: 'club',
-    select: 'name division',
-  });
+  const player = await Player.findById(id)
+    .populate({
+      path: 'club',
+      select: 'name division',
+    })
+    .populate('reports');
 
   if (!player) {
     return next(new ErrorResponse(`No player found with the id of ${id}`, 404));

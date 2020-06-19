@@ -21,7 +21,10 @@ router.use('/:playerId/reports', protect, reportsRouter);
 router.post('/', protect, createPlayer);
 router.get(
   '/',
-  [protect, advancedResults(Player, [{ path: 'club', select: 'name' }])],
+  [
+    protect,
+    advancedResults(Player, [{ path: 'club', select: 'name' }, 'reports']),
+  ],
   getPlayers
 );
 router.get('/:id', protect, getPlayer);
