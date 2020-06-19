@@ -45,11 +45,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
 
   const orders = await Order.find().sort('-createdAt');
 
-  res.status(200).json({
-    success: true,
-    count: orders.length,
-    data: orders,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get single order

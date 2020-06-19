@@ -6,13 +6,7 @@ const ErrorResponse = require('../utils/errorResponse');
 // @route GET /api/v1/users
 // @access Private (admin only)
 exports.getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    success: true,
-    count: users.length,
-    data: users,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get single user

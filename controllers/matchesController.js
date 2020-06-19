@@ -58,19 +58,7 @@ exports.getMatches = asyncHandler(async (req, res) => {
     });
   }
 
-  const matches = await Match.find()
-    .populate({
-      path: 'homeTeam',
-      select: 'name',
-    })
-    .populate({ path: 'awayTeam', select: 'name' })
-    .sort('-date');
-
-  res.status(200).json({
-    success: true,
-    count: matches.length,
-    data: matches,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get single match

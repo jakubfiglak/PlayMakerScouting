@@ -67,12 +67,7 @@ exports.getReports = asyncHandler(async (req, res) => {
     });
   }
 
-  const reports = await Report.find().sort('-createdAt');
-  res.status(200).json({
-    success: true,
-    count: reports.length,
-    data: reports,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get users reports

@@ -43,12 +43,7 @@ exports.getPlayers = asyncHandler(async (req, res) => {
     });
   }
 
-  const players = await Player.find().sort('name');
-  res.status(200).json({
-    success: true,
-    count: players.length,
-    data: players,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get single player
@@ -57,10 +52,12 @@ exports.getPlayers = asyncHandler(async (req, res) => {
 exports.getPlayer = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const player = await Player.findById(id).populate({
-    path: 'club',
-    select: 'name division',
-  });
+  const player = await Player.findById(id)
+    .populate({
+      path: 'club',
+      select: 'name division',
+    })
+    .populate('reports');
 
   if (!player) {
     return next(new ErrorResponse(`No player found with the id of ${id}`, 404));
