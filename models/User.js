@@ -109,4 +109,6 @@ UserSchema.methods.comparePasswords = async function (password) {
   return match;
 };
 
+// TODO: add virtuals with scout reports
+
 module.exports = model('User', UserSchema);

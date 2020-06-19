@@ -9,6 +9,8 @@ const {
   deleteClub,
 } = require('../controllers/clubsController');
 const { protect, authorize } = require('../middleware/auth');
+const advancedResults = require('../middleware/advancedResults');
+const Club = require('../models/Club');
 
 const playersRouter = require('./players');
 const matchesRouter = require('./matches');
@@ -19,7 +21,7 @@ router.use('/:clubId/players', protect, playersRouter);
 router.use('/:clubId/matches', protect, matchesRouter);
 
 router.post('/', [protect, authorize('admin')], createClub);
-router.get('/', protect, getClubs);
+router.get('/', [protect, advancedResults(Club)], getClubs);
 router.get('/:id', protect, getClub);
 router.put('/:id', [protect, authorize('admin')], updateClub);
 router.delete('/:id', [protect, authorize('admin')], deleteClub);

@@ -2,8 +2,9 @@ const calculateObjAvg = (object) => {
   const filtered = { ...object };
 
   Object.keys(filtered).forEach((key) => {
-    if (filtered[key] === undefined) delete filtered[key];
-    if (key === '$init') delete filtered[key];
+    if (filtered[key] === undefined || key.startsWith('$')) {
+      delete filtered[key];
+    }
   });
 
   const values = Object.values(filtered);

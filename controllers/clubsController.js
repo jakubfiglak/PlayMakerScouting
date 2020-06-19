@@ -27,12 +27,7 @@ exports.createClub = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/clubs
 // @access Private
 exports.getClubs = asyncHandler(async (req, res) => {
-  const clubs = await Club.find().sort('name');
-  res.status(200).json({
-    success: true,
-    count: clubs.length,
-    data: clubs,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get single club
@@ -52,8 +47,6 @@ exports.getClub = asyncHandler(async (req, res, next) => {
     data: club,
   });
 });
-
-// TODO: get rid of this route, it can be accomplished by query params
 
 // @desc Get clubs in a voivodeship
 // @route GET /api/v1/clubs/voivodeship/:voivodeship

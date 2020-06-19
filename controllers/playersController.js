@@ -43,12 +43,7 @@ exports.getPlayers = asyncHandler(async (req, res) => {
     });
   }
 
-  const players = await Player.find().sort('name');
-  res.status(200).json({
-    success: true,
-    count: players.length,
-    data: players,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get single player

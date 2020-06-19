@@ -41,4 +41,6 @@ const PlayerSchema = new Schema({
   },
 });
 
+// TODO: add virtuals with player reports
+
 module.exports = model('Player', PlayerSchema);
