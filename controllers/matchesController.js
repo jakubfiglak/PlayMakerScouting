@@ -21,7 +21,7 @@ exports.createMatch = asyncHandler(async (req, res, next) => {
 
   if (!awayTeam) {
     return next(
-      new ErrorResponse(`No club found with the id of ${homeTeamId}`, 404)
+      new ErrorResponse(`No club found with the id of ${awayTeamId}`, 404)
     );
   }
 
