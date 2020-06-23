@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import useStyles from './styles';
+import useForm from '../../hooks/useForm';
+import { RegisterFormData } from './types';
+
+const initialState: RegisterFormData = {
+  name: '',
+  surname: '',
+  email: '',
+  phone: '',
+  address: '',
+  activeRadius: 0,
+  password: '',
+  passwordConfirm: '',
+};
 
 const RegisterForm: React.FC = () => {
   const classes = useStyles();
 
+  const [registerData, onInputChange] = useForm(initialState);
+
+  const onSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    console.log(registerData);
+  };
+
   return (
-    <form className={classes.form}>
+    <form className={classes.form} onSubmit={onSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -19,6 +39,7 @@ const RegisterForm: React.FC = () => {
             id="name"
             label="Imię"
             autoFocus
+            onChange={onInputChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -30,6 +51,7 @@ const RegisterForm: React.FC = () => {
             label="Nazwisko"
             name="surname"
             autoComplete="lname"
+            onChange={onInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -42,6 +64,7 @@ const RegisterForm: React.FC = () => {
             name="email"
             autoComplete="email"
             type="email"
+            onChange={onInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -53,6 +76,7 @@ const RegisterForm: React.FC = () => {
             name="phone"
             autoComplete="phone"
             type="tel"
+            onChange={onInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -66,6 +90,7 @@ const RegisterForm: React.FC = () => {
             autoComplete="address"
             type="text"
             helperText="np. ul. Cicha 132/16 62-200 Gniezno"
+            onChange={onInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -78,6 +103,7 @@ const RegisterForm: React.FC = () => {
             name="activeRadius"
             type="number"
             helperText="Podaj maksymalną odległość w km, jaką możesz pokonać w celu obserwacji zawodnika"
+            onChange={onInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -89,6 +115,7 @@ const RegisterForm: React.FC = () => {
             label="Hasło"
             type="password"
             id="password"
+            onChange={onInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -100,6 +127,7 @@ const RegisterForm: React.FC = () => {
             label="Potwierdź hasło"
             type="password"
             id="passwordConfirm"
+            onChange={onInputChange}
           />
         </Grid>
       </Grid>

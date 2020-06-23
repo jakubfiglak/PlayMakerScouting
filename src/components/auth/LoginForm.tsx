@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { TextField, Button, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import useStyles from './styles';
+import { LoginFormData } from './types';
+import useForm from '../../hooks/useForm';
+
+const initialState: LoginFormData = {
+  email: '',
+  password: '',
+};
 
 const LoginForm: React.FC = () => {
   const classes = useStyles();
 
-  const onSubmit = (e: React.SyntheticEvent) => {
+  const [loginData, onInputChange] = useForm(initialState);
+
+  const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log('login!');
+    console.log(loginData);
   };
 
   return (
@@ -23,6 +32,7 @@ const LoginForm: React.FC = () => {
         name="email"
         autoComplete="email"
         autoFocus
+        onChange={onInputChange}
       />
       <TextField
         variant="outlined"
@@ -34,6 +44,7 @@ const LoginForm: React.FC = () => {
         type="password"
         id="password"
         autoComplete="current-password"
+        onChange={onInputChange}
       />
       <Button
         type="submit"
