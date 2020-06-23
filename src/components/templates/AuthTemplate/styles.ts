@@ -9,7 +9,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    width: '92px',
+    height: '84px',
   },
 }));
 

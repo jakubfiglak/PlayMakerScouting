@@ -1,26 +1,25 @@
 import React from 'react';
-import {
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Grid,
-  Link,
-} from '@material-ui/core';
+import { TextField, Button, Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import useStyles from './styles';
 
 const LoginForm: React.FC = () => {
   const classes = useStyles();
 
+  const onSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    console.log('login!');
+  };
+
   return (
-    <form className={classes.form} noValidate>
+    <form className={classes.form} onSubmit={onSubmit} autoComplete="off">
       <TextField
         variant="outlined"
         margin="normal"
         required
         fullWidth
         id="email"
-        label="Email Address"
+        label="Email"
         name="email"
         autoComplete="email"
         autoFocus
@@ -31,14 +30,10 @@ const LoginForm: React.FC = () => {
         required
         fullWidth
         name="password"
-        label="Password"
+        label="Hasło"
         type="password"
         id="password"
         autoComplete="current-password"
-      />
-      <FormControlLabel
-        control={<Checkbox value="remember" color="primary" />}
-        label="Remember me"
       />
       <Button
         type="submit"
@@ -47,17 +42,17 @@ const LoginForm: React.FC = () => {
         color="primary"
         className={classes.submit}
       >
-        Sign In
+        Zaloguj się
       </Button>
       <Grid container>
         <Grid item xs>
-          <Link href="#" variant="body2">
-            Forgot password?
+          <Link to="/forgotpassword" className={classes.link}>
+            Zapomniałeś hasła?
           </Link>
         </Grid>
         <Grid item>
-          <Link href="#" variant="body2">
-            Don't have an account? Sign Up
+          <Link to="/register" className={classes.link}>
+            Nie masz konta? Zarejestruj się
           </Link>
         </Grid>
       </Grid>

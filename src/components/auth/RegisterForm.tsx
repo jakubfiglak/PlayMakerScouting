@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, TextField, Button, Link } from '@material-ui/core';
+import { Grid, TextField, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import useStyles from './styles';
 
 const RegisterForm: React.FC = () => {
@@ -11,12 +12,12 @@ const RegisterForm: React.FC = () => {
         <Grid item xs={12} sm={6}>
           <TextField
             autoComplete="fname"
-            name="firstName"
+            name="name"
             variant="outlined"
             required
             fullWidth
-            id="firstName"
-            label="First Name"
+            id="name"
+            label="Imię"
             autoFocus
           />
         </Grid>
@@ -25,9 +26,9 @@ const RegisterForm: React.FC = () => {
             variant="outlined"
             required
             fullWidth
-            id="lastName"
-            label="Last Name"
-            name="lastName"
+            id="surname"
+            label="Nazwisko"
+            name="surname"
             autoComplete="lname"
           />
         </Grid>
@@ -37,7 +38,7 @@ const RegisterForm: React.FC = () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             type="email"
@@ -46,13 +47,59 @@ const RegisterForm: React.FC = () => {
         <Grid item xs={12}>
           <TextField
             variant="outlined"
+            fullWidth
+            id="phone"
+            label="Nr telefonu"
+            name="phone"
+            autoComplete="phone"
+            type="tel"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
+            id="address"
+            label="Adres"
+            name="address"
+            autoComplete="address"
+            type="text"
+            helperText="np. ul. Cicha 132/16 62-200 Gniezno"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
+            id="activeRadius"
+            label="Promień działania"
+            name="activeRadius"
+            type="number"
+            helperText="Podaj maksymalną odległość w km, jaką możesz pokonać w celu obserwacji zawodnika"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Hasło"
             type="password"
             id="password"
-            autoComplete="current-password"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
+            name="passwordConfirm"
+            label="Potwierdź hasło"
+            type="password"
+            id="passwordConfirm"
           />
         </Grid>
       </Grid>
@@ -63,12 +110,12 @@ const RegisterForm: React.FC = () => {
         color="primary"
         className={classes.submit}
       >
-        Sign Up
+        Zarejestruj się
       </Button>
       <Grid container justify="flex-end">
         <Grid item>
-          <Link href="#" variant="body2">
-            Already have an account? Sign in
+          <Link to="/login" className={classes.link}>
+            Jesteś już zarejestrowany? Zaloguj się
           </Link>
         </Grid>
       </Grid>

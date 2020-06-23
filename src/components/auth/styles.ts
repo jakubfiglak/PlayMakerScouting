@@ -8,6 +8,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  link: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
 }));
 
 export default useStyles;

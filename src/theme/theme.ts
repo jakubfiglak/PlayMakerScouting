@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import { lightGray } from './colors';
 
 const theme = createMuiTheme({
   palette: {
@@ -7,6 +8,9 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#f9a930',
+    },
+    background: {
+      default: lightGray,
     },
   },
 });
