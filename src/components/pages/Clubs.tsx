@@ -1,12 +1,12 @@
 import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
 
-const Home: React.FC = () => {
+const Clubs: React.FC = () => {
   return (
     <MainTemplate>
-      <h1>hello</h1>
+      <h1>Clubs</h1>
     </MainTemplate>
   );
 };
 
-export default Home;
+export default Clubs;

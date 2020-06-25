@@ -1,13 +1,16 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { lightGray } from './colors';
+import { lightGray, darkGray, red, yellow } from './colors';
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#333d4a',
+      main: darkGray,
     },
     secondary: {
-      main: '#f9a930',
+      main: yellow,
+    },
+    error: {
+      main: red,
     },
     background: {
       default: lightGray,
