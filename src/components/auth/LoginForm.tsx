@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import useStyles from './styles';
 import { LoginFormData } from './types';
 import useForm from '../../hooks/useForm';
+import useAuthState from '../../context/auth/useAuthState';
 
 const initialState: LoginFormData = {
   email: '',
@@ -12,12 +13,15 @@ const initialState: LoginFormData = {
 
 const LoginForm: React.FC = () => {
   const classes = useStyles();
+  const context = useAuthState();
+
+  const { login } = context;
 
   const [loginData, onInputChange] = useForm(initialState);
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log(loginData);
+    login(loginData);
   };
 
   return (
