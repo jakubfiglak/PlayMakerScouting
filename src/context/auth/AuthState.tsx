@@ -2,7 +2,12 @@ import React, { useReducer } from 'react';
 import { axiosJson, setAuthToken } from '../../config/axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
-import { State, LoginFormData, RegisterFormData } from '../../types/auth';
+import {
+  State,
+  LoginFormData,
+  RegisterFormData,
+  EditAccountData,
+} from '../../types/auth';
 
 const AuthState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -16,6 +21,7 @@ const AuthState: React.FC = ({ children }) => {
     login: () => null,
     register: () => null,
     logout: () => null,
+    editDetails: () => null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -99,6 +105,28 @@ const AuthState: React.FC = ({ children }) => {
     });
   };
 
+  // Edit details
+  const editDetails = async (formData: EditAccountData) => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.put('/api/v1/auth/updatedetails', formData);
+      console.log(res);
+
+      dispatch({
+        type: 'EDIT_SUCCESS',
+      });
+
+      loadUser();
+    } catch (err) {
+      console.log(err.response.data);
+      dispatch({
+        type: 'EDIT_FAIL',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
   // Clear errors
 
   return (
@@ -114,6 +142,7 @@ const AuthState: React.FC = ({ children }) => {
         login,
         logout,
         register,
+        editDetails,
       }}
     >
       {children}

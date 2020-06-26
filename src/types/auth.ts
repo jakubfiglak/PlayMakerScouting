@@ -1,4 +1,4 @@
-type User = {
+export type User = {
   role: string;
   _id: string;
   name: string;
@@ -7,6 +7,15 @@ type User = {
   phone: string;
   activeRadius: number;
   createdAt: string;
+  location: {
+    type: string;
+    coordinates: number[];
+    formattedAddress: string;
+    street: string;
+    city: string;
+    voivodeship: string;
+    zipcode: string;
+  };
   __v: number;
 };
 
@@ -21,6 +30,7 @@ export type State = {
   login: (formData: LoginFormData) => void;
   register: (formData: RegisterFormData) => void;
   logout: () => void;
+  editDetails: (formData: EditAccountData) => void;
 };
 
 export type Action =
@@ -32,7 +42,9 @@ export type Action =
   | { type: 'LOGIN_FAIL'; payload: string }
   | { type: 'LOGOUT' }
   | { type: 'CLEAR_ERRORS' }
-  | { type: 'SET_LOADING' };
+  | { type: 'SET_LOADING' }
+  | { type: 'EDIT_SUCCESS' }
+  | { type: 'EDIT_FAIL'; payload: string };
 
 export type LoginFormData = {
   email: string;
@@ -48,4 +60,10 @@ export type RegisterFormData = {
   activeRadius: number;
   password: string;
   passwordConfirm: string;
+};
+
+export type EditAccountData = {
+  phone: string | undefined;
+  address: string | undefined;
+  activeRadius: number | undefined;
 };

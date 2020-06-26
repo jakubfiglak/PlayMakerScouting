@@ -10,7 +10,7 @@ const useForm = <T>(initialState: T) => {
     });
   };
 
-  return [formData, onInputChange] as const;
+  return [formData, onInputChange, setFormData] as const;
 };
 
 export default useForm;

@@ -57,6 +57,15 @@ export default (state: State, action: Action): State => {
         error: null,
       };
 
+    case 'EDIT_SUCCESS':
+      return { ...state, loading: false };
+
+    case 'EDIT_FAIL':
+      return {
+        ...state,
+        error: action.payload,
+      };
+
     default:
       return state;
   }
