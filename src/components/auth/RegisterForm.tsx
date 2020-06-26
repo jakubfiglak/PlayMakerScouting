@@ -1,8 +1,10 @@
-import React, { SyntheticEvent } from 'react';
-import { Grid, TextField, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import React, { useEffect, SyntheticEvent } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
+
 import useStyles from './styles';
 import useForm from '../../hooks/useForm';
+import useAuthState from '../../context/auth/useAuthState';
 import { RegisterFormData } from '../../types/auth';
 
 const initialState: RegisterFormData = {
@@ -18,12 +20,22 @@ const initialState: RegisterFormData = {
 
 const RegisterForm: React.FC = () => {
   const classes = useStyles();
+  const authContext = useAuthState();
+  const history = useHistory();
+
+  const { register, loading, isAuthenticated } = authContext;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/');
+    }
+  }, [isAuthenticated, history]);
 
   const [registerData, onInputChange] = useForm(initialState);
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log(registerData);
+    register(registerData);
   };
 
   return (
@@ -76,6 +88,7 @@ const RegisterForm: React.FC = () => {
             name="phone"
             autoComplete="phone"
             type="tel"
+            helperText="np. 123456789 (bez myślników)"
             onChange={onInputChange}
           />
         </Grid>
@@ -102,6 +115,9 @@ const RegisterForm: React.FC = () => {
             label="Promień działania"
             name="activeRadius"
             type="number"
+            inputProps={{
+              min: 0,
+            }}
             helperText="Podaj maksymalną odległość w km, jaką możesz pokonać w celu obserwacji zawodnika"
             onChange={onInputChange}
           />
@@ -137,8 +153,12 @@ const RegisterForm: React.FC = () => {
         variant="contained"
         color="primary"
         className={classes.submit}
+        disabled={loading}
       >
         Zarejestruj się
+        {loading && (
+          <CircularProgress size={24} className={classes.buttonProgress} />
+        )}
       </Button>
       <Grid container justify="flex-end">
         <Grid item>

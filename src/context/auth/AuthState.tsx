@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson, setAuthToken } from '../../config/axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
-import { State, LoginFormData } from '../../types/auth';
+import { State, LoginFormData, RegisterFormData } from '../../types/auth';
 
 const AuthState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -14,6 +14,7 @@ const AuthState: React.FC = ({ children }) => {
     setLoading: () => null,
     loadUser: () => null,
     login: () => null,
+    register: () => null,
     logout: () => null,
   };
 
@@ -34,8 +35,6 @@ const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.get('/api/v1/auth/account');
-      console.log(res);
-      console.log(res.data);
       dispatch({
         type: 'USER_LOADED',
         payload: res.data.data,
@@ -49,6 +48,28 @@ const AuthState: React.FC = ({ children }) => {
   };
 
   // Register user
+  const register = async (formData: RegisterFormData) => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.post('/api/v1/auth/register', formData);
+
+      console.log(res.data);
+
+      dispatch({
+        type: 'REGISTER_SUCCESS',
+        payload: res.data.token,
+      });
+
+      loadUser();
+    } catch (err) {
+      console.log(err.response.data.error);
+      dispatch({
+        type: 'REGISTER_FAIL',
+        payload: err.response.data.error,
+      });
+    }
+  };
 
   // Login user
   const login = async (formData: LoginFormData) => {
@@ -56,7 +77,6 @@ const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/auth/login', formData);
-      console.log(res.data);
 
       dispatch({
         type: 'LOGIN_SUCCESS',
@@ -65,7 +85,6 @@ const AuthState: React.FC = ({ children }) => {
 
       loadUser();
     } catch (err) {
-      console.log(err.response.data);
       dispatch({
         type: 'LOGIN_FAIL',
         payload: err.response.data.error,
@@ -75,7 +94,6 @@ const AuthState: React.FC = ({ children }) => {
 
   // Logout
   const logout = () => {
-    console.log('logging out...');
     dispatch({
       type: 'LOGOUT',
     });
@@ -95,6 +113,7 @@ const AuthState: React.FC = ({ children }) => {
         loadUser,
         login,
         logout,
+        register,
       }}
     >
       {children}

@@ -19,12 +19,13 @@ export type State = {
   setLoading: () => void;
   loadUser: () => void;
   login: (formData: LoginFormData) => void;
+  register: (formData: RegisterFormData) => void;
   logout: () => void;
 };
 
 export type Action =
-  | { type: 'REGISTER_SUCCESS' }
-  | { type: 'REGISTER_FAIL' }
+  | { type: 'REGISTER_SUCCESS'; payload: string }
+  | { type: 'REGISTER_FAIL'; payload: string }
   | { type: 'USER_LOADED'; payload: User }
   | { type: 'AUTH_ERROR'; payload: string }
   | { type: 'LOGIN_SUCCESS'; payload: string }
