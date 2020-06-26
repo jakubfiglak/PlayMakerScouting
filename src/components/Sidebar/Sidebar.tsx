@@ -1,5 +1,6 @@
 import React from 'react';
-import { Drawer, Divider } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { Drawer, Divider, Typography } from '@material-ui/core';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import useStyles from './styles';
 import navElements from './data';
@@ -10,10 +11,12 @@ import useAuthState from '../../context/auth/useAuthState';
 const Sidebar: React.FC = () => {
   const classes = useStyles();
   const authContext = useAuthState();
+  const history = useHistory();
 
-  const { logout } = authContext;
+  const { logout, user } = authContext;
 
   const onLogout = () => {
+    history.push('/login');
     logout();
   };
 
@@ -26,7 +29,14 @@ const Sidebar: React.FC = () => {
       }}
       anchor="left"
     >
-      <div className={classes.toolbar} />
+      <div className={classes.toolbar}>
+        {user && (
+          <Typography>
+            Hello
+            {user.name}
+          </Typography>
+        )}
+      </div>
       <Divider />
       {navElements.map((element) => {
         const { Icon, text, link } = element;

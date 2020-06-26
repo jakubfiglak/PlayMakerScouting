@@ -1,5 +1,17 @@
+type User = {
+  role: string;
+  _id: string;
+  name: string;
+  surname: string;
+  email: string;
+  phone: string;
+  activeRadius: number;
+  createdAt: string;
+  __v: number;
+};
+
 export type State = {
-  user: string | null;
+  user: User | null;
   token: string | null;
   isAuthenticated: boolean | null;
   loading: boolean;
@@ -13,7 +25,7 @@ export type State = {
 export type Action =
   | { type: 'REGISTER_SUCCESS' }
   | { type: 'REGISTER_FAIL' }
-  | { type: 'USER_LOADED'; payload: string | null }
+  | { type: 'USER_LOADED'; payload: User }
   | { type: 'AUTH_ERROR'; payload: string }
   | { type: 'LOGIN_SUCCESS'; payload: string }
   | { type: 'LOGIN_FAIL'; payload: string }

@@ -34,10 +34,11 @@ const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.get('/api/v1/auth/account');
+      console.log(res);
       console.log(res.data);
       dispatch({
         type: 'USER_LOADED',
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
       dispatch({
@@ -74,6 +75,7 @@ const AuthState: React.FC = ({ children }) => {
 
   // Logout
   const logout = () => {
+    console.log('logging out...');
     dispatch({
       type: 'LOGOUT',
     });

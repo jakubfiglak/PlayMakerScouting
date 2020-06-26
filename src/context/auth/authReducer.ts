@@ -1,6 +1,6 @@
 import { State, Action } from '../../types/auth';
 
-export default (state: State, action: Action) => {
+export default (state: State, action: Action): State => {
   switch (action.type) {
     case 'USER_LOADED':
       return {
@@ -36,6 +36,7 @@ export default (state: State, action: Action) => {
       localStorage.removeItem('token');
       return {
         ...state,
+        isAuthenticated: false,
         token: null,
         loading: false,
         user: null,
