@@ -4,18 +4,22 @@ export type State = {
   isAuthenticated: boolean | null;
   loading: boolean;
   error: string | null;
+  setLoading: () => void;
+  loadUser: () => void;
   login: (formData: LoginFormData) => void;
+  logout: () => void;
 };
 
 export type Action =
   | { type: 'REGISTER_SUCCESS' }
   | { type: 'REGISTER_FAIL' }
   | { type: 'USER_LOADED'; payload: string | null }
-  | { type: 'AUTH_ERROR' }
-  | { type: 'LOGIN_SUCCESS'; payload: { token: string } }
+  | { type: 'AUTH_ERROR'; payload: string }
+  | { type: 'LOGIN_SUCCESS'; payload: string }
   | { type: 'LOGIN_FAIL'; payload: string }
   | { type: 'LOGOUT' }
-  | { type: 'CLEAR_ERRORS' };
+  | { type: 'CLEAR_ERRORS' }
+  | { type: 'SET_LOADING' };
 
 export type LoginFormData = {
   email: string;

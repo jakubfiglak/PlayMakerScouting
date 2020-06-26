@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textDecoration: 'none',
     color: white,
     textTransform: 'uppercase',
+    padding: 0,
   },
   isActive: {
     background: semiGray,

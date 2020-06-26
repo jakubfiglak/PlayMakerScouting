@@ -4,9 +4,18 @@ import ExitToApp from '@material-ui/icons/ExitToApp';
 import useStyles from './styles';
 import navElements from './data';
 import NavElement from './NavElement';
+import NavButton from './NavButton';
+import useAuthState from '../../context/auth/useAuthState';
 
 const Sidebar: React.FC = () => {
   const classes = useStyles();
+  const authContext = useAuthState();
+
+  const { logout } = authContext;
+
+  const onLogout = () => {
+    logout();
+  };
 
   return (
     <Drawer
@@ -24,7 +33,7 @@ const Sidebar: React.FC = () => {
         return <NavElement Icon={Icon} text={text} link={link} key={text} />;
       })}
       <Divider />
-      <NavElement Icon={ExitToApp} text="Wyloguj się" link="/logout" />
+      <NavButton Icon={ExitToApp} text="Wyloguj się" onClick={onLogout} />
     </Drawer>
   );
 };

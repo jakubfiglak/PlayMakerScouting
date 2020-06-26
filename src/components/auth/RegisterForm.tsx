@@ -3,7 +3,7 @@ import { Grid, TextField, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import useStyles from './styles';
 import useForm from '../../hooks/useForm';
-import { RegisterFormData } from './types';
+import { RegisterFormData } from '../../types/auth';
 
 const initialState: RegisterFormData = {
   name: '',

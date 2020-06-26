@@ -6,3 +6,9 @@ export type NavLinkProps = {
   text: string;
   link: string;
 };
+
+export type NavButtonProps = {
+  Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+  text: string;
+  onClick: () => void;
+};

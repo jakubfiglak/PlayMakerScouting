@@ -1,8 +1,9 @@
-import React, { SyntheticEvent } from 'react';
-import { TextField, Button, Grid } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import React, { useEffect, SyntheticEvent } from 'react';
+import { useHistory, Link } from 'react-router-dom';
+import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
+
 import useStyles from './styles';
-import { LoginFormData } from './types';
+import { LoginFormData } from '../../types/auth';
 import useForm from '../../hooks/useForm';
 import useAuthState from '../../context/auth/useAuthState';
 
@@ -13,9 +14,16 @@ const initialState: LoginFormData = {
 
 const LoginForm: React.FC = () => {
   const classes = useStyles();
-  const context = useAuthState();
+  const authContext = useAuthState();
+  const history = useHistory();
 
-  const { login } = context;
+  const { login, loading, isAuthenticated } = authContext;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/');
+    }
+  }, [isAuthenticated, history]);
 
   const [loginData, onInputChange] = useForm(initialState);
 
@@ -56,8 +64,12 @@ const LoginForm: React.FC = () => {
         variant="contained"
         color="primary"
         className={classes.submit}
+        disabled={loading}
       >
         Zaloguj się
+        {loading && (
+          <CircularProgress size={24} className={classes.buttonProgress} />
+        )}
       </Button>
       <Grid container>
         <Grid item xs>

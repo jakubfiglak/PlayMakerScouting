@@ -1,4 +1,4 @@
-import { State, Action } from './types';
+import { State, Action } from '../../types/auth';
 
 export default (state: State, action: Action) => {
   switch (action.type) {
@@ -11,15 +11,17 @@ export default (state: State, action: Action) => {
       };
 
     case 'LOGIN_SUCCESS':
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', action.payload);
       return {
         ...state,
-        token: action.payload.token,
+        token: action.payload,
         isAuthenticated: true,
         loading: false,
+        error: null,
       };
 
     case 'LOGIN_FAIL':
+    case 'AUTH_ERROR':
       localStorage.removeItem('token');
       return {
         ...state,
@@ -28,6 +30,28 @@ export default (state: State, action: Action) => {
         loading: false,
         user: null,
         error: action.payload,
+      };
+
+    case 'LOGOUT':
+      localStorage.removeItem('token');
+      return {
+        ...state,
+        token: null,
+        loading: false,
+        user: null,
+        error: null,
+      };
+
+    case 'SET_LOADING':
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case 'CLEAR_ERRORS':
+      return {
+        ...state,
+        error: null,
       };
 
     default:
