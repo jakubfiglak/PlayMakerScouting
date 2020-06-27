@@ -2,8 +2,8 @@ import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
 import useAuthorization from '../../hooks/useAuthorization';
 import UserCard from '../UserCard/UserCard';
+import SectionTitle from '../SectionTitle/SectionTitle';
 import useAuthState from '../../context/auth/useAuthState';
-import RegisterForm from '../auth/RegisterForm';
 
 const Profile: React.FC = () => {
   useAuthorization();
@@ -13,6 +13,7 @@ const Profile: React.FC = () => {
 
   return (
     <MainTemplate>
+      <SectionTitle>Mój profil</SectionTitle>
       <UserCard user={user} />
     </MainTemplate>
   );

@@ -8,7 +8,12 @@ import {
 import { NavButtonProps } from './types';
 import useStyles from './styles';
 
-const NavElement: React.FC<NavButtonProps> = ({ Icon, text, onClick }) => {
+const NavElement: React.FC<NavButtonProps> = ({
+  Icon,
+  text,
+  onClick,
+  className,
+}) => {
   const classes = useStyles();
 
   return (
@@ -17,7 +22,7 @@ const NavElement: React.FC<NavButtonProps> = ({ Icon, text, onClick }) => {
         <ListItemIcon className={classes.icon}>
           <Icon />
         </ListItemIcon>
-        <ListItemText primary={text} />
+        <ListItemText primary={text} className={className} />
       </ListItem>
     </Button>
   );

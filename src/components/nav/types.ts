@@ -5,10 +5,12 @@ export type NavLinkProps = {
   Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
   text: string;
   link: string;
+  className?: string;
 };
 
 export type NavButtonProps = {
   Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
   text: string;
+  className?: string;
   onClick: () => void;
 };

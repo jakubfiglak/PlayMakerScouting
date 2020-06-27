@@ -7,6 +7,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
+
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
   drawerPaper: {
     width: drawerWidth,
@@ -25,6 +29,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   isActive: {
     background: semiGray,
+  },
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+  },
+  title: {
+    flexGrow: 1,
+  },
+  menuLink: {
+    color: theme.palette.primary.main,
   },
 }));
 

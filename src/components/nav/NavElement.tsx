@@ -4,7 +4,12 @@ import { NavLink } from 'react-router-dom';
 import { NavLinkProps } from './types';
 import useStyles from './styles';
 
-const NavElement: React.FC<NavLinkProps> = ({ Icon, text, link }) => {
+const NavElement: React.FC<NavLinkProps> = ({
+  Icon,
+  text,
+  link,
+  className,
+}) => {
   const classes = useStyles();
 
   return (
@@ -17,7 +22,7 @@ const NavElement: React.FC<NavLinkProps> = ({ Icon, text, link }) => {
         <ListItemIcon className={classes.icon}>
           <Icon />
         </ListItemIcon>
-        <ListItemText primary={text} />
+        <ListItemText primary={text} className={className} />
       </ListItem>
     </NavLink>
   );

@@ -4,6 +4,10 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       maxWidth: '50%',
+
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '100%',
+      },
     },
     media: {
       height: 0,
