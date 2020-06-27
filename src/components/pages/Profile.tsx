@@ -4,7 +4,7 @@ import MainTemplate from '../templates/MainTemplate/MainTemplate';
 import useAuthorization from '../../hooks/useAuthorization';
 import DetailsCard from '../profile/DetailsCard';
 import PasswordCard from '../profile/PasswordCard';
-import SectionTitle from '../SectionTitle/SectionTitle';
+import SectionTitle from '../common/SectionTitle/SectionTitle';
 import useAuthState from '../../context/auth/useAuthState';
 
 const Profile: React.FC = () => {

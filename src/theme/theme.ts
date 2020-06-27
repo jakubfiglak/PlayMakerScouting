@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { lightGray, darkGray, red, yellow } from './colors';
+import { lightGray, darkGray, red, yellow, white } from './colors';
 
 const theme = createMuiTheme({
   typography: {
@@ -20,6 +20,9 @@ const theme = createMuiTheme({
     },
     background: {
       default: lightGray,
+    },
+    common: {
+      white,
     },
   },
 });
