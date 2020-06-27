@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import authContext from './authContext';
-import { State } from '../../types/auth';
+import playersContext from './playersContext';
+import { State } from '../../types/players';
 
 const useAuthState = (): State => {
-  const context = useContext(authContext);
+  const context = useContext(playersContext);
   if (context === undefined) {
     throw new Error('useAuthState hook must be used within AuthState');
   }

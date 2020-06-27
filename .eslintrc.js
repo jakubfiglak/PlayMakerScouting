@@ -33,6 +33,7 @@ module.exports = {
       "logical": "ignore",
       "prop": "ignore"
     }],
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "@typescript-eslint/naming-convention": "off"
   },
 };

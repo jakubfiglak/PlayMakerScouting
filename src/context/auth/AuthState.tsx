@@ -62,8 +62,6 @@ const AuthState: React.FC = ({ children }) => {
     try {
       const res = await axiosJson.post('/api/v1/auth/register', formData);
 
-      console.log(res.data);
-
       dispatch({
         type: 'REGISTER_SUCCESS',
         payload: res.data.token,
@@ -71,7 +69,6 @@ const AuthState: React.FC = ({ children }) => {
 
       loadUser();
     } catch (err) {
-      console.log(err.response.data.error);
       dispatch({
         type: 'REGISTER_FAIL',
         payload: err.response.data.error,
@@ -133,8 +130,7 @@ const AuthState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      const res = await axiosJson.put('/api/v1/auth/updatedetails', formData);
-      console.log(res);
+      await axiosJson.put('/api/v1/auth/updatedetails', formData);
 
       dispatch({
         type: 'EDIT_SUCCESS',
@@ -142,7 +138,6 @@ const AuthState: React.FC = ({ children }) => {
 
       loadUser();
     } catch (err) {
-      console.log(err.response.data);
       dispatch({
         type: 'EDIT_FAIL',
         payload: err.response.data.error,
