@@ -4,14 +4,14 @@ import EditAccountForm from '../auth/EditAccountForm';
 import useStyles from './styles';
 import { User } from '../../types/auth';
 
-const UserCard: React.FC<{ user: User | null }> = ({ user }) => {
+const DetailsCard: React.FC<{ user: User | null }> = ({ user }) => {
   const classes = useStyles();
 
   if (user) {
     const { name, surname, email, role } = user;
 
     return (
-      <Card className={classes.root}>
+      <Card>
         <CardHeader
           avatar={
             <Avatar className={classes.avatar}>
@@ -30,4 +30,4 @@ const UserCard: React.FC<{ user: User | null }> = ({ user }) => {
   return <p>You need to log in to see the account details</p>;
 };
 
-export default UserCard;
+export default DetailsCard;

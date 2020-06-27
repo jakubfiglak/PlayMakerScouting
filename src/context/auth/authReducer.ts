@@ -12,6 +12,7 @@ export default (state: State, action: Action): State => {
 
     case 'LOGIN_SUCCESS':
     case 'REGISTER_SUCCESS':
+    case 'UPDATE_PASSWORD_SUCCESS':
       localStorage.setItem('token', action.payload);
       return {
         ...state,
@@ -24,6 +25,7 @@ export default (state: State, action: Action): State => {
     case 'LOGIN_FAIL':
     case 'REGISTER_FAIL':
     case 'AUTH_ERROR':
+    case 'UPDATE_PASSWORD_FAIL':
       localStorage.removeItem('token');
       return {
         ...state,

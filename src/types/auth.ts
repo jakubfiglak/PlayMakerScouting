@@ -31,6 +31,7 @@ export type State = {
   register: (formData: RegisterFormData) => void;
   logout: () => void;
   editDetails: (formData: EditAccountData) => void;
+  updatePassword: (formData: UpdatePasswordData) => void;
 };
 
 export type Action =
@@ -44,7 +45,9 @@ export type Action =
   | { type: 'CLEAR_ERRORS' }
   | { type: 'SET_LOADING' }
   | { type: 'EDIT_SUCCESS' }
-  | { type: 'EDIT_FAIL'; payload: string };
+  | { type: 'EDIT_FAIL'; payload: string }
+  | { type: 'UPDATE_PASSWORD_SUCCESS'; payload: string }
+  | { type: 'UPDATE_PASSWORD_FAIL'; payload: string };
 
 export type LoginFormData = {
   email: string;
@@ -66,4 +69,10 @@ export type EditAccountData = {
   phone: string | undefined;
   address: string | undefined;
   activeRadius: number | undefined;
+};
+
+export type UpdatePasswordData = {
+  oldPassword: string;
+  newPassword: string;
+  newPasswordConfirm: string;
 };

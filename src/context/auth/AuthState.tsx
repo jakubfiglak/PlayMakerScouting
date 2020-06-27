@@ -7,6 +7,7 @@ import {
   LoginFormData,
   RegisterFormData,
   EditAccountData,
+  UpdatePasswordData,
 } from '../../types/auth';
 
 const AuthState: React.FC = ({ children }) => {
@@ -22,6 +23,7 @@ const AuthState: React.FC = ({ children }) => {
     register: () => null,
     logout: () => null,
     editDetails: () => null,
+    updatePassword: () => null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -98,6 +100,27 @@ const AuthState: React.FC = ({ children }) => {
     }
   };
 
+  // Update password
+  const updatePassword = async (formData: UpdatePasswordData) => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.put('/api/v1/auth/updatepassword', formData);
+
+      dispatch({
+        type: 'UPDATE_PASSWORD_SUCCESS',
+        payload: res.data.token,
+      });
+
+      loadUser();
+    } catch (err) {
+      dispatch({
+        type: 'UPDATE_PASSWORD_FAIL',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
   // Logout
   const logout = () => {
     dispatch({
@@ -143,6 +166,7 @@ const AuthState: React.FC = ({ children }) => {
         logout,
         register,
         editDetails,
+        updatePassword,
       }}
     >
       {children}
