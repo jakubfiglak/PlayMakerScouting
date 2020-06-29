@@ -6,7 +6,11 @@ import { State } from '../../types/players';
 
 const PlayersState: React.FC = ({ children }) => {
   const initialState: State = {
-    players: [],
+    playersData: {
+      data: [],
+      total: 0,
+      pagination: {},
+    },
     loading: false,
     error: null,
     setLoading: () => null,
@@ -23,17 +27,18 @@ const PlayersState: React.FC = ({ children }) => {
   };
 
   // Get players
-  const getPlayers = async () => {
+  const getPlayers = async (page = 1, limit = 20) => {
     setLoading();
     try {
-      const res = await axiosJson.get('/api/v1/players');
+      const res = await axiosJson.get(
+        `/api/v1/players?page=${page}&limit=${limit}`,
+      );
       console.log(res.data);
       dispatch({
         type: 'GET_PLAYERS_SUCCESS',
-        payload: res.data.data,
+        payload: res.data,
       });
     } catch (err) {
-      console.log(err.response);
       dispatch({
         type: 'GET_PLAYERS_FAIL',
         payload: err.response.data.error,
@@ -52,7 +57,7 @@ const PlayersState: React.FC = ({ children }) => {
   return (
     <PlayersContext.Provider
       value={{
-        players: state.players,
+        playersData: state.playersData,
         loading: state.loading,
         error: state.error,
         setLoading,

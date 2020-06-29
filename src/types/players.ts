@@ -13,17 +13,32 @@ export type Player = {
   footed: 'L' | 'R';
 };
 
+export type PlayersData = {
+  data: Player[];
+  total: number;
+  pagination: {
+    prev?: {
+      page: number;
+      limit: number;
+    };
+    next?: {
+      page: number;
+      limit: number;
+    };
+  };
+};
+
 export type State = {
-  players: Player[];
+  playersData: PlayersData;
   loading: boolean;
   error: string | null;
   setLoading: () => void;
-  getPlayers: () => void;
+  getPlayers: (page: number, limit: number) => void;
 };
 
 export type Action =
   | { type: 'SET_LOADING' }
-  | { type: 'GET_PLAYERS_SUCCESS'; payload: Player[] }
+  | { type: 'GET_PLAYERS_SUCCESS'; payload: PlayersData }
   | { type: 'GET_PLAYERS_FAIL'; payload: string }
   | { type: 'GET_PLAYER_SUCCESS'; payload: Player }
   | { type: 'GET_PLAYER_FAIL'; payload: string }

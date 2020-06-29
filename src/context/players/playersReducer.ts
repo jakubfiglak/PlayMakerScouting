@@ -13,7 +13,11 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
-        players: action.payload,
+        playersData: {
+          data: action.payload.data,
+          total: action.payload.total,
+          pagination: action.payload.pagination,
+        },
       };
 
     case 'GET_PLAYERS_FAIL':
