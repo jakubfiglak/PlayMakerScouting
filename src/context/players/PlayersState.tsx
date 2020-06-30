@@ -27,11 +27,11 @@ const PlayersState: React.FC = ({ children }) => {
   };
 
   // Get players
-  const getPlayers = async (page = 1, limit = 20) => {
+  const getPlayers = async (page = 1, limit = 20, sort = '_id') => {
     setLoading();
     try {
       const res = await axiosJson.get(
-        `/api/v1/players?page=${page}&limit=${limit}`,
+        `/api/v1/players?page=${page}&limit=${limit}&sort=${sort}`,
       );
       console.log(res.data);
       dispatch({

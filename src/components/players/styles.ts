@@ -9,15 +9,9 @@ const useStyles = makeStyles({
     overflowX: 'auto',
     margin: '0 auto',
   },
-  body: {
-    position: 'relative',
-  },
-  progress: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -20,
-    marginLeft: -20,
+  formControl: {
+    minWidth: 120,
+    margin: '20px',
   },
 });
 

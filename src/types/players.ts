@@ -33,7 +33,7 @@ export type State = {
   loading: boolean;
   error: string | null;
   setLoading: () => void;
-  getPlayers: (page: number, limit: number) => void;
+  getPlayers: (page: number, limit: number, sort: string) => void;
 };
 
 export type Action =
