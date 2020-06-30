@@ -19,9 +19,8 @@ const PlayersTableRow: React.FC<Player> = ({
 
   return (
     <TableRow>
-      <TableCell component="th" scope="row">
-        {`${lastName} ${firstName}`}
-      </TableCell>
+      <TableCell>{lastName}</TableCell>
+      <TableCell>{firstName}</TableCell>
       <TableCell>{club.name}</TableCell>
       <TableCell>{position}</TableCell>
       <TableCell>{formattedDate}</TableCell>
