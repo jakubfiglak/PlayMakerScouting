@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -7,70 +7,46 @@ import {
   TablePagination,
   TableFooter,
   TableRow,
-  FormControl,
-  FormHelperText,
-  Select,
-  MenuItem,
 } from '@material-ui/core';
-import PlayersTableHead from './PlayersTableHead';
 import PlayersTableRow from './PlayersTableRow';
 import TablePaginationActions from '../common/TablePaginationActions/TablePaginationActions';
 import Loader from '../common/Loader/Loader';
 import usePlayersState from '../../context/players/usePlayersState';
 import useStyles from './styles';
+import headCells from './data';
+import TableHeader from '../common/TableHeader/TableHeader';
+import useTable from '../../hooks/useTable';
 
 const PlayersTable: React.FC = () => {
   const classes = useStyles();
   const playersContext = usePlayersState();
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [sort, setSort] = React.useState('');
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSort(event.target.value as string);
-  };
+  const [
+    page,
+    rowsPerPage,
+    sortBy,
+    order,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleSort,
+  ] = useTable();
 
   const { loading, getPlayers, playersData } = playersContext;
 
   useEffect(() => {
-    getPlayers(page + 1, rowsPerPage, sort);
-    console.log(playersData);
-  }, [page, rowsPerPage, sort]);
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+    getPlayers(page + 1, rowsPerPage, sortBy, order);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage, sortBy, order]);
 
   return (
     <TableContainer component={Paper} className={classes.paper}>
       {loading && <Loader />}
-      <FormControl className={classes.formControl}>
-        <Select
-          value={sort}
-          onChange={handleChange}
-          displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          <MenuItem value="_id" />
-          <MenuItem value="lastName">Nazwisko</MenuItem>
-          <MenuItem value="position">Pozycja</MenuItem>
-          <MenuItem value="dateOfBirth">Data urodzenia</MenuItem>
-        </Select>
-        <FormHelperText>Sortuj według</FormHelperText>
-      </FormControl>
       <Table className={classes.table} aria-label="customized table">
-        <PlayersTableHead />
+        <TableHeader
+          headCells={headCells}
+          sortBy={sortBy}
+          order={order}
+          handleSort={handleSort}
+        />
         <TableBody>
           {playersData.data.map((player) => {
             const {
@@ -105,7 +81,7 @@ const PlayersTable: React.FC = () => {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 20]}
-              colSpan={7}
+              colSpan={8}
               count={playersData.total}
               rowsPerPage={rowsPerPage}
               page={page}

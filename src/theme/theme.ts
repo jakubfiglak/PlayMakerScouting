@@ -25,6 +25,25 @@ const theme = createMuiTheme({
       white,
     },
   },
+  overrides: {
+    MuiTableSortLabel: {
+      root: {
+        '&$active': {
+          color: yellow,
+
+          '&& $icon': {
+            color: yellow,
+          },
+        },
+        '&:hover': {
+          color: yellow,
+        },
+        '&:focus': {
+          color: yellow,
+        },
+      },
+    },
+  },
 });
 
 export default theme;

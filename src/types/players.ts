@@ -1,3 +1,5 @@
+import { Order } from './common';
+
 export type Player = {
   _id: string;
   firstName: string;
@@ -33,7 +35,7 @@ export type State = {
   loading: boolean;
   error: string | null;
   setLoading: () => void;
-  getPlayers: (page: number, limit: number, sort: string) => void;
+  getPlayers: (page: number, limit: number, sort: string, order: Order) => void;
 };
 
 export type Action =
