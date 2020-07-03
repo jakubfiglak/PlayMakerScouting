@@ -30,12 +30,19 @@ export type PlayersData = {
   };
 };
 
+export type GetPlayers = (
+  page: number,
+  limit: number,
+  sort: string,
+  order: Order,
+) => void;
+
 export type State = {
   playersData: PlayersData;
   loading: boolean;
   error: string | null;
   setLoading: () => void;
-  getPlayers: (page: number, limit: number, sort: string, order: Order) => void;
+  getPlayers: GetPlayers;
 };
 
 export type Action =

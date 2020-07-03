@@ -5,7 +5,6 @@ const useStyles = makeStyles({
     minWidth: 700,
   },
   paper: {
-    maxWidth: '90vw',
     overflowX: 'auto',
     margin: '0 auto',
   },

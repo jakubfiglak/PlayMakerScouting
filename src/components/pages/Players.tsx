@@ -1,9 +1,8 @@
 import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
 import useAuthorization from '../../hooks/useAuthorization';
-import SectionTitle from '../common/SectionTitle/SectionTitle';
-import PlayersTable from '../players/PlayersTable';
 import PlayersState from '../../context/players/PlayersState';
+import PlayersContent from '../content/PlayersContent';
 
 const Players: React.FC = () => {
   useAuthorization();
@@ -11,8 +10,7 @@ const Players: React.FC = () => {
   return (
     <PlayersState>
       <MainTemplate>
-        <SectionTitle>Zawodnicy</SectionTitle>
-        <PlayersTable />
+        <PlayersContent />
       </MainTemplate>
     </PlayersState>
   );

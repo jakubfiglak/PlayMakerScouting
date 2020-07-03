@@ -10,16 +10,19 @@ import {
 } from '@material-ui/core';
 import PlayersTableRow from './PlayersTableRow';
 import TablePaginationActions from '../common/TablePaginationActions/TablePaginationActions';
-import Loader from '../common/Loader/Loader';
-import usePlayersState from '../../context/players/usePlayersState';
 import useStyles from './styles';
 import headCells from './data';
 import TableHeader from '../common/TableHeader/TableHeader';
 import useTable from '../../hooks/useTable';
+import { PlayersData, GetPlayers } from '../../types/players';
 
-const PlayersTable: React.FC = () => {
+type TableProps = {
+  getPlayers: GetPlayers;
+  playersData: PlayersData;
+};
+
+const PlayersTable = ({ getPlayers, playersData }: TableProps) => {
   const classes = useStyles();
-  const playersContext = usePlayersState();
   const [
     page,
     rowsPerPage,
@@ -30,8 +33,6 @@ const PlayersTable: React.FC = () => {
     handleSort,
   ] = useTable();
 
-  const { loading, getPlayers, playersData } = playersContext;
-
   useEffect(() => {
     getPlayers(page + 1, rowsPerPage, sortBy, order);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,7 +40,6 @@ const PlayersTable: React.FC = () => {
 
   return (
     <TableContainer component={Paper} className={classes.paper}>
-      {loading && <Loader />}
       <Table className={classes.table} aria-label="customized table">
         <TableHeader
           headCells={headCells}
