@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 import PlayersTable from '../players/PlayersTable';
 import TabPanel from '../common/TabPanel/TabPanel';
 import usePlayersState from '../../context/players/usePlayersState';
+import useSimplifiedDataState from '../../context/simplifiedData/useSimplifiedDataState';
 import Loader from '../common/Loader/Loader';
 import PlayersFilterForm from '../players/PlayersFilterForm';
 
 const PlayersContent = () => {
   const playersContext = usePlayersState();
+  const simplifiedDataContext = useSimplifiedDataState();
 
   const { loading, getPlayers, playersData } = playersContext;
+  const {
+    loading: simpleDataLoading,
+    getClubs,
+    clubsData,
+  } = simplifiedDataContext;
 
   const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    getClubs();
+    console.log(clubsData);
+  }, []);
 
   const handleChange = (
     event: React.ChangeEvent<Record<string, unknown>>,
@@ -23,6 +35,7 @@ const PlayersContent = () => {
   return (
     <>
       {loading && <Loader />}
+      {simpleDataLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange} aria-label="players">
           <Tab
@@ -34,7 +47,7 @@ const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} title="players">
-        <PlayersFilterForm />
+        <PlayersFilterForm clubsData={clubsData} />
         <PlayersTable getPlayers={getPlayers} playersData={playersData} />
       </TabPanel>
       <TabPanel value={value} index={1} title="players">
