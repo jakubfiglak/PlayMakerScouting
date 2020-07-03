@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import useAuthState from '../context/auth/useAuthState';
 
 const useAuthorization = (redirectTo = '/login') => {
-  console.log('Checking authorization...');
   const history = useHistory();
   const authContext = useAuthState();
 
@@ -14,6 +13,7 @@ const useAuthorization = (redirectTo = '/login') => {
     if (!isAuthenticated) {
       history.push(redirectTo);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 };
 
