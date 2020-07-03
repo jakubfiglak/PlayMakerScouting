@@ -12,6 +12,9 @@ const useStyles = makeStyles({
     minWidth: 120,
     margin: '20px',
   },
+  input: {
+    margin: '8px',
+  },
 });
 
 export default useStyles;

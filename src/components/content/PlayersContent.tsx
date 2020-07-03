@@ -4,6 +4,7 @@ import PlayersTable from '../players/PlayersTable';
 import TabPanel from '../common/TabPanel/TabPanel';
 import usePlayersState from '../../context/players/usePlayersState';
 import Loader from '../common/Loader/Loader';
+import PlayersFilterForm from '../players/PlayersFilterForm';
 
 const PlayersContent = () => {
   const playersContext = usePlayersState();
@@ -33,6 +34,7 @@ const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} title="players">
+        <PlayersFilterForm />
         <PlayersTable getPlayers={getPlayers} playersData={playersData} />
       </TabPanel>
       <TabPanel value={value} index={1} title="players">
