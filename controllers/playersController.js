@@ -46,6 +46,19 @@ exports.getPlayers = asyncHandler(async (req, res) => {
   res.status(200).json(res.advancedResults);
 });
 
+// @desc Get players list
+// @route GET /api/v1/players/list
+// @access Private
+exports.getPlayersList = asyncHandler(async (req, res) => {
+  const players = await Player.find().select('firstName lastName');
+
+  return res.status(200).json({
+    success: true,
+    count: players.length,
+    data: players,
+  });
+});
+
 // @desc Get single player
 // @route GET /api/v1/players/:id
 // @access Private

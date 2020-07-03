@@ -30,6 +30,19 @@ exports.getClubs = asyncHandler(async (req, res) => {
   res.status(200).json(res.advancedResults);
 });
 
+// @desc Get clubs list
+// @route GET /api/v1/clubs/list
+// @access Private
+exports.getClubsList = asyncHandler(async (req, res) => {
+  const clubs = await Club.find().select('name');
+
+  return res.status(200).json({
+    success: true,
+    count: clubs.length,
+    data: clubs,
+  });
+});
+
 // @desc Get single club
 // @route GET /api/v1/clubs/:id
 // @access Private

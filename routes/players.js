@@ -2,6 +2,7 @@ const express = require('express');
 const {
   createPlayer,
   getPlayers,
+  getPlayersList,
   getPlayer,
   updatePlayer,
   deletePlayer,
@@ -27,6 +28,7 @@ router.get(
   ],
   getPlayers
 );
+router.get('/list', protect, getPlayersList);
 router.get('/:id', protect, getPlayer);
 router.put('/:id', protect, updatePlayer);
 router.delete('/:id', [protect, authorize('admin')], deletePlayer);

@@ -2,6 +2,7 @@ const express = require('express');
 const {
   createClub,
   getClubs,
+  getClubsList,
   getClub,
   getClubsInVoivodeship,
   getClubsInRadius,
@@ -22,6 +23,7 @@ router.use('/:clubId/matches', protect, matchesRouter);
 
 router.post('/', [protect, authorize('admin')], createClub);
 router.get('/', [protect, advancedResults(Club)], getClubs);
+router.get('/list', protect, getClubsList);
 router.get('/:id', protect, getClub);
 router.put('/:id', [protect, authorize('admin')], updateClub);
 router.delete('/:id', [protect, authorize('admin')], deleteClub);
