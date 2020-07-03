@@ -15,6 +15,7 @@ import usePlayersState from '../../context/players/usePlayersState';
 import useStyles from './styles';
 import headCells from './data';
 import TableHeader from '../common/TableHeader/TableHeader';
+import { Order } from '../../types/common';
 
 const PlayersTable: React.FC = () => {
   const classes = useStyles();
@@ -24,12 +25,13 @@ const PlayersTable: React.FC = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [sort, setSort] = React.useState('_id');
+  const [sortBy, setSortBy] = useState('_id');
+  const [order, setOrder] = useState<Order>('asc');
 
   useEffect(() => {
-    getPlayers(page + 1, rowsPerPage, sort);
+    getPlayers(page + 1, rowsPerPage, sortBy, order);
     console.log(playersData);
-  }, [page, rowsPerPage, sort]);
+  }, [page, rowsPerPage, sortBy, order]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -45,11 +47,22 @@ const PlayersTable: React.FC = () => {
     setPage(0);
   };
 
+  const handleSort = (id: string) => {
+    const isAsc = sortBy === id && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setSortBy(id);
+  };
+
   return (
     <TableContainer component={Paper} className={classes.paper}>
       {loading && <Loader />}
       <Table className={classes.table} aria-label="customized table">
-        <TableHeader headCells={headCells} sort={sort} setSort={setSort} />
+        <TableHeader
+          headCells={headCells}
+          sortBy={sortBy}
+          order={order}
+          handleSort={handleSort}
+        />
         <TableBody>
           {playersData.data.map((player) => {
             const {

@@ -3,6 +3,7 @@ import { axiosJson } from '../../config/axios';
 import PlayersContext from './playersContext';
 import playersReducer from './playersReducer';
 import { State } from '../../types/players';
+import { Order } from '../../types/common';
 
 const PlayersState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -27,11 +28,18 @@ const PlayersState: React.FC = ({ children }) => {
   };
 
   // Get players
-  const getPlayers = async (page = 1, limit = 20, sort = '_id') => {
+  const getPlayers = async (
+    page = 1,
+    limit = 20,
+    sort = '_id',
+    order: Order,
+  ) => {
     setLoading();
     try {
       const res = await axiosJson.get(
-        `/api/v1/players?page=${page}&limit=${limit}&sort=${sort}`,
+        `/api/v1/players?page=${page}&limit=${limit}&sort=${
+          order === 'desc' ? '-' : ''
+        }${sort}`,
       );
       console.log(res.data);
       dispatch({

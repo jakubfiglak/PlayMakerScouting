@@ -2,25 +2,24 @@ import React from 'react';
 import { TableHead, TableSortLabel } from '@material-ui/core';
 import TableRow from '../TableRow/TableRow';
 import TableCell from '../TableCell/TableCell';
-import HeadCell from './types';
+import { HeadCell } from './types';
+import { Order } from '../../../types/common';
 
 const TableHeader: React.FC<{
   headCells: HeadCell[];
-  sort: string;
-  setSort: (id: string) => void;
-}> = ({ headCells, sort, setSort }) => {
+  sortBy: string;
+  order: Order;
+  handleSort: (id: string) => void;
+}> = ({ headCells, sortBy, order, handleSort }) => {
   return (
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell key={headCell.id}>
             <TableSortLabel
-              active={headCell.id === sort}
-              direction="asc"
-              onClick={() => {
-                console.log('click!');
-                setSort(headCell.id);
-              }}
+              active={sortBy === headCell.id}
+              direction={sortBy === headCell.id ? order : 'asc'}
+              onClick={() => handleSort(headCell.id)}
             >
               {headCell.label}
             </TableSortLabel>
