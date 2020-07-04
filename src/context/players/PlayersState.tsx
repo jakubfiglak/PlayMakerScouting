@@ -16,6 +16,7 @@ const PlayersState: React.FC = ({ children }) => {
     error: null,
     setLoading: () => null,
     getPlayers: () => null,
+    deletePlayer: () => null,
   };
 
   const [state, dispatch] = useReducer(playersReducer, initialState);
@@ -70,6 +71,20 @@ const PlayersState: React.FC = ({ children }) => {
   // Update player details
 
   // Delete player
+  const deletePlayer = async (id: string) => {
+    setLoading();
+    try {
+      await axiosJson.delete(`/api/v1/players/${id}`);
+      dispatch({
+        type: 'DELETE_PLAYER_SUCCESS',
+      });
+    } catch (err) {
+      dispatch({
+        type: 'DELETE_PLAYER_FAIL',
+        payload: err.response.data.error,
+      });
+    }
+  };
 
   return (
     <PlayersContext.Provider
@@ -79,6 +94,7 @@ const PlayersState: React.FC = ({ children }) => {
         error: state.error,
         setLoading,
         getPlayers,
+        deletePlayer,
       }}
     >
       {children}

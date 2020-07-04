@@ -12,7 +12,7 @@ const PlayersContent = () => {
   const playersContext = usePlayersState();
   const simplifiedDataContext = useSimplifiedDataState();
 
-  const { loading, getPlayers, playersData } = playersContext;
+  const { loading, getPlayers, playersData, deletePlayer } = playersContext;
   const {
     loading: simpleDataLoading,
     getClubs,
@@ -58,6 +58,7 @@ const PlayersContent = () => {
           getPlayers={getPlayers}
           playersData={playersData}
           filters={filters}
+          deletePlayer={deletePlayer}
         />
       </TabPanel>
       <TabPanel value={value} index={1} title="players">

@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   table: {
     minWidth: 700,
   },
@@ -15,6 +15,9 @@ const useStyles = makeStyles({
   input: {
     margin: '8px',
   },
-});
+  delete: {
+    color: theme.palette.error.light,
+  },
+}));
 
 export default useStyles;

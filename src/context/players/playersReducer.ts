@@ -20,7 +20,15 @@ export default (state: State, action: Action): State => {
         },
       };
 
+    case 'DELETE_PLAYER_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
+
     case 'GET_PLAYERS_FAIL':
+    case 'DELETE_PLAYER_FAIL':
       return {
         ...state,
         loading: false,

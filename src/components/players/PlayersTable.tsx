@@ -24,9 +24,15 @@ type TableProps = {
   getPlayers: GetPlayers;
   playersData: PlayersData;
   filters: PlayersFilterData;
+  deletePlayer: (id: string) => void;
 };
 
-const PlayersTable = ({ getPlayers, playersData, filters }: TableProps) => {
+const PlayersTable = ({
+  getPlayers,
+  playersData,
+  filters,
+  deletePlayer,
+}: TableProps) => {
   const classes = useStyles();
   const [
     page,
@@ -40,7 +46,6 @@ const PlayersTable = ({ getPlayers, playersData, filters }: TableProps) => {
 
   useEffect(() => {
     getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
-    console.log(filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters]);
 
@@ -55,30 +60,13 @@ const PlayersTable = ({ getPlayers, playersData, filters }: TableProps) => {
         />
         <TableBody>
           {playersData.data.map((player) => {
-            const {
-              _id,
-              firstName,
-              lastName,
-              club,
-              position,
-              dateOfBirth,
-              height,
-              weight,
-              footed,
-            } = player;
+            const { _id } = player;
 
             return (
               <PlayersTableRow
                 key={_id}
-                _id={_id}
-                firstName={firstName}
-                lastName={lastName}
-                club={club}
-                position={position}
-                dateOfBirth={dateOfBirth}
-                height={height}
-                weight={weight}
-                footed={footed}
+                player={player}
+                deletePlayer={deletePlayer}
               />
             );
           })}

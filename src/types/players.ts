@@ -44,6 +44,7 @@ export type State = {
   error: string | null;
   setLoading: () => void;
   getPlayers: GetPlayers;
+  deletePlayer: (id: string) => void;
 };
 
 export type PlayersFilterData = {
@@ -63,4 +64,4 @@ export type Action =
   | { type: 'UPDATE_PLAYER_SUCCESS' }
   | { type: 'UPDATE_PLAYER_FAIL' }
   | { type: 'DELETE_PLAYER_SUCCESS' }
-  | { type: 'DELETE_PLAYER_FAIL' };
+  | { type: 'DELETE_PLAYER_FAIL'; payload: string };
