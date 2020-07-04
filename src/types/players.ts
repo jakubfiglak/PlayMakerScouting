@@ -35,6 +35,7 @@ export type GetPlayers = (
   limit: number,
   sort: string,
   order: Order,
+  filters: PlayersFilterData,
 ) => void;
 
 export type State = {
@@ -43,6 +44,12 @@ export type State = {
   error: string | null;
   setLoading: () => void;
   getPlayers: GetPlayers;
+};
+
+export type PlayersFilterData = {
+  name: string;
+  club: string;
+  position: string;
 };
 
 export type Action =

@@ -14,14 +14,19 @@ import useStyles from './styles';
 import headCells from './data';
 import TableHeader from '../common/TableHeader/TableHeader';
 import useTable from '../../hooks/useTable';
-import { PlayersData, GetPlayers } from '../../types/players';
+import {
+  PlayersData,
+  GetPlayers,
+  PlayersFilterData,
+} from '../../types/players';
 
 type TableProps = {
   getPlayers: GetPlayers;
   playersData: PlayersData;
+  filters: PlayersFilterData;
 };
 
-const PlayersTable = ({ getPlayers, playersData }: TableProps) => {
+const PlayersTable = ({ getPlayers, playersData, filters }: TableProps) => {
   const classes = useStyles();
   const [
     page,
@@ -34,9 +39,10 @@ const PlayersTable = ({ getPlayers, playersData }: TableProps) => {
   ] = useTable();
 
   useEffect(() => {
-    getPlayers(page + 1, rowsPerPage, sortBy, order);
+    getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
+    console.log(filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order]);
+  }, [page, rowsPerPage, sortBy, order, filters]);
 
   return (
     <TableContainer component={Paper} className={classes.paper}>

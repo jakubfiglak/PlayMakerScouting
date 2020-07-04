@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
 import {
   TextField,
   Button,
@@ -10,31 +10,38 @@ import {
 } from '@material-ui/core';
 import useStyles from './styles';
 import useForm from '../../hooks/useForm';
-import { FilterFormData } from './types';
+import { PlayersFilterData } from '../../types/players';
 import { ClubData } from '../../types/simplifiedData';
 
 type FilterFormProps = {
   clubsData: ClubData[];
+  setFilters: Dispatch<SetStateAction<PlayersFilterData>>;
 };
 
-const initialState: FilterFormData = {
+const initialState: PlayersFilterData = {
   name: '',
   club: '',
   position: '',
 };
 
-const PlayersFilterForm = ({ clubsData }: FilterFormProps) => {
+const PlayersFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
   const classes = useStyles();
-  const [filterData, onInputChange, setFormData] = useForm(initialState);
+  const [formData, onInputChange, setFormData] = useForm(initialState);
 
-  const { name, club, position } = filterData;
+  const { name, club, position } = formData;
 
   const handleClearFilter = () => {
     setFormData(initialState);
+    setFilters(initialState);
+  };
+
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    setFilters(formData);
   };
 
   return (
-    <form autoComplete="off">
+    <form autoComplete="off" onSubmit={handleSubmit}>
       <Grid container justify="center" alignItems="center">
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <TextField

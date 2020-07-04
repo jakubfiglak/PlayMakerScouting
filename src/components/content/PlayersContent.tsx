@@ -6,6 +6,7 @@ import usePlayersState from '../../context/players/usePlayersState';
 import useSimplifiedDataState from '../../context/simplifiedData/useSimplifiedDataState';
 import Loader from '../common/Loader/Loader';
 import PlayersFilterForm from '../players/PlayersFilterForm';
+import { PlayersFilterData } from '../../types/players';
 
 const PlayersContent = () => {
   const playersContext = usePlayersState();
@@ -20,9 +21,14 @@ const PlayersContent = () => {
 
   const [value, setValue] = useState(0);
 
+  const [filters, setFilters] = useState<PlayersFilterData>({
+    name: '',
+    club: '',
+    position: '',
+  });
+
   useEffect(() => {
     getClubs();
-    console.log(clubsData);
   }, []);
 
   const handleChange = (
@@ -47,8 +53,12 @@ const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} title="players">
-        <PlayersFilterForm clubsData={clubsData} />
-        <PlayersTable getPlayers={getPlayers} playersData={playersData} />
+        <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
+        <PlayersTable
+          getPlayers={getPlayers}
+          playersData={playersData}
+          filters={filters}
+        />
       </TabPanel>
       <TabPanel value={value} index={1} title="players">
         Item Two

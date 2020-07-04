@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import PlayersContext from './playersContext';
 import playersReducer from './playersReducer';
-import { State } from '../../types/players';
+import { State, PlayersFilterData } from '../../types/players';
 import { Order } from '../../types/common';
 
 const PlayersState: React.FC = ({ children }) => {
@@ -33,15 +33,24 @@ const PlayersState: React.FC = ({ children }) => {
     limit = 20,
     sort = '_id',
     order: Order,
+    filters: PlayersFilterData,
   ) => {
     setLoading();
+    const orderSign = order === 'desc' ? '-' : '';
+
+    // Generate query url
+    let playersURI = `/api/v1/players?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+    // Add filters to query url
+    Object.entries(filters).forEach(([key, value]) => {
+      const filter = `&${key}=${value}`;
+      if (value.length) {
+        playersURI = playersURI.concat(filter);
+      }
+    });
+
     try {
-      const res = await axiosJson.get(
-        `/api/v1/players?page=${page}&limit=${limit}&sort=${
-          order === 'desc' ? '-' : ''
-        }${sort}`,
-      );
-      console.log(res.data);
+      const res = await axiosJson.get(playersURI);
       dispatch({
         type: 'GET_PLAYERS_SUCCESS',
         payload: res.data,
