@@ -8,6 +8,8 @@ import TableCell from '../common/TableCell/TableCell';
 import useStyles from './styles';
 import useAuthState from '../../context/auth/useAuthState';
 import Loader from '../common/Loader/Loader';
+import Modal from '../common/Modal/Modal';
+import useModal from '../../hooks/useModal';
 
 type TableRowProps = {
   player: Player;
@@ -16,6 +18,8 @@ type TableRowProps = {
 
 const PlayersTableRow = ({ player, deletePlayer }: TableRowProps) => {
   const classes = useStyles();
+  const [isModalOpen, handleClickOpen, handleClose] = useModal();
+
   const authContext = useAuthState();
   const {
     _id,
@@ -45,13 +49,22 @@ const PlayersTableRow = ({ player, deletePlayer }: TableRowProps) => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Usuń">
-          <IconButton
-            aria-label="delete"
-            className={classes.delete}
-            disabled={user?.role !== 'admin'}
-          >
-            <DeleteIcon fontSize="small" />
-          </IconButton>
+          <div>
+            <IconButton
+              aria-label="delete"
+              className={classes.delete}
+              disabled={user?.role !== 'admin'}
+              onClick={handleClickOpen}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+            <Modal
+              open={isModalOpen}
+              message={`Usunąć zawodnika ${firstName} ${lastName} z bazy?`}
+              handleAccept={() => deletePlayer(_id)}
+              handleClose={handleClose}
+            />
+          </div>
         </Tooltip>
       </TableCell>
       <TableCell>{lastName}</TableCell>

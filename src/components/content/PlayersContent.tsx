@@ -7,10 +7,12 @@ import useSimplifiedDataState from '../../context/simplifiedData/useSimplifiedDa
 import Loader from '../common/Loader/Loader';
 import PlayersFilterForm from '../players/PlayersFilterForm';
 import { PlayersFilterData } from '../../types/players';
+import useTabs from '../../hooks/useTabs';
 
 const PlayersContent = () => {
   const playersContext = usePlayersState();
   const simplifiedDataContext = useSimplifiedDataState();
+  const [activeTab, handleTabChange] = useTabs();
 
   const { loading, getPlayers, playersData, deletePlayer } = playersContext;
   const {
@@ -18,8 +20,6 @@ const PlayersContent = () => {
     getClubs,
     clubsData,
   } = simplifiedDataContext;
-
-  const [value, setValue] = useState(0);
 
   const [filters, setFilters] = useState<PlayersFilterData>({
     name: '',
@@ -29,21 +29,15 @@ const PlayersContent = () => {
 
   useEffect(() => {
     getClubs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleChange = (
-    event: React.ChangeEvent<Record<string, unknown>>,
-    newValue: number,
-  ) => {
-    setValue(newValue);
-  };
 
   return (
     <>
       {loading && <Loader />}
       {simpleDataLoading && <Loader />}
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="players">
+        <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
           <Tab
             label="Baza zawodników"
             id="players-0"
@@ -52,7 +46,7 @@ const PlayersContent = () => {
           <Tab label="Dodaj/edytuj" id="players-1" aria-controls="players-1" />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0} title="players">
+      <TabPanel value={activeTab} index={0} title="players">
         <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
         <PlayersTable
           getPlayers={getPlayers}
@@ -61,7 +55,7 @@ const PlayersContent = () => {
           deletePlayer={deletePlayer}
         />
       </TabPanel>
-      <TabPanel value={value} index={1} title="players">
+      <TabPanel value={activeTab} index={1} title="players">
         Item Two
       </TabPanel>
     </>

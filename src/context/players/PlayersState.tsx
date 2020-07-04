@@ -77,6 +77,7 @@ const PlayersState: React.FC = ({ children }) => {
       await axiosJson.delete(`/api/v1/players/${id}`);
       dispatch({
         type: 'DELETE_PLAYER_SUCCESS',
+        payload: id,
       });
     } catch (err) {
       dispatch({

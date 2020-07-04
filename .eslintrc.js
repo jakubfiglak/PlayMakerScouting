@@ -36,6 +36,7 @@ module.exports = {
     "react/prop-types": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_id"]}]
   },
 };

@@ -63,5 +63,5 @@ export type Action =
   | { type: 'CREATE_PLAYER_FAIL' }
   | { type: 'UPDATE_PLAYER_SUCCESS' }
   | { type: 'UPDATE_PLAYER_FAIL' }
-  | { type: 'DELETE_PLAYER_SUCCESS' }
+  | { type: 'DELETE_PLAYER_SUCCESS'; payload: string }
   | { type: 'DELETE_PLAYER_FAIL'; payload: string };
