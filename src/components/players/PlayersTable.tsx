@@ -10,16 +10,33 @@ import {
 } from '@material-ui/core';
 import PlayersTableRow from './PlayersTableRow';
 import TablePaginationActions from '../common/TablePaginationActions/TablePaginationActions';
-import Loader from '../common/Loader/Loader';
-import usePlayersState from '../../context/players/usePlayersState';
 import useStyles from './styles';
 import headCells from './data';
 import TableHeader from '../common/TableHeader/TableHeader';
 import useTable from '../../hooks/useTable';
+import {
+  PlayersData,
+  GetPlayers,
+  PlayersFilterData,
+  NewPlayer,
+} from '../../types/players';
 
-const PlayersTable: React.FC = () => {
+type TableProps = {
+  getPlayers: GetPlayers;
+  playersData: PlayersData;
+  filters: PlayersFilterData;
+  deletePlayer: (id: string) => void;
+  handleSetCurrent: (player: NewPlayer) => void;
+};
+
+const PlayersTable = ({
+  getPlayers,
+  playersData,
+  filters,
+  deletePlayer,
+  handleSetCurrent,
+}: TableProps) => {
   const classes = useStyles();
-  const playersContext = usePlayersState();
   const [
     page,
     rowsPerPage,
@@ -30,16 +47,13 @@ const PlayersTable: React.FC = () => {
     handleSort,
   ] = useTable();
 
-  const { loading, getPlayers, playersData } = playersContext;
-
   useEffect(() => {
-    getPlayers(page + 1, rowsPerPage, sortBy, order);
+    getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order]);
+  }, [page, rowsPerPage, sortBy, order, filters]);
 
   return (
     <TableContainer component={Paper} className={classes.paper}>
-      {loading && <Loader />}
       <Table className={classes.table} aria-label="customized table">
         <TableHeader
           headCells={headCells}
@@ -49,30 +63,14 @@ const PlayersTable: React.FC = () => {
         />
         <TableBody>
           {playersData.data.map((player) => {
-            const {
-              _id,
-              firstName,
-              lastName,
-              club,
-              position,
-              dateOfBirth,
-              height,
-              weight,
-              footed,
-            } = player;
+            const { _id } = player;
 
             return (
               <PlayersTableRow
                 key={_id}
-                _id={_id}
-                firstName={firstName}
-                lastName={lastName}
-                club={club}
-                position={position}
-                dateOfBirth={dateOfBirth}
-                height={height}
-                weight={weight}
-                footed={footed}
+                player={player}
+                deletePlayer={deletePlayer}
+                handleSetCurrent={handleSetCurrent}
               />
             );
           })}

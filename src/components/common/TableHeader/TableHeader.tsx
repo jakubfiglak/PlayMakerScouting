@@ -14,6 +14,7 @@ const TableHeader: React.FC<{
   return (
     <TableHead>
       <TableRow>
+        <TableCell />
         {headCells.map((headCell) => (
           <TableCell key={headCell.id}>
             <TableSortLabel

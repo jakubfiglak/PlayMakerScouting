@@ -20,11 +20,45 @@ export default (state: State, action: Action): State => {
         },
       };
 
-    case 'GET_PLAYERS_FAIL':
+    case 'CREATE_PLAYER_SUCCESS':
+    case 'UPDATE_PLAYER_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
+
+    case 'DELETE_PLAYER_SUCCESS':
+      return {
+        ...state,
+        playersData: {
+          data: state.playersData.data.filter(
+            (player) => player._id !== action.payload,
+          ),
+          total: state.playersData.total - 1,
+          pagination: state.playersData.pagination,
+        },
+        loading: false,
+        error: null,
+      };
+
+    case 'PLAYERS_ERROR':
       return {
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    case 'SET_CURRENT':
+      return {
+        ...state,
+        current: action.payload,
+      };
+
+    case 'CLEAR_CURRENT':
+      return {
+        ...state,
+        current: null,
       };
 
     default:

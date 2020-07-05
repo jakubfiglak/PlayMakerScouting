@@ -1,11 +1,10 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   table: {
     minWidth: 700,
   },
   paper: {
-    maxWidth: '90vw',
     overflowX: 'auto',
     margin: '0 auto',
   },
@@ -13,6 +12,12 @@ const useStyles = makeStyles({
     minWidth: 120,
     margin: '20px',
   },
-});
+  input: {
+    margin: '8px',
+  },
+  delete: {
+    color: theme.palette.error.light,
+  },
+}));
 
 export default useStyles;
