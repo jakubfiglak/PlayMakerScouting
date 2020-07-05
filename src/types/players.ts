@@ -19,6 +19,7 @@ export type Player = BasicPlayerData & {
 };
 
 export type NewPlayer = BasicPlayerData & {
+  _id?: string;
   club: string;
 };
 
@@ -47,11 +48,16 @@ export type GetPlayers = (
 
 export type State = {
   playersData: PlayersData;
+  current: NewPlayer | null;
   loading: boolean;
   error: string | null;
   setLoading: () => void;
   getPlayers: GetPlayers;
   deletePlayer: (id: string) => void;
+  addPlayer: (player: NewPlayer) => void;
+  editPlayer: (player: NewPlayer) => void;
+  setCurrent: (player: NewPlayer) => void;
+  clearCurrent: () => void;
 };
 
 export type PlayersFilterData = {
@@ -62,13 +68,11 @@ export type PlayersFilterData = {
 
 export type Action =
   | { type: 'SET_LOADING' }
+  | { type: 'SET_CURRENT'; payload: NewPlayer }
+  | { type: 'CLEAR_CURRENT' }
+  | { type: 'PLAYERS_ERROR'; payload: string }
   | { type: 'GET_PLAYERS_SUCCESS'; payload: PlayersData }
-  | { type: 'GET_PLAYERS_FAIL'; payload: string }
   | { type: 'GET_PLAYER_SUCCESS'; payload: Player }
-  | { type: 'GET_PLAYER_FAIL'; payload: string }
   | { type: 'CREATE_PLAYER_SUCCESS' }
-  | { type: 'CREATE_PLAYER_FAIL' }
   | { type: 'UPDATE_PLAYER_SUCCESS' }
-  | { type: 'UPDATE_PLAYER_FAIL' }
-  | { type: 'DELETE_PLAYER_SUCCESS'; payload: string }
-  | { type: 'DELETE_PLAYER_FAIL'; payload: string };
+  | { type: 'DELETE_PLAYER_SUCCESS'; payload: string };

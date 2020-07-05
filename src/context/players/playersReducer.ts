@@ -20,6 +20,14 @@ export default (state: State, action: Action): State => {
         },
       };
 
+    case 'CREATE_PLAYER_SUCCESS':
+    case 'UPDATE_PLAYER_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
+
     case 'DELETE_PLAYER_SUCCESS':
       return {
         ...state,
@@ -34,12 +42,23 @@ export default (state: State, action: Action): State => {
         error: null,
       };
 
-    case 'GET_PLAYERS_FAIL':
-    case 'DELETE_PLAYER_FAIL':
+    case 'PLAYERS_ERROR':
       return {
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    case 'SET_CURRENT':
+      return {
+        ...state,
+        current: action.payload,
+      };
+
+    case 'CLEAR_CURRENT':
+      return {
+        ...state,
+        current: null,
       };
 
     default:

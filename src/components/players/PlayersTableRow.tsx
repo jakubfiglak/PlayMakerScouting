@@ -2,7 +2,7 @@ import React from 'react';
 import { IconButton, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { Player } from '../../types/players';
+import { Player, NewPlayer } from '../../types/players';
 import TableRow from '../common/TableRow/TableRow';
 import TableCell from '../common/TableCell/TableCell';
 import useStyles from './styles';
@@ -14,9 +14,14 @@ import useModal from '../../hooks/useModal';
 type TableRowProps = {
   player: Player;
   deletePlayer: (id: string) => void;
+  handleSetCurrent: (player: NewPlayer) => void;
 };
 
-const PlayersTableRow = ({ player, deletePlayer }: TableRowProps) => {
+const PlayersTableRow = ({
+  player,
+  deletePlayer,
+  handleSetCurrent,
+}: TableRowProps) => {
   const classes = useStyles();
   const [isModalOpen, handleClickOpen, handleClose] = useModal();
 
@@ -33,6 +38,18 @@ const PlayersTableRow = ({ player, deletePlayer }: TableRowProps) => {
     footed,
   } = player;
 
+  const playerEditData = {
+    _id,
+    firstName,
+    lastName,
+    club: club._id,
+    position,
+    dateOfBirth,
+    height,
+    weight,
+    footed,
+  };
+
   const { loading, user } = authContext;
 
   const formattedDate = new Intl.DateTimeFormat('pl-PL').format(
@@ -44,7 +61,10 @@ const PlayersTableRow = ({ player, deletePlayer }: TableRowProps) => {
       {loading && <Loader />}
       <TableCell>
         <Tooltip title="Edytuj">
-          <IconButton aria-label="edit">
+          <IconButton
+            aria-label="edit"
+            onClick={() => handleSetCurrent(playerEditData)}
+          >
             <EditIcon fontSize="small" />
           </IconButton>
         </Tooltip>

@@ -10,7 +10,7 @@ const useTabs = () => {
     setActiveTab(newTab);
   };
 
-  return [activeTab, handleTabChange] as const;
+  return [activeTab, handleTabChange, setActiveTab] as const;
 };
 
 export default useTabs;

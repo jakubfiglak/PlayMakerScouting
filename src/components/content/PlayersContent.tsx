@@ -6,16 +6,22 @@ import usePlayersState from '../../context/players/usePlayersState';
 import useSimplifiedDataState from '../../context/simplifiedData/useSimplifiedDataState';
 import Loader from '../common/Loader/Loader';
 import PlayersFilterForm from '../players/PlayersFilterForm';
-import { PlayersFilterData } from '../../types/players';
+import { PlayersFilterData, NewPlayer } from '../../types/players';
 import useTabs from '../../hooks/useTabs';
 import PlayersForm from '../players/PlayersForm';
 
 const PlayersContent = () => {
   const playersContext = usePlayersState();
   const simplifiedDataContext = useSimplifiedDataState();
-  const [activeTab, handleTabChange] = useTabs();
+  const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  const { loading, getPlayers, playersData, deletePlayer } = playersContext;
+  const {
+    loading,
+    getPlayers,
+    playersData,
+    deletePlayer,
+    setCurrent,
+  } = playersContext;
   const {
     loading: simpleDataLoading,
     getClubs,
@@ -27,6 +33,11 @@ const PlayersContent = () => {
     club: '',
     position: '',
   });
+
+  const handleSetCurrent = (player: NewPlayer) => {
+    setCurrent(player);
+    setActiveTab(1);
+  };
 
   useEffect(() => {
     getClubs();
@@ -54,6 +65,7 @@ const PlayersContent = () => {
           playersData={playersData}
           filters={filters}
           deletePlayer={deletePlayer}
+          handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">

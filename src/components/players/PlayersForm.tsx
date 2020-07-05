@@ -8,28 +8,37 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-
+import Loader from '../common/Loader/Loader';
 import useForm from '../../hooks/useForm';
 import { NewPlayer } from '../../types/players';
 import { ClubData } from '../../types/simplifiedData';
+import usePlayersState from '../../context/players/usePlayersState';
 
 type PlayersFormProps = {
   clubsData: ClubData[];
 };
 
-const initialState: NewPlayer = {
-  firstName: '',
-  lastName: '',
-  club: '',
-  position: 'M',
-  dateOfBirth: '2000-01-01',
-  height: 0,
-  weight: 0,
-  footed: 'R',
-};
-
 const PlayersForm = ({ clubsData }: PlayersFormProps) => {
-  const [playerData, onInputChange] = useForm(initialState);
+  const playersContext = usePlayersState();
+  const {
+    loading,
+    addPlayer,
+    current,
+    clearCurrent,
+    editPlayer,
+  } = playersContext;
+
+  const initialState: NewPlayer = current || {
+    firstName: '',
+    lastName: '',
+    club: '',
+    position: 'M',
+    dateOfBirth: '2000-01-01',
+    height: 0,
+    weight: 0,
+    footed: 'R',
+  };
+  const [playerData, onInputChange, setPlayerData] = useForm(initialState);
 
   const {
     firstName,
@@ -42,13 +51,26 @@ const PlayersForm = ({ clubsData }: PlayersFormProps) => {
     footed,
   } = playerData;
 
+  const formattedDate = dateOfBirth.slice(0, 10);
+
+  const onCancelClick = () => {
+    setPlayerData(initialState);
+  };
+
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log(playerData);
+
+    if (current) {
+      editPlayer(playerData);
+      clearCurrent();
+    } else {
+      addPlayer(playerData);
+    }
   };
 
   return (
     <form onSubmit={onSubmit}>
+      {loading && <Loader />}
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -131,7 +153,7 @@ const PlayersForm = ({ clubsData }: PlayersFormProps) => {
             label="Data urodzenia"
             id="dateOfBirth"
             name="dateOfBirth"
-            value={dateOfBirth}
+            value={formattedDate}
             onChange={onInputChange}
           />
         </Grid>
@@ -185,7 +207,17 @@ const PlayersForm = ({ clubsData }: PlayersFormProps) => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <Button type="submit" fullWidth variant="contained" color="primary">
-            Zapisz
+            {current ? 'Edytuj zawodnika' : 'Dodaj zawodnika'}
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="secondary"
+            onClick={onCancelClick}
+          >
+            Anuluj zmiany
           </Button>
         </Grid>
       </Grid>

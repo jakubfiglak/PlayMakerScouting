@@ -18,6 +18,7 @@ import {
   PlayersData,
   GetPlayers,
   PlayersFilterData,
+  NewPlayer,
 } from '../../types/players';
 
 type TableProps = {
@@ -25,6 +26,7 @@ type TableProps = {
   playersData: PlayersData;
   filters: PlayersFilterData;
   deletePlayer: (id: string) => void;
+  handleSetCurrent: (player: NewPlayer) => void;
 };
 
 const PlayersTable = ({
@@ -32,6 +34,7 @@ const PlayersTable = ({
   playersData,
   filters,
   deletePlayer,
+  handleSetCurrent,
 }: TableProps) => {
   const classes = useStyles();
   const [
@@ -67,6 +70,7 @@ const PlayersTable = ({
                 key={_id}
                 player={player}
                 deletePlayer={deletePlayer}
+                handleSetCurrent={handleSetCurrent}
               />
             );
           })}

@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import PlayersContext from './playersContext';
 import playersReducer from './playersReducer';
-import { State, PlayersFilterData } from '../../types/players';
+import { State, PlayersFilterData, NewPlayer } from '../../types/players';
 import { Order } from '../../types/common';
 
 const PlayersState: React.FC = ({ children }) => {
@@ -12,11 +12,16 @@ const PlayersState: React.FC = ({ children }) => {
       total: 0,
       pagination: {},
     },
+    current: null,
     loading: false,
     error: null,
     setLoading: () => null,
     getPlayers: () => null,
     deletePlayer: () => null,
+    addPlayer: () => null,
+    setCurrent: () => null,
+    clearCurrent: () => null,
+    editPlayer: () => null,
   };
 
   const [state, dispatch] = useReducer(playersReducer, initialState);
@@ -58,7 +63,7 @@ const PlayersState: React.FC = ({ children }) => {
       });
     } catch (err) {
       dispatch({
-        type: 'GET_PLAYERS_FAIL',
+        type: 'PLAYERS_ERROR',
         payload: err.response.data.error,
       });
     }
@@ -67,8 +72,53 @@ const PlayersState: React.FC = ({ children }) => {
   // Get player
 
   // Create new player
+  const addPlayer = async (player: NewPlayer) => {
+    setLoading();
+
+    try {
+      await axiosJson.post('/api/v1/players', player);
+      dispatch({
+        type: 'CREATE_PLAYER_SUCCESS',
+      });
+    } catch (err) {
+      dispatch({
+        type: 'PLAYERS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Set current
+  const setCurrent = (player: NewPlayer) => {
+    dispatch({
+      type: 'SET_CURRENT',
+      payload: player,
+    });
+  };
+
+  // Clear current
+  const clearCurrent = () => {
+    dispatch({
+      type: 'CLEAR_CURRENT',
+    });
+  };
 
   // Update player details
+  const editPlayer = async (player: NewPlayer) => {
+    setLoading();
+
+    try {
+      await axiosJson.put(`/api/v1/players/${player._id}`, player);
+      dispatch({
+        type: 'UPDATE_PLAYER_SUCCESS',
+      });
+    } catch (err) {
+      dispatch({
+        type: 'PLAYERS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
 
   // Delete player
   const deletePlayer = async (id: string) => {
@@ -81,7 +131,7 @@ const PlayersState: React.FC = ({ children }) => {
       });
     } catch (err) {
       dispatch({
-        type: 'DELETE_PLAYER_FAIL',
+        type: 'PLAYERS_ERROR',
         payload: err.response.data.error,
       });
     }
@@ -91,11 +141,16 @@ const PlayersState: React.FC = ({ children }) => {
     <PlayersContext.Provider
       value={{
         playersData: state.playersData,
+        current: state.current,
         loading: state.loading,
         error: state.error,
         setLoading,
         getPlayers,
         deletePlayer,
+        addPlayer,
+        setCurrent,
+        clearCurrent,
+        editPlayer,
       }}
     >
       {children}
