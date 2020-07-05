@@ -8,6 +8,7 @@ import Loader from '../common/Loader/Loader';
 import PlayersFilterForm from '../players/PlayersFilterForm';
 import { PlayersFilterData } from '../../types/players';
 import useTabs from '../../hooks/useTabs';
+import PlayersForm from '../players/PlayersForm';
 
 const PlayersContent = () => {
   const playersContext = usePlayersState();
@@ -56,7 +57,7 @@ const PlayersContent = () => {
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
-        Item Two
+        <PlayersForm clubsData={clubsData} />
       </TabPanel>
     </>
   );

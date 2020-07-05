@@ -1,18 +1,25 @@
 import { Order } from './common';
 
-export type Player = {
-  _id: string;
+type BasicPlayerData = {
   firstName: string;
   lastName: string;
-  club: {
-    _id: string;
-    name: string;
-  };
   position: 'GK' | 'D' | 'M' | 'F';
   dateOfBirth: string;
   height: number;
   weight: number;
   footed: 'L' | 'R';
+};
+
+export type Player = BasicPlayerData & {
+  _id: string;
+  club: {
+    _id: string;
+    name: string;
+  };
+};
+
+export type NewPlayer = BasicPlayerData & {
+  club: string;
 };
 
 export type PlayersData = {
