@@ -5,7 +5,9 @@ import { State } from '../../types/simplifiedData';
 const useSimplifiedDataState = (): State => {
   const context = useContext(simplifiedDataContext);
   if (context === undefined) {
-    throw new Error('useAuthState hook must be used within AuthState');
+    throw new Error(
+      'useSimplifiedDataState hook must be used within SimplifiedDataState',
+    );
   }
 
   return context;
