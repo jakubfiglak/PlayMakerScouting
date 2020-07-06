@@ -9,10 +9,10 @@ import {
   TableRow,
 } from '@material-ui/core';
 import PlayersTableRow from './PlayersTableRow';
-import TablePaginationActions from '../common/TablePaginationActions/TablePaginationActions';
+import TablePaginationActions from '../common/Table/TablePaginationActions';
 import useStyles from './styles';
 import headCells from './data';
-import TableHeader from '../common/TableHeader/TableHeader';
+import TableHeader from '../common/Table/TableHeader';
 import useTable from '../../hooks/useTable';
 import {
   PlayersData,

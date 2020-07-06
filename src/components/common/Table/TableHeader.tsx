@@ -1,22 +1,21 @@
 import React from 'react';
 import { TableHead, TableSortLabel } from '@material-ui/core';
-import TableRow from '../TableRow/TableRow';
-import TableCell from '../TableCell/TableCell';
-import { HeadCell } from './types';
-import { Order } from '../../../types/common';
+import StyledTableRow from './TableRow';
+import StyledTableCell from './TableCell';
+import { TableHeaderProps } from './types';
 
-const TableHeader: React.FC<{
-  headCells: HeadCell[];
-  sortBy: string;
-  order: Order;
-  handleSort: (id: string) => void;
-}> = ({ headCells, sortBy, order, handleSort }) => {
+const TableHeader = ({
+  headCells,
+  sortBy,
+  order,
+  handleSort,
+}: TableHeaderProps) => {
   return (
     <TableHead>
-      <TableRow>
-        <TableCell />
+      <StyledTableRow>
+        <StyledTableCell />
         {headCells.map((headCell) => (
-          <TableCell key={headCell.id}>
+          <StyledTableCell key={headCell.id}>
             <TableSortLabel
               active={sortBy === headCell.id}
               direction={sortBy === headCell.id ? order : 'asc'}
@@ -24,9 +23,9 @@ const TableHeader: React.FC<{
             >
               {headCell.label}
             </TableSortLabel>
-          </TableCell>
+          </StyledTableCell>
         ))}
-      </TableRow>
+      </StyledTableRow>
     </TableHead>
   );
 };
