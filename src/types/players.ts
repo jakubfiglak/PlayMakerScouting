@@ -1,6 +1,6 @@
 import { Order } from './common';
 
-type BasicPlayerData = {
+type Player = {
   firstName: string;
   lastName: string;
   position: 'GK' | 'D' | 'M' | 'F';
@@ -10,7 +10,7 @@ type BasicPlayerData = {
   footed: 'L' | 'R';
 };
 
-export type Player = BasicPlayerData & {
+export type DatabasePlayer = Player & {
   _id: string;
   club: {
     _id: string;
@@ -18,13 +18,13 @@ export type Player = BasicPlayerData & {
   };
 };
 
-export type NewPlayer = BasicPlayerData & {
+export type NewPlayer = Player & {
   _id?: string;
   club: string;
 };
 
 export type PlayersData = {
-  data: Player[];
+  data: DatabasePlayer[];
   total: number;
   pagination: {
     prev?: {

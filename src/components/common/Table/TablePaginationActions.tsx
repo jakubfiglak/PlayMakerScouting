@@ -4,12 +4,16 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import TablePaginationActionsProps from './types';
+import { TablePaginationActionsProps } from './types';
 import useStyles from './styles';
 
-const TablePaginationActions = (props: TablePaginationActionsProps) => {
+const TablePaginationActions = ({
+  count,
+  page,
+  rowsPerPage,
+  onChangePage,
+}: TablePaginationActionsProps) => {
   const classes = useStyles();
-  const { count, page, rowsPerPage, onChangePage } = props;
 
   const handleFirstPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>,

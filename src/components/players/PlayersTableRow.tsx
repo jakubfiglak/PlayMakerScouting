@@ -2,9 +2,9 @@ import React from 'react';
 import { IconButton, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { Player, NewPlayer } from '../../types/players';
-import TableRow from '../common/TableRow/TableRow';
-import TableCell from '../common/TableCell/TableCell';
+import { DatabasePlayer, NewPlayer } from '../../types/players';
+import StyledTableRow from '../common/Table/TableRow';
+import StyledTableCell from '../common/Table/TableCell';
 import useStyles from './styles';
 import useAuthState from '../../context/auth/useAuthState';
 import Loader from '../common/Loader/Loader';
@@ -12,7 +12,7 @@ import Modal from '../common/Modal/Modal';
 import useModal from '../../hooks/useModal';
 
 type TableRowProps = {
-  player: Player;
+  player: DatabasePlayer;
   deletePlayer: (id: string) => void;
   handleSetCurrent: (player: NewPlayer) => void;
 };
@@ -39,15 +39,8 @@ const PlayersTableRow = ({
   } = player;
 
   const playerEditData = {
-    _id,
-    firstName,
-    lastName,
+    ...player,
     club: club._id,
-    position,
-    dateOfBirth,
-    height,
-    weight,
-    footed,
   };
 
   const { loading, user } = authContext;
@@ -57,9 +50,9 @@ const PlayersTableRow = ({
   );
 
   return (
-    <TableRow>
+    <StyledTableRow>
       {loading && <Loader />}
-      <TableCell>
+      <StyledTableCell>
         <Tooltip title="Edytuj">
           <IconButton
             aria-label="edit"
@@ -86,16 +79,16 @@ const PlayersTableRow = ({
             />
           </div>
         </Tooltip>
-      </TableCell>
-      <TableCell>{lastName}</TableCell>
-      <TableCell>{firstName}</TableCell>
-      <TableCell>{club.name}</TableCell>
-      <TableCell>{position}</TableCell>
-      <TableCell>{formattedDate}</TableCell>
-      <TableCell>{height}</TableCell>
-      <TableCell>{weight}</TableCell>
-      <TableCell>{footed}</TableCell>
-    </TableRow>
+      </StyledTableCell>
+      <StyledTableCell>{lastName}</StyledTableCell>
+      <StyledTableCell>{firstName}</StyledTableCell>
+      <StyledTableCell>{club.name}</StyledTableCell>
+      <StyledTableCell>{position}</StyledTableCell>
+      <StyledTableCell>{formattedDate}</StyledTableCell>
+      <StyledTableCell>{height}</StyledTableCell>
+      <StyledTableCell>{weight}</StyledTableCell>
+      <StyledTableCell>{footed}</StyledTableCell>
+    </StyledTableRow>
   );
 };
 

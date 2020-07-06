@@ -22,9 +22,9 @@ module.exports = {
   ],
   plugins: ["prettier", "@typescript-eslint", "react-hooks"],
   rules: {
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
-    "react/jsx-wrap-multilines": ['error', {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-wrap-multilines": ["error", {
       "declaration": "parens",
       "assignment": "parens",
       "return": "parens",
@@ -37,6 +37,7 @@ module.exports = {
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "no-underscore-dangle": ["error", { "allow": ["_id"]}]
+    "no-underscore-dangle": ["error", { "allow": ["_id"]}],
+    "import/prefer-default-export": "off",
   },
 };
