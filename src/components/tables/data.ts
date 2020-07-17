@@ -8,3 +8,9 @@ export const playersHeadCells = [
   { id: 'weight', label: 'Waga [kg]' },
   { id: 'footed', label: 'Noga' },
 ];
+
+export const clubsHeadCells = [
+  { id: 'name', label: 'Nazwa' },
+  { id: 'division', label: 'Poziom rozgrywkowy' },
+  { id: 'voivodeship', label: 'Województwo' },
+];

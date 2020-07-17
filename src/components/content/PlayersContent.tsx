@@ -22,6 +22,7 @@ const PlayersContent = () => {
     deletePlayer,
     setCurrent,
   } = playersContext;
+
   const {
     loading: simpleDataLoading,
     getClubs,

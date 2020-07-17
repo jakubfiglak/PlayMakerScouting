@@ -1,26 +1,55 @@
-import { Location } from './common';
+import { Location, Order } from './common';
+
+type Division =
+  | ''
+  | 'Ekstraklasa'
+  | 'I liga'
+  | 'II liga'
+  | 'III liga'
+  | 'IV liga'
+  | 'Klasa okręgowa'
+  | 'Klasa A'
+  | 'Klasa B'
+  | 'Klasa C';
 
 export type Club = {
   _id: string;
   name: string;
   location: Location;
-  division:
-    | 'Ekstraklasa'
-    | 'I liga'
-    | 'II liga'
-    | 'III liga'
-    | 'IV liga'
-    | 'Klasa okręgowa'
-    | 'Klasa A'
-    | 'Klasa B'
-    | 'Klasa C';
+  division: Division;
 };
 
-export type State = {
-  clubsData: {
-    data: Club[];
-    total: number;
+export type ClubsData = {
+  data: Club[];
+  total: number;
+  pagination: {
+    prev?: {
+      page: number;
+      limit: number;
+    };
+    next?: {
+      page: number;
+      limit: number;
+    };
   };
+};
+
+export type ClubsFilterData = {
+  name: string;
+  division: Division;
+  voivodeship: string;
+};
+
+export type GetClubs = (
+  page: number,
+  limit: number,
+  sort: string,
+  order: Order,
+  filters: ClubsFilterData,
+) => void;
+
+export type State = {
+  clubsData: ClubsData;
   current: Club | null;
   loading: boolean;
   error: string | null;
