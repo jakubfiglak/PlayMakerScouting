@@ -52,7 +52,10 @@ export default (state: State, action: Action): State => {
     case 'SET_CURRENT':
       return {
         ...state,
-        current: action.payload,
+        current: {
+          ...action.payload,
+          club: action.payload.club._id,
+        },
       };
 
     case 'CLEAR_CURRENT':

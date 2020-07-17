@@ -1,6 +1,6 @@
 import { Order } from './common';
 
-type Player = {
+type PlayerCommonTypes = {
   firstName: string;
   lastName: string;
   position: 'GK' | 'D' | 'M' | 'F';
@@ -10,7 +10,7 @@ type Player = {
   footed: 'L' | 'R';
 };
 
-export type DatabasePlayer = Player & {
+export type Player = PlayerCommonTypes & {
   _id: string;
   club: {
     _id: string;
@@ -18,13 +18,13 @@ export type DatabasePlayer = Player & {
   };
 };
 
-export type NewPlayer = Player & {
+export type PlayersFormData = PlayerCommonTypes & {
   _id?: string;
   club: string;
 };
 
 export type PlayersData = {
-  data: DatabasePlayer[];
+  data: Player[];
   total: number;
   pagination: {
     prev?: {
@@ -48,15 +48,15 @@ export type GetPlayers = (
 
 export type State = {
   playersData: PlayersData;
-  current: NewPlayer | null;
+  current: PlayersFormData | null;
   loading: boolean;
   error: string | null;
   setLoading: () => void;
   getPlayers: GetPlayers;
   deletePlayer: (id: string) => void;
-  addPlayer: (player: NewPlayer) => void;
-  editPlayer: (player: NewPlayer) => void;
-  setCurrent: (player: NewPlayer) => void;
+  addPlayer: (player: PlayersFormData) => void;
+  editPlayer: (player: PlayersFormData) => void;
+  setCurrent: (player: Player) => void;
   clearCurrent: () => void;
 };
 
@@ -68,7 +68,7 @@ export type PlayersFilterData = {
 
 export type Action =
   | { type: 'SET_LOADING' }
-  | { type: 'SET_CURRENT'; payload: NewPlayer }
+  | { type: 'SET_CURRENT'; payload: Player }
   | { type: 'CLEAR_CURRENT' }
   | { type: 'PLAYERS_ERROR'; payload: string }
   | { type: 'GET_PLAYERS_SUCCESS'; payload: PlayersData }

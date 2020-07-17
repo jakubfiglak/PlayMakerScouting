@@ -12,9 +12,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: 120,
     margin: '20px',
   },
-  input: {
-    margin: '8px',
-  },
   delete: {
     color: theme.palette.error.light,
   },

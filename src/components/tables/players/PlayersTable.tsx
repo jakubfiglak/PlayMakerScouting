@@ -9,24 +9,24 @@ import {
   TableRow,
 } from '@material-ui/core';
 import PlayersTableRow from './PlayersTableRow';
-import TablePaginationActions from '../common/Table/TablePaginationActions';
-import useStyles from './styles';
-import headCells from './data';
-import TableHeader from '../common/Table/TableHeader';
-import useTable from '../../hooks/useTable';
+import TablePaginationActions from '../../common/Table/TablePaginationActions';
+import useStyles from '../styles';
+import { playersHeadCells } from '../data';
+import TableHeader from '../../common/Table/TableHeader';
+import useTable from '../../../hooks/useTable';
 import {
   PlayersData,
   GetPlayers,
   PlayersFilterData,
-  NewPlayer,
-} from '../../types/players';
+  Player,
+} from '../../../types/players';
 
 type TableProps = {
   getPlayers: GetPlayers;
   playersData: PlayersData;
   filters: PlayersFilterData;
   deletePlayer: (id: string) => void;
-  handleSetCurrent: (player: NewPlayer) => void;
+  handleSetCurrent: (player: Player) => void;
 };
 
 const PlayersTable = ({
@@ -56,7 +56,7 @@ const PlayersTable = ({
     <TableContainer component={Paper} className={classes.paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHeader
-          headCells={headCells}
+          headCells={playersHeadCells}
           sortBy={sortBy}
           order={order}
           handleSort={handleSort}

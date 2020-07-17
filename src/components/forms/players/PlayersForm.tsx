@@ -8,11 +8,11 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import Loader from '../common/Loader/Loader';
-import useForm from '../../hooks/useForm';
-import { NewPlayer } from '../../types/players';
-import { ClubData } from '../../types/simplifiedData';
-import usePlayersState from '../../context/players/usePlayersState';
+import Loader from '../../common/Loader/Loader';
+import useForm from '../../../hooks/useForm';
+import { PlayersFormData } from '../../../types/players';
+import { ClubData } from '../../../types/simplifiedData';
+import usePlayersState from '../../../context/players/usePlayersState';
 
 type PlayersFormProps = {
   clubsData: ClubData[];
@@ -28,7 +28,7 @@ const PlayersForm = ({ clubsData }: PlayersFormProps) => {
     editPlayer,
   } = playersContext;
 
-  const initialState: NewPlayer = current || {
+  const initialState: PlayersFormData = current || {
     firstName: '',
     lastName: '',
     club: '',

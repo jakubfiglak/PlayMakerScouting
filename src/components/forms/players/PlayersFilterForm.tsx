@@ -8,10 +8,10 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import useStyles from './styles';
-import useForm from '../../hooks/useForm';
-import { PlayersFilterData } from '../../types/players';
-import { ClubData } from '../../types/simplifiedData';
+import useStyles from '../styles';
+import useForm from '../../../hooks/useForm';
+import { PlayersFilterData } from '../../../types/players';
+import { ClubData } from '../../../types/simplifiedData';
 
 type FilterFormProps = {
   clubsData: ClubData[];
