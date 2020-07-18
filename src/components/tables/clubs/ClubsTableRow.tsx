@@ -10,6 +10,7 @@ import useAuthState from '../../../context/auth/useAuthState';
 import Loader from '../../common/Loader/Loader';
 import Modal from '../../common/Modal/Modal';
 import useModal from '../../../hooks/useModal';
+import { getVoivodeshipLabel } from '../../../utils/getVoivodeshipLabel';
 
 type TableRowProps = {
   club: Club;
@@ -62,7 +63,7 @@ const PlayersTableRow = ({
       </StyledTableCell>
       <StyledTableCell>{name}</StyledTableCell>
       <StyledTableCell>{division}</StyledTableCell>
-      <StyledTableCell>{voivodeship}</StyledTableCell>
+      <StyledTableCell>{getVoivodeshipLabel(voivodeship)}</StyledTableCell>
     </StyledTableRow>
   );
 };

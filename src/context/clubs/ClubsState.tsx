@@ -10,12 +10,14 @@ const ClubsState: React.FC = ({ children }) => {
     clubsData: {
       data: [],
       total: 0,
+      pagination: {},
     },
     current: null,
     loading: false,
     error: null,
     setLoading: () => null,
     getClubs: () => null,
+    getClub: () => null,
     deleteClub: () => null,
     addClub: () => null,
     editClub: () => null,
@@ -38,6 +40,7 @@ const ClubsState: React.FC = ({ children }) => {
       const res = await axiosJson.get('/api/v1/clubs');
       dispatch({
         type: 'GET_CLUBS_SUCCESS',
+        payload: res.data,
       });
     } catch (err) {
       dispatch({
@@ -55,6 +58,7 @@ const ClubsState: React.FC = ({ children }) => {
       const res = await axiosJson.get(`/api/v1/clubs/${id}`);
       dispatch({
         type: 'GET_CLUB_SUCCESS',
+        payload: res.data,
       });
     } catch (err) {
       dispatch({
@@ -85,6 +89,7 @@ const ClubsState: React.FC = ({ children }) => {
   const setCurrent = (club: Club) => {
     dispatch({
       type: 'SET_CURRENT',
+      payload: club,
     });
   };
 
@@ -138,6 +143,7 @@ const ClubsState: React.FC = ({ children }) => {
         error: state.error,
         setLoading,
         getClubs,
+        getClub,
         deleteClub,
         addClub,
         setCurrent,

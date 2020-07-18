@@ -1,6 +1,6 @@
 import { Location, Order } from './common';
 
-type Division =
+export type Division =
   | ''
   | 'Ekstraklasa'
   | 'I liga'
@@ -55,6 +55,7 @@ export type State = {
   error: string | null;
   setLoading: () => void;
   getClubs: () => void;
+  getClub: (id: string) => void;
   deleteClub: (id: string) => void;
   addClub: (club: Club) => void;
   editClub: (club: Club) => void;
@@ -64,11 +65,11 @@ export type State = {
 
 export type Action =
   | { type: 'SET_LOADING' }
-  | { type: 'SET_CURRENT' }
+  | { type: 'SET_CURRENT'; payload: Club }
   | { type: 'CLEAR_CURRENT' }
   | { type: 'CLUBS_ERROR'; payload: string }
-  | { type: 'GET_CLUBS_SUCCESS' }
-  | { type: 'GET_CLUB_SUCCESS' }
+  | { type: 'GET_CLUBS_SUCCESS'; payload: ClubsData }
+  | { type: 'GET_CLUB_SUCCESS'; payload: Club }
   | { type: 'CREATE_CLUB_SUCCESS' }
   | { type: 'UPDATE_CLUB_SUCCESS' }
   | { type: 'DELETE_CLUB_SUCCESS'; payload: string };
