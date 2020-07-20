@@ -1,9 +1,7 @@
 const sanitize = require('mongo-sanitize');
 
 const advancedResults = (model, populate) => async (req, res, next) => {
-  console.log(req.query);
   const reqQuery = sanitize({ ...req.query });
-  console.log(reqQuery);
 
   const removeFields = ['select', 'sort', 'page', 'limit'];
 
@@ -11,11 +9,21 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 
   // Create query string with mongoDB operators ($gt, $gte, etc.)
   const queryStr = JSON.stringify(reqQuery).replace(
-    /\b(gt|gte|lt|lte|in)\b/g,
+    /\b(gt|gte|lt|lte|in|regex)\b/g,
     (match) => `$${match}`
   );
 
-  let query = model.find(JSON.parse(queryStr));
+  const parsedQuery = JSON.parse(queryStr);
+
+  // Add case insensitivity to regex pattern if regex provided in query string
+  Object.keys(parsedQuery).forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(parsedQuery[key], '$regex')) {
+      parsedQuery[key].$options = 'i';
+    }
+  });
+
+  // Find resource based on parsed query string
+  let query = model.find(parsedQuery);
 
   // Select fields
   if (req.query.select) {
@@ -36,7 +44,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   const limit = parseInt(req.query.limit, 10) || 20;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  const total = await model.countDocuments(reqQuery);
+  const total = await model.countDocuments(parsedQuery);
 
   query = query.skip(startIndex).limit(limit);
 
@@ -46,8 +54,10 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     });
   }
 
+  // Execute query
   const results = await query;
 
+  // Pagination result
   const pagination = {};
 
   if (endIndex < total) {
