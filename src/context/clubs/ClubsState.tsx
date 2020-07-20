@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ClubsContext from './clubsContext';
 import clubsReducer from './clubsReducer';
-import { State, Club } from '../../types/clubs';
+import { State, Club, ClubsFilterData } from '../../types/clubs';
 import { Order } from '../../types/common';
 
 const ClubsState: React.FC = ({ children }) => {
@@ -35,9 +35,35 @@ const ClubsState: React.FC = ({ children }) => {
   };
 
   // Get clubs
-  const getClubs = async () => {
+  const getClubs = async (
+    page = 1,
+    limit = 20,
+    sort = '_id',
+    order: Order,
+    filters: ClubsFilterData,
+  ) => {
+    setLoading();
+    const orderSign = order === 'desc' ? '-' : '';
+
+    const { name, division, voivodeship } = filters;
+
+    // Generate query url
+    let clubsURI = `/api/v1/clubs?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+    if (name) {
+      clubsURI = clubsURI.concat(`&name[regex]=${name}`);
+    }
+
+    if (division) {
+      clubsURI = clubsURI.concat(`&division=${division}`);
+    }
+
+    if (voivodeship) {
+      clubsURI = clubsURI.concat(`&location.voivodeship[regex]=${voivodeship}`);
+    }
+
     try {
-      const res = await axiosJson.get('/api/v1/clubs');
+      const res = await axiosJson.get(clubsURI);
       dispatch({
         type: 'GET_CLUBS_SUCCESS',
         payload: res.data,

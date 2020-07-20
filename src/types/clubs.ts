@@ -54,7 +54,7 @@ export type State = {
   loading: boolean;
   error: string | null;
   setLoading: () => void;
-  getClubs: () => void;
+  getClubs: GetClubs;
   getClub: (id: string) => void;
   deleteClub: (id: string) => void;
   addClub: (club: Club) => void;

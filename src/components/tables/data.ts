@@ -12,5 +12,5 @@ export const playersHeadCells = [
 export const clubsHeadCells = [
   { id: 'name', label: 'Nazwa' },
   { id: 'division', label: 'Poziom rozgrywkowy' },
-  { id: 'voivodeship', label: 'Województwo' },
+  { id: 'location.voivodeship', label: 'Województwo' },
 ];
