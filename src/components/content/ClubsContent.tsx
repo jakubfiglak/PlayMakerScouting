@@ -6,6 +6,7 @@ import Loader from '../common/Loader/Loader';
 import useTabs from '../../hooks/useTabs';
 import useClubsState from '../../context/clubs/useClubsState';
 import { Club, ClubsFilterData } from '../../types/clubs';
+import ClubsFilterForm from '../forms/clubs/ClubsFilterForm';
 
 const ClubsContent = () => {
   const clubsContext = useClubsState();
@@ -39,6 +40,7 @@ const ClubsContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="clubs">
+        <ClubsFilterForm setFilters={setFilters} />
         <ClubsTable
           getClubs={getClubs}
           clubsData={clubsData}
