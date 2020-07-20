@@ -2,7 +2,6 @@ const express = require('express');
 const colors = require('colors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
@@ -33,9 +32,6 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
-// Sanitize data
-app.use(mongoSanitize());
 
 // Prevent XSS attacks
 app.use(xss());

@@ -1,5 +1,9 @@
+const sanitize = require('mongo-sanitize');
+
 const advancedResults = (model, populate) => async (req, res, next) => {
-  const reqQuery = { ...req.query };
+  console.log(req.query);
+  const reqQuery = sanitize({ ...req.query });
+  console.log(reqQuery);
 
   const removeFields = ['select', 'sort', 'page', 'limit'];
 
