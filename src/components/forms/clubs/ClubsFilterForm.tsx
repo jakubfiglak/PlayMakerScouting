@@ -8,27 +8,26 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import useStyles from './styles';
-import useForm from '../../hooks/useForm';
-import { PlayersFilterData } from '../../types/players';
-import { ClubData } from '../../types/simplifiedData';
+import useStyles from '../styles';
+import useForm from '../../../hooks/useForm';
+import { ClubsFilterData } from '../../../types/clubs';
+import { divisions, voivodeships } from '../../../data';
 
 type FilterFormProps = {
-  clubsData: ClubData[];
-  setFilters: Dispatch<SetStateAction<PlayersFilterData>>;
+  setFilters: Dispatch<SetStateAction<ClubsFilterData>>;
 };
 
-const initialState: PlayersFilterData = {
+const initialState: ClubsFilterData = {
   name: '',
-  club: '',
-  position: '',
+  division: '',
+  voivodeship: '',
 };
 
-const PlayersFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
+const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
   const classes = useStyles();
   const [formData, onInputChange, setFormData] = useForm(initialState);
 
-  const { name, club, position } = formData;
+  const { name, division, voivodeship } = formData;
 
   const handleClearFilter = () => {
     setFormData(initialState);
@@ -47,7 +46,7 @@ const PlayersFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
           <TextField
             variant="outlined"
             id="name"
-            label="Nazwisko"
+            label="Nazwa"
             name="name"
             size="small"
             fullWidth
@@ -57,24 +56,22 @@ const PlayersFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <InputLabel id="club">Klub</InputLabel>
+            <InputLabel id="division">Poziom rozgrywkowy</InputLabel>
             <Select
-              labelId="club"
-              id="club"
-              label="Klub"
-              name="club"
+              labelId="division"
+              id="division"
+              label="Poziom rozgrywkowy"
+              name="division"
               onChange={onInputChange}
-              value={club}
+              value={division}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {clubsData.map((clubData) => {
-                const { _id, name: clubName } = clubData;
-
+              {divisions.map((div) => {
                 return (
-                  <MenuItem key={_id} value={_id}>
-                    {clubName}
+                  <MenuItem key={div} value={div}>
+                    {div}
                   </MenuItem>
                 );
               })}
@@ -83,22 +80,27 @@ const PlayersFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <InputLabel id="position">Pozycja</InputLabel>
+            <InputLabel id="voivodeship">Województwo</InputLabel>
             <Select
-              labelId="position"
-              id="position"
-              label="Pozycja"
-              name="position"
+              labelId="voivodeship"
+              id="voivodeship"
+              label="Województwo"
+              name="voivodeship"
               onChange={onInputChange}
-              value={position}
+              value={voivodeship}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="GK">GK</MenuItem>
-              <MenuItem value="D">D</MenuItem>
-              <MenuItem value="M">M</MenuItem>
-              <MenuItem value="F">F</MenuItem>
+              {voivodeships.map((voivod) => {
+                const { value, label } = voivod;
+
+                return (
+                  <MenuItem key={value} value={value}>
+                    {label}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </Grid>
@@ -136,4 +138,4 @@ const PlayersFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
   );
 };
 
-export default PlayersFilterForm;
+export default ClubsFilterForm;

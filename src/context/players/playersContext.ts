@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { State } from '../../types/players';
 
-const authContext = createContext<State | undefined>(undefined);
+const playersContext = createContext<State | undefined>(undefined);
 
-export default authContext;
+export default playersContext;

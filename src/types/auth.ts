@@ -1,3 +1,5 @@
+import { Location } from './common';
+
 export type User = {
   role: string;
   _id: string;
@@ -7,15 +9,7 @@ export type User = {
   phone: string;
   activeRadius: number;
   createdAt: string;
-  location: {
-    type: string;
-    coordinates: number[];
-    formattedAddress: string;
-    street: string;
-    city: string;
-    voivodeship: string;
-    zipcode: string;
-  };
+  location: Location;
   __v: number;
 };
 

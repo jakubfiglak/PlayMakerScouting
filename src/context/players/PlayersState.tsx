@@ -2,7 +2,12 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import PlayersContext from './playersContext';
 import playersReducer from './playersReducer';
-import { State, PlayersFilterData, NewPlayer } from '../../types/players';
+import {
+  State,
+  PlayersFilterData,
+  PlayersFormData,
+  Player,
+} from '../../types/players';
 import { Order } from '../../types/common';
 
 const PlayersState: React.FC = ({ children }) => {
@@ -72,7 +77,7 @@ const PlayersState: React.FC = ({ children }) => {
   // Get player
 
   // Create new player
-  const addPlayer = async (player: NewPlayer) => {
+  const addPlayer = async (player: PlayersFormData) => {
     setLoading();
 
     try {
@@ -89,7 +94,7 @@ const PlayersState: React.FC = ({ children }) => {
   };
 
   // Set current
-  const setCurrent = (player: NewPlayer) => {
+  const setCurrent = (player: Player) => {
     dispatch({
       type: 'SET_CURRENT',
       payload: player,
@@ -104,7 +109,7 @@ const PlayersState: React.FC = ({ children }) => {
   };
 
   // Update player details
-  const editPlayer = async (player: NewPlayer) => {
+  const editPlayer = async (player: PlayersFormData) => {
     setLoading();
 
     try {

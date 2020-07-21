@@ -1,4 +1,4 @@
-import { State, Action } from '../../types/players';
+import { State, Action } from '../../types/clubs';
 
 export default (state: State, action: Action): State => {
   switch (action.type) {
@@ -8,41 +8,41 @@ export default (state: State, action: Action): State => {
         loading: true,
       };
 
-    case 'GET_PLAYERS_SUCCESS':
+    case 'GET_CLUBS_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
-        playersData: {
+        clubsData: {
           data: action.payload.data,
           total: action.payload.total,
           pagination: action.payload.pagination,
         },
       };
 
-    case 'CREATE_PLAYER_SUCCESS':
-    case 'UPDATE_PLAYER_SUCCESS':
+    case 'CREATE_CLUB_SUCCESS':
+    case 'UPDATE_CLUB_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
       };
 
-    case 'DELETE_PLAYER_SUCCESS':
+    case 'DELETE_CLUB_SUCCESS':
       return {
         ...state,
-        playersData: {
-          data: state.playersData.data.filter(
-            (player) => player._id !== action.payload,
+        clubsData: {
+          data: state.clubsData.data.filter(
+            (club) => club._id !== action.payload,
           ),
-          total: state.playersData.total - 1,
-          pagination: state.playersData.pagination,
+          total: state.clubsData.total - 1,
+          pagination: state.clubsData.pagination,
         },
         loading: false,
         error: null,
       };
 
-    case 'PLAYERS_ERROR':
+    case 'CLUBS_ERROR':
       return {
         ...state,
         loading: false,
@@ -52,10 +52,7 @@ export default (state: State, action: Action): State => {
     case 'SET_CURRENT':
       return {
         ...state,
-        current: {
-          ...action.payload,
-          club: action.payload.club._id,
-        },
+        current: action.payload,
       };
 
     case 'CLEAR_CURRENT':

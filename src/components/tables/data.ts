@@ -1,4 +1,4 @@
-const headCells = [
+export const playersHeadCells = [
   { id: 'lastName', label: 'Nazwisko' },
   { id: 'firstName', label: 'Imię' },
   { id: 'club', label: 'Klub' },
@@ -9,4 +9,8 @@ const headCells = [
   { id: 'footed', label: 'Noga' },
 ];
 
-export default headCells;
+export const clubsHeadCells = [
+  { id: 'name', label: 'Nazwa' },
+  { id: 'division', label: 'Poziom rozgrywkowy' },
+  { id: 'location.voivodeship', label: 'Województwo' },
+];
