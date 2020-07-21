@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ClubsContext from './clubsContext';
 import clubsReducer from './clubsReducer';
-import { State, Club, ClubsFilterData } from '../../types/clubs';
+import { State, Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 import { Order } from '../../types/common';
 
 const ClubsState: React.FC = ({ children }) => {
@@ -95,11 +95,11 @@ const ClubsState: React.FC = ({ children }) => {
   };
 
   // Create new club
-  const addClub = async (club: Club) => {
+  const addClub = async (club: ClubsFormData) => {
     setLoading();
 
     try {
-      await axiosJson.post('/api/v1/players', club);
+      await axiosJson.post('/api/v1/clubs', club);
       dispatch({
         type: 'CREATE_CLUB_SUCCESS',
       });
@@ -127,11 +127,11 @@ const ClubsState: React.FC = ({ children }) => {
   };
 
   // Update club details
-  const editClub = async (club: Club) => {
+  const editClub = async (id: string, club: ClubsFormData) => {
     setLoading();
 
     try {
-      await axiosJson.put(`/api/v1/players/${club._id}`, club);
+      await axiosJson.put(`/api/v1/clubs/${id}`, club);
       dispatch({
         type: 'UPDATE_CLUB_SUCCESS',
       });

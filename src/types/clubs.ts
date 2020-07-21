@@ -19,6 +19,12 @@ export type Club = {
   division: Division;
 };
 
+export type ClubsFormData = {
+  name: string;
+  address: string;
+  division: Division;
+};
+
 export type ClubsData = {
   data: Club[];
   total: number;
@@ -57,8 +63,8 @@ export type State = {
   getClubs: GetClubs;
   getClub: (id: string) => void;
   deleteClub: (id: string) => void;
-  addClub: (club: Club) => void;
-  editClub: (club: Club) => void;
+  addClub: (club: ClubsFormData) => void;
+  editClub: (id: string, club: ClubsFormData) => void;
   setCurrent: (club: Club) => void;
   clearCurrent: () => void;
 };

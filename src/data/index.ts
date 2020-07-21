@@ -29,7 +29,7 @@ export const voivodeships = [
   {
     value: 'GREATER POLAND VOIVODESHIP',
     slug: 'greater-poland-voivodeship',
-    label: 'Wielkoplskie',
+    label: 'Wielkopolskie',
   },
   {
     value: 'POMERANIAN VOIVODESHIP',

@@ -7,6 +7,7 @@ import useTabs from '../../hooks/useTabs';
 import useClubsState from '../../context/clubs/useClubsState';
 import { Club, ClubsFilterData } from '../../types/clubs';
 import ClubsFilterForm from '../forms/clubs/ClubsFilterForm';
+import ClubsForm from '../forms/clubs/ClubsForm';
 
 const ClubsContent = () => {
   const clubsContext = useClubsState();
@@ -22,7 +23,7 @@ const ClubsContent = () => {
 
   const handleSetCurrent = (club: Club) => {
     setCurrent(club);
-    setActiveTab(2);
+    setActiveTab(1);
   };
 
   return (
@@ -31,12 +32,7 @@ const ClubsContent = () => {
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
           <Tab label="Baza klubów" id="clubs-0" aria-controls="clubs-0" />
-          <Tab
-            label="Kluby w promieniu działania"
-            id="clubs-1"
-            aria-controls="clubs-1"
-          />
-          <Tab label="Dodaj/edytuj" id="clubs-2" aria-controls="clubs-2" />
+          <Tab label="Dodaj/edytuj" id="clubs-1" aria-controls="clubs-1" />
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="clubs">
@@ -49,8 +45,9 @@ const ClubsContent = () => {
           handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>
-      <TabPanel value={activeTab} index={1} title="clubs" />
-      <TabPanel value={activeTab} index={2} title="clubs" />
+      <TabPanel value={activeTab} index={1} title="clubs">
+        <ClubsForm />
+      </TabPanel>
     </>
   );
 };
