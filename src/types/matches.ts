@@ -52,7 +52,7 @@ export type State = {
   loading: boolean;
   error: string | null;
   setLoading: () => void;
-  getMatches: GetMatches;
+  getMatches: () => void;
   getMatch: (id: string) => void;
   deleteMatch: (id: string) => void;
   addMatch: (match: MatchesFormData) => void;

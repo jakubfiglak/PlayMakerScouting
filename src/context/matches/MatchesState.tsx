@@ -35,15 +35,9 @@ const MatchesState: React.FC = ({ children }) => {
   };
 
   // Get matches
-  const getMatches = async (
-    page = 1,
-    limit = 20,
-    sort = '_id',
-    order: Order,
-    filters: '',
-  ) => {
+  const getMatches = async () => {
     setLoading();
-    const orderSign = order === 'desc' ? '-' : '';
+    // const orderSign = order === 'desc' ? '-' : '';
 
     const matchesURI = '/api/v1/matches';
 
