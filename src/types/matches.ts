@@ -1,6 +1,6 @@
 import { Order } from './common';
 
-export type Competition = 'league' | 'cup' | 'friendly';
+export type Competition = '' | 'league' | 'cup' | 'friendly';
 
 export type Match = {
   _id: string;
@@ -44,6 +44,14 @@ export type MatchesFormData = {
   awayTeam: string;
   competition: Competition;
   date: string;
+};
+
+export type MatchesFilterData = {
+  homeTeam: string;
+  awayTeam: string;
+  competition: Competition;
+  dateFrom: string;
+  dateTo: string;
 };
 
 export type State = {

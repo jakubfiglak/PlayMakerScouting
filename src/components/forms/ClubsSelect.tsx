@@ -11,15 +11,17 @@ const ClubsSelect = ({
   onChange,
   value,
   required,
+  id,
+  label,
 }: ClubsSelectProps) => {
   return (
     <>
-      <InputLabel id="club">Klub</InputLabel>
+      <InputLabel id={id || 'club'}>{label || 'Klub'}</InputLabel>
       <Select
-        labelId="club"
-        id="club"
-        label="Klub"
-        name="club"
+        labelId={id || 'club'}
+        id={id || 'club'}
+        label={label || 'Klub'}
+        name={id || 'club'}
         onChange={onChange}
         value={value}
         required={required}
