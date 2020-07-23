@@ -1,18 +1,11 @@
 import React, { SyntheticEvent } from 'react';
-import {
-  Grid,
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
+import { Grid, TextField, FormControl } from '@material-ui/core';
 import Loader from '../../common/Loader/Loader';
 import useForm from '../../../hooks/useForm';
 import { ClubsFormData } from '../../../types/clubs';
 import useClubsState from '../../../context/clubs/useClubsState';
-import { divisions } from '../../../data';
+import DivisionSelect from '../DivisionSelect';
+import MainFormActions from '../MainFormActions';
 
 const ClubsForm = () => {
   const clubsContext = useClubsState();
@@ -74,43 +67,18 @@ const ClubsForm = () => {
         </Grid>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <InputLabel id="club">Klub</InputLabel>
-            <Select
-              labelId="division"
-              id="division"
-              label="Poziom rozgrywkowy"
-              name="division"
+            <DivisionSelect
               onChange={onInputChange}
               value={division}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {divisions.map((div) => {
-                return (
-                  <MenuItem key={div} value={div}>
-                    {div}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+              required
+            />
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <Button type="submit" fullWidth variant="contained" color="primary">
-            {current ? 'Edytuj klub' : 'Dodaj klub'}
-          </Button>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            onClick={onCancelClick}
-          >
-            Anuluj zmiany
-          </Button>
-        </Grid>
+        <MainFormActions
+          label="klub"
+          current={!!current}
+          onCancelClick={onCancelClick}
+        />
       </Grid>
     </form>
   );
