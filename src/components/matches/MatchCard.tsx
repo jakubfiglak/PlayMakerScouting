@@ -13,8 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import useStyles from './styles';
 import { Match } from '../../types/matches';
-import { replaceCompetitionName } from '../../utils/replaceCompetitionName';
-import { getChipColor } from '../../utils/getChipColor';
+import { replaceCompetitionName, getChipColor, formatDate } from '../../utils';
 
 type MatchCardProps = {
   match: Match;
@@ -53,7 +52,7 @@ const MatchCard = ({ match }: MatchCardProps) => {
           </Grid>
           <Grid item xs={12}>
             <Typography color="textSecondary" variant="body2" align="center">
-              {date}
+              {formatDate(date, true)}
             </Typography>
           </Grid>
         </Grid>

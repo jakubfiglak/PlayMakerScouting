@@ -10,7 +10,7 @@ import useAuthState from '../../../context/auth/useAuthState';
 import Loader from '../../common/Loader/Loader';
 import Modal from '../../common/Modal/Modal';
 import useModal from '../../../hooks/useModal';
-import { replaceVoivodeshipName } from '../../../utils/replaceVoivodeshipName';
+import { replaceVoivodeshipName } from '../../../utils';
 
 type TableRowProps = {
   club: Club;
