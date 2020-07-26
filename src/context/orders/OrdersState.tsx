@@ -19,8 +19,6 @@ export const OrdersState: React.FC = ({ children }) => {
     getOrder: () => null,
     deleteOrder: () => null,
     addOrder: () => null,
-    setCurrent: () => null,
-    clearCurrent: () => null,
   };
 
   const [state, dispatch] = useReducer(ordersReducer, initialState);
@@ -85,21 +83,6 @@ export const OrdersState: React.FC = ({ children }) => {
     }
   };
 
-  // Set current
-  const setCurrent = (order: Order) => {
-    dispatch({
-      type: 'SET_CURRENT',
-      payload: order,
-    });
-  };
-
-  // Clear current
-  const clearCurrent = () => {
-    dispatch({
-      type: 'CLEAR_CURRENT',
-    });
-  };
-
   // Delete order
   const deleteOrder = async (id: string) => {
     setLoading();
@@ -129,8 +112,6 @@ export const OrdersState: React.FC = ({ children }) => {
         getOrder,
         deleteOrder,
         addOrder,
-        setCurrent,
-        clearCurrent,
       }}
     >
       {children}

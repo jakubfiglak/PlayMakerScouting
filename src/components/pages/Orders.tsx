@@ -1,13 +1,17 @@
 import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
+import { OrdersContent } from '../content';
+import { OrdersState } from '../../context';
 import { useAuthorization } from '../../hooks';
 
 export const Orders = () => {
   useAuthorization();
 
   return (
-    <MainTemplate>
-      <h1>Orders</h1>
-    </MainTemplate>
+    <OrdersState>
+      <MainTemplate>
+        <OrdersContent />
+      </MainTemplate>
+    </OrdersState>
   );
 };

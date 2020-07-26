@@ -58,14 +58,10 @@ export type State = {
   getOrder: (id: string) => void;
   deleteOrder: (id: string) => void;
   addOrder: (order: OrderFormData) => void;
-  setCurrent: (order: Order) => void;
-  clearCurrent: () => void;
 };
 
 export type Action =
   | { type: 'SET_LOADING' }
-  | { type: 'SET_CURRENT'; payload: Order }
-  | { type: 'CLEAR_CURRENT' }
   | { type: 'ORDERS_ERROR'; payload: string }
   | { type: 'GET_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'GET_ORDER_SUCCESS'; payload: Order }
