@@ -50,7 +50,9 @@ exports.getPlayers = asyncHandler(async (req, res) => {
 // @route GET /api/v1/players/list
 // @access Private
 exports.getPlayersList = asyncHandler(async (req, res) => {
-  const players = await Player.find().select('firstName lastName');
+  const players = await Player.find()
+    .select('firstName lastName')
+    .populate({ path: 'club', select: 'name' });
 
   return res.status(200).json({
     success: true,

@@ -43,9 +43,34 @@ exports.getOrders = asyncHandler(async (req, res) => {
     });
   }
 
-  const orders = await Order.find().sort('-createdAt');
-
   res.status(200).json(res.advancedResults);
+});
+
+// @desc Get my orders
+// @route GET /api/v1/orders/my
+// @access Private
+exports.getMyOrders = asyncHandler(async (req, res) => {
+  console.log(req.user);
+  const orders = await Order.find({
+    scout: req.user._id,
+  })
+    .populate([
+      {
+        path: 'player',
+        select: 'firstName lastName',
+      },
+      {
+        path: 'scout',
+        select: 'name surname',
+      },
+    ])
+    .sort('-createdAt');
+
+  res.status(200).json({
+    success: true,
+    count: orders.length,
+    data: orders,
+  });
 });
 
 // @desc Get single order
