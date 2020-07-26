@@ -95,7 +95,7 @@ const MatchesState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.post('/api/v1/clubs', match);
+      await axiosJson.post('/api/v1/matches', match);
       dispatch({
         type: 'CREATE_MATCH_SUCCESS',
       });

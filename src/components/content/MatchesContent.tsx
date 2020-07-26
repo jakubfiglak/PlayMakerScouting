@@ -9,6 +9,7 @@ import { Match, MatchesFilterData } from '../../types/matches';
 import MatchCard from '../matches/MatchCard';
 import MatchesFilterForm from '../forms/matches/MatchesFilterForm';
 import { formatDateObject } from '../../utils';
+import MatchesForm from '../forms/matches/MatchesForm';
 
 const MatchesContent = () => {
   const matchesContext = useMatchesState();
@@ -56,7 +57,7 @@ const MatchesContent = () => {
           <Tab label="Dodaj/edytuj" id="matches-1" aria-controls="matches-1" />
         </Tabs>
       </AppBar>
-      <TabPanel value={activeTab} index={0} title="clubs">
+      <TabPanel value={activeTab} index={0} title="matches">
         <MatchesFilterForm clubsData={clubsData} setFilters={setFilters} />
         <Grid container spacing={2}>
           {matchesData.data.map((match) => (
@@ -66,7 +67,9 @@ const MatchesContent = () => {
           ))}
         </Grid>
       </TabPanel>
-      <TabPanel value={activeTab} index={1} title="clubs" />
+      <TabPanel value={activeTab} index={1} title="matches">
+        <MatchesForm clubsData={clubsData} />
+      </TabPanel>
     </>
   );
 };

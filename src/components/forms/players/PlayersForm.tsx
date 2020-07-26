@@ -1,5 +1,5 @@
 import React, { SyntheticEvent } from 'react';
-import { Grid, TextField, Button, FormControl } from '@material-ui/core';
+import { Grid, TextField, FormControl } from '@material-ui/core';
 import Loader from '../../common/Loader/Loader';
 import useForm from '../../../hooks/useForm';
 import { PlayersFormData } from '../../../types/players';
