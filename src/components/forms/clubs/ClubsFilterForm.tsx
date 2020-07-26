@@ -1,17 +1,11 @@
 import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
-import {
-  TextField,
-  Button,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
+import { TextField, Grid, FormControl } from '@material-ui/core';
 import useStyles from '../styles';
 import useForm from '../../../hooks/useForm';
 import { ClubsFilterData } from '../../../types/clubs';
-import { divisions, voivodeships } from '../../../data';
+import DivisionSelect from '../DivisionSelect';
+import VoivodeshipSelect from '../VoivodeshipSelect';
+import FilterFormActions from '../FilterFormActions';
 
 type FilterFormProps = {
   setFilters: Dispatch<SetStateAction<ClubsFilterData>>;
@@ -56,83 +50,15 @@ const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <InputLabel id="division">Poziom rozgrywkowy</InputLabel>
-            <Select
-              labelId="division"
-              id="division"
-              label="Poziom rozgrywkowy"
-              name="division"
-              onChange={onInputChange}
-              value={division}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {divisions.map((div) => {
-                return (
-                  <MenuItem key={div} value={div}>
-                    {div}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+            <DivisionSelect onChange={onInputChange} value={division} />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <InputLabel id="voivodeship">Województwo</InputLabel>
-            <Select
-              labelId="voivodeship"
-              id="voivodeship"
-              label="Województwo"
-              name="voivodeship"
-              onChange={onInputChange}
-              value={voivodeship}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {voivodeships.map((voivod) => {
-                const { value, label } = voivod;
-
-                return (
-                  <MenuItem key={value} value={value}>
-                    {label}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+            <VoivodeshipSelect onChange={onInputChange} value={voivodeship} />
           </FormControl>
         </Grid>
-        <Grid
-          container
-          xs={12}
-          sm={6}
-          lg={3}
-          className={classes.input}
-          spacing={2}
-        >
-          <Grid item xs={6}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              fullWidth
-            >
-              Filtruj
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={handleClearFilter}
-            >
-              Wyczyść filtr
-            </Button>
-          </Grid>
-        </Grid>
+        <FilterFormActions handleClearFilter={handleClearFilter} />
       </Grid>
     </form>
   );

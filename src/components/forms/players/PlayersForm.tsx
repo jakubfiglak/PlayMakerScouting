@@ -1,18 +1,14 @@
 import React, { SyntheticEvent } from 'react';
-import {
-  Grid,
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
+import { Grid, TextField, FormControl } from '@material-ui/core';
 import Loader from '../../common/Loader/Loader';
 import useForm from '../../../hooks/useForm';
 import { PlayersFormData } from '../../../types/players';
 import { ClubData } from '../../../types/simplifiedData';
 import usePlayersState from '../../../context/players/usePlayersState';
+import ClubsSelect from '../ClubsSelect';
+import PositionSelect from '../PositionSelect';
+import FootSelect from '../FootSelect';
+import MainFormActions from '../MainFormActions';
 
 type PlayersFormProps = {
   clubsData: ClubData[];
@@ -101,47 +97,17 @@ const PlayersForm = ({ clubsData }: PlayersFormProps) => {
         </Grid>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <InputLabel id="club">Klub</InputLabel>
-            <Select
-              labelId="club"
-              id="club"
-              label="Klub"
-              name="club"
+            <ClubsSelect
+              clubsData={clubsData}
               onChange={onInputChange}
               value={club}
               required
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {clubsData.map((clubData) => {
-                const { _id, name: clubName } = clubData;
-
-                return (
-                  <MenuItem key={_id} value={_id}>
-                    {clubName}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+            />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl variant="outlined" fullWidth>
-            <InputLabel id="position">Pozycja</InputLabel>
-            <Select
-              labelId="position"
-              id="position"
-              label="Pozycja"
-              name="position"
-              onChange={onInputChange}
-              value={position}
-            >
-              <MenuItem value="GK">GK</MenuItem>
-              <MenuItem value="D">D</MenuItem>
-              <MenuItem value="M">M</MenuItem>
-              <MenuItem value="F">F</MenuItem>
-            </Select>
+            <PositionSelect onChange={onInputChange} value={position} />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -191,35 +157,14 @@ const PlayersForm = ({ clubsData }: PlayersFormProps) => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <FormControl variant="outlined" fullWidth>
-            <InputLabel id="footed">Noga</InputLabel>
-            <Select
-              labelId="footed"
-              id="footed"
-              label="Noga"
-              name="footed"
-              onChange={onInputChange}
-              value={footed}
-            >
-              <MenuItem value="R">R</MenuItem>
-              <MenuItem value="L">L</MenuItem>
-            </Select>
+            <FootSelect onChange={onInputChange} value={footed} />
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <Button type="submit" fullWidth variant="contained" color="primary">
-            {current ? 'Edytuj zawodnika' : 'Dodaj zawodnika'}
-          </Button>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            onClick={onCancelClick}
-          >
-            Anuluj zmiany
-          </Button>
-        </Grid>
+        <MainFormActions
+          label="zawodnika"
+          current={!!current}
+          onCancelClick={onCancelClick}
+        />
       </Grid>
     </form>
   );

@@ -4,7 +4,7 @@ import useAuthorization from '../../hooks/useAuthorization';
 import ClubsState from '../../context/clubs/ClubsState';
 import ClubsContent from '../content/ClubsContent';
 
-const Players: React.FC = () => {
+const Clubs: React.FC = () => {
   useAuthorization();
 
   return (
@@ -16,4 +16,4 @@ const Players: React.FC = () => {
   );
 };
 
-export default Players;
+export default Clubs;

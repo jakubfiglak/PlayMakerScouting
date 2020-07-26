@@ -10,6 +10,7 @@ import useAuthState from '../../../context/auth/useAuthState';
 import Loader from '../../common/Loader/Loader';
 import Modal from '../../common/Modal/Modal';
 import useModal from '../../../hooks/useModal';
+import { formatDate } from '../../../utils';
 
 type TableRowProps = {
   player: Player;
@@ -39,10 +40,6 @@ const PlayersTableRow = ({
   } = player;
 
   const { loading, user } = authContext;
-
-  const formattedDate = new Intl.DateTimeFormat('pl-PL').format(
-    new Date(dateOfBirth),
-  );
 
   return (
     <StyledTableRow>
@@ -79,7 +76,7 @@ const PlayersTableRow = ({
       <StyledTableCell>{firstName}</StyledTableCell>
       <StyledTableCell>{club.name}</StyledTableCell>
       <StyledTableCell>{position}</StyledTableCell>
-      <StyledTableCell>{formattedDate}</StyledTableCell>
+      <StyledTableCell>{formatDate(dateOfBirth)}</StyledTableCell>
       <StyledTableCell>{height}</StyledTableCell>
       <StyledTableCell>{weight}</StyledTableCell>
       <StyledTableCell>{footed}</StyledTableCell>
