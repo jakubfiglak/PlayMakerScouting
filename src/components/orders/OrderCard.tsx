@@ -21,6 +21,8 @@ import { Order } from '../../types/orders';
 // Hooks
 import { useAuthState } from '../../context';
 import { useModal } from '../../hooks';
+// Utils & data
+import { formatDate } from '../../utils';
 // Styles
 import { useStyles } from './styles';
 
@@ -49,19 +51,21 @@ export const OrderCard = ({ order, deleteOrder }: OrderCardProps) => {
           <Grid item xs={12}>
             <Typography>{`Zawodnik: ${player.firstName} ${player.lastName}`}</Typography>
           </Grid>
-          {!open && (
+          {scout && (
             <Grid item xs={12}>
-              <Typography>
-                {`Scout: ${scout?.name} ${scout?.surname}`}
-              </Typography>
+              <Typography>{`Scout: ${scout.name} ${scout.surname}`}</Typography>
             </Grid>
           )}
           <Grid item xs={12}>
-            <Typography>{`Data utworzenia: ${createdAt}`}</Typography>
+            <Typography>
+              {`Data utworzenia: ${formatDate(createdAt, true)}`}
+            </Typography>
           </Grid>
-          {!open && (
+          {acceptDate && (
             <Grid item xs={12}>
-              <Typography>{`Data przyjęcia: ${acceptDate}`}</Typography>
+              <Typography>
+                {`Data przyjęcia: ${formatDate(acceptDate, true)}`}
+              </Typography>
             </Grid>
           )}
         </Grid>
@@ -96,9 +100,9 @@ export const OrderCard = ({ order, deleteOrder }: OrderCardProps) => {
               <AssignmentTurnedInIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Raportuj">
+          <Tooltip title="Raporty">
             <IconButton
-              aria-label="report"
+              aria-label="reports"
               onClick={() => console.log('generate report')}
             >
               <AssignmentIcon />

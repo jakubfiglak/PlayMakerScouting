@@ -20,6 +20,14 @@ export default (state: State, action: Action): State => {
         },
       };
 
+    case 'GET_MY_ORDERS_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        myOrdersData: action.payload,
+      };
+
     case 'CREATE_ORDER_SUCCESS':
       return {
         ...state,

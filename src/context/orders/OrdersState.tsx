@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import OrdersContext from './ordersContext';
 import ordersReducer from './ordersReducer';
-import { State, Order, OrderFormData } from '../../types/orders';
+import { State, OrderFormData } from '../../types/orders';
 
 export const OrdersState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -11,11 +11,13 @@ export const OrdersState: React.FC = ({ children }) => {
       total: 0,
       pagination: {},
     },
+    myOrdersData: [],
     current: null,
     loading: false,
     error: null,
     setLoading: () => null,
     getOrders: () => null,
+    getMyOrders: () => null,
     getOrder: () => null,
     deleteOrder: () => null,
     addOrder: () => null,
@@ -46,6 +48,26 @@ export const OrdersState: React.FC = ({ children }) => {
       dispatch({
         type: 'ORDERS_ERROR',
         payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Get my orders
+  const getMyOrders = async () => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.get('/api/v1/orders/my');
+      console.log(res);
+      dispatch({
+        type: 'GET_MY_ORDERS_SUCCESS',
+        payload: res.data.data,
+      });
+    } catch (err) {
+      console.log(err.response);
+      dispatch({
+        type: 'ORDERS_ERROR',
+        payload: 'err.response.data.error',
       });
     }
   };
@@ -100,15 +122,19 @@ export const OrdersState: React.FC = ({ children }) => {
     }
   };
 
+  const { ordersData, myOrdersData, current, loading, error } = state;
+
   return (
     <OrdersContext.Provider
       value={{
-        ordersData: state.ordersData,
-        current: state.current,
-        loading: state.loading,
-        error: state.error,
+        ordersData,
+        myOrdersData,
+        current,
+        loading,
+        error,
         setLoading,
         getOrders,
+        getMyOrders,
         getOrder,
         deleteOrder,
         addOrder,
