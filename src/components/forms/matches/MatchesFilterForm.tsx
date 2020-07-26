@@ -7,7 +7,7 @@ import { ClubData } from '../../../types/simplifiedData';
 import ClubsSelect from '../ClubsSelect';
 import CompetitionSelect from '../CompetitionSelect';
 import FilterFormActions from '../FilterFormActions';
-import { formatDateObject, formatDate } from '../../../utils';
+import { formatDateObject } from '../../../utils';
 
 type FilterFormProps = {
   clubsData: ClubData[];

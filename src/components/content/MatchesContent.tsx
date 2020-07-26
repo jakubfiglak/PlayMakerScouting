@@ -29,12 +29,6 @@ const MatchesContent = () => {
     clubsData,
   } = simplifiedDataContext;
 
-  useEffect(() => {
-    getClubs();
-    getMatches();
-    console.log(matchesData);
-  }, []);
-
   const [filters, setFilters] = useState<MatchesFilterData>({
     homeTeam: '',
     awayTeam: '',
@@ -42,6 +36,11 @@ const MatchesContent = () => {
     dateFrom: formatDateObject(new Date()),
     dateTo: formatDateObject(new Date()),
   });
+
+  useEffect(() => {
+    getClubs();
+    getMatches(filters);
+  }, [filters]);
 
   const handleSetCurrent = (match: Match) => {
     setCurrent(match);

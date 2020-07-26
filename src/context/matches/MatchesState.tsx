@@ -2,8 +2,12 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import MatchesContext from './matchesContext';
 import matchesReducer from './matchesReducer';
-import { State, Match, MatchesFormData } from '../../types/matches';
-import { Order } from '../../types/common';
+import {
+  State,
+  Match,
+  MatchesFormData,
+  MatchesFilterData,
+} from '../../types/matches';
 
 const MatchesState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -35,11 +39,26 @@ const MatchesState: React.FC = ({ children }) => {
   };
 
   // Get matches
-  const getMatches = async () => {
+  const getMatches = async (filters: MatchesFilterData) => {
     setLoading();
-    // const orderSign = order === 'desc' ? '-' : '';
 
-    const matchesURI = '/api/v1/matches';
+    const { homeTeam, awayTeam, competition, dateFrom, dateTo } = filters;
+
+    let matchesURI = `/api/v1/matches?sort=date&date[gte]=${dateFrom}&date[lte]=${dateTo}`;
+
+    if (homeTeam) {
+      matchesURI = matchesURI.concat(`&homeTeam=${homeTeam}`);
+    }
+
+    if (awayTeam) {
+      matchesURI = matchesURI.concat(`&awayTeam=${awayTeam}`);
+    }
+
+    if (competition) {
+      matchesURI = matchesURI.concat(`&competition=${competition}`);
+    }
+
+    console.log(matchesURI);
 
     try {
       const res = await axiosJson.get(matchesURI);
