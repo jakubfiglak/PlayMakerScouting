@@ -1,4 +1,5 @@
 import React from 'react';
+// MUI components
 import {
   Card,
   CardActions,
@@ -9,15 +10,20 @@ import {
   Avatar,
   Grid,
 } from '@material-ui/core';
+// MUI icons
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import useStyles from './styles';
+// Custom components
+import { Modal, Loader } from '../common';
+// Types
 import { Match } from '../../types/matches';
+// Hooks
+import { useAuthState } from '../../context';
+import { useModal } from '../../hooks';
+// Utils & data
 import { replaceCompetitionName, getChipColor, formatDate } from '../../utils';
-import useModal from '../../hooks/useModal';
-import Modal from '../common/Modal/Modal';
-import Loader from '../common/Loader/Loader';
-import useAuthState from '../../context/auth/useAuthState';
+// Styles
+import { useStyles } from './styles';
 
 type MatchCardProps = {
   match: Match;
@@ -25,7 +31,7 @@ type MatchCardProps = {
   handleSetCurrent: (match: Match) => void;
 };
 
-const MatchCard = ({
+export const MatchCard = ({
   match,
   deleteMatch,
   handleSetCurrent,
@@ -105,5 +111,3 @@ const MatchCard = ({
     </Card>
   );
 };
-
-export default MatchCard;

@@ -1,8 +1,14 @@
 import React from 'react';
+// MUI components
 import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
-import { competitions } from '../../data';
+// Data & utis
+import { competitions } from '../../../data';
 
-const CompetitionSelect = ({ onChange, value, required }: SelectProps) => {
+export const CompetitionSelect = ({
+  onChange,
+  value,
+  required,
+}: SelectProps) => {
   return (
     <>
       <InputLabel id="competition">Rodzaj rozgrywek</InputLabel>
@@ -29,5 +35,3 @@ const CompetitionSelect = ({ onChange, value, required }: SelectProps) => {
     </>
   );
 };
-
-export default CompetitionSelect;

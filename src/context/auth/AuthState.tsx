@@ -10,7 +10,7 @@ import {
   UpdatePasswordData,
 } from '../../types/auth';
 
-const AuthState: React.FC = ({ children }) => {
+export const AuthState: React.FC = ({ children }) => {
   const initialState: State = {
     user: null,
     token: localStorage.getItem('token'),
@@ -168,5 +168,3 @@ const AuthState: React.FC = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export default AuthState;

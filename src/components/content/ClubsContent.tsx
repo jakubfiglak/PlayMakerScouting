@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+// MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
-import TabPanel from '../common/TabPanel/TabPanel';
-import ClubsTable from '../tables/clubs/ClubsTable';
-import Loader from '../common/Loader/Loader';
-import useTabs from '../../hooks/useTabs';
-import useClubsState from '../../context/clubs/useClubsState';
+// Custom components
+import { ClubsTable } from '../tables';
+import { ClubsFilterForm, ClubsForm } from '../forms';
+import { TabPanel, Loader } from '../common';
+// Types
 import { Club, ClubsFilterData } from '../../types/clubs';
-import ClubsFilterForm from '../forms/clubs/ClubsFilterForm';
-import ClubsForm from '../forms/clubs/ClubsForm';
+// Hooks
+import { useTabs } from '../../hooks';
+import { useClubsState } from '../../context';
 
-const ClubsContent = () => {
+export const ClubsContent = () => {
   const clubsContext = useClubsState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
@@ -51,5 +53,3 @@ const ClubsContent = () => {
     </>
   );
 };
-
-export default ClubsContent;

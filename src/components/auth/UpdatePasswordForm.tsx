@@ -1,8 +1,8 @@
 import React, { SyntheticEvent } from 'react';
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
-import useStyles from './styles';
-import useForm from '../../hooks/useForm';
-import useAuthState from '../../context/auth/useAuthState';
+import { useStyles } from './styles';
+import { useForm } from '../../hooks';
+import { useAuthState } from '../../context';
 import { UpdatePasswordData } from '../../types/auth';
 
 const initialState: UpdatePasswordData = {
@@ -11,7 +11,7 @@ const initialState: UpdatePasswordData = {
   newPasswordConfirm: '',
 };
 
-const UpdatePasswordForm: React.FC = () => {
+export const UpdatePasswordForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
 
@@ -88,5 +88,3 @@ const UpdatePasswordForm: React.FC = () => {
     </form>
   );
 };
-
-export default UpdatePasswordForm;

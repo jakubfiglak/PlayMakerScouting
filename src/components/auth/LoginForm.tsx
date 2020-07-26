@@ -2,17 +2,17 @@ import React, { useEffect, SyntheticEvent } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 
-import useStyles from './styles';
+import { useStyles } from './styles';
 import { LoginFormData } from '../../types/auth';
-import useForm from '../../hooks/useForm';
-import useAuthState from '../../context/auth/useAuthState';
+import { useForm } from '../../hooks';
+import { useAuthState } from '../../context';
 
 const initialState: LoginFormData = {
   email: '',
   password: '',
 };
 
-const LoginForm: React.FC = () => {
+export const LoginForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
   const history = useHistory();
@@ -86,5 +86,3 @@ const LoginForm: React.FC = () => {
     </form>
   );
 };
-
-export default LoginForm;

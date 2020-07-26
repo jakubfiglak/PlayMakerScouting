@@ -1,7 +1,8 @@
 import React from 'react';
+// MUI components
 import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
 
-const PositionSelect = ({ onChange, value }: SelectProps) => {
+export const PositionSelect = ({ onChange, value }: SelectProps) => {
   return (
     <>
       <InputLabel id="position">Pozycja</InputLabel>
@@ -21,5 +22,3 @@ const PositionSelect = ({ onChange, value }: SelectProps) => {
     </>
   );
 };
-
-export default PositionSelect;

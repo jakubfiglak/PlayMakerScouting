@@ -1,7 +1,8 @@
 import React from 'react';
+// MUI components
 import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
 
-const FootSelect = ({ onChange, value }: SelectProps) => {
+export const FootSelect = ({ onChange, value }: SelectProps) => {
   return (
     <>
       <InputLabel id="footed">Noga</InputLabel>
@@ -19,5 +20,3 @@ const FootSelect = ({ onChange, value }: SelectProps) => {
     </>
   );
 };
-
-export default FootSelect;

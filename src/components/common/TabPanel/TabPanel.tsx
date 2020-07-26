@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
 
-const TabPanel: React.FC<{ index: any; value: any; title: string }> = ({
+export const TabPanel: React.FC<{ index: any; value: any; title: string }> = ({
   children,
   value,
   index,
@@ -18,5 +18,3 @@ const TabPanel: React.FC<{ index: any; value: any; title: string }> = ({
     </div>
   );
 };
-
-export default TabPanel;

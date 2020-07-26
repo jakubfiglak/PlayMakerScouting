@@ -9,7 +9,7 @@ import {
   MatchesFilterData,
 } from '../../types/matches';
 
-const MatchesState: React.FC = ({ children }) => {
+export const MatchesState: React.FC = ({ children }) => {
   const initialState: State = {
     matchesData: {
       data: [],
@@ -175,5 +175,3 @@ const MatchesState: React.FC = ({ children }) => {
     </MatchesContext.Provider>
   );
 };
-
-export default MatchesState;

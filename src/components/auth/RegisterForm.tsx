@@ -2,9 +2,9 @@ import React, { useEffect, SyntheticEvent } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 
-import useStyles from './styles';
-import useForm from '../../hooks/useForm';
-import useAuthState from '../../context/auth/useAuthState';
+import { useStyles } from './styles';
+import { useForm } from '../../hooks';
+import { useAuthState } from '../../context';
 import { RegisterFormData } from '../../types/auth';
 
 const initialState: RegisterFormData = {
@@ -18,7 +18,7 @@ const initialState: RegisterFormData = {
   passwordConfirm: '',
 };
 
-const RegisterForm: React.FC = () => {
+export const RegisterForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
   const history = useHistory();
@@ -170,5 +170,3 @@ const RegisterForm: React.FC = () => {
     </form>
   );
 };
-
-export default RegisterForm;

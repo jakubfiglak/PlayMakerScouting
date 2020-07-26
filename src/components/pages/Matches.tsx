@@ -1,10 +1,10 @@
 import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
-import useAuthorization from '../../hooks/useAuthorization';
-import MatchesState from '../../context/matches/MatchesState';
-import MatchesContent from '../content/MatchesContent';
+import { MatchesContent } from '../content';
+import { MatchesState } from '../../context';
+import { useAuthorization } from '../../hooks';
 
-const Clubs: React.FC = () => {
+export const Matches = () => {
   useAuthorization();
 
   return (
@@ -15,5 +15,3 @@ const Clubs: React.FC = () => {
     </MatchesState>
   );
 };
-
-export default Clubs;

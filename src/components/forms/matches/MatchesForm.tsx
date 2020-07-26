@@ -1,20 +1,24 @@
 import React, { SyntheticEvent } from 'react';
+// MUI components
 import { Grid, TextField, FormControl } from '@material-ui/core';
-import Loader from '../../common/Loader/Loader';
-import useForm from '../../../hooks/useForm';
+// Custom components
+import { ClubsSelect, CompetitionSelect } from '../selects';
+import { MainFormActions } from '../actions';
+import { Loader } from '../../common';
+// Types
 import { MatchesFormData } from '../../../types/matches';
 import { ClubData } from '../../../types/simplifiedData';
-import ClubsSelect from '../ClubsSelect';
-import MainFormActions from '../MainFormActions';
-import useMatchesState from '../../../context/matches/useMatchesState';
-import { formatDateObject, formatDate } from '../../../utils';
-import CompetitionSelect from '../CompetitionSelect';
+// Hooks
+import { useMatchesState } from '../../../context';
+import { useForm } from '../../../hooks';
+// Utils & data
+import { formatDateObject } from '../../../utils';
 
 type MatchesFormProps = {
   clubsData: ClubData[];
 };
 
-const MatchesForm = ({ clubsData }: MatchesFormProps) => {
+export const MatchesForm = ({ clubsData }: MatchesFormProps) => {
   const matchesContext = useMatchesState();
   const {
     loading,
@@ -110,5 +114,3 @@ const MatchesForm = ({ clubsData }: MatchesFormProps) => {
     </form>
   );
 };
-
-export default MatchesForm;

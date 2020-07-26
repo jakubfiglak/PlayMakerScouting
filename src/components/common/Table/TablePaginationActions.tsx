@@ -7,7 +7,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import { TablePaginationActionsProps } from './types';
 import useStyles from './styles';
 
-const TablePaginationActions = ({
+export const TablePaginationActions = ({
   count,
   page,
   rowsPerPage,
@@ -72,5 +72,3 @@ const TablePaginationActions = ({
     </div>
   );
 };
-
-export default TablePaginationActions;

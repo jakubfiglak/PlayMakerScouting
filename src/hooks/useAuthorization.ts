@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import useAuthState from '../context/auth/useAuthState';
+import { useAuthState } from '../context/auth/useAuthState';
 
-const useAuthorization = (redirectTo = '/login') => {
+export const useAuthorization = (redirectTo = '/login') => {
   const history = useHistory();
   const authContext = useAuthState();
 
@@ -16,5 +16,3 @@ const useAuthorization = (redirectTo = '/login') => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 };
-
-export default useAuthorization;

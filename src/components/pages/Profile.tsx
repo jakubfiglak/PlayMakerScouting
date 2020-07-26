@@ -1,13 +1,11 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
-import useAuthorization from '../../hooks/useAuthorization';
-import DetailsCard from '../profile/DetailsCard';
-import PasswordCard from '../profile/PasswordCard';
-import SectionTitle from '../common/SectionTitle/SectionTitle';
-import useAuthState from '../../context/auth/useAuthState';
+import { DetailsCard, PasswordCard } from '../profile';
+import { useAuthState } from '../../context';
+import { useAuthorization } from '../../hooks';
 
-const Profile: React.FC = () => {
+export const Profile = () => {
   useAuthorization();
   const authContext = useAuthState();
 
@@ -15,7 +13,6 @@ const Profile: React.FC = () => {
 
   return (
     <MainTemplate>
-      <SectionTitle>Mój profil</SectionTitle>
       <Grid container spacing={3}>
         <Grid item lg={6} sm={12}>
           <DetailsCard user={user} />
@@ -27,5 +24,3 @@ const Profile: React.FC = () => {
     </MainTemplate>
   );
 };
-
-export default Profile;

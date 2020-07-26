@@ -3,7 +3,7 @@ import { Order } from '../types/common';
 
 // hook for a paginated table with sorting
 
-const useTable = () => {
+export const useTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [sortBy, setSortBy] = useState('_id');
@@ -40,5 +40,3 @@ const useTable = () => {
     handleSort,
   ] as const;
 };
-
-export default useTable;

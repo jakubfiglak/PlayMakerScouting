@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useForm = <T>(initialState: T) => {
+export const useForm = <T>(initialState: T) => {
   const [formData, setFormData] = useState(initialState);
 
   const onInputChange = (
@@ -20,5 +20,3 @@ const useForm = <T>(initialState: T) => {
 
   return [formData, onInputChange, setFormData] as const;
 };
-
-export default useForm;

@@ -5,7 +5,7 @@ import clubsReducer from './clubsReducer';
 import { State, Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 import { Order } from '../../types/common';
 
-const ClubsState: React.FC = ({ children }) => {
+export const ClubsState: React.FC = ({ children }) => {
   const initialState: State = {
     clubsData: {
       data: [],
@@ -181,5 +181,3 @@ const ClubsState: React.FC = ({ children }) => {
     </ClubsContext.Provider>
   );
 };
-
-export default ClubsState;

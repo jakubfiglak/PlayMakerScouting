@@ -6,7 +6,7 @@ import useStyles from './styles';
 import navElements from './data';
 import NavElement from './NavElement';
 import NavButton from './NavButton';
-import useAuthState from '../../context/auth/useAuthState';
+import { useAuthState } from '../../context';
 
 const Sidebar: React.FC = () => {
   const classes = useStyles();

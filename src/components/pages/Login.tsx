@@ -1,13 +1,11 @@
 import React from 'react';
 import AuthTemplate from '../templates/AuthTemplate/AuthTemplate';
-import LoginForm from '../auth/LoginForm';
+import { LoginForm } from '../auth';
 
-const Login: React.FC = () => {
+export const Login = () => {
   return (
     <AuthTemplate title="Logowanie">
       <LoginForm />
     </AuthTemplate>
   );
 };
-
-export default Login;

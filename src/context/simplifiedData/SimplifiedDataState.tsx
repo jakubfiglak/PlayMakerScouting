@@ -4,7 +4,7 @@ import SimplifiedDataContext from './simplifiedDataContext';
 import simplifiedDataReducer from './simplifiedDataReducer';
 import { State } from '../../types/simplifiedData';
 
-const SimplifiedDataState: React.FC = ({ children }) => {
+export const SimplifiedDataState: React.FC = ({ children }) => {
   const initialState: State = {
     playersData: [],
     clubsData: [],
@@ -74,5 +74,3 @@ const SimplifiedDataState: React.FC = ({ children }) => {
     </SimplifiedDataContext.Provider>
   );
 };
-
-export default SimplifiedDataState;

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+// MUI components
 import {
   Table,
   TableBody,
@@ -8,18 +9,22 @@ import {
   TableFooter,
   TableRow,
 } from '@material-ui/core';
-import ClubsTableRow from './ClubsTableRow';
-import TablePaginationActions from '../../common/Table/TablePaginationActions';
-import useStyles from '../styles';
-import { clubsHeadCells } from '../data';
-import TableHeader from '../../common/Table/TableHeader';
-import useTable from '../../../hooks/useTable';
+// Custom components
+import { TablePaginationActions, TableHeader } from '../../common';
+import { ClubsTableRow } from './ClubsTableRow';
+// Types
 import {
   ClubsData,
   GetClubs,
   ClubsFilterData,
   Club,
 } from '../../../types/clubs';
+// Hooks
+import { useTable } from '../../../hooks';
+// Utils & data
+import { clubsHeadCells } from '../data';
+// Styles
+import { useStyles } from '../styles';
 
 type TableProps = {
   getClubs: GetClubs;
@@ -29,7 +34,7 @@ type TableProps = {
   handleSetCurrent: (club: Club) => void;
 };
 
-const ClubsTable = ({
+export const ClubsTable = ({
   getClubs,
   clubsData,
   filters,
@@ -97,5 +102,3 @@ const ClubsTable = ({
     </TableContainer>
   );
 };
-
-export default ClubsTable;

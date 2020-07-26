@@ -1,12 +1,16 @@
 import React from 'react';
+// MUI components
 import { Grid, Button } from '@material-ui/core';
-import useStyles from './styles';
+// Styles
+import { useStyles } from '../styles';
 
 type FilterFormActionsProps = {
   handleClearFilter: () => void;
 };
 
-const FilterFormActions = ({ handleClearFilter }: FilterFormActionsProps) => {
+export const FilterFormActions = ({
+  handleClearFilter,
+}: FilterFormActionsProps) => {
   const classes = useStyles();
 
   return (
@@ -29,5 +33,3 @@ const FilterFormActions = ({ handleClearFilter }: FilterFormActionsProps) => {
     </Grid>
   );
 };
-
-export default FilterFormActions;

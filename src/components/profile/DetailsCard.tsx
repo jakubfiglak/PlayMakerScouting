@@ -1,10 +1,14 @@
 import React from 'react';
 import { Card, CardHeader, CardContent, Avatar } from '@material-ui/core';
-import EditAccountForm from '../auth/EditAccountForm';
-import useStyles from './styles';
+import { EditAccountForm } from '../auth/EditAccountForm';
+import { useStyles } from './styles';
 import { User } from '../../types/auth';
 
-const DetailsCard: React.FC<{ user: User | null }> = ({ user }) => {
+type DetailsCardProps = {
+  user: User | null;
+};
+
+export const DetailsCard = ({ user }: DetailsCardProps) => {
   const classes = useStyles();
 
   if (user) {
@@ -29,5 +33,3 @@ const DetailsCard: React.FC<{ user: User | null }> = ({ user }) => {
   }
   return <p>You need to log in to see the account details</p>;
 };
-
-export default DetailsCard;

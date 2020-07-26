@@ -1,10 +1,10 @@
 import React from 'react';
 import { TableHead, TableSortLabel } from '@material-ui/core';
-import StyledTableRow from './TableRow';
-import StyledTableCell from './TableCell';
+import { StyledTableRow } from './TableRow';
+import { StyledTableCell } from './TableCell';
 import { TableHeaderProps } from './types';
 
-const TableHeader = ({
+export const TableHeader = ({
   headCells,
   sortBy,
   order,
@@ -29,5 +29,3 @@ const TableHeader = ({
     </TableHead>
   );
 };
-
-export default TableHeader;

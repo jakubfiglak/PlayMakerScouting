@@ -1,16 +1,20 @@
 import React from 'react';
+// MUI components
 import { IconButton, Tooltip } from '@material-ui/core';
+// MUI icons
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+// Custom components
+import { StyledTableRow, StyledTableCell, Loader, Modal } from '../../common';
+// Types
 import { Player } from '../../../types/players';
-import StyledTableRow from '../../common/Table/TableRow';
-import StyledTableCell from '../../common/Table/TableCell';
-import useStyles from '../styles';
-import useAuthState from '../../../context/auth/useAuthState';
-import Loader from '../../common/Loader/Loader';
-import Modal from '../../common/Modal/Modal';
-import useModal from '../../../hooks/useModal';
+// Hooks
+import { useAuthState } from '../../../context';
+import { useModal } from '../../../hooks';
+// Utils & data
 import { formatDate } from '../../../utils';
+// Styles
+import { useStyles } from '../styles';
 
 type TableRowProps = {
   player: Player;
@@ -18,7 +22,7 @@ type TableRowProps = {
   handleSetCurrent: (player: Player) => void;
 };
 
-const PlayersTableRow = ({
+export const PlayersTableRow = ({
   player,
   deletePlayer,
   handleSetCurrent,
@@ -83,5 +87,3 @@ const PlayersTableRow = ({
     </StyledTableRow>
   );
 };
-
-export default PlayersTableRow;

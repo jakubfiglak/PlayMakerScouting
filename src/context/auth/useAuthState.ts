@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import authContext from './authContext';
 import { State } from '../../types/auth';
 
-const useAuthState = (): State => {
+export const useAuthState = (): State => {
   const context = useContext(authContext);
   if (context === undefined) {
     throw new Error('useAuthState hook must be used within AuthState');
@@ -10,5 +10,3 @@ const useAuthState = (): State => {
 
   return context;
 };
-
-export default useAuthState;

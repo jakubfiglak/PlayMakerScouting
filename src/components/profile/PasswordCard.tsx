@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
-import useStyles from './styles';
-import UpdatePasswordForm from '../auth/UpdatePasswordForm';
+import { useStyles } from './styles';
+import { UpdatePasswordForm } from '../auth';
 
-const PasswordCard: React.FC = () => {
+export const PasswordCard = () => {
   const classes = useStyles();
 
   return (
@@ -19,5 +19,3 @@ const PasswordCard: React.FC = () => {
     </Card>
   );
 };
-
-export default PasswordCard;

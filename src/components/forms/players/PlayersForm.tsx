@@ -1,20 +1,22 @@
 import React, { SyntheticEvent } from 'react';
+// MUI components
 import { Grid, TextField, FormControl } from '@material-ui/core';
-import Loader from '../../common/Loader/Loader';
-import useForm from '../../../hooks/useForm';
+// Custom components
+import { ClubsSelect, PositionSelect, FootSelect } from '../selects';
+import { MainFormActions } from '../actions';
+import { Loader } from '../../common';
+// Types
 import { PlayersFormData } from '../../../types/players';
 import { ClubData } from '../../../types/simplifiedData';
-import usePlayersState from '../../../context/players/usePlayersState';
-import ClubsSelect from '../ClubsSelect';
-import PositionSelect from '../PositionSelect';
-import FootSelect from '../FootSelect';
-import MainFormActions from '../MainFormActions';
+// Hooks
+import { usePlayersState } from '../../../context';
+import { useForm } from '../../../hooks';
 
 type PlayersFormProps = {
   clubsData: ClubData[];
 };
 
-const PlayersForm = ({ clubsData }: PlayersFormProps) => {
+export const PlayersForm = ({ clubsData }: PlayersFormProps) => {
   const playersContext = usePlayersState();
   const {
     loading,
@@ -169,5 +171,3 @@ const PlayersForm = ({ clubsData }: PlayersFormProps) => {
     </form>
   );
 };
-
-export default PlayersForm;

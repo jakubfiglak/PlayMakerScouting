@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import clubsContext from './clubsContext';
 import { State } from '../../types/clubs';
 
-const useClubsState = (): State => {
+export const useClubsState = (): State => {
   const context = useContext(clubsContext);
   if (context === undefined) {
     throw new Error('useClubsState hook must be used within ClubsState');
@@ -10,5 +10,3 @@ const useClubsState = (): State => {
 
   return context;
 };
-
-export default useClubsState;
