@@ -62,7 +62,11 @@ const MatchesContent = () => {
         <Grid container spacing={2}>
           {matchesData.data.map((match) => (
             <Grid item xs={12} sm={6} md={3} key={match._id}>
-              <MatchCard match={match} />
+              <MatchCard
+                match={match}
+                deleteMatch={deleteMatch}
+                handleSetCurrent={handleSetCurrent}
+              />
             </Grid>
           ))}
         </Grid>

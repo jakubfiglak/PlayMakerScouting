@@ -7,7 +7,7 @@ import { ClubData } from '../../../types/simplifiedData';
 import ClubsSelect from '../ClubsSelect';
 import MainFormActions from '../MainFormActions';
 import useMatchesState from '../../../context/matches/useMatchesState';
-import { formatDateObject } from '../../../utils';
+import { formatDateObject, formatDate } from '../../../utils';
 import CompetitionSelect from '../CompetitionSelect';
 
 type MatchesFormProps = {
@@ -28,7 +28,10 @@ const MatchesForm = ({ clubsData }: MatchesFormProps) => {
     homeTeam: current?.homeTeam._id || '',
     awayTeam: current?.awayTeam._id || '',
     competition: current?.competition || '',
-    date: current?.date || formatDateObject(new Date()),
+    date:
+      current && current.date
+        ? current.date.slice(0, 10)
+        : formatDateObject(new Date()),
   };
   const [matchData, onInputChange, setMatchData] = useForm(initialState);
 
@@ -40,7 +43,6 @@ const MatchesForm = ({ clubsData }: MatchesFormProps) => {
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log(matchData);
 
     if (current) {
       editMatch(current._id, matchData);

@@ -58,8 +58,6 @@ const MatchesState: React.FC = ({ children }) => {
       matchesURI = matchesURI.concat(`&competition=${competition}`);
     }
 
-    console.log(matchesURI);
-
     try {
       const res = await axiosJson.get(matchesURI);
       dispatch({
