@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Tabs, Tab, Grid } from '@material-ui/core';
 // Custom components
 import { TabPanel, Loader } from '../common';
+import { OrderCard } from '../orders';
 // Types
 import { Order } from '../../types/orders';
 // Hooks
@@ -40,15 +41,11 @@ export const OrdersContent = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="matches">
         <Grid container spacing={2}>
-          {/* {matchesData.data.map((match) => (
-            <Grid item xs={12} sm={6} md={3} key={match._id}>
-              <MatchCard
-                match={match}
-                deleteMatch={deleteMatch}
-                handleSetCurrent={handleSetCurrent}
-              />
+          {ordersData.data.map((order) => (
+            <Grid item xs={12} sm={6} md={3} key={order._id}>
+              <OrderCard order={order} deleteOrder={deleteOrder} />
             </Grid>
-          ))} */}
+          ))}
         </Grid>
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="orders" />
