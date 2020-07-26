@@ -1,13 +1,18 @@
 import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
+// MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
-import useStyles from '../styles';
-import useForm from '../../../hooks/useForm';
+// Custom components
+import { ClubsSelect, CompetitionSelect } from '../selects';
+import { FilterFormActions } from '../actions';
+// Types
 import { MatchesFilterData } from '../../../types/matches';
 import { ClubData } from '../../../types/simplifiedData';
-import ClubsSelect from '../ClubsSelect';
-import CompetitionSelect from '../CompetitionSelect';
-import FilterFormActions from '../FilterFormActions';
+// Hooks
+import { useForm } from '../../../hooks';
+// Utils & data
 import { formatDateObject } from '../../../utils';
+// Styles
+import { useStyles } from '../styles';
 
 type FilterFormProps = {
   clubsData: ClubData[];
@@ -22,7 +27,10 @@ const initialState: MatchesFilterData = {
   dateTo: formatDateObject(new Date()),
 };
 
-const MatchesFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
+export const MatchesFilterForm = ({
+  clubsData,
+  setFilters,
+}: FilterFormProps) => {
   const classes = useStyles();
   const [formData, onInputChange, setFormData] = useForm(initialState);
 
@@ -99,5 +107,3 @@ const MatchesFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
     </form>
   );
 };
-
-export default MatchesFilterForm;

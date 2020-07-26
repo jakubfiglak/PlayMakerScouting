@@ -10,7 +10,7 @@ import {
 } from '../../types/players';
 import { Order } from '../../types/common';
 
-const PlayersState: React.FC = ({ children }) => {
+export const PlayersState: React.FC = ({ children }) => {
   const initialState: State = {
     playersData: {
       data: [],
@@ -162,5 +162,3 @@ const PlayersState: React.FC = ({ children }) => {
     </PlayersContext.Provider>
   );
 };
-
-export default PlayersState;

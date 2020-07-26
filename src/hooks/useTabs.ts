@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useTabs = () => {
+export const useTabs = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (
@@ -12,5 +12,3 @@ const useTabs = () => {
 
   return [activeTab, handleTabChange, setActiveTab] as const;
 };
-
-export default useTabs;

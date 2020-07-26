@@ -14,7 +14,12 @@ type ModalProps = {
   handleClose: () => void;
 } & DialogProps;
 
-const Modal = ({ message, open, handleAccept, handleClose }: ModalProps) => {
+export const Modal = ({
+  message,
+  open,
+  handleAccept,
+  handleClose,
+}: ModalProps) => {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogContent>
@@ -31,5 +36,3 @@ const Modal = ({ message, open, handleAccept, handleClose }: ModalProps) => {
     </Dialog>
   );
 };
-
-export default Modal;

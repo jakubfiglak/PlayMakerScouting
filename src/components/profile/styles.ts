@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     media: {
       height: 0,
@@ -15,5 +15,3 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
-
-export default useStyles;

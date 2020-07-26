@@ -1,11 +1,11 @@
 import React, { SyntheticEvent } from 'react';
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
-import useStyles from './styles';
-import useForm from '../../hooks/useForm';
-import useAuthState from '../../context/auth/useAuthState';
+import { useStyles } from './styles';
+import { useForm } from '../../hooks';
+import { useAuthState } from '../../context';
 import { EditAccountData } from '../../types/auth';
 
-const EditAccountForm: React.FC = () => {
+export const EditAccountForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
 
@@ -104,5 +104,3 @@ const EditAccountForm: React.FC = () => {
     </form>
   );
 };
-
-export default EditAccountForm;

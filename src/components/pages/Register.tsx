@@ -1,13 +1,11 @@
 import React from 'react';
 import AuthTemplate from '../templates/AuthTemplate/AuthTemplate';
-import RegisterForm from '../auth/RegisterForm';
+import { RegisterForm } from '../auth';
 
-const Register: React.FC = () => {
+export const Register = () => {
   return (
     <AuthTemplate title="Rejestracja">
       <RegisterForm />
     </AuthTemplate>
   );
 };
-
-export default Register;

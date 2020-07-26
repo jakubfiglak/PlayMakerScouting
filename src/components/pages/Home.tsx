@@ -1,8 +1,8 @@
 import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
-import useAuthorization from '../../hooks/useAuthorization';
+import { useAuthorization } from '../../hooks';
 
-const Home: React.FC = () => {
+export const Home = () => {
   useAuthorization();
 
   return (
@@ -11,5 +11,3 @@ const Home: React.FC = () => {
     </MainTemplate>
   );
 };
-
-export default Home;

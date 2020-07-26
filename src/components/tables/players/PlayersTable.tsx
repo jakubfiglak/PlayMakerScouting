@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+// MUI components
 import {
   Table,
   TableBody,
@@ -8,18 +9,22 @@ import {
   TableFooter,
   TableRow,
 } from '@material-ui/core';
-import PlayersTableRow from './PlayersTableRow';
-import TablePaginationActions from '../../common/Table/TablePaginationActions';
-import useStyles from '../styles';
-import { playersHeadCells } from '../data';
-import TableHeader from '../../common/Table/TableHeader';
-import useTable from '../../../hooks/useTable';
+// Custom components
+import { TablePaginationActions, TableHeader } from '../../common';
+import { PlayersTableRow } from './PlayersTableRow';
+// Types
 import {
   PlayersData,
   GetPlayers,
   PlayersFilterData,
   Player,
 } from '../../../types/players';
+// Hooks
+import { useTable } from '../../../hooks';
+// Utils & data
+import { playersHeadCells } from '../data';
+// Styles
+import { useStyles } from '../styles';
 
 type TableProps = {
   getPlayers: GetPlayers;
@@ -29,7 +34,7 @@ type TableProps = {
   handleSetCurrent: (player: Player) => void;
 };
 
-const PlayersTable = ({
+export const PlayersTable = ({
   getPlayers,
   playersData,
   filters,
@@ -97,5 +102,3 @@ const PlayersTable = ({
     </TableContainer>
   );
 };
-
-export default PlayersTable;

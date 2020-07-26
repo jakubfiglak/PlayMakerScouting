@@ -1,8 +1,10 @@
 import React from 'react';
+// MUI components
 import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
-import { voivodeships } from '../../data';
+// Data & utils
+import { voivodeships } from '../../../data';
 
-const VoivodeshipSelect = ({ onChange, value }: SelectProps) => {
+export const VoivodeshipSelect = ({ onChange, value }: SelectProps) => {
   return (
     <>
       <InputLabel id="voivodeship">Województwo</InputLabel>
@@ -30,5 +32,3 @@ const VoivodeshipSelect = ({ onChange, value }: SelectProps) => {
     </>
   );
 };
-
-export default VoivodeshipSelect;

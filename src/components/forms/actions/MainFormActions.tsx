@@ -1,4 +1,5 @@
 import React from 'react';
+// MUI components
 import { Grid, Button } from '@material-ui/core';
 
 type MainFormActionsProps = {
@@ -7,7 +8,7 @@ type MainFormActionsProps = {
   onCancelClick: () => void;
 };
 
-const MainFormActions = ({
+export const MainFormActions = ({
   label,
   current,
   onCancelClick,
@@ -32,5 +33,3 @@ const MainFormActions = ({
     </>
   );
 };
-
-export default MainFormActions;

@@ -1,11 +1,15 @@
 import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
+// MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
-import useStyles from '../styles';
-import useForm from '../../../hooks/useForm';
+// Custom components
+import { DivisionSelect, VoivodeshipSelect } from '../selects';
+import { FilterFormActions } from '../actions';
+// Types
 import { ClubsFilterData } from '../../../types/clubs';
-import DivisionSelect from '../DivisionSelect';
-import VoivodeshipSelect from '../VoivodeshipSelect';
-import FilterFormActions from '../FilterFormActions';
+// Hooks
+import { useForm } from '../../../hooks';
+// Styles
+import { useStyles } from '../styles';
 
 type FilterFormProps = {
   setFilters: Dispatch<SetStateAction<ClubsFilterData>>;
@@ -17,7 +21,7 @@ const initialState: ClubsFilterData = {
   voivodeship: '',
 };
 
-const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
+export const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
   const classes = useStyles();
   const [formData, onInputChange, setFormData] = useForm(initialState);
 
@@ -63,5 +67,3 @@ const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
     </form>
   );
 };
-
-export default ClubsFilterForm;

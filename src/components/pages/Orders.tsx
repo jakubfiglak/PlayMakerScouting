@@ -1,8 +1,8 @@
 import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
-import useAuthorization from '../../hooks/useAuthorization';
+import { useAuthorization } from '../../hooks';
 
-const Orders: React.FC = () => {
+export const Orders = () => {
   useAuthorization();
 
   return (
@@ -11,5 +11,3 @@ const Orders: React.FC = () => {
     </MainTemplate>
   );
 };
-
-export default Orders;

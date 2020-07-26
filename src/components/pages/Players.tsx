@@ -1,10 +1,10 @@
 import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
-import useAuthorization from '../../hooks/useAuthorization';
-import PlayersState from '../../context/players/PlayersState';
-import PlayersContent from '../content/PlayersContent';
+import { PlayersContent } from '../content';
+import { PlayersState } from '../../context';
+import { useAuthorization } from '../../hooks';
 
-const Players: React.FC = () => {
+export const Players: React.FC = () => {
   useAuthorization();
 
   return (
@@ -15,5 +15,3 @@ const Players: React.FC = () => {
     </PlayersState>
   );
 };
-
-export default Players;

@@ -1,8 +1,10 @@
 import React from 'react';
+// MUI components
 import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
-import { divisions } from '../../data';
+// Data & utils
+import { divisions } from '../../../data';
 
-const DivisionSelect = ({ onChange, value, required }: SelectProps) => {
+export const DivisionSelect = ({ onChange, value, required }: SelectProps) => {
   return (
     <>
       <InputLabel id="division">Poziom rozgrywkowy</InputLabel>
@@ -29,5 +31,3 @@ const DivisionSelect = ({ onChange, value, required }: SelectProps) => {
     </>
   );
 };
-
-export default DivisionSelect;

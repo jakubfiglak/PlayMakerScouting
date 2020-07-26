@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
+// MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
-import PlayersTable from '../tables/players/PlayersTable';
-import TabPanel from '../common/TabPanel/TabPanel';
-import usePlayersState from '../../context/players/usePlayersState';
-import useSimplifiedDataState from '../../context/simplifiedData/useSimplifiedDataState';
-import Loader from '../common/Loader/Loader';
-import PlayersFilterForm from '../forms/players/PlayersFilterForm';
+// Custom components
+import { PlayersTable } from '../tables';
+import { PlayersFilterForm, PlayersForm } from '../forms';
+import { TabPanel, Loader } from '../common';
+// Types
 import { PlayersFilterData, Player } from '../../types/players';
-import useTabs from '../../hooks/useTabs';
-import PlayersForm from '../forms/players/PlayersForm';
+// Hooks
+import { usePlayersState, useSimplifiedDataState } from '../../context';
+import { useTabs } from '../../hooks';
 
-const PlayersContent = () => {
+export const PlayersContent = () => {
   const playersContext = usePlayersState();
   const simplifiedDataContext = useSimplifiedDataState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
@@ -74,5 +75,3 @@ const PlayersContent = () => {
     </>
   );
 };
-
-export default PlayersContent;

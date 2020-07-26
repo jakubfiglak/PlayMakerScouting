@@ -1,7 +1,7 @@
 import { withStyles, createStyles, TableRow } from '@material-ui/core';
 import { lightGray } from '../../../theme/colors';
 
-const StyledTableRow = withStyles(() =>
+export const StyledTableRow = withStyles(() =>
   createStyles({
     root: {
       '&:nth-of-type(odd)': {
@@ -10,5 +10,3 @@ const StyledTableRow = withStyles(() =>
     },
   }),
 )(TableRow);
-
-export default StyledTableRow;

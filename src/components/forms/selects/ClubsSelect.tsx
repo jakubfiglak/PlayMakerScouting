@@ -1,12 +1,14 @@
 import React from 'react';
+// MUI components
 import { Select, MenuItem, InputLabel, SelectProps } from '@material-ui/core';
-import { ClubData } from '../../types/simplifiedData';
+// Types
+import { ClubData } from '../../../types/simplifiedData';
 
 type ClubsSelectProps = {
   clubsData: ClubData[];
 } & SelectProps;
 
-const ClubsSelect = ({
+export const ClubsSelect = ({
   clubsData,
   onChange,
   value,
@@ -42,5 +44,3 @@ const ClubsSelect = ({
     </>
   );
 };
-
-export default ClubsSelect;

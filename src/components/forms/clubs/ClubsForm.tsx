@@ -1,13 +1,17 @@
 import React, { SyntheticEvent } from 'react';
+// MUI components
 import { Grid, TextField, FormControl } from '@material-ui/core';
-import Loader from '../../common/Loader/Loader';
-import useForm from '../../../hooks/useForm';
+// Custom components
+import { DivisionSelect } from '../selects';
+import { MainFormActions } from '../actions';
+import { Loader } from '../../common';
+// Types
 import { ClubsFormData } from '../../../types/clubs';
-import useClubsState from '../../../context/clubs/useClubsState';
-import DivisionSelect from '../DivisionSelect';
-import MainFormActions from '../MainFormActions';
+// Hooks
+import { useClubsState } from '../../../context';
+import { useForm } from '../../../hooks';
 
-const ClubsForm = () => {
+export const ClubsForm = () => {
   const clubsContext = useClubsState();
   const { loading, addClub, current, clearCurrent, editClub } = clubsContext;
 
@@ -83,5 +87,3 @@ const ClubsForm = () => {
     </form>
   );
 };
-
-export default ClubsForm;

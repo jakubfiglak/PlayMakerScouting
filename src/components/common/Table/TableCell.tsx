@@ -1,6 +1,6 @@
 import { withStyles, createStyles, Theme, TableCell } from '@material-ui/core';
 
-const StyledTableCell = withStyles((theme: Theme) =>
+export const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
     head: {
       backgroundColor: theme.palette.primary.main,
@@ -12,5 +12,3 @@ const StyledTableCell = withStyles((theme: Theme) =>
     },
   }),
 )(TableCell);
-
-export default StyledTableCell;

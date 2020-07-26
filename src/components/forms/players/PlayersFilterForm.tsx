@@ -1,12 +1,16 @@
 import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
+// MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
-import useStyles from '../styles';
-import useForm from '../../../hooks/useForm';
+// Custom components
+import { ClubsSelect, PositionSelect } from '../selects';
+import { FilterFormActions } from '../actions';
+// Types
 import { PlayersFilterData } from '../../../types/players';
 import { ClubData } from '../../../types/simplifiedData';
-import ClubsSelect from '../ClubsSelect';
-import PositionSelect from '../PositionSelect';
-import FilterFormActions from '../FilterFormActions';
+// Hooks
+import { useForm } from '../../../hooks';
+// Styles
+import { useStyles } from '../styles';
 
 type FilterFormProps = {
   clubsData: ClubData[];
@@ -19,7 +23,10 @@ const initialState: PlayersFilterData = {
   position: '',
 };
 
-const PlayersFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
+export const PlayersFilterForm = ({
+  clubsData,
+  setFilters,
+}: FilterFormProps) => {
   const classes = useStyles();
   const [formData, onInputChange, setFormData] = useForm(initialState);
 
@@ -69,5 +76,3 @@ const PlayersFilterForm = ({ clubsData, setFilters }: FilterFormProps) => {
     </form>
   );
 };
-
-export default PlayersFilterForm;

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
+// MUI components
 import { AppBar, Tabs, Tab, Grid } from '@material-ui/core';
-import TabPanel from '../common/TabPanel/TabPanel';
-import Loader from '../common/Loader/Loader';
-import useTabs from '../../hooks/useTabs';
-import useSimplifiedDataState from '../../context/simplifiedData/useSimplifiedDataState';
-import useMatchesState from '../../context/matches/useMatchesState';
+// Custom components
+import { MatchesFilterForm, MatchesForm } from '../forms';
+import { TabPanel, Loader } from '../common';
+import { MatchCard } from '../matches';
+// Types
 import { Match, MatchesFilterData } from '../../types/matches';
-import MatchCard from '../matches/MatchCard';
-import MatchesFilterForm from '../forms/matches/MatchesFilterForm';
+// Hooks
+import { useMatchesState, useSimplifiedDataState } from '../../context';
+import { useTabs } from '../../hooks';
+// Utils & data
 import { formatDateObject } from '../../utils';
-import MatchesForm from '../forms/matches/MatchesForm';
 
-const MatchesContent = () => {
+export const MatchesContent = () => {
   const matchesContext = useMatchesState();
   const simplifiedDataContext = useSimplifiedDataState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
@@ -77,5 +79,3 @@ const MatchesContent = () => {
     </>
   );
 };
-
-export default MatchesContent;
