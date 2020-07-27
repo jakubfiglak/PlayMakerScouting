@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Tabs, Tab, Grid } from '@material-ui/core';
 // Custom components
 import { TabPanel, Loader } from '../common';
-import { OrdersForm } from '../forms';
+import { OrdersForm, OrdersFilterForm } from '../forms';
 import { OrderCard } from '../orders';
 // Types
-import { Order } from '../../types/orders';
+import { Order, OrdersFilterData } from '../../types/orders';
 // Hooks
 import {
   useOrdersState,
@@ -21,7 +21,7 @@ export const OrdersContent = () => {
   const ordersContext = useOrdersState();
   const simplifiedDataContext = useSimplifiedDataState();
   const authContext = useAuthState();
-  const [activeTab, handleTabChange, setActiveTab] = useTabs();
+  const [activeTab, handleTabChange] = useTabs();
 
   const {
     loading,
@@ -40,13 +40,18 @@ export const OrdersContent = () => {
 
   const { loading: userLoading, user } = authContext;
 
+  const [filters, setFilters] = useState<OrdersFilterData>({
+    player: '',
+    status: 'all',
+    createdAfter: formatDateObject(new Date()),
+    createdBefore: formatDateObject(new Date()),
+  });
+
   useEffect(() => {
     getPlayers();
-    getOrders();
+    getOrders(filters);
     getMyOrders();
-  }, []);
-
-  console.log(myOrdersData);
+  }, [filters]);
 
   const isAdmin = user?.role === 'admin';
 
@@ -64,6 +69,7 @@ export const OrdersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="matches">
+        <OrdersFilterForm playersData={playersData} setFilters={setFilters} />
         <Grid container spacing={2}>
           {ordersData.data.map((order) => (
             <Grid item xs={12} sm={6} md={3} key={order._id}>

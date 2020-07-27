@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import OrdersContext from './ordersContext';
 import ordersReducer from './ordersReducer';
-import { State, OrderFormData } from '../../types/orders';
+import { State, OrderFormData, OrdersFilterData } from '../../types/orders';
 
 export const OrdersState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -33,10 +33,24 @@ export const OrdersState: React.FC = ({ children }) => {
   };
 
   // Get orders
-  const getOrders = async () => {
+  const getOrders = async (filters: OrdersFilterData) => {
     setLoading();
 
-    const ordersURI = '/api/v1/orders';
+    const { player, status, createdAfter, createdBefore } = filters;
+
+    let ordersURI = `/api/v1/orders?sort=-createdAt&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
+
+    if (player) {
+      ordersURI = ordersURI.concat(`&player=${player}`);
+    }
+
+    if (status === 'open') {
+      ordersURI = ordersURI.concat('&open=true');
+    }
+
+    if (status === 'accepted') {
+      ordersURI = ordersURI.concat('&open=false');
+    }
 
     try {
       const res = await axiosJson.get(ordersURI);
@@ -58,13 +72,11 @@ export const OrdersState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.get('/api/v1/orders/my');
-      console.log(res);
       dispatch({
         type: 'GET_MY_ORDERS_SUCCESS',
         payload: res.data.data,
       });
     } catch (err) {
-      console.log(err.response);
       dispatch({
         type: 'ORDERS_ERROR',
         payload: 'err.response.data.error',

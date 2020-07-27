@@ -7,4 +7,5 @@ export { MatchesForm } from './matches/MatchesForm';
 export { PlayersFilterForm } from './players/PlayersFilterForm';
 export { PlayersForm } from './players/PlayersForm';
 
+export { OrdersFilterForm } from './orders/OrdersFilterForm';
 export { OrdersForm } from './orders/OrdersForm';

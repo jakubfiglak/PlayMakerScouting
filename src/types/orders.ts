@@ -34,19 +34,20 @@ export type OrdersData = {
   };
 };
 
-// export type ClubsFilterData = {
-//   name: string;
-//   division: Division;
-//   voivodeship: string;
-// };
+export type OrdersFilterData = {
+  player: string;
+  status: 'all' | 'open' | 'accepted';
+  createdAfter: string;
+  createdBefore: string;
+};
 
-// export type GetClubs = (
-//   page: number,
-//   limit: number,
-//   sort: string,
-//   order: Order,
-//   filters: ClubsFilterData,
-// ) => void;
+export type GetOrders = (
+  page: number,
+  limit: number,
+  sort: string,
+  order: Order,
+  filters: OrdersFilterData,
+) => void;
 
 export type State = {
   ordersData: OrdersData;
@@ -55,7 +56,7 @@ export type State = {
   loading: boolean;
   error: string | null;
   setLoading: () => void;
-  getOrders: () => void;
+  getOrders: (filters: OrdersFilterData) => void;
   getMyOrders: () => void;
   getOrder: (id: string) => void;
   deleteOrder: (id: string) => void;
