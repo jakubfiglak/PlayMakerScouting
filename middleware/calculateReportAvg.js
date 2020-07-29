@@ -1,14 +1,22 @@
 const calculateObjAvg = require('../utils/calculateObjAvg');
 const calculateAvg = require('../utils/calculateAvg');
 
+const getAvg = (object) => {
+  const ratings = Object.entries(object)
+    .map(([key, value]) => value.rating)
+    .filter((el) => el !== undefined);
+
+  return calculateAvg(...ratings);
+};
+
 function calculateReportAvg(next) {
-  this.mentalAverage = calculateObjAvg(this.mental);
-  this.physicalAverage = calculateObjAvg(this.physical);
-  this.footballSkillsAverage = calculateObjAvg(this.footballSkills);
-  this.averageRating = calculateAvg(
-    this.mentalAverage,
-    this.physicalAverage,
-    this.footballSkillsAverage
+  this.individualAvg = getAvg(this.individualSkills);
+  this.teamplayAvg = getAvg(this.teamplaySkills);
+  this.motorAvg = getAvg(this.motorSkills);
+  this.avgRating = calculateAvg(
+    this.individualAvg,
+    this.teamplayAvg,
+    this.motorAvg
   );
   next();
 }
