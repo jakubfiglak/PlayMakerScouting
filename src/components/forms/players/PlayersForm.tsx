@@ -30,7 +30,7 @@ export const PlayersForm = ({ clubsData }: PlayersFormProps) => {
     firstName: '',
     lastName: '',
     club: '',
-    position: 'M',
+    position: 'CM',
     dateOfBirth: '2000-01-01',
     height: 0,
     weight: 0,

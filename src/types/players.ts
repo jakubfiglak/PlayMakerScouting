@@ -3,11 +3,11 @@ import { Order } from './common';
 type PlayerCommonTypes = {
   firstName: string;
   lastName: string;
-  position: 'GK' | 'D' | 'M' | 'F';
+  position: 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
   dateOfBirth: string;
   height: number;
   weight: number;
-  footed: 'L' | 'R';
+  footed: 'L' | 'R' | 'both';
 };
 
 export type Player = PlayerCommonTypes & {

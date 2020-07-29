@@ -31,14 +31,6 @@ export type MatchesData = {
   };
 };
 
-export type GetMatches = (
-  page: number,
-  limit: number,
-  sort: string,
-  order: Order,
-  filters: '',
-) => void;
-
 export type MatchesFormData = {
   homeTeam: string;
   awayTeam: string;

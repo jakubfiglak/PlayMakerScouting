@@ -14,10 +14,12 @@ export const PositionSelect = ({ onChange, value }: SelectProps) => {
         onChange={onChange}
         value={value}
       >
-        <MenuItem value="GK">GK</MenuItem>
-        <MenuItem value="D">D</MenuItem>
-        <MenuItem value="M">M</MenuItem>
-        <MenuItem value="F">F</MenuItem>
+        <MenuItem value="GK">Bramkarz</MenuItem>
+        <MenuItem value="CB">Środkowy obrońca</MenuItem>
+        <MenuItem value="FB">Boczny obrońca</MenuItem>
+        <MenuItem value="CM">Środkowy pomocnik</MenuItem>
+        <MenuItem value="WM">Boczny pomocnik</MenuItem>
+        <MenuItem value="F">Napastnik</MenuItem>
       </Select>
     </>
   );

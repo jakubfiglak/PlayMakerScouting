@@ -14,8 +14,9 @@ export const FootSelect = ({ onChange, value }: SelectProps) => {
         onChange={onChange}
         value={value}
       >
-        <MenuItem value="R">R</MenuItem>
-        <MenuItem value="L">L</MenuItem>
+        <MenuItem value="R">prawa</MenuItem>
+        <MenuItem value="L">lewa</MenuItem>
+        <MenuItem value="both">obie</MenuItem>
       </Select>
     </>
   );

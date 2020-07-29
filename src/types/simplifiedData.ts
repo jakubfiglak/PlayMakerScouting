@@ -2,6 +2,10 @@ export type PlayerData = {
   _id: string;
   firstName: string;
   lastName: string;
+  club: {
+    _id: string;
+    name: string;
+  };
 };
 
 export type ClubData = {
