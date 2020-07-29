@@ -4,8 +4,15 @@ const calculateReportAvg = require('../middleware/calculateReportAvg');
 const { Schema, model } = mongoose;
 
 const ratingType = {
-  type: Number,
-  enum: [1, 2, 3],
+  rating: {
+    type: Number,
+    enum: [1, 2, 3, 4],
+  },
+  note: {
+    type: String,
+    trim: true,
+    maxlength: 400,
+  },
 };
 
 const ReportSchema = new Schema({
@@ -49,78 +56,45 @@ const ReportSchema = new Schema({
     type: Number,
     enum: [0, 1],
   },
-  mental: {
-    lostPossessionBeh: ratingType,
-    teamCommunication: ratingType,
-    failedActionBeh: ratingType,
-    teammateFailedPlayBeh: ratingType,
-    successfulActionBeh: ratingType,
-    teammateSuccessfulPlayBeh: ratingType,
-    refereeCallBeh: ratingType,
-    opponentScoreBeh: ratingType,
-    teammateScoreBeh: ratingType,
-    playerScoreBeh: ratingType,
-    decisionMaking: ratingType,
-    playerWrongDecisionBeh: ratingType,
-    fansCriticismBeh: ratingType,
-    coachCriticismBeh: ratingType,
-    diligence: ratingType,
-    bravery: ratingType,
-    creativity: ratingType,
-    determination: ratingType,
-    anticipation: ratingType,
-    leadershipSkills: ratingType,
-    ballReceivingAggression: ratingType,
-    experience: ratingType,
-    decisiveness: ratingType,
-  },
-  physical: {
-    acceleration: ratingType,
-    speed: ratingType,
-    jumping: ratingType,
-    stamina: ratingType,
-    strength: ratingType,
-    flexibility: ratingType,
-    coordination: ratingType,
-    reflex: ratingType,
-  },
-  footballSkills: {
-    shortPass: ratingType,
-    longPass: ratingType,
-    throughPass: ratingType,
-    shortPassWeakFoot: ratingType,
-    longPassWeakFoot: ratingType,
-    dribble: ratingType,
-    headPlay: ratingType,
-    covering: ratingType,
-    oneOnOneDef: ratingType,
-    oneOnOneAtt: ratingType,
-    slidingTackle: ratingType,
-    groundPassReception: ratingType,
-    airPassReception: ratingType,
-    setPieces: ratingType,
-    crosses: ratingType,
-    finishing: ratingType,
-    finishingWeakFoot: ratingType,
-    finishigHead: ratingType,
-    offTheBall: ratingType,
+  individualSkills: {
+    ballReception: ratingType,
+    holdPass: ratingType,
+    gainPass: ratingType,
+    keyPass: ratingType,
+    defOneOnOne: ratingType,
+    airPlay: ratingType,
     positioning: ratingType,
+    attOneOnOne: ratingType,
+    finishing: ratingType,
   },
-  mentalAverage: {
+  teamplaySkills: {
+    attack: ratingType,
+    defense: ratingType,
+    transition: ratingType,
+  },
+  motorSkills: {
+    leading: ratingType,
+    neglected: ratingType,
+  },
+  finalRating: {
     type: Number,
+    enum: [1, 2, 3, 4],
   },
-  physicalAverage: {
-    type: Number,
-  },
-  footballSkillsAverage: {
-    type: Number,
-  },
-  averageRating: {
-    type: Number,
-  },
-  note: {
+  summary: {
     type: String,
     trim: true,
+  },
+  individualAvg: {
+    type: Number,
+  },
+  teamplayAvg: {
+    type: Number,
+  },
+  motorAvg: {
+    type: Number,
+  },
+  avgRating: {
+    type: Number,
   },
   createdAt: {
     type: Date,

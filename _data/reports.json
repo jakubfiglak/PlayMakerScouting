@@ -1,7 +1,7 @@
 [
   {
     "_id": "5ee7b3a464f4c286f6ec6e67",
-    "player": "5ee50e8363c85bdf87cc0d72",
+    "player": "5ee50e5550a453bb0174b9b6",
     "match": "5ee62cf93d7b3e49dab466c5",
     "user": "5d7a514b5d2c12c7449be045",
     "order": "5ee63a8123e801c1391f013d",
@@ -10,68 +10,66 @@
     "assist": "0",
     "yellowCards": "1",
     "redCards": "0",
-    "mental": {
-      "lostPossessionBeh": "1",
-      "teamCommunication": "2",
-      "failedActionBeh": "3",
-      "teammateFailedPlayBeh": "2",
-      "successfulActionBeh": "2",
-      "teammateSuccessfulPlayBeh": "2",
-      "refereeCallBeh": "2",
-      "opponentScoreBeh": "2",
-      "teammateScoreBeh": "2",
-      "playerScoreBeh": "2",
-      "decisionMaking": "2",
-      "playerWrongDecisionBeh": "2",
-      "fansCriticismBeh": "2",
-      "coachCriticismBeh": "2",
-      "diligence": "2",
-      "bravery": "2",
-      "creativity": "2",
-      "determination": "2",
-      "anticipation": "2",
-      "leadershipSkills": "2",
-      "ballReceivingAggression": "2",
-      "experience": "2",
-      "decisiveness": "2"
+    "individualSkills": {
+      "ballReception": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "holdPass": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "gainPass": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "keyPass": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defOneOnOne": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "airPlay": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "positioning": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "physical": {
-      "acceleration": "2",
-      "speed": "3",
-      "jumping": "3",
-      "stamina": "1",
-      "strength": "3",
-      "flexibility": "2",
-      "coordination": "2",
-      "reflex": "3"
+    "teamplaySkills": {
+      "attack": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defense": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "transition": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "footballSkills": {
-      "shortPass": "2",
-      "longPass": "1",
-      "throughPass": "1",
-      "shortPassWeakFoot": "2",
-      "longPassWeakFoot": "3",
-      "dribble": "1",
-      "headPlay": "2",
-      "covering": "1",
-      "oneOnOneDef": "3",
-      "oneOnOneAtt": "2",
-      "slidingTackle": "1",
-      "groundPassReception": "2",
-      "airPassReception": "2",
-      "setPieces": "1",
-      "crosses": "2",
-      "finishing": "1",
-      "finishingWeakFoot": "2",
-      "finishigHead": "2",
-      "offTheBall": "3",
-      "positioning": "2"
+    "motorSkills": {
+      "leading": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "neglected": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "note": "nice player"
+    "finalRating": "3",
+    "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
   },
   {
     "_id": "5ee7b5b68297ff1d6b197536",
-    "player": "5ee50f8d62527ff1fa5fcbb6",
+    "player": "5ee50ddaac4b77f2d7a21326",
     "match": "5ee62d506bcfc8ae3fabc5f2",
     "user": "5c8a1d5b0190b214360dc031",
     "order": "5ee63a85f202e097d71a8a9a",
@@ -80,126 +78,66 @@
     "assist": "1",
     "yellowCards": "0",
     "redCards": "0",
-    "mental": {
-      "lostPossessionBeh": "1",
-      "teamCommunication": "3",
-      "failedActionBeh": "3",
-      "teammateFailedPlayBeh": "3",
-      "successfulActionBeh": "3",
-      "teammateSuccessfulPlayBeh": "3",
-      "refereeCallBeh": "3",
-      "opponentScoreBeh": "3",
-      "teammateScoreBeh": "3",
-      "playerScoreBeh": "3",
-      "decisionMaking": "3",
-      "playerWrongDecisionBeh": "3",
-      "fansCriticismBeh": "2",
-      "coachCriticismBeh": "2",
-      "diligence": "2",
-      "bravery": "2",
-      "creativity": "2",
-      "determination": "2",
-      "anticipation": "2",
-      "leadershipSkills": "2",
-      "ballReceivingAggression": "2",
-      "experience": "2",
-      "decisiveness": "2"
+    "individualSkills": {
+      "ballReception": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "holdPass": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "gainPass": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "keyPass": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defOneOnOne": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "airPlay": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "attOneOnOne": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "physical": {
-      "acceleration": "2",
-      "speed": "1",
-      "jumping": "1",
-      "stamina": "1",
-      "strength": "1",
-      "flexibility": "2",
-      "coordination": "2",
-      "reflex": "1"
+    "teamplaySkills": {
+      "attack": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defense": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "transition": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "footballSkills": {
-      "shortPass": "2",
-      "longPass": "3",
-      "throughPass": "3",
-      "shortPassWeakFoot": "2",
-      "longPassWeakFoot": "3",
-      "dribble": "3",
-      "headPlay": "2",
-      "covering": "3",
-      "oneOnOneDef": "3",
-      "oneOnOneAtt": "2",
-      "slidingTackle": "3",
-      "groundPassReception": "2",
-      "airPassReception": "2",
-      "setPieces": "3",
-      "crosses": "2",
-      "finishing": "3",
-      "finishingWeakFoot": "2",
-      "finishigHead": "2",
-      "offTheBall": "3",
-      "positioning": "2"
+    "motorSkills": {
+      "leading": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "neglected": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "note": "nice player"
-  },
-  {
-    "_id": "5ee7b5bc88152fb11a43f23f",
-    "player": "5ee50fbad77edae988c59b4a",
-    "match": "5ee62d53a29bc0279e9b351c",
-    "user": "5d7a514b5d2c12c7449be046",
-    "order": "5ee63a8a3d99fce9e2987a58",
-    "minutesPlayed": "66",
-    "goals": "0",
-    "assist": "0",
-    "yellowCards": "0",
-    "redCards": "1",
-    "mental": {
-      "lostPossessionBeh": "1",
-      "teamCommunication": "2",
-      "failedActionBeh": "3",
-      "teammateFailedPlayBeh": "2",
-      "successfulActionBeh": "2",
-      "refereeCallBeh": "2",
-      "teammateScoreBeh": "2",
-      "playerScoreBeh": "2",
-      "decisionMaking": "2",
-      "playerWrongDecisionBeh": "2",
-      "fansCriticismBeh": "2",
-      "coachCriticismBeh": "2",
-      "diligence": "2",
-      "bravery": "2",
-      "anticipation": "2",
-      "leadershipSkills": "2",
-      "ballReceivingAggression": "2",
-      "experience": "2",
-      "decisiveness": "2"
-    },
-    "physical": {
-      "acceleration": "2",
-      "jumping": "3",
-      "stamina": "1",
-      "flexibility": "2",
-      "reflex": "3"
-    },
-    "footballSkills": {
-      "shortPass": "2",
-      "longPass": "1",
-      "throughPass": "1",
-      "shortPassWeakFoot": "2",
-      "longPassWeakFoot": "3",
-      "dribble": "1",
-      "headPlay": "2",
-      "airPassReception": "2",
-      "setPieces": "1",
-      "crosses": "2",
-      "finishing": "1",
-      "finishingWeakFoot": "2",
-      "finishigHead": "2",
-      "offTheBall": "3",
-      "positioning": "2"
-    },
-    "note": "nice player"
+    "finalRating": "2",
+    "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
   },
   {
     "_id": "5ee7b5c183fd0c7d28ece6c4",
-    "player": "5ee50ff4706aaa7f0174ffa3",
+    "player": "5ee50d93e1a9105fcf95cb5f",
     "match": "5ee62d75387daadd46915679",
     "user": "5d7a514b5d2c12c7449be045",
     "order": "5ee63a9221a163e62aa1eca3",
@@ -208,63 +146,197 @@
     "assist": "2",
     "yellowCards": "0",
     "redCards": "0",
-    "mental": {
-      "lostPossessionBeh": "1",
-      "teamCommunication": "2",
-      "failedActionBeh": "3",
-      "teammateFailedPlayBeh": "3",
-      "successfulActionBeh": "3",
-      "teammateSuccessfulPlayBeh": "3",
-      "refereeCallBeh": "3",
-      "opponentScoreBeh": "3",
-      "teammateScoreBeh": "3",
-      "playerScoreBeh": "3",
-      "decisionMaking": "3",
-      "playerWrongDecisionBeh": "3",
-      "fansCriticismBeh": "3",
-      "coachCriticismBeh": "3",
-      "diligence": "3",
-      "bravery": "3",
-      "creativity": "3",
-      "determination": "2",
-      "anticipation": "2",
-      "leadershipSkills": "2",
-      "ballReceivingAggression": "2",
-      "experience": "2",
-      "decisiveness": "2"
+    "individualSkills": {
+      "ballReception": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "holdPass": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "gainPass": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "keyPass": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defOneOnOne": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "finishing": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "attOneOnOne": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "physical": {
-      "acceleration": "2",
-      "speed": "3",
-      "jumping": "3",
-      "stamina": "1",
-      "strength": "1",
-      "flexibility": "2",
-      "coordination": "2",
-      "reflex": "3"
+    "teamplaySkills": {
+      "attack": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defense": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "transition": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "footballSkills": {
-      "shortPass": "2",
-      "longPass": "1",
-      "throughPass": "1",
-      "shortPassWeakFoot": "2",
-      "longPassWeakFoot": "1",
-      "dribble": "1",
-      "headPlay": "2",
-      "covering": "1",
-      "oneOnOneDef": "3",
-      "oneOnOneAtt": "2",
-      "slidingTackle": "1",
-      "groundPassReception": "2",
-      "airPassReception": "2",
-      "setPieces": "1",
-      "crosses": "2",
-      "finishing": "1",
-      "finishingWeakFoot": "2",
-      "finishigHead": "2",
-      "offTheBall": "3",
-      "positioning": "2"
+    "motorSkills": {
+      "leading": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "neglected": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
     },
-    "note": "nice player"
+    "finalRating": "4",
+    "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+  },
+  {
+    "_id": "5f219f4e14829c59b651d8a6",
+    "player": "5ee50f199f46ce1701ac838f",
+    "match": "5ee62d75387daadd46915679",
+    "user": "5d7a514b5d2c12c7449be045",
+    "order": "5ee63a9221a163e62aa1eca3",
+    "minutesPlayed": "90",
+    "goals": "1",
+    "assist": "2",
+    "yellowCards": "0",
+    "redCards": "0",
+    "individualSkills": {
+      "ballReception": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "holdPass": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "gainPass": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "keyPass": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defOneOnOne": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "finishing": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "attOneOnOne": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
+    },
+    "teamplaySkills": {
+      "attack": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defense": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "transition": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
+    },
+    "motorSkills": {
+      "leading": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "neglected": {
+        "rating": "1",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
+    },
+    "finalRating": "4",
+    "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+  },
+  {
+    "_id": "5f219f9c87328167b7f9abf5",
+    "player": "5ee50e8a3261fb547d70459d",
+    "match": "5ee62d75387daadd46915679",
+    "user": "5d7a514b5d2c12c7449be045",
+    "order": "5ee63a9221a163e62aa1eca3",
+    "minutesPlayed": "90",
+    "goals": "1",
+    "assist": "2",
+    "yellowCards": "0",
+    "redCards": "0",
+    "individualSkills": {
+      "ballReception": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "holdPass": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "gainPass": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "keyPass": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "airPlay": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "finishing": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "attOneOnOne": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
+    },
+    "teamplaySkills": {
+      "attack": {
+        "rating": "4",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "defense": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "transition": {
+        "rating": "3",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
+    },
+    "motorSkills": {
+      "leading": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      },
+      "neglected": {
+        "rating": "2",
+        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
+      }
+    },
+    "finalRating": "2",
+    "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
   }
 ]
