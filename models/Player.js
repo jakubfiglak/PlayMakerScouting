@@ -21,7 +21,7 @@ const PlayerSchema = new Schema(
     position: {
       type: String,
       required: 'Please choose a position',
-      enum: ['GK', 'D', 'M', 'F'],
+      enum: ['GK', 'FB', 'CB', 'CM', 'WM', 'F'],
     },
     dateOfBirth: {
       type: Date,
@@ -38,7 +38,7 @@ const PlayerSchema = new Schema(
     footed: {
       type: String,
       required: 'Please choose players preferred leg',
-      enum: ['L', 'R'],
+      enum: ['L', 'R', 'both'],
     },
   },
   {
