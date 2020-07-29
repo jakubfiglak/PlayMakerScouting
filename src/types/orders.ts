@@ -58,6 +58,7 @@ export type State = {
   setLoading: () => void;
   getOrders: (filters: OrdersFilterData) => void;
   getMyOrders: () => void;
+  acceptOrder: (id: string) => void;
   getOrder: (id: string) => void;
   deleteOrder: (id: string) => void;
   addOrder: (order: OrderFormData) => void;
@@ -69,5 +70,6 @@ export type Action =
   | { type: 'GET_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'GET_ORDER_SUCCESS'; payload: Order }
   | { type: 'GET_MY_ORDERS_SUCCESS'; payload: Order[] }
+  | { type: 'ACCEPT_ORDER_SUCCESS'; payload: string }
   | { type: 'CREATE_ORDER_SUCCESS' }
   | { type: 'DELETE_ORDER_SUCCESS'; payload: string };

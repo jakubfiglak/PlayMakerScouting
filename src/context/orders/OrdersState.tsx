@@ -18,6 +18,7 @@ export const OrdersState: React.FC = ({ children }) => {
     setLoading: () => null,
     getOrders: () => null,
     getMyOrders: () => null,
+    acceptOrder: () => null,
     getOrder: () => null,
     deleteOrder: () => null,
     addOrder: () => null,
@@ -84,8 +85,28 @@ export const OrdersState: React.FC = ({ children }) => {
     }
   };
 
+  // Accept order
+  const acceptOrder = async (id: string) => {
+    setLoading();
+
+    try {
+      await axiosJson.post(`/api/v1/orders/${id}/accept`);
+      dispatch({
+        type: 'ACCEPT_ORDER_SUCCESS',
+        payload: id,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'ORDERS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
   // Get order
   const getOrder = async (id: string) => {
+    setLoading();
+
     try {
       const res = await axiosJson.get(`/api/v1/orders/${id}`);
       dispatch({
@@ -147,6 +168,7 @@ export const OrdersState: React.FC = ({ children }) => {
         setLoading,
         getOrders,
         getMyOrders,
+        acceptOrder,
         getOrder,
         deleteOrder,
         addOrder,

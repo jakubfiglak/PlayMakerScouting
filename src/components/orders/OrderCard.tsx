@@ -29,16 +29,31 @@ import { useStyles } from './styles';
 type OrderCardProps = {
   order: Order;
   deleteOrder: (id: string) => void;
+  acceptOrder: (id: string) => void;
 };
 
-export const OrderCard = ({ order, deleteOrder }: OrderCardProps) => {
+export const OrderCard = ({
+  order,
+  deleteOrder,
+  acceptOrder,
+}: OrderCardProps) => {
   const classes = useStyles();
 
   const authContext = useAuthState();
 
   const { loading, user } = authContext;
 
-  const [isModalOpen, handleClickOpen, handleClose] = useModal();
+  const [
+    isDeleteModalOpen,
+    handleClickOpenDelete,
+    handleCloseDelete,
+  ] = useModal();
+
+  const [
+    isAcceptModalOpen,
+    handleClickOpenAccept,
+    handleCloseAccept,
+  ] = useModal();
 
   const { _id, player, open, scout, createdAt, acceptDate } = order;
 
@@ -78,28 +93,36 @@ export const OrderCard = ({ order, deleteOrder }: OrderCardProps) => {
                 aria-label="delete match"
                 className={classes.delete}
                 disabled={user?.role !== 'admin'}
-                onClick={handleClickOpen}
+                onClick={handleClickOpenDelete}
               >
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
             <Modal
-              open={isModalOpen}
+              open={isDeleteModalOpen}
               message={`Usunąć zlecenie ${_id} z bazy?`}
               handleAccept={() => deleteOrder(_id)}
-              handleClose={handleClose}
+              handleClose={handleCloseDelete}
             />
           </div>
-          <Tooltip title="Przyjmij zlecenie">
-            <IconButton
-              aria-label="edit match"
-              className={classes.accept}
-              disabled={!open}
-              onClick={() => console.log('hello')}
-            >
-              <AssignmentTurnedInIcon />
-            </IconButton>
-          </Tooltip>
+          <div>
+            <Tooltip title="Przyjmij zlecenie">
+              <IconButton
+                aria-label="edit match"
+                className={classes.accept}
+                disabled={!open}
+                onClick={handleClickOpenAccept}
+              >
+                <AssignmentTurnedInIcon />
+              </IconButton>
+            </Tooltip>
+            <Modal
+              open={isAcceptModalOpen}
+              message={`Przyjąć zlecenie ${_id} do realizacji?`}
+              handleAccept={() => acceptOrder(_id)}
+              handleClose={handleCloseAccept}
+            />
+          </div>
           <Tooltip title="Raporty">
             <IconButton
               aria-label="reports"

@@ -27,6 +27,7 @@ export const OrdersContent = () => {
     loading,
     getOrders,
     getMyOrders,
+    acceptOrder,
     ordersData,
     myOrdersData,
     deleteOrder,
@@ -73,7 +74,11 @@ export const OrdersContent = () => {
         <Grid container spacing={2}>
           {ordersData.data.map((order) => (
             <Grid item xs={12} sm={6} md={3} key={order._id}>
-              <OrderCard order={order} deleteOrder={deleteOrder} />
+              <OrderCard
+                order={order}
+                deleteOrder={deleteOrder}
+                acceptOrder={acceptOrder}
+              />
             </Grid>
           ))}
         </Grid>
@@ -85,7 +90,11 @@ export const OrdersContent = () => {
           <Grid container spacing={2}>
             {myOrdersData.map((order) => (
               <Grid item xs={12} sm={6} md={3} key={order._id}>
-                <OrderCard order={order} deleteOrder={deleteOrder} />
+                <OrderCard
+                  order={order}
+                  deleteOrder={deleteOrder}
+                  acceptOrder={acceptOrder}
+                />
               </Grid>
             ))}
           </Grid>
