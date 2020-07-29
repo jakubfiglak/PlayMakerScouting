@@ -15,7 +15,7 @@ import {
 } from '../../context';
 import { useTabs } from '../../hooks';
 // Utils & data
-import { formatDateObject } from '../../utils';
+import { formatDateObject, today, tomorrow } from '../../utils';
 
 export const OrdersContent = () => {
   const ordersContext = useOrdersState();
@@ -44,8 +44,8 @@ export const OrdersContent = () => {
   const [filters, setFilters] = useState<OrdersFilterData>({
     player: '',
     status: 'all',
-    createdAfter: formatDateObject(new Date()),
-    createdBefore: formatDateObject(new Date()),
+    createdAfter: formatDateObject(today),
+    createdBefore: formatDateObject(tomorrow),
   });
 
   useEffect(() => {

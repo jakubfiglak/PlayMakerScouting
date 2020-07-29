@@ -10,7 +10,7 @@ import { PlayerData } from '../../../types/simplifiedData';
 // Hooks
 import { useForm } from '../../../hooks';
 // Utils & data
-import { formatDateObject } from '../../../utils';
+import { formatDateObject, today, tomorrow } from '../../../utils';
 // Styles
 import { useStyles } from '../styles';
 
@@ -22,8 +22,8 @@ type FilterFormProps = {
 const initialState: OrdersFilterData = {
   player: '',
   status: 'all',
-  createdAfter: formatDateObject(new Date()),
-  createdBefore: formatDateObject(new Date()),
+  createdAfter: formatDateObject(today),
+  createdBefore: formatDateObject(tomorrow),
 };
 
 export const OrdersFilterForm = ({
