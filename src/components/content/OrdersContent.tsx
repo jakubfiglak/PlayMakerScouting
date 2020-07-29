@@ -4,9 +4,9 @@ import { AppBar, Tabs, Tab, Grid } from '@material-ui/core';
 // Custom components
 import { TabPanel, Loader } from '../common';
 import { OrdersForm, OrdersFilterForm } from '../forms';
-import { OrderCard } from '../orders';
+import { OrdersGrid, MyOrdersGrid } from '../orders';
 // Types
-import { Order, OrdersFilterData } from '../../types/orders';
+import { OrdersFilterData } from '../../types/orders';
 // Hooks
 import {
   useOrdersState,
@@ -50,8 +50,6 @@ export const OrdersContent = () => {
 
   useEffect(() => {
     getPlayers();
-    getOrders(filters);
-    getMyOrders();
   }, [filters]);
 
   const isAdmin = user?.role === 'admin';
@@ -71,33 +69,24 @@ export const OrdersContent = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="matches">
         <OrdersFilterForm playersData={playersData} setFilters={setFilters} />
-        <Grid container spacing={2}>
-          {ordersData.data.map((order) => (
-            <Grid item xs={12} sm={6} md={3} key={order._id}>
-              <OrderCard
-                order={order}
-                deleteOrder={deleteOrder}
-                acceptOrder={acceptOrder}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <OrdersGrid
+          ordersData={ordersData}
+          filters={filters}
+          getOrders={getOrders}
+          deleteOrder={deleteOrder}
+          acceptOrder={acceptOrder}
+        />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="orders">
         {isAdmin ? (
           <OrdersForm playersData={playersData} />
         ) : (
-          <Grid container spacing={2}>
-            {myOrdersData.map((order) => (
-              <Grid item xs={12} sm={6} md={3} key={order._id}>
-                <OrderCard
-                  order={order}
-                  deleteOrder={deleteOrder}
-                  acceptOrder={acceptOrder}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <MyOrdersGrid
+            myOrdersData={myOrdersData}
+            getMyOrders={getMyOrders}
+            deleteOrder={deleteOrder}
+            acceptOrder={acceptOrder}
+          />
         )}
       </TabPanel>
     </>

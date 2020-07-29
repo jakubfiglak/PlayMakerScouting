@@ -49,12 +49,6 @@ export const OrderCard = ({
     handleCloseDelete,
   ] = useModal();
 
-  const [
-    isAcceptModalOpen,
-    handleClickOpenAccept,
-    handleCloseAccept,
-  ] = useModal();
-
   const { _id, player, open, scout, createdAt, acceptDate } = order;
 
   return (
@@ -105,24 +99,16 @@ export const OrderCard = ({
               handleClose={handleCloseDelete}
             />
           </div>
-          <div>
-            <Tooltip title="Przyjmij zlecenie">
-              <IconButton
-                aria-label="edit match"
-                className={classes.accept}
-                disabled={!open}
-                onClick={handleClickOpenAccept}
-              >
-                <AssignmentTurnedInIcon />
-              </IconButton>
-            </Tooltip>
-            <Modal
-              open={isAcceptModalOpen}
-              message={`Przyjąć zlecenie ${_id} do realizacji?`}
-              handleAccept={() => acceptOrder(_id)}
-              handleClose={handleCloseAccept}
-            />
-          </div>
+          <Tooltip title="Przyjmij zlecenie">
+            <IconButton
+              aria-label="edit match"
+              className={classes.accept}
+              disabled={!open}
+              onClick={() => acceptOrder(_id)}
+            >
+              <AssignmentTurnedInIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Raporty">
             <IconButton
               aria-label="reports"
