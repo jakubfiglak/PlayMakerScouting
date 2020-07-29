@@ -50,7 +50,6 @@ exports.getOrders = asyncHandler(async (req, res) => {
 // @route GET /api/v1/orders/my
 // @access Private
 exports.getMyOrders = asyncHandler(async (req, res) => {
-  console.log(req.user);
   const orders = await Order.find({
     scout: req.user._id,
   })
