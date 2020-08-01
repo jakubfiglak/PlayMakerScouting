@@ -41,6 +41,18 @@ export default (state: State, action: Action): State => {
         error: null,
       };
 
+    case 'SET_CURRENT':
+      return {
+        ...state,
+        current: action.payload,
+      };
+
+    case 'CLEAR_CURRENT':
+      return {
+        ...state,
+        current: null,
+      };
+
     case 'REPORTS_ERROR':
       return {
         ...state,

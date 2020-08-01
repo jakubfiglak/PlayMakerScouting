@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ReportsContext from './reportsContext';
 import reportsReducer from './reportsReducer';
-import { State, ReportFormData } from '../../types/reports';
+import { State, ReportFormData, Report } from '../../types/reports';
 
 export const ReportsState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -17,6 +17,8 @@ export const ReportsState: React.FC = ({ children }) => {
     getReport: () => null,
     deleteReport: () => null,
     addReport: () => null,
+    setCurrent: () => null,
+    clearCurrent: () => null,
   };
 
   const [state, dispatch] = useReducer(reportsReducer, initialState);
@@ -25,6 +27,21 @@ export const ReportsState: React.FC = ({ children }) => {
   const setLoading = () => {
     dispatch({
       type: 'SET_LOADING',
+    });
+  };
+
+  // Set current
+  const setCurrent = (report: Report) => {
+    dispatch({
+      type: 'SET_CURRENT',
+      payload: report,
+    });
+  };
+
+  // Clear current
+  const clearCurrent = () => {
+    dispatch({
+      type: 'CLEAR_CURRENT',
     });
   };
 
@@ -135,6 +152,8 @@ export const ReportsState: React.FC = ({ children }) => {
         getReport,
         deleteReport,
         addReport,
+        setCurrent,
+        clearCurrent,
       }}
     >
       {children}

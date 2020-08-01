@@ -50,7 +50,7 @@ export const OrdersContent = () => {
 
   useEffect(() => {
     getPlayers();
-  }, [filters]);
+  }, []);
 
   const isAdmin = user?.role === 'admin';
 

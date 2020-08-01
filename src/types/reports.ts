@@ -80,11 +80,15 @@ export type State = {
   getMyReports: () => void;
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
-  addReport: (order: ReportFormData) => void;
+  addReport: (report: ReportFormData) => void;
+  setCurrent: (report: Report) => void;
+  clearCurrent: () => void;
 };
 
 export type Action =
   | { type: 'SET_LOADING' }
+  | { type: 'SET_CURRENT'; payload: Report }
+  | { type: 'CLEAR_CURRENT' }
   | { type: 'REPORTS_ERROR'; payload: string }
   | { type: 'GET_REPORTS_SUCCESS'; payload: Report[] }
   | { type: 'GET_REPORT_SUCCESS'; payload: Report }
