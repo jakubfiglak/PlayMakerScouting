@@ -86,15 +86,15 @@ export const OrdersState: React.FC = ({ children }) => {
   };
 
   // Accept order
-  const acceptOrder = async (id: string) => {
+  const acceptOrder = async (id: string, filters: OrdersFilterData) => {
     setLoading();
 
     try {
       await axiosJson.post(`/api/v1/orders/${id}/accept`);
       dispatch({
         type: 'ACCEPT_ORDER_SUCCESS',
-        payload: id,
       });
+      getOrders(filters);
     } catch (err) {
       dispatch({
         type: 'ORDERS_ERROR',
