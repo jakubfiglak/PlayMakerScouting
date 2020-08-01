@@ -73,8 +73,8 @@ const ReportSchema = new Schema({
     transition: ratingType,
   },
   motorSkills: {
-    leading: ratingType,
-    neglected: ratingType,
+    leading: String,
+    neglected: String,
   },
   finalRating: {
     type: Number,
@@ -88,9 +88,6 @@ const ReportSchema = new Schema({
     type: Number,
   },
   teamplayAvg: {
-    type: Number,
-  },
-  motorAvg: {
     type: Number,
   },
   avgRating: {

@@ -77,10 +77,19 @@ exports.getMyReports = asyncHandler(async (req, res) => {
   const reports = await Report.find({
     user: req.user._id,
   })
-    .populate({
-      path: 'player',
-      select: 'firstName lastName',
-    })
+    .populate([
+      {
+        path: 'player',
+        select: 'firstName lastName',
+      },
+      {
+        path: 'match',
+        populate: [
+          { path: 'homeTeam', select: 'name' },
+          { path: 'awayTeam', select: 'name' },
+        ],
+      },
+    ])
     .sort('-createdAt');
 
   res.status(200).json({

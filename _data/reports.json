@@ -55,14 +55,8 @@
       }
     },
     "motorSkills": {
-      "leading": {
-        "rating": "2",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      },
-      "neglected": {
-        "rating": "3",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      }
+      "leading": "lorem, ipsum",
+      "neglected": "lorem, ipsum"
     },
     "finalRating": "3",
     "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
@@ -123,14 +117,8 @@
       }
     },
     "motorSkills": {
-      "leading": {
-        "rating": "2",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      },
-      "neglected": {
-        "rating": "1",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      }
+      "leading": "lorem, ipsum",
+      "neglected": "lorem, ipsum"
     },
     "finalRating": "2",
     "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
@@ -191,14 +179,8 @@
       }
     },
     "motorSkills": {
-      "leading": {
-        "rating": "4",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      },
-      "neglected": {
-        "rating": "1",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      }
+      "leading": "lorem, ipsum",
+      "neglected": "lorem, ipsum"
     },
     "finalRating": "4",
     "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
@@ -259,14 +241,8 @@
       }
     },
     "motorSkills": {
-      "leading": {
-        "rating": "4",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      },
-      "neglected": {
-        "rating": "1",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      }
+      "leading": "lorem, ipsum",
+      "neglected": "lorem, ipsum"
     },
     "finalRating": "4",
     "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
@@ -327,14 +303,8 @@
       }
     },
     "motorSkills": {
-      "leading": {
-        "rating": "2",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      },
-      "neglected": {
-        "rating": "2",
-        "note": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."
-      }
+      "leading": "lorem, ipsum",
+      "neglected": "lorem, ipsum"
     },
     "finalRating": "2",
     "summary": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi repudiandae ab, obcaecati atque cupiditate corrupti praesentium quibusdam culpa magnam expedita."

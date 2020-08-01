@@ -1,4 +1,3 @@
-const calculateObjAvg = require('../utils/calculateObjAvg');
 const calculateAvg = require('../utils/calculateAvg');
 
 const getAvg = (object) => {
@@ -12,12 +11,7 @@ const getAvg = (object) => {
 function calculateReportAvg(next) {
   this.individualAvg = getAvg(this.individualSkills);
   this.teamplayAvg = getAvg(this.teamplaySkills);
-  this.motorAvg = getAvg(this.motorSkills);
-  this.avgRating = calculateAvg(
-    this.individualAvg,
-    this.teamplayAvg,
-    this.motorAvg
-  );
+  this.avgRating = calculateAvg(this.individualAvg, this.teamplayAvg);
   next();
 }
 
