@@ -47,7 +47,7 @@ export default (state: State, action: Action): State => {
         ...state,
         ordersData: {
           data: state.ordersData.data.filter(
-            (match) => match._id !== action.payload,
+            (order) => order._id !== action.payload,
           ),
           total: state.ordersData.total - 1,
           pagination: state.ordersData.pagination,
