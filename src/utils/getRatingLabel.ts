@@ -13,6 +13,6 @@ export const getRatingLabel = (
       return motorSkills.find((rate) => rate.value === rating)?.label;
 
     default:
-      return null;
+      return 'default';
   }
 };
