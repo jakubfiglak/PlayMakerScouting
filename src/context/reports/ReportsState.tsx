@@ -88,10 +88,10 @@ export const ReportsState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      const res = await axiosJson.get(`/api/v1/orders/${id}`);
+      const res = await axiosJson.get(`/api/v1/reports/${id}`);
       dispatch({
         type: 'GET_REPORT_SUCCESS',
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
       dispatch({

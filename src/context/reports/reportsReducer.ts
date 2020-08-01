@@ -16,6 +16,14 @@ export default (state: State, action: Action): State => {
         reportsData: action.payload,
       };
 
+    case 'GET_REPORT_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        current: action.payload,
+      };
+
     case 'GET_MY_REPORTS_SUCCESS':
       return {
         ...state,
