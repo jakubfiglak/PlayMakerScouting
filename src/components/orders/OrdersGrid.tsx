@@ -11,7 +11,7 @@ type OrdersGridProps = {
   filters: OrdersFilterData;
   getOrders: (filters: OrdersFilterData) => void;
   deleteOrder: (id: string) => void;
-  acceptOrder: (id: string) => void;
+  acceptOrder: (id: string, filters: OrdersFilterData) => void;
 };
 
 export const OrdersGrid = ({
@@ -31,6 +31,7 @@ export const OrdersGrid = ({
         <Grid item xs={12} sm={6} md={3} key={order._id}>
           <OrderCard
             order={order}
+            filters={filters}
             deleteOrder={deleteOrder}
             acceptOrder={acceptOrder}
           />

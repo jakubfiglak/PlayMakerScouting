@@ -17,7 +17,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 // Custom components
 import { Modal, Loader } from '../common';
 // Types
-import { Order } from '../../types/orders';
+import { Order, OrdersFilterData } from '../../types/orders';
 // Hooks
 import { useAuthState } from '../../context';
 import { useModal } from '../../hooks';
@@ -28,12 +28,14 @@ import { useStyles } from './styles';
 
 type OrderCardProps = {
   order: Order;
+  filters: OrdersFilterData;
   deleteOrder: (id: string) => void;
-  acceptOrder: (id: string) => void;
+  acceptOrder: (id: string, filters: OrdersFilterData) => void;
 };
 
 export const OrderCard = ({
   order,
+  filters,
   deleteOrder,
   acceptOrder,
 }: OrderCardProps) => {
@@ -104,7 +106,7 @@ export const OrderCard = ({
               aria-label="edit match"
               className={classes.accept}
               disabled={!open}
-              onClick={() => acceptOrder(_id)}
+              onClick={() => acceptOrder(_id, filters)}
             >
               <AssignmentTurnedInIcon />
             </IconButton>

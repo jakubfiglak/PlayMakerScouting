@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // MUI components
-import { AppBar, Tabs, Tab, Grid } from '@material-ui/core';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { TabPanel, Loader } from '../common';
 import { OrdersForm, OrdersFilterForm } from '../forms';
@@ -83,6 +83,7 @@ export const OrdersContent = () => {
         ) : (
           <MyOrdersGrid
             myOrdersData={myOrdersData}
+            filters={filters}
             getMyOrders={getMyOrders}
             deleteOrder={deleteOrder}
             acceptOrder={acceptOrder}
