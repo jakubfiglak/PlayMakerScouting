@@ -4,6 +4,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { TabPanel, Loader } from '../common';
 import { ReportsGrid } from '../reports';
+import { ReportsForm } from '../forms';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 // Hooks
@@ -67,7 +68,7 @@ export const ReportsContent = () => {
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
-        <p>Formularz edycji / dodawania raportu</p>
+        <ReportsForm />
       </TabPanel>
     </>
   );

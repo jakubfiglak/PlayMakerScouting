@@ -7,10 +7,10 @@ import {
   Typography,
   Grid,
 } from '@material-ui/core';
-// Custom components
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FinalRatingChip } from './FinalRatingChip';
 // MUI icons
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+// Custom components
+import { FinalRatingChip } from './FinalRatingChip';
 
 type ReportSummaryAccordionProps = {
   summary: string;
