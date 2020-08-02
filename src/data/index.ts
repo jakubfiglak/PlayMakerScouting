@@ -108,7 +108,7 @@ export const competitions = [
   },
 ];
 
-export const individualSkills = [
+export const skills = [
   {
     value: 'ballReception',
     label: 'Przyjęcie piłki',
@@ -145,9 +145,6 @@ export const individualSkills = [
     value: 'finishing',
     label: 'Finalizacja akcji',
   },
-];
-
-export const teamplaySkills = [
   {
     value: 'attack',
     label: 'Udział w ataku',
@@ -160,9 +157,6 @@ export const teamplaySkills = [
     value: 'transition',
     label: 'Fazy przejściowe',
   },
-];
-
-export const motorSkills = [
   {
     value: 'leading',
     label: 'Cechy wiodące',

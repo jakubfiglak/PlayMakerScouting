@@ -34,14 +34,17 @@ export const IndividualSkillsData = ({ report }: BasicReportDataProps) => {
       </AccordionSummary>
       <AccordionDetails>
         <Grid container spacing={2}>
-          {Object.entries(individualSkills).map(([key, value]) => (
-            <Rating
-              key={key}
-              label={getRatingLabel(key, 'individual')!}
-              rating={value!.rating}
-              note={value!.note}
-            />
-          ))}
+          {Object.entries(individualSkills).map(
+            ([key, value]) =>
+              value && (
+                <Rating
+                  key={key}
+                  label={getRatingLabel(key)}
+                  rating={value.rating}
+                  note={value.note}
+                />
+              ),
+          )}
         </Grid>
       </AccordionDetails>
     </Accordion>
