@@ -105,16 +105,32 @@ exports.getMyReports = asyncHandler(async (req, res) => {
 exports.getReport = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const report = await Report.findById(id).populate({
-    path: 'player',
-    select: 'firstName lastName',
-  });
+  const report = await Report.findById(id).populate([
+    {
+      path: 'player',
+      select: 'firstName lastName',
+    },
+    {
+      path: 'match',
+      populate: [
+        { path: 'homeTeam', select: 'name' },
+        { path: 'awayTeam', select: 'name' },
+      ],
+    },
+    {
+      path: 'user',
+      select: 'name surname',
+    },
+  ]);
 
   if (!report) {
     return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
   }
 
-  if (report.user.toString() !== req.user._id && req.user.role !== 'admin') {
+  if (
+    report.user._id.toString() !== req.user._id &&
+    req.user.role !== 'admin'
+  ) {
     return next(
       new ErrorResponse(
         `User ${req.user._id} is not authorized to view report with the id of ${id}`,

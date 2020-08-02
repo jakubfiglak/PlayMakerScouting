@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Match = require('../models/Match');
 const Club = require('../models/Club');
+const Player = require('../models/Player');
 const ErrorResponse = require('../utils/errorResponse');
 
 // @desc Create new match
@@ -37,13 +38,35 @@ exports.createMatch = asyncHandler(async (req, res, next) => {
 // @desc Get all matches
 // @route GET /api/v1/matches
 // @route GET /api/v1/clubs/:clubId/matches
+// @route GET /api/v1/players/:playerId/matches
 // @access Private
 exports.getMatches = asyncHandler(async (req, res) => {
   const { clubId } = req.params;
+  const { playerId } = req.params;
 
   if (clubId) {
     const matches = await Match.find({
       $or: [{ homeTeam: clubId }, { awayTeam: clubId }],
+    })
+      .populate({
+        path: 'homeTeam',
+        select: 'name',
+      })
+      .populate({ path: 'awayTeam', select: 'name' });
+
+    return res.status(200).json({
+      success: true,
+      count: matches.length,
+      data: matches,
+    });
+  }
+
+  if (playerId) {
+    const player = await Player.findById(playerId);
+    const { club } = player;
+
+    const matches = await Match.find({
+      $or: [{ homeTeam: club }, { awayTeam: club }],
     })
       .populate({
         path: 'homeTeam',

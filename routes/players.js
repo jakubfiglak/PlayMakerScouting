@@ -13,11 +13,13 @@ const Player = require('../models/Player');
 
 const ordersRouter = require('./orders');
 const reportsRouter = require('./reports');
+const matchesRouter = require('./matches');
 
 const router = express.Router({ mergeParams: true });
 
 router.use('/:playerId/orders', protect, ordersRouter);
 router.use('/:playerId/reports', protect, reportsRouter);
+router.use('/:playerId/matches', protect, matchesRouter);
 
 router.post('/', protect, createPlayer);
 router.get(
