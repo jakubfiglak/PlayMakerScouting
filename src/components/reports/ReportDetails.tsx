@@ -6,6 +6,7 @@ import { ReportHeaderCard } from './ReportHeaderCard';
 import { BasicReportData } from './BasicReportData';
 import { SkillsAccordion } from './SkillsAccordion';
 import { MotorSkillsAccordion } from './MotorSkillsAccordion';
+import { ReportSummaryAccordion } from './ReportSummaryAccordion';
 import { Loader } from '../common';
 // Hooks
 import { useReportsState } from '../../context';
@@ -62,6 +63,13 @@ export const ReportDetails = ({ id }: ReportDetailsProps) => {
                 title="Ocena współdziałania z partnerami"
               />
               <MotorSkillsAccordion skills={current.motorSkills} />
+              <ReportSummaryAccordion
+                summary={current.summary}
+                finalRating={current.finalRating}
+                individualAvg={current.individualAvg}
+                teamplayAvg={current.teamplayAvg}
+                avgRating={current.avgRating}
+              />
             </Grid>
           </>
         )}
