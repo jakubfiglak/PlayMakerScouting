@@ -1,19 +1,12 @@
 import React, { useEffect } from 'react';
 // MUI components
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-  Grid,
-} from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 // Custom components
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { ReportHeaderCard } from './ReportHeaderCard';
 import { BasicReportData } from './BasicReportData';
-import { IndividualSkillsData } from './IndividualSkillsData';
+import { SkillsAccordion } from './SkillsAccordion';
+import { MotorSkillsAccordion } from './MotorSkillsAccordion';
 import { Loader } from '../common';
-// MUI icons
 // Hooks
 import { useReportsState } from '../../context';
 
@@ -30,12 +23,6 @@ export const ReportDetails = ({ id }: ReportDetailsProps) => {
     getReport(id);
   }, []);
 
-  console.log(current);
-
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
     <>
       {loading && <Loader />}
@@ -48,11 +35,33 @@ export const ReportDetails = ({ id }: ReportDetailsProps) => {
         {current && (
           <>
             <Grid item xs={12}>
-              <ReportHeaderCard report={current} />
+              <ReportHeaderCard
+                player={current.player}
+                match={current.match}
+                user={current.user}
+                order={current.order}
+                createdAt={current.createdAt}
+              />
             </Grid>
             <Grid item xs={12}>
-              <BasicReportData report={current} />
-              <IndividualSkillsData report={current} />
+              <BasicReportData
+                minutesPlayed={current.minutesPlayed}
+                assists={current.assists}
+                goals={current.goals}
+                yellowCards={current.yellowCards}
+                redCards={current.redCards}
+              />
+              <SkillsAccordion
+                skills={current.individualSkills}
+                id="individual-skills-header"
+                title="Ocena umiejętności indywidualnych"
+              />
+              <SkillsAccordion
+                skills={current.teamplaySkills}
+                id="teamplay-skills-header"
+                title="Ocena współdziałania z partnerami"
+              />
+              <MotorSkillsAccordion skills={current.motorSkills} />
             </Grid>
           </>
         )}

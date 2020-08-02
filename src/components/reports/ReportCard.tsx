@@ -11,23 +11,16 @@ import {
   Grid,
   Tooltip,
   Link,
-  Chip,
-  Avatar,
 } from '@material-ui/core';
 // MUI icons
 import EditIcon from '@material-ui/icons/Edit';
 import SearchIcon from '@material-ui/icons/Search';
+// Custom components
+import { FinalRatingChip } from './FinalRatingChip';
 // Types
 import { Report } from '../../types/reports';
 // Utils & data
-import {
-  formatDate,
-  replaceCompetitionName,
-  getRatingChipLabel,
-  getRatingChipClass,
-} from '../../utils';
-// Styles
-import { useStyles } from './styles';
+import { formatDate, replaceCompetitionName } from '../../utils';
 
 type ReportCardProps = {
   report: Report;
@@ -35,8 +28,6 @@ type ReportCardProps = {
 };
 
 export const ReportCard = ({ report, setCurrent }: ReportCardProps) => {
-  const classes = useStyles();
-
   const { _id, player, match, createdAt, finalRating } = report;
 
   return (
@@ -67,15 +58,7 @@ export const ReportCard = ({ report, setCurrent }: ReportCardProps) => {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography>
-              <strong>Ocena ostateczna: </strong>
-              <Chip
-                avatar={<Avatar>{finalRating}</Avatar>}
-                label={getRatingChipLabel(finalRating)}
-                color="primary"
-                className={getRatingChipClass(finalRating, classes)}
-              />
-            </Typography>
+            <FinalRatingChip finalRating={finalRating} />
           </Grid>
         </Grid>
       </CardContent>

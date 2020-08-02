@@ -2,17 +2,33 @@ import React from 'react';
 // MUI components
 import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 // Types
-import { Report } from '../../types/reports';
+import { Match } from '../../types/matches';
 // Utils & data
 import { replaceCompetitionName, formatDate } from '../../utils';
 
-type ReportCardProps = {
-  report: Report;
+type ReportHeaderCardProps = {
+  player: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  match: Match;
+  order?: string;
+  user: {
+    _id: string;
+    name: string;
+    surname: string;
+  };
+  createdAt: string;
 };
 
-export const ReportHeaderCard = ({ report }: ReportCardProps) => {
-  const { player, match, order, user, createdAt } = report;
-
+export const ReportHeaderCard = ({
+  player,
+  match,
+  order,
+  user,
+  createdAt,
+}: ReportHeaderCardProps) => {
   return (
     <Card>
       <CardContent>

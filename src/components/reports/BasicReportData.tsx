@@ -9,16 +9,22 @@ import {
 } from '@material-ui/core';
 // MUI icons
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-// Types
-import { Report } from '../../types/reports';
 
 type BasicReportDataProps = {
-  report: Report;
+  minutesPlayed: number;
+  goals: number;
+  assists: number;
+  yellowCards: number;
+  redCards: number;
 };
 
-export const BasicReportData = ({ report }: BasicReportDataProps) => {
-  const { minutesPlayed, goals, assists, yellowCards, redCards } = report;
-
+export const BasicReportData = ({
+  minutesPlayed,
+  goals,
+  assists,
+  yellowCards,
+  redCards,
+}: BasicReportDataProps) => {
   return (
     <Accordion>
       <AccordionSummary

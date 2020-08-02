@@ -5,7 +5,7 @@ type Rating = {
   note: string;
 };
 
-type IndividualSkills = {
+export type IndividualSkills = {
   ballReception: Rating;
   holdPass: Rating;
   gainPass: Rating;
@@ -17,15 +17,15 @@ type IndividualSkills = {
   finishing?: Rating;
 };
 
-type TeamplaySkills = {
+export type TeamplaySkills = {
   attack: Rating;
   defense: Rating;
   transition: Rating;
 };
 
-type MotorSkills = {
-  leading: Rating;
-  neglected: Rating;
+export type MotorSkills = {
+  leading: string;
+  neglected: string;
 };
 
 type ReportData = {

@@ -6,35 +6,35 @@ import {
   AccordionDetails,
   Typography,
   Grid,
+  AccordionSummaryProps,
 } from '@material-ui/core';
 // Custom components
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Rating } from './Rating';
 // MUI icons
 // Types
-import { Report } from '../../types/reports';
+import { Report, IndividualSkills, TeamplaySkills } from '../../types/reports';
 // Utils & data
 import { getRatingLabel } from '../../utils';
 
 type BasicReportDataProps = {
-  report: Report;
-};
+  skills: IndividualSkills | TeamplaySkills;
+  title: string;
+} & AccordionSummaryProps;
 
-export const IndividualSkillsData = ({ report }: BasicReportDataProps) => {
-  const { individualSkills } = report;
-
+export const SkillsAccordion = ({
+  skills,
+  id,
+  title,
+}: BasicReportDataProps) => {
   return (
     <Accordion>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="individual-skills-content"
-        id="individual-skills-header"
-      >
-        <Typography>Ocena umiejętności indywidualnych</Typography>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} id={id}>
+        <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Grid container spacing={2}>
-          {Object.entries(individualSkills).map(
+          {Object.entries(skills).map(
             ([key, value]) =>
               value && (
                 <Rating

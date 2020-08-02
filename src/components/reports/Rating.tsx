@@ -17,12 +17,12 @@ export const Rating = ({ label, rating, note }: RatingProps) => {
   return (
     <Grid item xs={12}>
       <Grid container>
-        <Grid item xs={3} md={2}>
+        <Grid item xs={6} sm={3} md={2}>
           <Typography>
             <strong>{label}</strong>
           </Typography>
         </Grid>
-        <Grid item xs={3} md={2}>
+        <Grid item xs={6} sm={3} md={2}>
           {ratingArr.map((el) => (
             <SportsSoccerIcon color="secondary" key={el} />
           ))}
