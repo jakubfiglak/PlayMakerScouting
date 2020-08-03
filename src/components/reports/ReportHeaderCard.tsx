@@ -14,7 +14,7 @@ type ReportHeaderCardProps = {
   };
   match: Match;
   order?: string;
-  user: {
+  scout: {
     _id: string;
     name: string;
     surname: string;
@@ -26,7 +26,7 @@ export const ReportHeaderCard = ({
   player,
   match,
   order,
-  user,
+  scout,
   createdAt,
 }: ReportHeaderCardProps) => {
   return (
@@ -60,7 +60,7 @@ export const ReportHeaderCard = ({
           <Grid item xs={12}>
             <Typography>
               <strong>Scout: </strong>
-              {`${user.name} ${user.surname}`}
+              {`${scout.name} ${scout.surname}`}
             </Typography>
           </Grid>
           <Grid item xs={12}>

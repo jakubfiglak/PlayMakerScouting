@@ -39,7 +39,7 @@ export const ReportDetails = ({ id }: ReportDetailsProps) => {
               <ReportHeaderCard
                 player={current.player}
                 match={current.match}
-                user={current.user}
+                scout={current.scout}
                 order={current.order}
                 createdAt={current.createdAt}
               />

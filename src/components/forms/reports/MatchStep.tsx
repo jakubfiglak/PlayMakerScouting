@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 // MUI components
-import { FormControl } from '@material-ui/core';
+import { FormControl, SelectProps } from '@material-ui/core';
 // Custom components
 import { PlayersSelect } from '../selects';
 import { Loader } from '../../common';

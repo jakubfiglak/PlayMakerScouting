@@ -28,9 +28,6 @@ export const PlayersSelect = ({
         value={value}
         required={required}
       >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
         {playersData.map((playerData) => {
           const { _id, firstName, lastName, club } = playerData;
 

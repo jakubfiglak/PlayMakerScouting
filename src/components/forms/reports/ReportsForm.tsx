@@ -10,30 +10,39 @@ import {
   Typography,
 } from '@material-ui/core/';
 // Custom components
+import { OrderStep } from './OrderStep';
 import { PlayerStep } from './PlayerStep';
 import { MatchStep } from './MatchStep';
 // Hooks
-import { useStepper } from '../../../hooks';
+import { useStepper, useForm } from '../../../hooks';
 // Styles
 import { useStyles } from '../styles';
+
+const initialState = {
+  order: '',
+  player: '',
+  match: '',
+};
 
 export const ReportsForm = () => {
   const classes = useStyles();
   const [activeStep, handleNext, handleBack, handleReset] = useStepper();
+  const [reportData, onInputChange, setReportData] = useForm(initialState);
 
-  const steps = ['Wybierz zawodnika', 'Create an ad group', 'Create an ad'];
+  const { order, player, match } = reportData;
+
+  const steps = ['Wybierz zlecenie', 'Wybierz zawodnika', 'Wybierz mecz'];
 
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <PlayerStep />;
+        return <OrderStep value={order} onChange={onInputChange} />;
       case 1:
-        return <MatchStep />;
+        return (
+          <PlayerStep value={player} onChange={onInputChange} order={order} />
+        );
       case 2:
-        return `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`;
+        return <MatchStep />;
       default:
         return 'Unknown step';
     }

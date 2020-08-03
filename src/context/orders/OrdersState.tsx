@@ -12,6 +12,7 @@ export const OrdersState: React.FC = ({ children }) => {
       pagination: {},
     },
     myOrdersData: [],
+    orderData: null,
     current: null,
     loading: false,
     error: null,
@@ -111,7 +112,7 @@ export const OrdersState: React.FC = ({ children }) => {
       const res = await axiosJson.get(`/api/v1/orders/${id}`);
       dispatch({
         type: 'GET_ORDER_SUCCESS',
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
       dispatch({
@@ -155,13 +156,21 @@ export const OrdersState: React.FC = ({ children }) => {
     }
   };
 
-  const { ordersData, myOrdersData, current, loading, error } = state;
+  const {
+    ordersData,
+    myOrdersData,
+    orderData,
+    current,
+    loading,
+    error,
+  } = state;
 
   return (
     <OrdersContext.Provider
       value={{
         ordersData,
         myOrdersData,
+        orderData,
         current,
         loading,
         error,

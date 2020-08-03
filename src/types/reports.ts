@@ -49,7 +49,7 @@ export type Report = {
     lastName: string;
   };
   match: Match;
-  user: {
+  scout: {
     _id: string;
     name: string;
     surname: string;
@@ -65,7 +65,7 @@ export type Report = {
 export type ReportFormData = {
   player: string;
   match: string;
-  user: string;
+  scout: string;
   order?: string;
 } & ReportData;
 
