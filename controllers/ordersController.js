@@ -72,6 +72,22 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Get my orders for a specific player
+// @route GET /api/v1/orders/my/:playerId
+// @access Private
+exports.getMyOrdersForPlayer = asyncHandler(async (req, res) => {
+  const orders = await Order.find({
+    scout: req.user._id,
+    player: req.params.playerId,
+  });
+
+  res.status(200).json({
+    success: true,
+    count: orders.length,
+    data: orders,
+  });
+});
+
 // @desc Get single order
 // @route GET /api/v1/orders/:id
 // @access Private

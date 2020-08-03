@@ -26,7 +26,7 @@ const ReportSchema = new Schema({
     ref: 'Match',
     required: 'Please add a match',
   },
-  user: {
+  scout: {
     type: Schema.ObjectId,
     ref: 'User',
     required: 'Please add a scout',

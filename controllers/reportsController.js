@@ -9,7 +9,7 @@ const ErrorResponse = require('../utils/errorResponse');
 // @route POST /api/v1/reports
 // @access Private
 exports.createReport = asyncHandler(async (req, res, next) => {
-  req.body.user = req.user._id;
+  req.body.scout = req.user._id;
 
   const playerId = req.body.player;
   const matchId = req.body.match;
@@ -75,7 +75,7 @@ exports.getReports = asyncHandler(async (req, res) => {
 // @access Private
 exports.getMyReports = asyncHandler(async (req, res) => {
   const reports = await Report.find({
-    user: req.user._id,
+    scout: req.user._id,
   })
     .populate([
       {
@@ -128,8 +128,8 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   }
 
   if (
-    report.user._id.toString() !== req.user._id &&
-    req.user.role !== 'admin'
+    report.user._id.toString() !== req.user._id
+    && req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(
@@ -188,7 +188,7 @@ exports.deleteReport = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
   }
 
-  if (report.user.toString() !== req.user._id && req.user.role !== 'admin') {
+  if (report.scout.toString() !== req.user._id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
         `User ${req.user._id} is not authorized to delete report with the id of ${id}`,

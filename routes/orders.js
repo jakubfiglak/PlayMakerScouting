@@ -6,6 +6,7 @@ const {
   acceptOrder,
   deleteOrder,
   getMyOrders,
+  getMyOrdersForPlayer,
 } = require('../controllers/ordersController');
 const { protect, authorize } = require('../middleware/auth');
 const advancedResults = require('../middleware/advancedResults');
@@ -27,6 +28,7 @@ router.get(
 );
 router.get('/my', protect, getMyOrders);
 router.get('/:id', protect, getOrder);
+router.get('/my/:playerId', protect, getMyOrdersForPlayer);
 router.post('/:id/accept', protect, acceptOrder);
 router.delete('/:id', [protect, authorize('admin')], deleteOrder);
 
