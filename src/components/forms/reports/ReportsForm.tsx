@@ -42,7 +42,9 @@ export const ReportsForm = () => {
           <PlayerStep value={player} onChange={onInputChange} order={order} />
         );
       case 2:
-        return <MatchStep />;
+        return (
+          <MatchStep value={match} onChange={onInputChange} player={player} />
+        );
       default:
         return 'Unknown step';
     }

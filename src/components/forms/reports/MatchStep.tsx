@@ -2,23 +2,34 @@ import React, { useEffect } from 'react';
 // MUI components
 import { FormControl, SelectProps } from '@material-ui/core';
 // Custom components
-import { PlayersSelect } from '../selects';
+import { MatchSelect } from '../selects';
 import { Loader } from '../../common';
 // Hooks
-import { useSimplifiedDataState } from '../../../context';
+import { usePlayersState } from '../../../context';
 
-export const MatchStep = () => {
-  const simplifiedDataContext = useSimplifiedDataState();
+type MatchStepProps = {
+  player: string;
+} & SelectProps;
 
-  const { loading, getPlayers, playersData } = simplifiedDataContext;
+export const MatchStep = ({ player, value, onChange }: MatchStepProps) => {
+  const playersContext = usePlayersState();
+
+  const { loading, getPlayerMatches, playerMatches } = playersContext;
 
   useEffect(() => {
-    console.log('Wybierz mecz');
+    getPlayerMatches(player);
   }, []);
 
   return (
     <>
-      <p>wybierz mecz</p>
+      {loading && <Loader />}
+      <FormControl variant="outlined" fullWidth>
+        <MatchSelect
+          matchesData={playerMatches}
+          value={value}
+          onChange={onChange}
+        />
+      </FormControl>
     </>
   );
 };

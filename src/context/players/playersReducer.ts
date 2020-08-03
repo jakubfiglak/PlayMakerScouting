@@ -20,6 +20,14 @@ export default (state: State, action: Action): State => {
         },
       };
 
+    case 'GET_PLAYER_MATCHES_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        playerMatches: action.payload,
+      };
+
     case 'CREATE_PLAYER_SUCCESS':
     case 'UPDATE_PLAYER_SUCCESS':
       return {
