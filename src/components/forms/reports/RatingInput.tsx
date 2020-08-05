@@ -8,28 +8,47 @@ import {
   Grid,
   Typography,
   TextField,
+  TextFieldProps,
 } from '@material-ui/core';
+// Types
+import { RatingScore } from '../../../types/reports';
 // Utils & data
 import { ratings } from '../../../data';
 
-export const RatingInput = () => {
+type RatingInputProps = {
+  title: string;
+  radioName: string;
+  ratingValue: RatingScore;
+  textFieldName: string;
+  noteValue: string;
+} & TextFieldProps;
+
+export const RatingInput = ({
+  title,
+  radioName,
+  ratingValue,
+  textFieldName,
+  noteValue,
+  onChange,
+}: RatingInputProps) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">Skill title</Typography>
+        <Typography variant="h6">{title}</Typography>
       </Grid>
       <Grid item xs={12}>
         <FormControl component="fieldset">
           <RadioGroup
             row
-            aria-label="position"
-            name="position"
-            defaultValue={1}
+            aria-label={radioName}
+            name={radioName}
+            value={ratingValue}
+            onChange={onChange}
           >
             {ratings.map((rating) => (
               <FormControlLabel
                 key={rating}
-                value={rating}
+                value={rating.toString()}
                 control={<Radio color="primary" />}
                 label={rating}
               />
@@ -39,7 +58,10 @@ export const RatingInput = () => {
       </Grid>
       <Grid item xs={12}>
         <TextField
-          id="outlined-multiline-flexible"
+          id={textFieldName}
+          name={textFieldName}
+          value={noteValue}
+          onChange={onChange}
           fullWidth
           label="Opis"
           multiline

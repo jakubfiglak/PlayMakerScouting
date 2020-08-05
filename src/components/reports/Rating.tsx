@@ -1,11 +1,14 @@
 import React from 'react';
 // MUI components
 import { Grid, Typography } from '@material-ui/core';
+// MUI icons
 import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
+// Types
+import { RatingScore } from '../../types/reports';
 
 type RatingProps = {
   label: string;
-  rating: 1 | 2 | 3 | 4;
+  rating: RatingScore;
   note: string;
 };
 

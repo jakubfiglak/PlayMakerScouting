@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 // MUI components
 import {
   Stepper,
@@ -17,10 +17,12 @@ import { BasicDataStep } from './BasicDataStep';
 import { IndividualSkillsStep } from './IndividualSkillsStep';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
+// Types
+import { ReportFormData } from '../../../types/reports';
 // Styles
 import { useStyles } from '../styles';
 
-const initialState = {
+const initialState: ReportFormData = {
   order: '',
   player: '',
   match: '',
@@ -29,6 +31,24 @@ const initialState = {
   assists: 0,
   yellowCards: 0,
   redCards: 0,
+  ballReceptionRating: 0,
+  ballReceptionNote: '',
+  holdPassRating: 0,
+  holdPassNote: '',
+  gainPassRating: 0,
+  gainPassNote: '',
+  keyPassRating: 0,
+  keyPassNote: '',
+  defOneOnOneRating: 0,
+  defOneOnOneNote: '',
+  airPlayRating: 0,
+  airPlayNote: '',
+  positioningRating: 0,
+  positioningNote: '',
+  attOneOnOneRating: 0,
+  attOneOnOneNote: '',
+  finishingRating: 0,
+  finishingNote: '',
 };
 
 export const ReportsForm = () => {
@@ -45,6 +65,24 @@ export const ReportsForm = () => {
     assists,
     yellowCards,
     redCards,
+    ballReceptionRating,
+    ballReceptionNote,
+    holdPassRating,
+    holdPassNote,
+    gainPassRating,
+    gainPassNote,
+    keyPassRating,
+    keyPassNote,
+    defOneOnOneRating,
+    defOneOnOneNote,
+    airPlayRating,
+    airPlayNote,
+    positioningRating,
+    positioningNote,
+    attOneOnOneRating,
+    attOneOnOneNote,
+    finishingRating,
+    finishingNote,
   } = reportData;
 
   const steps = [
@@ -79,14 +117,41 @@ export const ReportsForm = () => {
           />
         );
       case 4:
-        return <IndividualSkillsStep />;
+        return (
+          <IndividualSkillsStep
+            ballReceptionRating={ballReceptionRating}
+            ballReceptionNote={ballReceptionNote}
+            holdPassRating={holdPassRating}
+            holdPassNote={holdPassNote}
+            gainPassRating={gainPassRating}
+            gainPassNote={gainPassNote}
+            keyPassRating={keyPassRating}
+            keyPassNote={keyPassNote}
+            defOneOnOneNote={defOneOnOneNote}
+            defOneOnOneRating={defOneOnOneRating}
+            airPlayRating={airPlayRating}
+            airPlayNote={airPlayNote}
+            positioningRating={positioningRating}
+            positioningNote={positioningNote}
+            attOneOnOneRating={attOneOnOneRating}
+            attOneOnOneNote={attOneOnOneNote}
+            finishingRating={finishingRating}
+            finishingNote={finishingNote}
+            onChange={onInputChange}
+          />
+        );
       default:
         return 'Unknown step';
     }
   };
 
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    console.log(reportData);
+  };
+
   return (
-    <form className={classes.root}>
+    <form className={classes.root} onSubmit={handleSubmit}>
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((label, index) => (
           <Step key={label}>
@@ -119,7 +184,7 @@ export const ReportsForm = () => {
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} className={classes.button}>
+          <Button type="submit" className={classes.button}>
             Reset
           </Button>
         </Paper>

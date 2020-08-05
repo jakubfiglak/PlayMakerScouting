@@ -1,7 +1,9 @@
 import { Match } from './matches';
 
+export type RatingScore = 0 | 1 | 2 | 3 | 4;
+
 type Rating = {
-  rating: 1 | 2 | 3 | 4;
+  rating: RatingScore;
   note: string;
 };
 
@@ -63,11 +65,33 @@ export type Report = {
 } & ReportData;
 
 export type ReportFormData = {
+  order: string;
   player: string;
   match: string;
-  scout: string;
-  order?: string;
-} & ReportData;
+  minutesPlayed: number;
+  goals: number;
+  assists: number;
+  yellowCards: number;
+  redCards: number;
+  ballReceptionRating: RatingScore;
+  ballReceptionNote: string;
+  holdPassRating: RatingScore;
+  holdPassNote: string;
+  gainPassRating: RatingScore;
+  gainPassNote: string;
+  keyPassRating: RatingScore;
+  keyPassNote: string;
+  defOneOnOneRating: RatingScore;
+  defOneOnOneNote: string;
+  airPlayRating: RatingScore;
+  airPlayNote: string;
+  positioningRating: RatingScore;
+  positioningNote: string;
+  attOneOnOneRating: RatingScore;
+  attOneOnOneNote: string;
+  finishingRating: RatingScore;
+  finishingNote: string;
+};
 
 export type State = {
   reportsData: Report[];
