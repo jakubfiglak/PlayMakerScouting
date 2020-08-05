@@ -13,6 +13,7 @@ import {
 import { OrderStep } from './OrderStep';
 import { PlayerStep } from './PlayerStep';
 import { MatchStep } from './MatchStep';
+import { BasicDataStep } from './BasicDataStep';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
 // Styles
@@ -22,6 +23,11 @@ const initialState = {
   order: '',
   player: '',
   match: '',
+  minutesPlayed: 0,
+  goals: 0,
+  assists: 0,
+  yellowCards: 0,
+  redCards: 0,
 };
 
 export const ReportsForm = () => {
@@ -29,9 +35,23 @@ export const ReportsForm = () => {
   const [activeStep, handleNext, handleBack, handleReset] = useStepper();
   const [reportData, onInputChange, setReportData] = useForm(initialState);
 
-  const { order, player, match } = reportData;
+  const {
+    order,
+    player,
+    match,
+    minutesPlayed,
+    goals,
+    assists,
+    yellowCards,
+    redCards,
+  } = reportData;
 
-  const steps = ['Wybierz zlecenie', 'Wybierz zawodnika', 'Wybierz mecz'];
+  const steps = [
+    'Wybierz zlecenie',
+    'Wybierz zawodnika',
+    'Wybierz mecz',
+    'Dane podstawowe',
+  ];
 
   const getStepContent = (step: number) => {
     switch (step) {
@@ -44,6 +64,17 @@ export const ReportsForm = () => {
       case 2:
         return (
           <MatchStep value={match} onChange={onInputChange} player={player} />
+        );
+      case 3:
+        return (
+          <BasicDataStep
+            minutesPlayed={minutesPlayed}
+            goals={goals}
+            assists={assists}
+            yellowCards={yellowCards}
+            redCards={redCards}
+            onChange={onInputChange}
+          />
         );
       default:
         return 'Unknown step';
