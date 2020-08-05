@@ -166,3 +166,5 @@ export const skills = [
     label: 'Cechy zaniedbane',
   },
 ];
+
+export const ratings = [1, 2, 3, 4];

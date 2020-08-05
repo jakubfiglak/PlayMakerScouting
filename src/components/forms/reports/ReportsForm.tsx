@@ -14,6 +14,7 @@ import { OrderStep } from './OrderStep';
 import { PlayerStep } from './PlayerStep';
 import { MatchStep } from './MatchStep';
 import { BasicDataStep } from './BasicDataStep';
+import { IndividualSkillsStep } from './IndividualSkillsStep';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
 // Styles
@@ -51,6 +52,7 @@ export const ReportsForm = () => {
     'Wybierz zawodnika',
     'Wybierz mecz',
     'Dane podstawowe',
+    'Ocena umiejętności indywidualnych',
   ];
 
   const getStepContent = (step: number) => {
@@ -76,6 +78,8 @@ export const ReportsForm = () => {
             onChange={onInputChange}
           />
         );
+      case 4:
+        return <IndividualSkillsStep />;
       default:
         return 'Unknown step';
     }
