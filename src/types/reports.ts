@@ -64,15 +64,7 @@ export type Report = {
   createdAt: string;
 } & ReportData;
 
-export type ReportFormData = {
-  order: string;
-  player: string;
-  match: string;
-  minutesPlayed: number;
-  goals: number;
-  assists: number;
-  yellowCards: number;
-  redCards: number;
+export type IndSkillsFormData = {
   ballReceptionRating: RatingScore;
   ballReceptionNote: string;
   holdPassRating: RatingScore;
@@ -92,6 +84,17 @@ export type ReportFormData = {
   finishingRating: RatingScore;
   finishingNote: string;
 };
+
+export type ReportFormData = {
+  order: string;
+  player: string;
+  match: string;
+  minutesPlayed: number;
+  goals: number;
+  assists: number;
+  yellowCards: number;
+  redCards: number;
+} & IndSkillsFormData;
 
 export type State = {
   reportsData: Report[];

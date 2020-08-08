@@ -17,12 +17,14 @@ export const PlayersState: React.FC = ({ children }) => {
       total: 0,
       pagination: {},
     },
+    playerData: null,
     current: null,
     playerMatches: [],
     loading: false,
     error: null,
     setLoading: () => null,
     getPlayers: () => null,
+    getPlayer: () => null,
     getPlayerMatches: () => null,
     deletePlayer: () => null,
     addPlayer: () => null,
@@ -77,6 +79,23 @@ export const PlayersState: React.FC = ({ children }) => {
   };
 
   // Get player
+  const getPlayer = async (id: string) => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.get(`/api/v1/players/${id}`);
+
+      dispatch({
+        type: 'GET_PLAYER_SUCCESS',
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'PLAYERS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
 
   // Get matches for a player
   const getPlayerMatches = async (id: string) => {
@@ -162,18 +181,27 @@ export const PlayersState: React.FC = ({ children }) => {
     }
   };
 
-  const { playersData, playerMatches, current, loading, error } = state;
+  const {
+    playersData,
+    playerData,
+    playerMatches,
+    current,
+    loading,
+    error,
+  } = state;
 
   return (
     <PlayersContext.Provider
       value={{
         playersData,
         playerMatches,
+        playerData,
         current,
         loading,
         error,
         setLoading,
         getPlayers,
+        getPlayer,
         getPlayerMatches,
         deletePlayer,
         addPlayer,

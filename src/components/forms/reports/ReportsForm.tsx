@@ -138,6 +138,7 @@ export const ReportsForm = () => {
             finishingRating={finishingRating}
             finishingNote={finishingNote}
             onChange={onInputChange}
+            player={player}
           />
         );
       default:

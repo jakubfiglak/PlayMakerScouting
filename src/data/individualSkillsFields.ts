@@ -1,12 +1,12 @@
-import { IndividualSkillsStepProps } from '../types/reportProps';
+import { IndSkillsFormData } from '../types/reports';
 
-type Field = {
+export type SkillsField = {
   title: string;
-  radioName: keyof IndividualSkillsStepProps;
-  textFieldName: keyof IndividualSkillsStepProps;
+  radioName: keyof IndSkillsFormData;
+  textFieldName: keyof IndSkillsFormData;
 };
 
-export const commonFields: Field[] = [
+export const commonIndSkillsFields: SkillsField[] = [
   {
     title: 'Podania utrzymujące',
     radioName: 'holdPassRating',
@@ -26,5 +26,77 @@ export const commonFields: Field[] = [
     title: 'Przyjęcie piłki',
     radioName: 'ballReceptionRating',
     textFieldName: 'ballReceptionNote',
+  },
+];
+
+export const cbIndSkillsFields: SkillsField[] = [
+  {
+    title: 'Gra 1v1 w obronie',
+    radioName: 'defOneOnOneRating',
+    textFieldName: 'defOneOnOneNote',
+  },
+  {
+    title: 'Gra w powietrzu',
+    radioName: 'airPlayRating',
+    textFieldName: 'airPlayNote',
+  },
+  {
+    title: 'Ustawianie się',
+    radioName: 'positioningRating',
+    textFieldName: 'positioningNote',
+  },
+];
+
+export const fbIndSkillsFields: SkillsField[] = [
+  {
+    title: 'Gra 1v1 w obronie',
+    radioName: 'defOneOnOneRating',
+    textFieldName: 'defOneOnOneNote',
+  },
+  {
+    title: 'Gra 1v1 w ataku',
+    radioName: 'attOneOnOneRating',
+    textFieldName: 'attOneOnOneNote',
+  },
+  {
+    title: 'Gra w powietrzu',
+    radioName: 'airPlayRating',
+    textFieldName: 'airPlayNote',
+  },
+];
+
+export const mIndSkillsFields: SkillsField[] = [
+  {
+    title: 'Finalizacja akcji',
+    radioName: 'finishingRating',
+    textFieldName: 'finishingNote',
+  },
+  {
+    title: 'Gra 1v1 w ataku',
+    radioName: 'attOneOnOneRating',
+    textFieldName: 'attOneOnOneNote',
+  },
+  {
+    title: 'Gra 1v1 w obronie',
+    radioName: 'defOneOnOneRating',
+    textFieldName: 'defOneOnOneNote',
+  },
+];
+
+export const fIndSkillsFields: SkillsField[] = [
+  {
+    title: 'Finalizacja akcji',
+    radioName: 'finishingRating',
+    textFieldName: 'finishingNote',
+  },
+  {
+    title: 'Gra w powietrzu',
+    radioName: 'airPlayRating',
+    textFieldName: 'airPlayNote',
+  },
+  {
+    title: 'Gra 1v1 w ataku',
+    radioName: 'attOneOnOneRating',
+    textFieldName: 'attOneOnOneNote',
   },
 ];

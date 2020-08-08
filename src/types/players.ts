@@ -1,10 +1,12 @@
 import { Order } from './common';
 import { Match } from './matches';
 
+export type Position = 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
+
 type PlayerCommonTypes = {
   firstName: string;
   lastName: string;
-  position: 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
+  position: Position;
   dateOfBirth: string;
   height: number;
   weight: number;
@@ -49,12 +51,14 @@ export type GetPlayers = (
 
 export type State = {
   playersData: PlayersData;
+  playerData: Player | null;
   current: PlayersFormData | null;
   playerMatches: Match[];
   loading: boolean;
   error: string | null;
   setLoading: () => void;
   getPlayers: GetPlayers;
+  getPlayer: (id: string) => void;
   getPlayerMatches: (id: string) => void;
   deletePlayer: (id: string) => void;
   addPlayer: (player: PlayersFormData) => void;
