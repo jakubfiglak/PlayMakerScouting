@@ -7,8 +7,11 @@ import { Loader } from '../../common';
 // Hooks
 import { usePlayersState } from '../../../context';
 // Types
-import { IndSkillsFormData, RatingScore } from '../../../types/reports';
-import { SkillsField } from '../../../data/individualSkillsFields';
+import {
+  IndSkillsFormData,
+  RatingScore,
+  IndSkillsField,
+} from '../../../types/reports';
 // Utils & data
 import { commonIndSkillsFields } from '../../../data';
 import { getIndSkillsFields } from '../../../utils';
@@ -26,7 +29,7 @@ export const IndividualSkillsStep = (props: IndividualSkillsStepProps) => {
     getPlayer(player);
   }, []);
 
-  let specificIndSkillsFields: SkillsField[] = [];
+  let specificIndSkillsFields: IndSkillsField[] = [];
 
   if (playerData?.position) {
     specificIndSkillsFields = getIndSkillsFields(playerData.position);

@@ -4,3 +4,4 @@ export { ratings } from './ratings';
 export { skills } from './skills';
 export { voivodeships } from './voivodeships';
 export { commonIndSkillsFields } from './individualSkillsFields';
+export { teamplaySkillsFields } from './teamplaySkillsFields';

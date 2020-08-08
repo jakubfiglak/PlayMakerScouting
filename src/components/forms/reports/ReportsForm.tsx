@@ -15,6 +15,7 @@ import { PlayerStep } from './PlayerStep';
 import { MatchStep } from './MatchStep';
 import { BasicDataStep } from './BasicDataStep';
 import { IndividualSkillsStep } from './IndividualSkillsStep';
+import { TeamplaySkillsStep } from './TeamplaySkillsStep';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
 // Types
@@ -31,13 +32,13 @@ const initialState: ReportFormData = {
   assists: 0,
   yellowCards: 0,
   redCards: 0,
-  ballReceptionRating: 0,
+  ballReceptionRating: 1,
   ballReceptionNote: '',
-  holdPassRating: 0,
+  holdPassRating: 1,
   holdPassNote: '',
-  gainPassRating: 0,
+  gainPassRating: 1,
   gainPassNote: '',
-  keyPassRating: 0,
+  keyPassRating: 1,
   keyPassNote: '',
   defOneOnOneRating: 0,
   defOneOnOneNote: '',
@@ -49,6 +50,12 @@ const initialState: ReportFormData = {
   attOneOnOneNote: '',
   finishingRating: 0,
   finishingNote: '',
+  attackRating: 1,
+  attackNote: '',
+  defenseRating: 1,
+  defenseNote: '',
+  transitionRating: 1,
+  transitionNote: '',
 };
 
 export const ReportsForm = () => {
@@ -83,6 +90,12 @@ export const ReportsForm = () => {
     attOneOnOneNote,
     finishingRating,
     finishingNote,
+    attackRating,
+    attackNote,
+    defenseRating,
+    defenseNote,
+    transitionRating,
+    transitionNote,
   } = reportData;
 
   const steps = [
@@ -91,6 +104,7 @@ export const ReportsForm = () => {
     'Wybierz mecz',
     'Dane podstawowe',
     'Ocena umiejętności indywidualnych',
+    'Ocena współdziałania z partnerami',
   ];
 
   const getStepContent = (step: number) => {
@@ -139,6 +153,18 @@ export const ReportsForm = () => {
             finishingNote={finishingNote}
             onChange={onInputChange}
             player={player}
+          />
+        );
+      case 5:
+        return (
+          <TeamplaySkillsStep
+            attackRating={attackRating}
+            attackNote={attackNote}
+            defenseRating={defenseRating}
+            defenseNote={defenseNote}
+            transitionRating={transitionRating}
+            transitionNote={transitionNote}
+            onChange={onInputChange}
           />
         );
       default:

@@ -1,12 +1,6 @@
-import { IndSkillsFormData } from '../types/reports';
+import { IndSkillsField } from '../types/reports';
 
-export type SkillsField = {
-  title: string;
-  radioName: keyof IndSkillsFormData;
-  textFieldName: keyof IndSkillsFormData;
-};
-
-export const commonIndSkillsFields: SkillsField[] = [
+export const commonIndSkillsFields: IndSkillsField[] = [
   {
     title: 'Podania utrzymujące',
     radioName: 'holdPassRating',
@@ -29,7 +23,7 @@ export const commonIndSkillsFields: SkillsField[] = [
   },
 ];
 
-export const cbIndSkillsFields: SkillsField[] = [
+export const cbIndSkillsFields: IndSkillsField[] = [
   {
     title: 'Gra 1v1 w obronie',
     radioName: 'defOneOnOneRating',
@@ -47,7 +41,7 @@ export const cbIndSkillsFields: SkillsField[] = [
   },
 ];
 
-export const fbIndSkillsFields: SkillsField[] = [
+export const fbIndSkillsFields: IndSkillsField[] = [
   {
     title: 'Gra 1v1 w obronie',
     radioName: 'defOneOnOneRating',
@@ -65,7 +59,7 @@ export const fbIndSkillsFields: SkillsField[] = [
   },
 ];
 
-export const mIndSkillsFields: SkillsField[] = [
+export const mIndSkillsFields: IndSkillsField[] = [
   {
     title: 'Finalizacja akcji',
     radioName: 'finishingRating',
@@ -83,7 +77,7 @@ export const mIndSkillsFields: SkillsField[] = [
   },
 ];
 
-export const fIndSkillsFields: SkillsField[] = [
+export const fIndSkillsFields: IndSkillsField[] = [
   {
     title: 'Finalizacja akcji',
     radioName: 'finishingRating',

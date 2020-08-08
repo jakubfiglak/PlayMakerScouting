@@ -1,5 +1,17 @@
 import { Match } from './matches';
 
+export type IndSkillsField = {
+  title: string;
+  radioName: keyof IndSkillsFormData;
+  textFieldName: keyof IndSkillsFormData;
+};
+
+export type TeamplaySkillsField = {
+  title: string;
+  radioName: keyof TeamplaySkillsFormData;
+  textFieldName: keyof TeamplaySkillsFormData;
+};
+
 export type RatingScore = 0 | 1 | 2 | 3 | 4;
 
 type Rating = {
@@ -85,6 +97,15 @@ export type IndSkillsFormData = {
   finishingNote: string;
 };
 
+export type TeamplaySkillsFormData = {
+  attackRating: RatingScore;
+  attackNote: string;
+  defenseRating: RatingScore;
+  defenseNote: string;
+  transitionRating: RatingScore;
+  transitionNote: string;
+};
+
 export type ReportFormData = {
   order: string;
   player: string;
@@ -94,7 +115,8 @@ export type ReportFormData = {
   assists: number;
   yellowCards: number;
   redCards: number;
-} & IndSkillsFormData;
+} & IndSkillsFormData &
+  TeamplaySkillsFormData;
 
 export type State = {
   reportsData: Report[];
