@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ReportsContext from './reportsContext';
 import reportsReducer from './reportsReducer';
-import { State, ReportFormData, Report } from '../../types/reports';
+import { State, Report, FormattedReportFormData } from '../../types/reports';
 
 export const ReportsState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -102,7 +102,7 @@ export const ReportsState: React.FC = ({ children }) => {
   };
 
   // Create new report
-  const addReport = async (report: ReportFormData) => {
+  const addReport = async (report: FormattedReportFormData) => {
     setLoading();
 
     try {

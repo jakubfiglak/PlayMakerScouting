@@ -146,7 +146,7 @@ export type State = {
   getMyReports: () => void;
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
-  addReport: (report: ReportFormData) => void;
+  addReport: (report: FormattedReportFormData) => void;
   setCurrent: (report: Report) => void;
   clearCurrent: () => void;
 };

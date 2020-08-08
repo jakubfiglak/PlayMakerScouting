@@ -20,6 +20,7 @@ import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
+import { useReportsState } from '../../../context';
 // Types
 import { ReportFormData } from '../../../types/reports';
 // Styles
@@ -70,6 +71,9 @@ export const ReportsForm = () => {
   const classes = useStyles();
   const [activeStep, handleNext, handleBack, handleReset] = useStepper();
   const [reportData, onInputChange, setReportData] = useForm(initialState);
+  const reportsContext = useReportsState();
+
+  const { addReport } = reportsContext;
 
   const {
     order,
@@ -206,6 +210,7 @@ export const ReportsForm = () => {
     e.preventDefault();
     const formattedReport = formatReportObject(reportData);
     console.log(formattedReport);
+    addReport(formattedReport);
   };
 
   return (
