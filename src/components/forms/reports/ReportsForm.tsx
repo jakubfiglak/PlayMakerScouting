@@ -16,6 +16,8 @@ import { MatchStep } from './MatchStep';
 import { BasicDataStep } from './BasicDataStep';
 import { IndividualSkillsStep } from './IndividualSkillsStep';
 import { TeamplaySkillsStep } from './TeamplaySkillsStep';
+import { MotorSkillsStep } from './MotorSkillsStep';
+import { SummaryStep } from './SummaryStep';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
 // Types
@@ -56,6 +58,10 @@ const initialState: ReportFormData = {
   defenseNote: '',
   transitionRating: 1,
   transitionNote: '',
+  leading: '',
+  neglected: '',
+  summary: '',
+  finalRating: 1,
 };
 
 export const ReportsForm = () => {
@@ -96,6 +102,10 @@ export const ReportsForm = () => {
     defenseNote,
     transitionRating,
     transitionNote,
+    leading,
+    neglected,
+    summary,
+    finalRating,
   } = reportData;
 
   const steps = [
@@ -105,6 +115,8 @@ export const ReportsForm = () => {
     'Dane podstawowe',
     'Ocena umiejętności indywidualnych',
     'Ocena współdziałania z partnerami',
+    'Ocena potencjału motorycznego',
+    'Podsumowanie występu',
   ];
 
   const getStepContent = (step: number) => {
@@ -164,6 +176,22 @@ export const ReportsForm = () => {
             defenseNote={defenseNote}
             transitionRating={transitionRating}
             transitionNote={transitionNote}
+            onChange={onInputChange}
+          />
+        );
+      case 6:
+        return (
+          <MotorSkillsStep
+            leading={leading}
+            neglected={neglected}
+            onChange={onInputChange}
+          />
+        );
+      case 7:
+        return (
+          <SummaryStep
+            summary={summary}
+            finalRating={finalRating}
             onChange={onInputChange}
           />
         );

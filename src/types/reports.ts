@@ -106,6 +106,11 @@ export type TeamplaySkillsFormData = {
   transitionNote: string;
 };
 
+export type MotorSkillsFormData = {
+  leading: string;
+  neglected: string;
+};
+
 export type ReportFormData = {
   order: string;
   player: string;
@@ -115,8 +120,11 @@ export type ReportFormData = {
   assists: number;
   yellowCards: number;
   redCards: number;
+  finalRating: 1 | 2 | 3 | 4;
+  summary: string;
 } & IndSkillsFormData &
-  TeamplaySkillsFormData;
+  TeamplaySkillsFormData &
+  MotorSkillsFormData;
 
 export type State = {
   reportsData: Report[];
