@@ -1,7 +1,7 @@
 export { competitions } from './competitions';
 export { divisions } from './divisions';
 export { ratings } from './ratings';
-export { skills } from './skills';
+export { skills, individualSkills, teamplaySkills } from './skills';
 export { voivodeships } from './voivodeships';
 export { commonIndSkillsFields } from './individualSkillsFields';
 export { teamplaySkillsFields } from './teamplaySkillsFields';

@@ -24,6 +24,8 @@ import { useStepper, useForm } from '../../../hooks';
 import { ReportFormData } from '../../../types/reports';
 // Styles
 import { useStyles } from '../styles';
+// Utils & data
+import { formatReportObject } from '../../../utils';
 
 const initialState: ReportFormData = {
   order: '',
@@ -202,7 +204,8 @@ export const ReportsForm = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log(reportData);
+    const formattedReport = formatReportObject(reportData);
+    console.log(formattedReport);
   };
 
   return (

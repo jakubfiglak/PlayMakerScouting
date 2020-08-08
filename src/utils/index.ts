@@ -8,3 +8,4 @@ export { getRatingChipLabel } from './getRatingChipLabel';
 export { getRatingChipClass } from './getRatingChipClass';
 export { getRatingLabel } from './getRatingLabel';
 export { getIndSkillsFields } from './getIndSkillsFields';
+export { formatReportObject } from './formatReportObject';

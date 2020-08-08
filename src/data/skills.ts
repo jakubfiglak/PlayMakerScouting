@@ -56,3 +56,17 @@ export const skills = [
     label: 'Cechy zaniedbane',
   },
 ];
+
+export const individualSkills = [
+  'ballReception',
+  'holdPass',
+  'gainPass',
+  'keyPass',
+  'defOneOnOne',
+  'airPlay',
+  'positioning',
+  'attOneOnOne',
+  'finishing',
+];
+
+export const teamplaySkills = ['attack', 'defense', 'transition'];

@@ -24,11 +24,11 @@ export type IndividualSkills = {
   holdPass: Rating;
   gainPass: Rating;
   keyPass: Rating;
-  defOneOnOne?: Rating;
-  airPlay?: Rating;
-  positioning?: Rating;
-  attOneOnOne?: Rating;
-  finishing?: Rating;
+  defOneOnOne: Rating;
+  airPlay: Rating;
+  positioning: Rating;
+  attOneOnOne: Rating;
+  finishing: Rating;
 };
 
 export type TeamplaySkills = {
@@ -111,7 +111,7 @@ export type MotorSkillsFormData = {
   neglected: string;
 };
 
-export type ReportFormData = {
+type CommonFormData = {
   order: string;
   player: string;
   match: string;
@@ -122,9 +122,18 @@ export type ReportFormData = {
   redCards: number;
   finalRating: 1 | 2 | 3 | 4;
   summary: string;
-} & IndSkillsFormData &
+};
+
+export type ReportFormData = CommonFormData &
+  IndSkillsFormData &
   TeamplaySkillsFormData &
   MotorSkillsFormData;
+
+export type FormattedReportFormData = {
+  individualSkills: IndividualSkills;
+  teamplaySkills: TeamplaySkills;
+  motorSkills: MotorSkills;
+} & CommonFormData;
 
 export type State = {
   reportsData: Report[];
