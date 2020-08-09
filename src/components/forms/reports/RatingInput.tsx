@@ -1,19 +1,11 @@
 import React from 'react';
 // MUI components
-import {
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Grid,
-  Typography,
-  TextField,
-  TextFieldProps,
-} from '@material-ui/core';
+import { Grid, Typography, TextField, FormControl } from '@material-ui/core';
+// Custom components
+import { RatingSelect } from '../selects';
 // Types
 import { RatingScore } from '../../../types/reports';
-// Utils & data
-import { ratings } from '../../../data';
+import { OnChangeFn } from '../../../types/common';
 
 type RatingInputProps = {
   title: string;
@@ -21,7 +13,8 @@ type RatingInputProps = {
   ratingValue: RatingScore;
   textFieldName: string;
   noteValue: string;
-} & TextFieldProps;
+  onChange: OnChangeFn;
+};
 
 export const RatingInput = ({
   title,
@@ -36,24 +29,13 @@ export const RatingInput = ({
       <Grid item xs={12}>
         <Typography variant="h6">{title}</Typography>
       </Grid>
-      <Grid item xs={12}>
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            aria-label={radioName}
-            name={radioName}
+      <Grid item xs={4}>
+        <FormControl variant="outlined" fullWidth>
+          <RatingSelect
             value={ratingValue}
+            name={radioName}
             onChange={onChange}
-          >
-            {ratings.map((rating) => (
-              <FormControlLabel
-                key={rating}
-                value={rating}
-                control={<Radio color="primary" />}
-                label={rating}
-              />
-            ))}
-          </RadioGroup>
+          />
         </FormControl>
       </Grid>
       <Grid item xs={12}>

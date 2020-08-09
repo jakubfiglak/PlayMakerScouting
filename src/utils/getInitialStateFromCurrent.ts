@@ -64,6 +64,5 @@ export const getInitialStateFromCurrent = (current: Report): ReportFormData => {
     };
   });
 
-  console.log(initialState);
   return initialState;
 };

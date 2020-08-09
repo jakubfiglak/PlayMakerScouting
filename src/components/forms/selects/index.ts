@@ -7,4 +7,5 @@ export { OrdersSelect } from './OrdersSelect';
 export { OrderStatusSelect } from './OrderStatusSelect';
 export { PlayersSelect } from './PlayersSelect';
 export { PositionSelect } from './PositionSelect';
+export { RatingSelect } from './RatingSelect';
 export { VoivodeshipSelect } from './VoivodeshipSelect';

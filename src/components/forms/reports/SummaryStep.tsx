@@ -1,13 +1,16 @@
 import React from 'react';
 // MUI components
-import { Grid, TextFieldProps } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 // Custom components
 import { RatingInput } from './RatingInput';
+// Types
+import { OnChangeFn } from '../../../types/common';
 
 type SummaryStepProps = {
   summary: string;
   finalRating: 1 | 2 | 3 | 4;
-} & TextFieldProps;
+  onChange: OnChangeFn;
+};
 
 export const SummaryStep = ({
   summary,

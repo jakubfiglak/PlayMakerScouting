@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 // MUI components
-import { Grid, TextFieldProps } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 // Custom components
 import { RatingInput } from './RatingInput';
 import { Loader } from '../../common';
@@ -12,12 +12,15 @@ import {
   RatingScore,
   IndSkillsField,
 } from '../../../types/reports';
+import { OnChangeFn } from '../../../types/common';
 // Utils & data
 import { commonIndSkillsFields } from '../../../data';
 import { getIndSkillsFields } from '../../../utils';
 
-type IndividualSkillsStepProps = { player: string } & IndSkillsFormData &
-  TextFieldProps;
+type IndividualSkillsStepProps = {
+  player: string;
+  onChange: OnChangeFn;
+} & IndSkillsFormData;
 
 export const IndividualSkillsStep = (props: IndividualSkillsStepProps) => {
   const { onChange, player } = props;

@@ -1,14 +1,17 @@
 import React from 'react';
 // MUI components
-import { Grid, TextFieldProps } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 // Custom components
 import { RatingInput } from './RatingInput';
 // Types
 import { TeamplaySkillsFormData, RatingScore } from '../../../types/reports';
+import { OnChangeFn } from '../../../types/common';
 // Utils & data
 import { teamplaySkillsFields } from '../../../data';
 
-type TeamplaySkillsStepProps = TeamplaySkillsFormData & TextFieldProps;
+type TeamplaySkillsStepProps = {
+  onChange: OnChangeFn;
+} & TeamplaySkillsFormData;
 
 export const TeamplaySkillsStep = (props: TeamplaySkillsStepProps) => {
   const { onChange } = props;
