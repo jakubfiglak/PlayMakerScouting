@@ -156,7 +156,6 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
       message: 'Email sent',
     });
   } catch (err) {
-    console.log(err);
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
 
