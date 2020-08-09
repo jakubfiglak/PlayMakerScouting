@@ -41,6 +41,13 @@ exports.createReport = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Delete indivdualSkills field if the rating value is equal to 0
+  Object.entries(req.body.individualSkills).forEach(([key, value]) => {
+    if (value.rating === '0' || value.rating === 0) {
+      delete req.body.individualSkills[key];
+    }
+  });
+
   const report = await Report.create(req.body);
 
   res.status(201).json({
@@ -118,7 +125,7 @@ exports.getReport = asyncHandler(async (req, res, next) => {
       ],
     },
     {
-      path: 'user',
+      path: 'scout',
       select: 'name surname',
     },
   ]);
@@ -128,8 +135,8 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   }
 
   if (
-    report.user._id.toString() !== req.user._id
-    && req.user.role !== 'admin'
+    report.scout._id.toString() !== req.user._id &&
+    req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(
@@ -157,7 +164,7 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
   }
 
-  if (report.user.toString() !== req.user._id && req.user.role !== 'admin') {
+  if (report.scout.toString() !== req.user._id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
         `User ${req.user._id} is not authorized to update report with the id of ${id}`,
@@ -165,6 +172,13 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  // Delete indivdualSkills field if the rating value is equal to 0
+  Object.entries(req.body.individualSkills).forEach(([key, value]) => {
+    if (value.rating === '0' || value.rating === 0) {
+      delete req.body.individualSkills[key];
+    }
+  });
 
   Object.keys(req.body).forEach((key) => (report[key] = req.body[key]));
 

@@ -95,6 +95,10 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id).populate({
     path: 'player',
     select: 'firstName lastName club',
+    populate: {
+      path: 'club',
+      select: 'name',
+    },
   });
 
   if (!order) {
