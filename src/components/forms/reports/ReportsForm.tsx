@@ -8,6 +8,7 @@ import {
   Button,
   Paper,
   Typography,
+  Grid,
 } from '@material-ui/core/';
 // Custom components
 import { OrderStep } from './OrderStep';
@@ -21,59 +22,25 @@ import { SummaryStep } from './SummaryStep';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
 import { useReportsState } from '../../../context';
-// Types
-import { ReportFormData } from '../../../types/reports';
 // Styles
 import { useStyles } from '../styles';
 // Utils & data
-import { formatReportObject } from '../../../utils';
-
-const initialState: ReportFormData = {
-  order: '',
-  player: '',
-  match: '',
-  minutesPlayed: 0,
-  goals: 0,
-  assists: 0,
-  yellowCards: 0,
-  redCards: 0,
-  ballReceptionRating: 1,
-  ballReceptionNote: '',
-  holdPassRating: 1,
-  holdPassNote: '',
-  gainPassRating: 1,
-  gainPassNote: '',
-  keyPassRating: 1,
-  keyPassNote: '',
-  defOneOnOneRating: 0,
-  defOneOnOneNote: '',
-  airPlayRating: 0,
-  airPlayNote: '',
-  positioningRating: 0,
-  positioningNote: '',
-  attOneOnOneRating: 0,
-  attOneOnOneNote: '',
-  finishingRating: 0,
-  finishingNote: '',
-  attackRating: 1,
-  attackNote: '',
-  defenseRating: 1,
-  defenseNote: '',
-  transitionRating: 1,
-  transitionNote: '',
-  leading: '',
-  neglected: '',
-  summary: '',
-  finalRating: 1,
-};
+import { reportFormInitialState } from '../../../data';
+import { formatReportObject, getInitialStateFromCurrent } from '../../../utils';
 
 export const ReportsForm = () => {
   const classes = useStyles();
   const [activeStep, handleNext, handleBack, handleReset] = useStepper();
-  const [reportData, onInputChange, setReportData] = useForm(initialState);
+
   const reportsContext = useReportsState();
 
-  const { addReport } = reportsContext;
+  const { addReport, current, editReport, loading } = reportsContext;
+
+  const initialState = current
+    ? getInitialStateFromCurrent(current)
+    : reportFormInitialState;
+
+  const [reportData, onInputChange, setReportData] = useForm(initialState);
 
   const {
     order,
@@ -128,14 +95,26 @@ export const ReportsForm = () => {
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <OrderStep value={order} onChange={onInputChange} />;
+        return (
+          <OrderStep value={order} onChange={onInputChange} current={current} />
+        );
       case 1:
         return (
-          <PlayerStep value={player} onChange={onInputChange} order={order} />
+          <PlayerStep
+            value={player}
+            onChange={onInputChange}
+            order={order}
+            current={current}
+          />
         );
       case 2:
         return (
-          <MatchStep value={match} onChange={onInputChange} player={player} />
+          <MatchStep
+            value={match}
+            onChange={onInputChange}
+            player={player}
+            current={current}
+          />
         );
       case 3:
         return (
@@ -209,49 +188,66 @@ export const ReportsForm = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     const formattedReport = formatReportObject(reportData);
-    console.log(formattedReport);
-    addReport(formattedReport);
+
+    if (current) {
+      editReport(current._id, formattedReport);
+    } else {
+      addReport(formattedReport);
+    }
   };
 
   return (
-    <form className={classes.root} onSubmit={handleSubmit}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((label, index) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-            <StepContent>
-              <Typography>{getStepContent(index)}</Typography>
-              <div className={classes.actionsContainer}>
-                <div>
-                  <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    className={classes.button}
-                  >
-                    Wstecz
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Zapisz' : 'Dalej'}
-                  </Button>
-                </div>
-              </div>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep === steps.length && (
-        <Paper square elevation={0} className={classes.resetContainer}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button type="submit" className={classes.button}>
-            Reset
-          </Button>
-        </Paper>
-      )}
-    </form>
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <Typography variant="h5" align="center">
+          {current
+            ? `Edycja raportu nr ${current._id}`
+            : 'Tworzenie nowego raportu'}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <form className={classes.root} onSubmit={handleSubmit}>
+          <Stepper activeStep={activeStep} orientation="vertical">
+            {steps.map((label, index) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+                <StepContent>
+                  <Typography>{getStepContent(index)}</Typography>
+                  <div className={classes.actionsContainer}>
+                    <div>
+                      <Button
+                        disabled={activeStep === 0}
+                        onClick={handleBack}
+                        className={classes.button}
+                      >
+                        Wstecz
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleNext}
+                        className={classes.button}
+                      >
+                        {activeStep === steps.length - 1 ? 'Zapisz' : 'Dalej'}
+                      </Button>
+                    </div>
+                  </div>
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+          {activeStep === steps.length && (
+            <Paper square elevation={0} className={classes.resetContainer}>
+              <Typography>
+                All steps completed - you&apos;re finished
+              </Typography>
+              <Button type="submit" className={classes.button}>
+                Reset
+              </Button>
+            </Paper>
+          )}
+        </form>
+      </Grid>
+    </Grid>
   );
 };

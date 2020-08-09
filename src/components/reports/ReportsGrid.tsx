@@ -9,13 +9,13 @@ import { Report } from '../../types/reports';
 type ReportsGridProps = {
   reportsData: Report[];
   getReports: () => void;
-  setCurrent: (report: Report) => void;
+  handleSetCurrent: (report: Report) => void;
 };
 
 export const ReportsGrid = ({
   reportsData,
   getReports,
-  setCurrent,
+  handleSetCurrent,
 }: ReportsGridProps) => {
   useEffect(() => {
     getReports();
@@ -25,7 +25,7 @@ export const ReportsGrid = ({
     <Grid container spacing={2}>
       {reportsData.map((report) => (
         <Grid item xs={12} sm={6} md={3} key={report._id}>
-          <ReportCard report={report} setCurrent={setCurrent} />
+          <ReportCard report={report} handleSetCurrent={handleSetCurrent} />
         </Grid>
       ))}
     </Grid>

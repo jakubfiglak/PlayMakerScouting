@@ -33,6 +33,7 @@ export default (state: State, action: Action): State => {
       };
 
     case 'CREATE_REPORT_SUCCESS':
+    case 'UPDATE_REPORT_SUCCESS':
       return {
         ...state,
         loading: false,

@@ -48,7 +48,7 @@ export const RatingInput = ({
             {ratings.map((rating) => (
               <FormControlLabel
                 key={rating}
-                value={rating.toString()}
+                value={rating}
                 control={<Radio color="primary" />}
                 label={rating}
               />

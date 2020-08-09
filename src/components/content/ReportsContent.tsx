@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -6,54 +6,25 @@ import { TabPanel, Loader } from '../common';
 import { ReportsGrid } from '../reports';
 import { ReportsForm } from '../forms';
 // Types
-import { OrdersFilterData } from '../../types/orders';
+import { Report } from '../../types/reports';
 // Hooks
-import {
-  useReportsState,
-  useSimplifiedDataState,
-  useAuthState,
-} from '../../context';
+import { useReportsState } from '../../context';
 import { useTabs } from '../../hooks';
-// Utils & data
-import { formatDateObject, today, tomorrow } from '../../utils';
 
 export const ReportsContent = () => {
   const reportsContext = useReportsState();
-  const simplifiedDataContext = useSimplifiedDataState();
-  const authContext = useAuthState();
-  const [activeTab, handleTabChange] = useTabs();
+  const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  const {
-    loading,
-    getReports,
-    getMyReports,
-    reportsData,
-    myReportsData,
-    deleteReport,
-    addReport,
-    setCurrent,
-  } = reportsContext;
+  const { loading, getMyReports, myReportsData, setCurrent } = reportsContext;
 
-  // const {
-  //   loading: simpleDataLoading,
-  //   getPlayers,
-  //   playersData,
-  // } = simplifiedDataContext;
-
-  const { loading: userLoading, user } = authContext;
-
-  const [filters, setFilters] = useState<OrdersFilterData>({
-    player: '',
-    status: 'all',
-    createdAfter: formatDateObject(today),
-    createdBefore: formatDateObject(tomorrow),
-  });
-
-  const isAdmin = user?.role === 'admin';
+  const handleSetCurrent = (report: Report) => {
+    setCurrent(report);
+    setActiveTab(1);
+  };
 
   return (
     <>
-      {(loading || userLoading) && <Loader />}
+      {loading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
           <Tab label="Moje raporty" id="reports-0" aria-controls="reports-0" />
@@ -64,7 +35,7 @@ export const ReportsContent = () => {
         <ReportsGrid
           reportsData={myReportsData}
           getReports={getMyReports}
-          setCurrent={setCurrent}
+          handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">

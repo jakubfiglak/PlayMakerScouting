@@ -6,18 +6,27 @@ import {
   Select,
   MenuItem,
   SelectProps,
+  Typography,
 } from '@material-ui/core';
 // Custom components
 import { PlayersSelect } from '../selects';
 import { Loader } from '../../common';
+// Types
+import { Report } from '../../../types/reports';
 // Hooks
 import { useSimplifiedDataState, useOrdersState } from '../../../context';
 
 type PlayerStepProps = {
-  order: string;
+  order?: string;
+  current: Report | null;
 } & SelectProps;
 
-export const PlayerStep = ({ order, value, onChange }: PlayerStepProps) => {
+export const PlayerStep = ({
+  order,
+  value,
+  onChange,
+  current,
+}: PlayerStepProps) => {
   const ordersContext = useOrdersState();
   const simplifiedDataContext = useSimplifiedDataState();
 
@@ -29,14 +38,26 @@ export const PlayerStep = ({ order, value, onChange }: PlayerStepProps) => {
   } = simplifiedDataContext;
 
   useEffect(() => {
-    if (order) {
-      getOrder(order);
-      console.log(orderData);
-    } else {
-      getPlayers();
+    if (!current) {
+      if (order) {
+        getOrder(order);
+      } else {
+        getPlayers();
+      }
     }
   }, []);
 
+  if (current) {
+    const {
+      player: { lastName, firstName },
+    } = current;
+
+    return (
+      <Typography>
+        {lastName}, {firstName}
+      </Typography>
+    );
+  }
   return (
     <>
       {(loading || simpleDataLoading) && <Loader />}

@@ -17,6 +17,7 @@ export const ReportsState: React.FC = ({ children }) => {
     getReport: () => null,
     deleteReport: () => null,
     addReport: () => null,
+    editReport: () => null,
     setCurrent: () => null,
     clearCurrent: () => null,
   };
@@ -118,6 +119,25 @@ export const ReportsState: React.FC = ({ children }) => {
     }
   };
 
+  // Update report
+  const editReport = async (id: string, report: FormattedReportFormData) => {
+    setLoading();
+
+    try {
+      await axiosJson.put(`/api/v1/reports/${id}`, report);
+      dispatch({
+        type: 'UPDATE_REPORT_SUCCESS',
+      });
+    } catch (err) {
+      dispatch({
+        type: 'REPORTS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+
+    clearCurrent();
+  };
+
   // Delete report
   const deleteReport = async (id: string) => {
     setLoading();
@@ -152,6 +172,7 @@ export const ReportsState: React.FC = ({ children }) => {
         getReport,
         deleteReport,
         addReport,
+        editReport,
         setCurrent,
         clearCurrent,
       }}

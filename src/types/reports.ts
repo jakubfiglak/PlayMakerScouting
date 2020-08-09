@@ -112,7 +112,7 @@ export type MotorSkillsFormData = {
 };
 
 type CommonFormData = {
-  order: string;
+  order?: string;
   player: string;
   match: string;
   minutesPlayed: number;
@@ -147,6 +147,7 @@ export type State = {
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
   addReport: (report: FormattedReportFormData) => void;
+  editReport: (id: string, report: FormattedReportFormData) => void;
   setCurrent: (report: Report) => void;
   clearCurrent: () => void;
 };
@@ -160,4 +161,5 @@ export type Action =
   | { type: 'GET_REPORT_SUCCESS'; payload: Report }
   | { type: 'GET_MY_REPORTS_SUCCESS'; payload: Report[] }
   | { type: 'CREATE_REPORT_SUCCESS' }
+  | { type: 'UPDATE_REPORT_SUCCESS' }
   | { type: 'DELETE_REPORT_SUCCESS'; payload: string };
