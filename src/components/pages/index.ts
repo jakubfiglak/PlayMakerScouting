@@ -7,3 +7,4 @@ export { Players } from './Players';
 export { Profile } from './Profile';
 export { Register } from './Register';
 export { Reports } from './Reports';
+export { Report } from './Report';

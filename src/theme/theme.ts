@@ -6,6 +6,7 @@ import {
   yellow,
   white,
   redTransparent,
+  green,
 } from './colors';
 
 const theme = createMuiTheme({

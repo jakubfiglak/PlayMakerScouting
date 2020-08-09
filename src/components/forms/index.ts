@@ -9,3 +9,5 @@ export { PlayersForm } from './players/PlayersForm';
 
 export { OrdersFilterForm } from './orders/OrdersFilterForm';
 export { OrdersForm } from './orders/OrdersForm';
+
+export { ReportsForm } from './reports/ReportsForm';

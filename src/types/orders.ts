@@ -52,6 +52,7 @@ export type GetOrders = (
 export type State = {
   ordersData: OrdersData;
   myOrdersData: Order[];
+  orderData: Order | null;
   current: Order | null;
   loading: boolean;
   error: string | null;

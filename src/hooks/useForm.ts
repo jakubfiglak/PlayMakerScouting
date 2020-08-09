@@ -1,17 +1,10 @@
 import { useState } from 'react';
+import { OnChangeFn } from '../types/common';
 
 export const useForm = <T>(initialState: T) => {
   const [formData, setFormData] = useState(initialState);
 
-  const onInputChange = (
-    e: React.ChangeEvent<
-      | HTMLInputElement
-      | {
-          name?: string | undefined;
-          value: unknown;
-        }
-    >,
-  ) => {
+  const onInputChange: OnChangeFn = (e) => {
     setFormData({
       ...formData,
       [e.target.name!]: e.target.value,

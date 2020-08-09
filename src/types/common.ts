@@ -1,3 +1,5 @@
+import { ChangeEvent } from 'react';
+
 export type Order = 'asc' | 'desc';
 
 export type Location = {
@@ -9,3 +11,13 @@ export type Location = {
   voivodeship: string;
   zipcode: string;
 };
+
+export type OnChangeFn = (
+  e: ChangeEvent<
+    | HTMLInputElement
+    | {
+        name?: string | undefined;
+        value: unknown;
+      }
+  >,
+) => void;

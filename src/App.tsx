@@ -11,6 +11,7 @@ import {
   Matches,
   Orders,
   Reports,
+  Report,
 } from './components/pages';
 import { AuthState, SimplifiedDataState } from './context';
 import theme from './theme/theme';
@@ -29,6 +30,7 @@ const App: React.FC = () => {
               <Route exact path="/matches" component={Matches} />
               <Route exact path="/orders" component={Orders} />
               <Route exact path="/reports" component={Reports} />
+              <Route exact path="/reports/:id" component={Report} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
             </Switch>
