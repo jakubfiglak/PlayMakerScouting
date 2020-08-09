@@ -4,7 +4,9 @@
   "description": "Express, mongoose, passport template",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test-coverage": "jest --watchAll --verbose --runInBand --detectOpenHandles --coverage",
     "test": "jest --watchAll --verbose --runInBand --detectOpenHandles",
     "testOne": "jest --watch --detectOpenHandles",
@@ -30,6 +32,7 @@
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
