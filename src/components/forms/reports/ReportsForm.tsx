@@ -19,6 +19,7 @@ import { IndividualSkillsStep } from './IndividualSkillsStep';
 import { TeamplaySkillsStep } from './TeamplaySkillsStep';
 import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
+import { StepActions, MainFormActions } from '../actions';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
 import { useReportsState } from '../../../context';
@@ -30,11 +31,17 @@ import { formatReportObject, getInitialStateFromCurrent } from '../../../utils';
 
 export const ReportsForm = () => {
   const classes = useStyles();
-  const [activeStep, handleNext, handleBack, handleReset] = useStepper();
+  const [
+    activeStep,
+    handleNext,
+    handleBack,
+    handleReset,
+    setActiveStep,
+  ] = useStepper();
 
   const reportsContext = useReportsState();
 
-  const { addReport, current, editReport, loading } = reportsContext;
+  const { addReport, current, editReport } = reportsContext;
 
   const initialState = current
     ? getInitialStateFromCurrent(current)
@@ -196,6 +203,15 @@ export const ReportsForm = () => {
     }
   };
 
+  const onCancelClick = () => {
+    setReportData(initialState);
+    handleReset();
+  };
+
+  const handleGoBack = () => {
+    setActiveStep(steps.length - 1);
+  };
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -206,47 +222,50 @@ export const ReportsForm = () => {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <form className={classes.root} onSubmit={handleSubmit}>
-          <Stepper activeStep={activeStep} orientation="vertical">
-            {steps.map((label, index) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-                <StepContent>
-                  <Typography>{getStepContent(index)}</Typography>
-                  <div className={classes.actionsContainer}>
-                    <div>
-                      <Button
-                        disabled={activeStep === 0}
-                        onClick={handleBack}
-                        className={classes.button}
-                      >
-                        Wstecz
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleNext}
-                        className={classes.button}
-                      >
-                        {activeStep === steps.length - 1 ? 'Zapisz' : 'Dalej'}
-                      </Button>
-                    </div>
-                  </div>
-                </StepContent>
-              </Step>
-            ))}
-          </Stepper>
+        <Grid
+          container
+          component="form"
+          className={classes.root}
+          onSubmit={handleSubmit}
+          spacing={3}
+        >
+          <Grid item xs={12}>
+            <Stepper activeStep={activeStep} orientation="vertical">
+              {steps.map((label, index) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                  <StepContent>
+                    <Typography component="div">
+                      {getStepContent(index)}
+                    </Typography>
+                    <StepActions
+                      activeStep={activeStep}
+                      steps={steps}
+                      handleBack={handleBack}
+                      handleNext={handleNext}
+                      player={player}
+                      match={match}
+                    />
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+          </Grid>
           {activeStep === steps.length && (
-            <Paper square elevation={0} className={classes.resetContainer}>
-              <Typography>
-                All steps completed - you&apos;re finished
-              </Typography>
-              <Button type="submit" className={classes.button}>
-                Reset
-              </Button>
-            </Paper>
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <MainFormActions
+                  label="raport"
+                  current={!!current}
+                  onCancelClick={onCancelClick}
+                  goBack={handleGoBack}
+                  activeStep={activeStep}
+                  steps={steps}
+                />
+              </Grid>
+            </Grid>
           )}
-        </form>
+        </Grid>
       </Grid>
     </Grid>
   );

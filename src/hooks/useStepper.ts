@@ -15,5 +15,11 @@ export const useStepper = () => {
     setActiveStep(0);
   };
 
-  return [activeStep, handleNext, handleBack, handleReset] as const;
+  return [
+    activeStep,
+    handleNext,
+    handleBack,
+    handleReset,
+    setActiveStep,
+  ] as const;
 };
