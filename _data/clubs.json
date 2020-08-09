@@ -1,0 +1,68 @@
+[
+  {
+    "_id": "5ee50570f75bec032c291c33",
+    "name": "Miejski Klub Sportowy Victoria Września",
+    "address": "Kosynierów 1, 62-300 Września",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee5060ad784b010395a756e",
+    "name": "Piłkarski Klub Sportowy Obra Kościan",
+    "address": "Maya 26, 64-000 Kościan",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee5062436d322bff641683d",
+    "name": "Kępiński Klub Sportowy Polonia Kępno",
+    "address": " Aleja Marcinkowskiego 13a, 63-600 Kępno",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee50640f75f558bc1fa5fbf",
+    "name": "Spółka Sportowa Hutnik Warszawa Spółka z ograniczoną odpowiedzialnością",
+    "address": "Marymoncka 42, 01-977 Warszawa",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee5065ca84f5c2e6a18d3ca",
+    "name": "Miejski Klub Sportowy Mazovia Mińsk Mazowiecki",
+    "address": "Sportowa 1, 05-300 Mińsk Mazowiecki",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee50678b381dd897dd5be4c",
+    "name": "Ząbkovia Ząbki",
+    "address": "Sportowa 1, 05-091 Ząbki",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee5069a48e704cd7e434f1a",
+    "name": "Stowarzyszenie Klub Piłkarski Bielawianka Bielawa",
+    "address": "Sportowa 10, 58-260 Bielawa",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee506e65623b4b72c9e0379",
+    "name": "Klub Sportowy Piast Nowa Ruda",
+    "address": "Sportowa 1, 57-400 Nowa Ruda",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee50703d1aeb981e0ea7c15",
+    "name": "Klub Sportowy Orzeł Ząbkowice Śląskie",
+    "address": "Kusocińskiego 17, 57-200 Ząbkowice Śląskie",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee5071b4d4c6dfcce318e68",
+    "name": "Uczniowski Klub Sportowy Lider Włocławek",
+    "address": "Leśna 53a, 87-800 Włocławek",
+    "division": "IV liga"
+  },
+  {
+    "_id": "5ee5073106bbf18cb5217d47",
+    "name": "Rypiński Klub Sportowy Lech Rypin",
+    "address": "Sportowa 41, 87-500 Rypin",
+    "division": "IV liga"
+  }
+]
