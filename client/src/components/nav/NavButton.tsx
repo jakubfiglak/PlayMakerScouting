@@ -17,7 +17,7 @@ const NavButton: React.FC<NavButtonProps> = ({
   const classes = useStyles();
 
   return (
-    <Button className={classes.link} onClick={onClick}>
+    <Button onClick={onClick} className={classes.link}>
       <ListItem button>
         <ListItemIcon>
           <Icon color="error" />
