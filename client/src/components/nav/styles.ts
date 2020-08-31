@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
-  icon: {
-    color: theme.palette.error.main,
-  },
   link: {
     textDecoration: 'none',
     color: white,
@@ -31,8 +28,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     background: semiGray,
   },
   appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
 
     [theme.breakpoints.down('sm')]: {
       width: '100%',

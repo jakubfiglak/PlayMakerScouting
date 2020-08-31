@@ -43,7 +43,12 @@ const Sidebar: React.FC = () => {
         return <NavElement Icon={Icon} text={text} link={link} key={text} />;
       })}
       <Divider />
-      <NavButton Icon={ExitToApp} text="Wyloguj się" onClick={onLogout} />
+      <NavButton
+        Icon={ExitToApp}
+        text="Wyloguj się"
+        onClick={onLogout}
+        className={classes.link}
+      />
     </Drawer>
   );
 };
