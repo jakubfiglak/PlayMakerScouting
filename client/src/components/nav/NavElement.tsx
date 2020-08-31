@@ -19,8 +19,8 @@ const NavElement: React.FC<NavLinkProps> = ({
       activeClassName={classes.isActive}
     >
       <ListItem button>
-        <ListItemIcon className={classes.icon}>
-          <Icon />
+        <ListItemIcon>
+          <Icon color="error" />
         </ListItemIcon>
         <ListItemText primary={text} className={className} />
       </ListItem>

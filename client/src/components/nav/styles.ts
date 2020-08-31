@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
-  icon: {
-    color: theme.palette.error.main,
-  },
   link: {
     textDecoration: 'none',
     color: white,

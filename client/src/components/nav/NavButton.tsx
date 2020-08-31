@@ -8,7 +8,7 @@ import {
 import { NavButtonProps } from './types';
 import useStyles from './styles';
 
-const NavElement: React.FC<NavButtonProps> = ({
+const NavButton: React.FC<NavButtonProps> = ({
   Icon,
   text,
   onClick,
@@ -19,8 +19,8 @@ const NavElement: React.FC<NavButtonProps> = ({
   return (
     <Button className={classes.link} onClick={onClick}>
       <ListItem button>
-        <ListItemIcon className={classes.icon}>
-          <Icon />
+        <ListItemIcon>
+          <Icon color="error" />
         </ListItemIcon>
         <ListItemText primary={text} className={className} />
       </ListItem>
@@ -28,4 +28,4 @@ const NavElement: React.FC<NavButtonProps> = ({
   );
 };
 
-export default NavElement;
+export default NavButton;
