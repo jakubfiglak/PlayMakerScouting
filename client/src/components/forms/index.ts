@@ -11,3 +11,4 @@ export { OrdersFilterForm } from './orders/OrdersFilterForm';
 export { OrdersForm } from './orders/OrdersForm';
 
 export { ReportsForm } from './reports/ReportsForm';
+export { BottomNav } from './reports/BottomNav';
