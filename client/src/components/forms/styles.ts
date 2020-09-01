@@ -18,12 +18,18 @@ export const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(3),
   },
   bottomNav: {
-    width: '100%',
+    width: '500px',
     position: 'fixed',
     bottom: 0,
     left: '50%',
-    transform: 'translateX(-50%)',
+    transform: 'translateX(calc(-50% + 120px))',
     backgroundColor: theme.palette.secondary.main,
     zIndex: 1000,
+
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      left: '50%',
+      transform: 'translateX(-50%)',
+    },
   },
 }));
