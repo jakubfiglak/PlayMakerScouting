@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
+import { useStyles } from '../styles';
 
 export const TabPanel: React.FC<{ index: any; value: any; title: string }> = ({
   children,
@@ -7,6 +8,8 @@ export const TabPanel: React.FC<{ index: any; value: any; title: string }> = ({
   index,
   title,
 }) => {
+  const classes = useStyles();
+
   return (
     <div
       role="tabpanel"
@@ -14,7 +17,7 @@ export const TabPanel: React.FC<{ index: any; value: any; title: string }> = ({
       id={`${title}-${index}`}
       aria-labelledby={`${title}-${index}`}
     >
-      {value === index && <Box p={2}>{children}</Box>}
+      {value === index && <Box className={classes.box}>{children}</Box>}
     </div>
   );
 };

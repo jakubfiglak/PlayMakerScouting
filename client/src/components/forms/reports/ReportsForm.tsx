@@ -212,7 +212,7 @@ export const ReportsForm = () => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container>
       <Grid item xs={12}>
         <Typography variant="h5" align="center">
           {current
@@ -226,7 +226,6 @@ export const ReportsForm = () => {
           component="form"
           className={classes.root}
           onSubmit={handleSubmit}
-          spacing={3}
         >
           <Grid item xs={12}>
             <Stepper activeStep={activeStep} orientation="vertical">
