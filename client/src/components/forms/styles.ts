@@ -17,4 +17,13 @@ export const useStyles = makeStyles((theme: Theme) => ({
   resetContainer: {
     padding: theme.spacing(3),
   },
+  bottomNav: {
+    width: '100%',
+    position: 'fixed',
+    bottom: 0,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    backgroundColor: theme.palette.secondary.main,
+    zIndex: 1000,
+  },
 }));
