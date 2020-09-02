@@ -1,3 +1,4 @@
+export { ClubsCombo } from './ClubsCombo';
 export { ClubsSelect } from './ClubsSelect';
 export { CompetitionSelect } from './CompetitionSelect';
 export { DivisionSelect } from './DivisionSelect';
