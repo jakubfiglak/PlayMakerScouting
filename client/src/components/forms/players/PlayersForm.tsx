@@ -2,7 +2,12 @@ import React, { SyntheticEvent } from 'react';
 // MUI components
 import { Grid, TextField, FormControl } from '@material-ui/core';
 // Custom components
-import { ClubsSelect, PositionSelect, FootSelect } from '../selects';
+import {
+  ClubsSelect,
+  PositionSelect,
+  FootSelect,
+  ClubsCombo,
+} from '../selects';
 import { MainFormActions } from '../actions';
 import { Loader } from '../../common';
 // Types
@@ -99,11 +104,12 @@ export const PlayersForm = ({ clubsData }: PlayersFormProps) => {
         </Grid>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <ClubsSelect
+            <ClubsCombo
               clubsData={clubsData}
-              onChange={onInputChange}
               value={club}
-              required
+              id="club"
+              setFormData={setPlayerData}
+              label="Klub"
             />
           </FormControl>
         </Grid>

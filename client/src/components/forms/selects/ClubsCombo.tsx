@@ -10,6 +10,7 @@ type ClubsComboProps = {
   value: string;
   id: string;
   label: string;
+  size?: 'medium' | 'small';
 };
 
 export const ClubsCombo = ({
@@ -18,6 +19,7 @@ export const ClubsCombo = ({
   setFormData,
   id,
   label,
+  size,
 }: ClubsComboProps) => {
   return (
     <Autocomplete
@@ -40,6 +42,7 @@ export const ClubsCombo = ({
       renderInput={(params) => (
         <TextField {...params} label={label} variant="outlined" name={id} />
       )}
+      size={size}
     />
   );
 };

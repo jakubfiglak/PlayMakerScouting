@@ -2,7 +2,7 @@ import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
 // MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
 // Custom components
-import { ClubsSelect, PositionSelect } from '../selects';
+import { PositionSelect, ClubsCombo } from '../selects';
 import { FilterFormActions } from '../actions';
 // Types
 import { PlayersFilterData } from '../../../types/players';
@@ -59,10 +59,13 @@ export const PlayersFilterForm = ({
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <ClubsSelect
+            <ClubsCombo
               clubsData={clubsData}
-              onChange={onInputChange}
               value={club}
+              id="club"
+              setFormData={setFormData}
+              label="Klub"
+              size="small"
             />
           </FormControl>
         </Grid>
