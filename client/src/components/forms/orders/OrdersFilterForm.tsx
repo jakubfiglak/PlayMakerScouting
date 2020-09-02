@@ -2,7 +2,7 @@ import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
 // MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
 // Custom components
-import { PlayersSelect, OrderStatusSelect } from '../selects';
+import { PlayersSelect, OrderStatusSelect, PlayersCombo } from '../selects';
 import { FilterFormActions } from '../actions';
 // Types
 import { OrdersFilterData } from '../../../types/orders';
@@ -50,12 +50,20 @@ export const OrdersFilterForm = ({
       <Grid container justify="center" alignItems="center">
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <PlayersSelect
+            {/* <PlayersSelect
               playersData={playersData}
               onChange={onInputChange}
               value={player}
               id="player"
               label="Zawodnik"
+            /> */}
+            <PlayersCombo
+              id="player"
+              label="Zawodnik"
+              playersData={playersData}
+              setFormData={setFormData}
+              value={player}
+              size="small"
             />
           </FormControl>
         </Grid>
