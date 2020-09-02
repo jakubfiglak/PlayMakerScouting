@@ -2,12 +2,7 @@ import React, { SyntheticEvent } from 'react';
 // MUI components
 import { Grid, TextField, FormControl } from '@material-ui/core';
 // Custom components
-import {
-  ClubsSelect,
-  PositionSelect,
-  FootSelect,
-  ClubsCombo,
-} from '../selects';
+import { PositionSelect, FootSelect, ClubsCombo } from '../selects';
 import { MainFormActions } from '../actions';
 import { Loader } from '../../common';
 // Types

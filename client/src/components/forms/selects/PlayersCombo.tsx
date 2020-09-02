@@ -3,10 +3,10 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 // Types
-import { ClubData } from '../../../types/simplifiedData';
+import { PlayerData } from '../../../types/simplifiedData';
 
-type ClubsComboProps = {
-  clubsData: ClubData[];
+type PlayersComboProps = {
+  playersData: PlayerData[];
   setFormData: Dispatch<SetStateAction<any>>;
   value: string;
   id: string;
@@ -14,14 +14,14 @@ type ClubsComboProps = {
   size?: 'medium' | 'small';
 };
 
-export const ClubsCombo = ({
-  clubsData,
+export const PlayersCombo = ({
+  playersData,
   value,
   setFormData,
   id,
   label,
   size,
-}: ClubsComboProps) => {
+}: PlayersComboProps) => {
   return (
     <Autocomplete
       id={id}
@@ -32,11 +32,12 @@ export const ClubsCombo = ({
         }));
       }}
       value={value}
-      options={clubsData.map((club) => club._id)}
+      options={playersData.map((player) => player._id)}
       getOptionLabel={(option) => {
-        const club = clubsData.find((c) => c._id === option);
-        if (club) {
-          return club.name;
+        const player = playersData.find((p) => p._id === option);
+        if (player) {
+          const { lastName, firstName, club } = player;
+          return `${lastName}, ${firstName} (${club.name})`;
         }
         return '';
       }}

@@ -6,6 +6,7 @@ export { FootSelect } from './FootSelect';
 export { MatchSelect } from './MatchSelect';
 export { OrdersSelect } from './OrdersSelect';
 export { OrderStatusSelect } from './OrderStatusSelect';
+export { PlayersCombo } from './PlayersCombo';
 export { PlayersSelect } from './PlayersSelect';
 export { PositionSelect } from './PositionSelect';
 export { RatingSelect } from './RatingSelect';
