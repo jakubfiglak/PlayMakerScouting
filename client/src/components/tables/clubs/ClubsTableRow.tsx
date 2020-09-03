@@ -1,6 +1,6 @@
 import React from 'react';
 // MUI components
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip, Box } from '@material-ui/core';
 // MUI icons
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -41,29 +41,34 @@ export const ClubsTableRow = ({
     <StyledTableRow>
       {loading && <Loader />}
       <StyledTableCell>
-        <Tooltip title="Edytuj">
-          <IconButton aria-label="edit" onClick={() => handleSetCurrent(club)}>
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Usuń">
-          <div>
+        <Box display="flex">
+          <Tooltip title="Edytuj">
             <IconButton
-              aria-label="delete"
-              className={classes.delete}
-              disabled={user?.role !== 'admin'}
-              onClick={handleClickOpen}
+              aria-label="edit"
+              onClick={() => handleSetCurrent(club)}
             >
-              <DeleteIcon fontSize="small" />
+              <EditIcon fontSize="small" />
             </IconButton>
-            <Modal
-              open={isModalOpen}
-              message={`Usunąć klub ${name} z bazy?`}
-              handleAccept={() => deleteClub(_id)}
-              handleClose={handleClose}
-            />
-          </div>
-        </Tooltip>
+          </Tooltip>
+          <Tooltip title="Usuń">
+            <div>
+              <IconButton
+                aria-label="delete"
+                className={classes.delete}
+                disabled={user?.role !== 'admin'}
+                onClick={handleClickOpen}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+              <Modal
+                open={isModalOpen}
+                message={`Usunąć klub ${name} z bazy?`}
+                handleAccept={() => deleteClub(_id)}
+                handleClose={handleClose}
+              />
+            </div>
+          </Tooltip>
+        </Box>
       </StyledTableCell>
       <StyledTableCell>{name}</StyledTableCell>
       <StyledTableCell>{division}</StyledTableCell>
