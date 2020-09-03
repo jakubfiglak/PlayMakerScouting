@@ -1,6 +1,6 @@
 import React from 'react';
 // MUI components
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip, Box } from '@material-ui/core';
 // MUI icons
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -12,7 +12,8 @@ import { Player } from '../../../types/players';
 import { useAuthState } from '../../../context';
 import { useModal } from '../../../hooks';
 // Utils & data
-import { formatDate } from '../../../utils';
+import { formatDate, getLabel } from '../../../utils';
+import { footLabels, positionLabels } from '../../../data';
 // Styles
 import { useStyles } from '../styles';
 
@@ -38,8 +39,6 @@ export const PlayersTableRow = ({
     club,
     position,
     dateOfBirth,
-    height,
-    weight,
     footed,
   } = player;
 
@@ -49,41 +48,41 @@ export const PlayersTableRow = ({
     <StyledTableRow>
       {loading && <Loader />}
       <StyledTableCell>
-        <Tooltip title="Edytuj">
-          <IconButton
-            aria-label="edit"
-            onClick={() => handleSetCurrent(player)}
-          >
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Usuń">
-          <div>
+        <Box display="flex">
+          <Tooltip title="Edytuj">
             <IconButton
-              aria-label="delete"
-              className={classes.delete}
-              disabled={user?.role !== 'admin'}
-              onClick={handleClickOpen}
+              aria-label="edit"
+              onClick={() => handleSetCurrent(player)}
             >
-              <DeleteIcon fontSize="small" />
+              <EditIcon fontSize="small" />
             </IconButton>
-            <Modal
-              open={isModalOpen}
-              message={`Usunąć zawodnika ${firstName} ${lastName} z bazy?`}
-              handleAccept={() => deletePlayer(_id)}
-              handleClose={handleClose}
-            />
-          </div>
-        </Tooltip>
+          </Tooltip>
+          <Tooltip title="Usuń">
+            <div>
+              <IconButton
+                aria-label="delete"
+                className={classes.delete}
+                disabled={user?.role !== 'admin'}
+                onClick={handleClickOpen}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+              <Modal
+                open={isModalOpen}
+                message={`Usunąć zawodnika ${firstName} ${lastName} z bazy?`}
+                handleAccept={() => deletePlayer(_id)}
+                handleClose={handleClose}
+              />
+            </div>
+          </Tooltip>
+        </Box>
       </StyledTableCell>
       <StyledTableCell>{lastName}</StyledTableCell>
       <StyledTableCell>{firstName}</StyledTableCell>
       <StyledTableCell>{club.name}</StyledTableCell>
-      <StyledTableCell>{position}</StyledTableCell>
+      <StyledTableCell>{getLabel(position, positionLabels)}</StyledTableCell>
       <StyledTableCell>{formatDate(dateOfBirth)}</StyledTableCell>
-      <StyledTableCell>{height}</StyledTableCell>
-      <StyledTableCell>{weight}</StyledTableCell>
-      <StyledTableCell>{footed}</StyledTableCell>
+      <StyledTableCell>{getLabel(footed, footLabels)}</StyledTableCell>
     </StyledTableRow>
   );
 };

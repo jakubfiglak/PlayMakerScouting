@@ -11,3 +11,4 @@ export {
   motorSkillsInitialState,
   reportFormInitialState,
 } from './reportFormInitialState';
+export { footLabels, positionLabels } from './labels';

@@ -10,3 +10,4 @@ export { getRatingLabel } from './getRatingLabel';
 export { getIndSkillsFields } from './getIndSkillsFields';
 export { formatReportObject } from './formatReportObject';
 export { getInitialStateFromCurrent } from './getInitialStateFromCurrent';
+export { getLabel } from './getLabel';
