@@ -50,13 +50,6 @@ export const OrdersFilterForm = ({
       <Grid container justify="center" alignItems="center">
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            {/* <PlayersSelect
-              playersData={playersData}
-              onChange={onInputChange}
-              value={player}
-              id="player"
-              label="Zawodnik"
-            /> */}
             <PlayersCombo
               id="player"
               label="Zawodnik"

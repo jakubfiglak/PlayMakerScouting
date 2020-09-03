@@ -11,7 +11,7 @@ import { Match, MatchesFilterData } from '../../types/matches';
 import { useMatchesState, useSimplifiedDataState } from '../../context';
 import { useTabs } from '../../hooks';
 // Utils & data
-import { formatDateObject } from '../../utils';
+import { formatDateObject, tomorrow, yearFromNow } from '../../utils';
 
 export const MatchesContent = () => {
   const matchesContext = useMatchesState();
@@ -36,8 +36,8 @@ export const MatchesContent = () => {
     homeTeam: '',
     awayTeam: '',
     competition: '',
-    dateFrom: formatDateObject(new Date()),
-    dateTo: formatDateObject(new Date()),
+    dateFrom: formatDateObject(yearFromNow),
+    dateTo: formatDateObject(tomorrow),
   });
 
   useEffect(() => {

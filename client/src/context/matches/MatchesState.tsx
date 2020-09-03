@@ -44,7 +44,7 @@ export const MatchesState: React.FC = ({ children }) => {
 
     const { homeTeam, awayTeam, competition, dateFrom, dateTo } = filters;
 
-    let matchesURI = `/api/v1/matches?sort=date&date[gte]=${dateFrom}&date[lte]=${dateTo}`;
+    let matchesURI = `/api/v1/matches?sort=-date&date[gte]=${dateFrom}&date[lte]=${dateTo}`;
 
     if (homeTeam) {
       matchesURI = matchesURI.concat(`&homeTeam=${homeTeam}`);
