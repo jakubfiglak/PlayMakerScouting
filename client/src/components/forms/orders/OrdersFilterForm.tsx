@@ -2,7 +2,7 @@ import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
 // MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
 // Custom components
-import { PlayersSelect, OrderStatusSelect, PlayersCombo } from '../selects';
+import { OrderStatusSelect, PlayersCombo } from '../selects';
 import { FilterFormActions } from '../actions';
 // Types
 import { OrdersFilterData } from '../../../types/orders';

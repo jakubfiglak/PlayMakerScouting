@@ -2,7 +2,7 @@ import React, { SyntheticEvent } from 'react';
 // MUI components
 import { Grid, FormControl } from '@material-ui/core';
 // Custom components
-import { PlayersSelect } from '../selects';
+import { PlayersCombo } from '../selects';
 import { MainFormActions } from '../actions';
 import { Loader } from '../../common';
 // Types
@@ -25,7 +25,7 @@ export const OrdersForm = ({ playersData }: OrdersFormProps) => {
     player: '',
   };
 
-  const [orderData, onInputChange, setOrderData] = useForm(initialState);
+  const [orderData, _, setOrderData] = useForm(initialState);
 
   const { player } = orderData;
 
@@ -45,11 +45,12 @@ export const OrdersForm = ({ playersData }: OrdersFormProps) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <PlayersSelect
-              onChange={onInputChange}
-              value={player}
+            <PlayersCombo
+              id="player"
+              label="Zawodnik"
               playersData={playersData}
-              required
+              setFormData={setOrderData}
+              value={player}
             />
           </FormControl>
         </Grid>

@@ -111,6 +111,7 @@ export const ReportsForm = () => {
             onChange={onInputChange}
             order={order}
             current={current}
+            setFormData={setReportData}
           />
         );
       case 2:

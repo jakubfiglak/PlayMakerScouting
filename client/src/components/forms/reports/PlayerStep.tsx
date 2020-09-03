@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Dispatch, SetStateAction } from 'react';
 // MUI components
 import {
   FormControl,
@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@material-ui/core';
 // Custom components
-import { PlayersSelect } from '../selects';
+import { PlayersCombo } from '../selects';
 import { Loader } from '../../common';
 // Types
 import { Report } from '../../../types/reports';
@@ -19,6 +19,7 @@ import { useSimplifiedDataState, useOrdersState } from '../../../context';
 type PlayerStepProps = {
   order?: string;
   current: Report | null;
+  setFormData: Dispatch<SetStateAction<any>>;
 } & SelectProps;
 
 export const PlayerStep = ({
@@ -26,6 +27,7 @@ export const PlayerStep = ({
   value,
   onChange,
   current,
+  setFormData,
 }: PlayerStepProps) => {
   const ordersContext = useOrdersState();
   const simplifiedDataContext = useSimplifiedDataState();
@@ -79,10 +81,12 @@ export const PlayerStep = ({
         </FormControl>
       ) : (
         <FormControl variant="outlined" fullWidth>
-          <PlayersSelect
+          <PlayersCombo
+            id="player"
+            label="Zawodnik"
             playersData={playersData}
-            value={value}
-            onChange={onChange}
+            setFormData={setFormData}
+            value={value as string}
           />
         </FormControl>
       )}
