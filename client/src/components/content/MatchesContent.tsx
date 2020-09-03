@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 // MUI components
-import { AppBar, Tabs, Tab, Grid } from '@material-ui/core';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { MatchesFilterForm, MatchesForm } from '../forms';
 import { TabPanel, Loader } from '../common';
-import { MatchCard } from '../matches';
+import { MatchesTable } from '../tables';
 // Types
 import { Match, MatchesFilterData } from '../../types/matches';
 // Hooks
@@ -42,7 +42,7 @@ export const MatchesContent = () => {
 
   useEffect(() => {
     getClubs();
-    getMatches(filters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const handleSetCurrent = (match: Match) => {
@@ -61,17 +61,13 @@ export const MatchesContent = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="matches">
         <MatchesFilterForm clubsData={clubsData} setFilters={setFilters} />
-        <Grid container spacing={2}>
-          {matchesData.data.map((match) => (
-            <Grid item xs={12} sm={6} md={3} key={match._id}>
-              <MatchCard
-                match={match}
-                deleteMatch={deleteMatch}
-                handleSetCurrent={handleSetCurrent}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <MatchesTable
+          getMatches={getMatches}
+          matchesData={matchesData}
+          deleteMatch={deleteMatch}
+          filters={filters}
+          handleSetCurrent={handleSetCurrent}
+        />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="matches">
         <MatchesForm clubsData={clubsData} />

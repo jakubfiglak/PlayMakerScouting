@@ -39,3 +39,18 @@ export const footLabels = [
     label: 'Prawa',
   },
 ];
+
+export const competitionLabels = [
+  {
+    value: 'league',
+    label: 'Liga',
+  },
+  {
+    value: 'cup',
+    label: 'Puchar',
+  },
+  {
+    value: 'friendly',
+    label: 'Towarzyski',
+  },
+];

@@ -12,3 +12,10 @@ export const clubsHeadCells = [
   { id: 'division', label: 'Poziom rozgrywkowy' },
   { id: 'location.voivodeship', label: 'Województwo' },
 ];
+
+export const matchesHeadCells = [
+  { id: 'date', label: 'Data' },
+  { id: 'homeTeam', label: 'Gospodarz' },
+  { id: 'awayTeam', label: 'Gość' },
+  { id: 'competition', label: 'Rozgrywki' },
+];
