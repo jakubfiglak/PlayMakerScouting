@@ -23,6 +23,16 @@ const OrderSchema = new Schema({
   acceptDate: {
     type: Date,
   },
+  docNumber: {
+    type: String,
+  },
+});
+
+OrderSchema.pre('save', async function (next) {
+  const count = await model('Order', OrderSchema).countDocuments();
+  const date = new Date();
+  this.docNumber = `ORD/${date.toISOString().slice(0, 10)}/${count + 1}`;
+  next();
 });
 
 module.exports = model('Order', OrderSchema);

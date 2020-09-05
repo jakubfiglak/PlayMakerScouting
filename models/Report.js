@@ -97,6 +97,16 @@ const ReportSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  docNumber: {
+    type: String,
+  },
+});
+
+ReportSchema.pre('save', async function (next) {
+  const count = await model('Report', ReportSchema).countDocuments();
+  const date = new Date();
+  this.docNumber = `REP/${date.toISOString().slice(0, 10)}/${count + 1}`;
+  next();
 });
 
 ReportSchema.pre('save', calculateReportAvg);
