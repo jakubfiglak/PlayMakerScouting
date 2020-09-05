@@ -217,3 +217,25 @@ exports.removeFromFavorites = asyncHandler(async (req, res, next) => {
     message: `Successfully removed club with the id of ${id} from favorites`,
   });
 });
+
+// @desc Get my clubs
+// @route GET /api/v1/clubs/:my
+// @access Private
+exports.getMyClubs = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+    );
+  }
+
+  const { myClubs } = user;
+
+  const clubs = await Club.find({ _id: { $in: myClubs } });
+
+  res.status(200).json({
+    success: true,
+    data: clubs,
+  });
+});
