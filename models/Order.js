@@ -8,9 +8,10 @@ const OrderSchema = new Schema({
     ref: 'Player',
     required: 'Please add a player',
   },
-  open: {
-    type: Boolean,
-    default: true,
+  status: {
+    type: String,
+    enum: ['open', 'accepted', 'closed'],
+    default: 'open',
   },
   scout: {
     type: Schema.ObjectId,
@@ -23,7 +24,13 @@ const OrderSchema = new Schema({
   acceptDate: {
     type: Date,
   },
+  closeDate: {
+    type: Date,
+  },
   docNumber: {
+    type: String,
+  },
+  notes: {
     type: String,
   },
 });

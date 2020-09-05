@@ -125,7 +125,7 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
   }
 
-  if (!order.open) {
+  if (order.status === 'accepted') {
     return next(
       new ErrorResponse(
         `Order with the id of ${id} has been already accepted by another user`,
@@ -134,7 +134,16 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
     );
   }
 
-  order.open = false;
+  if (order.status === 'closed') {
+    return next(
+      new ErrorResponse(
+        `Order with the id of ${id} has already been closed`,
+        400
+      )
+    );
+  }
+
+  order.status = 'accepted';
   order.scout = req.user._id;
   order.acceptDate = Date.now();
 
@@ -143,6 +152,48 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Order with the id of ${id} successfully accepted`,
+    data: order,
+  });
+});
+
+// @desc Close order
+// @route POST /api/v1/orders/:id/close
+// @access Private (admin only)
+exports.closeOrder = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const order = await Order.findById(id);
+
+  if (!order) {
+    return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
+  }
+
+  if (order.status === 'open') {
+    return next(
+      new ErrorResponse(
+        `Order with the id of ${id} has not been accepted yet`,
+        400
+      )
+    );
+  }
+
+  if (order.status === 'closed') {
+    return next(
+      new ErrorResponse(
+        `Order with the id of ${id} has already been closed`,
+        400
+      )
+    );
+  }
+
+  order.status = 'closed';
+  order.closeDate = Date.now();
+
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Order with the id of ${id} successfully closed`,
     data: order,
   });
 });
