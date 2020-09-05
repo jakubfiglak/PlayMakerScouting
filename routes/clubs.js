@@ -8,6 +8,8 @@ const {
   getClubsInRadius,
   updateClub,
   deleteClub,
+  addToFavorites,
+  removeFromFavorites,
 } = require('../controllers/clubsController');
 const { protect, authorize } = require('../middleware/auth');
 const advancedResults = require('../middleware/advancedResults');
@@ -29,5 +31,7 @@ router.put('/:id', [protect, authorize('admin')], updateClub);
 router.delete('/:id', [protect, authorize('admin')], deleteClub);
 router.get('/voivodeship/:voivodeship', protect, getClubsInVoivodeship);
 router.get('/radius/activeradius', protect, getClubsInRadius);
+router.post('/:id/addtofavorites', protect, addToFavorites);
+router.post('/:id/removefromfavorites', protect, removeFromFavorites);
 
 module.exports = router;

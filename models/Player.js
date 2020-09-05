@@ -40,6 +40,9 @@ const PlayerSchema = new Schema(
       required: 'Please choose players preferred leg',
       enum: ['L', 'R', 'both'],
     },
+    lnpID: {
+      type: String,
+    },
   },
   {
     toJSON: { virtuals: true },

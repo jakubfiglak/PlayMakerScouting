@@ -62,6 +62,18 @@ const UserSchema = new Schema({
     type: String,
     default: 'scout',
   },
+  myClubs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Club',
+    },
+  ],
+  myPlayers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Player',
+    },
+  ],
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   createdAt: {

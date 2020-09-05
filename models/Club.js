@@ -39,6 +39,9 @@ const ClubSchema = new Schema({
     ],
     required: 'please add clubs current division',
   },
+  lnpID: {
+    type: String,
+  },
 });
 
 ClubSchema.pre('save', geocode);

@@ -16,7 +16,9 @@
     },
     "activeRadius": 100,
     "password": "Password123",
-    "passwordConfirm": "Password123"
+    "passwordConfirm": "Password123",
+    "myClubs": [],
+    "myPlayers": []
   },
   {
     "_id": "5d7a514b5d2c12c7449be045",
@@ -35,7 +37,9 @@
     },
     "activeRadius": 300,
     "password": "Password123",
-    "passwordConfirm": "Password123"
+    "passwordConfirm": "Password123",
+    "myClubs": [],
+    "myPlayers": []
   },
   {
     "_id": "5d7a514b5d2c12c7449be046",
@@ -54,7 +58,9 @@
     },
     "activeRadius": 150,
     "password": "Password123",
-    "passwordConfirm": "Password123"
+    "passwordConfirm": "Password123",
+    "myClubs": [],
+    "myPlayers": []
   },
   {
     "_id": "5c8a1d5b0190b214360dc031",
@@ -73,6 +79,8 @@
     },
     "activeRadius": 50,
     "password": "Password123",
-    "passwordConfirm": "Password123"
+    "passwordConfirm": "Password123",
+    "myClubs": [],
+    "myPlayers": []
   }
 ]
