@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const geocode = require('../middleware/geocode');
+const AddressSchema = require('../schemas/Address');
 
 const { Schema, model } = mongoose;
 
@@ -11,8 +12,7 @@ const ClubSchema = new Schema({
     unique: true,
   },
   address: {
-    type: String,
-    required: 'please add an address',
+    type: AddressSchema,
   },
   location: {
     type: {
@@ -23,12 +23,6 @@ const ClubSchema = new Schema({
       type: [Number],
       index: '2dsphere',
     },
-    formattedAddress: String,
-    street: String,
-    city: String,
-    voivodeship: String,
-    zipcode: String,
-    voivodeshipSlug: String,
   },
   division: {
     type: String,

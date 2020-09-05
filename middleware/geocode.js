@@ -3,19 +3,16 @@ const geocoder = require('../utils/geocoder');
 
 async function geocode(next) {
   if (this.address) {
-    const loc = await geocoder.geocode(this.address);
+    const { street, streetNo, zipcode, city } = this.address;
+    const addressString = `${street} ${streetNo}, ${zipcode} ${city}`;
+    const loc = await geocoder.geocode(addressString);
     this.location = {
       type: 'Point',
       coordinates: [loc[0].longitude, loc[0].latitude],
-      formattedAddress: loc[0].formattedAddress,
-      street: loc[0].streetName,
-      city: loc[0].city,
-      voivodeship: loc[0].stateCode,
-      zipcode: loc[0].zipcode,
       voivodeshipSlug: slugify(loc[0].stateCode, { lower: true }),
     };
   }
-  this.address = undefined;
+  // this.address = undefined;
 
   next();
 }

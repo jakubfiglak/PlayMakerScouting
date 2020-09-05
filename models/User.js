@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const geocode = require('../middleware/geocode');
+const AddressSchema = require('../schemas/Address');
 
 const { Schema, model } = mongoose;
 
@@ -31,8 +32,7 @@ const UserSchema = new Schema({
     validate: [validator.isMobilePhone, 'phone number is not valid'],
   },
   address: {
-    type: String,
-    required: 'please add an address',
+    type: AddressSchema,
   },
   location: {
     type: {
@@ -43,11 +43,6 @@ const UserSchema = new Schema({
       type: [Number],
       index: '2dsphere',
     },
-    formattedAddress: String,
-    street: String,
-    city: String,
-    voivodeship: String,
-    zipcode: String,
   },
   activeRadius: {
     type: Number,
