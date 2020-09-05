@@ -2,7 +2,7 @@ import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
 // MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
 // Custom components
-import { PlayersSelect, OrderStatusSelect } from '../selects';
+import { OrderStatusSelect, PlayersCombo } from '../selects';
 import { FilterFormActions } from '../actions';
 // Types
 import { OrdersFilterData } from '../../../types/orders';
@@ -10,7 +10,7 @@ import { PlayerData } from '../../../types/simplifiedData';
 // Hooks
 import { useForm } from '../../../hooks';
 // Utils & data
-import { formatDateObject, today, tomorrow } from '../../../utils';
+import { formatDateObject, yearFromNow, tomorrow } from '../../../utils';
 // Styles
 import { useStyles } from '../styles';
 
@@ -21,8 +21,8 @@ type FilterFormProps = {
 
 const initialState: OrdersFilterData = {
   player: '',
-  status: 'all',
-  createdAfter: formatDateObject(today),
+  status: 'open',
+  createdAfter: formatDateObject(yearFromNow),
   createdBefore: formatDateObject(tomorrow),
 };
 
@@ -50,12 +50,13 @@ export const OrdersFilterForm = ({
       <Grid container justify="center" alignItems="center">
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <PlayersSelect
-              playersData={playersData}
-              onChange={onInputChange}
-              value={player}
+            <PlayersCombo
               id="player"
               label="Zawodnik"
+              playersData={playersData}
+              setFormData={setFormData}
+              value={player}
+              size="small"
             />
           </FormControl>
         </Grid>

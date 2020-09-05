@@ -2,7 +2,7 @@ import React, { SyntheticEvent } from 'react';
 // MUI components
 import { Grid, TextField, FormControl } from '@material-ui/core';
 // Custom components
-import { ClubsSelect, CompetitionSelect } from '../selects';
+import { ClubsSelect, CompetitionSelect, ClubsCombo } from '../selects';
 import { MainFormActions } from '../actions';
 import { Loader } from '../../common';
 // Types
@@ -62,25 +62,23 @@ export const MatchesForm = ({ clubsData }: MatchesFormProps) => {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <FormControl variant="outlined" fullWidth>
-            <ClubsSelect
-              id="homeTeam"
-              label="Gospodarz"
+            <ClubsCombo
               clubsData={clubsData}
-              onChange={onInputChange}
               value={homeTeam}
-              required
+              id="homeTeam"
+              setFormData={setMatchData}
+              label="Gospodarz"
             />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl variant="outlined" fullWidth>
-            <ClubsSelect
-              id="awayTeam"
-              label="Gość"
+            <ClubsCombo
               clubsData={clubsData}
-              onChange={onInputChange}
               value={awayTeam}
-              required
+              id="awayTeam"
+              setFormData={setMatchData}
+              label="Gość"
             />
           </FormControl>
         </Grid>

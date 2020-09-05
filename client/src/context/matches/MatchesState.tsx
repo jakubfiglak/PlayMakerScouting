@@ -8,6 +8,7 @@ import {
   MatchesFormData,
   MatchesFilterData,
 } from '../../types/matches';
+import { Order } from '../../types/common';
 
 export const MatchesState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -39,13 +40,22 @@ export const MatchesState: React.FC = ({ children }) => {
   };
 
   // Get matches
-  const getMatches = async (filters: MatchesFilterData) => {
+  const getMatches = async (
+    page = 1,
+    limit = 20,
+    sort = 'date',
+    order: Order = 'desc',
+    filters: MatchesFilterData,
+  ) => {
     setLoading();
+    const orderSign = order === 'desc' ? '-' : '';
 
     const { homeTeam, awayTeam, competition, dateFrom, dateTo } = filters;
 
-    let matchesURI = `/api/v1/matches?sort=date&date[gte]=${dateFrom}&date[lte]=${dateTo}`;
+    // Generate query url
+    let matchesURI = `/api/v1/matches?page=${page}&limit=${limit}&sort=${orderSign}${sort}&date[gte]=${dateFrom}&date[lte]=${dateTo}`;
 
+    // Add filters to query url
     if (homeTeam) {
       matchesURI = matchesURI.concat(`&homeTeam=${homeTeam}`);
     }

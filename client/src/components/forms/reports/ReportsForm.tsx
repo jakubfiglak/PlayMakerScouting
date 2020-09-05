@@ -5,8 +5,6 @@ import {
   Step,
   StepLabel,
   StepContent,
-  Button,
-  Paper,
   Typography,
   Grid,
 } from '@material-ui/core/';
@@ -20,6 +18,7 @@ import { TeamplaySkillsStep } from './TeamplaySkillsStep';
 import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
 import { StepActions, MainFormActions } from '../actions';
+import { BottomNav } from './BottomNav';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
 import { useReportsState } from '../../../context';
@@ -92,11 +91,11 @@ export const ReportsForm = () => {
     'Wybierz zlecenie',
     'Wybierz zawodnika',
     'Wybierz mecz',
-    'Dane podstawowe',
     'Ocena umiejętności indywidualnych',
     'Ocena współdziałania z partnerami',
     'Ocena potencjału motorycznego',
     'Podsumowanie występu',
+    'Statystyki',
   ];
 
   const getStepContent = (step: number) => {
@@ -112,6 +111,7 @@ export const ReportsForm = () => {
             onChange={onInputChange}
             order={order}
             current={current}
+            setFormData={setReportData}
           />
         );
       case 2:
@@ -124,17 +124,6 @@ export const ReportsForm = () => {
           />
         );
       case 3:
-        return (
-          <BasicDataStep
-            minutesPlayed={minutesPlayed}
-            goals={goals}
-            assists={assists}
-            yellowCards={yellowCards}
-            redCards={redCards}
-            onChange={onInputChange}
-          />
-        );
-      case 4:
         return (
           <IndividualSkillsStep
             ballReceptionRating={ballReceptionRating}
@@ -159,7 +148,7 @@ export const ReportsForm = () => {
             player={player}
           />
         );
-      case 5:
+      case 4:
         return (
           <TeamplaySkillsStep
             attackRating={attackRating}
@@ -171,7 +160,7 @@ export const ReportsForm = () => {
             onChange={onInputChange}
           />
         );
-      case 6:
+      case 5:
         return (
           <MotorSkillsStep
             leading={leading}
@@ -179,11 +168,22 @@ export const ReportsForm = () => {
             onChange={onInputChange}
           />
         );
-      case 7:
+      case 6:
         return (
           <SummaryStep
             summary={summary}
             finalRating={finalRating}
+            onChange={onInputChange}
+          />
+        );
+      case 7:
+        return (
+          <BasicDataStep
+            minutesPlayed={minutesPlayed}
+            goals={goals}
+            assists={assists}
+            yellowCards={yellowCards}
+            redCards={redCards}
             onChange={onInputChange}
           />
         );
@@ -213,7 +213,7 @@ export const ReportsForm = () => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container>
       <Grid item xs={12}>
         <Typography variant="h5" align="center">
           {current
@@ -227,7 +227,6 @@ export const ReportsForm = () => {
           component="form"
           className={classes.root}
           onSubmit={handleSubmit}
-          spacing={3}
         >
           <Grid item xs={12}>
             <Stepper activeStep={activeStep} orientation="vertical">
@@ -267,6 +266,7 @@ export const ReportsForm = () => {
           )}
         </Grid>
       </Grid>
+      <BottomNav activeStep={activeStep} setActiveStep={setActiveStep} />
     </Grid>
   );
 };

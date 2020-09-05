@@ -2,7 +2,7 @@ import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
 // MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
 // Custom components
-import { ClubsSelect, CompetitionSelect } from '../selects';
+import { CompetitionSelect, ClubsCombo } from '../selects';
 import { FilterFormActions } from '../actions';
 // Types
 import { MatchesFilterData } from '../../../types/matches';
@@ -10,7 +10,7 @@ import { ClubData } from '../../../types/simplifiedData';
 // Hooks
 import { useForm } from '../../../hooks';
 // Utils & data
-import { formatDateObject } from '../../../utils';
+import { formatDateObject, tomorrow, yearFromNow } from '../../../utils';
 // Styles
 import { useStyles } from '../styles';
 
@@ -23,8 +23,8 @@ const initialState: MatchesFilterData = {
   homeTeam: '',
   awayTeam: '',
   competition: '',
-  dateFrom: formatDateObject(new Date()),
-  dateTo: formatDateObject(new Date()),
+  dateFrom: formatDateObject(yearFromNow),
+  dateTo: formatDateObject(tomorrow),
 };
 
 export const MatchesFilterForm = ({
@@ -51,23 +51,25 @@ export const MatchesFilterForm = ({
       <Grid container justify="center" alignItems="center">
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <ClubsSelect
+            <ClubsCombo
               clubsData={clubsData}
-              onChange={onInputChange}
               value={homeTeam}
               id="homeTeam"
+              setFormData={setFormData}
               label="Gospodarz"
+              size="small"
             />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <FormControl variant="outlined" size="small" fullWidth>
-            <ClubsSelect
+            <ClubsCombo
               clubsData={clubsData}
-              onChange={onInputChange}
               value={awayTeam}
               id="awayTeam"
+              setFormData={setFormData}
               label="Gość"
+              size="small"
             />
           </FormControl>
         </Grid>

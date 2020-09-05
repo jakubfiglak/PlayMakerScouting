@@ -46,13 +46,21 @@ export type MatchesFilterData = {
   dateTo: string;
 };
 
+export type GetMatches = (
+  page: number,
+  limit: number,
+  sort: string,
+  order: Order,
+  filters: MatchesFilterData,
+) => void;
+
 export type State = {
   matchesData: MatchesData;
   current: Match | null;
   loading: boolean;
   error: string | null;
   setLoading: () => void;
-  getMatches: (filters: MatchesFilterData) => void;
+  getMatches: GetMatches;
   getMatch: (id: string) => void;
   deleteMatch: (id: string) => void;
   addMatch: (match: MatchesFormData) => void;

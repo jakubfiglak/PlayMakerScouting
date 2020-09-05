@@ -5,35 +5,34 @@ import { IconButton, Tooltip, Box } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 // Custom components
-import { StyledTableRow, StyledTableCell, Modal, Loader } from '../../common';
+import { StyledTableRow, StyledTableCell, Loader, Modal } from '../../common';
 // Types
-import { Club } from '../../../types/clubs';
+import { Match } from '../../../types/matches';
 // Hooks
 import { useAuthState } from '../../../context';
 import { useModal } from '../../../hooks';
 // Utils & data
-import { replaceVoivodeshipName } from '../../../utils';
+import { formatDate, getLabel } from '../../../utils';
+import { competitionLabels } from '../../../data';
 // Styles
 import { useStyles } from '../styles';
 
 type TableRowProps = {
-  club: Club;
-  deleteClub: (id: string) => void;
-  handleSetCurrent: (club: Club) => void;
+  match: Match;
+  deleteMatch: (id: string) => void;
+  handleSetCurrent: (match: Match) => void;
 };
 
-export const ClubsTableRow = ({
-  club,
-  deleteClub,
+export const MatchesTableRow = ({
+  match,
+  deleteMatch,
   handleSetCurrent,
 }: TableRowProps) => {
   const classes = useStyles();
   const [isModalOpen, handleClickOpen, handleClose] = useModal();
 
   const authContext = useAuthState();
-  const { _id, name, division, location } = club;
-
-  const { voivodeship } = location;
+  const { _id, homeTeam, awayTeam, date, competition } = match;
 
   const { loading, user } = authContext;
 
@@ -45,7 +44,7 @@ export const ClubsTableRow = ({
           <Tooltip title="Edytuj">
             <IconButton
               aria-label="edit"
-              onClick={() => handleSetCurrent(club)}
+              onClick={() => handleSetCurrent(match)}
             >
               <EditIcon fontSize="small" />
             </IconButton>
@@ -62,18 +61,19 @@ export const ClubsTableRow = ({
               </IconButton>
               <Modal
                 open={isModalOpen}
-                message={`Usunąć klub ${name} z bazy?`}
-                handleAccept={() => deleteClub(_id)}
+                message={`Usunąć mecz ${homeTeam.name} vs. ${awayTeam.name} z bazy?`}
+                handleAccept={() => deleteMatch(_id)}
                 handleClose={handleClose}
               />
             </div>
           </Tooltip>
         </Box>
       </StyledTableCell>
-      <StyledTableCell>{name}</StyledTableCell>
-      <StyledTableCell>{division}</StyledTableCell>
+      <StyledTableCell>{formatDate(date)}</StyledTableCell>
+      <StyledTableCell>{homeTeam.name}</StyledTableCell>
+      <StyledTableCell>{awayTeam.name}</StyledTableCell>
       <StyledTableCell>
-        {replaceVoivodeshipName(voivodeship, 'label')}
+        {getLabel(competition, competitionLabels)}
       </StyledTableCell>
     </StyledTableRow>
   );

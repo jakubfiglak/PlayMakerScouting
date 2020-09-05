@@ -4,8 +4,6 @@ export const playersHeadCells = [
   { id: 'club', label: 'Klub' },
   { id: 'position', label: 'Pozycja' },
   { id: 'dateOfBirth', label: 'Data urodzenia' },
-  { id: 'height', label: 'Wzrost [cm]' },
-  { id: 'weight', label: 'Waga [kg]' },
   { id: 'footed', label: 'Noga' },
 ];
 
@@ -13,4 +11,11 @@ export const clubsHeadCells = [
   { id: 'name', label: 'Nazwa' },
   { id: 'division', label: 'Poziom rozgrywkowy' },
   { id: 'location.voivodeship', label: 'Województwo' },
+];
+
+export const matchesHeadCells = [
+  { id: 'date', label: 'Data' },
+  { id: 'homeTeam', label: 'Gospodarz' },
+  { id: 'awayTeam', label: 'Gość' },
+  { id: 'competition', label: 'Rozgrywki' },
 ];
