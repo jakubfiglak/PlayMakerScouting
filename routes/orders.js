@@ -23,6 +23,7 @@ router.get(
     advancedResults(Order, [
       { path: 'player', select: ['firstName', 'lastName'] },
       { path: 'scout', select: ['name', 'surname'] },
+      { path: 'reports', select: ['_id'] },
     ]),
   ],
   getOrders
