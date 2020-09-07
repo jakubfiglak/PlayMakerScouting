@@ -38,7 +38,5 @@ router.get('/my', protect, getMyPlayers);
 router.get('/:id', protect, getPlayer);
 router.put('/:id', protect, updatePlayer);
 router.delete('/:id', [protect, authorize('admin')], deletePlayer);
-router.post('/:id/addtofavorites', protect, addToFavorites);
-router.post('/:id/removefromfavorites', protect, removeFromFavorites);
 
 module.exports = router;

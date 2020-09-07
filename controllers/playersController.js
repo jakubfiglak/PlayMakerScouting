@@ -128,85 +128,13 @@ exports.deletePlayer = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc Add to favorites
-// @route POST /api/v1/players/:id/addtofavorites
-// @access Private
-exports.addToFavorites = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-
-  const player = await Player.findById(id);
-
-  if (!player) {
-    return next(new ErrorResponse(`Player not found with id of ${id}`, 404));
-  }
-
-  const user = await User.findById(req.user._id);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
-  }
-
-  if (user.myPlayers.includes(id)) {
-    return next(
-      new ErrorResponse(
-        `Club with the id of ${id} is already in your favorites`
-      )
-    );
-  }
-
-  user.myPlayers.push(id);
-  await user.save();
-
-  res.status(200).json({
-    success: true,
-    message: `Successfully added player with the id of ${id} to favorites`,
-  });
-});
-
-// @desc Remove from favorites
-// @route POST /api/v1/players/:id/removefromfavorites
-// @access Private
-exports.removeFromFavorites = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-
-  const player = await Player.findById(id);
-
-  if (!player) {
-    return next(new ErrorResponse(`Player not found with id of ${id}`, 404));
-  }
-
-  const user = await User.findById(req.user._id);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
-  }
-
-  if (!user.myPlayers.includes(id)) {
-    return next(
-      new ErrorResponse(
-        `Player with the id of ${id} is already not in your favorites`
-      )
-    );
-  }
-
-  user.myPlayers.pull(id);
-  await user.save();
-
-  res.status(200).json({
-    success: true,
-    message: `Successfully removed player with the id of ${id} from favorites`,
-  });
-});
-
-// @desc Get my players
-// @route GET /api/v1/players/:my
+// @desc Get my players (players that the user has access to - his ID is in privilegedUsers array)
+// @route GET /api/v1/players/my
 // @access Private
 exports.getMyPlayers = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
+  const { _id } = req.user;
+
+  const user = await User.findById(_id);
 
   if (!user) {
     return next(
@@ -214,9 +142,10 @@ exports.getMyPlayers = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const { myPlayers } = user;
-
-  const players = await Player.find({ _id: { $in: myPlayers } });
+  const players = await Player.find(
+    { privilegedUsers: _id },
+    { privilegedUsers: 0 }
+  );
 
   res.status(200).json({
     success: true,

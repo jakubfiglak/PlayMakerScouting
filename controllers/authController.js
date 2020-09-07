@@ -74,14 +74,6 @@ exports.account = asyncHandler(async (req, res) => {
       path: 'myClubs',
       select: 'name',
     },
-    {
-      path: 'myPlayers',
-      select: 'firstName lastName club',
-      populate: {
-        path: 'club',
-        select: 'name',
-      },
-    },
   ]);
 
   res.status(200).json({
