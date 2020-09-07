@@ -43,6 +43,15 @@ const PlayerSchema = new Schema(
     lnpID: {
       type: String,
     },
+    lnpProfileURL: {
+      type: String,
+    },
+    privilegedUsers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },

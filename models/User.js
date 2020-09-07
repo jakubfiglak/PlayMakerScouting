@@ -60,18 +60,13 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
+    enum: ['admin', 'playmaker-scout', 'scout'],
     default: 'scout',
   },
   myClubs: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Club',
-    },
-  ],
-  myPlayers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Player',
     },
   ],
   resetPasswordToken: String,
