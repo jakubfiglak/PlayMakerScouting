@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Club = require('../models/Club');
+const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 
 // @desc Create new club
@@ -140,5 +141,101 @@ exports.deleteClub = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Club with the id of ${id} successfully removed!`,
+  });
+});
+
+// @desc Add to favorites
+// @route POST /api/v1/clubs/:id/addtofavorites
+// @access Private
+exports.addToFavorites = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const club = await Club.findById(id);
+
+  if (!club) {
+    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
+  }
+
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+    );
+  }
+
+  if (user.myClubs.includes(id)) {
+    return next(
+      new ErrorResponse(
+        `Club with the id of ${id} is already in your favorites`
+      )
+    );
+  }
+
+  user.myClubs.push(id);
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Successfully added club with the id of ${id} to favorites`,
+  });
+});
+
+// @desc Remove from favorites
+// @route POST /api/v1/clubs/:id/removefromfavorites
+// @access Private
+exports.removeFromFavorites = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const club = await Club.findById(id);
+
+  if (!club) {
+    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
+  }
+
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+    );
+  }
+
+  if (!user.myClubs.includes(id)) {
+    return next(
+      new ErrorResponse(
+        `Club with the id of ${id} is already not in your favorites`
+      )
+    );
+  }
+
+  user.myClubs.pull(id);
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Successfully removed club with the id of ${id} from favorites`,
+  });
+});
+
+// @desc Get my clubs
+// @route GET /api/v1/clubs/:my
+// @access Private
+exports.getMyClubs = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+    );
+  }
+
+  const { myClubs } = user;
+
+  const clubs = await Club.find({ _id: { $in: myClubs } });
+
+  res.status(200).json({
+    success: true,
+    data: clubs,
   });
 });

@@ -4,6 +4,7 @@ const {
   getOrders,
   getOrder,
   acceptOrder,
+  closeOrder,
   deleteOrder,
   getMyOrders,
   getMyOrdersForPlayer,
@@ -22,6 +23,7 @@ router.get(
     advancedResults(Order, [
       { path: 'player', select: ['firstName', 'lastName'] },
       { path: 'scout', select: ['name', 'surname'] },
+      { path: 'reports', select: ['_id'] },
     ]),
   ],
   getOrders
@@ -30,6 +32,7 @@ router.get('/my', protect, getMyOrders);
 router.get('/:id', protect, getOrder);
 router.get('/my/:playerId', protect, getMyOrdersForPlayer);
 router.post('/:id/accept', protect, acceptOrder);
+router.post('/:id/close', [protect, authorize('admin')], closeOrder);
 router.delete('/:id', [protect, authorize('admin')], deleteOrder);
 
 module.exports = router;
