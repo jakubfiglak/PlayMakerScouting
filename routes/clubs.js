@@ -24,7 +24,7 @@ const router = express.Router();
 router.use('/:clubId/players', [protect, authorize('admin')], playersRouter);
 router.use('/:clubId/matches', protect, matchesRouter);
 
-router.post('/', [protect, authorize('admin')], createClub);
+router.post('/', [protect], createClub);
 router.get('/', [protect, advancedResults(Club)], getClubs);
 router.get('/list', protect, getClubsList);
 router.get('/my', protect, getMyClubs);

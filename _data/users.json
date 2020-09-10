@@ -1,8 +1,8 @@
 [
   {
     "_id": "5d7a514b5d2c12c7449be042",
-    "name": "Admin",
-    "surname": "Account",
+    "firstName": "Admin",
+    "lastName": "Account",
     "role": "admin",
     "email": "admin@gmail.com",
     "phone": "123456789",
@@ -21,8 +21,8 @@
   },
   {
     "_id": "5d7a514b5d2c12c7449be045",
-    "name": "John",
-    "surname": "Doe",
+    "firstName": "John",
+    "lastName": "Doe",
     "role": "scout",
     "email": "john@gmail.com",
     "phone": "123456789",
@@ -42,8 +42,8 @@
   },
   {
     "_id": "5d7a514b5d2c12c7449be046",
-    "name": "Kevin",
-    "surname": "Smith",
+    "firstName": "Kevin",
+    "lastName": "Smith",
     "role": "playmaker-scout",
     "email": "kevin@gmail.com",
     "phone": "123456789",
@@ -63,8 +63,8 @@
   },
   {
     "_id": "5c8a1d5b0190b214360dc031",
-    "name": "Mary",
-    "surname": "Williams",
+    "firstName": "Mary",
+    "lastName": "Williams",
     "role": "playmaker-scout",
     "email": "mary@gmail.com",
     "phone": "123456789",
