@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Order = require('../models/Order');
 const Player = require('../models/Player');
+const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 
 // @desc Create new order
@@ -29,7 +30,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 // @desc Get all orders
 // @route GET /api/v1/orders
 // @route GET /api/v1/players/:playerId/orders
-// @access Private
+// @access Private (admin and playmaker-scout only)
 exports.getOrders = asyncHandler(async (req, res) => {
   const { playerId } = req.params;
 
@@ -48,7 +49,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
 
 // @desc Get my orders
 // @route GET /api/v1/orders/my
-// @access Private
+// @access Private (admin and playmaker-scout only)
 exports.getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({
     scout: req.user._id,
@@ -74,7 +75,7 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
 
 // @desc Get my orders for a specific player
 // @route GET /api/v1/orders/my/:playerId
-// @access Private
+// @access Private (admin and playmaker-scout only)
 exports.getMyOrdersForPlayer = asyncHandler(async (req, res) => {
   const orders = await Order.find({
     scout: req.user._id,
@@ -90,7 +91,7 @@ exports.getMyOrdersForPlayer = asyncHandler(async (req, res) => {
 
 // @desc Get single order
 // @route GET /api/v1/orders/:id
-// @access Private
+// @access Private (admin and playmaker-scout only)
 exports.getOrder = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id).populate({
     path: 'player',
@@ -115,7 +116,7 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 
 // @desc Accept order
 // @route POST /api/v1/orders/:id/accept
-// @access Private
+// @access Private (admin and playmaker-scout only)
 exports.acceptOrder = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
@@ -143,9 +144,21 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // TODO:
-  // grant user with an access to a player when order is accepted
-  // push player ID to users myPlayers array
+  // Grant user with an access to a player when order is accepted
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      );
+    }
+
+    if (!user.myPlayers.includes(order.player)) {
+      user.myPlayers.push(order.player);
+      await user.save();
+    }
+  }
 
   order.status = 'accepted';
   order.scout = req.user._id;
