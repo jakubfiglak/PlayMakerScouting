@@ -21,7 +21,7 @@ const matchesRouter = require('./matches');
 
 const router = express.Router();
 
-router.use('/:clubId/players', protect, playersRouter);
+router.use('/:clubId/players', [protect, authorize('admin')], playersRouter);
 router.use('/:clubId/matches', protect, matchesRouter);
 
 router.post('/', [protect, authorize('admin')], createClub);

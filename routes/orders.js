@@ -20,6 +20,7 @@ router.get(
   '/',
   [
     protect,
+    authorize('admin', 'playmaker-scout'),
     advancedResults(Order, [
       { path: 'player', select: ['firstName', 'lastName'] },
       { path: 'scout', select: ['name', 'surname'] },
@@ -28,10 +29,22 @@ router.get(
   ],
   getOrders
 );
-router.get('/my', protect, getMyOrders);
-router.get('/:id', protect, getOrder);
-router.get('/my/:playerId', protect, getMyOrdersForPlayer);
-router.post('/:id/accept', protect, acceptOrder);
+router.get(
+  '/my',
+  [protect, authorize('admin', 'playmaker-scout')],
+  getMyOrders
+);
+router.get('/:id', [protect, authorize('admin', 'playmaker-scout')], getOrder);
+router.get(
+  '/my/:playerId',
+  [protect, authorize('admin', 'playmaker-scout')],
+  getMyOrdersForPlayer
+);
+router.post(
+  '/:id/accept',
+  [protect, authorize('admin', 'playmaker-scout')],
+  acceptOrder
+);
 router.post('/:id/close', [protect, authorize('admin')], closeOrder);
 router.delete('/:id', [protect, authorize('admin')], deleteOrder);
 

@@ -20,6 +20,20 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
 
   const player = await Player.create(req.body);
 
+  // If the user creating the player is not an admin, push the players ID to users myPlayers array
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      );
+    }
+
+    user.myPlayers.push(player._id);
+    await user.save();
+  }
+
   res.status(201).json({
     success: true,
     message: 'Successfully created new player!',
@@ -30,7 +44,7 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
 // @desc Get all players
 // @route GET /api/v1/players
 // @route GET /api/v1/clubs/:clubId/players
-// @access Private
+// @access Private (admin only)
 exports.getPlayers = asyncHandler(async (req, res) => {
   if (req.params.clubId) {
     const players = await Player.find({
@@ -109,7 +123,7 @@ exports.updatePlayer = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Delete player
-// @route DELETE /api/v1/clubs/:id
+// @route DELETE /api/v1/players/:id
 // @access Private (admin only)
 exports.deletePlayer = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -128,82 +142,8 @@ exports.deletePlayer = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc Add to favorites
-// @route POST /api/v1/players/:id/addtofavorites
-// @access Private
-exports.addToFavorites = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-
-  const player = await Player.findById(id);
-
-  if (!player) {
-    return next(new ErrorResponse(`Player not found with id of ${id}`, 404));
-  }
-
-  const user = await User.findById(req.user._id);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
-  }
-
-  if (user.myPlayers.includes(id)) {
-    return next(
-      new ErrorResponse(
-        `Club with the id of ${id} is already in your favorites`
-      )
-    );
-  }
-
-  user.myPlayers.push(id);
-  await user.save();
-
-  res.status(200).json({
-    success: true,
-    message: `Successfully added player with the id of ${id} to favorites`,
-  });
-});
-
-// @desc Remove from favorites
-// @route POST /api/v1/players/:id/removefromfavorites
-// @access Private
-exports.removeFromFavorites = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-
-  const player = await Player.findById(id);
-
-  if (!player) {
-    return next(new ErrorResponse(`Player not found with id of ${id}`, 404));
-  }
-
-  const user = await User.findById(req.user._id);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
-  }
-
-  if (!user.myPlayers.includes(id)) {
-    return next(
-      new ErrorResponse(
-        `Player with the id of ${id} is already not in your favorites`
-      )
-    );
-  }
-
-  user.myPlayers.pull(id);
-  await user.save();
-
-  res.status(200).json({
-    success: true,
-    message: `Successfully removed player with the id of ${id} from favorites`,
-  });
-});
-
-// @desc Get my players
-// @route GET /api/v1/players/:my
+// @desc Get my players (players that the user has access to)
+// @route GET /api/v1/players/my
 // @access Private
 exports.getMyPlayers = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user._id);
@@ -221,5 +161,44 @@ exports.getMyPlayers = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: players,
+  });
+});
+
+// @desc Grant user with an access to a specific player
+// @route POST /api/v1/players/grantaccess
+// @access Private (admin only)
+exports.grantAccess = asyncHandler(async (req, res, next) => {
+  const userId = req.body.user;
+  const playerId = req.body.player;
+
+  const user = await User.findById(userId);
+  const player = await Player.findById(playerId);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with the id of ${userId}`, 404)
+    );
+  }
+
+  if (!player) {
+    return next(
+      new ErrorResponse(`Player not found with the id of ${playerId}`, 404)
+    );
+  }
+
+  if (user.myPlayers.includes(playerId)) {
+    return next(
+      new ErrorResponse(
+        `User with the id of ${userId} already has access to the player with the id of ${playerId}`
+      )
+    );
+  }
+
+  user.myPlayers.push(playerId);
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Successfully granted the user with the id of ${userId} with the access to the player with the id of ${playerId}`,
   });
 });

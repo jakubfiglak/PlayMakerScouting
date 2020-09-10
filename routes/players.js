@@ -6,9 +6,8 @@ const {
   getPlayer,
   updatePlayer,
   deletePlayer,
-  addToFavorites,
-  removeFromFavorites,
   getMyPlayers,
+  grantAccess,
 } = require('../controllers/playersController');
 const { protect, authorize } = require('../middleware/auth');
 const advancedResults = require('../middleware/advancedResults');
@@ -29,16 +28,16 @@ router.get(
   '/',
   [
     protect,
+    authorize('admin'),
     advancedResults(Player, [{ path: 'club', select: 'name' }, 'reports']),
   ],
   getPlayers
 );
 router.get('/list', protect, getPlayersList);
 router.get('/my', protect, getMyPlayers);
+router.post('/grantaccess', [protect, authorize('admin')], grantAccess);
 router.get('/:id', protect, getPlayer);
 router.put('/:id', protect, updatePlayer);
 router.delete('/:id', [protect, authorize('admin')], deletePlayer);
-router.post('/:id/addtofavorites', protect, addToFavorites);
-router.post('/:id/removefromfavorites', protect, removeFromFavorites);
 
 module.exports = router;

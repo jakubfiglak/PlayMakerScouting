@@ -17,8 +17,7 @@
     "activeRadius": 100,
     "password": "Password123",
     "passwordConfirm": "Password123",
-    "myClubs": [],
-    "myPlayers": []
+    "myClubs": []
   },
   {
     "_id": "5d7a514b5d2c12c7449be045",
@@ -45,7 +44,7 @@
     "_id": "5d7a514b5d2c12c7449be046",
     "name": "Kevin",
     "surname": "Smith",
-    "role": "scout",
+    "role": "playmaker-scout",
     "email": "kevin@gmail.com",
     "phone": "123456789",
     "address": {
@@ -66,7 +65,7 @@
     "_id": "5c8a1d5b0190b214360dc031",
     "name": "Mary",
     "surname": "Williams",
-    "role": "scout",
+    "role": "playmaker-scout",
     "email": "mary@gmail.com",
     "phone": "123456789",
     "address": {
