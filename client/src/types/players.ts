@@ -11,6 +11,8 @@ type PlayerCommonTypes = {
   height: number;
   weight: number;
   footed: 'L' | 'R' | 'both';
+  lnpID?: string;
+  lnpProfileURL?: string;
 };
 
 export type Player = PlayerCommonTypes & {

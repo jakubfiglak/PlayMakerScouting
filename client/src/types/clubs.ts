@@ -1,4 +1,4 @@
-import { Location, Order } from './common';
+import { Location, Order, Address } from './common';
 
 export type Division =
   | ''
@@ -17,7 +17,10 @@ export type Club = {
   name: string;
   location: Location;
   division: Division;
+  address: Address;
 };
+
+// TODO: Adjust clubs form data to current format accepted by the API (address)
 
 export type ClubsFormData = {
   name: string;

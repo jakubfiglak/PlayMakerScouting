@@ -5,7 +5,7 @@ export type Order = {
     firstName: string;
     lastName: string;
   };
-  open: boolean;
+  status: 'open' | 'accepted' | 'closed';
   scout?: {
     _id: string;
     name: string;
@@ -13,6 +13,9 @@ export type Order = {
   };
   createdAt: string;
   acceptDate?: string;
+  closeDate?: string;
+  docNumber: string;
+  notes?: string;
 };
 
 export type OrderFormData = {

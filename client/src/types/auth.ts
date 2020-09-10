@@ -1,16 +1,18 @@
-import { Location } from './common';
+import { Location, Address } from './common';
 
 export type User = {
-  role: string;
   _id: string;
-  name: string;
-  surname: string;
+  role: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   activeRadius: number;
   createdAt: string;
   location: Location;
-  __v: number;
+  address: Address;
+  myClubs: string[];
+  myPlayers: string[];
 };
 
 export type State = {
@@ -48,9 +50,11 @@ export type LoginFormData = {
   password: string;
 };
 
+// TODO: Adjust register form data to current format accepted by the API (address)
+
 export type RegisterFormData = {
-  name: string;
-  surname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone?: string;
   address: string;
