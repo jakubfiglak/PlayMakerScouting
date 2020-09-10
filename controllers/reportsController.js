@@ -9,9 +9,6 @@ const ErrorResponse = require('../utils/errorResponse');
 // @route POST /api/v1/reports
 // @access Private
 exports.createReport = asyncHandler(async (req, res, next) => {
-  // TODO:
-  // - do not let user create a report connected to an order if the order status is 'open' or 'closed'
-
   req.body.scout = req.user._id;
 
   const playerId = req.body.player;
@@ -41,6 +38,22 @@ exports.createReport = asyncHandler(async (req, res, next) => {
   if (orderId && !order) {
     return next(
       new ErrorResponse(`No order found with the id of ${orderId}`, 404)
+    );
+  }
+
+  if (orderId && order.status === 'open') {
+    return next(
+      new ErrorResponse(
+        'You have to accept the order before creating a report attached to that order'
+      )
+    );
+  }
+
+  if (orderId && order.status === 'closed') {
+    return next(
+      new ErrorResponse(
+        'You cannot create a report attached to an order that has already been closed'
+      )
     );
   }
 
