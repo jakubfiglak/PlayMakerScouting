@@ -143,6 +143,10 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // TODO:
+  // grant user with an access to a player when order is accepted
+  // push player ID to users myPlayers array
+
   order.status = 'accepted';
   order.scout = req.user._id;
   order.acceptDate = Date.now();

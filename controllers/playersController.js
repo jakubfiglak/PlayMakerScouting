@@ -7,6 +7,7 @@ const ErrorResponse = require('../utils/errorResponse');
 // @desc Create new player
 // @route POST /api/v1/players
 // @access Private
+// TODO: add player to myPlayers when the player is created
 exports.createPlayer = asyncHandler(async (req, res, next) => {
   const clubId = req.body.club;
 
@@ -20,6 +21,20 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
 
   const player = await Player.create(req.body);
 
+  // If the user creating the player is not an admin, push the players ID to users myPlayers array
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      );
+    }
+
+    user.myClubs.push(player._id);
+    await user.save();
+  }
+
   res.status(201).json({
     success: true,
     message: 'Successfully created new player!',
@@ -30,7 +45,7 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
 // @desc Get all players
 // @route GET /api/v1/players
 // @route GET /api/v1/clubs/:clubId/players
-// @access Private
+// @access Private (admin only)
 exports.getPlayers = asyncHandler(async (req, res) => {
   if (req.params.clubId) {
     const players = await Player.find({
@@ -131,6 +146,7 @@ exports.deletePlayer = asyncHandler(async (req, res, next) => {
 // @desc Get my players (players that the user has access to - his ID is in privilegedUsers array)
 // @route GET /api/v1/players/my
 // @access Private
+// TODO: refactor this route
 exports.getMyPlayers = asyncHandler(async (req, res, next) => {
   const { _id } = req.user;
 

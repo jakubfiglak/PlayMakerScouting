@@ -6,8 +6,6 @@ const {
   getPlayer,
   updatePlayer,
   deletePlayer,
-  addToFavorites,
-  removeFromFavorites,
   getMyPlayers,
 } = require('../controllers/playersController');
 const { protect, authorize } = require('../middleware/auth');
@@ -29,6 +27,7 @@ router.get(
   '/',
   [
     protect,
+    authorize('admin'),
     advancedResults(Player, [{ path: 'club', select: 'name' }, 'reports']),
   ],
   getPlayers

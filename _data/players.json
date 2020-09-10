@@ -10,8 +10,7 @@
     "weight": "70",
     "footed": "R",
     "lnpID": "859871",
-    "lnpProfileURL": "https://www.laczynaspilka.pl/zawodnik/michal-boldyn,859871.html",
-    "privilegedUsers": ["5c8a1d5b0190b214360dc031"]
+    "lnpProfileURL": "https://www.laczynaspilka.pl/zawodnik/michal-boldyn,859871.html"
   },
   {
     "_id": "5ee50d93e1a9105fcf95cb5f",
@@ -55,8 +54,7 @@
     "dateOfBirth": "2000-02-04",
     "height": "178",
     "weight": "70",
-    "footed": "R",
-    "privilegedUsers": ["5c8a1d5b0190b214360dc031"]
+    "footed": "R"
   },
   {
     "_id": "5ee50e5550a453bb0174b9b6",
@@ -89,8 +87,7 @@
     "dateOfBirth": "2000-02-04",
     "height": "178",
     "weight": "70",
-    "footed": "R",
-    "privilegedUsers": ["5c8a1d5b0190b214360dc031", "5d7a514b5d2c12c7449be046"]
+    "footed": "R"
   },
   {
     "_id": "5ee50ecf582d94b0a140c5c5",
@@ -112,8 +109,7 @@
     "dateOfBirth": "2000-02-04",
     "height": "178",
     "weight": "70",
-    "footed": "R",
-    "privilegedUsers": ["5c8a1d5b0190b214360dc031", "5d7a514b5d2c12c7449be046"]
+    "footed": "R"
   },
   {
     "_id": "5ee50f199f46ce1701ac838f",
