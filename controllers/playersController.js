@@ -7,7 +7,6 @@ const ErrorResponse = require('../utils/errorResponse');
 // @desc Create new player
 // @route POST /api/v1/players
 // @access Private
-// TODO: add player to myPlayers when the player is created
 exports.createPlayer = asyncHandler(async (req, res, next) => {
   const clubId = req.body.club;
 
@@ -31,7 +30,7 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
       );
     }
 
-    user.myClubs.push(player._id);
+    user.myPlayers.push(player._id);
     await user.save();
   }
 
@@ -124,7 +123,7 @@ exports.updatePlayer = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Delete player
-// @route DELETE /api/v1/clubs/:id
+// @route DELETE /api/v1/players/:id
 // @access Private (admin only)
 exports.deletePlayer = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -143,14 +142,11 @@ exports.deletePlayer = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc Get my players (players that the user has access to - his ID is in privilegedUsers array)
+// @desc Get my players (players that the user has access to)
 // @route GET /api/v1/players/my
 // @access Private
-// TODO: refactor this route
 exports.getMyPlayers = asyncHandler(async (req, res, next) => {
-  const { _id } = req.user;
-
-  const user = await User.findById(_id);
+  const user = await User.findById(req.user._id);
 
   if (!user) {
     return next(
@@ -158,13 +154,51 @@ exports.getMyPlayers = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const players = await Player.find(
-    { privilegedUsers: _id },
-    { privilegedUsers: 0 }
-  );
+  const { myPlayers } = user;
+
+  const players = await Player.find({ _id: { $in: myPlayers } });
 
   res.status(200).json({
     success: true,
     data: players,
+  });
+});
+
+// @desc Grant user with an access to a specific player
+// @route POST /api/v1/players/grantaccess
+// @access Private (admin only)
+exports.grantAccess = asyncHandler(async (req, res, next) => {
+  const userId = req.body.user;
+  const playerId = req.body.player;
+
+  const user = await User.findById(userId);
+  const player = await Player.findById(playerId);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with the id of ${userId}`, 404)
+    );
+  }
+
+  if (!player) {
+    return next(
+      new ErrorResponse(`Player not found with the id of ${playerId}`, 404)
+    );
+  }
+
+  if (user.myPlayers.includes(playerId)) {
+    return next(
+      new ErrorResponse(
+        `User with the id of ${userId} already has access to the player with the id of ${playerId}`
+      )
+    );
+  }
+
+  user.myPlayers.push(playerId);
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Successfully granted the user with the id of ${userId} with the access to the player with the id of ${playerId}`,
   });
 });
