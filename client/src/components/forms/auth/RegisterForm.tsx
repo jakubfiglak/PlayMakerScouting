@@ -3,16 +3,21 @@ import { Link, useHistory } from 'react-router-dom';
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 
 import { useStyles } from './styles';
-import { useForm } from '../../hooks';
-import { useAuthState } from '../../context';
-import { RegisterFormData } from '../../types/auth';
+import { useForm } from '../../../hooks';
+import { useAuthState } from '../../../context';
+import { RegisterFormData } from '../../../types/auth';
 
 const initialState: RegisterFormData = {
   firstName: '',
   lastName: '',
   email: '',
   phone: '',
-  address: '',
+  street: '',
+  streetNo: '',
+  zipCode: '',
+  city: '',
+  voivodeship: '',
+  country: '',
   activeRadius: 0,
   password: '',
   passwordConfirm: '',
@@ -35,7 +40,8 @@ export const RegisterForm = () => {
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    register(registerData);
+    console.log(registerData);
+    // register(registerData);
   };
 
   return (

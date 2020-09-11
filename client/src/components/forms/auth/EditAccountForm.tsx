@@ -1,9 +1,9 @@
 import React, { SyntheticEvent } from 'react';
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 import { useStyles } from './styles';
-import { useForm } from '../../hooks';
-import { useAuthState } from '../../context';
-import { EditAccountData } from '../../types/auth';
+import { useForm } from '../../../hooks';
+import { useAuthState } from '../../../context';
+import { EditAccountData } from '../../../types/auth';
 
 export const EditAccountForm = () => {
   const classes = useStyles();

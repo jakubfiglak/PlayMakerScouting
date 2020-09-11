@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthTemplate from '../templates/AuthTemplate/AuthTemplate';
-import { LoginForm } from '../auth';
+import { LoginForm } from '../forms';
 
 export const Login = () => {
   return (

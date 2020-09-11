@@ -3,6 +3,7 @@ import { ChangeEvent } from 'react';
 export type Order = 'asc' | 'desc';
 
 export type Voivodeship =
+  | ''
   | 'Zachodniopomorskie'
   | 'Lubuskie'
   | 'Dolnośląskie'

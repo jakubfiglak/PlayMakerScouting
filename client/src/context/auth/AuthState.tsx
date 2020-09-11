@@ -5,7 +5,7 @@ import authReducer from './authReducer';
 import {
   State,
   LoginFormData,
-  RegisterFormData,
+  FormattedRegisterFormData,
   EditAccountData,
   UpdatePasswordData,
 } from '../../types/auth';
@@ -56,7 +56,7 @@ export const AuthState: React.FC = ({ children }) => {
   };
 
   // Register user
-  const register = async (formData: RegisterFormData) => {
+  const register = async (formData: FormattedRegisterFormData) => {
     setLoading();
 
     try {

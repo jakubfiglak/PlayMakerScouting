@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, CardContent, Avatar } from '@material-ui/core';
-import { EditAccountForm } from '../auth/EditAccountForm';
+import { EditAccountForm } from '../forms/auth/EditAccountForm';
 import { useStyles } from './styles';
 import { User } from '../../types/auth';
 

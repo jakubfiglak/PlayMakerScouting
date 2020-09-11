@@ -1,8 +1,10 @@
-import { Location, Address } from './common';
+import { Location, Address, Voivodeship } from './common';
+
+type UserRole = 'admin' | 'playmaker-scout' | 'scout';
 
 export type User = {
   _id: string;
-  role: string;
+  role: UserRole;
   firstName: string;
   lastName: string;
   email: string;
@@ -15,6 +17,46 @@ export type User = {
   myPlayers: string[];
 };
 
+export type LoginFormData = {
+  email: string;
+  password: string;
+};
+
+type CommonFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  activeRadius: number;
+  password: string;
+  passwordConfirm: string;
+};
+
+export type RegisterFormData = {
+  street: string;
+  streetNo: string;
+  zipCode: string;
+  city: string;
+  voivodeship?: Voivodeship;
+  country: string;
+} & CommonFormData;
+
+export type FormattedRegisterFormData = {
+  address: Address;
+} & CommonFormData;
+
+export type EditAccountData = {
+  phone: string | undefined;
+  address: string | undefined;
+  activeRadius: number | undefined;
+};
+
+export type UpdatePasswordData = {
+  oldPassword: string;
+  newPassword: string;
+  newPasswordConfirm: string;
+};
+
 export type State = {
   user: User | null;
   token: string | null;
@@ -24,7 +66,7 @@ export type State = {
   setLoading: () => void;
   loadUser: () => void;
   login: (formData: LoginFormData) => void;
-  register: (formData: RegisterFormData) => void;
+  register: (formData: FormattedRegisterFormData) => void;
   logout: () => void;
   editDetails: (formData: EditAccountData) => void;
   updatePassword: (formData: UpdatePasswordData) => void;
@@ -44,33 +86,3 @@ export type Action =
   | { type: 'EDIT_FAIL'; payload: string }
   | { type: 'UPDATE_PASSWORD_SUCCESS'; payload: string }
   | { type: 'UPDATE_PASSWORD_FAIL'; payload: string };
-
-export type LoginFormData = {
-  email: string;
-  password: string;
-};
-
-// TODO: Adjust register form data to current format accepted by the API (address)
-
-export type RegisterFormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  address: string;
-  activeRadius: number;
-  password: string;
-  passwordConfirm: string;
-};
-
-export type EditAccountData = {
-  phone: string | undefined;
-  address: string | undefined;
-  activeRadius: number | undefined;
-};
-
-export type UpdatePasswordData = {
-  oldPassword: string;
-  newPassword: string;
-  newPasswordConfirm: string;
-};
