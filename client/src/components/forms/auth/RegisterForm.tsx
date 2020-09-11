@@ -1,11 +1,16 @@
 import React, { useEffect, SyntheticEvent } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+// MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
-
-import { useStyles } from './styles';
+// Custom components
+import { AddressFieldset } from '../fieldsets';
+// Hooks
 import { useForm } from '../../../hooks';
 import { useAuthState } from '../../../context';
+// Types
 import { RegisterFormData } from '../../../types/auth';
+// Styles
+import { useStyles } from './styles';
 
 const initialState: RegisterFormData = {
   firstName: '',
@@ -38,10 +43,44 @@ export const RegisterForm = () => {
 
   const [registerData, onInputChange] = useForm(initialState);
 
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    street,
+    streetNo,
+    zipCode,
+    city,
+    voivodeship,
+    country,
+    activeRadius,
+    password,
+    passwordConfirm,
+  } = registerData;
+
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log(registerData);
-    // register(registerData);
+
+    const formattedRegisterData = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      address: {
+        street,
+        streetNo,
+        zipCode,
+        city,
+        voivodeship,
+        country,
+      },
+      activeRadius,
+      password,
+      passwordConfirm,
+    };
+
+    register(formattedRegisterData);
   };
 
   return (
@@ -57,6 +96,7 @@ export const RegisterForm = () => {
             id="firstName"
             label="Imię"
             autoFocus
+            value={firstName}
             onChange={onInputChange}
           />
         </Grid>
@@ -69,6 +109,7 @@ export const RegisterForm = () => {
             label="Nazwisko"
             name="lastName"
             autoComplete="lname"
+            value={lastName}
             onChange={onInputChange}
           />
         </Grid>
@@ -82,6 +123,7 @@ export const RegisterForm = () => {
             name="email"
             autoComplete="email"
             type="email"
+            value={email}
             onChange={onInputChange}
           />
         </Grid>
@@ -95,23 +137,19 @@ export const RegisterForm = () => {
             autoComplete="phone"
             type="tel"
             helperText="np. 123456789 (bez myślników)"
+            value={phone}
             onChange={onInputChange}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            id="address"
-            label="Adres"
-            name="address"
-            autoComplete="address"
-            type="text"
-            helperText="np. ul. Cicha 132/16 62-200 Gniezno"
-            onChange={onInputChange}
-          />
-        </Grid>
+        <AddressFieldset
+          streetValue={street}
+          streetNoValue={streetNo}
+          zipCodeValue={zipCode}
+          cityValue={city}
+          voivodeshipValue={voivodeship}
+          countryValue={country}
+          onChange={onInputChange}
+        />
         <Grid item xs={12}>
           <TextField
             variant="outlined"
@@ -125,6 +163,7 @@ export const RegisterForm = () => {
               min: 0,
             }}
             helperText="Podaj maksymalną odległość w km, jaką możesz pokonać w celu obserwacji zawodnika"
+            value={activeRadius}
             onChange={onInputChange}
           />
         </Grid>
@@ -137,6 +176,7 @@ export const RegisterForm = () => {
             label="Hasło"
             type="password"
             id="password"
+            value={password}
             onChange={onInputChange}
           />
         </Grid>
@@ -149,6 +189,7 @@ export const RegisterForm = () => {
             label="Potwierdź hasło"
             type="password"
             id="passwordConfirm"
+            value={passwordConfirm}
             onChange={onInputChange}
           />
         </Grid>

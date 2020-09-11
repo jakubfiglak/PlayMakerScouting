@@ -37,7 +37,7 @@ export type RegisterFormData = {
   streetNo: string;
   zipCode: string;
   city: string;
-  voivodeship?: Voivodeship;
+  voivodeship: Voivodeship;
   country: string;
 } & CommonFormData;
 

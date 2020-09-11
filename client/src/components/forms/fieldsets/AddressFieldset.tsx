@@ -27,7 +27,7 @@ export const AddressFieldset = ({
 }: AddressFieldsetProps) => {
   return (
     <>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={8}>
         <TextField
           variant="outlined"
           required
@@ -39,7 +39,7 @@ export const AddressFieldset = ({
           onChange={onChange}
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={4}>
         <TextField
           variant="outlined"
           required
@@ -51,7 +51,7 @@ export const AddressFieldset = ({
           onChange={onChange}
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={5}>
         <TextField
           variant="outlined"
           required
@@ -63,7 +63,7 @@ export const AddressFieldset = ({
           onChange={onChange}
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={7}>
         <TextField
           variant="outlined"
           required
