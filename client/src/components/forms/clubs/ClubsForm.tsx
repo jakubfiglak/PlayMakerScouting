@@ -17,7 +17,7 @@ export const ClubsForm = () => {
 
   const initialState: ClubsFormData = {
     name: current?.name || '',
-    address: current?.location.formattedAddress || '',
+    address: current?.address.city || '',
     division: current?.division || '',
   };
   const [clubData, onInputChange, setClubData] = useForm(initialState);

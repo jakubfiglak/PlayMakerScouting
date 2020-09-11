@@ -8,8 +8,8 @@ import { useAuthState } from '../../context';
 import { RegisterFormData } from '../../types/auth';
 
 const initialState: RegisterFormData = {
-  name: '',
-  surname: '',
+  firstName: '',
+  lastName: '',
   email: '',
   phone: '',
   address: '',
@@ -44,11 +44,11 @@ export const RegisterForm = () => {
         <Grid item xs={12} sm={6}>
           <TextField
             autoComplete="fname"
-            name="name"
+            name="firstName"
             variant="outlined"
             required
             fullWidth
-            id="name"
+            id="firstName"
             label="Imię"
             autoFocus
             onChange={onInputChange}
@@ -59,9 +59,9 @@ export const RegisterForm = () => {
             variant="outlined"
             required
             fullWidth
-            id="surname"
+            id="lastName"
             label="Nazwisko"
-            name="surname"
+            name="lastName"
             autoComplete="lname"
             onChange={onInputChange}
           />

@@ -51,7 +51,7 @@ export const OrderCard = ({
     handleCloseDelete,
   ] = useModal();
 
-  const { _id, player, open, scout, createdAt, acceptDate } = order;
+  const { _id, player, status, scout, createdAt, acceptDate } = order;
 
   return (
     <Card>
@@ -105,7 +105,7 @@ export const OrderCard = ({
             <IconButton
               aria-label="edit match"
               className={classes.accept}
-              disabled={!open}
+              disabled={status !== 'open'}
               onClick={() => acceptOrder(_id, filters)}
             >
               <AssignmentTurnedInIcon />

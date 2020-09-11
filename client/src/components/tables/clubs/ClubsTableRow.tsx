@@ -11,8 +11,6 @@ import { Club } from '../../../types/clubs';
 // Hooks
 import { useAuthState } from '../../../context';
 import { useModal } from '../../../hooks';
-// Utils & data
-import { replaceVoivodeshipName } from '../../../utils';
 // Styles
 import { useStyles } from '../styles';
 
@@ -31,9 +29,12 @@ export const ClubsTableRow = ({
   const [isModalOpen, handleClickOpen, handleClose] = useModal();
 
   const authContext = useAuthState();
-  const { _id, name, division, location } = club;
-
-  const { voivodeship } = location;
+  const {
+    _id,
+    name,
+    division,
+    address: { voivodeship },
+  } = club;
 
   const { loading, user } = authContext;
 
@@ -72,9 +73,7 @@ export const ClubsTableRow = ({
       </StyledTableCell>
       <StyledTableCell>{name}</StyledTableCell>
       <StyledTableCell>{division}</StyledTableCell>
-      <StyledTableCell>
-        {replaceVoivodeshipName(voivodeship, 'label')}
-      </StyledTableCell>
+      <StyledTableCell>{voivodeship}</StyledTableCell>
     </StyledTableRow>
   );
 };

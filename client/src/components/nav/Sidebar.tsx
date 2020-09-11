@@ -33,7 +33,7 @@ const Sidebar: React.FC = () => {
         {user && (
           <Typography>
             Hello
-            {user.name}
+            {user.firstName}
           </Typography>
         )}
       </div>

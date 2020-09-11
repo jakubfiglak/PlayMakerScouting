@@ -13,7 +13,7 @@ export const EditAccountForm = () => {
 
   const initialState: EditAccountData = {
     phone: user?.phone,
-    address: user?.location.formattedAddress,
+    address: user?.address.city,
     activeRadius: user?.activeRadius,
   };
 

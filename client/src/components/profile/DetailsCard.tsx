@@ -12,17 +12,17 @@ export const DetailsCard = ({ user }: DetailsCardProps) => {
   const classes = useStyles();
 
   if (user) {
-    const { name, surname, email, role } = user;
+    const { firstName, lastName, email, role } = user;
 
     return (
       <Card>
         <CardHeader
           avatar={
             <Avatar className={classes.avatar}>
-              {`${name[0]}${surname[0]}`}
+              {`${firstName[0]}${lastName[0]}`}
             </Avatar>
           }
-          title={`${name} ${surname} (${role})`}
+          title={`${firstName} ${lastName} (${role})`}
           subheader={`${email}`}
         />
         <CardContent>
