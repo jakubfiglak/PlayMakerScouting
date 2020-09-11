@@ -6,7 +6,7 @@ import {
   State,
   LoginFormData,
   FormattedRegisterFormData,
-  EditAccountData,
+  FormattedEditAccountData,
   UpdatePasswordData,
 } from '../../types/auth';
 
@@ -126,7 +126,7 @@ export const AuthState: React.FC = ({ children }) => {
   };
 
   // Edit details
-  const editDetails = async (formData: EditAccountData) => {
+  const editDetails = async (formData: FormattedEditAccountData) => {
     setLoading();
 
     try {
