@@ -8,11 +8,16 @@ import { TabPanel, Loader } from '../common';
 // Types
 import { PlayersFilterData, Player } from '../../types/players';
 // Hooks
-import { usePlayersState, useSimplifiedDataState } from '../../context';
+import {
+  usePlayersState,
+  useSimplifiedDataState,
+  useAuthState,
+} from '../../context';
 import { useTabs } from '../../hooks';
 
 export const PlayersContent = () => {
   const playersContext = usePlayersState();
+  const authContext = useAuthState();
   const simplifiedDataContext = useSimplifiedDataState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
@@ -23,6 +28,8 @@ export const PlayersContent = () => {
     deletePlayer,
     setCurrent,
   } = playersContext;
+
+  const { user } = authContext;
 
   const {
     loading: simpleDataLoading,
@@ -46,6 +53,8 @@ export const PlayersContent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const isAdmin = user?.role === 'admin';
+
   return (
     <>
       {(loading || simpleDataLoading) && <Loader />}
@@ -60,14 +69,20 @@ export const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
-        <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
-        <PlayersTable
-          getPlayers={getPlayers}
-          playersData={playersData}
-          filters={filters}
-          deletePlayer={deletePlayer}
-          handleSetCurrent={handleSetCurrent}
-        />
+        {isAdmin ? (
+          <>
+            <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
+            <PlayersTable
+              getPlayers={getPlayers}
+              playersData={playersData}
+              filters={filters}
+              deletePlayer={deletePlayer}
+              handleSetCurrent={handleSetCurrent}
+            />
+          </>
+        ) : (
+          <p>Nie jesteś adminem człowieku</p>
+        )}
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PlayersForm clubsData={clubsData} />

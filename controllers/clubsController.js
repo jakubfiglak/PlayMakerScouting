@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Club = require('../models/Club');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
+const clearQuery = require('../utils/clearQuery');
 
 // @desc Create new club
 // @route POST /api/v1/clubs
@@ -232,7 +233,20 @@ exports.getMyClubs = asyncHandler(async (req, res, next) => {
 
   const { myClubs } = user;
 
-  const clubs = await Club.find({ _id: { $in: myClubs } });
+  const reqQuery = clearQuery(req.query);
+
+  const query = {
+    _id: { $in: myClubs },
+    ...reqQuery,
+  };
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+  };
+
+  const clubs = await Club.paginate(query, options);
 
   res.status(200).json({
     success: true,

@@ -1,11 +1,7 @@
-const sanitize = require('mongo-sanitize');
+const clearQuery = require('../utils/clearQuery');
 
 const advancedResults = (model, populate) => async (req, res, next) => {
-  const reqQuery = sanitize({ ...req.query });
-
-  const removeFields = ['select', 'sort', 'page', 'limit'];
-
-  removeFields.forEach((field) => delete reqQuery[field]);
+  const reqQuery = clearQuery(req.query);
 
   // Create query string with mongoDB operators ($gt, $gte, etc.)
   const queryStr = JSON.stringify(reqQuery).replace(

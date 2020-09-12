@@ -3,6 +3,7 @@ const Player = require('../models/Player');
 const Club = require('../models/Club');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
+const clearQuery = require('../utils/clearQuery');
 
 // @desc Create new player
 // @route POST /api/v1/players
@@ -156,7 +157,20 @@ exports.getMyPlayers = asyncHandler(async (req, res, next) => {
 
   const { myPlayers } = user;
 
-  const players = await Player.find({ _id: { $in: myPlayers } });
+  const reqQuery = clearQuery(req.query);
+
+  const query = {
+    _id: { $in: myPlayers },
+    ...reqQuery,
+  };
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+  };
+
+  const players = await Player.paginate(query, options);
 
   res.status(200).json({
     success: true,
