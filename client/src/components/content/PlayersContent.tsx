@@ -13,17 +13,29 @@ import {
   useSimplifiedDataState,
   useAuthState,
 } from '../../context';
-import { useTabs } from '../../hooks';
+import { useTabs, useTable } from '../../hooks';
 
 export const PlayersContent = () => {
   const playersContext = usePlayersState();
-  const authContext = useAuthState();
   const simplifiedDataContext = useSimplifiedDataState();
+  const authContext = useAuthState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
+  const [
+    page,
+    rowsPerPage,
+    sortBy,
+    order,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleSort,
+  ] = useTable();
 
-  const { loading, getPlayers, playersData, setCurrent } = playersContext;
-
-  const { user } = authContext;
+  const {
+    loading,
+    getPlayers,
+    playersData: { docs, totalDocs },
+    setCurrent,
+  } = playersContext;
 
   const {
     loading: simpleDataLoading,
@@ -31,8 +43,10 @@ export const PlayersContent = () => {
     clubsData,
   } = simplifiedDataContext;
 
+  const { user } = authContext;
+
   const [filters, setFilters] = useState<PlayersFilterData>({
-    name: '',
+    lastName: '',
     club: '',
     position: '',
   });
@@ -42,12 +56,13 @@ export const PlayersContent = () => {
     setActiveTab(1);
   };
 
+  const isAdmin = user?.role === 'admin';
+
   useEffect(() => {
     getClubs();
+    getPlayers(page + 1, rowsPerPage, sortBy, order, filters, !isAdmin);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const isAdmin = user?.role === 'admin';
+  }, [activeTab, page, rowsPerPage, sortBy, order, filters]);
 
   return (
     <>
@@ -63,18 +78,24 @@ export const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
-        {isAdmin ? (
+        {totalDocs ? (
           <>
             <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
             <PlayersTable
-              getPlayers={getPlayers}
-              playersData={playersData}
-              filters={filters}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              sortBy={sortBy}
+              order={order}
+              handleChangePage={handleChangePage}
+              handleChangeRowsPerPage={handleChangeRowsPerPage}
+              handleSort={handleSort}
+              players={docs}
+              total={totalDocs}
               handleSetCurrent={handleSetCurrent}
             />
           </>
         ) : (
-          <p>Nie jesteś adminem człowieku</p>
+          <p>Nie masz jeszcze żadnych zawodników w swojej bazie </p>
         )}
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // MUI components
 import {
   Table,
@@ -13,47 +13,32 @@ import {
 import { TablePaginationActions, TableHeader } from '../../common';
 import { PlayersTableRow } from './PlayersTableRow';
 // Types
-import {
-  PlayersData,
-  GetPlayers,
-  PlayersFilterData,
-  Player,
-} from '../../../types/players';
-// Hooks
-import { useTable } from '../../../hooks';
+import { Player } from '../../../types/players';
 // Utils & data
 import { playersHeadCells } from '../data';
+// Types
+import { CommonTableProps } from '../../../types/common';
 // Styles
 import { useStyles } from '../styles';
 
 type TableProps = {
-  getPlayers: GetPlayers;
-  playersData: PlayersData;
-  filters: PlayersFilterData;
+  players: Player[];
   handleSetCurrent: (player: Player) => void;
-};
+} & CommonTableProps;
 
 export const PlayersTable = ({
-  getPlayers,
-  playersData,
-  filters,
+  page,
+  rowsPerPage,
+  sortBy,
+  order,
+  handleChangePage,
+  handleChangeRowsPerPage,
+  handleSort,
+  players,
+  total,
   handleSetCurrent,
 }: TableProps) => {
   const classes = useStyles();
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
-    handleChangePage,
-    handleChangeRowsPerPage,
-    handleSort,
-  ] = useTable();
-
-  useEffect(() => {
-    getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
 
   return (
     <TableContainer component={Paper} className={classes.paper}>
@@ -65,7 +50,7 @@ export const PlayersTable = ({
           handleSort={handleSort}
         />
         <TableBody>
-          {playersData.docs.map((player) => {
+          {players.map((player) => {
             const { _id } = player;
 
             return (
@@ -82,7 +67,7 @@ export const PlayersTable = ({
             <TablePagination
               rowsPerPageOptions={[5, 10, 20]}
               colSpan={8}
-              count={playersData.totalDocs}
+              count={total}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

@@ -47,6 +47,22 @@ export type Address = {
   country: string;
 };
 
+export type CommonTableProps = {
+  page: number;
+  rowsPerPage: number;
+  sortBy: string;
+  order: Order;
+  handleChangePage: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    newPage: number,
+  ) => void;
+  handleChangeRowsPerPage: (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
+  handleSort: (id: string) => void;
+  total: number;
+};
+
 export type OnChangeFn = (
   e: ChangeEvent<
     | HTMLInputElement

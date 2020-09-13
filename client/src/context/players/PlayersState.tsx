@@ -9,21 +9,11 @@ import {
   Player,
 } from '../../types/players';
 import { Order } from '../../types/common';
+import { initialPaginatedData } from '../../data';
 
 export const PlayersState: React.FC = ({ children }) => {
   const initialState: State = {
-    playersData: {
-      docs: [],
-      totalDocs: 0,
-      limit: 0,
-      totalPages: 0,
-      page: 1,
-      pagingCounter: 1,
-      hasPrevPage: false,
-      hasNextPage: false,
-      prevPage: null,
-      nextPage: null,
-    },
+    playersData: initialPaginatedData,
     playerData: null,
     current: null,
     playerMatches: [],
@@ -55,12 +45,15 @@ export const PlayersState: React.FC = ({ children }) => {
     sort = '_id',
     order: Order,
     filters: PlayersFilterData,
+    my?: boolean,
   ) => {
     setLoading();
     const orderSign = order === 'desc' ? '-' : '';
 
     // Generate query url
-    let playersURI = `/api/v1/players?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+    let playersURI = `/api/v1/players${
+      my ? '/my' : ''
+    }?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
 
     // Add filters to query url
     Object.entries(filters).forEach(([key, value]) => {

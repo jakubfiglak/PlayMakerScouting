@@ -12,3 +12,4 @@ export {
   reportFormInitialState,
 } from './reportFormInitialState';
 export { footLabels, positionLabels, competitionLabels } from './labels';
+export { initialPaginatedData } from './initialPaginatedData';
