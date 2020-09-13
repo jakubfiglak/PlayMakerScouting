@@ -41,46 +41,48 @@ export const PlayersTable = ({
   const classes = useStyles();
 
   return (
-    <TableContainer component={Paper} className={classes.paper}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHeader
-          headCells={playersHeadCells}
-          sortBy={sortBy}
-          order={order}
-          handleSort={handleSort}
-        />
-        <TableBody>
-          {players.map((player) => {
-            const { _id } = player;
+    <>
+      <TableContainer component={Paper} className={classes.paper}>
+        <Table className={classes.table} aria-label="customized table">
+          <TableHeader
+            headCells={playersHeadCells}
+            sortBy={sortBy}
+            order={order}
+            handleSort={handleSort}
+          />
+          <TableBody>
+            {players.map((player) => {
+              const { _id } = player;
 
-            return (
-              <PlayersTableRow
-                key={_id}
-                player={player}
-                handleSetCurrent={handleSetCurrent}
+              return (
+                <PlayersTableRow
+                  key={_id}
+                  player={player}
+                  handleSetCurrent={handleSetCurrent}
+                />
+              );
+            })}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 20]}
+                colSpan={8}
+                count={total}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: { 'aria-label': 'rows per page' },
+                  native: true,
+                }}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
               />
-            );
-          })}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 20]}
-              colSpan={8}
-              count={total}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: { 'aria-label': 'rows per page' },
-                native: true,
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+    </>
   );
 };

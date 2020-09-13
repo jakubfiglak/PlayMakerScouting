@@ -8,12 +8,18 @@ import { TabPanel, Loader } from '../common';
 // Types
 import { PlayersFilterData, Player } from '../../types/players';
 // Hooks
-import { usePlayersState, useSimplifiedDataState } from '../../context';
+import {
+  usePlayersState,
+  useSimplifiedDataState,
+  useAuthState,
+} from '../../context';
 import { useTabs, useTable } from '../../hooks';
 
 export const PlayersContent = () => {
   const playersContext = usePlayersState();
   const simplifiedDataContext = useSimplifiedDataState();
+  const authContext = useAuthState();
+
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
     page,
@@ -35,8 +41,12 @@ export const PlayersContent = () => {
   const {
     loading: simpleDataLoading,
     getClubs,
+    getMyClubs,
     clubsData,
+    myClubsData,
   } = simplifiedDataContext;
+
+  const { user } = authContext;
 
   const [filters, setFilters] = useState<PlayersFilterData>({
     lastName: '',
@@ -50,7 +60,11 @@ export const PlayersContent = () => {
   };
 
   useEffect(() => {
-    getClubs();
+    if (user?.role !== 'admin') {
+      getMyClubs();
+    } else {
+      getClubs();
+    }
     getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, page, rowsPerPage, sortBy, order, filters]);
@@ -69,29 +83,22 @@ export const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
-        {!!totalDocs && (
-          <>
-            <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
-            <PlayersTable
-              page={page}
-              rowsPerPage={rowsPerPage}
-              sortBy={sortBy}
-              order={order}
-              handleChangePage={handleChangePage}
-              handleChangeRowsPerPage={handleChangeRowsPerPage}
-              handleSort={handleSort}
-              players={docs}
-              total={totalDocs}
-              handleSetCurrent={handleSetCurrent}
-            />
-          </>
-        )}
-        {!totalDocs && !(loading || simpleDataLoading) && (
-          <p>
-            Nie masz jeszcze żadnych zawodników w swojej bazie. Dodaj zawodnika
-            lub przyjmij zlecenie.
-          </p>
-        )}
+        <PlayersFilterForm
+          clubsData={user?.role === 'admin' ? clubsData : myClubsData}
+          setFilters={setFilters}
+        />
+        <PlayersTable
+          page={page}
+          rowsPerPage={rowsPerPage}
+          sortBy={sortBy}
+          order={order}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          handleSort={handleSort}
+          players={docs}
+          total={totalDocs}
+          handleSetCurrent={handleSetCurrent}
+        />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PlayersForm clubsData={clubsData} />
