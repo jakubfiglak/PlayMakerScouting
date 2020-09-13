@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -82,6 +83,8 @@ const UserSchema = new Schema({
     default: Date.now,
   },
 });
+
+UserSchema.plugin(mongoosePaginate);
 
 // Encrypt the password before each model save
 UserSchema.pre('save', async function (next) {

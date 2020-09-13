@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const calculateReportAvg = require('../middleware/calculateReportAvg');
 
 const { Schema, model } = mongoose;
@@ -101,6 +102,8 @@ const ReportSchema = new Schema({
     type: String,
   },
 });
+
+ReportSchema.plugin(mongoosePaginate);
 
 ReportSchema.pre('save', async function (next) {
   const count = await model('Report', ReportSchema).countDocuments();

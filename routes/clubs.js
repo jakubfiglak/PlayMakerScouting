@@ -13,8 +13,6 @@ const {
   getMyClubs,
 } = require('../controllers/clubsController');
 const { protect, authorize } = require('../middleware/auth');
-const advancedResults = require('../middleware/advancedResults');
-const Club = require('../models/Club');
 
 const playersRouter = require('./players');
 const matchesRouter = require('./matches');
@@ -24,8 +22,8 @@ const router = express.Router();
 router.use('/:clubId/players', [protect, authorize('admin')], playersRouter);
 router.use('/:clubId/matches', protect, matchesRouter);
 
-router.post('/', [protect], createClub);
-router.get('/', [protect, advancedResults(Club)], getClubs);
+router.post('/', protect, createClub);
+router.get('/', protect, getClubs);
 router.get('/list', protect, getClubsList);
 router.get('/my', protect, getMyClubs);
 router.get('/:id', protect, getClub);

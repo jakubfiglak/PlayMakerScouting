@@ -3,6 +3,7 @@ const Order = require('../models/Order');
 const Player = require('../models/Player');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
+const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new order
 // @route POST /api/v1/orders
@@ -34,17 +35,39 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 exports.getOrders = asyncHandler(async (req, res) => {
   const { playerId } = req.params;
 
+  const reqQuery = prepareQuery(req.query);
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [
+      { path: 'player', select: ['firstName', 'lastName'] },
+      { path: 'scout', select: ['name', 'surname'] },
+      { path: 'reports', select: ['_id'] },
+    ],
+  };
+
   if (playerId) {
-    const orders = await Order.find({ player: playerId });
+    const query = {
+      player: playerId,
+      ...reqQuery,
+    };
+
+    const orders = await Order.paginate(query, options);
 
     return res.status(200).json({
       success: true,
-      count: orders.length,
       data: orders,
     });
   }
 
-  res.status(200).json(res.advancedResults);
+  const orders = await Order.paginate(reqQuery, options);
+
+  return res.status(200).json({
+    success: true,
+    data: orders,
+  });
 });
 
 // @desc Get my orders

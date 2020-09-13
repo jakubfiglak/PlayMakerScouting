@@ -4,6 +4,7 @@ const Player = require('../models/Player');
 const Match = require('../models/Match');
 const Order = require('../models/Order');
 const ErrorResponse = require('../utils/errorResponse');
+const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new report
 // @route POST /api/v1/reports
@@ -78,29 +79,14 @@ exports.createReport = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/players/:playerId/reports
 // @access Private (admin only)
 exports.getReports = asyncHandler(async (req, res) => {
-  if (req.params.playerId) {
-    const reports = await Report.find({
-      player: req.params.playerId,
-    }).sort('-createdAt');
+  const { playerId } = req.params;
+  const reqQuery = prepareQuery(req.query);
 
-    return res.status(200).json({
-      success: true,
-      count: reports.length,
-      data: reports,
-    });
-  }
-
-  res.status(200).json(res.advancedResults);
-});
-
-// @desc Get users reports
-// @route GET /api/v1/reports/my
-// @access Private
-exports.getMyReports = asyncHandler(async (req, res) => {
-  const reports = await Report.find({
-    scout: req.user._id,
-  })
-    .populate([
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [
       {
         path: 'player',
         select: 'firstName lastName',
@@ -112,12 +98,65 @@ exports.getMyReports = asyncHandler(async (req, res) => {
           { path: 'awayTeam', select: 'name' },
         ],
       },
-    ])
-    .sort('-createdAt');
+    ],
+  };
+
+  if (playerId) {
+    const query = {
+      player: playerId,
+      ...reqQuery,
+    };
+
+    const reports = await Report.paginate(query, options);
+
+    return res.status(200).json({
+      success: true,
+      data: reports,
+    });
+  }
+
+  const reports = await Report.paginate(reqQuery, options);
+
+  return res.status(200).json({
+    success: true,
+    data: reports,
+  });
+});
+
+// @desc Get users reports
+// @route GET /api/v1/reports/my
+// @access Private
+exports.getMyReports = asyncHandler(async (req, res) => {
+  const reqQuery = prepareQuery(req.query);
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [
+      {
+        path: 'player',
+        select: 'firstName lastName',
+      },
+      {
+        path: 'match',
+        populate: [
+          { path: 'homeTeam', select: 'name' },
+          { path: 'awayTeam', select: 'name' },
+        ],
+      },
+    ],
+  };
+
+  const query = {
+    scout: req.user._id,
+    ...reqQuery,
+  };
+
+  const reports = await Report.paginate(query, options);
 
   res.status(200).json({
     success: true,
-    count: reports.length,
     data: reports,
   });
 });
@@ -151,8 +190,8 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   }
 
   if (
-    report.scout._id.toString() !== req.user._id
-    && req.user.role !== 'admin'
+    report.scout._id.toString() !== req.user._id &&
+    req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(

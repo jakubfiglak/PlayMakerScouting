@@ -3,7 +3,7 @@ const Player = require('../models/Player');
 const Club = require('../models/Club');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
-const clearQuery = require('../utils/clearQuery');
+const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new player
 // @route POST /api/v1/players
@@ -70,7 +70,7 @@ exports.getPlayersList = asyncHandler(async (req, res) => {
     .select('firstName lastName')
     .populate({ path: 'club', select: 'name' });
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     count: players.length,
     data: players,
@@ -157,7 +157,7 @@ exports.getMyPlayers = asyncHandler(async (req, res, next) => {
 
   const { myPlayers } = user;
 
-  const reqQuery = clearQuery(req.query);
+  const reqQuery = prepareQuery(req.query);
 
   const query = {
     _id: { $in: myPlayers },
