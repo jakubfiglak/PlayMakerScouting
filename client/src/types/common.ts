@@ -2,6 +2,18 @@ import { ChangeEvent } from 'react';
 
 export type Order = 'asc' | 'desc';
 
+export type PaginationData = {
+  totalDocs: number;
+  limit: number;
+  totalPages: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: number | null;
+  nextPage: number | null;
+};
+
 export type Voivodeship =
   | ''
   | 'Zachodniopomorskie'

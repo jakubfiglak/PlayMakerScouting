@@ -1,4 +1,4 @@
-import { Order } from './common';
+import { Order, PaginationData } from './common';
 import { Match } from './matches';
 
 export type Position = 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
@@ -29,19 +29,8 @@ export type PlayersFormData = PlayerCommonTypes & {
 };
 
 export type PlayersData = {
-  data: Player[];
-  total: number;
-  pagination: {
-    prev?: {
-      page: number;
-      limit: number;
-    };
-    next?: {
-      page: number;
-      limit: number;
-    };
-  };
-};
+  docs: Player[];
+} & PaginationData;
 
 export type GetPlayers = (
   page: number,
@@ -62,7 +51,6 @@ export type State = {
   getPlayers: GetPlayers;
   getPlayer: (id: string) => void;
   getPlayerMatches: (id: string) => void;
-  deletePlayer: (id: string) => void;
   addPlayer: (player: PlayersFormData) => void;
   editPlayer: (player: PlayersFormData) => void;
   setCurrent: (player: Player) => void;

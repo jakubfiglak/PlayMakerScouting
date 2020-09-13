@@ -21,13 +21,7 @@ export const PlayersContent = () => {
   const simplifiedDataContext = useSimplifiedDataState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  const {
-    loading,
-    getPlayers,
-    playersData,
-    deletePlayer,
-    setCurrent,
-  } = playersContext;
+  const { loading, getPlayers, playersData, setCurrent } = playersContext;
 
   const { user } = authContext;
 
@@ -76,7 +70,6 @@ export const PlayersContent = () => {
               getPlayers={getPlayers}
               playersData={playersData}
               filters={filters}
-              deletePlayer={deletePlayer}
               handleSetCurrent={handleSetCurrent}
             />
           </>

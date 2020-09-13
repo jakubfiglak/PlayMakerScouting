@@ -30,7 +30,6 @@ type TableProps = {
   getPlayers: GetPlayers;
   playersData: PlayersData;
   filters: PlayersFilterData;
-  deletePlayer: (id: string) => void;
   handleSetCurrent: (player: Player) => void;
 };
 
@@ -38,7 +37,6 @@ export const PlayersTable = ({
   getPlayers,
   playersData,
   filters,
-  deletePlayer,
   handleSetCurrent,
 }: TableProps) => {
   const classes = useStyles();
@@ -67,14 +65,13 @@ export const PlayersTable = ({
           handleSort={handleSort}
         />
         <TableBody>
-          {playersData.data.map((player) => {
+          {playersData.docs.map((player) => {
             const { _id } = player;
 
             return (
               <PlayersTableRow
                 key={_id}
                 player={player}
-                deletePlayer={deletePlayer}
                 handleSetCurrent={handleSetCurrent}
               />
             );
@@ -85,7 +82,7 @@ export const PlayersTable = ({
             <TablePagination
               rowsPerPageOptions={[5, 10, 20]}
               colSpan={8}
-              count={playersData.total}
+              count={playersData.totalDocs}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
