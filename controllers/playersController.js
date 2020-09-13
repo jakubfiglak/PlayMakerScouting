@@ -47,19 +47,37 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/clubs/:clubId/players
 // @access Private (admin only)
 exports.getPlayers = asyncHandler(async (req, res) => {
-  if (req.params.clubId) {
-    const players = await Player.find({
-      club: req.params.clubId,
-    });
+  const { clubId } = req.params;
 
-    return res.status(200).json({
+  const reqQuery = prepareQuery(req.query);
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [{ path: 'club', select: 'name' }],
+  };
+
+  if (clubId) {
+    const query = {
+      club: clubId,
+      ...reqQuery,
+    };
+
+    const players = await Player.paginate(query, options);
+
+    res.status(200).json({
       success: true,
-      count: players.length,
       data: players,
     });
   }
 
-  res.status(200).json(res.advancedResults);
+  const players = await Player.paginate(reqQuery, options);
+
+  res.status(200).json({
+    success: true,
+    data: players,
+  });
 });
 
 // @desc Get players list
