@@ -17,12 +17,26 @@ export const ClubsForm = () => {
 
   const initialState: ClubsFormData = {
     name: current?.name || '',
-    address: current?.address.city || '',
+    street: current?.address.street || '',
+    streetNo: current?.address.streetNo || '',
+    zipCode: current?.address.zipCode || '',
+    city: current?.address.city || '',
+    voivodeship: current?.address.voivodeship || '',
+    country: current?.address.country || '',
     division: current?.division || '',
   };
   const [clubData, onInputChange, setClubData] = useForm(initialState);
 
-  const { name, address, division } = clubData;
+  const {
+    name,
+    street,
+    streetNo,
+    zipCode,
+    city,
+    voivodeship,
+    country,
+    division,
+  } = clubData;
 
   const onCancelClick = () => {
     setClubData(initialState);
@@ -64,7 +78,7 @@ export const ClubsForm = () => {
             id="address"
             label="Adres"
             name="address"
-            value={address}
+            value={street}
             onChange={onInputChange}
             helperText="np. ul. Cicha 132/16 62-200 Gniezno"
           />

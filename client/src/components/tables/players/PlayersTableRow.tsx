@@ -4,11 +4,9 @@ import { IconButton, Tooltip } from '@material-ui/core';
 // MUI icons
 import EditIcon from '@material-ui/icons/Edit';
 // Custom components
-import { StyledTableRow, StyledTableCell, Loader } from '../../common';
+import { StyledTableRow, StyledTableCell } from '../../common';
 // Types
 import { Player } from '../../../types/players';
-// Hooks
-import { useAuthState } from '../../../context';
 // Utils & data
 import { formatDate, getLabel } from '../../../utils';
 import { footLabels, positionLabels } from '../../../data';
@@ -22,14 +20,10 @@ export const PlayersTableRow = ({
   player,
   handleSetCurrent,
 }: TableRowProps) => {
-  const authContext = useAuthState();
   const { firstName, lastName, club, position, dateOfBirth, footed } = player;
-
-  const { loading } = authContext;
 
   return (
     <StyledTableRow>
-      {loading && <Loader />}
       <StyledTableCell>
         <Tooltip title="Edytuj">
           <IconButton

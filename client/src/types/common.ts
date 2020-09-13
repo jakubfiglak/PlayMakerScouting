@@ -15,7 +15,6 @@ export type PaginationData = {
 };
 
 export type Voivodeship =
-  | ''
   | 'Zachodniopomorskie'
   | 'Lubuskie'
   | 'Dolnośląskie'
@@ -43,7 +42,7 @@ export type Address = {
   streetNo: string;
   zipCode: string;
   city: string;
-  voivodeship?: Voivodeship;
+  voivodeship?: Voivodeship | '';
   country: string;
 };
 

@@ -15,7 +15,7 @@ export const ClubsContent = () => {
   const clubsContext = useClubsState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  const { loading, getClubs, clubsData, deleteClub, setCurrent } = clubsContext;
+  const { loading, getClubs, clubsData, setCurrent } = clubsContext;
 
   const [filters, setFilters] = useState<ClubsFilterData>({
     name: '',
@@ -43,7 +43,6 @@ export const ClubsContent = () => {
           getClubs={getClubs}
           clubsData={clubsData}
           filters={filters}
-          deleteClub={deleteClub}
           handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>

@@ -4,21 +4,17 @@ import ClubsContext from './clubsContext';
 import clubsReducer from './clubsReducer';
 import { State, Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 import { Order } from '../../types/common';
+import { initialPaginatedData } from '../../data';
 
 export const ClubsState: React.FC = ({ children }) => {
   const initialState: State = {
-    clubsData: {
-      data: [],
-      total: 0,
-      pagination: {},
-    },
+    clubsData: initialPaginatedData,
     current: null,
     loading: false,
     error: null,
     setLoading: () => null,
     getClubs: () => null,
     getClub: () => null,
-    deleteClub: () => null,
     addClub: () => null,
     editClub: () => null,
     setCurrent: () => null,
@@ -59,14 +55,14 @@ export const ClubsState: React.FC = ({ children }) => {
     }
 
     if (voivodeship) {
-      clubsURI = clubsURI.concat(`&location.voivodeship[regex]=${voivodeship}`);
+      clubsURI = clubsURI.concat(`&address.voivodeship[regex]=${voivodeship}`);
     }
 
     try {
       const res = await axiosJson.get(clubsURI);
       dispatch({
         type: 'GET_CLUBS_SUCCESS',
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
       dispatch({
@@ -143,23 +139,6 @@ export const ClubsState: React.FC = ({ children }) => {
     }
   };
 
-  // Delete club
-  const deleteClub = async (id: string) => {
-    setLoading();
-    try {
-      await axiosJson.delete(`/api/v1/clubs/${id}`);
-      dispatch({
-        type: 'DELETE_CLUB_SUCCESS',
-        payload: id,
-      });
-    } catch (err) {
-      dispatch({
-        type: 'CLUBS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
-  };
-
   return (
     <ClubsContext.Provider
       value={{
@@ -170,7 +149,6 @@ export const ClubsState: React.FC = ({ children }) => {
         setLoading,
         getClubs,
         getClub,
-        deleteClub,
         addClub,
         setCurrent,
         clearCurrent,

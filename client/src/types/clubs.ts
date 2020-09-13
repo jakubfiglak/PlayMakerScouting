@@ -1,7 +1,12 @@
-import { Location, Order, Address } from './common';
+import {
+  Location,
+  Order,
+  Address,
+  PaginationData,
+  Voivodeship,
+} from './common';
 
 export type Division =
-  | ''
   | 'Ekstraklasa'
   | 'I liga'
   | 'II liga'
@@ -20,32 +25,24 @@ export type Club = {
   address: Address;
 };
 
-// TODO: Adjust clubs form data to current format accepted by the API (address)
-
 export type ClubsFormData = {
   name: string;
-  address: string;
-  division: Division;
+  division: Division | '';
+  street: string;
+  streetNo: string;
+  zipCode: string;
+  city: string;
+  voivodeship: Voivodeship | '';
+  country: string;
 };
 
 export type ClubsData = {
-  data: Club[];
-  total: number;
-  pagination: {
-    prev?: {
-      page: number;
-      limit: number;
-    };
-    next?: {
-      page: number;
-      limit: number;
-    };
-  };
-};
+  docs: Club[];
+} & PaginationData;
 
 export type ClubsFilterData = {
   name: string;
-  division: Division;
+  division: Division | '';
   voivodeship: string;
 };
 
@@ -65,7 +62,6 @@ export type State = {
   setLoading: () => void;
   getClubs: GetClubs;
   getClub: (id: string) => void;
-  deleteClub: (id: string) => void;
   addClub: (club: ClubsFormData) => void;
   editClub: (id: string, club: ClubsFormData) => void;
   setCurrent: (club: Club) => void;
@@ -80,5 +76,4 @@ export type Action =
   | { type: 'GET_CLUBS_SUCCESS'; payload: ClubsData }
   | { type: 'GET_CLUB_SUCCESS'; payload: Club }
   | { type: 'CREATE_CLUB_SUCCESS' }
-  | { type: 'UPDATE_CLUB_SUCCESS' }
-  | { type: 'DELETE_CLUB_SUCCESS'; payload: string };
+  | { type: 'UPDATE_CLUB_SUCCESS' };

@@ -11,7 +11,7 @@ type AddressFieldsetProps = {
   streetNoValue: string;
   zipCodeValue: string;
   cityValue: string;
-  voivodeshipValue: Voivodeship;
+  voivodeshipValue: Voivodeship | '';
   countryValue: string;
   onChange: OnChangeFn;
 };

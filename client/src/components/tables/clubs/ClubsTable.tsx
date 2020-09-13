@@ -30,7 +30,6 @@ type TableProps = {
   getClubs: GetClubs;
   clubsData: ClubsData;
   filters: ClubsFilterData;
-  deleteClub: (id: string) => void;
   handleSetCurrent: (club: Club) => void;
 };
 
@@ -38,7 +37,6 @@ export const ClubsTable = ({
   getClubs,
   clubsData,
   filters,
-  deleteClub,
   handleSetCurrent,
 }: TableProps) => {
   const classes = useStyles();
@@ -67,14 +65,13 @@ export const ClubsTable = ({
           handleSort={handleSort}
         />
         <TableBody>
-          {clubsData.data.map((club) => {
+          {clubsData.docs.map((club) => {
             const { _id } = club;
 
             return (
               <ClubsTableRow
                 key={_id}
                 club={club}
-                deleteClub={deleteClub}
                 handleSetCurrent={handleSetCurrent}
               />
             );
@@ -85,7 +82,7 @@ export const ClubsTable = ({
             <TablePagination
               rowsPerPageOptions={[5, 10, 20]}
               colSpan={8}
-              count={clubsData.total}
+              count={clubsData.totalDocs}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

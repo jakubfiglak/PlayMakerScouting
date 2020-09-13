@@ -13,31 +13,13 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
-        clubsData: {
-          data: action.payload.data,
-          total: action.payload.total,
-          pagination: action.payload.pagination,
-        },
+        clubsData: action.payload,
       };
 
     case 'CREATE_CLUB_SUCCESS':
     case 'UPDATE_CLUB_SUCCESS':
       return {
         ...state,
-        loading: false,
-        error: null,
-      };
-
-    case 'DELETE_CLUB_SUCCESS':
-      return {
-        ...state,
-        clubsData: {
-          data: state.clubsData.data.filter(
-            (club) => club._id !== action.payload,
-          ),
-          total: state.clubsData.total - 1,
-          pagination: state.clubsData.pagination,
-        },
         loading: false,
         error: null,
       };
