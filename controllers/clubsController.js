@@ -58,6 +58,31 @@ exports.getClubsList = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Get my clubs list
+// @route GET /api/v1/clubs/mylist
+// @access Private
+exports.getMyClubsList = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+    );
+  }
+
+  const { myClubs } = user;
+
+  const clubs = await Club.find({ _id: { $in: myClubs } })
+    .select('name')
+    .sort('name');
+
+  return res.status(200).json({
+    success: true,
+    count: clubs.length,
+    data: clubs,
+  });
+});
+
 // @desc Get single club
 // @route GET /api/v1/clubs/:id
 // @access Private

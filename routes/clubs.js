@@ -3,6 +3,7 @@ const {
   createClub,
   getClubs,
   getClubsList,
+  getMyClubsList,
   getClub,
   getClubsInVoivodeship,
   getClubsInRadius,
@@ -25,6 +26,7 @@ router.use('/:clubId/matches', protect, matchesRouter);
 router.post('/', protect, createClub);
 router.get('/', protect, getClubs);
 router.get('/list', protect, getClubsList);
+router.get('/mylist', protect, getMyClubsList);
 router.get('/my', protect, getMyClubs);
 router.get('/:id', protect, getClub);
 router.put('/:id', [protect, authorize('admin')], updateClub);

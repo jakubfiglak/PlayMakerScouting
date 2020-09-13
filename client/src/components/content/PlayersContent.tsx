@@ -69,7 +69,7 @@ export const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
-        {totalDocs ? (
+        {!!totalDocs && (
           <>
             <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
             <PlayersTable
@@ -85,8 +85,12 @@ export const PlayersContent = () => {
               handleSetCurrent={handleSetCurrent}
             />
           </>
-        ) : (
-          <p>Nie masz jeszcze żadnych zawodników w swojej bazie </p>
+        )}
+        {!totalDocs && !(loading || simpleDataLoading) && (
+          <p>
+            Nie masz jeszcze żadnych zawodników w swojej bazie. Dodaj zawodnika
+            lub przyjmij zlecenie.
+          </p>
         )}
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
