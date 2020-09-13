@@ -46,7 +46,7 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/players
 // @route GET /api/v1/clubs/:clubId/players
 // @access Private (admin only)
-exports.getPlayers = asyncHandler(async (req, res) => {
+exports.getPlayers = asyncHandler(async (req, res, next) => {
   const { clubId } = req.params;
 
   const reqQuery = prepareQuery(req.query);
@@ -58,21 +58,29 @@ exports.getPlayers = asyncHandler(async (req, res) => {
     populate: [{ path: 'club', select: 'name' }],
   };
 
+  const query = { ...reqQuery };
+
+  // If club ID is provided in query params, return only players assinged to this club
   if (clubId) {
-    const query = {
-      club: clubId,
-      ...reqQuery,
-    };
-
-    const players = await Player.paginate(query, options);
-
-    res.status(200).json({
-      success: true,
-      data: players,
-    });
+    query.club = clubId;
   }
 
-  const players = await Player.paginate(reqQuery, options);
+  // If user is not an admin return only players to which this user has access to
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      );
+    }
+
+    const { myPlayers } = user;
+
+    query._id = { $in: myPlayers };
+  }
+
+  const players = await Player.paginate(query, options);
 
   res.status(200).json({
     success: true,
@@ -158,41 +166,6 @@ exports.deletePlayer = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Player with the id of ${id} successfully removed!`,
-  });
-});
-
-// @desc Get my players (players that the user has access to)
-// @route GET /api/v1/players/my
-// @access Private
-exports.getMyPlayers = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
-  }
-
-  const { myPlayers } = user;
-
-  const reqQuery = prepareQuery(req.query);
-
-  const query = {
-    _id: { $in: myPlayers },
-    ...reqQuery,
-  };
-
-  const options = {
-    sort: req.query.sort || '_id',
-    limit: req.query.limit || 20,
-    page: req.query.page || 1,
-  };
-
-  const players = await Player.paginate(query, options);
-
-  res.status(200).json({
-    success: true,
-    data: players,
   });
 });
 

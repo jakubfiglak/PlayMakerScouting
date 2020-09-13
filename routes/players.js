@@ -6,7 +6,6 @@ const {
   getPlayer,
   updatePlayer,
   deletePlayer,
-  getMyPlayers,
   grantAccess,
 } = require('../controllers/playersController');
 const { protect, authorize } = require('../middleware/auth');
@@ -22,9 +21,8 @@ router.use('/:playerId/reports', protect, reportsRouter);
 router.use('/:playerId/matches', protect, matchesRouter);
 
 router.post('/', protect, createPlayer);
-router.get('/', [protect, authorize('admin')], getPlayers);
+router.get('/', protect, getPlayers);
 router.get('/list', protect, getPlayersList);
-router.get('/my', protect, getMyPlayers);
 router.post('/grantaccess', [protect, authorize('admin')], grantAccess);
 router.get('/:id', protect, getPlayer);
 router.put('/:id', protect, updatePlayer);

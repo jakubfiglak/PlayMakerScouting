@@ -38,7 +38,6 @@ export type GetPlayers = (
   sort: string,
   order: Order,
   filters: PlayersFilterData,
-  my?: boolean,
 ) => void;
 
 export type State = {

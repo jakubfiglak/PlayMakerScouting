@@ -8,17 +8,12 @@ import { TabPanel, Loader } from '../common';
 // Types
 import { PlayersFilterData, Player } from '../../types/players';
 // Hooks
-import {
-  usePlayersState,
-  useSimplifiedDataState,
-  useAuthState,
-} from '../../context';
+import { usePlayersState, useSimplifiedDataState } from '../../context';
 import { useTabs, useTable } from '../../hooks';
 
 export const PlayersContent = () => {
   const playersContext = usePlayersState();
   const simplifiedDataContext = useSimplifiedDataState();
-  const authContext = useAuthState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
     page,
@@ -43,8 +38,6 @@ export const PlayersContent = () => {
     clubsData,
   } = simplifiedDataContext;
 
-  const { user } = authContext;
-
   const [filters, setFilters] = useState<PlayersFilterData>({
     lastName: '',
     club: '',
@@ -56,11 +49,9 @@ export const PlayersContent = () => {
     setActiveTab(1);
   };
 
-  const isAdmin = user?.role === 'admin';
-
   useEffect(() => {
     getClubs();
-    getPlayers(page + 1, rowsPerPage, sortBy, order, filters, !isAdmin);
+    getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, page, rowsPerPage, sortBy, order, filters]);
 
