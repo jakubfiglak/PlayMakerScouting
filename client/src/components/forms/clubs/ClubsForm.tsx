@@ -4,6 +4,7 @@ import { Grid, TextField, FormControl } from '@material-ui/core';
 // Custom components
 import { DivisionSelect } from '../selects';
 import { MainFormActions } from '../actions';
+import { AddressFieldset } from '../fieldsets';
 import { Loader } from '../../common';
 // Types
 import { ClubsFormData } from '../../../types/clubs';
@@ -70,19 +71,15 @@ export const ClubsForm = () => {
             onChange={onInputChange}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            id="address"
-            label="Adres"
-            name="address"
-            value={street}
-            onChange={onInputChange}
-            helperText="np. ul. Cicha 132/16 62-200 Gniezno"
-          />
-        </Grid>
+        <AddressFieldset
+          streetValue={street}
+          streetNoValue={streetNo}
+          zipCodeValue={zipCode}
+          cityValue={city}
+          voivodeshipValue={voivodeship}
+          countryValue={country}
+          onChange={onInputChange}
+        />
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
             <DivisionSelect

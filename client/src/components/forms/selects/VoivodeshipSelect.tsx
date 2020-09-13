@@ -10,9 +10,15 @@ import {
 // Data & utils
 import { voivodeships } from '../../../data';
 
-export const VoivodeshipSelect = ({ onChange, value }: SelectProps) => {
+type VoivodeshipSelectProps = { size?: 'small' | 'medium' } & SelectProps;
+
+export const VoivodeshipSelect = ({
+  onChange,
+  value,
+  size,
+}: VoivodeshipSelectProps) => {
   return (
-    <FormControl variant="outlined" fullWidth>
+    <FormControl variant="outlined" fullWidth size={size}>
       <InputLabel id="voivodeship">Województwo</InputLabel>
       <Select
         labelId="voivodeship"
