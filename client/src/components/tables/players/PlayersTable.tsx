@@ -14,10 +14,9 @@ import { TablePaginationActions, TableHeader } from '../../common';
 import { PlayersTableRow } from './PlayersTableRow';
 // Types
 import { Player } from '../../../types/players';
+import { CommonTableProps } from '../../../types/common';
 // Utils & data
 import { playersHeadCells } from '../data';
-// Types
-import { CommonTableProps } from '../../../types/common';
 // Styles
 import { useStyles } from '../styles';
 
@@ -43,7 +42,7 @@ export const PlayersTable = ({
   return (
     <>
       <TableContainer component={Paper} className={classes.paper}>
-        <Table className={classes.table} aria-label="customized table">
+        <Table className={classes.table} aria-label="players table">
           <TableHeader
             headCells={playersHeadCells}
             sortBy={sortBy}

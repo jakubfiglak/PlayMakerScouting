@@ -52,10 +52,12 @@ export type GetClubs = (
   sort: string,
   order: Order,
   filters: ClubsFilterData,
+  my?: boolean,
 ) => void;
 
 export type State = {
   clubsData: ClubsData;
+  myClubsData: ClubsData;
   current: Club | null;
   loading: boolean;
   error: string | null;
@@ -74,6 +76,7 @@ export type Action =
   | { type: 'CLEAR_CURRENT' }
   | { type: 'CLUBS_ERROR'; payload: string }
   | { type: 'GET_CLUBS_SUCCESS'; payload: ClubsData }
+  | { type: 'GET_MY_CLUBS_SUCCESS'; payload: ClubsData }
   | { type: 'GET_CLUB_SUCCESS'; payload: Club }
   | { type: 'CREATE_CLUB_SUCCESS' }
   | { type: 'UPDATE_CLUB_SUCCESS' };

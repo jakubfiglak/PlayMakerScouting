@@ -59,11 +59,13 @@ export const PlayersContent = () => {
     setActiveTab(1);
   };
 
+  const isAdmin = user?.role === 'admin';
+
   useEffect(() => {
-    if (user?.role !== 'admin') {
-      getMyClubs();
-    } else {
+    if (isAdmin) {
       getClubs();
+    } else {
+      getMyClubs();
     }
     getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,7 +86,7 @@ export const PlayersContent = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
         <PlayersFilterForm
-          clubsData={user?.role === 'admin' ? clubsData : myClubsData}
+          clubsData={isAdmin ? clubsData : myClubsData}
           setFilters={setFilters}
         />
         <PlayersTable
@@ -101,7 +103,7 @@ export const PlayersContent = () => {
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
-        <PlayersForm clubsData={clubsData} />
+        <PlayersForm clubsData={isAdmin ? clubsData : myClubsData} />
       </TabPanel>
     </>
   );

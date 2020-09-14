@@ -9,6 +9,7 @@ import { initialPaginatedData } from '../../data';
 export const ClubsState: React.FC = ({ children }) => {
   const initialState: State = {
     clubsData: initialPaginatedData,
+    myClubsData: initialPaginatedData,
     current: null,
     loading: false,
     error: null,
@@ -37,6 +38,7 @@ export const ClubsState: React.FC = ({ children }) => {
     sort = '_id',
     order: Order,
     filters: ClubsFilterData,
+    my?: boolean,
   ) => {
     setLoading();
     const orderSign = order === 'desc' ? '-' : '';
@@ -44,7 +46,15 @@ export const ClubsState: React.FC = ({ children }) => {
     const { name, division, voivodeship } = filters;
 
     // Generate query url
-    let clubsURI = `/api/v1/clubs?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+    let clubsURI = '/api/v1/clubs';
+
+    if (my) {
+      clubsURI = clubsURI.concat('/my');
+    }
+
+    clubsURI = clubsURI.concat(
+      `?page=${page}&limit=${limit}&sort=${orderSign}${sort}`,
+    );
 
     if (name) {
       clubsURI = clubsURI.concat(`&name[regex]=${name}`);
@@ -60,10 +70,17 @@ export const ClubsState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.get(clubsURI);
-      dispatch({
-        type: 'GET_CLUBS_SUCCESS',
-        payload: res.data.data,
-      });
+      if (my) {
+        dispatch({
+          type: 'GET_MY_CLUBS_SUCCESS',
+          payload: res.data.data,
+        });
+      } else {
+        dispatch({
+          type: 'GET_CLUBS_SUCCESS',
+          payload: res.data.data,
+        });
+      }
     } catch (err) {
       dispatch({
         type: 'CLUBS_ERROR',
@@ -139,13 +156,16 @@ export const ClubsState: React.FC = ({ children }) => {
     }
   };
 
+  const { clubsData, myClubsData, current, loading, error } = state;
+
   return (
     <ClubsContext.Provider
       value={{
-        clubsData: state.clubsData,
-        current: state.current,
-        loading: state.loading,
-        error: state.error,
+        clubsData,
+        myClubsData,
+        current,
+        loading,
+        error,
         setLoading,
         getClubs,
         getClub,
