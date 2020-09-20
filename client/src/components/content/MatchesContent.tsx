@@ -18,13 +18,7 @@ export const MatchesContent = () => {
   const simplifiedDataContext = useSimplifiedDataState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  const {
-    loading,
-    getMatches,
-    matchesData,
-    deleteMatch,
-    setCurrent,
-  } = matchesContext;
+  const { loading, getMatches, matchesData, setCurrent } = matchesContext;
 
   const {
     loading: simpleDataLoading,
@@ -64,7 +58,6 @@ export const MatchesContent = () => {
         <MatchesTable
           getMatches={getMatches}
           matchesData={matchesData}
-          deleteMatch={deleteMatch}
           filters={filters}
           handleSetCurrent={handleSetCurrent}
         />

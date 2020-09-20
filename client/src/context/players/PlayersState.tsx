@@ -52,8 +52,6 @@ export const PlayersState: React.FC = ({ children }) => {
     // Generate query url
     let playersURI = `/api/v1/players?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
 
-    console.log(playersURI);
-
     // Add filters to query url
     Object.entries(filters).forEach(([key, value]) => {
       const filter = `&${key}=${value}`;

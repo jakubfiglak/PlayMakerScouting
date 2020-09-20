@@ -13,31 +13,13 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
-        matchesData: {
-          data: action.payload.data,
-          total: action.payload.total,
-          pagination: action.payload.pagination,
-        },
+        matchesData: action.payload,
       };
 
     case 'CREATE_MATCH_SUCCESS':
     case 'UPDATE_MATCH_SUCCESS':
       return {
         ...state,
-        loading: false,
-        error: null,
-      };
-
-    case 'DELETE_MATCH_SUCCESS':
-      return {
-        ...state,
-        matchesData: {
-          data: state.matchesData.data.filter(
-            (match) => match._id !== action.payload,
-          ),
-          total: state.matchesData.total - 1,
-          pagination: state.matchesData.pagination,
-        },
         loading: false,
         error: null,
       };

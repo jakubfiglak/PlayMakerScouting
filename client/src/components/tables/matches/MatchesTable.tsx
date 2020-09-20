@@ -30,7 +30,6 @@ type TableProps = {
   getMatches: GetMatches;
   matchesData: MatchesData;
   filters: MatchesFilterData;
-  deleteMatch: (id: string) => void;
   handleSetCurrent: (match: Match) => void;
 };
 
@@ -38,7 +37,6 @@ export const MatchesTable = ({
   getMatches,
   matchesData,
   filters,
-  deleteMatch,
   handleSetCurrent,
 }: TableProps) => {
   const classes = useStyles();
@@ -67,14 +65,13 @@ export const MatchesTable = ({
           handleSort={handleSort}
         />
         <TableBody>
-          {matchesData.data.map((match) => {
+          {matchesData.docs.map((match) => {
             const { _id } = match;
 
             return (
               <MatchesTableRow
                 key={_id}
                 match={match}
-                deleteMatch={deleteMatch}
                 handleSetCurrent={handleSetCurrent}
               />
             );
@@ -85,7 +82,7 @@ export const MatchesTable = ({
             <TablePagination
               rowsPerPageOptions={[5, 10, 20]}
               colSpan={4}
-              count={matchesData.total}
+              count={matchesData.totalDocs}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

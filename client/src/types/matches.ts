@@ -1,6 +1,6 @@
-import { Order } from './common';
+import { Order, PaginationData } from './common';
 
-export type Competition = '' | 'league' | 'cup' | 'friendly';
+export type Competition = 'league' | 'cup' | 'friendly';
 
 export type Match = {
   _id: string;
@@ -17,31 +17,20 @@ export type Match = {
 };
 
 export type MatchesData = {
-  data: Match[];
-  total: number;
-  pagination: {
-    prev?: {
-      page: number;
-      limit: number;
-    };
-    next?: {
-      page: number;
-      limit: number;
-    };
-  };
-};
+  docs: Match[];
+} & PaginationData;
 
 export type MatchesFormData = {
   homeTeam: string;
   awayTeam: string;
-  competition: Competition;
+  competition: Competition | '';
   date: string;
 };
 
 export type MatchesFilterData = {
   homeTeam: string;
   awayTeam: string;
-  competition: Competition;
+  competition: Competition | '';
   dateFrom: string;
   dateTo: string;
 };
@@ -62,7 +51,6 @@ export type State = {
   setLoading: () => void;
   getMatches: GetMatches;
   getMatch: (id: string) => void;
-  deleteMatch: (id: string) => void;
   addMatch: (match: MatchesFormData) => void;
   editMatch: (id: string, club: MatchesFormData) => void;
   setCurrent: (match: Match) => void;

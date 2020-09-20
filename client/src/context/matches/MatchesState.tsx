@@ -9,21 +9,17 @@ import {
   MatchesFilterData,
 } from '../../types/matches';
 import { Order } from '../../types/common';
+import { initialPaginatedData } from '../../data';
 
 export const MatchesState: React.FC = ({ children }) => {
   const initialState: State = {
-    matchesData: {
-      data: [],
-      total: 0,
-      pagination: {},
-    },
+    matchesData: initialPaginatedData,
     current: null,
     loading: false,
     error: null,
     setLoading: () => null,
     getMatches: () => null,
     getMatch: () => null,
-    deleteMatch: () => null,
     addMatch: () => null,
     editMatch: () => null,
     setCurrent: () => null,
@@ -72,7 +68,7 @@ export const MatchesState: React.FC = ({ children }) => {
       const res = await axiosJson.get(matchesURI);
       dispatch({
         type: 'GET_MATCHES_SUCCESS',
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
       dispatch({
@@ -147,23 +143,6 @@ export const MatchesState: React.FC = ({ children }) => {
     }
   };
 
-  // Delete match
-  const deleteMatch = async (id: string) => {
-    setLoading();
-    try {
-      await axiosJson.delete(`/api/v1/matches/${id}`);
-      dispatch({
-        type: 'DELETE_MATCH_SUCCESS',
-        payload: id,
-      });
-    } catch (err) {
-      dispatch({
-        type: 'MATCHES_ERROR',
-        payload: err.response.data.error,
-      });
-    }
-  };
-
   return (
     <MatchesContext.Provider
       value={{
@@ -174,7 +153,6 @@ export const MatchesState: React.FC = ({ children }) => {
         setLoading,
         getMatches,
         getMatch,
-        deleteMatch,
         addMatch,
         setCurrent,
         clearCurrent,
