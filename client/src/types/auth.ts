@@ -1,6 +1,6 @@
 import { Location, Address, Voivodeship } from './common';
 
-type UserRole = 'admin' | 'playmaker-scout' | 'scout';
+export type UserRole = 'admin' | 'playmaker-scout' | 'scout';
 
 export type User = {
   _id: string;
@@ -81,19 +81,21 @@ export type State = {
   logout: () => void;
   editDetails: (formData: FormattedEditAccountData) => void;
   updatePassword: (formData: UpdatePasswordData) => void;
+  addClubToFavorites: (id: string) => void;
+  removeClubFromFavorites: (id: string) => void;
 };
 
 export type Action =
   | { type: 'REGISTER_SUCCESS'; payload: string }
-  | { type: 'REGISTER_FAIL'; payload: string }
   | { type: 'USER_LOADED'; payload: User }
   | { type: 'AUTH_ERROR'; payload: string }
   | { type: 'LOGIN_SUCCESS'; payload: string }
-  | { type: 'LOGIN_FAIL'; payload: string }
   | { type: 'LOGOUT' }
   | { type: 'CLEAR_ERRORS' }
   | { type: 'SET_LOADING' }
   | { type: 'EDIT_SUCCESS' }
-  | { type: 'EDIT_FAIL'; payload: string }
+  | { type: 'EDIT_ERROR'; payload: string }
   | { type: 'UPDATE_PASSWORD_SUCCESS'; payload: string }
-  | { type: 'UPDATE_PASSWORD_FAIL'; payload: string };
+  | { type: 'ADD_CLUB_TO_FAVORITES_SUCCESS' }
+  | { type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS' }
+  | { type: 'CLUBS_ERROR'; payload: string };

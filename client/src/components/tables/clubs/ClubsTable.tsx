@@ -23,6 +23,8 @@ import { useStyles } from '../styles';
 type TableProps = {
   clubs: Club[];
   handleSetCurrent: (club: Club) => void;
+  addToFavorites: (id: string) => void;
+  removeFromFavorites: (id: string) => void;
 } & CommonTableProps;
 
 export const ClubsTable = ({
@@ -36,6 +38,8 @@ export const ClubsTable = ({
   clubs,
   total,
   handleSetCurrent,
+  addToFavorites,
+  removeFromFavorites,
 }: TableProps) => {
   const classes = useStyles();
 
@@ -57,6 +61,8 @@ export const ClubsTable = ({
                 key={_id}
                 club={club}
                 handleSetCurrent={handleSetCurrent}
+                addToFavorites={addToFavorites}
+                removeFromFavorites={removeFromFavorites}
               />
             );
           })}
