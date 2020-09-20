@@ -69,12 +69,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/auth/account
 // @access Private
 exports.account = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).populate([
-    {
-      path: 'myClubs',
-      select: 'name',
-    },
-  ]);
+  const user = await User.findById(req.user._id);
 
   res.status(200).json({
     success: true,
