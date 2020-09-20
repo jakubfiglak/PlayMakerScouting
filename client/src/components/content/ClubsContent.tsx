@@ -42,6 +42,7 @@ export const ClubsContent = () => {
   } = clubsContext;
 
   const {
+    user,
     loading: authLoading,
     addClubToFavorites,
     removeClubFromFavorites,

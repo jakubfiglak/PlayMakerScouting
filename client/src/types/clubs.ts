@@ -36,6 +36,12 @@ export type ClubsFormData = {
   country: string;
 };
 
+export type FormattedClubsFormData = {
+  name: string;
+  address: Address;
+  division: Division | '';
+};
+
 export type ClubsData = {
   docs: Club[];
 } & PaginationData;
@@ -64,8 +70,8 @@ export type State = {
   setLoading: () => void;
   getClubs: GetClubs;
   getClub: (id: string) => void;
-  addClub: (club: ClubsFormData) => void;
-  editClub: (id: string, club: ClubsFormData) => void;
+  addClub: (club: FormattedClubsFormData) => void;
+  editClub: (id: string, club: FormattedClubsFormData) => void;
   setCurrent: (club: Club) => void;
   clearCurrent: () => void;
 };

@@ -2,7 +2,13 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ClubsContext from './clubsContext';
 import clubsReducer from './clubsReducer';
-import { State, Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
+import {
+  State,
+  Club,
+  ClubsFilterData,
+  ClubsFormData,
+  FormattedClubsFormData,
+} from '../../types/clubs';
 import { Order } from '../../types/common';
 import { initialPaginatedData } from '../../data';
 
@@ -108,7 +114,7 @@ export const ClubsState: React.FC = ({ children }) => {
   };
 
   // Create new club
-  const addClub = async (club: ClubsFormData) => {
+  const addClub = async (club: FormattedClubsFormData) => {
     setLoading();
 
     try {
@@ -140,7 +146,7 @@ export const ClubsState: React.FC = ({ children }) => {
   };
 
   // Update club details
-  const editClub = async (id: string, club: ClubsFormData) => {
+  const editClub = async (id: string, club: FormattedClubsFormData) => {
     setLoading();
 
     try {

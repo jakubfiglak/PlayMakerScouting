@@ -46,11 +46,24 @@ export const ClubsForm = () => {
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
+    const formattedClubData = {
+      name,
+      address: {
+        street,
+        streetNo,
+        zipCode,
+        city,
+        voivodeship,
+        country,
+      },
+      division,
+    };
+
     if (current) {
-      editClub(current._id, clubData);
+      editClub(current._id, formattedClubData);
       clearCurrent();
     } else {
-      addClub(clubData);
+      addClub(formattedClubData);
     }
   };
 
