@@ -18,6 +18,20 @@ exports.createClub = asyncHandler(async (req, res, next) => {
 
   club = await Club.create(req.body);
 
+  // If the user creating the club is not an admin, push the clubs ID to users myClubs array
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      );
+    }
+
+    user.myClubs.push(club._id);
+    await user.save();
+  }
+
   res.status(201).json({
     success: true,
     message: 'Successfully created new club!',

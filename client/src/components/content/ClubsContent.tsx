@@ -42,7 +42,7 @@ export const ClubsContent = () => {
   } = clubsContext;
 
   const {
-    user,
+    loadUser,
     loading: authLoading,
     addClubToFavorites,
     removeClubFromFavorites,
@@ -65,6 +65,7 @@ export const ClubsContent = () => {
   };
 
   useEffect(() => {
+    loadUser();
     // get all clubs
     getClubs(page + 1, rowsPerPage, sortBy, order, filters);
     // get my clubs
