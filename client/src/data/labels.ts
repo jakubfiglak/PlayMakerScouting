@@ -54,3 +54,18 @@ export const competitionLabels = [
     label: 'Towarzyski',
   },
 ];
+
+export const orderStatusLabels = [
+  {
+    value: 'open',
+    label: 'otwarte',
+  },
+  {
+    value: 'accepted',
+    label: 'przyjęte do realizacji',
+  },
+  {
+    value: 'closed',
+    label: 'zamknięte',
+  },
+];

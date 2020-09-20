@@ -13,11 +13,7 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
-        ordersData: {
-          data: action.payload.data,
-          total: action.payload.total,
-          pagination: action.payload.pagination,
-        },
+        ordersData: action.payload,
       };
 
     case 'GET_MY_ORDERS_SUCCESS':
@@ -53,13 +49,6 @@ export default (state: State, action: Action): State => {
     case 'DELETE_ORDER_SUCCESS':
       return {
         ...state,
-        ordersData: {
-          data: state.ordersData.data.filter(
-            (order) => order._id !== action.payload,
-          ),
-          total: state.ordersData.total - 1,
-          pagination: state.ordersData.pagination,
-        },
         loading: false,
         error: null,
       };

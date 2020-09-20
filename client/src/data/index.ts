@@ -11,5 +11,10 @@ export {
   motorSkillsInitialState,
   reportFormInitialState,
 } from './reportFormInitialState';
-export { footLabels, positionLabels, competitionLabels } from './labels';
+export {
+  footLabels,
+  positionLabels,
+  competitionLabels,
+  orderStatusLabels,
+} from './labels';
 export { initialPaginatedData } from './initialPaginatedData';

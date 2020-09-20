@@ -1,3 +1,7 @@
+import { PaginationData } from './common';
+
+export type OrderStatus = 'open' | 'accepted' | 'closed';
+
 export type Order = {
   _id: string;
   player: {
@@ -8,8 +12,8 @@ export type Order = {
   status: 'open' | 'accepted' | 'closed';
   scout?: {
     _id: string;
-    name: string;
-    surname: string;
+    firstName: string;
+    lastName: string;
   };
   createdAt: string;
   acceptDate?: string;
@@ -23,23 +27,12 @@ export type OrderFormData = {
 };
 
 export type OrdersData = {
-  data: Order[];
-  total: number;
-  pagination: {
-    prev?: {
-      page: number;
-      limit: number;
-    };
-    next?: {
-      page: number;
-      limit: number;
-    };
-  };
-};
+  docs: Order[];
+} & PaginationData;
 
 export type OrdersFilterData = {
   player: string;
-  status: 'all' | 'open' | 'accepted';
+  status: OrderStatus | '';
   createdAfter: string;
   createdBefore: string;
 };

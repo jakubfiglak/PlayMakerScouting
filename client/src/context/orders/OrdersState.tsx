@@ -3,14 +3,11 @@ import { axiosJson } from '../../config/axios';
 import OrdersContext from './ordersContext';
 import ordersReducer from './ordersReducer';
 import { State, OrderFormData, OrdersFilterData } from '../../types/orders';
+import { initialPaginatedData } from '../../data';
 
 export const OrdersState: React.FC = ({ children }) => {
   const initialState: State = {
-    ordersData: {
-      data: [],
-      total: 0,
-      pagination: {},
-    },
+    ordersData: initialPaginatedData,
     myOrdersData: [],
     orderData: null,
     current: null,
@@ -46,19 +43,15 @@ export const OrdersState: React.FC = ({ children }) => {
       ordersURI = ordersURI.concat(`&player=${player}`);
     }
 
-    if (status === 'open') {
-      ordersURI = ordersURI.concat('&open=true');
-    }
-
-    if (status === 'accepted') {
-      ordersURI = ordersURI.concat('&open=false');
+    if (status) {
+      ordersURI = ordersURI.concat(`&status=${status}`);
     }
 
     try {
       const res = await axiosJson.get(ordersURI);
       dispatch({
         type: 'GET_ORDERS_SUCCESS',
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
       dispatch({

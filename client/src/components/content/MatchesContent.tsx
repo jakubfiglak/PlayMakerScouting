@@ -52,9 +52,8 @@ export const MatchesContent = () => {
   useEffect(() => {
     getClubs();
     getMatches(page + 1, rowsPerPage, sortBy, order, filters);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [page, rowsPerPage, sortBy, order, filters]);
 
   const handleSetCurrent = (match: Match) => {
     setCurrent(match);

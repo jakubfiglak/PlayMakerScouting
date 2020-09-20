@@ -22,7 +22,8 @@ import { Order, OrdersFilterData } from '../../types/orders';
 import { useAuthState } from '../../context';
 import { useModal } from '../../hooks';
 // Utils & data
-import { formatDate } from '../../utils';
+import { formatDate, getLabel } from '../../utils';
+import { orderStatusLabels } from '../../data';
 // Styles
 import { useStyles } from './styles';
 
@@ -51,20 +52,38 @@ export const OrderCard = ({
     handleCloseDelete,
   ] = useModal();
 
-  const { _id, player, status, scout, createdAt, acceptDate } = order;
+  const {
+    _id,
+    docNumber,
+    player,
+    status,
+    scout,
+    createdAt,
+    acceptDate,
+    closeDate,
+    notes,
+  } = order;
 
   return (
     <Card>
       {loading && <Loader />}
       <CardContent>
-        <CardHeader title="Zlecenie obserwacji" subheader={`Nr: ${_id}`} />
+        <CardHeader
+          title="Zlecenie obserwacji"
+          subheader={`Nr: ${docNumber}`}
+        />
         <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography>
+              {`Status: ${getLabel(status, orderStatusLabels)}`}
+            </Typography>
+          </Grid>
           <Grid item xs={12}>
             <Typography>{`Zawodnik: ${player.firstName} ${player.lastName}`}</Typography>
           </Grid>
           {scout && (
             <Grid item xs={12}>
-              <Typography>{`Scout: ${scout.name} ${scout.surname}`}</Typography>
+              <Typography>{`Scout: ${scout.firstName} ${scout.lastName}`}</Typography>
             </Grid>
           )}
           <Grid item xs={12}>
@@ -79,6 +98,16 @@ export const OrderCard = ({
               </Typography>
             </Grid>
           )}
+          {closeDate && (
+            <Grid item xs={12}>
+              <Typography>
+                {`Data zamknięcia: ${formatDate(closeDate, true)}`}
+              </Typography>
+            </Grid>
+          )}
+          <Grid item xs={12}>
+            <Typography>{`Uwagi: ${notes}`}</Typography>
+          </Grid>
         </Grid>
       </CardContent>
       <CardActions>

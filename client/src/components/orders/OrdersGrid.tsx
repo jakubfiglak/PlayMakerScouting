@@ -23,11 +23,12 @@ export const OrdersGrid = ({
 }: OrdersGridProps) => {
   useEffect(() => {
     getOrders(filters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   return (
     <Grid container spacing={2}>
-      {ordersData.data.map((order) => (
+      {ordersData.docs.map((order) => (
         <Grid item xs={12} sm={6} md={3} key={order._id}>
           <OrderCard
             order={order}
