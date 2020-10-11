@@ -56,6 +56,10 @@ export const OrdersContent = () => {
 
   const isAdmin = user?.role === 'admin';
 
+  if (user?.role === 'scout') {
+    return <p>Aby mieć dostęp do zleceń, zostań scoutem Playmakera!</p>;
+  }
+
   return (
     <>
       {(loading || simpleDataLoading || userLoading) && <Loader />}

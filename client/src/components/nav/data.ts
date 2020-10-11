@@ -6,7 +6,7 @@ import Assignment from '@material-ui/icons/Assignment';
 import Assessment from '@material-ui/icons/Assessment';
 import { NavLinkProps } from './types';
 
-const navElements: NavLinkProps[] = [
+export const basicNavElements: NavLinkProps[] = [
   {
     Icon: AccountCircle,
     text: 'Mój profil',
@@ -28,15 +28,17 @@ const navElements: NavLinkProps[] = [
     link: '/matches',
   },
   {
-    Icon: Assignment,
-    text: 'Zlecenia',
-    link: '/orders',
-  },
-  {
     Icon: Assessment,
     text: 'Raporty',
     link: '/reports',
   },
 ];
 
-export default navElements;
+export const extendedNavElements = [
+  ...basicNavElements,
+  {
+    Icon: Assignment,
+    text: 'Zlecenia',
+    link: '/orders',
+  },
+];
