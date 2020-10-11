@@ -50,7 +50,9 @@ export const OrdersContent = () => {
 
   useEffect(() => {
     getPlayers();
-  }, []);
+    getOrders(filters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
 
   const isAdmin = user?.role === 'admin';
 
@@ -72,7 +74,6 @@ export const OrdersContent = () => {
         <OrdersGrid
           ordersData={ordersData}
           filters={filters}
-          getOrders={getOrders}
           deleteOrder={deleteOrder}
           acceptOrder={acceptOrder}
         />
