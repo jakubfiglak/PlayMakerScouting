@@ -38,7 +38,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
   const reqQuery = prepareQuery(req.query);
 
   const options = {
-    sort: req.query.sort || '_id',
+    sort: req.query.sort || '-createdAt',
     limit: req.query.limit || 20,
     page: req.query.page || 1,
     populate: [
@@ -74,24 +74,23 @@ exports.getOrders = asyncHandler(async (req, res) => {
 // @route GET /api/v1/orders/my
 // @access Private (admin and playmaker-scout only)
 exports.getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({
-    scout: req.user._id,
-  })
-    .populate([
-      {
-        path: 'player',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'scout',
-        select: 'firstName lastName',
-      },
-    ])
-    .sort('-createdAt');
+  const reqQuery = prepareQuery(req.query);
 
-  res.status(200).json({
+  const options = {
+    sort: req.query.sort || '-createdAt',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [
+      { path: 'player', select: ['firstName', 'lastName'] },
+      { path: 'scout', select: ['firstName', 'lastName'] },
+      { path: 'reports', select: ['_id'] },
+    ],
+  };
+
+  const orders = await Order.paginate(reqQuery, options);
+
+  return res.status(200).json({
     success: true,
-    count: orders.length,
     data: orders,
   });
 });

@@ -92,6 +92,14 @@ exports.getReports = asyncHandler(async (req, res) => {
         select: 'firstName lastName',
       },
       {
+        path: 'scout',
+        select: 'firstName lastName',
+      },
+      {
+        path: 'order',
+        select: 'docNumber',
+      },
+      {
         path: 'match',
         populate: [
           { path: 'homeTeam', select: 'name' },
@@ -139,6 +147,14 @@ exports.getMyReports = asyncHandler(async (req, res) => {
         select: 'firstName lastName',
       },
       {
+        path: 'scout',
+        select: 'firstName lastName',
+      },
+      {
+        path: 'order',
+        select: 'docNumber',
+      },
+      {
         path: 'match',
         populate: [
           { path: 'homeTeam', select: 'name' },
@@ -173,6 +189,10 @@ exports.getReport = asyncHandler(async (req, res, next) => {
       select: 'firstName lastName',
     },
     {
+      path: 'order',
+      select: 'docNumber',
+    },
+    {
       path: 'match',
       populate: [
         { path: 'homeTeam', select: 'name' },
@@ -181,7 +201,7 @@ exports.getReport = asyncHandler(async (req, res, next) => {
     },
     {
       path: 'scout',
-      select: 'name surname',
+      select: 'firstName lastName',
     },
   ]);
 
