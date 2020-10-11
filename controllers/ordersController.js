@@ -87,7 +87,12 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
     ],
   };
 
-  const orders = await Order.paginate(reqQuery, options);
+  const query = {
+    scout: req.user._id,
+    ...reqQuery,
+  };
+
+  const orders = await Order.paginate(query, options);
 
   return res.status(200).json({
     success: true,
