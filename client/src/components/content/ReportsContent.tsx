@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -17,6 +17,10 @@ export const ReportsContent = () => {
 
   const { loading, getMyReports, myReportsData, setCurrent } = reportsContext;
 
+  useEffect(() => {
+    getMyReports();
+  }, []);
+
   const handleSetCurrent = (report: Report) => {
     setCurrent(report);
     setActiveTab(1);
@@ -34,7 +38,6 @@ export const ReportsContent = () => {
       <TabPanel value={activeTab} index={0} title="reports">
         <ReportsGrid
           reportsData={myReportsData}
-          getReports={getMyReports}
           handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>

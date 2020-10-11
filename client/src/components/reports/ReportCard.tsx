@@ -28,12 +28,15 @@ type ReportCardProps = {
 };
 
 export const ReportCard = ({ report, handleSetCurrent }: ReportCardProps) => {
-  const { _id, player, match, createdAt, finalRating } = report;
+  const { _id, docNumber, player, match, createdAt, finalRating } = report;
 
   return (
     <Card>
       <CardContent>
-        <CardHeader title="Raport z obserwacji" subheader={`Nr: ${_id}`} />
+        <CardHeader
+          title="Raport z obserwacji"
+          subheader={`Nr: ${docNumber}`}
+        />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography>

@@ -22,7 +22,7 @@ export const ReportDetails = ({ id }: ReportDetailsProps) => {
 
   useEffect(() => {
     getReport(id);
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -30,7 +30,7 @@ export const ReportDetails = ({ id }: ReportDetailsProps) => {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h5" align="center">
-            Raport z obserwacji nr {id}
+            Raport z obserwacji nr {current?.docNumber}
           </Typography>
         </Grid>
         {current && (

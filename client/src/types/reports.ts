@@ -1,3 +1,4 @@
+import { PaginationData } from './common';
 import { Match } from './matches';
 
 export type IndSkillsField = {
@@ -57,6 +58,7 @@ type ReportData = {
 
 export type Report = {
   _id: string;
+  docNumber: string;
   player: {
     _id: string;
     firstName: string;
@@ -135,9 +137,13 @@ export type FormattedReportFormData = {
   motorSkills: MotorSkills;
 } & CommonFormData;
 
+export type ReportsData = {
+  docs: Report[];
+} & PaginationData;
+
 export type State = {
-  reportsData: Report[];
-  myReportsData: Report[];
+  reportsData: ReportsData;
+  myReportsData: ReportsData;
   current: Report | null;
   loading: boolean;
   error: string | null;
@@ -157,9 +163,9 @@ export type Action =
   | { type: 'SET_CURRENT'; payload: Report }
   | { type: 'CLEAR_CURRENT' }
   | { type: 'REPORTS_ERROR'; payload: string }
-  | { type: 'GET_REPORTS_SUCCESS'; payload: Report[] }
+  | { type: 'GET_REPORTS_SUCCESS'; payload: ReportsData }
   | { type: 'GET_REPORT_SUCCESS'; payload: Report }
-  | { type: 'GET_MY_REPORTS_SUCCESS'; payload: Report[] }
+  | { type: 'GET_MY_REPORTS_SUCCESS'; payload: ReportsData }
   | { type: 'CREATE_REPORT_SUCCESS' }
   | { type: 'UPDATE_REPORT_SUCCESS' }
   | { type: 'DELETE_REPORT_SUCCESS'; payload: string };
