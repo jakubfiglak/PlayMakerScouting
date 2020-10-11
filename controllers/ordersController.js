@@ -43,7 +43,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
     page: req.query.page || 1,
     populate: [
       { path: 'player', select: ['firstName', 'lastName'] },
-      { path: 'scout', select: ['name', 'surname'] },
+      { path: 'scout', select: ['firstName', 'lastName'] },
       { path: 'reports', select: ['_id'] },
     ],
   };
@@ -84,7 +84,7 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
       },
       {
         path: 'scout',
-        select: 'name surname',
+        select: 'firstName lastName',
       },
     ])
     .sort('-createdAt');
