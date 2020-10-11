@@ -13,11 +13,14 @@ type ReportHeaderCardProps = {
     lastName: string;
   };
   match: Match;
-  order?: string;
+  order?: {
+    _id: string;
+    docNumber: string;
+  };
   scout: {
     _id: string;
-    name: string;
-    surname: string;
+    firstName: string;
+    lastName: string;
   };
   createdAt: string;
 };
@@ -53,14 +56,14 @@ export const ReportHeaderCard = ({
             <Grid item xs={12}>
               <Typography>
                 <strong>Nr zlecenia: </strong>
-                {order}
+                {order.docNumber}
               </Typography>
             </Grid>
           )}
           <Grid item xs={12}>
             <Typography>
               <strong>Scout: </strong>
-              {`${scout.name} ${scout.surname}`}
+              {`${scout.firstName} ${scout.lastName}`}
             </Typography>
           </Grid>
           <Grid item xs={12}>

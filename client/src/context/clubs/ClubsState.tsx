@@ -6,7 +6,6 @@ import {
   State,
   Club,
   ClubsFilterData,
-  ClubsFormData,
   FormattedClubsFormData,
 } from '../../types/clubs';
 import { Order } from '../../types/common';

@@ -67,10 +67,13 @@ export type Report = {
   match: Match;
   scout: {
     _id: string;
-    name: string;
-    surname: string;
+    firstName: string;
+    lastName: string;
   };
-  order?: string;
+  order?: {
+    _id: string;
+    docNumber: string;
+  };
   individualAvg: number;
   teamplayAvg: number;
   motorAvg: number;

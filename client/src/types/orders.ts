@@ -47,7 +47,7 @@ export type GetOrders = (
 
 export type State = {
   ordersData: OrdersData;
-  myOrdersData: Order[];
+  myOrdersData: OrdersData;
   orderData: Order | null;
   current: Order | null;
   loading: boolean;
@@ -66,7 +66,7 @@ export type Action =
   | { type: 'ORDERS_ERROR'; payload: string }
   | { type: 'GET_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'GET_ORDER_SUCCESS'; payload: Order }
-  | { type: 'GET_MY_ORDERS_SUCCESS'; payload: Order[] }
+  | { type: 'GET_MY_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'ACCEPT_ORDER_SUCCESS' }
   | { type: 'CREATE_ORDER_SUCCESS' }
   | { type: 'DELETE_ORDER_SUCCESS'; payload: string };

@@ -8,7 +8,7 @@ import { initialPaginatedData } from '../../data';
 export const OrdersState: React.FC = ({ children }) => {
   const initialState: State = {
     ordersData: initialPaginatedData,
-    myOrdersData: [],
+    myOrdersData: initialPaginatedData,
     orderData: null,
     current: null,
     loading: false,
