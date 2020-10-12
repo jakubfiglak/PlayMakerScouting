@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const { Schema, model } = mongoose;
 
@@ -52,6 +53,8 @@ const PlayerSchema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
+PlayerSchema.plugin(mongoosePaginate);
 
 PlayerSchema.virtual('reports', {
   ref: 'Report',

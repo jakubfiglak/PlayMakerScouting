@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // MUI components
 import { Grid } from '@material-ui/core';
 // Custom components
@@ -9,7 +9,6 @@ import { OrdersData, OrdersFilterData } from '../../types/orders';
 type OrdersGridProps = {
   ordersData: OrdersData;
   filters: OrdersFilterData;
-  getOrders: (filters: OrdersFilterData) => void;
   deleteOrder: (id: string) => void;
   acceptOrder: (id: string, filters: OrdersFilterData) => void;
 };
@@ -17,17 +16,12 @@ type OrdersGridProps = {
 export const OrdersGrid = ({
   ordersData,
   filters,
-  getOrders,
   deleteOrder,
   acceptOrder,
 }: OrdersGridProps) => {
-  useEffect(() => {
-    getOrders(filters);
-  }, [filters]);
-
   return (
     <Grid container spacing={2}>
-      {ordersData.data.map((order) => (
+      {ordersData.docs.map((order) => (
         <Grid item xs={12} sm={6} md={3} key={order._id}>
           <OrderCard
             order={order}

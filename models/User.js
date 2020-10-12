@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -8,14 +9,14 @@ const AddressSchema = require('../schemas/Address');
 const { Schema, model } = mongoose;
 
 const UserSchema = new Schema({
-  name: {
+  firstName: {
     type: String,
-    required: 'please add a name',
+    required: 'please add a first name',
     trim: true,
   },
-  surname: {
+  lastName: {
     type: String,
-    required: 'please add a surname',
+    required: 'please add a last name',
     trim: true,
   },
   email: {
@@ -82,6 +83,8 @@ const UserSchema = new Schema({
     default: Date.now,
   },
 });
+
+UserSchema.plugin(mongoosePaginate);
 
 // Encrypt the password before each model save
 UserSchema.pre('save', async function (next) {

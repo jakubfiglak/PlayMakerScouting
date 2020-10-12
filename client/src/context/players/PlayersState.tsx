@@ -9,14 +9,11 @@ import {
   Player,
 } from '../../types/players';
 import { Order } from '../../types/common';
+import { initialPaginatedData } from '../../data';
 
 export const PlayersState: React.FC = ({ children }) => {
   const initialState: State = {
-    playersData: {
-      data: [],
-      total: 0,
-      pagination: {},
-    },
+    playersData: initialPaginatedData,
     playerData: null,
     current: null,
     playerMatches: [],
@@ -26,7 +23,6 @@ export const PlayersState: React.FC = ({ children }) => {
     getPlayers: () => null,
     getPlayer: () => null,
     getPlayerMatches: () => null,
-    deletePlayer: () => null,
     addPlayer: () => null,
     setCurrent: () => null,
     clearCurrent: () => null,
@@ -68,7 +64,7 @@ export const PlayersState: React.FC = ({ children }) => {
       const res = await axiosJson.get(playersURI);
       dispatch({
         type: 'GET_PLAYERS_SUCCESS',
-        payload: res.data,
+        payload: res.data.data,
       });
     } catch (err) {
       dispatch({
@@ -164,23 +160,6 @@ export const PlayersState: React.FC = ({ children }) => {
     }
   };
 
-  // Delete player
-  const deletePlayer = async (id: string) => {
-    setLoading();
-    try {
-      await axiosJson.delete(`/api/v1/players/${id}`);
-      dispatch({
-        type: 'DELETE_PLAYER_SUCCESS',
-        payload: id,
-      });
-    } catch (err) {
-      dispatch({
-        type: 'PLAYERS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
-  };
-
   const {
     playersData,
     playerData,
@@ -203,7 +182,6 @@ export const PlayersState: React.FC = ({ children }) => {
         getPlayers,
         getPlayer,
         getPlayerMatches,
-        deletePlayer,
         addPlayer,
         setCurrent,
         clearCurrent,

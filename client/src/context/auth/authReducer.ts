@@ -22,10 +22,7 @@ export default (state: State, action: Action): State => {
         error: null,
       };
 
-    case 'LOGIN_FAIL':
-    case 'REGISTER_FAIL':
     case 'AUTH_ERROR':
-    case 'UPDATE_PASSWORD_FAIL':
       localStorage.removeItem('token');
       return {
         ...state,
@@ -62,10 +59,19 @@ export default (state: State, action: Action): State => {
     case 'EDIT_SUCCESS':
       return { ...state, loading: false };
 
-    case 'EDIT_FAIL':
+    case 'EDIT_ERROR':
+    case 'CLUBS_ERROR':
       return {
         ...state,
         error: action.payload,
+      };
+
+    case 'ADD_CLUB_TO_FAVORITES_SUCCESS':
+    case 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
       };
 
     default:

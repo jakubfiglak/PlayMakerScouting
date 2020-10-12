@@ -3,9 +3,9 @@ import { useHistory, Link } from 'react-router-dom';
 import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 
 import { useStyles } from './styles';
-import { LoginFormData } from '../../types/auth';
-import { useForm } from '../../hooks';
-import { useAuthState } from '../../context';
+import { LoginFormData } from '../../../types/auth';
+import { useForm } from '../../../hooks';
+import { useAuthState } from '../../../context';
 
 const initialState: LoginFormData = {
   email: '',

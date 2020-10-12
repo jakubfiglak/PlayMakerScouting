@@ -5,8 +5,8 @@ import authReducer from './authReducer';
 import {
   State,
   LoginFormData,
-  RegisterFormData,
-  EditAccountData,
+  FormattedRegisterFormData,
+  FormattedEditAccountData,
   UpdatePasswordData,
 } from '../../types/auth';
 
@@ -24,6 +24,8 @@ export const AuthState: React.FC = ({ children }) => {
     logout: () => null,
     editDetails: () => null,
     updatePassword: () => null,
+    addClubToFavorites: () => null,
+    removeClubFromFavorites: () => null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -56,7 +58,7 @@ export const AuthState: React.FC = ({ children }) => {
   };
 
   // Register user
-  const register = async (formData: RegisterFormData) => {
+  const register = async (formData: FormattedRegisterFormData) => {
     setLoading();
 
     try {
@@ -70,7 +72,7 @@ export const AuthState: React.FC = ({ children }) => {
       loadUser();
     } catch (err) {
       dispatch({
-        type: 'REGISTER_FAIL',
+        type: 'AUTH_ERROR',
         payload: err.response.data.error,
       });
     }
@@ -91,7 +93,7 @@ export const AuthState: React.FC = ({ children }) => {
       loadUser();
     } catch (err) {
       dispatch({
-        type: 'LOGIN_FAIL',
+        type: 'AUTH_ERROR',
         payload: err.response.data.error,
       });
     }
@@ -112,7 +114,7 @@ export const AuthState: React.FC = ({ children }) => {
       loadUser();
     } catch (err) {
       dispatch({
-        type: 'UPDATE_PASSWORD_FAIL',
+        type: 'AUTH_ERROR',
         payload: err.response.data.error,
       });
     }
@@ -126,7 +128,7 @@ export const AuthState: React.FC = ({ children }) => {
   };
 
   // Edit details
-  const editDetails = async (formData: EditAccountData) => {
+  const editDetails = async (formData: FormattedEditAccountData) => {
     setLoading();
 
     try {
@@ -139,7 +141,43 @@ export const AuthState: React.FC = ({ children }) => {
       loadUser();
     } catch (err) {
       dispatch({
-        type: 'EDIT_FAIL',
+        type: 'EDIT_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Add club to favorites
+  const addClubToFavorites = async (id: string) => {
+    setLoading();
+
+    try {
+      await axiosJson.post(`/api/v1/clubs/${id}/addtofavorites`);
+      dispatch({
+        type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
+      });
+      loadUser();
+    } catch (err) {
+      dispatch({
+        type: 'CLUBS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Remove club from favorites
+  const removeClubFromFavorites = async (id: string) => {
+    setLoading();
+
+    try {
+      await axiosJson.post(`/api/v1/clubs/${id}/removefromfavorites`);
+      dispatch({
+        type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
+      });
+      loadUser();
+    } catch (err) {
+      dispatch({
+        type: 'CLUBS_ERROR',
         payload: err.response.data.error,
       });
     }
@@ -147,14 +185,16 @@ export const AuthState: React.FC = ({ children }) => {
 
   // Clear errors
 
+  const { user, token, isAuthenticated, loading, error } = state;
+
   return (
     <AuthContext.Provider
       value={{
-        user: state.user,
-        token: state.token,
-        isAuthenticated: state.isAuthenticated,
-        loading: state.loading,
-        error: state.error,
+        user,
+        token,
+        isAuthenticated,
+        loading,
+        error,
         setLoading,
         loadUser,
         login,
@@ -162,6 +202,8 @@ export const AuthState: React.FC = ({ children }) => {
         register,
         editDetails,
         updatePassword,
+        addClubToFavorites,
+        removeClubFromFavorites,
       }}
     >
       {children}

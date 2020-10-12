@@ -1,1 +1,0 @@
-export { MatchCard } from './MatchCard';

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Drawer, Divider, Typography } from '@material-ui/core';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import useStyles from './styles';
-import navElements from './data';
+import { basicNavElements, extendedNavElements } from './data';
 import NavElement from './NavElement';
 import NavButton from './NavButton';
 import { useAuthState } from '../../context';
@@ -14,6 +14,9 @@ const Sidebar: React.FC = () => {
   const history = useHistory();
 
   const { logout, user } = authContext;
+
+  const navElements =
+    user?.role === 'scout' ? basicNavElements : extendedNavElements;
 
   const onLogout = () => {
     history.push('/login');
@@ -33,7 +36,7 @@ const Sidebar: React.FC = () => {
         {user && (
           <Typography>
             Hello
-            {user.name}
+            {user.firstName}
           </Typography>
         )}
       </div>

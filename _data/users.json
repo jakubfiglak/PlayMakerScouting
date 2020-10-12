@@ -1,8 +1,8 @@
 [
   {
     "_id": "5d7a514b5d2c12c7449be042",
-    "name": "Admin",
-    "surname": "Account",
+    "firstName": "Admin",
+    "lastName": "Account",
     "role": "admin",
     "email": "admin@gmail.com",
     "phone": "123456789",
@@ -21,8 +21,8 @@
   },
   {
     "_id": "5d7a514b5d2c12c7449be045",
-    "name": "John",
-    "surname": "Doe",
+    "firstName": "John",
+    "lastName": "Doe",
     "role": "scout",
     "email": "john@gmail.com",
     "phone": "123456789",
@@ -42,8 +42,8 @@
   },
   {
     "_id": "5d7a514b5d2c12c7449be046",
-    "name": "Kevin",
-    "surname": "Smith",
+    "firstName": "Kevin",
+    "lastName": "Smith",
     "role": "playmaker-scout",
     "email": "kevin@gmail.com",
     "phone": "123456789",
@@ -63,8 +63,8 @@
   },
   {
     "_id": "5c8a1d5b0190b214360dc031",
-    "name": "Mary",
-    "surname": "Williams",
+    "firstName": "Mary",
+    "lastName": "Williams",
     "role": "playmaker-scout",
     "email": "mary@gmail.com",
     "phone": "123456789",
@@ -80,6 +80,29 @@
     "password": "Password123",
     "passwordConfirm": "Password123",
     "myClubs": [],
-    "myPlayers": []
+    "myPlayers": [
+      "5ee50d4327c7c5c1998a4196",
+      "5ee50d93e1a9105fcf95cb5f",
+      "5ee50daee6693713d57f166d",
+      "5ee50ddaac4b77f2d7a21326",
+      "5ee510bb6aff66353f67a7cd",
+      "5ee50e5550a453bb0174b9b6",
+      "5ee50e8363c85bdf87cc0d72",
+      "5ee50e8a3261fb547d70459d",
+      "5ee50ecf582d94b0a140c5c5",
+      "5ee50ed85ade40d60ae9a782",
+      "5ee50f199f46ce1701ac838f",
+      "5ee50f1d3196f7895d8f8e4f",
+      "5ee50f5a63902c58db49ba87",
+      "5ee50f5cf4dc903d4b68b32d",
+      "5ee50f8915b4caa9f077643c",
+      "5ee50f8d62527ff1fa5fcbb6",
+      "5ee50fbad77edae988c59b4a",
+      "5ee50fbdc10aac9248f3a007",
+      "5ee50ff041acffcecad9e556",
+      "5ee50ff4706aaa7f0174ffa3",
+      "5ee5102aebef64ec49c5762b",
+      "5ee5102d6387e051fe6efffb"
+    ]
   }
 ]

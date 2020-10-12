@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 // MUI components
 import {
   Card,
@@ -9,6 +10,8 @@ import {
   IconButton,
   Grid,
   Tooltip,
+  Chip,
+  Avatar,
 } from '@material-ui/core';
 // MUI icons
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -22,7 +25,8 @@ import { Order, OrdersFilterData } from '../../types/orders';
 import { useAuthState } from '../../context';
 import { useModal } from '../../hooks';
 // Utils & data
-import { formatDate } from '../../utils';
+import { formatDate, getLabel } from '../../utils';
+import { orderStatusLabels } from '../../data';
 // Styles
 import { useStyles } from './styles';
 
@@ -51,34 +55,89 @@ export const OrderCard = ({
     handleCloseDelete,
   ] = useModal();
 
-  const { _id, player, open, scout, createdAt, acceptDate } = order;
+  const {
+    _id,
+    docNumber,
+    player,
+    status,
+    scout,
+    createdAt,
+    acceptDate,
+    closeDate,
+    notes,
+  } = order;
 
   return (
     <Card>
       {loading && <Loader />}
       <CardContent>
-        <CardHeader title="Zlecenie obserwacji" subheader={`Nr: ${_id}`} />
+        <CardHeader
+          title="Zlecenie obserwacji"
+          subheader={`Nr: ${docNumber}`}
+        />
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography>{`Zawodnik: ${player.firstName} ${player.lastName}`}</Typography>
+            <Typography>
+              <strong>Status:</strong>{' '}
+              <Chip
+                avatar={
+                  <Avatar
+                    className={clsx({
+                      [classes.chip]: true,
+                      [classes.avatarOpen]: status === 'open',
+                      [classes.avatarClosed]: status === 'closed',
+                      [classes.avatarAccepted]: status === 'accepted',
+                    })}
+                  >
+                    {status[0].toUpperCase()}
+                  </Avatar>
+                }
+                label={getLabel(status, orderStatusLabels)}
+                className={clsx({
+                  [classes.chip]: true,
+                  [classes.open]: status === 'open',
+                  [classes.closed]: status === 'closed',
+                  [classes.accepted]: status === 'accepted',
+                })}
+              />
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>
+              <strong>Zawodnik:</strong> {player.firstName} {player.lastName}
+            </Typography>
           </Grid>
           {scout && (
             <Grid item xs={12}>
-              <Typography>{`Scout: ${scout.name} ${scout.surname}`}</Typography>
+              <Typography>
+                <strong>Scout:</strong> {scout.firstName} {scout.lastName}
+              </Typography>
             </Grid>
           )}
           <Grid item xs={12}>
             <Typography>
-              {`Data utworzenia: ${formatDate(createdAt, true)}`}
+              <strong>Data utworzenia:</strong> {formatDate(createdAt, true)}
             </Typography>
           </Grid>
           {acceptDate && (
             <Grid item xs={12}>
               <Typography>
-                {`Data przyjęcia: ${formatDate(acceptDate, true)}`}
+                <strong>Data przyjęcia:</strong> {formatDate(acceptDate, true)}
               </Typography>
             </Grid>
           )}
+          {closeDate && (
+            <Grid item xs={12}>
+              <Typography>
+                <strong>Data zamknięcia:</strong> {formatDate(closeDate, true)}
+              </Typography>
+            </Grid>
+          )}
+          <Grid item xs={12}>
+            <Typography>
+              <strong>Uwagi:</strong> {notes}
+            </Typography>
+          </Grid>
         </Grid>
       </CardContent>
       <CardActions>
@@ -105,7 +164,7 @@ export const OrderCard = ({
             <IconButton
               aria-label="edit match"
               className={classes.accept}
-              disabled={!open}
+              disabled={status !== 'open'}
               onClick={() => acceptOrder(_id, filters)}
             >
               <AssignmentTurnedInIcon />

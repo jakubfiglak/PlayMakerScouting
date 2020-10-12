@@ -1,3 +1,7 @@
+import { PaginationData } from './common';
+
+export type OrderStatus = 'open' | 'accepted' | 'closed';
+
 export type Order = {
   _id: string;
   player: {
@@ -5,14 +9,17 @@ export type Order = {
     firstName: string;
     lastName: string;
   };
-  open: boolean;
+  status: 'open' | 'accepted' | 'closed';
   scout?: {
     _id: string;
-    name: string;
-    surname: string;
+    firstName: string;
+    lastName: string;
   };
   createdAt: string;
   acceptDate?: string;
+  closeDate?: string;
+  docNumber: string;
+  notes?: string;
 };
 
 export type OrderFormData = {
@@ -20,23 +27,12 @@ export type OrderFormData = {
 };
 
 export type OrdersData = {
-  data: Order[];
-  total: number;
-  pagination: {
-    prev?: {
-      page: number;
-      limit: number;
-    };
-    next?: {
-      page: number;
-      limit: number;
-    };
-  };
-};
+  docs: Order[];
+} & PaginationData;
 
 export type OrdersFilterData = {
   player: string;
-  status: 'all' | 'open' | 'accepted';
+  status: OrderStatus | '';
   createdAfter: string;
   createdBefore: string;
 };
@@ -51,7 +47,7 @@ export type GetOrders = (
 
 export type State = {
   ordersData: OrdersData;
-  myOrdersData: Order[];
+  myOrdersData: OrdersData;
   orderData: Order | null;
   current: Order | null;
   loading: boolean;
@@ -70,7 +66,7 @@ export type Action =
   | { type: 'ORDERS_ERROR'; payload: string }
   | { type: 'GET_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'GET_ORDER_SUCCESS'; payload: Order }
-  | { type: 'GET_MY_ORDERS_SUCCESS'; payload: Order[] }
+  | { type: 'GET_MY_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'ACCEPT_ORDER_SUCCESS' }
   | { type: 'CREATE_ORDER_SUCCESS' }
   | { type: 'DELETE_ORDER_SUCCESS'; payload: string };

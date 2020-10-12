@@ -8,30 +8,48 @@ import { TabPanel, Loader } from '../common';
 // Types
 import { PlayersFilterData, Player } from '../../types/players';
 // Hooks
-import { usePlayersState, useSimplifiedDataState } from '../../context';
-import { useTabs } from '../../hooks';
+import {
+  usePlayersState,
+  useSimplifiedDataState,
+  useAuthState,
+} from '../../context';
+import { useTabs, useTable } from '../../hooks';
 
 export const PlayersContent = () => {
   const playersContext = usePlayersState();
   const simplifiedDataContext = useSimplifiedDataState();
+  const authContext = useAuthState();
+
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
+  const [
+    page,
+    rowsPerPage,
+    sortBy,
+    order,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleSort,
+  ] = useTable();
 
   const {
     loading,
     getPlayers,
-    playersData,
-    deletePlayer,
+    playersData: { docs, totalDocs },
     setCurrent,
   } = playersContext;
 
   const {
     loading: simpleDataLoading,
     getClubs,
+    getMyClubs,
     clubsData,
+    myClubsData,
   } = simplifiedDataContext;
 
+  const { user } = authContext;
+
   const [filters, setFilters] = useState<PlayersFilterData>({
-    name: '',
+    lastName: '',
     club: '',
     position: '',
   });
@@ -41,10 +59,17 @@ export const PlayersContent = () => {
     setActiveTab(1);
   };
 
+  const isAdmin = user?.role === 'admin';
+
   useEffect(() => {
-    getClubs();
+    if (isAdmin) {
+      getClubs();
+    } else {
+      getMyClubs();
+    }
+    getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [activeTab, page, rowsPerPage, sortBy, order, filters]);
 
   return (
     <>
@@ -60,17 +85,25 @@ export const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
-        <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
+        <PlayersFilterForm
+          clubsData={isAdmin ? clubsData : myClubsData}
+          setFilters={setFilters}
+        />
         <PlayersTable
-          getPlayers={getPlayers}
-          playersData={playersData}
-          filters={filters}
-          deletePlayer={deletePlayer}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          sortBy={sortBy}
+          order={order}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          handleSort={handleSort}
+          players={docs}
+          total={totalDocs}
           handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
-        <PlayersForm clubsData={clubsData} />
+        <PlayersForm clubsData={isAdmin ? clubsData : myClubsData} />
       </TabPanel>
     </>
   );

@@ -3,6 +3,7 @@ const {
   createClub,
   getClubs,
   getClubsList,
+  getMyClubsList,
   getClub,
   getClubsInVoivodeship,
   getClubsInRadius,
@@ -13,20 +14,19 @@ const {
   getMyClubs,
 } = require('../controllers/clubsController');
 const { protect, authorize } = require('../middleware/auth');
-const advancedResults = require('../middleware/advancedResults');
-const Club = require('../models/Club');
 
 const playersRouter = require('./players');
 const matchesRouter = require('./matches');
 
 const router = express.Router();
 
-router.use('/:clubId/players', [protect, authorize('admin')], playersRouter);
+router.use('/:clubId/players', protect, playersRouter);
 router.use('/:clubId/matches', protect, matchesRouter);
 
-router.post('/', [protect, authorize('admin')], createClub);
-router.get('/', [protect, advancedResults(Club)], getClubs);
+router.post('/', protect, createClub);
+router.get('/', protect, getClubs);
 router.get('/list', protect, getClubsList);
+router.get('/mylist', protect, getMyClubsList);
 router.get('/my', protect, getMyClubs);
 router.get('/:id', protect, getClub);
 router.put('/:id', [protect, authorize('admin')], updateClub);

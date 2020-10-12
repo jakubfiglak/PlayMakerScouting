@@ -11,3 +11,8 @@ export { OrdersFilterForm } from './orders/OrdersFilterForm';
 export { OrdersForm } from './orders/OrdersForm';
 
 export { ReportsForm } from './reports/ReportsForm';
+
+export { EditAccountForm } from './auth/EditAccountForm';
+export { LoginForm } from './auth/LoginForm';
+export { RegisterForm } from './auth/RegisterForm';
+export { UpdatePasswordForm } from './auth/UpdatePasswordForm';

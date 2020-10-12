@@ -4,6 +4,7 @@ import { Grid, TextField, FormControl } from '@material-ui/core';
 // Custom components
 import { DivisionSelect } from '../selects';
 import { MainFormActions } from '../actions';
+import { AddressFieldset } from '../fieldsets';
 import { Loader } from '../../common';
 // Types
 import { ClubsFormData } from '../../../types/clubs';
@@ -17,12 +18,26 @@ export const ClubsForm = () => {
 
   const initialState: ClubsFormData = {
     name: current?.name || '',
-    address: current?.location.formattedAddress || '',
+    street: current?.address.street || '',
+    streetNo: current?.address.streetNo || '',
+    zipCode: current?.address.zipCode || '',
+    city: current?.address.city || '',
+    voivodeship: current?.address.voivodeship || '',
+    country: current?.address.country || '',
     division: current?.division || '',
   };
   const [clubData, onInputChange, setClubData] = useForm(initialState);
 
-  const { name, address, division } = clubData;
+  const {
+    name,
+    street,
+    streetNo,
+    zipCode,
+    city,
+    voivodeship,
+    country,
+    division,
+  } = clubData;
 
   const onCancelClick = () => {
     setClubData(initialState);
@@ -31,11 +46,24 @@ export const ClubsForm = () => {
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
+    const formattedClubData = {
+      name,
+      address: {
+        street,
+        streetNo,
+        zipCode,
+        city,
+        voivodeship,
+        country,
+      },
+      division,
+    };
+
     if (current) {
-      editClub(current._id, clubData);
+      editClub(current._id, formattedClubData);
       clearCurrent();
     } else {
-      addClub(clubData);
+      addClub(formattedClubData);
     }
   };
 
@@ -56,19 +84,15 @@ export const ClubsForm = () => {
             onChange={onInputChange}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            id="address"
-            label="Adres"
-            name="address"
-            value={address}
-            onChange={onInputChange}
-            helperText="np. ul. Cicha 132/16 62-200 Gniezno"
-          />
-        </Grid>
+        <AddressFieldset
+          streetValue={street}
+          streetNoValue={streetNo}
+          zipCodeValue={zipCode}
+          cityValue={city}
+          voivodeshipValue={voivodeship}
+          countryValue={country}
+          onChange={onInputChange}
+        />
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
             <DivisionSelect

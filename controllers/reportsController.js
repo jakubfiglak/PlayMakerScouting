@@ -4,14 +4,12 @@ const Player = require('../models/Player');
 const Match = require('../models/Match');
 const Order = require('../models/Order');
 const ErrorResponse = require('../utils/errorResponse');
+const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new report
 // @route POST /api/v1/reports
 // @access Private
 exports.createReport = asyncHandler(async (req, res, next) => {
-  // TODO:
-  // - do not let user create a report connected to an order if the order status is 'open' or 'closed'
-
   req.body.scout = req.user._id;
 
   const playerId = req.body.player;
@@ -44,6 +42,22 @@ exports.createReport = asyncHandler(async (req, res, next) => {
     );
   }
 
+  if (orderId && order.status === 'open') {
+    return next(
+      new ErrorResponse(
+        'You have to accept the order before creating a report attached to that order'
+      )
+    );
+  }
+
+  if (orderId && order.status === 'closed') {
+    return next(
+      new ErrorResponse(
+        'You cannot create a report attached to an order that has already been closed'
+      )
+    );
+  }
+
   // Delete indivdualSkills field if the rating value is equal to 0
   Object.entries(req.body.individualSkills).forEach(([key, value]) => {
     if (value.rating === '0' || value.rating === 0) {
@@ -65,32 +79,25 @@ exports.createReport = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/players/:playerId/reports
 // @access Private (admin only)
 exports.getReports = asyncHandler(async (req, res) => {
-  if (req.params.playerId) {
-    const reports = await Report.find({
-      player: req.params.playerId,
-    }).sort('-createdAt');
+  const { playerId } = req.params;
+  const reqQuery = prepareQuery(req.query);
 
-    return res.status(200).json({
-      success: true,
-      count: reports.length,
-      data: reports,
-    });
-  }
-
-  res.status(200).json(res.advancedResults);
-});
-
-// @desc Get users reports
-// @route GET /api/v1/reports/my
-// @access Private
-exports.getMyReports = asyncHandler(async (req, res) => {
-  const reports = await Report.find({
-    scout: req.user._id,
-  })
-    .populate([
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [
       {
         path: 'player',
         select: 'firstName lastName',
+      },
+      {
+        path: 'scout',
+        select: 'firstName lastName',
+      },
+      {
+        path: 'order',
+        select: 'docNumber',
       },
       {
         path: 'match',
@@ -99,12 +106,73 @@ exports.getMyReports = asyncHandler(async (req, res) => {
           { path: 'awayTeam', select: 'name' },
         ],
       },
-    ])
-    .sort('-createdAt');
+    ],
+  };
+
+  if (playerId) {
+    const query = {
+      player: playerId,
+      ...reqQuery,
+    };
+
+    const reports = await Report.paginate(query, options);
+
+    return res.status(200).json({
+      success: true,
+      data: reports,
+    });
+  }
+
+  const reports = await Report.paginate(reqQuery, options);
+
+  return res.status(200).json({
+    success: true,
+    data: reports,
+  });
+});
+
+// @desc Get users reports
+// @route GET /api/v1/reports/my
+// @access Private
+exports.getMyReports = asyncHandler(async (req, res) => {
+  const reqQuery = prepareQuery(req.query);
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [
+      {
+        path: 'player',
+        select: 'firstName lastName',
+      },
+      {
+        path: 'scout',
+        select: 'firstName lastName',
+      },
+      {
+        path: 'order',
+        select: 'docNumber',
+      },
+      {
+        path: 'match',
+        populate: [
+          { path: 'homeTeam', select: 'name' },
+          { path: 'awayTeam', select: 'name' },
+        ],
+      },
+    ],
+  };
+
+  const query = {
+    scout: req.user._id,
+    ...reqQuery,
+  };
+
+  const reports = await Report.paginate(query, options);
 
   res.status(200).json({
     success: true,
-    count: reports.length,
     data: reports,
   });
 });
@@ -121,6 +189,10 @@ exports.getReport = asyncHandler(async (req, res, next) => {
       select: 'firstName lastName',
     },
     {
+      path: 'order',
+      select: 'docNumber',
+    },
+    {
       path: 'match',
       populate: [
         { path: 'homeTeam', select: 'name' },
@@ -129,7 +201,7 @@ exports.getReport = asyncHandler(async (req, res, next) => {
     },
     {
       path: 'scout',
-      select: 'name surname',
+      select: 'firstName lastName',
     },
   ]);
 
@@ -138,8 +210,8 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   }
 
   if (
-    report.scout._id.toString() !== req.user._id
-    && req.user.role !== 'admin'
+    report.scout._id.toString() !== req.user._id &&
+    req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(

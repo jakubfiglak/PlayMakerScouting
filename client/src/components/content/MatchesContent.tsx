@@ -9,20 +9,29 @@ import { MatchesTable } from '../tables';
 import { Match, MatchesFilterData } from '../../types/matches';
 // Hooks
 import { useMatchesState, useSimplifiedDataState } from '../../context';
-import { useTabs } from '../../hooks';
+import { useTabs, useTable } from '../../hooks';
 // Utils & data
 import { formatDateObject, tomorrow, yearFromNow } from '../../utils';
 
 export const MatchesContent = () => {
   const matchesContext = useMatchesState();
   const simplifiedDataContext = useSimplifiedDataState();
+
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
+  const [
+    page,
+    rowsPerPage,
+    sortBy,
+    order,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleSort,
+  ] = useTable();
 
   const {
     loading,
     getMatches,
-    matchesData,
-    deleteMatch,
+    matchesData: { docs, totalDocs },
     setCurrent,
   } = matchesContext;
 
@@ -42,8 +51,9 @@ export const MatchesContent = () => {
 
   useEffect(() => {
     getClubs();
+    getMatches(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [page, rowsPerPage, sortBy, order, filters]);
 
   const handleSetCurrent = (match: Match) => {
     setCurrent(match);
@@ -62,10 +72,15 @@ export const MatchesContent = () => {
       <TabPanel value={activeTab} index={0} title="matches">
         <MatchesFilterForm clubsData={clubsData} setFilters={setFilters} />
         <MatchesTable
-          getMatches={getMatches}
-          matchesData={matchesData}
-          deleteMatch={deleteMatch}
-          filters={filters}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          sortBy={sortBy}
+          order={order}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          handleSort={handleSort}
+          matches={docs}
+          total={totalDocs}
           handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>

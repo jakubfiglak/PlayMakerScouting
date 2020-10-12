@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Club = require('../models/Club');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
+const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new club
 // @route POST /api/v1/clubs
@@ -17,6 +18,20 @@ exports.createClub = asyncHandler(async (req, res, next) => {
 
   club = await Club.create(req.body);
 
+  // If the user creating the club is not an admin, push the clubs ID to users myClubs array
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      );
+    }
+
+    user.myClubs.push(club._id);
+    await user.save();
+  }
+
   res.status(201).json({
     success: true,
     message: 'Successfully created new club!',
@@ -28,7 +43,20 @@ exports.createClub = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/clubs
 // @access Private
 exports.getClubs = asyncHandler(async (req, res) => {
-  res.status(200).json(res.advancedResults);
+  const reqQuery = prepareQuery(req.query);
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+  };
+
+  const clubs = await Club.paginate(reqQuery, options);
+
+  res.status(200).json({
+    success: true,
+    data: clubs,
+  });
 });
 
 // @desc Get clubs list
@@ -36,6 +64,31 @@ exports.getClubs = asyncHandler(async (req, res) => {
 // @access Private
 exports.getClubsList = asyncHandler(async (req, res) => {
   const clubs = await Club.find().select('name').sort('name');
+
+  return res.status(200).json({
+    success: true,
+    count: clubs.length,
+    data: clubs,
+  });
+});
+
+// @desc Get my clubs list
+// @route GET /api/v1/clubs/mylist
+// @access Private
+exports.getMyClubsList = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+    );
+  }
+
+  const { myClubs } = user;
+
+  const clubs = await Club.find({ _id: { $in: myClubs } })
+    .select('name')
+    .sort('name');
 
   return res.status(200).json({
     success: true,
@@ -232,7 +285,20 @@ exports.getMyClubs = asyncHandler(async (req, res, next) => {
 
   const { myClubs } = user;
 
-  const clubs = await Club.find({ _id: { $in: myClubs } });
+  const reqQuery = prepareQuery(req.query);
+
+  const query = {
+    _id: { $in: myClubs },
+    ...reqQuery,
+  };
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+  };
+
+  const clubs = await Club.paginate(query, options);
 
   res.status(200).json({
     success: true,

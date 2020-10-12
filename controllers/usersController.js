@@ -1,12 +1,26 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
+const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Get all users
 // @route GET /api/v1/users
 // @access Private (admin only)
 exports.getUsers = asyncHandler(async (req, res) => {
-  res.status(200).json(res.advancedResults);
+  const reqQuery = prepareQuery(req.query);
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+  };
+
+  const users = await User.paginate(reqQuery, options);
+
+  res.status(200).json({
+    success: true,
+    data: users,
+  });
 });
 
 // @desc Get single user

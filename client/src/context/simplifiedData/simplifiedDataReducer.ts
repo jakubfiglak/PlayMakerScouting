@@ -32,6 +32,14 @@ export default (state: State, action: Action): State => {
         clubsData: action.payload,
       };
 
+    case 'GET_MY_CLUBS_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        myClubsData: action.payload,
+      };
+
     default:
       return state;
   }

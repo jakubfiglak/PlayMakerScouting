@@ -3,6 +3,7 @@ const Player = require('../models/Player');
 const Club = require('../models/Club');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
+const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new player
 // @route POST /api/v1/players
@@ -45,31 +46,73 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/players
 // @route GET /api/v1/clubs/:clubId/players
 // @access Private (admin only)
-exports.getPlayers = asyncHandler(async (req, res) => {
-  if (req.params.clubId) {
-    const players = await Player.find({
-      club: req.params.clubId,
-    });
+exports.getPlayers = asyncHandler(async (req, res, next) => {
+  const { clubId } = req.params;
 
-    return res.status(200).json({
-      success: true,
-      count: players.length,
-      data: players,
-    });
+  const reqQuery = prepareQuery(req.query);
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [{ path: 'club', select: 'name' }],
+  };
+
+  const query = { ...reqQuery };
+
+  // If club ID is provided in query params, return only players assinged to this club
+  if (clubId) {
+    query.club = clubId;
   }
 
-  res.status(200).json(res.advancedResults);
+  // If user is not an admin return only players to which this user has access to
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      );
+    }
+
+    const { myPlayers } = user;
+
+    query._id = { $in: myPlayers };
+  }
+
+  const players = await Player.paginate(query, options);
+
+  res.status(200).json({
+    success: true,
+    data: players,
+  });
 });
 
 // @desc Get players list
 // @route GET /api/v1/players/list
 // @access Private
-exports.getPlayersList = asyncHandler(async (req, res) => {
-  const players = await Player.find()
+exports.getPlayersList = asyncHandler(async (req, res, next) => {
+  const query = {};
+
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      );
+    }
+
+    const { myPlayers } = user;
+
+    query._id = { $in: myPlayers };
+  }
+
+  const players = await Player.find(query)
     .select('firstName lastName')
     .populate({ path: 'club', select: 'name' });
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     count: players.length,
     data: players,
@@ -142,28 +185,6 @@ exports.deletePlayer = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc Get my players (players that the user has access to)
-// @route GET /api/v1/players/my
-// @access Private
-exports.getMyPlayers = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
-  }
-
-  const { myPlayers } = user;
-
-  const players = await Player.find({ _id: { $in: myPlayers } });
-
-  res.status(200).json({
-    success: true,
-    data: players,
-  });
-});
-
 // @desc Grant user with an access to a specific player
 // @route POST /api/v1/players/grantaccess
 // @access Private (admin only)
@@ -192,6 +213,11 @@ exports.grantAccess = asyncHandler(async (req, res, next) => {
         `User with the id of ${userId} already has access to the player with the id of ${playerId}`
       )
     );
+  }
+
+  // If user doesn't have players club in myClubs array, add it
+  if (!user.myClubs.includes(player.club)) {
+    user.myClubs.push(player.club);
   }
 
   user.myPlayers.push(playerId);

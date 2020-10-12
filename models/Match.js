@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const { Schema, model } = mongoose;
 
@@ -23,5 +24,7 @@ const MatchSchema = new Schema({
     required: 'Please add a date',
   },
 });
+
+MatchSchema.plugin(mongoosePaginate);
 
 module.exports = model('Match', MatchSchema);

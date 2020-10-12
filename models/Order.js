@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const { Schema, model } = mongoose;
 
@@ -40,6 +41,8 @@ const OrderSchema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
+OrderSchema.plugin(mongoosePaginate);
 
 OrderSchema.pre('save', async function (next) {
   const count = await model('Order', OrderSchema).countDocuments();

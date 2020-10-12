@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // MUI components
 import {
   Table,
@@ -13,53 +13,39 @@ import {
 import { TablePaginationActions, TableHeader } from '../../common';
 import { ClubsTableRow } from './ClubsTableRow';
 // Types
-import {
-  ClubsData,
-  GetClubs,
-  ClubsFilterData,
-  Club,
-} from '../../../types/clubs';
-// Hooks
-import { useTable } from '../../../hooks';
+import { Club } from '../../../types/clubs';
+import { CommonTableProps } from '../../../types/common';
 // Utils & data
 import { clubsHeadCells } from '../data';
 // Styles
 import { useStyles } from '../styles';
 
 type TableProps = {
-  getClubs: GetClubs;
-  clubsData: ClubsData;
-  filters: ClubsFilterData;
-  deleteClub: (id: string) => void;
+  clubs: Club[];
   handleSetCurrent: (club: Club) => void;
-};
+  addToFavorites: (id: string) => void;
+  removeFromFavorites: (id: string) => void;
+} & CommonTableProps;
 
 export const ClubsTable = ({
-  getClubs,
-  clubsData,
-  filters,
-  deleteClub,
+  page,
+  rowsPerPage,
+  sortBy,
+  order,
+  handleChangePage,
+  handleChangeRowsPerPage,
+  handleSort,
+  clubs,
+  total,
   handleSetCurrent,
+  addToFavorites,
+  removeFromFavorites,
 }: TableProps) => {
   const classes = useStyles();
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
-    handleChangePage,
-    handleChangeRowsPerPage,
-    handleSort,
-  ] = useTable();
-
-  useEffect(() => {
-    getClubs(page + 1, rowsPerPage, sortBy, order, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
 
   return (
     <TableContainer component={Paper} className={classes.paper}>
-      <Table className={classes.table} aria-label="customized table">
+      <Table className={classes.table} aria-label="clubs table">
         <TableHeader
           headCells={clubsHeadCells}
           sortBy={sortBy}
@@ -67,15 +53,16 @@ export const ClubsTable = ({
           handleSort={handleSort}
         />
         <TableBody>
-          {clubsData.data.map((club) => {
+          {clubs.map((club) => {
             const { _id } = club;
 
             return (
               <ClubsTableRow
                 key={_id}
                 club={club}
-                deleteClub={deleteClub}
                 handleSetCurrent={handleSetCurrent}
+                addToFavorites={addToFavorites}
+                removeFromFavorites={removeFromFavorites}
               />
             );
           })}
@@ -85,7 +72,7 @@ export const ClubsTable = ({
             <TablePagination
               rowsPerPageOptions={[5, 10, 20]}
               colSpan={8}
-              count={clubsData.total}
+              count={total}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

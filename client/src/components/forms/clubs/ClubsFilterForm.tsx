@@ -58,9 +58,11 @@ export const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
-          <FormControl variant="outlined" size="small" fullWidth>
-            <VoivodeshipSelect onChange={onInputChange} value={voivodeship} />
-          </FormControl>
+          <VoivodeshipSelect
+            onChange={onInputChange}
+            value={voivodeship}
+            size="small"
+          />
         </Grid>
         <FilterFormActions handleClearFilter={handleClearFilter} />
       </Grid>

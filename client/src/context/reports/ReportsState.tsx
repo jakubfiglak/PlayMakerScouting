@@ -3,11 +3,12 @@ import { axiosJson } from '../../config/axios';
 import ReportsContext from './reportsContext';
 import reportsReducer from './reportsReducer';
 import { State, Report, FormattedReportFormData } from '../../types/reports';
+import { initialPaginatedData } from '../../data';
 
 export const ReportsState: React.FC = ({ children }) => {
   const initialState: State = {
-    reportsData: [],
-    myReportsData: [],
+    reportsData: initialPaginatedData,
+    myReportsData: initialPaginatedData,
     current: null,
     loading: false,
     error: null,

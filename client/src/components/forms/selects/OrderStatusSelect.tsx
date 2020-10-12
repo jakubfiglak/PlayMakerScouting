@@ -14,9 +14,10 @@ export const OrderStatusSelect = ({ onChange, value }: SelectProps) => {
         onChange={onChange}
         value={value}
       >
-        <MenuItem value="all">Wszystkie</MenuItem>
+        <MenuItem value="">Wszystkie</MenuItem>
         <MenuItem value="open">Otwarte</MenuItem>
         <MenuItem value="accepted">Przyjęte do realizacji</MenuItem>
+        <MenuItem value="closed">Zamknięte</MenuItem>
       </Select>
     </>
   );

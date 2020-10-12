@@ -18,7 +18,7 @@ type FilterFormProps = {
 };
 
 const initialState: PlayersFilterData = {
-  name: '',
+  lastName: '',
   club: '',
   position: '',
 };
@@ -30,7 +30,7 @@ export const PlayersFilterForm = ({
   const classes = useStyles();
   const [formData, onInputChange, setFormData] = useForm(initialState);
 
-  const { name, club, position } = formData;
+  const { lastName, club, position } = formData;
 
   const handleClearFilter = () => {
     setFormData(initialState);
@@ -48,13 +48,13 @@ export const PlayersFilterForm = ({
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <TextField
             variant="outlined"
-            id="name"
+            id="lastName"
             label="Nazwisko"
-            name="name"
+            name="lastName"
             size="small"
             fullWidth
             onChange={onInputChange}
-            value={name}
+            value={lastName}
           />
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.input}>

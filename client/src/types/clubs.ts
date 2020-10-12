@@ -1,7 +1,12 @@
-import { Location, Order } from './common';
+import {
+  Location,
+  Order,
+  Address,
+  PaginationData,
+  Voivodeship,
+} from './common';
 
 export type Division =
-  | ''
   | 'Ekstraklasa'
   | 'I liga'
   | 'II liga'
@@ -17,32 +22,33 @@ export type Club = {
   name: string;
   location: Location;
   division: Division;
+  address: Address;
 };
 
 export type ClubsFormData = {
   name: string;
-  address: string;
-  division: Division;
+  division: Division | '';
+  street: string;
+  streetNo: string;
+  zipCode: string;
+  city: string;
+  voivodeship: Voivodeship | '';
+  country: string;
+};
+
+export type FormattedClubsFormData = {
+  name: string;
+  address: Address;
+  division: Division | '';
 };
 
 export type ClubsData = {
-  data: Club[];
-  total: number;
-  pagination: {
-    prev?: {
-      page: number;
-      limit: number;
-    };
-    next?: {
-      page: number;
-      limit: number;
-    };
-  };
-};
+  docs: Club[];
+} & PaginationData;
 
 export type ClubsFilterData = {
   name: string;
-  division: Division;
+  division: Division | '';
   voivodeship: string;
 };
 
@@ -52,19 +58,20 @@ export type GetClubs = (
   sort: string,
   order: Order,
   filters: ClubsFilterData,
+  my?: boolean,
 ) => void;
 
 export type State = {
   clubsData: ClubsData;
+  myClubsData: ClubsData;
   current: Club | null;
   loading: boolean;
   error: string | null;
   setLoading: () => void;
   getClubs: GetClubs;
   getClub: (id: string) => void;
-  deleteClub: (id: string) => void;
-  addClub: (club: ClubsFormData) => void;
-  editClub: (id: string, club: ClubsFormData) => void;
+  addClub: (club: FormattedClubsFormData) => void;
+  editClub: (id: string, club: FormattedClubsFormData) => void;
   setCurrent: (club: Club) => void;
   clearCurrent: () => void;
 };
@@ -75,7 +82,7 @@ export type Action =
   | { type: 'CLEAR_CURRENT' }
   | { type: 'CLUBS_ERROR'; payload: string }
   | { type: 'GET_CLUBS_SUCCESS'; payload: ClubsData }
+  | { type: 'GET_MY_CLUBS_SUCCESS'; payload: ClubsData }
   | { type: 'GET_CLUB_SUCCESS'; payload: Club }
   | { type: 'CREATE_CLUB_SUCCESS' }
-  | { type: 'UPDATE_CLUB_SUCCESS' }
-  | { type: 'DELETE_CLUB_SUCCESS'; payload: string };
+  | { type: 'UPDATE_CLUB_SUCCESS' };

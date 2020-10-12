@@ -36,7 +36,7 @@ export const OrderStep = ({ value, onChange, current }: OrderStepProps) => {
       ) : (
         <FormControl variant="outlined" fullWidth>
           <OrdersSelect
-            ordersData={myOrdersData}
+            ordersData={myOrdersData.docs}
             value={value}
             onChange={onChange}
           />

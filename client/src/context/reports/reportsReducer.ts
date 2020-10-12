@@ -43,9 +43,6 @@ export default (state: State, action: Action): State => {
     case 'DELETE_REPORT_SUCCESS':
       return {
         ...state,
-        reportsData: state.reportsData.filter(
-          (report) => report._id !== action.payload,
-        ),
         loading: false,
         error: null,
       };

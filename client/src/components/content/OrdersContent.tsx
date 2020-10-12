@@ -4,7 +4,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { TabPanel, Loader } from '../common';
 import { OrdersForm, OrdersFilterForm } from '../forms';
-import { OrdersGrid, MyOrdersGrid } from '../orders';
+import { OrdersGrid } from '../orders';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 // Hooks
@@ -50,9 +50,16 @@ export const OrdersContent = () => {
 
   useEffect(() => {
     getPlayers();
-  }, []);
+    getOrders(filters);
+    getMyOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
 
   const isAdmin = user?.role === 'admin';
+
+  if (user?.role === 'scout') {
+    return <p>Aby mieć dostęp do zleceń, zostań scoutem Playmakera!</p>;
+  }
 
   return (
     <>
@@ -72,7 +79,6 @@ export const OrdersContent = () => {
         <OrdersGrid
           ordersData={ordersData}
           filters={filters}
-          getOrders={getOrders}
           deleteOrder={deleteOrder}
           acceptOrder={acceptOrder}
         />
@@ -81,10 +87,9 @@ export const OrdersContent = () => {
         {isAdmin ? (
           <OrdersForm playersData={playersData} />
         ) : (
-          <MyOrdersGrid
-            myOrdersData={myOrdersData}
+          <OrdersGrid
+            ordersData={myOrdersData}
             filters={filters}
-            getMyOrders={getMyOrders}
             deleteOrder={deleteOrder}
             acceptOrder={acceptOrder}
           />

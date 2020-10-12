@@ -2,23 +2,25 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ClubsContext from './clubsContext';
 import clubsReducer from './clubsReducer';
-import { State, Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
+import {
+  State,
+  Club,
+  ClubsFilterData,
+  FormattedClubsFormData,
+} from '../../types/clubs';
 import { Order } from '../../types/common';
+import { initialPaginatedData } from '../../data';
 
 export const ClubsState: React.FC = ({ children }) => {
   const initialState: State = {
-    clubsData: {
-      data: [],
-      total: 0,
-      pagination: {},
-    },
+    clubsData: initialPaginatedData,
+    myClubsData: initialPaginatedData,
     current: null,
     loading: false,
     error: null,
     setLoading: () => null,
     getClubs: () => null,
     getClub: () => null,
-    deleteClub: () => null,
     addClub: () => null,
     editClub: () => null,
     setCurrent: () => null,
@@ -41,6 +43,7 @@ export const ClubsState: React.FC = ({ children }) => {
     sort = '_id',
     order: Order,
     filters: ClubsFilterData,
+    my?: boolean,
   ) => {
     setLoading();
     const orderSign = order === 'desc' ? '-' : '';
@@ -48,7 +51,15 @@ export const ClubsState: React.FC = ({ children }) => {
     const { name, division, voivodeship } = filters;
 
     // Generate query url
-    let clubsURI = `/api/v1/clubs?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+    let clubsURI = '/api/v1/clubs';
+
+    if (my) {
+      clubsURI = clubsURI.concat('/my');
+    }
+
+    clubsURI = clubsURI.concat(
+      `?page=${page}&limit=${limit}&sort=${orderSign}${sort}`,
+    );
 
     if (name) {
       clubsURI = clubsURI.concat(`&name[regex]=${name}`);
@@ -59,15 +70,22 @@ export const ClubsState: React.FC = ({ children }) => {
     }
 
     if (voivodeship) {
-      clubsURI = clubsURI.concat(`&location.voivodeship[regex]=${voivodeship}`);
+      clubsURI = clubsURI.concat(`&address.voivodeship[regex]=${voivodeship}`);
     }
 
     try {
       const res = await axiosJson.get(clubsURI);
-      dispatch({
-        type: 'GET_CLUBS_SUCCESS',
-        payload: res.data,
-      });
+      if (my) {
+        dispatch({
+          type: 'GET_MY_CLUBS_SUCCESS',
+          payload: res.data.data,
+        });
+      } else {
+        dispatch({
+          type: 'GET_CLUBS_SUCCESS',
+          payload: res.data.data,
+        });
+      }
     } catch (err) {
       dispatch({
         type: 'CLUBS_ERROR',
@@ -95,7 +113,7 @@ export const ClubsState: React.FC = ({ children }) => {
   };
 
   // Create new club
-  const addClub = async (club: ClubsFormData) => {
+  const addClub = async (club: FormattedClubsFormData) => {
     setLoading();
 
     try {
@@ -127,7 +145,7 @@ export const ClubsState: React.FC = ({ children }) => {
   };
 
   // Update club details
-  const editClub = async (id: string, club: ClubsFormData) => {
+  const editClub = async (id: string, club: FormattedClubsFormData) => {
     setLoading();
 
     try {
@@ -143,34 +161,19 @@ export const ClubsState: React.FC = ({ children }) => {
     }
   };
 
-  // Delete club
-  const deleteClub = async (id: string) => {
-    setLoading();
-    try {
-      await axiosJson.delete(`/api/v1/clubs/${id}`);
-      dispatch({
-        type: 'DELETE_CLUB_SUCCESS',
-        payload: id,
-      });
-    } catch (err) {
-      dispatch({
-        type: 'CLUBS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
-  };
+  const { clubsData, myClubsData, current, loading, error } = state;
 
   return (
     <ClubsContext.Provider
       value={{
-        clubsData: state.clubsData,
-        current: state.current,
-        loading: state.loading,
-        error: state.error,
+        clubsData,
+        myClubsData,
+        current,
+        loading,
+        error,
         setLoading,
         getClubs,
         getClub,
-        deleteClub,
         addClub,
         setCurrent,
         clearCurrent,

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Menu, Divider, IconButton } from '@material-ui/core';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
-import navElements from './data';
+import { basicNavElements, extendedNavElements } from './data';
 import NavElement from './NavElement';
 import NavButton from './NavButton';
 import useStyles from './styles';
@@ -15,7 +15,10 @@ const TopbarMenu: React.FC = () => {
   const authContext = useAuthState();
   const history = useHistory();
 
-  const { logout } = authContext;
+  const { logout, user } = authContext;
+
+  const navElements =
+    user?.role === 'scout' ? basicNavElements : extendedNavElements;
 
   const onLogout = () => {
     history.push('/login');

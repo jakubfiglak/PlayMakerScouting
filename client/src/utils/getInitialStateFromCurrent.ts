@@ -24,7 +24,7 @@ export const getInitialStateFromCurrent = (current: Report): ReportFormData => {
   } = current;
 
   let initialState: ReportFormData = {
-    order,
+    order: order?._id,
     player: player._id,
     match: match._id,
     minutesPlayed,

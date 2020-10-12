@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // MUI components
 import {
   Table,
@@ -13,49 +13,31 @@ import {
 import { TablePaginationActions, TableHeader } from '../../common';
 import { MatchesTableRow } from './MatchesTableRow';
 // Types
-import {
-  Match,
-  MatchesData,
-  GetMatches,
-  MatchesFilterData,
-} from '../../../types/matches';
-// Hooks
-import { useTable } from '../../../hooks';
+import { Match } from '../../../types/matches';
+import { CommonTableProps } from '../../../types/common';
 // Utils & data
 import { matchesHeadCells } from '../data';
 // Styles
 import { useStyles } from '../styles';
 
 type TableProps = {
-  getMatches: GetMatches;
-  matchesData: MatchesData;
-  filters: MatchesFilterData;
-  deleteMatch: (id: string) => void;
+  matches: Match[];
   handleSetCurrent: (match: Match) => void;
-};
+} & CommonTableProps;
 
 export const MatchesTable = ({
-  getMatches,
-  matchesData,
-  filters,
-  deleteMatch,
+  page,
+  rowsPerPage,
+  sortBy,
+  order,
+  handleChangePage,
+  handleChangeRowsPerPage,
+  handleSort,
+  matches,
+  total,
   handleSetCurrent,
 }: TableProps) => {
   const classes = useStyles();
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
-    handleChangePage,
-    handleChangeRowsPerPage,
-    handleSort,
-  ] = useTable('date', 'desc');
-
-  useEffect(() => {
-    getMatches(page + 1, rowsPerPage, sortBy, order, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
 
   return (
     <TableContainer component={Paper} className={classes.paper}>
@@ -67,14 +49,13 @@ export const MatchesTable = ({
           handleSort={handleSort}
         />
         <TableBody>
-          {matchesData.data.map((match) => {
+          {matches.map((match) => {
             const { _id } = match;
 
             return (
               <MatchesTableRow
                 key={_id}
                 match={match}
-                deleteMatch={deleteMatch}
                 handleSetCurrent={handleSetCurrent}
               />
             );
@@ -85,7 +66,7 @@ export const MatchesTable = ({
             <TablePagination
               rowsPerPageOptions={[5, 10, 20]}
               colSpan={4}
-              count={matchesData.total}
+              count={total}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

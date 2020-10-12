@@ -13,11 +13,7 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
-        playersData: {
-          data: action.payload.data,
-          total: action.payload.total,
-          pagination: action.payload.pagination,
-        },
+        playersData: action.payload,
       };
 
     case 'GET_PLAYER_SUCCESS':
@@ -40,20 +36,6 @@ export default (state: State, action: Action): State => {
     case 'UPDATE_PLAYER_SUCCESS':
       return {
         ...state,
-        loading: false,
-        error: null,
-      };
-
-    case 'DELETE_PLAYER_SUCCESS':
-      return {
-        ...state,
-        playersData: {
-          data: state.playersData.data.filter(
-            (player) => player._id !== action.payload,
-          ),
-          total: state.playersData.total - 1,
-          pagination: state.playersData.pagination,
-        },
         loading: false,
         error: null,
       };

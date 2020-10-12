@@ -3,6 +3,7 @@ const Match = require('../models/Match');
 const Club = require('../models/Club');
 const Player = require('../models/Player');
 const ErrorResponse = require('../utils/errorResponse');
+const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new match
 // @route POST /api/v1/matches
@@ -44,19 +45,31 @@ exports.getMatches = asyncHandler(async (req, res) => {
   const { clubId } = req.params;
   const { playerId } = req.params;
 
-  if (clubId) {
-    const matches = await Match.find({
-      $or: [{ homeTeam: clubId }, { awayTeam: clubId }],
-    })
-      .populate({
+  const reqQuery = prepareQuery(req.query);
+
+  const options = {
+    sort: req.query.sort || '_id',
+    limit: req.query.limit || 20,
+    page: req.query.page || 1,
+    populate: [
+      {
         path: 'homeTeam',
         select: 'name',
-      })
-      .populate({ path: 'awayTeam', select: 'name' });
+      },
+      { path: 'awayTeam', select: 'name' },
+    ],
+  };
 
-    return res.status(200).json({
+  if (clubId) {
+    const query = {
+      $or: [{ homeTeam: clubId }, { awayTeam: clubId }],
+      ...reqQuery,
+    };
+
+    const matches = await Match.paginate(query, options);
+
+    res.status(200).json({
       success: true,
-      count: matches.length,
       data: matches,
     });
   }
@@ -65,23 +78,25 @@ exports.getMatches = asyncHandler(async (req, res) => {
     const player = await Player.findById(playerId);
     const { club } = player;
 
-    const matches = await Match.find({
+    const query = {
       $or: [{ homeTeam: club }, { awayTeam: club }],
-    })
-      .populate({
-        path: 'homeTeam',
-        select: 'name',
-      })
-      .populate({ path: 'awayTeam', select: 'name' });
+      ...reqQuery,
+    };
 
-    return res.status(200).json({
+    const matches = await Match.paginate(query, options);
+
+    res.status(200).json({
       success: true,
-      count: matches.length,
       data: matches,
     });
   }
 
-  res.status(200).json(res.advancedResults);
+  const matches = await Match.paginate(reqQuery, options);
+
+  res.status(200).json({
+    success: true,
+    data: matches,
+  });
 });
 
 // @desc Get single match

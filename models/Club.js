@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const geocode = require('../middleware/geocode');
 const AddressSchema = require('../schemas/Address');
 
@@ -43,6 +44,8 @@ const ClubSchema = new Schema({
     type: String,
   },
 });
+
+ClubSchema.plugin(mongoosePaginate);
 
 ClubSchema.pre('save', geocode);
 

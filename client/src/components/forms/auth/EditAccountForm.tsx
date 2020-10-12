@@ -1,9 +1,15 @@
 import React, { SyntheticEvent } from 'react';
+// MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
+// Custom components
+import { AddressFieldset } from '../fieldsets';
+// Hooks
+import { useForm } from '../../../hooks';
+import { useAuthState } from '../../../context';
+// Types
+import { EditAccountData } from '../../../types/auth';
+// Styles
 import { useStyles } from './styles';
-import { useForm } from '../../hooks';
-import { useAuthState } from '../../context';
-import { EditAccountData } from '../../types/auth';
 
 export const EditAccountForm = () => {
   const classes = useStyles();
@@ -12,18 +18,46 @@ export const EditAccountForm = () => {
   const { loading, editDetails, user } = authContext;
 
   const initialState: EditAccountData = {
-    phone: user?.phone,
-    address: user?.location.formattedAddress,
-    activeRadius: user?.activeRadius,
+    phone: user?.phone || '',
+    activeRadius: user?.activeRadius || 0,
+    street: user?.address.street || '',
+    streetNo: user?.address.streetNo || '',
+    zipCode: user?.address.zipCode || '',
+    city: user?.address.city || '',
+    voivodeship: user?.address.voivodeship || '',
+    country: user?.address.country || '',
   };
 
   const [editAccountData, onInputChange, setFormData] = useForm(initialState);
 
-  const { phone, address, activeRadius } = editAccountData;
+  const {
+    phone,
+    activeRadius,
+    street,
+    streetNo,
+    zipCode,
+    city,
+    voivodeship,
+    country,
+  } = editAccountData;
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    editDetails(editAccountData);
+
+    const formattedEditFormData = {
+      phone,
+      address: {
+        street,
+        streetNo,
+        zipCode,
+        city,
+        voivodeship,
+        country,
+      },
+      activeRadius,
+    };
+
+    editDetails(formattedEditFormData);
   };
 
   const onCancel = () => {
@@ -47,21 +81,15 @@ export const EditAccountForm = () => {
             onChange={onInputChange}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            id="address"
-            label="Adres"
-            name="address"
-            autoComplete="address"
-            type="text"
-            helperText="np. ul. Cicha 132/16 62-200 Gniezno"
-            value={address}
-            onChange={onInputChange}
-          />
-        </Grid>
+        <AddressFieldset
+          streetValue={street}
+          streetNoValue={streetNo}
+          zipCodeValue={zipCode}
+          cityValue={city}
+          voivodeshipValue={voivodeship}
+          countryValue={country}
+          onChange={onInputChange}
+        />
         <Grid item xs={12}>
           <TextField
             variant="outlined"
