@@ -69,3 +69,10 @@ export const orderStatusLabels = [
     label: 'zamknięte',
   },
 ];
+
+export const errorLabels = [
+  {
+    value: 'Invalid credentials',
+    label: 'Niepoprawne dane logowania',
+  },
+];

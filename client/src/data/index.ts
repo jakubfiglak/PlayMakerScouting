@@ -16,5 +16,6 @@ export {
   positionLabels,
   competitionLabels,
   orderStatusLabels,
+  errorLabels,
 } from './labels';
 export { initialPaginatedData } from './initialPaginatedData';
