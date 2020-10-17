@@ -22,28 +22,16 @@ export type LoginFormData = {
   password: string;
 };
 
-type CommonFormData = {
+export type RegisterFormData = {
   firstName: string;
   lastName: string;
   email: string;
-  phone?: string;
+  phone: string;
+  address: Address;
   activeRadius: number;
   password: string;
   passwordConfirm: string;
 };
-
-export type RegisterFormData = {
-  street: string;
-  streetNo: string;
-  zipCode: string;
-  city: string;
-  voivodeship: Voivodeship | '';
-  country: string;
-} & CommonFormData;
-
-export type FormattedRegisterFormData = {
-  address: Address;
-} & CommonFormData;
 
 export type EditAccountData = {
   phone?: string;
@@ -77,7 +65,7 @@ export type State = {
   setLoading: () => void;
   loadUser: () => void;
   login: (formData: LoginFormData) => void;
-  register: (formData: FormattedRegisterFormData) => void;
+  register: (formData: RegisterFormData) => void;
   logout: () => void;
   editDetails: (formData: FormattedEditAccountData) => void;
   updatePassword: (formData: UpdatePasswordData) => void;

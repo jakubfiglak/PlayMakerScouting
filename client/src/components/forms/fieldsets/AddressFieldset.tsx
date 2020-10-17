@@ -1,93 +1,74 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
 import { Grid, TextField } from '@material-ui/core';
 // Custom components
 import { VoivodeshipSelect } from '../selects';
-// Types
-import { OnChangeFn, Voivodeship } from '../../../types/common';
 
 type AddressFieldsetProps = {
-  streetValue: string;
-  streetNoValue: string;
-  zipCodeValue: string;
-  cityValue: string;
-  voivodeshipValue: Voivodeship | '';
-  countryValue: string;
-  onChange: OnChangeFn;
+  namespace: string;
 };
 
-export const AddressFieldset = ({
-  streetValue,
-  streetNoValue,
-  zipCodeValue,
-  cityValue,
-  voivodeshipValue,
-  countryValue,
-  onChange,
-}: AddressFieldsetProps) => {
+export const AddressFieldset = ({ namespace }: AddressFieldsetProps) => {
+  const [streetField, streetFieldMeta] = useField(`${namespace}.street`);
+  const [streetNoField, streetNoFieldMeta] = useField(`${namespace}.streetNo`);
+  const [zipCodeField, zipCodeFieldMeta] = useField(`${namespace}.zipCode`);
+  const [cityField, cityFieldMeta] = useField(`${namespace}.city`);
+  const [countryField, countryFieldMeta] = useField(`${namespace}.country`);
+
   return (
     <>
       <Grid item xs={12} sm={8}>
         <TextField
+          {...streetField}
           variant="outlined"
-          required
           fullWidth
-          id="street"
           label="Ulica"
-          name="street"
-          value={streetValue}
-          onChange={onChange}
+          error={streetFieldMeta.touched && !!streetFieldMeta.error}
+          helperText={streetFieldMeta.touched && streetFieldMeta.error}
         />
       </Grid>
       <Grid item xs={12} sm={4}>
         <TextField
+          {...streetNoField}
           variant="outlined"
-          required
           fullWidth
-          id="streetNo"
           label="Nr ulicy"
-          name="streetNo"
-          value={streetNoValue}
-          onChange={onChange}
+          error={streetNoFieldMeta.touched && !!streetNoFieldMeta.error}
+          helperText={streetNoFieldMeta.touched && streetNoFieldMeta.error}
         />
       </Grid>
       <Grid item xs={12} sm={5}>
         <TextField
+          {...zipCodeField}
           variant="outlined"
-          required
           fullWidth
-          id="zipCode"
           label="Kod pocztowy"
-          name="zipCode"
-          value={zipCodeValue}
-          onChange={onChange}
+          error={zipCodeFieldMeta.touched && !!zipCodeFieldMeta.error}
+          helperText={zipCodeFieldMeta.touched && zipCodeFieldMeta.error}
         />
       </Grid>
       <Grid item xs={12} sm={7}>
         <TextField
+          {...cityField}
           variant="outlined"
-          required
           fullWidth
-          id="city"
           label="Miasto"
-          name="city"
-          value={cityValue}
-          onChange={onChange}
+          error={cityFieldMeta.touched && !!cityFieldMeta.error}
+          helperText={cityFieldMeta.touched && cityFieldMeta.error}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <VoivodeshipSelect value={voivodeshipValue} onChange={onChange} />
+        <VoivodeshipSelect name={`${namespace}.voivodeship`} />
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
+          {...countryField}
           variant="outlined"
-          required
           fullWidth
-          id="country"
           label="Kraj"
-          name="country"
-          value={countryValue}
-          onChange={onChange}
+          error={countryFieldMeta.touched && !!countryFieldMeta.error}
+          helperText={countryFieldMeta.touched && countryFieldMeta.error}
         />
       </Grid>
     </>

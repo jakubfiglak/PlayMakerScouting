@@ -84,7 +84,7 @@ export const ClubsForm = () => {
             onChange={onInputChange}
           />
         </Grid>
-        <AddressFieldset
+        {/* <AddressFieldset
           streetValue={street}
           streetNoValue={streetNo}
           zipCodeValue={zipCode}
@@ -92,7 +92,7 @@ export const ClubsForm = () => {
           voivodeshipValue={voivodeship}
           countryValue={country}
           onChange={onInputChange}
-        />
+        /> */}
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
             <DivisionSelect

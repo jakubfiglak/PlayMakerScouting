@@ -81,7 +81,7 @@ export const EditAccountForm = () => {
             onChange={onInputChange}
           />
         </Grid>
-        <AddressFieldset
+        {/* <AddressFieldset
           streetValue={street}
           streetNoValue={streetNo}
           zipCodeValue={zipCode}
@@ -89,7 +89,7 @@ export const EditAccountForm = () => {
           voivodeshipValue={voivodeship}
           countryValue={country}
           onChange={onInputChange}
-        />
+        /> */}
         <Grid item xs={12}>
           <TextField
             variant="outlined"

@@ -57,13 +57,13 @@ export const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
             <DivisionSelect onChange={onInputChange} value={division} />
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} lg={3} className={classes.input}>
+        {/* <Grid item xs={12} sm={6} lg={3} className={classes.input}>
           <VoivodeshipSelect
             onChange={onInputChange}
             value={voivodeship}
             size="small"
           />
-        </Grid>
+        </Grid> */}
         <FilterFormActions handleClearFilter={handleClearFilter} />
       </Grid>
     </form>

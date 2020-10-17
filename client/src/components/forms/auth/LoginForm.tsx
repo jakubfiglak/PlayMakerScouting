@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { object, string } from 'yup';
 // MUI components
 import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 // Types
@@ -26,11 +26,11 @@ export const LoginForm = () => {
       email: '',
       password: '',
     },
-    validationSchema: Yup.object({
-      email: Yup.string()
+    validationSchema: object({
+      email: string()
         .email('Niepoprawny adres e-mail')
         .required('Podaj adres e-mail'),
-      password: Yup.string().required('Podaj hasło'),
+      password: string().required('Podaj hasło'),
     }),
     onSubmit: (values) => {
       login(values);
