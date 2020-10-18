@@ -23,6 +23,20 @@ export const LoginForm = () => {
   const { login, loading, isAuthenticated, error, clearErrors } = authContext;
   const { setAlert } = alertsContext;
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/');
+    }
+  }, [isAuthenticated, history]);
+
+  useEffect(() => {
+    if (error) {
+      setAlert(getLabel(error, errorLabels), 'error');
+      clearErrors();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
   const formik = useFormik<LoginFormData>({
     initialValues: {
       email: '',
@@ -38,17 +52,6 @@ export const LoginForm = () => {
       login(values);
     },
   });
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      history.push('/');
-    }
-
-    if (error) {
-      setAlert(getLabel(error, errorLabels), 'error');
-      clearErrors();
-    }
-  }, [error, isAuthenticated, history]);
 
   const { handleSubmit, errors, touched, getFieldProps } = formik;
 

@@ -1,4 +1,4 @@
-import { RegisterFormData } from '../../../types/auth';
+import { RegisterFormData, EditAccountData } from '../../../types/auth';
 
 export const registerFormInitialValues: RegisterFormData = {
   firstName: '',
@@ -16,4 +16,17 @@ export const registerFormInitialValues: RegisterFormData = {
   activeRadius: 0,
   password: '',
   passwordConfirm: '',
+};
+
+export const editAccountInitialValues: EditAccountData = {
+  phone: '',
+  activeRadius: 0,
+  address: {
+    street: '',
+    streetNo: '',
+    zipCode: '',
+    city: '',
+    voivodeship: '',
+    country: 'Polska',
+  },
 };

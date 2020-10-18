@@ -1,4 +1,4 @@
-import { Location, Address, Voivodeship } from './common';
+import { Location, Address } from './common';
 
 export type UserRole = 'admin' | 'playmaker-scout' | 'scout';
 
@@ -34,18 +34,7 @@ export type RegisterFormData = {
 };
 
 export type EditAccountData = {
-  phone?: string;
-  activeRadius: number;
-  street: string;
-  streetNo: string;
-  zipCode: string;
-  city: string;
-  voivodeship: Voivodeship | '';
-  country: string;
-};
-
-export type FormattedEditAccountData = {
-  phone?: string;
+  phone: string;
   activeRadius: number;
   address: Address;
 };
@@ -70,7 +59,7 @@ export type State = {
   login: (formData: LoginFormData) => void;
   register: (formData: RegisterFormData) => void;
   logout: () => void;
-  editDetails: (formData: FormattedEditAccountData) => void;
+  editDetails: (formData: EditAccountData) => void;
   updatePassword: (formData: UpdatePasswordData) => void;
   addClubToFavorites: (id: string) => void;
   removeClubFromFavorites: (id: string) => void;
@@ -85,7 +74,7 @@ export type Action =
   | { type: 'CLEAR_ERRORS' }
   | { type: 'CLEAR_MESSAGE' }
   | { type: 'SET_LOADING' }
-  | { type: 'EDIT_SUCCESS' }
+  | { type: 'EDIT_SUCCESS'; payload: { user: User; message: string } }
   | { type: 'EDIT_ERROR'; payload: string }
   | {
       type: 'UPDATE_PASSWORD_SUCCESS';

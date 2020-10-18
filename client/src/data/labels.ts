@@ -75,6 +75,10 @@ export const errorLabels = [
     value: 'Invalid credentials',
     label: 'Niepoprawne dane logowania',
   },
+  {
+    value: 'User already exists',
+    label: 'Na podany adres e-mail zarejestrowano już użytkownika',
+  },
 ];
 
 export const messageLabels = [

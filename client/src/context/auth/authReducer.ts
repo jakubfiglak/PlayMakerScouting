@@ -57,14 +57,26 @@ export default (state: State, action: Action): State => {
         error: null,
       };
 
+    case 'CLEAR_MESSAGE':
+      return {
+        ...state,
+        message: null,
+      };
+
     case 'EDIT_SUCCESS':
-      return { ...state, loading: false };
+      return {
+        ...state,
+        user: action.payload.user,
+        message: action.payload.message,
+        loading: false,
+      };
 
     case 'EDIT_ERROR':
     case 'CLUBS_ERROR':
       return {
         ...state,
         error: action.payload,
+        loading: false,
       };
 
     case 'ADD_CLUB_TO_FAVORITES_SUCCESS':

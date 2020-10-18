@@ -6,7 +6,7 @@ import {
   State,
   LoginFormData,
   RegisterFormData,
-  FormattedEditAccountData,
+  EditAccountData,
   UpdatePasswordData,
 } from '../../types/auth';
 
@@ -131,17 +131,16 @@ export const AuthState: React.FC = ({ children }) => {
   };
 
   // Edit details
-  const editDetails = async (formData: FormattedEditAccountData) => {
+  const editDetails = async (formData: EditAccountData) => {
     setLoading();
 
     try {
-      await axiosJson.put('/api/v1/auth/updatedetails', formData);
+      const res = await axiosJson.put('/api/v1/auth/updatedetails', formData);
 
       dispatch({
         type: 'EDIT_SUCCESS',
+        payload: { user: res.data.data, message: res.data.message },
       });
-
-      loadUser();
     } catch (err) {
       dispatch({
         type: 'EDIT_ERROR',

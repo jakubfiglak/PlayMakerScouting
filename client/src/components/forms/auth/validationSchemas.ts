@@ -1,5 +1,17 @@
 import * as yup from 'yup';
-import { RegisterFormData } from '../../../types/auth';
+import { Address } from '../../../types/common';
+import { RegisterFormData, EditAccountData } from '../../../types/auth';
+
+const addressValidationSchema: yup.ObjectSchema<Address> = yup
+  .object({
+    street: yup.string().required('Podaj ulicę'),
+    streetNo: yup.string().required('Podaj numer ulicy'),
+    zipCode: yup.string().required('Podaj kod pocztowy'),
+    city: yup.string().required('Podaj miasto'),
+    voivodeship: yup.string(),
+    country: yup.string().required('Podaj kraj'),
+  })
+  .defined();
 
 export const registerFormValidationSchema: yup.ObjectSchema<RegisterFormData> = yup
   .object({
@@ -7,16 +19,7 @@ export const registerFormValidationSchema: yup.ObjectSchema<RegisterFormData> = 
     lastName: yup.string().required('Podaj nazwisko'),
     email: yup.string().email().required('Podaj adres e-mail'),
     phone: yup.string(),
-    address: yup
-      .object({
-        street: yup.string().required('Podaj ulicę'),
-        streetNo: yup.string().required('Podaj numer ulicy'),
-        zipCode: yup.string().required('Podaj kod pocztowy'),
-        city: yup.string().required('Podaj miasto'),
-        voivodeship: yup.string(),
-        country: yup.string().required('Podaj kraj'),
-      })
-      .defined(),
+    address: addressValidationSchema,
     activeRadius: yup
       .number()
       .min(0, 'Promień działania musi być większy lub równy 0 ')
@@ -33,5 +36,16 @@ export const registerFormValidationSchema: yup.ObjectSchema<RegisterFormData> = 
       .string()
       .oneOf([yup.ref('password')], 'Podane hasła muszą być takie same')
       .required('Potwierdź hasło'),
+  })
+  .defined();
+
+export const editAccountValidationSchema: yup.ObjectSchema<EditAccountData> = yup
+  .object({
+    phone: yup.string(),
+    activeRadius: yup
+      .number()
+      .min(0, 'Promień działania musi być większy lub równy 0 ')
+      .required('Podaj promień działania'),
+    address: addressValidationSchema,
   })
   .defined();

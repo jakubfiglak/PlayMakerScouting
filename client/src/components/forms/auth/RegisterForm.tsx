@@ -6,26 +6,44 @@ import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Custom components
 import { AddressFieldset } from '../fieldsets';
 // Hooks
-import { useAuthState } from '../../../context';
+import { useAuthState, useAlertsState } from '../../../context';
 // Utils & data
 import { registerFormInitialValues } from './initialValues';
 import { registerFormValidationSchema } from './validationSchemas';
 // Styles
 import { useStyles } from './styles';
+// Utils & data
+import { errorLabels } from '../../../data';
+import { getLabel } from '../../../utils';
 
-// TODO: extract this into separate files, adjust data types, submit the form to the backend, catch backend errors
 export const RegisterForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
+  const alertsContext = useAlertsState();
   const history = useHistory();
 
-  const { register, loading, isAuthenticated } = authContext;
+  const {
+    register,
+    loading,
+    isAuthenticated,
+    error,
+    clearErrors,
+  } = authContext;
+  const { setAlert } = alertsContext;
 
   useEffect(() => {
     if (isAuthenticated) {
       history.push('/');
     }
   }, [isAuthenticated, history]);
+
+  useEffect(() => {
+    if (error) {
+      setAlert(getLabel(error, errorLabels), 'error');
+      clearErrors();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   return (
     <Formik
