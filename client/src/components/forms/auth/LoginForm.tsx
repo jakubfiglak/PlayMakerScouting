@@ -7,7 +7,7 @@ import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 // Types
 import { LoginFormData } from '../../../types/auth';
 // Hooks
-import { useAuthState } from '../../../context';
+import { useAuthState, useAlertsState } from '../../../context';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
@@ -17,9 +17,11 @@ import { getLabel } from '../../../utils';
 export const LoginForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
+  const alertsContext = useAlertsState();
   const history = useHistory();
 
-  const { login, loading, isAuthenticated, error } = authContext;
+  const { login, loading, isAuthenticated, error, clearErrors } = authContext;
+  const { setAlert } = alertsContext;
 
   const formik = useFormik<LoginFormData>({
     initialValues: {
@@ -41,7 +43,12 @@ export const LoginForm = () => {
     if (isAuthenticated) {
       history.push('/');
     }
-  }, [isAuthenticated, history]);
+
+    if (error) {
+      setAlert(getLabel(error, errorLabels), 'error');
+      clearErrors();
+    }
+  }, [error, isAuthenticated, history]);
 
   const { handleSubmit, errors, touched, getFieldProps } = formik;
 
@@ -56,11 +63,8 @@ export const LoginForm = () => {
         autoComplete="email"
         autoFocus
         {...getFieldProps('email')}
-        error={(touched.email && !!errors.email) || !!error}
-        helperText={
-          (touched.email && !!errors.email && errors.email) ||
-          (error && getLabel(error, errorLabels))
-        }
+        error={touched.email && !!errors.email}
+        helperText={touched.email && !!errors.email && errors.email}
       />
       <TextField
         variant="outlined"
@@ -71,11 +75,8 @@ export const LoginForm = () => {
         id="password"
         autoComplete="current-password"
         {...getFieldProps('password')}
-        error={(touched.password && !!errors.password) || !!error}
-        helperText={
-          (touched.password && !!errors.password && errors.password) ||
-          (error && getLabel(error, errorLabels))
-        }
+        error={touched.password && !!errors.password}
+        helperText={touched.password && !!errors.password && errors.password}
       />
       <Button
         type="submit"

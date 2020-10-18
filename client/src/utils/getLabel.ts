@@ -8,5 +8,5 @@ export const getLabel = (value: string, source: SourceType): string => {
   if (element) {
     return element.label;
   }
-  return 'Nieznana wartość';
+  return value;
 };

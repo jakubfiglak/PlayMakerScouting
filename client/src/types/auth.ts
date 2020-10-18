@@ -62,7 +62,10 @@ export type State = {
   isAuthenticated: boolean | null;
   loading: boolean;
   error: string | null;
+  message: string | null;
   setLoading: () => void;
+  clearErrors: () => void;
+  clearMessage: () => void;
   loadUser: () => void;
   login: (formData: LoginFormData) => void;
   register: (formData: RegisterFormData) => void;
@@ -74,16 +77,20 @@ export type State = {
 };
 
 export type Action =
-  | { type: 'REGISTER_SUCCESS'; payload: string }
+  | { type: 'REGISTER_SUCCESS'; payload: { token: string; message: string } }
   | { type: 'USER_LOADED'; payload: User }
   | { type: 'AUTH_ERROR'; payload: string }
-  | { type: 'LOGIN_SUCCESS'; payload: string }
+  | { type: 'LOGIN_SUCCESS'; payload: { token: string; message: string } }
   | { type: 'LOGOUT' }
   | { type: 'CLEAR_ERRORS' }
+  | { type: 'CLEAR_MESSAGE' }
   | { type: 'SET_LOADING' }
   | { type: 'EDIT_SUCCESS' }
   | { type: 'EDIT_ERROR'; payload: string }
-  | { type: 'UPDATE_PASSWORD_SUCCESS'; payload: string }
+  | {
+      type: 'UPDATE_PASSWORD_SUCCESS';
+      payload: { token: string; message: string };
+    }
   | { type: 'ADD_CLUB_TO_FAVORITES_SUCCESS' }
   | { type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS' }
   | { type: 'CLUBS_ERROR'; payload: string };

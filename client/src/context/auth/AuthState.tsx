@@ -17,7 +17,10 @@ export const AuthState: React.FC = ({ children }) => {
     isAuthenticated: null,
     loading: false,
     error: null,
+    message: null,
     setLoading: () => null,
+    clearErrors: () => null,
+    clearMessage: () => null,
     loadUser: () => null,
     login: () => null,
     register: () => null,
@@ -66,7 +69,7 @@ export const AuthState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'REGISTER_SUCCESS',
-        payload: res.data.token,
+        payload: { token: res.data.token, message: res.data.message },
       });
 
       loadUser();
@@ -87,7 +90,7 @@ export const AuthState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'LOGIN_SUCCESS',
-        payload: res.data.token,
+        payload: { token: res.data.token, message: res.data.message },
       });
 
       loadUser();
@@ -108,7 +111,7 @@ export const AuthState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'UPDATE_PASSWORD_SUCCESS',
-        payload: res.data.token,
+        payload: { token: res.data.token, message: res.data.message },
       });
 
       loadUser();
@@ -184,8 +187,18 @@ export const AuthState: React.FC = ({ children }) => {
   };
 
   // Clear errors
+  const clearErrors = () =>
+    dispatch({
+      type: 'CLEAR_ERRORS',
+    });
 
-  const { user, token, isAuthenticated, loading, error } = state;
+  // Clear message
+  const clearMessage = () =>
+    dispatch({
+      type: 'CLEAR_MESSAGE',
+    });
+
+  const { user, token, isAuthenticated, loading, error, message } = state;
 
   return (
     <AuthContext.Provider
@@ -195,7 +208,10 @@ export const AuthState: React.FC = ({ children }) => {
         isAuthenticated,
         loading,
         error,
+        message,
         setLoading,
+        clearErrors,
+        clearMessage,
         loadUser,
         login,
         logout,

@@ -76,3 +76,22 @@ export const errorLabels = [
     label: 'Niepoprawne dane logowania',
   },
 ];
+
+export const messageLabels = [
+  {
+    value: 'Successfully created new user!',
+    label: 'Proces rejestracji zakończony pomyślnie, witamy!',
+  },
+  {
+    value: 'Login success!',
+    label: 'Proces logowania zakończony pomyślnie, witamy!',
+  },
+  {
+    value: 'Account details successfully updated!',
+    label: 'Twoje konto użytkownika zostało zaktualizowane pomyślnie',
+  },
+  {
+    value: 'Password updated successfully!',
+    label: 'Hasło zostało zmienione pomyślnie',
+  },
+];
