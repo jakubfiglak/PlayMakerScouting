@@ -1,29 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // Custom components
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
 // Hooks
-import { useAuthorization } from '../../hooks';
-import { useAuthState, useAlertsState } from '../../context';
+import { useAuthorization, useAlert } from '../../hooks';
+import { useAuthState } from '../../context';
 // Utils & data
-import { getLabel } from '../../utils';
 import { messageLabels } from '../../data/labels';
 
 export const Home = () => {
   useAuthorization();
 
-  const authContext = useAuthState();
-  const alertsContext = useAlertsState();
+  const { message, clearMessage } = useAuthState();
 
-  const { message, clearMessage } = authContext;
-  const { setAlert } = alertsContext;
-
-  useEffect(() => {
-    console.log('hello', message);
-    if (message) {
-      setAlert(getLabel(message, messageLabels), 'success');
-      clearMessage();
-    }
-  }, [message]);
+  useAlert(message, 'success', messageLabels, clearMessage);
 
   return (
     <MainTemplate>

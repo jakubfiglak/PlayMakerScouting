@@ -1,51 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Custom components
 import { AddressFieldset } from '../fieldsets';
 // Hooks
-import { useAuthState, useAlertsState } from '../../../context';
+import { useAuthState } from '../../../context';
 // Utils & data
 import { editAccountInitialValues } from './initialValues';
 import { editAccountValidationSchema } from './validationSchemas';
 // Styles
 import { useStyles } from './styles';
-// Utils & data
-import { errorLabels, messageLabels } from '../../../data';
-import { getLabel } from '../../../utils';
 
 export const EditAccountForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
-  const alertsContext = useAlertsState();
 
-  const {
-    loading,
-    editDetails,
-    user,
-    error,
-    message,
-    clearErrors,
-    clearMessage,
-  } = authContext;
-  const { setAlert } = alertsContext;
-
-  useEffect(() => {
-    if (error) {
-      setAlert(getLabel(error, errorLabels), 'error');
-      clearErrors();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
-
-  useEffect(() => {
-    if (message) {
-      setAlert(getLabel(message, messageLabels), 'success');
-      clearMessage();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message]);
+  const { loading, editDetails, user } = authContext;
 
   const initialValues = user
     ? {

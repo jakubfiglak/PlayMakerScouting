@@ -6,23 +6,21 @@ import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 // Types
 import { LoginFormData } from '../../../types/auth';
 // Hooks
-import { useAuthState, useAlertsState } from '../../../context';
+import { useAuthState } from '../../../context';
+import { useAlert } from '../../../hooks';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
 import { loginFormInitialValues } from './initialValues';
 import { loginFormValidationSchema } from './validationSchemas';
 import { errorLabels } from '../../../data';
-import { getLabel } from '../../../utils';
 
 export const LoginForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
-  const alertsContext = useAlertsState();
   const history = useHistory();
 
   const { login, loading, isAuthenticated, error, clearErrors } = authContext;
-  const { setAlert } = alertsContext;
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -30,13 +28,7 @@ export const LoginForm = () => {
     }
   }, [isAuthenticated, history]);
 
-  useEffect(() => {
-    if (error) {
-      setAlert(getLabel(error, errorLabels), 'error');
-      clearErrors();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  useAlert(error, 'error', errorLabels, clearErrors);
 
   const formik = useFormik<LoginFormData>({
     initialValues: loginFormInitialValues,

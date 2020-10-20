@@ -6,7 +6,8 @@ import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Custom components
 import { AddressFieldset } from '../fieldsets';
 // Hooks
-import { useAuthState, useAlertsState } from '../../../context';
+import { useAuthState } from '../../../context';
+import { useAlert } from '../../../hooks';
 // Utils & data
 import { registerFormInitialValues } from './initialValues';
 import { registerFormValidationSchema } from './validationSchemas';
@@ -14,12 +15,10 @@ import { registerFormValidationSchema } from './validationSchemas';
 import { useStyles } from './styles';
 // Utils & data
 import { errorLabels } from '../../../data';
-import { getLabel } from '../../../utils';
 
 export const RegisterForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
-  const alertsContext = useAlertsState();
   const history = useHistory();
 
   const {
@@ -29,7 +28,6 @@ export const RegisterForm = () => {
     error,
     clearErrors,
   } = authContext;
-  const { setAlert } = alertsContext;
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -37,13 +35,7 @@ export const RegisterForm = () => {
     }
   }, [isAuthenticated, history]);
 
-  useEffect(() => {
-    if (error) {
-      setAlert(getLabel(error, errorLabels), 'error');
-      clearErrors();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  useAlert(error, 'error', errorLabels, clearErrors);
 
   return (
     <Formik

@@ -1,68 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 // MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Types
 import { UpdatePasswordData } from '../../../types/auth';
 // Hooks
-import { useForm } from '../../../hooks';
-import { useAuthState, useAlertsState } from '../../../context';
+import { useAuthState } from '../../../context';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
 import { updatePasswordInitialValues } from './initialValues';
 import { updatePasswordValidationSchema } from './validationSchemas';
-import { errorLabels, messageLabels } from '../../../data';
-import { getLabel } from '../../../utils';
-
-// const initialState: UpdatePasswordData = {
-//   oldPassword: '',
-//   newPassword: '',
-//   newPasswordConfirm: '',
-// };
 
 export const UpdatePasswordForm = () => {
   const classes = useStyles();
   const authContext = useAuthState();
-  const alertsContext = useAlertsState();
 
-  const {
-    loading,
-    updatePassword,
-    error,
-    clearErrors,
-    message,
-    clearMessage,
-  } = authContext;
-  const { setAlert } = alertsContext;
-
-  // // const [updatePasswordData, onInputChange, setPasswordData] = useForm(
-  // //   initialState,
-  // // );
-
-  // const { oldPassword, newPassword, newPasswordConfirm } = updatePasswordData;
-
-  // const onSubmit = (e: SyntheticEvent) => {
-  //   e.preventDefault();
-  //   updatePassword(updatePasswordData);
-  //   setPasswordData(initialState);
-  // };
-
-  useEffect(() => {
-    if (error) {
-      setAlert(getLabel(error, errorLabels), 'error');
-      clearErrors();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
-
-  useEffect(() => {
-    if (message) {
-      setAlert(getLabel(message, messageLabels), 'success');
-      clearMessage();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message]);
+  const { loading, updatePassword } = authContext;
 
   const formik = useFormik<UpdatePasswordData>({
     initialValues: updatePasswordInitialValues,

@@ -73,7 +73,7 @@ export const orderStatusLabels = [
 export const errorLabels = [
   {
     value: 'Invalid credentials',
-    label: 'Niepoprawne dane logowania',
+    label: 'Nieprawidłowe dane logowania',
   },
   {
     value: 'User already exists',
