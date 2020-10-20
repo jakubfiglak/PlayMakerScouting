@@ -16,6 +16,7 @@ type Props = {
 export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
   const [field, fieldMeta, fieldHelpers] = useField(name);
 
+  const { value } = field;
   const { setValue } = fieldHelpers;
 
   return (
@@ -24,6 +25,7 @@ export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
       onChange={(_, newValue: string | null) => {
         setValue(newValue);
       }}
+      value={value}
       options={clubsData.map((club) => club._id)}
       getOptionLabel={(option) => {
         const club = clubsData.find((c) => c._id === option);
