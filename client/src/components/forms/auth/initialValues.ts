@@ -1,4 +1,20 @@
-import { RegisterFormData, EditAccountData } from '../../../types/auth';
+import {
+  RegisterFormData,
+  EditAccountData,
+  LoginFormData,
+  UpdatePasswordData,
+} from '../../../types/auth';
+
+export const loginFormInitialValues: LoginFormData = {
+  email: '',
+  password: '',
+};
+
+export const updatePasswordInitialValues: UpdatePasswordData = {
+  oldPassword: '',
+  newPassword: '',
+  newPasswordConfirm: '',
+};
 
 export const registerFormInitialValues: RegisterFormData = {
   firstName: '',

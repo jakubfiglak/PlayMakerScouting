@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { object, string } from 'yup';
 // MUI components
 import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 // Types
@@ -11,6 +10,8 @@ import { useAuthState, useAlertsState } from '../../../context';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
+import { loginFormInitialValues } from './initialValues';
+import { loginFormValidationSchema } from './validationSchemas';
 import { errorLabels } from '../../../data';
 import { getLabel } from '../../../utils';
 
@@ -38,16 +39,8 @@ export const LoginForm = () => {
   }, [error]);
 
   const formik = useFormik<LoginFormData>({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: object({
-      email: string()
-        .email('Niepoprawny adres e-mail')
-        .required('Podaj adres e-mail'),
-      password: string().required('Podaj hasło'),
-    }),
+    initialValues: loginFormInitialValues,
+    validationSchema: loginFormValidationSchema,
     onSubmit: (values) => {
       login(values);
     },

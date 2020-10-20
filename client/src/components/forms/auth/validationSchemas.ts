@@ -1,6 +1,11 @@
 import * as yup from 'yup';
 import { Address } from '../../../types/common';
-import { RegisterFormData, EditAccountData } from '../../../types/auth';
+import {
+  RegisterFormData,
+  EditAccountData,
+  LoginFormData,
+  UpdatePasswordData,
+} from '../../../types/auth';
 
 const addressValidationSchema: yup.ObjectSchema<Address> = yup
   .object({
@@ -10,6 +15,25 @@ const addressValidationSchema: yup.ObjectSchema<Address> = yup
     city: yup.string().required('Podaj miasto'),
     voivodeship: yup.string(),
     country: yup.string().required('Podaj kraj'),
+  })
+  .defined();
+
+const passwordValidationSchema = yup
+  .string()
+  .min(6, 'Hasło musi składać się co najmniej z 6 znaków')
+  .matches(
+    /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
+    'Hasło musi zawierać co najmniej jedną małą literę, wielką literę oraz cyfrę',
+  )
+  .required('Podaj hasło');
+
+export const loginFormValidationSchema: yup.ObjectSchema<LoginFormData> = yup
+  .object({
+    email: yup
+      .string()
+      .email('Niepoprawny adres e-mail')
+      .required('Podaj adres e-mail'),
+    password: yup.string().required('Podaj hasło'),
   })
   .defined();
 
@@ -24,14 +48,7 @@ export const registerFormValidationSchema: yup.ObjectSchema<RegisterFormData> = 
       .number()
       .min(0, 'Promień działania musi być większy lub równy 0 ')
       .required('Podaj promień działania'),
-    password: yup
-      .string()
-      .min(6, 'Hasło musi składać się co najmniej z 6 znaków')
-      .matches(
-        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
-        'Hasło musi zawierać co najmniej jedną małą literę, wielką literę oraz cyfrę',
-      )
-      .required('Podaj hasło'),
+    password: passwordValidationSchema,
     passwordConfirm: yup
       .string()
       .oneOf([yup.ref('password')], 'Podane hasła muszą być takie same')
@@ -47,5 +64,16 @@ export const editAccountValidationSchema: yup.ObjectSchema<EditAccountData> = yu
       .min(0, 'Promień działania musi być większy lub równy 0 ')
       .required('Podaj promień działania'),
     address: addressValidationSchema,
+  })
+  .defined();
+
+export const updatePasswordValidationSchema: yup.ObjectSchema<UpdatePasswordData> = yup
+  .object({
+    oldPassword: yup.string().required('Podaj aktualne hasło'),
+    newPassword: passwordValidationSchema,
+    newPasswordConfirm: yup
+      .string()
+      .oneOf([yup.ref('newPassword')], 'Podane hasła muszą być takie same')
+      .required('Potwierdź hasło'),
   })
   .defined();
