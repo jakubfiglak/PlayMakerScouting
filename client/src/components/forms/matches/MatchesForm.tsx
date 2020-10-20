@@ -64,22 +64,14 @@ export const MatchesForm = ({ clubsData }: MatchesFormProps) => {
           <FormControl variant="outlined" fullWidth>
             <ClubsCombo
               clubsData={clubsData}
-              value={homeTeam}
-              id="homeTeam"
-              setFormData={setMatchData}
+              name="homeTeam"
               label="Gospodarz"
             />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl variant="outlined" fullWidth>
-            <ClubsCombo
-              clubsData={clubsData}
-              value={awayTeam}
-              id="awayTeam"
-              setFormData={setMatchData}
-              label="Gość"
-            />
+            <ClubsCombo clubsData={clubsData} name="awayTeam" label="Gość" />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>

@@ -53,9 +53,7 @@ export const MatchesFilterForm = ({
           <FormControl variant="outlined" size="small" fullWidth>
             <ClubsCombo
               clubsData={clubsData}
-              value={homeTeam}
-              id="homeTeam"
-              setFormData={setFormData}
+              name="homeTeam"
               label="Gospodarz"
               size="small"
             />
@@ -65,9 +63,7 @@ export const MatchesFilterForm = ({
           <FormControl variant="outlined" size="small" fullWidth>
             <ClubsCombo
               clubsData={clubsData}
-              value={awayTeam}
-              id="awayTeam"
-              setFormData={setFormData}
+              name="awayTeam"
               label="Gość"
               size="small"
             />

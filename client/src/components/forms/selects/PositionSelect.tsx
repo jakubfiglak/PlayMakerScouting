@@ -1,19 +1,15 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
+import { InputLabel, Select, MenuItem } from '@material-ui/core';
 
-export const PositionSelect = ({ onChange, value }: SelectProps) => {
+export const PositionSelect = () => {
+  const [field, fieldMeta] = useField('position');
+
   return (
     <>
       <InputLabel id="position">Pozycja</InputLabel>
-      <Select
-        labelId="position"
-        id="position"
-        label="Pozycja"
-        name="position"
-        onChange={onChange}
-        value={value}
-      >
+      <Select {...field} labelId="position" id="position" label="Pozycja">
         <MenuItem value="GK">Bramkarz</MenuItem>
         <MenuItem value="CB">Środkowy obrońca</MenuItem>
         <MenuItem value="FB">Boczny obrońca</MenuItem>

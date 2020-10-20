@@ -12,9 +12,7 @@ import { errorLabels, messageLabels } from '../../data';
 
 export const Profile = () => {
   useAuthorization();
-  const authContext = useAuthState();
-
-  const { user, error, clearErrors, message, clearMessage } = authContext;
+  const { user, error, clearErrors, message, clearMessage } = useAuthState();
 
   useAlert(error, 'error', errorLabels, clearErrors);
   useAlert(message, 'success', messageLabels, clearMessage);

@@ -14,9 +14,7 @@ import { useStyles } from './styles';
 
 export const EditAccountForm = () => {
   const classes = useStyles();
-  const authContext = useAuthState();
-
-  const { loading, editDetails, user } = authContext;
+  const { loading, editDetails, user } = useAuthState();
 
   const initialValues = user
     ? {

@@ -101,16 +101,15 @@ export const PlayersForm = ({ clubsData }: PlayersFormProps) => {
           <FormControl variant="outlined" fullWidth>
             <ClubsCombo
               clubsData={clubsData}
-              value={club}
-              id="club"
-              setFormData={setPlayerData}
+              name="club"
               label="Klub"
+              size="small"
             />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl variant="outlined" fullWidth>
-            <PositionSelect onChange={onInputChange} value={position} />
+            <PositionSelect />
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>

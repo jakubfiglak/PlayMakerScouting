@@ -18,16 +18,14 @@ import { errorLabels } from '../../../data';
 
 export const RegisterForm = () => {
   const classes = useStyles();
-  const authContext = useAuthState();
   const history = useHistory();
-
   const {
     register,
     loading,
     isAuthenticated,
     error,
     clearErrors,
-  } = authContext;
+  } = useAuthState();
 
   useEffect(() => {
     if (isAuthenticated) {

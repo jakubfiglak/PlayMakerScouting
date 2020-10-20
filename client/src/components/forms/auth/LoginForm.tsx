@@ -17,10 +17,14 @@ import { errorLabels } from '../../../data';
 
 export const LoginForm = () => {
   const classes = useStyles();
-  const authContext = useAuthState();
   const history = useHistory();
-
-  const { login, loading, isAuthenticated, error, clearErrors } = authContext;
+  const {
+    login,
+    loading,
+    isAuthenticated,
+    error,
+    clearErrors,
+  } = useAuthState();
 
   useEffect(() => {
     if (isAuthenticated) {

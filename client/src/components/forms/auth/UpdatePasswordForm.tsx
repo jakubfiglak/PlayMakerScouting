@@ -14,9 +14,7 @@ import { updatePasswordValidationSchema } from './validationSchemas';
 
 export const UpdatePasswordForm = () => {
   const classes = useStyles();
-  const authContext = useAuthState();
-
-  const { loading, updatePassword } = authContext;
+  const { loading, updatePassword } = useAuthState();
 
   const formik = useFormik<UpdatePasswordData>({
     initialValues: updatePasswordInitialValues,
