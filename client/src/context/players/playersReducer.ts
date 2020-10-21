@@ -33,11 +33,31 @@ export default (state: State, action: Action): State => {
       };
 
     case 'CREATE_PLAYER_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        message: action.payload.message,
+        playersData: {
+          ...state.playersData,
+          docs: [action.payload.player, ...state.playersData.docs],
+        },
+      };
+
     case 'UPDATE_PLAYER_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
+        message: action.payload.message,
+        playersData: {
+          ...state.playersData,
+          docs: state.playersData.docs.map((player) =>
+            player._id === action.payload.player._id
+              ? action.payload.player
+              : player,
+          ),
+        },
       };
 
     case 'PLAYERS_ERROR':
@@ -50,16 +70,25 @@ export default (state: State, action: Action): State => {
     case 'SET_CURRENT':
       return {
         ...state,
-        current: {
-          ...action.payload,
-          club: action.payload.club._id,
-        },
+        current: action.payload,
       };
 
     case 'CLEAR_CURRENT':
       return {
         ...state,
         current: null,
+      };
+
+    case 'CLEAR_ERRORS':
+      return {
+        ...state,
+        error: null,
+      };
+
+    case 'CLEAR_MESSAGE':
+      return {
+        ...state,
+        message: null,
       };
 
     default:

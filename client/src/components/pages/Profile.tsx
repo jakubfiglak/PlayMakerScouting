@@ -9,13 +9,14 @@ import { useAuthState } from '../../context';
 import { useAuthorization, useAlert } from '../../hooks';
 // Utils & data
 import { errorLabels, messageLabels } from '../../data';
+import { getLabel } from '../../utils';
 
 export const Profile = () => {
   useAuthorization();
   const { user, error, clearErrors, message, clearMessage } = useAuthState();
 
-  useAlert(error, 'error', errorLabels, clearErrors);
-  useAlert(message, 'success', messageLabels, clearMessage);
+  useAlert(getLabel(error, errorLabels), 'error', clearErrors);
+  useAlert(getLabel(message, messageLabels), 'success', clearMessage);
 
   return (
     <MainTemplate>

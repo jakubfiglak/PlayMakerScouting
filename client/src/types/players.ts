@@ -2,6 +2,7 @@ import { Order, PaginationData } from './common';
 import { Match } from './matches';
 
 export type Position = 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
+export type Foot = 'L' | 'R' | 'both';
 
 type PlayerCommonTypes = {
   firstName: string;
@@ -10,7 +11,7 @@ type PlayerCommonTypes = {
   dateOfBirth: string;
   height: number;
   weight: number;
-  footed: 'L' | 'R' | 'both';
+  footed: Foot;
   lnpID?: string;
   lnpProfileURL?: string;
 };
@@ -24,13 +25,18 @@ export type Player = PlayerCommonTypes & {
 };
 
 export type PlayersFormData = PlayerCommonTypes & {
-  _id?: string;
   club: string;
 };
 
 export type PlayersData = {
   docs: Player[];
 } & PaginationData;
+
+export type PlayersFilterData = {
+  lastName: string;
+  club: string;
+  position: string;
+};
 
 export type GetPlayers = (
   page: number,
@@ -43,34 +49,39 @@ export type GetPlayers = (
 export type State = {
   playersData: PlayersData;
   playerData: Player | null;
-  current: PlayersFormData | null;
+  current: Player | null;
   playerMatches: Match[];
   loading: boolean;
   error: string | null;
+  message: string | null;
   setLoading: () => void;
+  clearErrors: () => void;
+  clearMessage: () => void;
   getPlayers: GetPlayers;
   getPlayer: (id: string) => void;
   getPlayerMatches: (id: string) => void;
   addPlayer: (player: PlayersFormData) => void;
-  editPlayer: (player: PlayersFormData) => void;
+  editPlayer: (id: string, data: PlayersFormData) => void;
   setCurrent: (player: Player) => void;
   clearCurrent: () => void;
-};
-
-export type PlayersFilterData = {
-  lastName: string;
-  club: string;
-  position: string;
 };
 
 export type Action =
   | { type: 'SET_LOADING' }
   | { type: 'SET_CURRENT'; payload: Player }
   | { type: 'CLEAR_CURRENT' }
+  | { type: 'CLEAR_ERRORS' }
+  | { type: 'CLEAR_MESSAGE' }
   | { type: 'PLAYERS_ERROR'; payload: string }
   | { type: 'GET_PLAYERS_SUCCESS'; payload: PlayersData }
   | { type: 'GET_PLAYER_SUCCESS'; payload: Player }
   | { type: 'GET_PLAYER_MATCHES_SUCCESS'; payload: Match[] }
-  | { type: 'CREATE_PLAYER_SUCCESS' }
-  | { type: 'UPDATE_PLAYER_SUCCESS' }
+  | {
+      type: 'CREATE_PLAYER_SUCCESS';
+      payload: { player: Player; message: string };
+    }
+  | {
+      type: 'UPDATE_PLAYER_SUCCESS';
+      payload: { player: Player; message: string };
+    }
   | { type: 'DELETE_PLAYER_SUCCESS'; payload: string };

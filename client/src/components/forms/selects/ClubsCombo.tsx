@@ -17,6 +17,7 @@ export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
   const [field, fieldMeta, fieldHelpers] = useField(name);
 
   const { value } = field;
+  const { error, touched } = fieldMeta;
   const { setValue } = fieldHelpers;
 
   return (
@@ -35,7 +36,14 @@ export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
         return '';
       }}
       renderInput={(params) => (
-        <TextField {...params} {...field} label={label} variant="outlined" />
+        <TextField
+          {...params}
+          {...field}
+          label={label}
+          variant="outlined"
+          error={touched && !!error}
+          helperText={touched && error}
+        />
       )}
       size={size}
     />

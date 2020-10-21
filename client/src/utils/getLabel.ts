@@ -3,10 +3,14 @@ type SourceType = {
   label: string;
 }[];
 
-export const getLabel = (value: string, source: SourceType): string => {
+export const getLabel = (value: string | null, source: SourceType) => {
   const element = source.find((el) => el.value === value);
   if (element) {
     return element.label;
   }
-  return value;
+  if (value) {
+    return value;
+  }
+
+  return null;
 };

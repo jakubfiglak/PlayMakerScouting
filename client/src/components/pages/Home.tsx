@@ -5,6 +5,7 @@ import MainTemplate from '../templates/MainTemplate/MainTemplate';
 import { useAuthorization, useAlert } from '../../hooks';
 import { useAuthState } from '../../context';
 // Utils & data
+import { getLabel } from '../../utils';
 import { messageLabels } from '../../data/labels';
 
 export const Home = () => {
@@ -12,7 +13,7 @@ export const Home = () => {
 
   const { message, clearMessage } = useAuthState();
 
-  useAlert(message, 'success', messageLabels, clearMessage);
+  useAlert(getLabel(message, messageLabels), 'success', clearMessage);
 
   return (
     <MainTemplate>

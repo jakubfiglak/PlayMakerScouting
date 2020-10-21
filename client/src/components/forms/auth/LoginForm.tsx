@@ -14,6 +14,7 @@ import { useStyles } from './styles';
 import { loginFormInitialValues } from './initialValues';
 import { loginFormValidationSchema } from './validationSchemas';
 import { errorLabels } from '../../../data';
+import { getLabel } from '../../../utils';
 
 export const LoginForm = () => {
   const classes = useStyles();
@@ -32,7 +33,7 @@ export const LoginForm = () => {
     }
   }, [isAuthenticated, history]);
 
-  useAlert(error, 'error', errorLabels, clearErrors);
+  useAlert(getLabel(error, errorLabels), 'error', clearErrors);
 
   const formik = useFormik<LoginFormData>({
     initialValues: loginFormInitialValues,

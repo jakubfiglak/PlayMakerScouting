@@ -15,6 +15,7 @@ import { registerFormValidationSchema } from './validationSchemas';
 import { useStyles } from './styles';
 // Utils & data
 import { errorLabels } from '../../../data';
+import { getLabel } from '../../../utils';
 
 export const RegisterForm = () => {
   const classes = useStyles();
@@ -33,7 +34,7 @@ export const RegisterForm = () => {
     }
   }, [isAuthenticated, history]);
 
-  useAlert(error, 'error', errorLabels, clearErrors);
+  useAlert(getLabel(error, errorLabels), 'error', clearErrors);
 
   return (
     <Formik
