@@ -19,7 +19,11 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const player = await Player.create(req.body);
+  let player = await Player.create(req.body);
+
+  player = await player
+    .populate({ path: 'club', select: 'name' })
+    .execPopulate();
 
   // If the user creating the player is not an admin, push the players ID to users myPlayers array
   if (req.user.role !== 'admin') {
