@@ -1,7 +1,13 @@
 import React from 'react';
 import { useField } from 'formik';
 // MUI components
-import { InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
+import {
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+  FormHelperText,
+} from '@material-ui/core';
 // Data & utils
 import { voivodeships } from '../../../data';
 
@@ -9,6 +15,8 @@ type VoivodeshipSelectProps = { size?: 'small' | 'medium'; name: string };
 
 export const VoivodeshipSelect = ({ name, size }: VoivodeshipSelectProps) => {
   const [field, meta] = useField(name);
+
+  const { error, touched } = meta;
 
   return (
     <FormControl variant="outlined" fullWidth size={size}>
@@ -18,7 +26,7 @@ export const VoivodeshipSelect = ({ name, size }: VoivodeshipSelectProps) => {
         labelId="voivodeship"
         label="Województwo"
         name={name}
-        error={meta.touched && !!meta.error}
+        error={touched && !!error}
       >
         <MenuItem value="">
           <em>Inne</em>
@@ -31,6 +39,7 @@ export const VoivodeshipSelect = ({ name, size }: VoivodeshipSelectProps) => {
           );
         })}
       </Select>
+      {touched && error && <FormHelperText>{error}</FormHelperText>}
     </FormControl>
   );
 };

@@ -94,13 +94,11 @@ export const ClubsForm = () => {
           onChange={onInputChange}
         /> */}
         <Grid item xs={12}>
-          <FormControl variant="outlined" fullWidth>
-            <DivisionSelect
+          {/* <DivisionSelect
               onChange={onInputChange}
               value={division}
               required
-            />
-          </FormControl>
+            /> */}
         </Grid>
         <MainFormActions
           label="klub"

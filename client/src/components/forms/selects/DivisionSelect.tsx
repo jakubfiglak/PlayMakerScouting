@@ -1,21 +1,33 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
+import {
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+  FormHelperText,
+} from '@material-ui/core';
 // Data & utils
 import { divisions } from '../../../data';
 
-export const DivisionSelect = ({ onChange, value, required }: SelectProps) => {
+type Props = {
+  size?: 'small' | 'medium';
+};
+
+export const DivisionSelect = ({ size }: Props) => {
+  const [field, meta] = useField('division');
+
+  const { error, touched } = meta;
+
   return (
-    <>
+    <FormControl variant="outlined" fullWidth size={size}>
       <InputLabel id="division">Poziom rozgrywkowy</InputLabel>
       <Select
+        {...field}
         labelId="division"
-        id="division"
         label="Poziom rozgrywkowy"
-        name="division"
-        onChange={onChange}
-        value={value}
-        required={required}
+        error={touched && !!error}
       >
         <MenuItem value="">
           <em>None</em>
@@ -28,6 +40,7 @@ export const DivisionSelect = ({ onChange, value, required }: SelectProps) => {
           );
         })}
       </Select>
-    </>
+      {touched && error && <FormHelperText>{error}</FormHelperText>}
+    </FormControl>
   );
 };

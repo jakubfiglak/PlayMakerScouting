@@ -47,12 +47,15 @@ export const PlayersForm = ({ clubsData }: Props) => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(data) => {
+      enableReinitialize
+      onSubmit={(data, { resetForm }) => {
         if (current) {
           editPlayer(current._id, data);
           clearCurrent();
+          resetForm();
         } else {
           addPlayer(data);
+          resetForm();
         }
       }}
     >
