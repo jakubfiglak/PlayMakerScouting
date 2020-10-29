@@ -1,10 +1,4 @@
-import {
-  Location,
-  Order,
-  Address,
-  PaginationData,
-  Voivodeship,
-} from './common';
+import { Location, Order, Address, PaginationData } from './common';
 
 export type Division =
   | 'Ekstraklasa'
@@ -25,17 +19,13 @@ export type Club = {
   address: Address;
 };
 
+export type ClubWithFlag = Club & { isFavorite: boolean };
+
 export type ClubsFormData = {
   name: string;
   division: Division | '';
   address: Address;
 };
-
-// export type FormattedClubsFormData = {
-//   name: string;
-//   address: Address;
-//   division: Division | '';
-// };
 
 export type ClubsData = {
   docs: Club[];

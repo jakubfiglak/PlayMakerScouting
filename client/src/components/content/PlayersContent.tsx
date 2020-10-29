@@ -26,6 +26,7 @@ export const PlayersContent = () => {
     clearMessage,
     clearErrors,
   } = usePlayersState();
+
   const {
     loading: simpleDataLoading,
     getClubs,
@@ -33,6 +34,7 @@ export const PlayersContent = () => {
     clubsData,
     myClubsData,
   } = useSimplifiedDataState();
+
   const { user } = useAuthState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();

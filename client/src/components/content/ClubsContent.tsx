@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 // MUI components
 import {
   AppBar,
@@ -19,8 +19,15 @@ import { useTabs, useTable } from '../../hooks';
 import { useClubsState, useAuthState } from '../../context';
 
 export const ClubsContent = () => {
-  const clubsContext = useClubsState();
-  const authContext = useAuthState();
+  const {
+    loading,
+    getClubs,
+    clubsData,
+    myClubsData,
+    setCurrent,
+  } = useClubsState();
+
+  const { user, addClubToFavorites, removeClubFromFavorites } = useAuthState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -33,21 +40,6 @@ export const ClubsContent = () => {
     handleSort,
   ] = useTable();
 
-  const {
-    loading,
-    getClubs,
-    clubsData,
-    myClubsData,
-    setCurrent,
-  } = clubsContext;
-
-  const {
-    loadUser,
-    loading: authLoading,
-    addClubToFavorites,
-    removeClubFromFavorites,
-  } = authContext;
-
   const [showMyClubs, setShowMyClubs] = useState(false);
 
   const [filters, setFilters] = useState<ClubsFilterData>({
@@ -56,7 +48,7 @@ export const ClubsContent = () => {
     voivodeship: '',
   });
 
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleCheckboxChange = () =>
     setShowMyClubs((prevShowMyClubs) => !prevShowMyClubs);
 
   const handleSetCurrent = (club: Club) => {
@@ -65,18 +57,31 @@ export const ClubsContent = () => {
   };
 
   useEffect(() => {
-    loadUser();
-    // get all clubs
-    getClubs(page + 1, rowsPerPage, sortBy, order, filters);
     // get my clubs
-    getClubs(page + 1, rowsPerPage, sortBy, order, filters, true);
-
+    if (showMyClubs) {
+      getClubs(page + 1, rowsPerPage, sortBy, order, filters, true);
+    } else {
+      // get all clubs
+      getClubs(page + 1, rowsPerPage, sortBy, order, filters);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, page, rowsPerPage, sortBy, order, filters, showMyClubs]);
+  }, [page, rowsPerPage, sortBy, order, filters, showMyClubs]);
+
+  const clubsWithFlag = showMyClubs
+    ? myClubsData.docs.map((club) => ({
+        ...club,
+        isFavorite: true,
+      }))
+    : clubsData.docs.map((club) => ({
+        ...club,
+        isFavorite: user?.myClubs.includes(club._id) || false,
+      }));
+
+  const totalClubs = showMyClubs ? myClubsData.totalDocs : clubsData.totalDocs;
 
   return (
     <>
-      {(loading || authLoading) && <Loader />}
+      {loading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
           <Tab label="Baza klubów" id="clubs-0" aria-controls="clubs-0" />
@@ -106,8 +111,8 @@ export const ClubsContent = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          clubs={showMyClubs ? myClubsData.docs : clubsData.docs}
-          total={showMyClubs ? myClubsData.totalDocs : clubsData.totalDocs}
+          clubs={clubsWithFlag}
+          total={totalClubs}
           handleSetCurrent={handleSetCurrent}
           addToFavorites={addClubToFavorites}
           removeFromFavorites={removeClubFromFavorites}

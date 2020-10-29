@@ -8,12 +8,10 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 // Custom components
 import { StyledTableRow, StyledTableCell } from '../../common';
 // Types
-import { Club } from '../../../types/clubs';
-// Hooks
-import { useAuthState } from '../../../context';
+import { Club, ClubWithFlag } from '../../../types/clubs';
 
 type TableRowProps = {
-  club: Club;
+  club: ClubWithFlag;
   handleSetCurrent: (club: Club) => void;
   addToFavorites: (id: string) => void;
   removeFromFavorites: (id: string) => void;
@@ -30,13 +28,8 @@ export const ClubsTableRow = ({
     name,
     division,
     address: { voivodeship },
+    isFavorite,
   } = club;
-
-  const authContext = useAuthState();
-
-  const { user } = authContext;
-
-  const isFavorite = user?.myClubs.includes(_id);
 
   return (
     <StyledTableRow>
