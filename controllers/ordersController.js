@@ -19,7 +19,11 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const order = await Order.create(req.body);
+  let order = await Order.create(req.body);
+
+  order = await order
+    .populate({ path: 'player', select: 'firstName lastName' })
+    .execPopulate();
 
   res.status(201).json({
     success: true,
@@ -147,7 +151,7 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 exports.acceptOrder = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const order = await Order.findById(id);
+  let order = await Order.findById(id);
 
   if (!order) {
     return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
@@ -172,8 +176,10 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
   }
 
   // Grant user with an access to a player when order is accepted
+  // And add players club to users favorites
   if (req.user.role !== 'admin') {
     const user = await User.findById(req.user._id);
+    const player = await Player.findById(order.player);
 
     if (!user) {
       return next(
@@ -181,8 +187,19 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
       );
     }
 
+    if (!player) {
+      return next(
+        new ErrorResponse(`Player not found with id of ${order.player}`, 404)
+      );
+    }
+
     if (!user.myPlayers.includes(order.player)) {
       user.myPlayers.push(order.player);
+      await user.save();
+    }
+
+    if (!user.myClubs.includes(player.club)) {
+      user.myClubs.push(player.club);
       await user.save();
     }
   }
@@ -192,6 +209,13 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
   order.acceptDate = Date.now();
 
   await order.save();
+
+  order = await order
+    .populate([
+      { path: 'player', select: 'firstName lastName' },
+      { path: 'scout', select: 'firstName lastName' },
+    ])
+    .execPopulate();
 
   res.status(200).json({
     success: true,
@@ -206,7 +230,7 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
 exports.closeOrder = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const order = await Order.findById(id);
+  let order = await Order.findById(id);
 
   if (!order) {
     return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
@@ -234,6 +258,13 @@ exports.closeOrder = asyncHandler(async (req, res, next) => {
   order.closeDate = Date.now();
 
   await order.save();
+
+  order = await order
+    .populate([
+      { path: 'player', select: 'firstName lastName' },
+      { path: 'scout', select: 'firstName lastName' },
+    ])
+    .execPopulate();
 
   res.status(200).json({
     success: true,
