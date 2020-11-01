@@ -27,7 +27,14 @@ exports.createMatch = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const match = await Match.create(req.body);
+  let match = await Match.create(req.body);
+
+  match = await match
+    .populate([
+      { path: 'homeTeam', select: 'name' },
+      { path: 'awayTeam', select: 'name' },
+    ])
+    .execPopulate();
 
   res.status(201).json({
     success: true,
@@ -137,10 +144,16 @@ exports.updateMatch = asyncHandler(async (req, res, next) => {
   match = await Match.findByIdAndUpdate(id, req.body, {
     new: true,
     runValidators: true,
-  });
+  })
+    .populate([
+      { path: 'homeTeam', select: 'name' },
+      { path: 'awayTeam', select: 'name' },
+    ])
+    .execPopulate();
 
   res.status(200).json({
     success: true,
+    message: `Match with the id of ${id} successfully updated!`,
     data: match,
   });
 });
