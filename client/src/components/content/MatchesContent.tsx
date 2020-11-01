@@ -9,7 +9,7 @@ import { MatchesTable } from '../tables';
 import { MatchesFilterData } from '../../types/matches';
 // Hooks
 import { useMatchesState, useSimplifiedDataState } from '../../context';
-import { useTabs, useTable } from '../../hooks';
+import { useTabs, useTable, useAlert } from '../../hooks';
 // Utils & data
 import { formatDateObject, tomorrow, yearFromNow } from '../../utils';
 
@@ -18,6 +18,10 @@ export const MatchesContent = () => {
     loading,
     getMatches,
     matchesData: { docs, totalDocs },
+    error,
+    message,
+    clearErrors,
+    clearMessage,
   } = useMatchesState();
   const {
     loading: simpleDataLoading,
@@ -35,6 +39,9 @@ export const MatchesContent = () => {
     handleChangeRowsPerPage,
     handleSort,
   ] = useTable();
+
+  useAlert(error, 'error', clearErrors);
+  useAlert(message, 'success', clearMessage);
 
   const [filters, setFilters] = useState<MatchesFilterData>({
     homeTeam: '',

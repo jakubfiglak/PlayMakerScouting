@@ -17,7 +17,10 @@ export const MatchesState: React.FC = ({ children }) => {
     current: null,
     loading: false,
     error: null,
+    message: null,
     setLoading: () => null,
+    clearErrors: () => null,
+    clearMessage: () => null,
     getMatches: () => null,
     getMatch: () => null,
     addMatch: () => null,
@@ -99,9 +102,10 @@ export const MatchesState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.post('/api/v1/matches', match);
+      const res = await axiosJson.post('/api/v1/matches', match);
       dispatch({
         type: 'CREATE_MATCH_SUCCESS',
+        payload: { match: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -131,9 +135,10 @@ export const MatchesState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.put(`/api/v1/matches/${id}`, match);
+      const res = await axiosJson.put(`/api/v1/matches/${id}`, match);
       dispatch({
         type: 'UPDATE_MATCH_SUCCESS',
+        payload: { match: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -143,14 +148,31 @@ export const MatchesState: React.FC = ({ children }) => {
     }
   };
 
+  // Clear errors
+  const clearErrors = () =>
+    dispatch({
+      type: 'CLEAR_ERRORS',
+    });
+
+  // Clear message
+  const clearMessage = () =>
+    dispatch({
+      type: 'CLEAR_MESSAGE',
+    });
+
+  const { matchesData, current, loading, error, message } = state;
+
   return (
     <MatchesContext.Provider
       value={{
-        matchesData: state.matchesData,
-        current: state.current,
-        loading: state.loading,
-        error: state.error,
+        matchesData,
+        current,
+        loading,
+        error,
+        message,
         setLoading,
+        clearErrors,
+        clearMessage,
         getMatches,
         getMatch,
         addMatch,
