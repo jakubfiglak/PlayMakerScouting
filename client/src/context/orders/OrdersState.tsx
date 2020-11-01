@@ -158,7 +158,7 @@ export const OrdersState: React.FC = ({ children }) => {
   const closeOrder = async (id: string) => {
     setLoading();
     try {
-      const res = await axiosJson.delete(`/api/v1/orders/${id}/close`);
+      const res = await axiosJson.post(`/api/v1/orders/${id}/close`);
       dispatch({
         type: 'CLOSE_ORDER_SUCCESS',
         payload: { order: res.data.data, message: res.data.message },

@@ -4,30 +4,30 @@ import { Grid } from '@material-ui/core';
 // Custom components
 import { OrderCard } from './OrderCard';
 // Types
-import { OrdersData, OrdersFilterData } from '../../types/orders';
+import { OrdersData } from '../../types/orders';
 
-type OrdersGridProps = {
+type Props = {
   ordersData: OrdersData;
-  filters: OrdersFilterData;
   deleteOrder: (id: string) => void;
-  acceptOrder: (id: string, filters: OrdersFilterData) => void;
+  acceptOrder: (id: string) => void;
+  closeOrder: (id: string) => void;
 };
 
 export const OrdersGrid = ({
   ordersData,
-  filters,
   deleteOrder,
   acceptOrder,
-}: OrdersGridProps) => {
+  closeOrder,
+}: Props) => {
   return (
     <Grid container spacing={2}>
       {ordersData.docs.map((order) => (
         <Grid item xs={12} sm={6} md={3} key={order._id}>
           <OrderCard
             order={order}
-            filters={filters}
             deleteOrder={deleteOrder}
             acceptOrder={acceptOrder}
+            closeOrder={closeOrder}
           />
         </Grid>
       ))}

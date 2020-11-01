@@ -26,6 +26,7 @@ export const OrdersContent = () => {
     ordersData,
     myOrdersData,
     deleteOrder,
+    closeOrder,
     error,
     message,
     clearErrors,
@@ -82,9 +83,9 @@ export const OrdersContent = () => {
         <OrdersFilterForm playersData={playersData} setFilters={setFilters} />
         <OrdersGrid
           ordersData={ordersData}
-          filters={filters}
           deleteOrder={deleteOrder}
           acceptOrder={acceptOrder}
+          closeOrder={closeOrder}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="orders">
@@ -93,9 +94,9 @@ export const OrdersContent = () => {
         ) : (
           <OrdersGrid
             ordersData={myOrdersData}
-            filters={filters}
             deleteOrder={deleteOrder}
             acceptOrder={acceptOrder}
+            closeOrder={closeOrder}
           />
         )}
       </TabPanel>
