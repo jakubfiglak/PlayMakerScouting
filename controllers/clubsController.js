@@ -173,6 +173,7 @@ exports.updateClub = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    message: `Club with the id of ${id} successfully updated!`,
     data: club,
   });
 });
@@ -194,6 +195,7 @@ exports.deleteClub = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Club with the id of ${id} successfully removed!`,
+    data: id,
   });
 });
 
@@ -231,6 +233,7 @@ exports.addToFavorites = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Successfully added club with the id of ${id} to favorites`,
+    data: club,
   });
 });
 
@@ -268,6 +271,7 @@ exports.removeFromFavorites = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Successfully removed club with the id of ${id} from favorites`,
+    data: id,
   });
 });
 
