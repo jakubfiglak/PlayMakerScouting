@@ -7,8 +7,6 @@ import { DivisionSelect } from '../selects';
 import { MainFormActions } from '../actions';
 import { AddressFieldset } from '../fieldsets';
 import { Loader } from '../../common';
-// Types
-import { ClubsFormData } from '../../../types/clubs';
 // Hooks
 import { useClubsState } from '../../../context';
 // Utils & data
@@ -16,30 +14,16 @@ import { clubsFormInitialValues } from '../initialValues';
 import { clubsFormValidationSchema } from '../validationSchemas';
 
 export const ClubsForm = () => {
-  const { loading, addClub, current, clearCurrent, editClub } = useClubsState();
-
-  const initialValues: ClubsFormData = current
-    ? {
-        name: current.name,
-        division: current.division,
-        address: current.address,
-      }
-    : clubsFormInitialValues;
+  const { loading, addClub } = useClubsState();
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={clubsFormInitialValues}
       validationSchema={clubsFormValidationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        if (current) {
-          editClub(current._id, data);
-          clearCurrent();
-          resetForm();
-        } else {
-          addClub(data);
-          resetForm();
-        }
+        addClub(data);
+        resetForm();
       }}
     >
       {({ errors, touched, handleReset }) => (
@@ -64,7 +48,7 @@ export const ClubsForm = () => {
             </Grid>
             <MainFormActions
               label="klub"
-              current={!!current}
+              current={false}
               onCancelClick={handleReset}
             />
           </Grid>

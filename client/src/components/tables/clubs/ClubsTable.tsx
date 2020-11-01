@@ -54,6 +54,7 @@ export const ClubsTable = ({
           sortBy={sortBy}
           order={order}
           handleSort={handleSort}
+          actions
         />
         <TableBody>
           {clubs.map((club) => {

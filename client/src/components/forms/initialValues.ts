@@ -7,6 +7,8 @@ import {
 } from '../../types/auth';
 import { PlayersFormData } from '../../types/players';
 import { ClubsFormData } from '../../types/clubs';
+import { MatchesFormData } from '../../types/matches';
+import { formatDateObject } from '../../utils';
 
 const initialAddress: Address = {
   street: '',
@@ -69,4 +71,11 @@ export const clubsFormInitialValues: ClubsFormData = {
   name: '',
   division: '',
   address: initialAddress,
+};
+
+export const matchesFormInitialValues: MatchesFormData = {
+  homeTeam: '',
+  awayTeam: '',
+  competition: '',
+  date: formatDateObject(new Date()),
 };

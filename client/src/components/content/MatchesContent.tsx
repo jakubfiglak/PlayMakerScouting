@@ -6,7 +6,7 @@ import { MatchesFilterForm, MatchesForm } from '../forms';
 import { TabPanel, Loader } from '../common';
 import { MatchesTable } from '../tables';
 // Types
-import { Match, MatchesFilterData } from '../../types/matches';
+import { MatchesFilterData } from '../../types/matches';
 // Hooks
 import { useMatchesState, useSimplifiedDataState } from '../../context';
 import { useTabs, useTable } from '../../hooks';
@@ -14,10 +14,18 @@ import { useTabs, useTable } from '../../hooks';
 import { formatDateObject, tomorrow, yearFromNow } from '../../utils';
 
 export const MatchesContent = () => {
-  const matchesContext = useMatchesState();
-  const simplifiedDataContext = useSimplifiedDataState();
+  const {
+    loading,
+    getMatches,
+    matchesData: { docs, totalDocs },
+  } = useMatchesState();
+  const {
+    loading: simpleDataLoading,
+    getMyClubs,
+    myClubsData,
+  } = useSimplifiedDataState();
 
-  const [activeTab, handleTabChange, setActiveTab] = useTabs();
+  const [activeTab, handleTabChange] = useTabs();
   const [
     page,
     rowsPerPage,
@@ -28,19 +36,6 @@ export const MatchesContent = () => {
     handleSort,
   ] = useTable();
 
-  const {
-    loading,
-    getMatches,
-    matchesData: { docs, totalDocs },
-    setCurrent,
-  } = matchesContext;
-
-  const {
-    loading: simpleDataLoading,
-    getClubs,
-    clubsData,
-  } = simplifiedDataContext;
-
   const [filters, setFilters] = useState<MatchesFilterData>({
     homeTeam: '',
     awayTeam: '',
@@ -50,15 +45,10 @@ export const MatchesContent = () => {
   });
 
   useEffect(() => {
-    getClubs();
+    getMyClubs();
     getMatches(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters]);
-
-  const handleSetCurrent = (match: Match) => {
-    setCurrent(match);
-    setActiveTab(1);
-  };
 
   return (
     <>
@@ -66,11 +56,11 @@ export const MatchesContent = () => {
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="matches">
           <Tab label="Baza meczów" id="matches-0" aria-controls="matches-0" />
-          <Tab label="Dodaj/edytuj" id="matches-1" aria-controls="matches-1" />
+          <Tab label="Dodaj" id="matches-1" aria-controls="matches-1" />
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="matches">
-        <MatchesFilterForm clubsData={clubsData} setFilters={setFilters} />
+        <MatchesFilterForm clubsData={myClubsData} setFilters={setFilters} />
         <MatchesTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -81,11 +71,10 @@ export const MatchesContent = () => {
           handleSort={handleSort}
           matches={docs}
           total={totalDocs}
-          handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="matches">
-        <MatchesForm clubsData={clubsData} />
+        <MatchesForm clubsData={myClubsData} />
       </TabPanel>
     </>
   );

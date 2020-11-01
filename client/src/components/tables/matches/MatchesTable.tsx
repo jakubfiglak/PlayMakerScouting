@@ -22,7 +22,6 @@ import { useStyles } from '../styles';
 
 type TableProps = {
   matches: Match[];
-  handleSetCurrent: (match: Match) => void;
 } & CommonTableProps;
 
 export const MatchesTable = ({
@@ -35,7 +34,6 @@ export const MatchesTable = ({
   handleSort,
   matches,
   total,
-  handleSetCurrent,
 }: TableProps) => {
   const classes = useStyles();
 
@@ -52,13 +50,7 @@ export const MatchesTable = ({
           {matches.map((match) => {
             const { _id } = match;
 
-            return (
-              <MatchesTableRow
-                key={_id}
-                match={match}
-                handleSetCurrent={handleSetCurrent}
-              />
-            );
+            return <MatchesTableRow key={_id} match={match} />;
           })}
         </TableBody>
         <TableFooter>

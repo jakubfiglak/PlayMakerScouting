@@ -19,8 +19,6 @@ export type Club = {
   address: Address;
 };
 
-export type ClubWithFlag = Club & { isFavorite: boolean };
-
 export type ClubsFormData = {
   name: string;
   division: Division | '';

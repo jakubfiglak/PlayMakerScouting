@@ -48,6 +48,7 @@ export const PlayersTable = ({
             sortBy={sortBy}
             order={order}
             handleSort={handleSort}
+            actions
           />
           <TableBody>
             {players.map((player) => {

@@ -10,7 +10,7 @@ import { ClubsFilterData } from '../../../types/clubs';
 // Styles
 import { useStyles } from '../styles';
 
-type FilterFormProps = {
+type Props = {
   setFilters: Dispatch<SetStateAction<ClubsFilterData>>;
 };
 
@@ -20,7 +20,7 @@ const initialFilters: ClubsFilterData = {
   voivodeship: '',
 };
 
-export const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
+export const ClubsFilterForm = ({ setFilters }: Props) => {
   const classes = useStyles();
 
   return (
