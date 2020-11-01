@@ -7,8 +7,8 @@ import { AddressFieldset } from '../fieldsets';
 // Hooks
 import { useAuthState } from '../../../context';
 // Utils & data
-import { editAccountInitialValues } from './initialValues';
-import { editAccountValidationSchema } from './validationSchemas';
+import { editAccountInitialValues } from '../initialValues';
+import { editAccountValidationSchema } from '../validationSchemas';
 // Styles
 import { useStyles } from './styles';
 

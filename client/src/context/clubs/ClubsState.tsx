@@ -13,13 +13,18 @@ export const ClubsState: React.FC = ({ children }) => {
     current: null,
     loading: false,
     error: null,
+    message: null,
     setLoading: () => null,
+    clearErrors: () => null,
+    clearMessage: () => null,
     getClubs: () => null,
     getClub: () => null,
     addClub: () => null,
     editClub: () => null,
     setCurrent: () => null,
     clearCurrent: () => null,
+    addClubToFavorites: () => null,
+    removeClubFromFavorites: () => null,
   };
 
   const [state, dispatch] = useReducer(clubsReducer, initialState);
@@ -112,9 +117,10 @@ export const ClubsState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.post('/api/v1/clubs', club);
+      const res = await axiosJson.post('/api/v1/clubs', club);
       dispatch({
         type: 'CREATE_CLUB_SUCCESS',
+        payload: { club: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -144,9 +150,10 @@ export const ClubsState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.put(`/api/v1/clubs/${id}`, club);
+      const res = await axiosJson.put(`/api/v1/clubs/${id}`, club);
       dispatch({
         type: 'UPDATE_CLUB_SUCCESS',
+        payload: { club: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -156,7 +163,57 @@ export const ClubsState: React.FC = ({ children }) => {
     }
   };
 
-  const { clubsData, myClubsData, current, loading, error } = state;
+  // Add club to favorites
+  const addClubToFavorites = async (id: string) => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.post(`/api/v1/clubs/${id}/addtofavorites`);
+      dispatch({
+        type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
+        payload: { club: res.data.data, message: res.data.message },
+      });
+    } catch (err) {
+      dispatch({
+        type: 'CLUBS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Remove club from favorites
+  const removeClubFromFavorites = async (id: string) => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.post(
+        `/api/v1/clubs/${id}/removefromfavorites`,
+      );
+      dispatch({
+        type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
+        payload: { id: res.data.data, message: res.data.message },
+      });
+    } catch (err) {
+      dispatch({
+        type: 'CLUBS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Clear errors
+  const clearErrors = () =>
+    dispatch({
+      type: 'CLEAR_ERRORS',
+    });
+
+  // Clear message
+  const clearMessage = () =>
+    dispatch({
+      type: 'CLEAR_MESSAGE',
+    });
+
+  const { clubsData, myClubsData, current, loading, error, message } = state;
 
   return (
     <ClubsContext.Provider
@@ -166,6 +223,7 @@ export const ClubsState: React.FC = ({ children }) => {
         current,
         loading,
         error,
+        message,
         setLoading,
         getClubs,
         getClub,
@@ -173,6 +231,10 @@ export const ClubsState: React.FC = ({ children }) => {
         setCurrent,
         clearCurrent,
         editClub,
+        addClubToFavorites,
+        removeClubFromFavorites,
+        clearErrors,
+        clearMessage,
       }}
     >
       {children}

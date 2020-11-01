@@ -80,6 +80,6 @@ export type Action =
       type: 'UPDATE_PASSWORD_SUCCESS';
       payload: { token: string; message: string };
     }
-  | { type: 'ADD_CLUB_TO_FAVORITES_SUCCESS' }
-  | { type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS' }
+  | { type: 'ADD_CLUB_TO_FAVORITES_SUCCESS'; payload: string }
+  | { type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS'; payload: string }
   | { type: 'CLUBS_ERROR'; payload: string };

@@ -1,11 +1,13 @@
 import * as yup from 'yup';
-import { Address } from '../../../types/common';
+import { Address } from '../../types/common';
 import {
   RegisterFormData,
   EditAccountData,
   LoginFormData,
   UpdatePasswordData,
-} from '../../../types/auth';
+} from '../../types/auth';
+import { PlayersFormData, Position, Foot } from '../../types/players';
+import { ClubsFormData, Division } from '../../types/clubs';
 
 const addressValidationSchema: yup.ObjectSchema<Address> = yup
   .object({
@@ -75,5 +77,34 @@ export const updatePasswordValidationSchema: yup.ObjectSchema<UpdatePasswordData
       .string()
       .oneOf([yup.ref('newPassword')], 'Podane hasła muszą być takie same')
       .required('Potwierdź hasło'),
+  })
+  .defined();
+
+export const playersFormValidationSchema: yup.ObjectSchema<PlayersFormData> = yup
+  .object({
+    firstName: yup.string().required('Podaj imię zawodnika'),
+    lastName: yup.string().required('Podaj nazwisko zawodnika'),
+    club: yup.string().required('Wybierz klub zawodnika'),
+    position: yup.mixed<Position>().required('Podaj pozycję zawodnika'),
+    dateOfBirth: yup.string().required('Podaj datę urodzenia zawodnika'),
+    height: yup
+      .number()
+      .min(0, 'Wzrost zawodnika musi być większy niż 0 cm')
+      .required('Podaj wzrost zawodnika'),
+    weight: yup
+      .number()
+      .min(0, 'Waga zawodnika musi być większa niż 0 kg')
+      .required('Podaj wzrost zawodnika'),
+    footed: yup.mixed<Foot>().required('Podaj preferowaną nogę zawodnika'),
+    lnpID: yup.string().notRequired(),
+    lnpProfileURL: yup.string().url('Niepoprawny format url').notRequired(),
+  })
+  .defined();
+
+export const clubsFormValidationSchema: yup.ObjectSchema<ClubsFormData> = yup
+  .object({
+    name: yup.string().required('Podaj nazwę klubu'),
+    division: yup.mixed<Division>().required('Podaj poziom rozgrywkowy klubu'),
+    address: addressValidationSchema,
   })
   .defined();

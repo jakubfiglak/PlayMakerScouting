@@ -9,8 +9,8 @@ import { useAuthState } from '../../../context';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
-import { updatePasswordInitialValues } from './initialValues';
-import { updatePasswordValidationSchema } from './validationSchemas';
+import { updatePasswordInitialValues } from '../initialValues';
+import { updatePasswordValidationSchema } from '../validationSchemas';
 
 export const UpdatePasswordForm = () => {
   const classes = useStyles();

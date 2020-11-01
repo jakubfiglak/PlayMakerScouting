@@ -8,10 +8,11 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 // Custom components
 import { StyledTableRow, StyledTableCell } from '../../common';
 // Types
-import { Club, ClubWithFlag } from '../../../types/clubs';
+import { Club } from '../../../types/clubs';
 
-type TableRowProps = {
-  club: ClubWithFlag;
+type Props = {
+  club: Club;
+  isFavorite: boolean;
   handleSetCurrent: (club: Club) => void;
   addToFavorites: (id: string) => void;
   removeFromFavorites: (id: string) => void;
@@ -19,16 +20,16 @@ type TableRowProps = {
 
 export const ClubsTableRow = ({
   club,
+  isFavorite,
   handleSetCurrent,
   addToFavorites,
   removeFromFavorites,
-}: TableRowProps) => {
+}: Props) => {
   const {
     _id,
     name,
     division,
     address: { voivodeship },
-    isFavorite,
   } = club;
 
   return (

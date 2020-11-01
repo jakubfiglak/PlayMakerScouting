@@ -9,8 +9,8 @@ import { AddressFieldset } from '../fieldsets';
 import { useAuthState } from '../../../context';
 import { useAlert } from '../../../hooks';
 // Utils & data
-import { registerFormInitialValues } from './initialValues';
-import { registerFormValidationSchema } from './validationSchemas';
+import { registerFormInitialValues } from '../initialValues';
+import { registerFormValidationSchema } from '../validationSchemas';
 // Styles
 import { useStyles } from './styles';
 // Utils & data

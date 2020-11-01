@@ -11,8 +11,8 @@ import { useAlert } from '../../../hooks';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
-import { loginFormInitialValues } from './initialValues';
-import { loginFormValidationSchema } from './validationSchemas';
+import { loginFormInitialValues } from '../initialValues';
+import { loginFormValidationSchema } from '../validationSchemas';
 import { errorLabels } from '../../../data';
 import { getLabel } from '../../../utils';
 

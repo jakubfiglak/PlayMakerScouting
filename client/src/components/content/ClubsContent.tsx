@@ -15,7 +15,7 @@ import { TabPanel, Loader } from '../common';
 // Types
 import { Club, ClubsFilterData } from '../../types/clubs';
 // Hooks
-import { useTabs, useTable } from '../../hooks';
+import { useTabs, useTable, useAlert } from '../../hooks';
 import { useClubsState, useAuthState } from '../../context';
 
 export const ClubsContent = () => {
@@ -25,9 +25,18 @@ export const ClubsContent = () => {
     clubsData,
     myClubsData,
     setCurrent,
+    error,
+    message,
+    clearErrors,
+    clearMessage,
+    addClubToFavorites,
+    removeClubFromFavorites,
   } = useClubsState();
 
-  const { user, addClubToFavorites, removeClubFromFavorites } = useAuthState();
+  const {
+    addClubToFavorites: userAddClubToFavorites,
+    removeClubFromFavorites: userRemoveClubFromFavorites,
+  } = useAuthState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -39,6 +48,9 @@ export const ClubsContent = () => {
     handleChangeRowsPerPage,
     handleSort,
   ] = useTable();
+
+  useAlert(error, 'error', clearErrors);
+  useAlert(message, 'success', clearMessage);
 
   const [showMyClubs, setShowMyClubs] = useState(false);
 
@@ -67,17 +79,18 @@ export const ClubsContent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters, showMyClubs]);
 
-  const clubsWithFlag = showMyClubs
-    ? myClubsData.docs.map((club) => ({
-        ...club,
-        isFavorite: true,
-      }))
-    : clubsData.docs.map((club) => ({
-        ...club,
-        isFavorite: user?.myClubs.includes(club._id) || false,
-      }));
-
+  const clubsToShow = showMyClubs ? myClubsData.docs : clubsData.docs;
   const totalClubs = showMyClubs ? myClubsData.totalDocs : clubsData.totalDocs;
+
+  const handleAddToFavorites = (id: string) => {
+    addClubToFavorites(id);
+    userAddClubToFavorites(id);
+  };
+
+  const handleRemoveFromFavorites = (id: string) => {
+    removeClubFromFavorites(id);
+    userRemoveClubFromFavorites(id);
+  };
 
   return (
     <>
@@ -111,11 +124,11 @@ export const ClubsContent = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          clubs={clubsWithFlag}
+          clubs={clubsToShow}
           total={totalClubs}
           handleSetCurrent={handleSetCurrent}
-          addToFavorites={addClubToFavorites}
-          removeFromFavorites={removeClubFromFavorites}
+          addToFavorites={handleAddToFavorites}
+          removeFromFavorites={handleRemoveFromFavorites}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">

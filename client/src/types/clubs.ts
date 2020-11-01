@@ -52,22 +52,37 @@ export type State = {
   current: Club | null;
   loading: boolean;
   error: string | null;
+  message: string | null;
   setLoading: () => void;
+  clearErrors: () => void;
+  clearMessage: () => void;
   getClubs: GetClubs;
   getClub: (id: string) => void;
   addClub: (club: ClubsFormData) => void;
   editClub: (id: string, club: ClubsFormData) => void;
   setCurrent: (club: Club) => void;
   clearCurrent: () => void;
+  addClubToFavorites: (id: string) => void;
+  removeClubFromFavorites: (id: string) => void;
 };
 
 export type Action =
   | { type: 'SET_LOADING' }
   | { type: 'SET_CURRENT'; payload: Club }
   | { type: 'CLEAR_CURRENT' }
+  | { type: 'CLEAR_ERRORS' }
+  | { type: 'CLEAR_MESSAGE' }
   | { type: 'CLUBS_ERROR'; payload: string }
   | { type: 'GET_CLUBS_SUCCESS'; payload: ClubsData }
   | { type: 'GET_MY_CLUBS_SUCCESS'; payload: ClubsData }
   | { type: 'GET_CLUB_SUCCESS'; payload: Club }
-  | { type: 'CREATE_CLUB_SUCCESS' }
-  | { type: 'UPDATE_CLUB_SUCCESS' };
+  | {
+      type: 'ADD_CLUB_TO_FAVORITES_SUCCESS';
+      payload: { club: Club; message: string };
+    }
+  | {
+      type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS';
+      payload: { id: string; message: string };
+    }
+  | { type: 'CREATE_CLUB_SUCCESS'; payload: { club: Club; message: string } }
+  | { type: 'UPDATE_CLUB_SUCCESS'; payload: { club: Club; message: string } };

@@ -80,11 +80,23 @@ export default (state: State, action: Action): State => {
       };
 
     case 'ADD_CLUB_TO_FAVORITES_SUCCESS':
+      return {
+        ...state,
+        user: {
+          ...state.user!,
+          myClubs: [action.payload, ...state.user!.myClubs],
+        },
+      };
+
     case 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS':
       return {
         ...state,
-        loading: false,
-        error: null,
+        user: {
+          ...state.user!,
+          myClubs: state.user!.myClubs.filter(
+            (club) => club !== action.payload,
+          ),
+        },
       };
 
     default:

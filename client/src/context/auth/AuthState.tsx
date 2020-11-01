@@ -151,38 +151,18 @@ export const AuthState: React.FC = ({ children }) => {
 
   // Add club to favorites
   const addClubToFavorites = async (id: string) => {
-    setLoading();
-
-    try {
-      await axiosJson.post(`/api/v1/clubs/${id}/addtofavorites`);
-      dispatch({
-        type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
-      });
-      loadUser();
-    } catch (err) {
-      dispatch({
-        type: 'CLUBS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
+    dispatch({
+      type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
+      payload: id,
+    });
   };
 
   // Remove club from favorites
   const removeClubFromFavorites = async (id: string) => {
-    setLoading();
-
-    try {
-      await axiosJson.post(`/api/v1/clubs/${id}/removefromfavorites`);
-      dispatch({
-        type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
-      });
-      loadUser();
-    } catch (err) {
-      dispatch({
-        type: 'CLUBS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
+    dispatch({
+      type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
+      payload: id,
+    });
   };
 
   // Clear errors

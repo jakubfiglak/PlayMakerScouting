@@ -12,7 +12,8 @@ import { PlayersFormData } from '../../../types/players';
 // Hooks
 import { usePlayersState } from '../../../context';
 // Utils & data
-import { validationSchema } from './validationSchema';
+import { playersFormValidationSchema } from '../validationSchemas';
+import { playersFormInitialValues } from '../initialValues';
 
 type Props = {
   clubsData: ClubData[];
@@ -27,26 +28,25 @@ export const PlayersForm = ({ clubsData }: Props) => {
     editPlayer,
   } = usePlayersState();
 
-  const initialValues: PlayersFormData = {
-    firstName: current?.firstName || '',
-    lastName: current?.lastName || '',
-    club: current?.club._id || '',
-    position: current?.position || 'CM',
-    dateOfBirth:
-      current && current.dateOfBirth
-        ? current.dateOfBirth.slice(0, 10)
-        : '2000-01-01',
-    height: current?.height || 0,
-    weight: current?.weight || 0,
-    footed: current?.footed || 'R',
-    lnpID: current?.lnpID || '',
-    lnpProfileURL: current?.lnpProfileURL || '',
-  };
+  const initialValues: PlayersFormData = current
+    ? {
+        firstName: current.firstName,
+        lastName: current.lastName,
+        club: current.club._id,
+        position: current.position,
+        dateOfBirth: current.dateOfBirth.slice(0, 10),
+        height: current.height,
+        weight: current.weight,
+        footed: current.footed,
+        lnpID: current.lnpID,
+        lnpProfileURL: current.lnpProfileURL,
+      }
+    : playersFormInitialValues;
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      validationSchema={playersFormValidationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
         if (current) {

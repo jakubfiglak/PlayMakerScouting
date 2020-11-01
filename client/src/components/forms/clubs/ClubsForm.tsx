@@ -11,6 +11,9 @@ import { Loader } from '../../common';
 import { ClubsFormData } from '../../../types/clubs';
 // Hooks
 import { useClubsState } from '../../../context';
+// Utils & data
+import { clubsFormInitialValues } from '../initialValues';
+import { clubsFormValidationSchema } from '../validationSchemas';
 
 export const ClubsForm = () => {
   const { loading, addClub, current, clearCurrent, editClub } = useClubsState();
@@ -21,22 +24,12 @@ export const ClubsForm = () => {
         division: current.division,
         address: current.address,
       }
-    : {
-        name: '',
-        division: '',
-        address: {
-          street: '',
-          streetNo: '',
-          zipCode: '',
-          city: '',
-          voivodeship: '',
-          country: 'Polska',
-        },
-      };
+    : clubsFormInitialValues;
 
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={clubsFormValidationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
         if (current) {
