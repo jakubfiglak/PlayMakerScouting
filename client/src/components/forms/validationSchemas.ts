@@ -9,6 +9,7 @@ import {
 import { PlayersFormData, Position, Foot } from '../../types/players';
 import { ClubsFormData, Division } from '../../types/clubs';
 import { Competition, MatchesFormData } from '../../types/matches';
+import { OrderFormData } from '../../types/orders';
 
 const addressValidationSchema: yup.ObjectSchema<Address> = yup
   .object({
@@ -112,9 +113,16 @@ export const clubsFormValidationSchema: yup.ObjectSchema<ClubsFormData> = yup
 
 export const matchesFormValidationSchema: yup.ObjectSchema<MatchesFormData> = yup
   .object({
-    homeTeam: yup.string().required('Podaj drużynę gospodarzy'),
-    awayTeam: yup.string().required('Podaj drużynę gości'),
-    competition: yup.mixed<Competition>().required('Podaj rodzaj rozgrywek'),
+    homeTeam: yup.string().required('Wybierz drużynę gospodarzy'),
+    awayTeam: yup.string().required('Wybierz drużynę gości'),
+    competition: yup.mixed<Competition>().required('Wybierz rodzaj rozgrywek'),
     date: yup.string().required('Podaj datę rozgrywania meczu'),
+  })
+  .defined();
+
+export const ordersFormValidationSchema: yup.ObjectSchema<OrderFormData> = yup
+  .object({
+    player: yup.string().required('Wybierz zawodnika'),
+    notes: yup.string().notRequired(),
   })
   .defined();

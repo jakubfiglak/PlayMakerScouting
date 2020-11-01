@@ -32,18 +32,52 @@ export default (state: State, action: Action): State => {
         orderData: action.payload,
       };
 
-    case 'ACCEPT_ORDER_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        error: null,
-      };
-
     case 'CREATE_ORDER_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
+        message: action.payload.message,
+        ordersData: {
+          ...state.ordersData,
+          docs: [action.payload.order, ...state.ordersData.docs],
+        },
+      };
+
+    case 'ACCEPT_ORDER_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        message: action.payload.message,
+        ordersData: {
+          ...state.ordersData,
+          docs: state.ordersData.docs.map((order) =>
+            order._id === action.payload.order._id
+              ? action.payload.order
+              : order,
+          ),
+        },
+        myOrdersData: {
+          ...state.myOrdersData,
+          docs: [action.payload.order, ...state.myOrdersData.docs],
+        },
+      };
+
+    case 'CLOSE_ORDER_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        message: action.payload.message,
+        ordersData: {
+          ...state.ordersData,
+          docs: state.ordersData.docs.map((order) =>
+            order._id === action.payload.order._id
+              ? action.payload.order
+              : order,
+          ),
+        },
       };
 
     case 'DELETE_ORDER_SUCCESS':
@@ -51,6 +85,13 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
+        message: action.payload.message,
+        ordersData: {
+          ...state.ordersData,
+          docs: state.ordersData.docs.filter(
+            (order) => order._id !== action.payload.id,
+          ),
+        },
       };
 
     case 'ORDERS_ERROR':
@@ -58,6 +99,18 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    case 'CLEAR_ERRORS':
+      return {
+        ...state,
+        error: null,
+      };
+
+    case 'CLEAR_MESSAGE':
+      return {
+        ...state,
+        message: null,
       };
 
     default:

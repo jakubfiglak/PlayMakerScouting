@@ -8,6 +8,7 @@ import {
 import { PlayersFormData } from '../../types/players';
 import { ClubsFormData } from '../../types/clubs';
 import { MatchesFormData } from '../../types/matches';
+import { OrderFormData } from '../../types/orders';
 import { formatDateObject } from '../../utils';
 
 const initialAddress: Address = {
@@ -78,4 +79,8 @@ export const matchesFormInitialValues: MatchesFormData = {
   awayTeam: '',
   competition: '',
   date: formatDateObject(new Date()),
+};
+export const ordersFormInitialValues: OrderFormData = {
+  player: '',
+  notes: '',
 };

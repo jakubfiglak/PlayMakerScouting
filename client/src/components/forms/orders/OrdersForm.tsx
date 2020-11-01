@@ -1,65 +1,60 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
+import { Formik, Form, Field } from 'formik';
 // MUI components
-import { Grid, FormControl } from '@material-ui/core';
+import { Grid, FormControl, TextField } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../selects';
 import { MainFormActions } from '../actions';
 import { Loader } from '../../common';
 // Types
-import { OrderFormData } from '../../../types/orders';
 import { PlayerData } from '../../../types/simplifiedData';
 // Hooks
 import { useOrdersState } from '../../../context';
-import { useForm } from '../../../hooks';
+// Utils & data
+import { ordersFormInitialValues } from '../initialValues';
+import { ordersFormValidationSchema } from '../validationSchemas';
 
-type OrdersFormProps = {
+type Props = {
   playersData: PlayerData[];
 };
 
-export const OrdersForm = ({ playersData }: OrdersFormProps) => {
-  const ordersContext = useOrdersState();
-
-  const { addOrder, loading } = ordersContext;
-
-  const initialState: OrderFormData = {
-    player: '',
-  };
-
-  const [orderData, _, setOrderData] = useForm(initialState);
-
-  const { player } = orderData;
-
-  const onCancelClick = () => {
-    setOrderData(initialState);
-  };
-
-  const onSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    addOrder(orderData);
-  };
+export const OrdersForm = ({ playersData }: Props) => {
+  const { addOrder, loading } = useOrdersState();
 
   return (
-    <form onSubmit={onSubmit}>
-      {loading && <Loader />}
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <FormControl variant="outlined" fullWidth>
-            <PlayersCombo
-              id="player"
-              label="Zawodnik"
-              playersData={playersData}
-              setFormData={setOrderData}
-              value={player}
+    <Formik
+      initialValues={ordersFormInitialValues}
+      validationSchema={ordersFormValidationSchema}
+      onSubmit={(data) => addOrder(data)}
+    >
+      {({ handleReset, touched, errors }) => (
+        <Form>
+          {loading && <Loader />}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" fullWidth>
+                <PlayersCombo playersData={playersData} label="Zawodnik" />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <Field
+                name="notes"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Uwagi"
+                error={touched.notes && !!errors.notes}
+                helperText={touched.notes && errors.notes}
+              />
+            </Grid>
+            <MainFormActions
+              label="zlecenie"
+              onCancelClick={handleReset}
+              current={false}
             />
-          </FormControl>
-        </Grid>
-        <MainFormActions
-          label="zlecenie"
-          onCancelClick={onCancelClick}
-          current={false}
-        />
-      </Grid>
-    </form>
+          </Grid>
+        </Form>
+      )}
+    </Formik>
   );
 };

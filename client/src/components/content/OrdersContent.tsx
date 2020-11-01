@@ -13,16 +13,11 @@ import {
   useSimplifiedDataState,
   useAuthState,
 } from '../../context';
-import { useTabs } from '../../hooks';
+import { useTabs, useAlert } from '../../hooks';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils';
 
 export const OrdersContent = () => {
-  const ordersContext = useOrdersState();
-  const simplifiedDataContext = useSimplifiedDataState();
-  const authContext = useAuthState();
-  const [activeTab, handleTabChange] = useTabs();
-
   const {
     loading,
     getOrders,
@@ -31,15 +26,24 @@ export const OrdersContent = () => {
     ordersData,
     myOrdersData,
     deleteOrder,
-  } = ordersContext;
+    error,
+    message,
+    clearErrors,
+    clearMessage,
+  } = useOrdersState();
 
   const {
     loading: simpleDataLoading,
     getPlayers,
     playersData,
-  } = simplifiedDataContext;
+  } = useSimplifiedDataState();
 
-  const { loading: userLoading, user } = authContext;
+  const { loading: userLoading, user } = useAuthState();
+
+  const [activeTab, handleTabChange] = useTabs();
+
+  useAlert(error, 'error', clearErrors);
+  useAlert(message, 'success', clearMessage);
 
   const [filters, setFilters] = useState<OrdersFilterData>({
     player: '',

@@ -24,6 +24,7 @@ export type Order = {
 
 export type OrderFormData = {
   player: string;
+  notes?: string;
 };
 
 export type OrdersData = {
@@ -52,21 +53,28 @@ export type State = {
   current: Order | null;
   loading: boolean;
   error: string | null;
+  message: string | null;
   setLoading: () => void;
+  clearErrors: () => void;
+  clearMessage: () => void;
   getOrders: (filters: OrdersFilterData) => void;
   getMyOrders: () => void;
-  acceptOrder: (id: string, filters: OrdersFilterData) => void;
+  acceptOrder: (id: string) => void;
   getOrder: (id: string) => void;
   deleteOrder: (id: string) => void;
+  closeOrder: (id: string) => void;
   addOrder: (order: OrderFormData) => void;
 };
 
 export type Action =
   | { type: 'SET_LOADING' }
+  | { type: 'CLEAR_ERRORS' }
+  | { type: 'CLEAR_MESSAGE' }
   | { type: 'ORDERS_ERROR'; payload: string }
   | { type: 'GET_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'GET_ORDER_SUCCESS'; payload: Order }
   | { type: 'GET_MY_ORDERS_SUCCESS'; payload: OrdersData }
-  | { type: 'ACCEPT_ORDER_SUCCESS' }
-  | { type: 'CREATE_ORDER_SUCCESS' }
-  | { type: 'DELETE_ORDER_SUCCESS'; payload: string };
+  | { type: 'ACCEPT_ORDER_SUCCESS'; payload: { order: Order; message: string } }
+  | { type: 'CREATE_ORDER_SUCCESS'; payload: { order: Order; message: string } }
+  | { type: 'CLOSE_ORDER_SUCCESS'; payload: { order: Order; message: string } }
+  | { type: 'DELETE_ORDER_SUCCESS'; payload: { id: string; message: string } };

@@ -81,13 +81,13 @@ export const PlayerStep = ({
         </FormControl>
       ) : (
         <FormControl variant="outlined" fullWidth>
-          <PlayersCombo
+          {/* <PlayersCombo
             id="player"
             label="Zawodnik"
             playersData={playersData}
             setFormData={setFormData}
             value={value as string}
-          />
+          /> */}
         </FormControl>
       )}
     </>
