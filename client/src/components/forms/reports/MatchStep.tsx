@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 // MUI components
-import { FormControl, SelectProps, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 // Custom components
 import { MatchSelect } from '../selects';
 import { Loader } from '../../common';
@@ -11,17 +11,12 @@ import { usePlayersState } from '../../../context';
 // Utils & data
 import { formatDate } from '../../../utils';
 
-type MatchStepProps = {
+type Props = {
   player: string;
   current: Report | null;
-} & SelectProps;
+};
 
-export const MatchStep = ({
-  player,
-  value,
-  onChange,
-  current,
-}: MatchStepProps) => {
+export const MatchStep = ({ player, current }: Props) => {
   const playersContext = usePlayersState();
 
   const { loading, getPlayerMatches, playerMatches } = playersContext;
@@ -51,13 +46,7 @@ export const MatchStep = ({
   return (
     <>
       {loading && <Loader />}
-      <FormControl variant="outlined" fullWidth>
-        <MatchSelect
-          matchesData={playerMatches}
-          value={value}
-          onChange={onChange}
-        />
-      </FormControl>
+      <MatchSelect matchesData={playerMatches} name="match" />
     </>
   );
 };

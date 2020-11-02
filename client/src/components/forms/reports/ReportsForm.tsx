@@ -1,4 +1,5 @@
 import React, { SyntheticEvent } from 'react';
+import { Formik, Form, Field, FormikValues } from 'formik';
 // MUI components
 import {
   Stepper,
@@ -22,11 +23,12 @@ import { BottomNav } from './BottomNav';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
 import { useReportsState } from '../../../context';
+// Types
+import { ReportFormData } from '../../../types/reports';
 // Styles
 import { useStyles } from '../styles';
 // Utils & data
-import { reportFormInitialState } from '../../../data';
-import { formatReportObject, getInitialStateFromCurrent } from '../../../utils';
+import { reportsFormInitialValues } from '../initialValues';
 
 export const ReportsForm = () => {
   const classes = useStyles();
@@ -34,58 +36,15 @@ export const ReportsForm = () => {
     activeStep,
     handleNext,
     handleBack,
-    handleReset,
+    resetStepper,
     setActiveStep,
   ] = useStepper();
 
-  const reportsContext = useReportsState();
+  const { addReport, current, editReport } = useReportsState();
 
-  const { addReport, current, editReport } = reportsContext;
-
-  const initialState = current
-    ? getInitialStateFromCurrent(current)
-    : reportFormInitialState;
-
-  const [reportData, onInputChange, setReportData] = useForm(initialState);
-
-  const {
-    order,
-    player,
-    match,
-    minutesPlayed,
-    goals,
-    assists,
-    yellowCards,
-    redCards,
-    ballReceptionRating,
-    ballReceptionNote,
-    holdPassRating,
-    holdPassNote,
-    gainPassRating,
-    gainPassNote,
-    keyPassRating,
-    keyPassNote,
-    defOneOnOneRating,
-    defOneOnOneNote,
-    airPlayRating,
-    airPlayNote,
-    positioningRating,
-    positioningNote,
-    attOneOnOneRating,
-    attOneOnOneNote,
-    finishingRating,
-    finishingNote,
-    attackRating,
-    attackNote,
-    defenseRating,
-    defenseNote,
-    transitionRating,
-    transitionNote,
-    leading,
-    neglected,
-    summary,
-    finalRating,
-  } = reportData;
+  // const initialState = current
+  //   ? getInitialStateFromCurrent(current)
+  //   : reportFormInitialState;
 
   const steps = [
     'Wybierz zlecenie',
@@ -98,115 +57,39 @@ export const ReportsForm = () => {
     'Statystyki',
   ];
 
-  const getStepContent = (step: number) => {
+  const getStepContent = (step: number, values: ReportFormData) => {
     switch (step) {
       case 0:
-        return (
-          <OrderStep value={order} onChange={onInputChange} current={current} />
-        );
+        return <OrderStep current={current} />;
       case 1:
-        return (
-          <PlayerStep
-            value={player}
-            onChange={onInputChange}
-            order={order}
-            current={current}
-            setFormData={setReportData}
-          />
-        );
+        return <PlayerStep order={values.order} current={current} />;
       case 2:
-        return (
-          <MatchStep
-            value={match}
-            onChange={onInputChange}
-            player={player}
-            current={current}
-          />
-        );
+        return <MatchStep player={values.player} current={current} />;
       case 3:
-        return (
-          <IndividualSkillsStep
-            ballReceptionRating={ballReceptionRating}
-            ballReceptionNote={ballReceptionNote}
-            holdPassRating={holdPassRating}
-            holdPassNote={holdPassNote}
-            gainPassRating={gainPassRating}
-            gainPassNote={gainPassNote}
-            keyPassRating={keyPassRating}
-            keyPassNote={keyPassNote}
-            defOneOnOneNote={defOneOnOneNote}
-            defOneOnOneRating={defOneOnOneRating}
-            airPlayRating={airPlayRating}
-            airPlayNote={airPlayNote}
-            positioningRating={positioningRating}
-            positioningNote={positioningNote}
-            attOneOnOneRating={attOneOnOneRating}
-            attOneOnOneNote={attOneOnOneNote}
-            finishingRating={finishingRating}
-            finishingNote={finishingNote}
-            onChange={onInputChange}
-            player={player}
-          />
-        );
+        return <IndividualSkillsStep player={values.player} />;
       case 4:
-        return (
-          <TeamplaySkillsStep
-            attackRating={attackRating}
-            attackNote={attackNote}
-            defenseRating={defenseRating}
-            defenseNote={defenseNote}
-            transitionRating={transitionRating}
-            transitionNote={transitionNote}
-            onChange={onInputChange}
-          />
-        );
+        return <TeamplaySkillsStep />;
       case 5:
-        return (
-          <MotorSkillsStep
-            leading={leading}
-            neglected={neglected}
-            onChange={onInputChange}
-          />
-        );
+        return <MotorSkillsStep />;
       case 6:
-        return (
-          <SummaryStep
-            summary={summary}
-            finalRating={finalRating}
-            onChange={onInputChange}
-          />
-        );
+        return <SummaryStep />;
       case 7:
-        return (
-          <BasicDataStep
-            minutesPlayed={minutesPlayed}
-            goals={goals}
-            assists={assists}
-            yellowCards={yellowCards}
-            redCards={redCards}
-            onChange={onInputChange}
-          />
-        );
+        return <BasicDataStep />;
       default:
         return 'Unknown step';
     }
   };
 
-  const handleSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    const formattedReport = formatReportObject(reportData);
+  // const handleSubmit = (e: SyntheticEvent) => {
+  //   e.preventDefault();
+  //   const formattedReport = formatReportObject(reportData);
 
-    if (current) {
-      editReport(current._id, formattedReport);
-    } else {
-      addReport(formattedReport);
-    }
-  };
-
-  const onCancelClick = () => {
-    setReportData(initialState);
-    handleReset();
-  };
+  //   if (current) {
+  //     editReport(current._id, formattedReport);
+  //   } else {
+  //     addReport(formattedReport);
+  //   }
+  // };
 
   const handleGoBack = () => {
     setActiveStep(steps.length - 1);
@@ -222,49 +105,56 @@ export const ReportsForm = () => {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Grid
-          container
-          component="form"
-          className={classes.root}
-          onSubmit={handleSubmit}
+        <Formik
+          initialValues={reportsFormInitialValues}
+          onSubmit={(data) => console.log(data)}
         >
-          <Grid item xs={12}>
-            <Stepper activeStep={activeStep} orientation="vertical">
-              {steps.map((label, index) => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                  <StepContent>
-                    <Typography component="div">
-                      {getStepContent(index)}
-                    </Typography>
-                    <StepActions
-                      activeStep={activeStep}
-                      steps={steps}
-                      handleBack={handleBack}
-                      handleNext={handleNext}
-                      player={player}
-                      match={match}
-                    />
-                  </StepContent>
-                </Step>
-              ))}
-            </Stepper>
-          </Grid>
-          {activeStep === steps.length && (
-            <Grid item xs={12}>
-              <Grid container spacing={2}>
-                <MainFormActions
-                  label="raport"
-                  current={!!current}
-                  onCancelClick={onCancelClick}
-                  goBack={handleGoBack}
-                  activeStep={activeStep}
-                  steps={steps}
-                />
+          {({ handleReset, touched, errors, values }) => (
+            <Form>
+              <Grid container className={classes.root}>
+                <Grid item xs={12}>
+                  <Stepper activeStep={activeStep} orientation="vertical">
+                    {steps.map((label, index) => (
+                      <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                        <StepContent>
+                          <Typography component="div">
+                            {getStepContent(index, values)}
+                          </Typography>
+                          <StepActions
+                            activeStep={activeStep}
+                            steps={steps}
+                            handleBack={handleBack}
+                            handleNext={handleNext}
+                            player={values.player}
+                            match={values.match}
+                          />
+                        </StepContent>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </Grid>
+                {activeStep === steps.length && (
+                  <Grid item xs={12}>
+                    <Grid container spacing={2}>
+                      <MainFormActions
+                        label="raport"
+                        current={!!current}
+                        onCancelClick={() => {
+                          handleReset();
+                          resetStepper();
+                        }}
+                        goBack={handleGoBack}
+                        activeStep={activeStep}
+                        steps={steps}
+                      />
+                    </Grid>
+                  </Grid>
+                )}
               </Grid>
-            </Grid>
+            </Form>
           )}
-        </Grid>
+        </Formik>
       </Grid>
       <BottomNav activeStep={activeStep} setActiveStep={setActiveStep} />
     </Grid>

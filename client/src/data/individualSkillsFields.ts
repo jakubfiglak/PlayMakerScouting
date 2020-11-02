@@ -1,96 +1,78 @@
-import { IndSkillsField } from '../types/reports';
-
-export const commonIndSkillsFields: IndSkillsField[] = [
+export const commonIndSkillsFields = [
   {
     title: 'Podania utrzymujące',
-    radioName: 'holdPassRating',
-    textFieldName: 'holdPassNote',
+    namespace: 'holdPass',
   },
   {
     title: 'Podania zdobywające',
-    radioName: 'gainPassRating',
-    textFieldName: 'gainPassNote',
+    namespace: 'gainPass',
   },
   {
     title: 'Podania kluczowe',
-    radioName: 'keyPassRating',
-    textFieldName: 'keyPassNote',
+    namespace: 'keyPass',
   },
   {
     title: 'Przyjęcie piłki',
-    radioName: 'ballReceptionRating',
-    textFieldName: 'ballReceptionNote',
+    namespace: 'ballReception',
   },
 ];
 
-export const cbIndSkillsFields: IndSkillsField[] = [
+export const cbIndSkillsFields = [
   {
     title: 'Gra 1v1 w obronie',
-    radioName: 'defOneOnOneRating',
-    textFieldName: 'defOneOnOneNote',
+    namespace: 'defOneOnOne',
   },
   {
     title: 'Gra w powietrzu',
-    radioName: 'airPlayRating',
-    textFieldName: 'airPlayNote',
+    namespace: 'airPlay',
   },
   {
     title: 'Ustawianie się',
-    radioName: 'positioningRating',
-    textFieldName: 'positioningNote',
+    namespace: 'positioning',
   },
 ];
 
-export const fbIndSkillsFields: IndSkillsField[] = [
+export const fbIndSkillsFields = [
   {
     title: 'Gra 1v1 w obronie',
-    radioName: 'defOneOnOneRating',
-    textFieldName: 'defOneOnOneNote',
+    namespace: 'defOneOnOne',
   },
   {
     title: 'Gra 1v1 w ataku',
-    radioName: 'attOneOnOneRating',
-    textFieldName: 'attOneOnOneNote',
+    namespace: 'attOneOnOne',
   },
   {
     title: 'Gra w powietrzu',
-    radioName: 'airPlayRating',
-    textFieldName: 'airPlayNote',
+    namespace: 'airPlay',
   },
 ];
 
-export const mIndSkillsFields: IndSkillsField[] = [
+export const mIndSkillsFields = [
   {
     title: 'Finalizacja akcji',
-    radioName: 'finishingRating',
-    textFieldName: 'finishingNote',
+    namespace: 'finishing',
   },
   {
     title: 'Gra 1v1 w ataku',
-    radioName: 'attOneOnOneRating',
-    textFieldName: 'attOneOnOneNote',
+    namespace: 'attOneOnOne',
   },
   {
     title: 'Gra 1v1 w obronie',
-    radioName: 'defOneOnOneRating',
-    textFieldName: 'defOneOnOneNote',
+    namespace: 'defOneOnOne',
   },
 ];
 
-export const fIndSkillsFields: IndSkillsField[] = [
+export const fIndSkillsFields = [
   {
     title: 'Finalizacja akcji',
-    radioName: 'finishingRating',
-    textFieldName: 'finishingNote',
+    namespace: 'finishing',
   },
   {
     title: 'Gra w powietrzu',
-    radioName: 'airPlayRating',
-    textFieldName: 'airPlayNote',
+    namespace: 'airPlay',
   },
   {
     title: 'Gra 1v1 w ataku',
-    radioName: 'attOneOnOneRating',
-    textFieldName: 'attOneOnOneNote',
+    namespace: 'attOneOnOne',
   },
 ];

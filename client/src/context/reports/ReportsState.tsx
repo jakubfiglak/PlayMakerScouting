@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ReportsContext from './reportsContext';
 import reportsReducer from './reportsReducer';
-import { State, Report, FormattedReportFormData } from '../../types/reports';
+import { State, Report, ReportFormData } from '../../types/reports';
 import { initialPaginatedData } from '../../data';
 
 export const ReportsState: React.FC = ({ children }) => {
@@ -104,7 +104,7 @@ export const ReportsState: React.FC = ({ children }) => {
   };
 
   // Create new report
-  const addReport = async (report: FormattedReportFormData) => {
+  const addReport = async (report: ReportFormData) => {
     setLoading();
 
     try {
@@ -121,7 +121,7 @@ export const ReportsState: React.FC = ({ children }) => {
   };
 
   // Update report
-  const editReport = async (id: string, report: FormattedReportFormData) => {
+  const editReport = async (id: string, report: ReportFormData) => {
     setLoading();
 
     try {

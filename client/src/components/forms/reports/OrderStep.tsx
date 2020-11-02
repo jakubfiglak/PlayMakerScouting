@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 // MUI components
-import { FormControl, SelectProps, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 // Custom components
 import { OrdersSelect } from '../selects';
 import { Loader } from '../../common';
@@ -9,11 +9,11 @@ import { Report } from '../../../types/reports';
 // Hooks
 import { useOrdersState } from '../../../context';
 
-type OrderStepProps = {
+type Props = {
   current: Report | null;
-} & SelectProps;
+};
 
-export const OrderStep = ({ value, onChange, current }: OrderStepProps) => {
+export const OrderStep = ({ current }: Props) => {
   const ordersContext = useOrdersState();
 
   const { loading, getMyOrders, myOrdersData } = ordersContext;
@@ -34,13 +34,7 @@ export const OrderStep = ({ value, onChange, current }: OrderStepProps) => {
             : 'Raport bez przypisanego zlecenia obserwacji'}
         </Typography>
       ) : (
-        <FormControl variant="outlined" fullWidth>
-          <OrdersSelect
-            ordersData={myOrdersData.docs}
-            value={value}
-            onChange={onChange}
-          />
-        </FormControl>
+        <OrdersSelect ordersData={myOrdersData.docs} name="order" />
       )}
     </>
   );

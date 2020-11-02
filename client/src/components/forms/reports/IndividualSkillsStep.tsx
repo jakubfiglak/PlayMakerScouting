@@ -6,25 +6,15 @@ import { RatingInput } from './RatingInput';
 import { Loader } from '../../common';
 // Hooks
 import { usePlayersState } from '../../../context';
-// Types
-import {
-  IndSkillsFormData,
-  RatingScore,
-  IndSkillsField,
-} from '../../../types/reports';
-import { OnChangeFn } from '../../../types/common';
 // Utils & data
 import { commonIndSkillsFields } from '../../../data';
 import { getIndSkillsFields } from '../../../utils';
 
-type IndividualSkillsStepProps = {
+type Props = {
   player: string;
-  onChange: OnChangeFn;
-} & IndSkillsFormData;
+};
 
-export const IndividualSkillsStep = (props: IndividualSkillsStepProps) => {
-  const { onChange, player } = props;
-
+export const IndividualSkillsStep = ({ player }: Props) => {
   const playersContext = usePlayersState();
   const { loading, playerData, getPlayer } = playersContext;
 
@@ -32,7 +22,7 @@ export const IndividualSkillsStep = (props: IndividualSkillsStepProps) => {
     getPlayer(player);
   }, []);
 
-  let specificIndSkillsFields: IndSkillsField[] = [];
+  let specificIndSkillsFields: { title: string; namespace: string }[] = [];
 
   if (playerData?.position) {
     specificIndSkillsFields = getIndSkillsFields(playerData.position);
@@ -44,22 +34,14 @@ export const IndividualSkillsStep = (props: IndividualSkillsStepProps) => {
     <>
       {loading && <Loader />}
       <Grid container spacing={3}>
-        {skillsFields.map((field) => {
-          const { title, radioName, textFieldName } = field;
-
-          return (
-            <Grid item xs={12} key={title}>
-              <RatingInput
-                title={title}
-                radioName={radioName}
-                ratingValue={props[radioName] as RatingScore}
-                textFieldName={textFieldName}
-                noteValue={props[textFieldName] as string}
-                onChange={onChange}
-              />
-            </Grid>
-          );
-        })}
+        {skillsFields.map(({ title, namespace }) => (
+          <Grid item xs={12} key={title}>
+            <RatingInput
+              title={title}
+              namespace={`individualSkills.${namespace}`}
+            />
+          </Grid>
+        ))}
       </Grid>
     </>
   );

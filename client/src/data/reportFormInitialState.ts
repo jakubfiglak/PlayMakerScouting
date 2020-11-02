@@ -40,18 +40,18 @@ export const motorSkillsInitialState: MotorSkillsFormData = {
   neglected: '',
 };
 
-export const reportFormInitialState: ReportFormData = {
-  order: '',
-  player: '',
-  match: '',
-  minutesPlayed: 0,
-  goals: 0,
-  assists: 0,
-  yellowCards: 0,
-  redCards: 0,
-  ...indSkillsInitialState,
-  ...teamplaySkillsInitialState,
-  ...motorSkillsInitialState,
-  summary: '',
-  finalRating: 1,
-};
+// export const reportFormInitialState: ReportFormData = {
+//   order: '',
+//   player: '',
+//   match: '',
+//   minutesPlayed: 0,
+//   goals: 0,
+//   assists: 0,
+//   yellowCards: 0,
+//   redCards: 0,
+//   ...indSkillsInitialState,
+//   ...teamplaySkillsInitialState,
+//   ...motorSkillsInitialState,
+//   summary: '',
+//   finalRating: 1,
+// };

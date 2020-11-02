@@ -1,49 +1,32 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { Grid, Typography, TextField, FormControl } from '@material-ui/core';
+import { Grid, Typography, TextField } from '@material-ui/core';
 // Custom components
 import { RatingSelect } from '../selects';
-// Types
-import { RatingScore } from '../../../types/reports';
-import { OnChangeFn } from '../../../types/common';
 
-type RatingInputProps = {
+type Props = {
   title: string;
-  radioName: string;
-  ratingValue: RatingScore;
-  textFieldName: string;
-  noteValue: string;
-  onChange: OnChangeFn;
+  namespace: string;
 };
 
-export const RatingInput = ({
-  title,
-  radioName,
-  ratingValue,
-  textFieldName,
-  noteValue,
-  onChange,
-}: RatingInputProps) => {
+export const RatingInput = ({ title, namespace }: Props) => {
+  const [field, meta] = useField(`${namespace}.note`);
+
+  const { error, touched } = meta;
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">{title}</Typography>
       </Grid>
       <Grid item xs={4}>
-        <FormControl variant="outlined" fullWidth>
-          <RatingSelect
-            value={ratingValue}
-            name={radioName}
-            onChange={onChange}
-          />
-        </FormControl>
+        <RatingSelect name={`${namespace}.rating`} />
       </Grid>
       <Grid item xs={12}>
         <TextField
-          id={textFieldName}
-          name={textFieldName}
-          value={noteValue}
-          onChange={onChange}
+          {...field}
+          id={`${namespace}.note`}
           fullWidth
           label="Opis"
           multiline
@@ -52,6 +35,8 @@ export const RatingInput = ({
           inputProps={{
             maxlength: 400,
           }}
+          error={touched && !!error}
+          helperText={touched && error}
         />
       </Grid>
     </Grid>

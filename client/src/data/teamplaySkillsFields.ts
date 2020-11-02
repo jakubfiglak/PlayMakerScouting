@@ -1,19 +1,14 @@
-import { TeamplaySkillsField } from '../types/reports';
-
-export const teamplaySkillsFields: TeamplaySkillsField[] = [
+export const teamplaySkillsFields = [
   {
     title: 'Udział w ataku',
-    radioName: 'attackRating',
-    textFieldName: 'attackNote',
+    namespace: 'attack',
   },
   {
     title: 'Praca w obronie',
-    radioName: 'defenseRating',
-    textFieldName: 'defenseNote',
+    namespace: 'defense',
   },
   {
     title: 'Fazy przejściowe',
-    radioName: 'transitionRating',
-    textFieldName: 'transitionNote',
+    namespace: 'transition',
   },
 ];

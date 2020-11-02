@@ -9,7 +9,6 @@ export {
   indSkillsInitialState,
   teamplaySkillsInitialState,
   motorSkillsInitialState,
-  reportFormInitialState,
 } from './reportFormInitialState';
 export {
   footLabels,

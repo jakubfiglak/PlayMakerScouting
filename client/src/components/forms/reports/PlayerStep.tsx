@@ -1,13 +1,6 @@
-import React, { useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useEffect } from 'react';
 // MUI components
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectProps,
-  Typography,
-} from '@material-ui/core';
+import { FormControl, Typography } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../selects';
 import { Loader } from '../../common';
@@ -16,19 +9,12 @@ import { Report } from '../../../types/reports';
 // Hooks
 import { useSimplifiedDataState, useOrdersState } from '../../../context';
 
-type PlayerStepProps = {
+type Props = {
   order?: string;
   current: Report | null;
-  setFormData: Dispatch<SetStateAction<any>>;
-} & SelectProps;
+};
 
-export const PlayerStep = ({
-  order,
-  value,
-  onChange,
-  current,
-  setFormData,
-}: PlayerStepProps) => {
+export const PlayerStep = ({ order, current }: Props) => {
   const ordersContext = useOrdersState();
   const simplifiedDataContext = useSimplifiedDataState();
 
@@ -64,30 +50,10 @@ export const PlayerStep = ({
     <>
       {(loading || simpleDataLoading) && <Loader />}
       {order && orderData ? (
-        <FormControl variant="outlined" fullWidth>
-          <InputLabel id="player">Zawodnik</InputLabel>
-          <Select
-            labelId="player"
-            id="player"
-            label="Zawodnik"
-            name="player"
-            onChange={onChange}
-            value={value}
-          >
-            <MenuItem key={orderData.player._id} value={orderData.player._id}>
-              {`${orderData.player.lastName}, ${orderData.player.firstName}`}
-            </MenuItem>
-          </Select>
-        </FormControl>
+        <p> {`${orderData.player.lastName}, ${orderData.player.firstName}`}</p>
       ) : (
         <FormControl variant="outlined" fullWidth>
-          {/* <PlayersCombo
-            id="player"
-            label="Zawodnik"
-            playersData={playersData}
-            setFormData={setFormData}
-            value={value as string}
-          /> */}
+          <PlayersCombo label="Zawodnik" playersData={playersData} />
         </FormControl>
       )}
     </>

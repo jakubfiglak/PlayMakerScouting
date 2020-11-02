@@ -129,12 +129,12 @@ type CommonFormData = {
   summary: string;
 };
 
-export type ReportFormData = CommonFormData &
-  IndSkillsFormData &
-  TeamplaySkillsFormData &
-  MotorSkillsFormData;
+// export type ReportFormData = CommonFormData &
+//   IndSkillsFormData &
+//   TeamplaySkillsFormData &
+//   MotorSkillsFormData;
 
-export type FormattedReportFormData = {
+export type ReportFormData = {
   individualSkills: IndividualSkills;
   teamplaySkills: TeamplaySkills;
   motorSkills: MotorSkills;
@@ -155,8 +155,8 @@ export type State = {
   getMyReports: () => void;
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
-  addReport: (report: FormattedReportFormData) => void;
-  editReport: (id: string, report: FormattedReportFormData) => void;
+  addReport: (report: ReportFormData) => void;
+  editReport: (id: string, report: ReportFormData) => void;
   setCurrent: (report: Report) => void;
   clearCurrent: () => void;
 };

@@ -9,6 +9,7 @@ import { PlayersFormData } from '../../types/players';
 import { ClubsFormData } from '../../types/clubs';
 import { MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
+import { ReportFormData } from '../../types/reports';
 import { formatDateObject } from '../../utils';
 
 const initialAddress: Address = {
@@ -80,7 +81,77 @@ export const matchesFormInitialValues: MatchesFormData = {
   competition: '',
   date: formatDateObject(new Date()),
 };
+
 export const ordersFormInitialValues: OrderFormData = {
   player: '',
   notes: '',
+};
+
+export const reportsFormInitialValues: ReportFormData = {
+  order: '',
+  player: '',
+  match: '',
+  minutesPlayed: 0,
+  goals: 0,
+  assists: 0,
+  yellowCards: 0,
+  redCards: 0,
+  individualSkills: {
+    ballReception: {
+      rating: 1,
+      note: '',
+    },
+    holdPass: {
+      rating: 1,
+      note: '',
+    },
+    gainPass: {
+      rating: 1,
+      note: '',
+    },
+    keyPass: {
+      rating: 1,
+      note: '',
+    },
+    defOneOnOne: {
+      rating: 0,
+      note: '',
+    },
+    airPlay: {
+      rating: 0,
+      note: '',
+    },
+    positioning: {
+      rating: 0,
+      note: '',
+    },
+    attOneOnOne: {
+      rating: 0,
+      note: '',
+    },
+    finishing: {
+      rating: 0,
+      note: '',
+    },
+  },
+  teamplaySkills: {
+    attack: {
+      rating: 1,
+      note: '',
+    },
+    defense: {
+      rating: 1,
+      note: '',
+    },
+    transition: {
+      rating: 1,
+      note: '',
+    },
+  },
+  motorSkills: {
+    leading: '',
+    neglected: '',
+  },
+  summary: '',
+  finalRating: 1,
 };

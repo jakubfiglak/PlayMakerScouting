@@ -1,24 +1,21 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { Grid, TextFieldProps, TextField } from '@material-ui/core';
-// Types
-import { MotorSkillsFormData } from '../../../types/reports';
+import { Grid, TextField } from '@material-ui/core';
 
-type MotorSkillsStepProps = MotorSkillsFormData & TextFieldProps;
+export const MotorSkillsStep = () => {
+  const [leadingField, leadingMeta] = useField('motorSkills.leading');
+  const [neglectedField, neglectedMeta] = useField('motorSkills.neglected');
 
-export const MotorSkillsStep = ({
-  leading,
-  neglected,
-  onChange,
-}: MotorSkillsStepProps) => {
+  const { error: leadingError, touched: leadingTouched } = leadingMeta;
+  const { error: neglectedError, touched: neglectedTouched } = neglectedMeta;
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <TextField
+          {...leadingField}
           id="leading"
-          name="leading"
-          value={leading}
-          onChange={onChange}
           fullWidth
           label="Cechy wiodące"
           multiline
@@ -27,14 +24,14 @@ export const MotorSkillsStep = ({
           inputProps={{
             maxlength: 400,
           }}
+          error={leadingTouched && !!leadingError}
+          helperText={leadingTouched && leadingError}
         />
       </Grid>
       <Grid item xs={12}>
         <TextField
+          {...neglectedField}
           id="neglected"
-          name="neglected"
-          value={neglected}
-          onChange={onChange}
           fullWidth
           label="Cechy zaniedbane"
           multiline
@@ -43,6 +40,8 @@ export const MotorSkillsStep = ({
           inputProps={{
             maxlength: 400,
           }}
+          error={neglectedTouched && !!neglectedError}
+          helperText={neglectedTouched && neglectedError}
         />
       </Grid>
     </Grid>
