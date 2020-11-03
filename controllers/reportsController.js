@@ -12,17 +12,24 @@ const prepareQuery = require('../utils/prepareQuery');
 exports.createReport = asyncHandler(async (req, res, next) => {
   req.body.scout = req.user._id;
 
-  const playerId = req.body.player;
   const matchId = req.body.match;
   const orderId = req.body.order;
 
-  const player = await Player.findById(playerId);
   const match = await Match.findById(matchId);
   let order;
 
   if (orderId) {
     order = await Order.findById(orderId);
   }
+
+  // If player is not provided and the report is generated based on the order,
+  // assign player ID from the order to req.body
+  if (!req.body.player && order) {
+    req.body.player = order.player;
+  }
+
+  const playerId = req.body.player;
+  const player = await Player.findById(playerId);
 
   if (!player) {
     return next(

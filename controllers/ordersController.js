@@ -104,6 +104,31 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Get my orders list with the status of "open"
+// @route GET /api/v1/orders/mylist
+// @access Private (admin and playmaker-scout-only)
+exports.getMyList = asyncHandler(async (req, res) => {
+  const orders = await Order.find({
+    scout: req.user._id,
+    status: 'accepted',
+  })
+    .select('player club docNumber')
+    .populate({
+      path: 'player',
+      select: 'firstName lastName club',
+      populate: {
+        path: 'club',
+        select: 'name',
+      },
+    });
+
+  res.status(200).json({
+    success: true,
+    count: orders.length,
+    data: orders,
+  });
+});
+
 // @desc Get my orders for a specific player
 // @route GET /api/v1/orders/my/:playerId
 // @access Private (admin and playmaker-scout only)

@@ -113,7 +113,7 @@ exports.getPlayersList = asyncHandler(async (req, res, next) => {
   }
 
   const players = await Player.find(query)
-    .select('firstName lastName')
+    .select('firstName lastName position')
     .populate({ path: 'club', select: 'name' });
 
   res.status(200).json({

@@ -8,6 +8,7 @@ const {
   deleteOrder,
   getMyOrders,
   getMyOrdersForPlayer,
+  getMyList,
 } = require('../controllers/ordersController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -19,6 +20,11 @@ router.get(
   '/my',
   [protect, authorize('admin', 'playmaker-scout')],
   getMyOrders
+);
+router.get(
+  '/mylist',
+  [protect, authorize('admin', 'playmaker-scout')],
+  getMyList
 );
 router.get('/:id', [protect, authorize('admin', 'playmaker-scout')], getOrder);
 router.get(
