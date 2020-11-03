@@ -30,8 +30,8 @@ export const PlayersCombo = ({ playersData, label, size }: Props) => {
       getOptionLabel={(option) => {
         const player = playersData.find((p) => p._id === option);
         if (player) {
-          const { lastName, firstName, club } = player;
-          return `${lastName}, ${firstName} (${club.name})`;
+          const { lastName, firstName, club, position } = player;
+          return `${firstName[0]}. ${lastName}, ${position} (${club.name})`;
         }
         return '';
       }}

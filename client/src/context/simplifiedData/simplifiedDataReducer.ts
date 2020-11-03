@@ -16,8 +16,7 @@ export default (state: State, action: Action): State => {
         playersData: action.payload,
       };
 
-    case 'GET_PLAYERS_FAIL':
-    case 'GET_CLUBS_FAIL':
+    case 'SIMPLIFIED_DATA_ERROR':
       return {
         ...state,
         loading: false,
@@ -38,6 +37,14 @@ export default (state: State, action: Action): State => {
         loading: false,
         error: null,
         myClubsData: action.payload,
+      };
+
+    case 'GET_MY_ORDERS_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        myOrdersData: action.payload,
       };
 
     default:

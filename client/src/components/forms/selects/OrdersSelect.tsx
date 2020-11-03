@@ -9,10 +9,10 @@ import {
   FormHelperText,
 } from '@material-ui/core';
 // Types
-import { Order } from '../../../types/orders';
+import { OrderData } from '../../../types/simplifiedData';
 
 type Props = {
-  ordersData: Order[];
+  ordersData: OrderData[];
   name: string;
 };
 
@@ -30,15 +30,12 @@ export const OrdersSelect = ({ ordersData, name }: Props) => {
         label="Zlecenie"
         error={touched && !!error}
       >
-        <MenuItem value={undefined}>
-          <em>Brak</em>
-        </MenuItem>
         {ordersData.map((orderData) => {
-          const { _id, player } = orderData;
+          const { _id, docNumber, player } = orderData;
 
           return (
             <MenuItem key={_id} value={_id}>
-              {`${_id} (${player.lastName}, ${player.firstName})`}
+              {`${docNumber} (${player.lastName}, ${player.firstName} (${player.club.name}))`}
             </MenuItem>
           );
         })}

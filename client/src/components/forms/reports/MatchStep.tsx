@@ -6,27 +6,18 @@ import { MatchSelect } from '../selects';
 import { Loader } from '../../common';
 // Types
 import { Report } from '../../../types/reports';
+import { Match } from '../../../types/matches';
 // Hooks
 import { usePlayersState } from '../../../context';
 // Utils & data
 import { formatDate } from '../../../utils';
 
 type Props = {
-  player: string;
   current: Report | null;
+  matches: Match[];
 };
 
-export const MatchStep = ({ player, current }: Props) => {
-  const playersContext = usePlayersState();
-
-  const { loading, getPlayerMatches, playerMatches } = playersContext;
-
-  useEffect(() => {
-    if (!current) {
-      getPlayerMatches(player);
-    }
-  }, []);
-
+export const MatchStep = ({ current, matches }: Props) => {
   if (current) {
     const {
       match: {
@@ -43,10 +34,5 @@ export const MatchStep = ({ player, current }: Props) => {
     );
   }
 
-  return (
-    <>
-      {loading && <Loader />}
-      <MatchSelect matchesData={playerMatches} name="match" />
-    </>
-  );
+  return <MatchSelect matchesData={matches} name="match" />;
 };

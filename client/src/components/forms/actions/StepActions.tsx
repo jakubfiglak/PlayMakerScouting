@@ -9,8 +9,9 @@ type StepActionsProps = {
   steps: string[];
   handleBack: () => void;
   handleNext: () => void;
-  player: string;
+  player?: string;
   match: string;
+  order?: string;
 };
 
 export const StepActions = ({
@@ -20,6 +21,7 @@ export const StepActions = ({
   handleNext,
   player,
   match,
+  order,
 }: StepActionsProps) => {
   const classes = useStyles();
 
@@ -39,7 +41,8 @@ export const StepActions = ({
           onClick={handleNext}
           className={classes.button}
           disabled={
-            (activeStep === 1 && !player) || (activeStep === 2 && !match)
+            (activeStep === 1 && !player && !order) ||
+            (activeStep === 2 && !match)
           }
         >
           {activeStep === steps.length - 1 ? 'Zapisz' : 'Dalej'}

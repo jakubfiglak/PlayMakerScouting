@@ -1,5 +1,5 @@
-import React, { SyntheticEvent } from 'react';
-import { Formik, Form, Field, FormikValues } from 'formik';
+import React, { useState, useEffect, useRef, RefObject } from 'react';
+import { Formik, Form, Field, FormikValues, FormikProps } from 'formik';
 // MUI components
 import {
   Stepper,
@@ -10,6 +10,7 @@ import {
   Grid,
 } from '@material-ui/core/';
 // Custom components
+import { ReportTypeStep } from './ReportTypeStep';
 import { OrderStep } from './OrderStep';
 import { PlayerStep } from './PlayerStep';
 import { MatchStep } from './MatchStep';
@@ -20,15 +21,25 @@ import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
 import { StepActions, MainFormActions } from '../actions';
 import { BottomNav } from './BottomNav';
+import { Loader } from '../../common';
 // Hooks
 import { useStepper, useForm } from '../../../hooks';
-import { useReportsState } from '../../../context';
+import {
+  useOrdersState,
+  useReportsState,
+  useSimplifiedDataState,
+  usePlayersState,
+  useAuthState,
+} from '../../../context';
 // Types
 import { ReportFormData } from '../../../types/reports';
 // Styles
 import { useStyles } from '../styles';
 // Utils & data
 import { reportsFormInitialValues } from '../initialValues';
+
+// TODO: perhaps move the formik component one level up to ReportsContent to avoid using form refs and
+// use useFormikContext() hook instead
 
 export const ReportsForm = () => {
   const classes = useStyles();
@@ -40,15 +51,73 @@ export const ReportsForm = () => {
     setActiveStep,
   ] = useStepper();
 
-  const { addReport, current, editReport } = useReportsState();
+  const { user } = useAuthState();
+
+  const { addReport, current, editReport, loading } = useReportsState();
+
+  const {
+    loading: playerLoading,
+    getPlayer,
+    getPlayerMatches,
+    playerData,
+    playerMatches,
+  } = usePlayersState();
+
+  const { loading: orderLoading, getOrder, orderData } = useOrdersState();
+
+  const {
+    loading: simpleDataLoading,
+    getPlayers,
+    getMyOrders,
+    playersData,
+    myOrdersData,
+  } = useSimplifiedDataState();
+
+  const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
+
+  const formRef = useRef() as RefObject<FormikProps<ReportFormData>>;
 
   // const initialState = current
   //   ? getInitialStateFromCurrent(current)
   //   : reportFormInitialState;
 
+  useEffect(() => {
+    formRef.current?.setValues(reportsFormInitialValues);
+    if (reportType === 'custom' && playersData.length === 0) {
+      getPlayers();
+    }
+    if (reportType === 'order' && myOrdersData.length === 0) {
+      getMyOrders();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportType]);
+
+  useEffect(() => {
+    if (formRef.current?.values.player) {
+      getPlayer(formRef.current.values.player);
+      getPlayerMatches(formRef.current.values.player);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formRef.current?.values.player]);
+
+  useEffect(() => {
+    if (formRef.current?.values.order) {
+      getOrder(formRef.current?.values.order);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formRef.current?.values.order]);
+
+  useEffect(() => {
+    if (orderData) {
+      getPlayer(orderData.player._id);
+      getPlayerMatches(orderData.player._id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderData]);
+
   const steps = [
-    'Wybierz zlecenie',
-    'Wybierz zawodnika',
+    'Rodzaj raportu',
+    reportType === 'custom' ? 'Wybierz zawodnika' : 'Wybierz zlecenie',
     'Wybierz mecz',
     'Ocena umiejętności indywidualnych',
     'Ocena współdziałania z partnerami',
@@ -57,16 +126,25 @@ export const ReportsForm = () => {
     'Statystyki',
   ];
 
-  const getStepContent = (step: number, values: ReportFormData) => {
+  const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <OrderStep current={current} />;
+        return (
+          <ReportTypeStep
+            reportType={reportType}
+            setReportType={setReportType}
+            userRole={user?.role}
+          />
+        );
       case 1:
-        return <PlayerStep order={values.order} current={current} />;
+        if (reportType === 'order') {
+          return <OrderStep current={current} ordersData={myOrdersData} />;
+        }
+        return <PlayerStep current={current} playersData={playersData} />;
       case 2:
-        return <MatchStep player={values.player} current={current} />;
+        return <MatchStep current={current} matches={playerMatches} />;
       case 3:
-        return <IndividualSkillsStep player={values.player} />;
+        return <IndividualSkillsStep position={playerData?.position} />;
       case 4:
         return <TeamplaySkillsStep />;
       case 5:
@@ -97,6 +175,7 @@ export const ReportsForm = () => {
 
   return (
     <Grid container>
+      {(loading || simpleDataLoading || playerLoading) && <Loader />}
       <Grid item xs={12}>
         <Typography variant="h5" align="center">
           {current
@@ -108,6 +187,7 @@ export const ReportsForm = () => {
         <Formik
           initialValues={reportsFormInitialValues}
           onSubmit={(data) => console.log(data)}
+          innerRef={formRef}
         >
           {({ handleReset, touched, errors, values }) => (
             <Form>
@@ -119,7 +199,7 @@ export const ReportsForm = () => {
                         <StepLabel>{label}</StepLabel>
                         <StepContent>
                           <Typography component="div">
-                            {getStepContent(index, values)}
+                            {getStepContent(index)}
                           </Typography>
                           <StepActions
                             activeStep={activeStep}
@@ -128,6 +208,7 @@ export const ReportsForm = () => {
                             handleNext={handleNext}
                             player={values.player}
                             match={values.match}
+                            order={values.order}
                           />
                         </StepContent>
                       </Step>
