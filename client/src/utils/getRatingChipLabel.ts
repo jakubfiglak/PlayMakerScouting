@@ -1,4 +1,6 @@
-export const getRatingChipLabel = (rating: 1 | 2 | 3 | 4) => {
+import { RatingScore } from '../types/reports';
+
+export const getRatingChipLabel = (rating: RatingScore) => {
   switch (rating) {
     case 1:
       return 'Selekcja negatywna';

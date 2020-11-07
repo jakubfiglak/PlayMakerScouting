@@ -34,5 +34,15 @@ export const MatchStep = ({ current, matches }: Props) => {
     );
   }
 
+  if (matches.length === 0) {
+    return (
+      <Typography>
+        Drużyna zawodnika, którego wybrałeś, nie ma żadnego meczu zdefiniowanego
+        w bazie. Stwórz mecz w zakładce <strong>Mecze</strong> i wróć do
+        tworzenia raportu
+      </Typography>
+    );
+  }
+
   return <MatchSelect matchesData={matches} name="match" />;
 };

@@ -1,5 +1,7 @@
+import { RatingScore } from '../types/reports';
+
 export const getRatingChipClass = (
-  rating: 1 | 2 | 3 | 4,
+  rating: RatingScore,
   classes: Record<
     'delete' | 'accept' | 'negative' | 'unknown' | 'observe' | 'positive',
     string

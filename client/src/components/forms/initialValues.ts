@@ -114,23 +114,23 @@ export const reportsFormInitialValues: ReportFormData = {
       note: '',
     },
     defOneOnOne: {
-      rating: 0,
+      rating: 1,
       note: '',
     },
     airPlay: {
-      rating: 0,
+      rating: 1,
       note: '',
     },
     positioning: {
-      rating: 0,
+      rating: 1,
       note: '',
     },
     attOneOnOne: {
-      rating: 0,
+      rating: 1,
       note: '',
     },
     finishing: {
-      rating: 0,
+      rating: 1,
       note: '',
     },
   },

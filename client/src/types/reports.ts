@@ -1,35 +1,23 @@
 import { PaginationData } from './common';
 import { Match } from './matches';
 
-export type IndSkillsField = {
-  title: string;
-  radioName: keyof IndSkillsFormData;
-  textFieldName: keyof IndSkillsFormData;
-};
+export type RatingScore = 1 | 2 | 3 | 4;
 
-export type TeamplaySkillsField = {
-  title: string;
-  radioName: keyof TeamplaySkillsFormData;
-  textFieldName: keyof TeamplaySkillsFormData;
-};
-
-export type RatingScore = 0 | 1 | 2 | 3 | 4;
-
-type Rating = {
+export type Rating = {
   rating: RatingScore;
   note: string;
 };
 
 export type IndividualSkills = {
-  ballReception: Rating;
   holdPass: Rating;
   gainPass: Rating;
   keyPass: Rating;
-  defOneOnOne: Rating;
-  airPlay: Rating;
-  positioning: Rating;
-  attOneOnOne: Rating;
-  finishing: Rating;
+  ballReception: Rating;
+  defOneOnOne?: Rating;
+  airPlay?: Rating;
+  positioning?: Rating;
+  attOneOnOne?: Rating;
+  finishing?: Rating;
 };
 
 export type TeamplaySkills = {
@@ -52,7 +40,7 @@ type ReportData = {
   individualSkills: IndividualSkills;
   teamplaySkills: TeamplaySkills;
   motorSkills: MotorSkills;
-  finalRating: 1 | 2 | 3 | 4;
+  finalRating: RatingScore;
   summary: string;
 };
 
@@ -81,41 +69,6 @@ export type Report = {
   createdAt: string;
 } & ReportData;
 
-export type IndSkillsFormData = {
-  ballReceptionRating: RatingScore;
-  ballReceptionNote: string;
-  holdPassRating: RatingScore;
-  holdPassNote: string;
-  gainPassRating: RatingScore;
-  gainPassNote: string;
-  keyPassRating: RatingScore;
-  keyPassNote: string;
-  defOneOnOneRating: RatingScore;
-  defOneOnOneNote: string;
-  airPlayRating: RatingScore;
-  airPlayNote: string;
-  positioningRating: RatingScore;
-  positioningNote: string;
-  attOneOnOneRating: RatingScore;
-  attOneOnOneNote: string;
-  finishingRating: RatingScore;
-  finishingNote: string;
-};
-
-export type TeamplaySkillsFormData = {
-  attackRating: RatingScore;
-  attackNote: string;
-  defenseRating: RatingScore;
-  defenseNote: string;
-  transitionRating: RatingScore;
-  transitionNote: string;
-};
-
-export type MotorSkillsFormData = {
-  leading: string;
-  neglected: string;
-};
-
 type CommonFormData = {
   order?: string;
   player: string;
@@ -125,14 +78,9 @@ type CommonFormData = {
   assists: number;
   yellowCards: number;
   redCards: number;
-  finalRating: 1 | 2 | 3 | 4;
+  finalRating: RatingScore;
   summary: string;
 };
-
-// export type ReportFormData = CommonFormData &
-//   IndSkillsFormData &
-//   TeamplaySkillsFormData &
-//   MotorSkillsFormData;
 
 export type ReportFormData = {
   individualSkills: IndividualSkills;

@@ -22,7 +22,7 @@ export const MotorSkillsStep = () => {
           rowsMax={4}
           variant="outlined"
           inputProps={{
-            maxlength: 400,
+            maxLength: 400,
           }}
           error={leadingTouched && !!leadingError}
           helperText={leadingTouched && leadingError}
@@ -38,7 +38,7 @@ export const MotorSkillsStep = () => {
           rowsMax={4}
           variant="outlined"
           inputProps={{
-            maxlength: 400,
+            maxLength: 400,
           }}
           error={neglectedTouched && !!neglectedError}
           helperText={neglectedTouched && neglectedError}

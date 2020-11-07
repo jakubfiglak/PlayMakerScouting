@@ -30,7 +30,7 @@ export const PlayersCombo = ({ playersData, label, size }: Props) => {
         setValue(newValue);
       }}
       value={value}
-      options={playersData.map((player) => player._id)}
+      options={['', ...playersData.map((player) => player._id)]}
       getOptionLabel={(option) => {
         const player = playersData.find((p) => p._id === option);
         if (player) {

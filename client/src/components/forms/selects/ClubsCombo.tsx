@@ -28,7 +28,7 @@ export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
         setValue(newValue);
       }}
       value={value}
-      options={clubsData.map((club) => club._id)}
+      options={['', ...clubsData.map((club) => club._id)]}
       getOptionLabel={(option) => {
         const club = clubsData.find((c) => c._id === option);
         if (club) {

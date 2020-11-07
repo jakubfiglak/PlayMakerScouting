@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, RefObject } from 'react';
-import { Formik, Form, Field, FormikValues, FormikProps } from 'formik';
+import React, { useState, useEffect } from 'react';
+import { Form, useFormikContext } from 'formik';
 // MUI components
 import {
   Stepper,
@@ -23,7 +23,7 @@ import { StepActions, MainFormActions } from '../actions';
 import { BottomNav } from './BottomNav';
 import { Loader } from '../../common';
 // Hooks
-import { useStepper, useForm } from '../../../hooks';
+import { useStepper } from '../../../hooks';
 import {
   useOrdersState,
   useReportsState,
@@ -37,9 +37,6 @@ import { ReportFormData } from '../../../types/reports';
 import { useStyles } from '../styles';
 // Utils & data
 import { reportsFormInitialValues } from '../initialValues';
-
-// TODO: perhaps move the formik component one level up to ReportsContent to avoid using form refs and
-// use useFormikContext() hook instead
 
 export const ReportsForm = () => {
   const classes = useStyles();
@@ -75,14 +72,10 @@ export const ReportsForm = () => {
 
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
 
-  const formRef = useRef() as RefObject<FormikProps<ReportFormData>>;
-
-  // const initialState = current
-  //   ? getInitialStateFromCurrent(current)
-  //   : reportFormInitialState;
+  const { values, setValues, handleReset } = useFormikContext<ReportFormData>();
 
   useEffect(() => {
-    formRef.current?.setValues(reportsFormInitialValues);
+    setValues(reportsFormInitialValues);
     if (reportType === 'custom' && playersData.length === 0) {
       getPlayers();
     }
@@ -93,19 +86,19 @@ export const ReportsForm = () => {
   }, [reportType]);
 
   useEffect(() => {
-    if (formRef.current?.values.player) {
-      getPlayer(formRef.current.values.player);
-      getPlayerMatches(formRef.current.values.player);
+    if (values.player) {
+      getPlayer(values.player);
+      getPlayerMatches(values.player);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formRef.current?.values.player]);
+  }, [values.player]);
 
   useEffect(() => {
-    if (formRef.current?.values.order) {
-      getOrder(formRef.current?.values.order);
+    if (values.order) {
+      getOrder(values.order);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formRef.current?.values.order]);
+  }, [values.order]);
 
   useEffect(() => {
     if (orderData) {
@@ -158,24 +151,15 @@ export const ReportsForm = () => {
     }
   };
 
-  // const handleSubmit = (e: SyntheticEvent) => {
-  //   e.preventDefault();
-  //   const formattedReport = formatReportObject(reportData);
-
-  //   if (current) {
-  //     editReport(current._id, formattedReport);
-  //   } else {
-  //     addReport(formattedReport);
-  //   }
-  // };
-
   const handleGoBack = () => {
     setActiveStep(steps.length - 1);
   };
 
   return (
     <Grid container>
-      {(loading || simpleDataLoading || playerLoading) && <Loader />}
+      {(loading || simpleDataLoading || playerLoading || orderLoading) && (
+        <Loader />
+      )}
       <Grid item xs={12}>
         <Typography variant="h5" align="center">
           {current
@@ -184,58 +168,53 @@ export const ReportsForm = () => {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Formik
-          initialValues={reportsFormInitialValues}
-          onSubmit={(data) => console.log(data)}
-          innerRef={formRef}
-        >
-          {({ handleReset, touched, errors, values }) => (
-            <Form>
-              <Grid container className={classes.root}>
-                <Grid item xs={12}>
-                  <Stepper activeStep={activeStep} orientation="vertical">
-                    {steps.map((label, index) => (
-                      <Step key={label}>
-                        <StepLabel>{label}</StepLabel>
-                        <StepContent>
-                          <Typography component="div">
-                            {getStepContent(index)}
-                          </Typography>
-                          <StepActions
-                            activeStep={activeStep}
-                            steps={steps}
-                            handleBack={handleBack}
-                            handleNext={handleNext}
-                            player={values.player}
-                            match={values.match}
-                            order={values.order}
-                          />
-                        </StepContent>
-                      </Step>
-                    ))}
-                  </Stepper>
-                </Grid>
-                {activeStep === steps.length && (
-                  <Grid item xs={12}>
-                    <Grid container spacing={2}>
-                      <MainFormActions
-                        label="raport"
-                        current={!!current}
-                        onCancelClick={() => {
-                          handleReset();
-                          resetStepper();
-                        }}
-                        goBack={handleGoBack}
+        <Form>
+          <Grid container className={classes.root}>
+            <Grid item xs={12}>
+              <Stepper activeStep={activeStep} orientation="vertical">
+                {steps.map((label, index) => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                    <StepContent>
+                      <Typography component="div">
+                        {getStepContent(index)}
+                      </Typography>
+                      <StepActions
                         activeStep={activeStep}
                         steps={steps}
+                        handleBack={handleBack}
+                        handleNext={handleNext}
+                        isNextButtonDisabled={
+                          (activeStep === 1 &&
+                            !values.player &&
+                            !values.order) ||
+                          (activeStep === 2 && !values.match)
+                        }
                       />
-                    </Grid>
-                  </Grid>
-                )}
+                    </StepContent>
+                  </Step>
+                ))}
+              </Stepper>
+            </Grid>
+            {activeStep === steps.length && (
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <MainFormActions
+                    label="raport"
+                    current={!!current}
+                    onCancelClick={() => {
+                      handleReset();
+                      resetStepper();
+                    }}
+                    goBack={handleGoBack}
+                    activeStep={activeStep}
+                    steps={steps}
+                  />
+                </Grid>
               </Grid>
-            </Form>
-          )}
-        </Formik>
+            )}
+          </Grid>
+        </Form>
       </Grid>
       <BottomNav activeStep={activeStep} setActiveStep={setActiveStep} />
     </Grid>

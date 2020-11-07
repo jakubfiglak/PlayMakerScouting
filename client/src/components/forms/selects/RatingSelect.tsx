@@ -8,8 +8,8 @@ import {
   FormControl,
   FormHelperText,
 } from '@material-ui/core';
-// Data & utils
-import { ratings } from '../../../data';
+// Types
+import { RatingScore } from '../../../types/reports';
 
 type Props = {
   name: string;
@@ -19,6 +19,8 @@ export const RatingSelect = ({ name }: Props) => {
   const [field, meta] = useField(name);
 
   const { error, touched } = meta;
+
+  const ratings: RatingScore[] = [1, 2, 3, 4];
 
   return (
     <FormControl variant="outlined" fullWidth>

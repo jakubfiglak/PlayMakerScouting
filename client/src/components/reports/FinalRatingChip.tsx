@@ -1,13 +1,15 @@
 import React from 'react';
 // MUI components
 import { Chip, Avatar, Typography } from '@material-ui/core';
+// Types
+import { RatingScore } from '../../types/reports';
 // Utils & data
 import { getRatingChipLabel, getRatingChipClass } from '../../utils';
 // Styles
 import { useStyles } from './styles';
 
 type FinalRatingChipProps = {
-  finalRating: 1 | 2 | 3 | 4;
+  finalRating: RatingScore;
 };
 
 export const FinalRatingChip = ({ finalRating }: FinalRatingChipProps) => {

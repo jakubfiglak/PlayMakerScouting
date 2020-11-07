@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Formik } from 'formik';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -10,6 +11,9 @@ import { Report } from '../../types/reports';
 // Hooks
 import { useReportsState } from '../../context';
 import { useTabs } from '../../hooks';
+// Utils & data
+import { reportsFormInitialValues } from '../forms/initialValues';
+import { reportsFormValidationSchema } from '../forms/validationSchemas';
 
 export const ReportsContent = () => {
   const reportsContext = useReportsState();
@@ -42,7 +46,15 @@ export const ReportsContent = () => {
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
-        <ReportsForm />
+        <Formik
+          initialValues={reportsFormInitialValues}
+          validationSchema={reportsFormValidationSchema}
+          onSubmit={(data) => {
+            console.log(data);
+          }}
+        >
+          {() => <ReportsForm />}
+        </Formik>
       </TabPanel>
     </>
   );

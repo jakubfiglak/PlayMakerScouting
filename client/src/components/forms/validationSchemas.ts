@@ -10,6 +10,7 @@ import { PlayersFormData, Position, Foot } from '../../types/players';
 import { ClubsFormData, Division } from '../../types/clubs';
 import { Competition, MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
+import { ReportFormData, Rating, RatingScore } from '../../types/reports';
 
 const addressValidationSchema: yup.ObjectSchema<Address> = yup
   .object({
@@ -124,5 +125,71 @@ export const ordersFormValidationSchema: yup.ObjectSchema<OrderFormData> = yup
   .object({
     player: yup.string().required('Wybierz zawodnika'),
     notes: yup.string().notRequired(),
+  })
+  .defined();
+
+const ratingValidationSchema: yup.ObjectSchema<Rating> = yup
+  .object({
+    rating: yup.mixed<RatingScore>(),
+    note: yup.string(),
+  })
+  .defined();
+
+export const reportsFormValidationSchema: yup.ObjectSchema<ReportFormData> = yup
+  .object({
+    order: yup.string(),
+    player: yup.string(),
+    match: yup.string().required('Wybierz mecz, którego dotyczy raport'),
+    minutesPlayed: yup
+      .number()
+      .min(0, 'Liczba rozegranych minut musi być wartością pomiędzy 0 a 90')
+      .max(90, 'Liczba rozegranych minut musi mieć wartość pomiędzy 0 a 90')
+      .required(),
+    goals: yup
+      .number()
+      .min(0, 'Liczba goli nie może być mniejsza od 0')
+      .required(),
+    assists: yup
+      .number()
+      .min(0, 'Liczba asyst nie może być mniejsza od 0')
+      .required(),
+    yellowCards: yup
+      .number()
+      .min(0, 'Liczba żółtych kartek musi mieć wartość 0, 1 lub 2')
+      .max(2, 'Liczba żółtych kartek musi mieć wartość 0, 1 lub 2')
+      .required(),
+    redCards: yup
+      .number()
+      .min(0, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
+      .max(1, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
+      .required(),
+    individualSkills: yup
+      .object({
+        ballReception: ratingValidationSchema,
+        holdPass: ratingValidationSchema,
+        gainPass: ratingValidationSchema,
+        keyPass: ratingValidationSchema,
+        defOneOnOne: ratingValidationSchema,
+        airPlay: ratingValidationSchema,
+        positioning: ratingValidationSchema,
+        attOneOnOne: ratingValidationSchema,
+        finishing: ratingValidationSchema,
+      })
+      .defined(),
+    teamplaySkills: yup
+      .object({
+        attack: ratingValidationSchema,
+        defense: ratingValidationSchema,
+        transition: ratingValidationSchema,
+      })
+      .defined(),
+    motorSkills: yup
+      .object({
+        leading: yup.string(),
+        neglected: yup.string(),
+      })
+      .defined(),
+    summary: yup.string(),
+    finalRating: yup.mixed<RatingScore>(),
   })
   .defined();

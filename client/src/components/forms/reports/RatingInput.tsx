@@ -33,7 +33,7 @@ export const RatingInput = ({ title, namespace }: Props) => {
           rowsMax={4}
           variant="outlined"
           inputProps={{
-            maxlength: 400,
+            maxLength: 400,
           }}
           error={touched && !!error}
           helperText={touched && error}
