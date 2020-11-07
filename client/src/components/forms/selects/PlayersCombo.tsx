@@ -5,6 +5,9 @@ import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 // Types
 import { PlayerData } from '../../../types/simplifiedData';
+// Utils & data
+import { getLabel } from '../../../utils/getLabel';
+import { positionLabels } from '../../../data/labels';
 
 type Props = {
   playersData: PlayerData[];
@@ -22,6 +25,7 @@ export const PlayersCombo = ({ playersData, label, size }: Props) => {
   return (
     <Autocomplete
       id="player"
+      {...field}
       onChange={(_, newValue: string | null) => {
         setValue(newValue);
       }}
@@ -31,14 +35,16 @@ export const PlayersCombo = ({ playersData, label, size }: Props) => {
         const player = playersData.find((p) => p._id === option);
         if (player) {
           const { lastName, firstName, club, position } = player;
-          return `${firstName[0]}. ${lastName}, ${position} (${club.name})`;
+          return `${firstName[0]}. ${lastName}, ${getLabel(
+            position,
+            positionLabels,
+          )} (${club.name})`;
         }
         return '';
       }}
       renderInput={(params) => (
         <TextField
           {...params}
-          {...field}
           label={label}
           variant="outlined"
           error={touched && !!error}

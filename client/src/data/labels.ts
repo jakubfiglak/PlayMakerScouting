@@ -1,27 +1,27 @@
 export const positionLabels = [
   {
     value: 'GK',
-    label: 'Bramkarz',
+    label: 'bramkarz',
   },
   {
     value: 'CB',
-    label: 'Środkowy obrońca',
+    label: 'środkowy obrońca',
   },
   {
     value: 'FB',
-    label: 'Boczny obrońca',
+    label: 'boczny obrońca',
   },
   {
     value: 'CM',
-    label: 'Środkowy pomocnik',
+    label: 'środkowy pomocnik',
   },
   {
     value: 'WM',
-    label: 'Boczny pomocnik',
+    label: 'boczny pomocnik',
   },
   {
     value: 'F',
-    label: 'Napastnik',
+    label: 'napastnik',
   },
 ];
 

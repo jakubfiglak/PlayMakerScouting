@@ -23,6 +23,7 @@ export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
   return (
     <Autocomplete
       id={name}
+      {...field}
       onChange={(_, newValue: string | null) => {
         setValue(newValue);
       }}
@@ -38,7 +39,6 @@ export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          {...field}
           label={label}
           variant="outlined"
           error={touched && !!error}
