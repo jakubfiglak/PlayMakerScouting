@@ -7,6 +7,28 @@ const ErrorResponse = require('../utils/errorResponse');
 const prepareQuery = require('../utils/prepareQuery');
 const getIndividualSkillsProps = require('../utils/getIndividualSkillsProps');
 
+const populate = [
+  {
+    path: 'player',
+    select: 'firstName lastName',
+  },
+  {
+    path: 'scout',
+    select: 'firstName lastName',
+  },
+  {
+    path: 'order',
+    select: 'docNumber',
+  },
+  {
+    path: 'match',
+    populate: [
+      { path: 'homeTeam', select: 'name' },
+      { path: 'awayTeam', select: 'name' },
+    ],
+  },
+];
+
 // @desc Create new report
 // @route POST /api/v1/reports
 // @access Private
@@ -21,6 +43,8 @@ exports.createReport = asyncHandler(async (req, res, next) => {
 
   if (orderId) {
     order = await Order.findById(orderId);
+  } else {
+    req.body.order = undefined;
   }
 
   // If player is not provided and the report is generated based on the order,
@@ -71,7 +95,9 @@ exports.createReport = asyncHandler(async (req, res, next) => {
     player.position
   );
 
-  const report = await Report.create(req.body);
+  let report = await Report.create(req.body);
+
+  report = await report.populate(populate).execPopulate();
 
   res.status(201).json({
     success: true,
@@ -92,27 +118,7 @@ exports.getReports = asyncHandler(async (req, res) => {
     sort: req.query.sort || '_id',
     limit: req.query.limit || 20,
     page: req.query.page || 1,
-    populate: [
-      {
-        path: 'player',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'scout',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'order',
-        select: 'docNumber',
-      },
-      {
-        path: 'match',
-        populate: [
-          { path: 'homeTeam', select: 'name' },
-          { path: 'awayTeam', select: 'name' },
-        ],
-      },
-    ],
+    populate,
   };
 
   if (playerId) {
@@ -147,27 +153,7 @@ exports.getMyReports = asyncHandler(async (req, res) => {
     sort: req.query.sort || '_id',
     limit: req.query.limit || 20,
     page: req.query.page || 1,
-    populate: [
-      {
-        path: 'player',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'scout',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'order',
-        select: 'docNumber',
-      },
-      {
-        path: 'match',
-        populate: [
-          { path: 'homeTeam', select: 'name' },
-          { path: 'awayTeam', select: 'name' },
-        ],
-      },
-    ],
+    populate,
   };
 
   const query = {
@@ -189,27 +175,7 @@ exports.getMyReports = asyncHandler(async (req, res) => {
 exports.getReport = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const report = await Report.findById(id).populate([
-    {
-      path: 'player',
-      select: 'firstName lastName',
-    },
-    {
-      path: 'order',
-      select: 'docNumber',
-    },
-    {
-      path: 'match',
-      populate: [
-        { path: 'homeTeam', select: 'name' },
-        { path: 'awayTeam', select: 'name' },
-      ],
-    },
-    {
-      path: 'scout',
-      select: 'firstName lastName',
-    },
-  ]);
+  const report = await Report.findById(id).populate(populate);
 
   if (!report) {
     return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
@@ -239,7 +205,7 @@ exports.getReport = asyncHandler(async (req, res, next) => {
 exports.updateReport = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const report = await Report.findById(id);
+  let report = await Report.findById(id);
 
   if (!report) {
     return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
@@ -270,6 +236,8 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
   Object.keys(req.body).forEach((key) => (report[key] = req.body[key]));
 
   await report.save({ validateModifiedOnly: true });
+
+  report = await report.populate(populate).execPopulate();
 
   res.status(200).json({
     success: true,
