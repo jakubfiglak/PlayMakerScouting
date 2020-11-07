@@ -5,6 +5,7 @@ const Match = require('../models/Match');
 const Order = require('../models/Order');
 const ErrorResponse = require('../utils/errorResponse');
 const prepareQuery = require('../utils/prepareQuery');
+const getIndividualSkillsProps = require('../utils/getIndividualSkillsProps');
 
 // @desc Create new report
 // @route POST /api/v1/reports
@@ -65,12 +66,10 @@ exports.createReport = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Delete indivdualSkills field if the rating value is equal to 0
-  Object.entries(req.body.individualSkills).forEach(([key, value]) => {
-    if (value.rating === '0' || value.rating === 0) {
-      delete req.body.individualSkills[key];
-    }
-  });
+  req.body.individualSkills = getIndividualSkillsProps(
+    req.body.individualSkills,
+    player.position
+  );
 
   const report = await Report.create(req.body);
 
@@ -255,12 +254,18 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Delete indivdualSkills field if the rating value is equal to 0
-  Object.entries(req.body.individualSkills).forEach(([key, value]) => {
-    if (value.rating === '0' || value.rating === 0) {
-      delete req.body.individualSkills[key];
-    }
-  });
+  const player = await Player.findById(report.player);
+
+  if (!player) {
+    return next(
+      new ErrorResponse(`No player found with the id of ${report.player}`, 404)
+    );
+  }
+
+  req.body.individualSkills = getIndividualSkillsProps(
+    req.body.individualSkills,
+    player.position
+  );
 
   Object.keys(req.body).forEach((key) => (report[key] = req.body[key]));
 
