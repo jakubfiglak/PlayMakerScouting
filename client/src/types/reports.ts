@@ -95,10 +95,14 @@ export type ReportsData = {
 export type State = {
   reportsData: ReportsData;
   myReportsData: ReportsData;
+  reportData: Report | null;
   current: Report | null;
   loading: boolean;
   error: string | null;
+  message: string | null;
   setLoading: () => void;
+  clearErrors: () => void;
+  clearMessage: () => void;
   getReports: () => void;
   getMyReports: () => void;
   getReport: (id: string) => void;
@@ -111,12 +115,20 @@ export type State = {
 
 export type Action =
   | { type: 'SET_LOADING' }
+  | { type: 'CLEAR_ERRORS' }
+  | { type: 'CLEAR_MESSAGE' }
   | { type: 'SET_CURRENT'; payload: Report }
   | { type: 'CLEAR_CURRENT' }
   | { type: 'REPORTS_ERROR'; payload: string }
   | { type: 'GET_REPORTS_SUCCESS'; payload: ReportsData }
   | { type: 'GET_REPORT_SUCCESS'; payload: Report }
   | { type: 'GET_MY_REPORTS_SUCCESS'; payload: ReportsData }
-  | { type: 'CREATE_REPORT_SUCCESS' }
-  | { type: 'UPDATE_REPORT_SUCCESS' }
-  | { type: 'DELETE_REPORT_SUCCESS'; payload: string };
+  | {
+      type: 'CREATE_REPORT_SUCCESS';
+      payload: { report: Report; message: string };
+    }
+  | {
+      type: 'UPDATE_REPORT_SUCCESS';
+      payload: { report: Report; message: string };
+    }
+  | { type: 'DELETE_REPORT_SUCCESS'; payload: { id: string; message: string } };

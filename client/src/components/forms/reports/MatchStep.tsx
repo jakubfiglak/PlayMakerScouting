@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // MUI components
 import { Typography } from '@material-ui/core';
 // Custom components
 import { MatchSelect } from '../selects';
-import { Loader } from '../../common';
 // Types
 import { Report } from '../../../types/reports';
 import { Match } from '../../../types/matches';
-// Hooks
-import { usePlayersState } from '../../../context';
 // Utils & data
 import { formatDate } from '../../../utils';
 

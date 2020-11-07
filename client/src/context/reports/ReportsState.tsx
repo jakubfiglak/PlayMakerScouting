@@ -9,10 +9,14 @@ export const ReportsState: React.FC = ({ children }) => {
   const initialState: State = {
     reportsData: initialPaginatedData,
     myReportsData: initialPaginatedData,
+    reportData: null,
     current: null,
     loading: false,
     error: null,
+    message: null,
     setLoading: () => null,
+    clearErrors: () => null,
+    clearMessage: () => null,
     getReports: () => null,
     getMyReports: () => null,
     getReport: () => null,
@@ -108,9 +112,10 @@ export const ReportsState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.post('/api/v1/reports', report);
+      const res = await axiosJson.post('/api/v1/reports', report);
       dispatch({
         type: 'CREATE_REPORT_SUCCESS',
+        payload: { report: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -125,9 +130,10 @@ export const ReportsState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.put(`/api/v1/reports/${id}`, report);
+      const res = await axiosJson.put(`/api/v1/reports/${id}`, report);
       dispatch({
         type: 'UPDATE_REPORT_SUCCESS',
+        payload: { report: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -144,10 +150,10 @@ export const ReportsState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.delete(`/api/v1/reports/${id}`);
+      const res = await axiosJson.delete(`/api/v1/reports/${id}`);
       dispatch({
         type: 'DELETE_REPORT_SUCCESS',
-        payload: id,
+        payload: { id, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -157,16 +163,38 @@ export const ReportsState: React.FC = ({ children }) => {
     }
   };
 
-  const { reportsData, myReportsData, current, loading, error } = state;
+  // Clear errors
+  const clearErrors = () =>
+    dispatch({
+      type: 'CLEAR_ERRORS',
+    });
+
+  // Clear message
+  const clearMessage = () =>
+    dispatch({
+      type: 'CLEAR_MESSAGE',
+    });
+
+  const {
+    reportsData,
+    myReportsData,
+    reportData,
+    current,
+    loading,
+    error,
+    message,
+  } = state;
 
   return (
     <ReportsContext.Provider
       value={{
         reportsData,
         myReportsData,
+        reportData,
         current,
         loading,
         error,
+        message,
         setLoading,
         getReports,
         getMyReports,
@@ -176,6 +204,8 @@ export const ReportsState: React.FC = ({ children }) => {
         editReport,
         setCurrent,
         clearCurrent,
+        clearErrors,
+        clearMessage,
       }}
     >
       {children}

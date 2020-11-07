@@ -10,7 +10,7 @@ import { ReportsForm } from '../forms';
 import { Report } from '../../types/reports';
 // Hooks
 import { useReportsState } from '../../context';
-import { useTabs } from '../../hooks';
+import { useAlert, useTabs } from '../../hooks';
 // Utils & data
 import { reportsFormInitialValues } from '../forms/initialValues';
 import { reportsFormValidationSchema } from '../forms/validationSchemas';
@@ -19,11 +19,25 @@ export const ReportsContent = () => {
   const reportsContext = useReportsState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  const { loading, getMyReports, myReportsData, setCurrent } = reportsContext;
+  const {
+    loading,
+    getMyReports,
+    myReportsData,
+    setCurrent,
+    addReport,
+    error,
+    message,
+    clearErrors,
+    clearMessage,
+  } = reportsContext;
 
   useEffect(() => {
     getMyReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useAlert(error, 'error', clearErrors);
+  useAlert(message, 'success', clearMessage);
 
   const handleSetCurrent = (report: Report) => {
     setCurrent(report);
@@ -50,7 +64,7 @@ export const ReportsContent = () => {
           initialValues={reportsFormInitialValues}
           validationSchema={reportsFormValidationSchema}
           onSubmit={(data) => {
-            console.log(data);
+            addReport(data);
           }}
         >
           {() => <ReportsForm />}
