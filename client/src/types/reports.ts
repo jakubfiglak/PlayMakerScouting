@@ -1,4 +1,5 @@
 import { PaginationData } from './common';
+import { Position } from './players';
 import { Match } from './matches';
 
 export type RatingScore = 1 | 2 | 3 | 4;
@@ -51,6 +52,11 @@ export type Report = {
     _id: string;
     firstName: string;
     lastName: string;
+    club: {
+      _id: string;
+      name: string;
+    };
+    position: Position;
   };
   match: Match;
   scout: {

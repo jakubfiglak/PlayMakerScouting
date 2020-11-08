@@ -141,8 +141,6 @@ export const ReportsState: React.FC = ({ children }) => {
         payload: err.response.data.error,
       });
     }
-
-    clearCurrent();
   };
 
   // Delete report

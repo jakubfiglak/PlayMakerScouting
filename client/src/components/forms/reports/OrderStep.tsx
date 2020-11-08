@@ -4,25 +4,13 @@ import { Typography } from '@material-ui/core';
 // Custom components
 import { OrdersSelect } from '../selects';
 // Types
-import { Report } from '../../../types/reports';
 import { OrderData } from '../../../types/simplifiedData';
 
 type Props = {
-  current: Report | null;
   ordersData: OrderData[];
 };
 
-export const OrderStep = ({ current, ordersData }: Props) => {
-  if (current) {
-    return (
-      <Typography>
-        {current.order
-          ? `Zlecenie obserwacji nr ${current.order}`
-          : 'Raport bez przypisanego zlecenia obserwacji'}
-      </Typography>
-    );
-  }
-
+export const OrderStep = ({ ordersData }: Props) => {
   if (ordersData.length === 0) {
     return (
       <Typography>

@@ -4,27 +4,13 @@ import { FormControl, Typography } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../selects';
 // Types
-import { Report } from '../../../types/reports';
 import { PlayerData } from '../../../types/simplifiedData';
 
 type Props = {
-  current: Report | null;
   playersData: PlayerData[];
 };
 
-export const PlayerStep = ({ current, playersData }: Props) => {
-  if (current) {
-    const {
-      player: { lastName, firstName },
-    } = current;
-
-    return (
-      <Typography>
-        {lastName}, {firstName}
-      </Typography>
-    );
-  }
-
+export const PlayerStep = ({ playersData }: Props) => {
   if (playersData.length === 0) {
     return (
       <Typography>

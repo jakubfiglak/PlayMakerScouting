@@ -5,7 +5,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 type Props = {
   reportType: 'custom' | 'order';
   setReportType: Dispatch<SetStateAction<'order' | 'custom'>>;
-  userRole?: 'admin' | 'playmaker-scout' | 'scout';
+  isOrderOptionDisabled: boolean;
 };
 
 type ReportType = 'order' | 'custom';
@@ -13,7 +13,7 @@ type ReportType = 'order' | 'custom';
 export const ReportTypeStep = ({
   reportType,
   setReportType,
-  userRole,
+  isOrderOptionDisabled,
 }: Props) => {
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
     setReportType(event.target.value as ReportType);
@@ -30,7 +30,7 @@ export const ReportTypeStep = ({
         label="Rodzaj raportu"
       >
         <MenuItem value="custom">Własny raport</MenuItem>
-        <MenuItem value="order" disabled={userRole === 'scout'}>
+        <MenuItem value="order" disabled={isOrderOptionDisabled}>
           Raport na podstawie zlecenia
         </MenuItem>
       </Select>

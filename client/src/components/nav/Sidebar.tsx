@@ -32,14 +32,7 @@ const Sidebar: React.FC = () => {
       }}
       anchor="left"
     >
-      <div className={classes.toolbar}>
-        {user && (
-          <Typography>
-            Hello
-            {user.firstName}
-          </Typography>
-        )}
-      </div>
+      <div className={classes.toolbar} />
       <Divider />
       {navElements.map((element) => {
         const { Icon, text, link } = element;

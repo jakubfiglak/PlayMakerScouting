@@ -26,7 +26,6 @@ import { Loader } from '../../common';
 import { useStepper } from '../../../hooks';
 import {
   useOrdersState,
-  useReportsState,
   useSimplifiedDataState,
   usePlayersState,
   useAuthState,
@@ -38,7 +37,7 @@ import { useStyles } from '../styles';
 // Utils & data
 import { reportsFormInitialValues } from '../initialValues';
 
-export const ReportsForm = () => {
+export const NewReportForm = () => {
   const classes = useStyles();
   const [
     activeStep,
@@ -49,8 +48,6 @@ export const ReportsForm = () => {
   ] = useStepper();
 
   const { user } = useAuthState();
-
-  const { addReport, current, editReport, loading } = useReportsState();
 
   const {
     loading: playerLoading,
@@ -126,16 +123,16 @@ export const ReportsForm = () => {
           <ReportTypeStep
             reportType={reportType}
             setReportType={setReportType}
-            userRole={user?.role}
+            isOrderOptionDisabled={user?.role === 'scout'}
           />
         );
       case 1:
         if (reportType === 'order') {
-          return <OrderStep current={current} ordersData={myOrdersData} />;
+          return <OrderStep ordersData={myOrdersData} />;
         }
-        return <PlayerStep current={current} playersData={playersData} />;
+        return <PlayerStep playersData={playersData} />;
       case 2:
-        return <MatchStep current={current} matches={playerMatches} />;
+        return <MatchStep matches={playerMatches} />;
       case 3:
         return <IndividualSkillsStep position={playerData?.position} />;
       case 4:
@@ -157,14 +154,10 @@ export const ReportsForm = () => {
 
   return (
     <Grid container>
-      {(loading || simpleDataLoading || playerLoading || orderLoading) && (
-        <Loader />
-      )}
+      {(simpleDataLoading || playerLoading || orderLoading) && <Loader />}
       <Grid item xs={12}>
         <Typography variant="h5" align="center">
-          {current
-            ? `Edycja raportu nr ${current._id}`
-            : 'Tworzenie nowego raportu'}
+          Tworzenie nowego raportu
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -201,7 +194,7 @@ export const ReportsForm = () => {
                 <Grid container spacing={2}>
                   <MainFormActions
                     label="raport"
-                    current={!!current}
+                    current={false}
                     onCancelClick={() => {
                       handleReset();
                       resetStepper();

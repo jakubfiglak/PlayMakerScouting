@@ -5,9 +5,9 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { TabPanel, Loader } from '../common';
 import { ReportsGrid } from '../reports';
-import { ReportsForm } from '../forms';
+import { EditReportForm, NewReportForm } from '../forms';
 // Types
-import { Report } from '../../types/reports';
+import { Report, ReportFormData } from '../../types/reports';
 // Hooks
 import { useReportsState } from '../../context';
 import { useAlert, useTabs } from '../../hooks';
@@ -25,16 +25,44 @@ export const ReportsContent = () => {
     myReportsData,
     setCurrent,
     addReport,
+    editReport,
     error,
     message,
     clearErrors,
     clearMessage,
+    clearCurrent,
+    current,
   } = reportsContext;
+
+  const initialValues: ReportFormData = current
+    ? {
+        order: current?.order?._id || '',
+        player: current.player._id,
+        match: current.match._id,
+        minutesPlayed: current.minutesPlayed,
+        goals: current.goals,
+        assists: current.assists,
+        yellowCards: current.yellowCards,
+        redCards: current.redCards,
+        finalRating: current.finalRating,
+        summary: current.summary,
+        individualSkills: current.individualSkills,
+        teamplaySkills: current.teamplaySkills,
+        motorSkills: current.motorSkills,
+      }
+    : reportsFormInitialValues;
 
   useEffect(() => {
     getMyReports();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 0 && current) {
+      clearCurrent();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, current]);
 
   useAlert(error, 'error', clearErrors);
   useAlert(message, 'success', clearMessage);
@@ -61,13 +89,20 @@ export const ReportsContent = () => {
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
         <Formik
-          initialValues={reportsFormInitialValues}
+          initialValues={initialValues}
           validationSchema={reportsFormValidationSchema}
-          onSubmit={(data) => {
-            addReport(data);
+          onSubmit={(data, { resetForm }) => {
+            if (current) {
+              editReport(current._id, data);
+            } else {
+              addReport(data);
+              resetForm();
+            }
           }}
         >
-          {() => <ReportsForm />}
+          {() =>
+            current ? <EditReportForm report={current} /> : <NewReportForm />
+          }
         </Formik>
       </TabPanel>
     </>

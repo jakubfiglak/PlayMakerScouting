@@ -4,33 +4,13 @@ import { Typography } from '@material-ui/core';
 // Custom components
 import { MatchSelect } from '../selects';
 // Types
-import { Report } from '../../../types/reports';
 import { Match } from '../../../types/matches';
-// Utils & data
-import { formatDate } from '../../../utils';
 
 type Props = {
-  current: Report | null;
   matches: Match[];
 };
 
-export const MatchStep = ({ current, matches }: Props) => {
-  if (current) {
-    const {
-      match: {
-        homeTeam: { name: homeTeamName },
-        awayTeam: { name: awayTeamName },
-        date,
-      },
-    } = current;
-
-    return (
-      <Typography>
-        {formatDate(date, true)}: {homeTeamName} vs. {awayTeamName}
-      </Typography>
-    );
-  }
-
+export const MatchStep = ({ matches }: Props) => {
   if (matches.length === 0) {
     return (
       <Typography>
