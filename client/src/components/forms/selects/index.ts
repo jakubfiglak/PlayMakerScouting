@@ -10,4 +10,5 @@ export { PlayersCombo } from './PlayersCombo';
 export { PlayersSelect } from './PlayersSelect';
 export { PositionSelect } from './PositionSelect';
 export { RatingSelect } from './RatingSelect';
+export { UsersCombo } from './UsersCombo';
 export { VoivodeshipSelect } from './VoivodeshipSelect';

@@ -7,6 +7,7 @@ import {
   PlayersFilterData,
   PlayersFormData,
   Player,
+  GrantAccessFormData,
 } from '../../types/players';
 import { Order } from '../../types/common';
 import { initialPaginatedData } from '../../data';
@@ -30,6 +31,7 @@ export const PlayersState: React.FC = ({ children }) => {
     editPlayer: () => null,
     setCurrent: () => null,
     clearCurrent: () => null,
+    grantAccess: () => null,
   };
 
   const [state, dispatch] = useReducer(playersReducer, initialState);
@@ -132,6 +134,24 @@ export const PlayersState: React.FC = ({ children }) => {
     }
   };
 
+  // Grant user with an access to a specific player
+  const grantAccess = async (data: GrantAccessFormData) => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.post('/api/v1/players/grantaccess', data);
+      dispatch({
+        type: 'GRANT_ACCESS_SUCCESS',
+        payload: { message: res.data.message },
+      });
+    } catch (err) {
+      dispatch({
+        type: 'PLAYERS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
   // Set current
   const setCurrent = (player: Player) => {
     dispatch({
@@ -204,6 +224,7 @@ export const PlayersState: React.FC = ({ children }) => {
         getPlayer,
         getPlayerMatches,
         addPlayer,
+        grantAccess,
         setCurrent,
         clearCurrent,
         editPlayer,

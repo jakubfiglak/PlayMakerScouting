@@ -6,7 +6,12 @@ import {
   LoginFormData,
   UpdatePasswordData,
 } from '../../types/auth';
-import { PlayersFormData, Position, Foot } from '../../types/players';
+import {
+  PlayersFormData,
+  Position,
+  Foot,
+  GrantAccessFormData,
+} from '../../types/players';
 import { ClubsFormData, Division } from '../../types/clubs';
 import { Competition, MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
@@ -191,5 +196,12 @@ export const reportsFormValidationSchema: yup.ObjectSchema<ReportFormData> = yup
       .defined(),
     summary: yup.string(),
     finalRating: yup.mixed<RatingScore>(),
+  })
+  .defined();
+
+export const grantAccessFormValidationSchema: yup.ObjectSchema<GrantAccessFormData> = yup
+  .object({
+    user: yup.string().required('Wybierz użytkownika'),
+    player: yup.string().required('Wybierz zawodnika'),
   })
   .defined();

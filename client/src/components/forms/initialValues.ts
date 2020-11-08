@@ -5,7 +5,7 @@ import {
   LoginFormData,
   UpdatePasswordData,
 } from '../../types/auth';
-import { PlayersFormData } from '../../types/players';
+import { PlayersFormData, GrantAccessFormData } from '../../types/players';
 import { ClubsFormData } from '../../types/clubs';
 import { MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
@@ -154,4 +154,9 @@ export const reportsFormInitialValues: ReportFormData = {
   },
   summary: '',
   finalRating: 1,
+};
+
+export const grantAccessFormInitialValues: GrantAccessFormData = {
+  user: '',
+  player: '',
 };

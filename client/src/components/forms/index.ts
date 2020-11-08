@@ -1,3 +1,5 @@
+export { GrantAccessForm } from './accessManagement/GrantAccessForm';
+
 export { ClubsFilterForm } from './clubs/ClubsFilterForm';
 export { ClubsForm } from './clubs/ClubsForm';
 
