@@ -2,10 +2,14 @@ import React, { useEffect } from 'react';
 // MUI components
 import { Typography, Grid } from '@material-ui/core';
 // Custom components
-import { GrantAccessForm } from '../forms';
+import { GrantAccessForm, AssignPlaymakerRoleForm } from '../forms';
 import { Loader } from '../common';
 // Hooks
-import { useSimplifiedDataState, usePlayersState } from '../../context';
+import {
+  useSimplifiedDataState,
+  usePlayersState,
+  useUsersState,
+} from '../../context';
 import { useAlert } from '../../hooks';
 
 export const AccessManagementContent = () => {
@@ -17,7 +21,18 @@ export const AccessManagementContent = () => {
     usersData,
   } = useSimplifiedDataState();
 
-  const { message, error, clearMessage, clearErrors } = usePlayersState();
+  const {
+    message: playersMessage,
+    error: playersError,
+    clearMessage: clearPlayersMessage,
+    clearErrors: clearPlayersError,
+  } = usePlayersState();
+  const {
+    message: usersMessage,
+    error: usersError,
+    clearMessage: clearUsersMessage,
+    clearErrors: clearUsersError,
+  } = useUsersState();
 
   useEffect(() => {
     getPlayers();
@@ -25,10 +40,13 @@ export const AccessManagementContent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useAlert(error, 'error', clearErrors);
-  useAlert(message, 'success', clearMessage);
+  useAlert(playersError, 'error', clearPlayersError);
+  useAlert(usersError, 'error', clearUsersError);
+  useAlert(playersMessage, 'success', clearPlayersMessage);
+  useAlert(usersMessage, 'success', clearUsersMessage);
 
   const nonAdminUsers = usersData.filter((user) => user.role !== 'admin');
+  const regularScoutUsers = usersData.filter((user) => user.role === 'scout');
 
   return (
     <div>
@@ -44,6 +62,14 @@ export const AccessManagementContent = () => {
             playersData={playersData}
             usersData={nonAdminUsers}
           />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h5" align="center">
+            Przyznawanie użytkownikom roli <strong>playmaker-scout</strong>
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <AssignPlaymakerRoleForm usersData={regularScoutUsers} />
         </Grid>
       </Grid>
     </div>

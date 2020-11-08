@@ -16,6 +16,7 @@ import { ClubsFormData, Division } from '../../types/clubs';
 import { Competition, MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
 import { ReportFormData, Rating, RatingScore } from '../../types/reports';
+import { AssignPlaymakerRoleData } from '../../types/users';
 
 const addressValidationSchema: yup.ObjectSchema<Address> = yup
   .object({
@@ -203,5 +204,11 @@ export const grantAccessFormValidationSchema: yup.ObjectSchema<GrantAccessFormDa
   .object({
     user: yup.string().required('Wybierz użytkownika'),
     player: yup.string().required('Wybierz zawodnika'),
+  })
+  .defined();
+
+export const assignPlaymakerRoleFormValidationSchema: yup.ObjectSchema<AssignPlaymakerRoleData> = yup
+  .object({
+    user: yup.string().required('Wybierz użytkownika'),
   })
   .defined();

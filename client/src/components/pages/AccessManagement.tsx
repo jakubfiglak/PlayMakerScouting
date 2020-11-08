@@ -1,7 +1,7 @@
 import React from 'react';
 import MainTemplate from '../templates/MainTemplate/MainTemplate';
 import { AccessManagementContent } from '../content';
-import { PlayersState } from '../../context';
+import { PlayersState, UsersState } from '../../context';
 import { useAuthorization } from '../../hooks';
 
 export const AccessManagement = () => {
@@ -9,9 +9,11 @@ export const AccessManagement = () => {
 
   return (
     <PlayersState>
-      <MainTemplate>
-        <AccessManagementContent />
-      </MainTemplate>
+      <UsersState>
+        <MainTemplate>
+          <AccessManagementContent />
+        </MainTemplate>
+      </UsersState>
     </PlayersState>
   );
 };

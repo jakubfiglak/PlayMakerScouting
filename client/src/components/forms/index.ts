@@ -1,4 +1,5 @@
 export { GrantAccessForm } from './accessManagement/GrantAccessForm';
+export { AssignPlaymakerRoleForm } from './accessManagement/AssignPlaymakerRoleForm';
 
 export { ClubsFilterForm } from './clubs/ClubsFilterForm';
 export { ClubsForm } from './clubs/ClubsForm';

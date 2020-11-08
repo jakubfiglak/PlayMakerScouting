@@ -11,6 +11,7 @@ import { MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
 import { ReportFormData } from '../../types/reports';
 import { formatDateObject } from '../../utils';
+import { AssignPlaymakerRoleData } from '../../types/users';
 
 const initialAddress: Address = {
   street: '',
@@ -159,4 +160,8 @@ export const reportsFormInitialValues: ReportFormData = {
 export const grantAccessFormInitialValues: GrantAccessFormData = {
   user: '',
   player: '',
+};
+
+export const assignPlaymakerRoleFormInitialValues: AssignPlaymakerRoleData = {
+  user: '',
 };
