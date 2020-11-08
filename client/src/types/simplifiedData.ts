@@ -1,4 +1,5 @@
 import { Position } from './players';
+import { UserRole } from './auth';
 
 export type PlayerData = {
   _id: string;
@@ -22,9 +23,18 @@ export type OrderData = {
   docNumber: string;
 };
 
+export type UserData = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: UserRole;
+};
+
 export type State = {
   playersData: PlayerData[];
   clubsData: ClubData[];
+  usersData: UserData[];
   myClubsData: ClubData[];
   myOrdersData: OrderData[];
   loading: boolean;
@@ -34,6 +44,7 @@ export type State = {
   getClubs: () => void;
   getMyClubs: () => void;
   getMyOrders: () => void;
+  getUsers: () => void;
 };
 
 export type Action =
@@ -42,4 +53,5 @@ export type Action =
   | { type: 'GET_MY_ORDERS_SUCCESS'; payload: OrderData[] }
   | { type: 'GET_CLUBS_SUCCESS'; payload: ClubData[] }
   | { type: 'GET_MY_CLUBS_SUCCESS'; payload: ClubData[] }
+  | { type: 'GET_USERS_SUCCESS'; payload: UserData[] }
   | { type: 'SIMPLIFIED_DATA_ERROR'; payload: string };

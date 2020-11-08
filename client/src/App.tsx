@@ -12,6 +12,7 @@ import {
   Orders,
   Reports,
   Report,
+  AccessManagement,
 } from './components/pages';
 import { Alerts } from './components/common';
 import { AuthState, SimplifiedDataState, AlertsState } from './context';
@@ -37,6 +38,11 @@ const App: React.FC = () => {
                   <Route exact path="/reports/:id" component={Report} />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/register" component={Register} />
+                  <Route
+                    exact
+                    path="/accessmanagement"
+                    component={AccessManagement}
+                  />
                 </Switch>
               </>
             </Router>

@@ -8,3 +8,4 @@ export { Profile } from './Profile';
 export { Register } from './Register';
 export { Reports } from './Reports';
 export { Report } from './Report';
+export { AccessManagement } from './AccessManagement';

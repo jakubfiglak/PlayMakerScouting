@@ -23,6 +23,19 @@ exports.getUsers = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Get users list
+// @route GET /api/v1/users/list
+// @access Private (admin only)
+exports.getUsersList = asyncHandler(async (req, res) => {
+  const users = await User.find().select('firstName lastName email role');
+
+  res.status(200).json({
+    success: true,
+    count: users.length,
+    data: users,
+  });
+});
+
 // @desc Get single user
 // @route GET /api/v1/users/:id
 // @access Private (admin only)
@@ -58,5 +71,41 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `User with the id of ${id} successfully removed!`,
+  });
+});
+
+// @desc Make user a playmaker-scout
+// @route POST /api/v1/users/assignplaymaker
+// @access Private (admin only)
+exports.assignPlaymakerRole = asyncHandler(async (req, res, next) => {
+  const userId = req.body.user;
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with the id of ${userId}`, 404)
+    );
+  }
+
+  if (user.role === 'playmaker-scout') {
+    return next(
+      new ErrorResponse(
+        `User with the id of ${userId} is already a playmaker-scout`
+      )
+    );
+  }
+
+  if (user.role === 'admin') {
+    return next(new ErrorResponse(`User with the id of ${userId} is an admin`));
+  }
+
+  user.role = 'playmaker-scout';
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Successfully assigned the role of 'playmaker-scout' to the user with the id of ${userId}`,
   });
 });

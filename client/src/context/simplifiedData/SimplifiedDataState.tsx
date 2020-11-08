@@ -8,6 +8,7 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
   const initialState: State = {
     playersData: [],
     clubsData: [],
+    usersData: [],
     myClubsData: [],
     myOrdersData: [],
     loading: false,
@@ -17,6 +18,7 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
     getClubs: () => null,
     getMyClubs: () => null,
     getMyOrders: () => null,
+    getUsers: () => null,
   };
 
   const [state, dispatch] = useReducer(simplifiedDataReducer, initialState);
@@ -52,6 +54,23 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
       const res = await axiosJson.get('/api/v1/clubs/list');
       dispatch({
         type: 'GET_CLUBS_SUCCESS',
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'SIMPLIFIED_DATA_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Get users
+  const getUsers = async () => {
+    setLoading();
+    try {
+      const res = await axiosJson.get('/api/v1/users/list');
+      dispatch({
+        type: 'GET_USERS_SUCCESS',
         payload: res.data.data,
       });
     } catch (err) {
@@ -99,6 +118,7 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
   const {
     playersData,
     clubsData,
+    usersData,
     myClubsData,
     myOrdersData,
     loading,
@@ -110,6 +130,7 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
       value={{
         playersData,
         clubsData,
+        usersData,
         myClubsData,
         myOrdersData,
         loading,
@@ -119,6 +140,7 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
         getClubs,
         getMyClubs,
         getMyOrders,
+        getUsers,
       }}
     >
       {children}

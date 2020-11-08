@@ -38,6 +38,11 @@ export type PlayersFilterData = {
   position: string;
 };
 
+export type GrantAccessFormData = {
+  user: string;
+  player: string;
+};
+
 export type GetPlayers = (
   page: number,
   limit: number,
@@ -62,6 +67,7 @@ export type State = {
   getPlayerMatches: (id: string) => void;
   addPlayer: (player: PlayersFormData) => void;
   editPlayer: (id: string, data: PlayersFormData) => void;
+  grantAccess: (data: GrantAccessFormData) => void;
   setCurrent: (player: Player) => void;
   clearCurrent: () => void;
 };
@@ -84,4 +90,5 @@ export type Action =
       type: 'UPDATE_PLAYER_SUCCESS';
       payload: { player: Player; message: string };
     }
-  | { type: 'DELETE_PLAYER_SUCCESS'; payload: string };
+  | { type: 'DELETE_PLAYER_SUCCESS'; payload: string }
+  | { type: 'GRANT_ACCESS_SUCCESS'; payload: { message: string } };

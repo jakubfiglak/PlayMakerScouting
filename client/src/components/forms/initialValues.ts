@@ -5,12 +5,13 @@ import {
   LoginFormData,
   UpdatePasswordData,
 } from '../../types/auth';
-import { PlayersFormData } from '../../types/players';
+import { PlayersFormData, GrantAccessFormData } from '../../types/players';
 import { ClubsFormData } from '../../types/clubs';
 import { MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
 import { ReportFormData } from '../../types/reports';
 import { formatDateObject } from '../../utils';
+import { AssignPlaymakerRoleData } from '../../types/users';
 
 const initialAddress: Address = {
   street: '',
@@ -154,4 +155,13 @@ export const reportsFormInitialValues: ReportFormData = {
   },
   summary: '',
   finalRating: 1,
+};
+
+export const grantAccessFormInitialValues: GrantAccessFormData = {
+  user: '',
+  player: '',
+};
+
+export const assignPlaymakerRoleFormInitialValues: AssignPlaymakerRoleData = {
+  user: '',
 };
