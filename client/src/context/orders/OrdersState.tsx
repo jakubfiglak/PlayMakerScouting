@@ -36,12 +36,12 @@ export const OrdersState: React.FC = ({ children }) => {
   };
 
   // Get orders
-  const getOrders = async (filters: OrdersFilterData) => {
+  const getOrders = async (filters: OrdersFilterData, page = 1) => {
     setLoading();
 
     const { player, status, createdAfter, createdBefore } = filters;
 
-    let ordersURI = `/api/v1/orders?sort=-createdAt&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
+    let ordersURI = `/api/v1/orders?page=${page}&sort=-createdAt&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
 
     if (player) {
       ordersURI = ordersURI.concat(`&player=${player}`);

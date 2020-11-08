@@ -98,6 +98,10 @@ export type ReportsData = {
   docs: Report[];
 } & PaginationData;
 
+export type ReportsFilterData = {
+  player: string;
+};
+
 export type State = {
   reportsData: ReportsData;
   myReportsData: ReportsData;
@@ -109,8 +113,8 @@ export type State = {
   setLoading: () => void;
   clearErrors: () => void;
   clearMessage: () => void;
-  getReports: () => void;
-  getMyReports: () => void;
+  getReports: (filters: ReportsFilterData, page: number) => void;
+  getMyReports: (filters: ReportsFilterData, page: number) => void;
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
   addReport: (report: ReportFormData) => void;

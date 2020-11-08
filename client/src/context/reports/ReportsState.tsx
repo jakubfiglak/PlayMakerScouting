@@ -2,7 +2,12 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ReportsContext from './reportsContext';
 import reportsReducer from './reportsReducer';
-import { State, Report, ReportFormData } from '../../types/reports';
+import {
+  State,
+  Report,
+  ReportFormData,
+  ReportsFilterData,
+} from '../../types/reports';
 import { initialPaginatedData } from '../../data';
 
 export const ReportsState: React.FC = ({ children }) => {
@@ -52,10 +57,14 @@ export const ReportsState: React.FC = ({ children }) => {
   };
 
   // Get reports
-  const getReports = async () => {
+  const getReports = async (filters: ReportsFilterData, page = 1) => {
     setLoading();
 
-    const reportsURI = '/api/v1/reports';
+    let reportsURI = `/api/v1/reports?page=${page}`;
+
+    if (filters.player) {
+      reportsURI = reportsURI.concat(`&player=${filters.player}`);
+    }
 
     try {
       const res = await axiosJson.get(reportsURI);
@@ -72,11 +81,17 @@ export const ReportsState: React.FC = ({ children }) => {
   };
 
   // Get my reports
-  const getMyReports = async () => {
+  const getMyReports = async (filters: ReportsFilterData, page = 1) => {
     setLoading();
 
+    let reportsURI = `/api/v1/reports/my?page=${page}`;
+
+    if (filters.player) {
+      reportsURI = reportsURI.concat(`&player=${filters.player}`);
+    }
+
     try {
-      const res = await axiosJson.get('/api/v1/reports/my');
+      const res = await axiosJson.get(reportsURI);
       dispatch({
         type: 'GET_MY_REPORTS_SUCCESS',
         payload: res.data.data,

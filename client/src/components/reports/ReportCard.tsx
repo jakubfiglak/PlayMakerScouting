@@ -24,10 +24,10 @@ import { formatDate, replaceCompetitionName } from '../../utils';
 
 type ReportCardProps = {
   report: Report;
-  handleSetCurrent: (report: Report) => void;
+  onEditClick: (report: Report) => void;
 };
 
-export const ReportCard = ({ report, handleSetCurrent }: ReportCardProps) => {
+export const ReportCard = ({ report, onEditClick }: ReportCardProps) => {
   const { _id, docNumber, player, match, createdAt, finalRating } = report;
 
   return (
@@ -70,7 +70,7 @@ export const ReportCard = ({ report, handleSetCurrent }: ReportCardProps) => {
           <Tooltip title="Edytuj">
             <IconButton
               aria-label="edit report"
-              onClick={() => handleSetCurrent(report)}
+              onClick={() => onEditClick(report)}
             >
               <EditIcon />
             </IconButton>
