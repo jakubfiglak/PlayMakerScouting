@@ -19,7 +19,11 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const player = await Player.create(req.body);
+  let player = await Player.create(req.body);
+
+  player = await player
+    .populate({ path: 'club', select: 'name' })
+    .execPopulate();
 
   // If the user creating the player is not an admin, push the players ID to users myPlayers array
   if (req.user.role !== 'admin') {
@@ -109,7 +113,7 @@ exports.getPlayersList = asyncHandler(async (req, res, next) => {
   }
 
   const players = await Player.find(query)
-    .select('firstName lastName')
+    .select('firstName lastName position')
     .populate({ path: 'club', select: 'name' });
 
   res.status(200).json({
@@ -146,12 +150,12 @@ exports.getPlayer = asyncHandler(async (req, res, next) => {
 // @route PUT /api/v1/players/:id
 // @access Private
 exports.updatePlayer = asyncHandler(async (req, res, next) => {
-  let player = await Player.findById(req.params.id);
+  const { id } = req.params;
+
+  let player = await Player.findById(id);
 
   if (!player) {
-    return next(
-      new ErrorResponse(`No player found with the id of ${req.params.id}`, 404)
-    );
+    return next(new ErrorResponse(`No player found with the id of ${id}`, 404));
   }
 
   player = await Player.findByIdAndUpdate(req.params.id, req.body, {
@@ -159,9 +163,14 @@ exports.updatePlayer = asyncHandler(async (req, res, next) => {
     runValidators: true,
   });
 
+  player = await player
+    .populate({ path: 'club', select: 'name' })
+    .execPopulate();
+
   res.status(200).json({
     success: true,
     data: player,
+    message: `Player with the id of ${id} successfully updated!`,
   });
 });
 

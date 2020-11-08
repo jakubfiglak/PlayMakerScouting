@@ -9,12 +9,14 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
     playersData: [],
     clubsData: [],
     myClubsData: [],
+    myOrdersData: [],
     loading: false,
     error: null,
     setLoading: () => null,
     getPlayers: () => null,
     getClubs: () => null,
     getMyClubs: () => null,
+    getMyOrders: () => null,
   };
 
   const [state, dispatch] = useReducer(simplifiedDataReducer, initialState);
@@ -37,7 +39,7 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
       });
     } catch (err) {
       dispatch({
-        type: 'GET_PLAYERS_FAIL',
+        type: 'SIMPLIFIED_DATA_ERROR',
         payload: err.response.data.error,
       });
     }
@@ -54,7 +56,7 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
       });
     } catch (err) {
       dispatch({
-        type: 'GET_CLUBS_FAIL',
+        type: 'SIMPLIFIED_DATA_ERROR',
         payload: err.response.data.error,
       });
     }
@@ -71,13 +73,37 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
       });
     } catch (err) {
       dispatch({
-        type: 'GET_CLUBS_FAIL',
+        type: 'SIMPLIFIED_DATA_ERROR',
         payload: err.response.data.error,
       });
     }
   };
 
-  const { playersData, clubsData, myClubsData, loading, error } = state;
+  // Get my orders
+  const getMyOrders = async () => {
+    setLoading();
+    try {
+      const res = await axiosJson.get('/api/v1/orders/mylist');
+      dispatch({
+        type: 'GET_MY_ORDERS_SUCCESS',
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'SIMPLIFIED_DATA_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  const {
+    playersData,
+    clubsData,
+    myClubsData,
+    myOrdersData,
+    loading,
+    error,
+  } = state;
 
   return (
     <SimplifiedDataContext.Provider
@@ -85,12 +111,14 @@ export const SimplifiedDataState: React.FC = ({ children }) => {
         playersData,
         clubsData,
         myClubsData,
+        myOrdersData,
         loading,
         error,
         setLoading,
         getPlayers,
         getClubs,
         getMyClubs,
+        getMyOrders,
       }}
     >
       {children}

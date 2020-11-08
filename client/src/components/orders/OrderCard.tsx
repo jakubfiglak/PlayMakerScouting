@@ -17,10 +17,11 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 // Custom components
 import { Modal, Loader } from '../common';
 // Types
-import { Order, OrdersFilterData } from '../../types/orders';
+import { Order } from '../../types/orders';
 // Hooks
 import { useAuthState } from '../../context';
 import { useModal } from '../../hooks';
@@ -30,19 +31,19 @@ import { orderStatusLabels } from '../../data';
 // Styles
 import { useStyles } from './styles';
 
-type OrderCardProps = {
+type Props = {
   order: Order;
-  filters: OrdersFilterData;
   deleteOrder: (id: string) => void;
-  acceptOrder: (id: string, filters: OrdersFilterData) => void;
+  acceptOrder: (id: string) => void;
+  closeOrder: (id: string) => void;
 };
 
 export const OrderCard = ({
   order,
-  filters,
   deleteOrder,
   acceptOrder,
-}: OrderCardProps) => {
+  closeOrder,
+}: Props) => {
   const classes = useStyles();
 
   const authContext = useAuthState();
@@ -142,30 +143,45 @@ export const OrderCard = ({
       </CardContent>
       <CardActions>
         <Grid container justify="center">
-          <div>
-            <Tooltip title="Usuń">
-              <IconButton
-                aria-label="delete match"
-                className={classes.delete}
-                disabled={user?.role !== 'admin'}
-                onClick={handleClickOpenDelete}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-            <Modal
-              open={isDeleteModalOpen}
-              message={`Usunąć zlecenie ${_id} z bazy?`}
-              handleAccept={() => deleteOrder(_id)}
-              handleClose={handleCloseDelete}
-            />
-          </div>
+          {status === 'open' ? (
+            <div>
+              <Tooltip title="Usuń">
+                <IconButton
+                  aria-label="delete order"
+                  className={classes.delete}
+                  disabled={user?.role !== 'admin'}
+                  onClick={handleClickOpenDelete}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+              <Modal
+                open={isDeleteModalOpen}
+                message={`Usunąć zlecenie ${_id} z bazy?`}
+                handleAccept={() => deleteOrder(_id)}
+                handleClose={handleCloseDelete}
+              />
+            </div>
+          ) : (
+            <>
+              <Tooltip title="Zamknij">
+                <IconButton
+                  aria-label="close order"
+                  className={classes.delete}
+                  disabled={user?.role !== 'admin' || status === 'closed'}
+                  onClick={() => closeOrder(_id)}
+                >
+                  <CancelOutlinedIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
           <Tooltip title="Przyjmij zlecenie">
             <IconButton
               aria-label="edit match"
               className={classes.accept}
               disabled={status !== 'open'}
-              onClick={() => acceptOrder(_id, filters)}
+              onClick={() => acceptOrder(_id)}
             >
               <AssignmentTurnedInIcon />
             </IconButton>

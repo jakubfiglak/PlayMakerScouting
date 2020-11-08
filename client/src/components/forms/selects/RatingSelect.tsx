@@ -1,20 +1,36 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
-// Data & utils
-import { ratings } from '../../../data';
+import {
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+  FormHelperText,
+} from '@material-ui/core';
+// Types
+import { RatingScore } from '../../../types/reports';
 
-export const RatingSelect = ({ onChange, value, name }: SelectProps) => {
+type Props = {
+  name: string;
+};
+
+export const RatingSelect = ({ name }: Props) => {
+  const [field, meta] = useField(name);
+
+  const { error, touched } = meta;
+
+  const ratings: RatingScore[] = [1, 2, 3, 4];
+
   return (
-    <>
-      <InputLabel id="rating">Ocena</InputLabel>
+    <FormControl variant="outlined" fullWidth>
+      <InputLabel id={name}>Ocena</InputLabel>
       <Select
-        labelId="rating"
-        id={name}
+        {...field}
+        labelId={name}
         label="Ocena"
         name={name}
-        onChange={onChange}
-        value={value}
+        error={touched && !!error}
       >
         {ratings.map((rating) => {
           return (
@@ -24,6 +40,7 @@ export const RatingSelect = ({ onChange, value, name }: SelectProps) => {
           );
         })}
       </Select>
-    </>
+      {touched && error && <FormHelperText>{error}</FormHelperText>}
+    </FormControl>
   );
 };

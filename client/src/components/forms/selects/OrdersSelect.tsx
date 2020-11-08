@@ -1,46 +1,46 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { Select, MenuItem, InputLabel, SelectProps } from '@material-ui/core';
+import {
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+} from '@material-ui/core';
 // Types
-import { Order } from '../../../types/orders';
+import { OrderData } from '../../../types/simplifiedData';
 
-type OrdersSelectProps = {
-  ordersData: Order[];
-} & SelectProps;
+type Props = {
+  ordersData: OrderData[];
+  name: string;
+};
 
-export const OrdersSelect = ({
-  ordersData,
-  onChange,
-  value,
-  required,
-  id,
-  label,
-}: OrdersSelectProps) => {
+export const OrdersSelect = ({ ordersData, name }: Props) => {
+  const [field, meta] = useField(name);
+
+  const { error, touched } = meta;
+
   return (
-    <>
-      <InputLabel id={id || 'order'}>{label || 'Zlecenie'}</InputLabel>
+    <FormControl variant="outlined" fullWidth>
+      <InputLabel id="order">Zlecenie</InputLabel>
       <Select
-        labelId={id || 'order'}
-        id={id || 'order'}
-        label={label || 'Zlecenie'}
-        name={id || 'order'}
-        onChange={onChange}
-        value={value}
-        required={required}
+        {...field}
+        labelId="order"
+        label="Zlecenie"
+        error={touched && !!error}
       >
-        <MenuItem value={undefined}>
-          <em>Brak</em>
-        </MenuItem>
         {ordersData.map((orderData) => {
-          const { _id, player } = orderData;
+          const { _id, docNumber, player } = orderData;
 
           return (
             <MenuItem key={_id} value={_id}>
-              {`${_id} (${player.lastName}, ${player.firstName})`}
+              {`${docNumber} (${player.lastName}, ${player.firstName} (${player.club.name}))`}
             </MenuItem>
           );
         })}
       </Select>
-    </>
+      {touched && error && <FormHelperText>{error}</FormHelperText>}
+    </FormControl>
   );
 };

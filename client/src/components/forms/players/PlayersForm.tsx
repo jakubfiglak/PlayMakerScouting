@@ -1,4 +1,5 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
+import { Formik, Form, Field } from 'formik';
 // MUI components
 import { Grid, TextField, FormControl } from '@material-ui/core';
 // Custom components
@@ -6,169 +7,179 @@ import { PositionSelect, FootSelect, ClubsCombo } from '../selects';
 import { MainFormActions } from '../actions';
 import { Loader } from '../../common';
 // Types
-import { PlayersFormData } from '../../../types/players';
 import { ClubData } from '../../../types/simplifiedData';
+import { PlayersFormData } from '../../../types/players';
 // Hooks
 import { usePlayersState } from '../../../context';
-import { useForm } from '../../../hooks';
+// Utils & data
+import { playersFormValidationSchema } from '../validationSchemas';
+import { playersFormInitialValues } from '../initialValues';
 
-type PlayersFormProps = {
+type Props = {
   clubsData: ClubData[];
 };
 
-export const PlayersForm = ({ clubsData }: PlayersFormProps) => {
-  const playersContext = usePlayersState();
+export const PlayersForm = ({ clubsData }: Props) => {
   const {
     loading,
     addPlayer,
     current,
     clearCurrent,
     editPlayer,
-  } = playersContext;
+  } = usePlayersState();
 
-  const initialState: PlayersFormData = current || {
-    firstName: '',
-    lastName: '',
-    club: '',
-    position: 'CM',
-    dateOfBirth: '2000-01-01',
-    height: 0,
-    weight: 0,
-    footed: 'R',
-  };
-  const [playerData, onInputChange, setPlayerData] = useForm(initialState);
-
-  const {
-    firstName,
-    lastName,
-    club,
-    position,
-    dateOfBirth,
-    height,
-    weight,
-    footed,
-  } = playerData;
-
-  const formattedDate = dateOfBirth.slice(0, 10);
-
-  const onCancelClick = () => {
-    setPlayerData(initialState);
-  };
-
-  const onSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    if (current) {
-      editPlayer(playerData);
-      clearCurrent();
-    } else {
-      addPlayer(playerData);
-    }
-  };
+  const initialValues: PlayersFormData = current
+    ? {
+        firstName: current.firstName,
+        lastName: current.lastName,
+        club: current.club._id,
+        position: current.position,
+        dateOfBirth: current.dateOfBirth.slice(0, 10),
+        height: current.height,
+        weight: current.weight,
+        footed: current.footed,
+        lnpID: current.lnpID,
+        lnpProfileURL: current.lnpProfileURL,
+      }
+    : playersFormInitialValues;
 
   return (
-    <form onSubmit={onSubmit}>
-      {loading && <Loader />}
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            autoComplete="fname"
-            name="firstName"
-            variant="outlined"
-            required
-            fullWidth
-            id="name"
-            label="Imię"
-            autoFocus
-            value={firstName}
-            onChange={onInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            id="surname"
-            label="Nazwisko"
-            name="lastName"
-            autoComplete="lname"
-            value={lastName}
-            onChange={onInputChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl variant="outlined" fullWidth>
-            <ClubsCombo
-              clubsData={clubsData}
-              value={club}
-              id="club"
-              setFormData={setPlayerData}
-              label="Klub"
+    <Formik
+      initialValues={initialValues}
+      validationSchema={playersFormValidationSchema}
+      enableReinitialize
+      onSubmit={(data, { resetForm }) => {
+        if (current) {
+          editPlayer(current._id, data);
+          clearCurrent();
+          resetForm();
+        } else {
+          addPlayer(data);
+          resetForm();
+        }
+      }}
+    >
+      {({ errors, touched, handleReset }) => (
+        <Form>
+          {loading && <Loader />}
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Field
+                name="firstName"
+                as={TextField}
+                variant="outlined"
+                autoComplete="fname"
+                fullWidth
+                label="Imię"
+                autoFocus
+                error={touched.firstName && !!errors.firstName}
+                helperText={touched.firstName && errors.firstName}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                name="lastName"
+                as={TextField}
+                variant="outlined"
+                autoComplete="lname"
+                fullWidth
+                label="Nazwisko"
+                error={touched.lastName && !!errors.lastName}
+                helperText={touched.lastName && errors.lastName}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" fullWidth>
+                <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl variant="outlined" fullWidth>
+                <PositionSelect />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                name="dateOfBirth"
+                as={TextField}
+                type="date"
+                variant="outlined"
+                fullWidth
+                label="Data urodzenia"
+                error={touched.dateOfBirth && !!errors.dateOfBirth}
+                helperText={touched.dateOfBirth && errors.dateOfBirth}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Field
+                name="height"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Wzrost [cm]"
+                type="number"
+                inputProps={{
+                  min: 0,
+                }}
+                error={touched.height && !!errors.height}
+                helperText={touched.height && errors.height}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Field
+                name="weight"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Waga [kg]"
+                type="number"
+                inputProps={{
+                  min: 0,
+                }}
+                error={touched.weight && !!errors.weight}
+                helperText={touched.weight && errors.weight}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <FormControl variant="outlined" fullWidth>
+                <FootSelect />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                name="lnpID"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="ID Łączy Nas Piłka"
+                error={touched.lnpID && !!errors.lnpID}
+                helperText={
+                  (touched.lnpID && errors.lnpID) || 'Pole opcjonalne'
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                name="lnpProfileURL"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Link do profilu ŁNP"
+                error={touched.lnpProfileURL && !!errors.lnpProfileURL}
+                helperText={
+                  (touched.lnpProfileURL && errors.lnpProfileURL) ||
+                  'Pole opcjonalne'
+                }
+              />
+            </Grid>
+            <MainFormActions
+              label="zawodnika"
+              current={!!current}
+              onCancelClick={handleReset}
             />
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl variant="outlined" fullWidth>
-            <PositionSelect onChange={onInputChange} value={position} />
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            type="date"
-            variant="outlined"
-            required
-            fullWidth
-            label="Data urodzenia"
-            id="dateOfBirth"
-            name="dateOfBirth"
-            value={formattedDate}
-            onChange={onInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            id="height"
-            label="Wzrost [cm]"
-            name="height"
-            type="number"
-            inputProps={{
-              min: 0,
-            }}
-            value={height}
-            onChange={onInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            id="weight"
-            label="Waga [kg]"
-            name="weight"
-            type="number"
-            inputProps={{
-              min: 0,
-            }}
-            value={weight}
-            onChange={onInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <FormControl variant="outlined" fullWidth>
-            <FootSelect onChange={onInputChange} value={footed} />
-          </FormControl>
-        </Grid>
-        <MainFormActions
-          label="zawodnika"
-          current={!!current}
-          onCancelClick={onCancelClick}
-        />
-      </Grid>
-    </form>
+          </Grid>
+        </Form>
+      )}
+    </Formik>
   );
 };

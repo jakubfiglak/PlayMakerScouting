@@ -1,47 +1,24 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // MUI components
-import { FormControl, SelectProps, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 // Custom components
 import { OrdersSelect } from '../selects';
-import { Loader } from '../../common';
 // Types
-import { Report } from '../../../types/reports';
-// Hooks
-import { useOrdersState } from '../../../context';
+import { OrderData } from '../../../types/simplifiedData';
 
-type OrderStepProps = {
-  current: Report | null;
-} & SelectProps;
+type Props = {
+  ordersData: OrderData[];
+};
 
-export const OrderStep = ({ value, onChange, current }: OrderStepProps) => {
-  const ordersContext = useOrdersState();
-
-  const { loading, getMyOrders, myOrdersData } = ordersContext;
-
-  useEffect(() => {
-    if (!current) {
-      getMyOrders();
-    }
-  }, []);
-
-  return (
-    <>
-      {loading && <Loader />}
-      {current ? (
-        <Typography>
-          {current.order
-            ? `Zlecenie obserwacji nr ${current.order}`
-            : 'Raport bez przypisanego zlecenia obserwacji'}
-        </Typography>
-      ) : (
-        <FormControl variant="outlined" fullWidth>
-          <OrdersSelect
-            ordersData={myOrdersData.docs}
-            value={value}
-            onChange={onChange}
-          />
-        </FormControl>
-      )}
-    </>
-  );
+export const OrderStep = ({ ordersData }: Props) => {
+  if (ordersData.length === 0) {
+    return (
+      <Typography>
+        Nie masz żadnych zleceń w toku. Przyjmij zlecenie do realizacji lub wróć
+        do poprzedniego kroku i wybierz opcję <strong>Własny raport</strong>, by
+        stworzyć raport dla dowolnie wybranego zawodnika.
+      </Typography>
+    );
+  }
+  return <OrdersSelect ordersData={ordersData} name="order" />;
 };

@@ -1,63 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // MUI components
-import { FormControl, SelectProps, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 // Custom components
 import { MatchSelect } from '../selects';
-import { Loader } from '../../common';
 // Types
-import { Report } from '../../../types/reports';
-// Hooks
-import { usePlayersState } from '../../../context';
-// Utils & data
-import { formatDate } from '../../../utils';
+import { Match } from '../../../types/matches';
 
-type MatchStepProps = {
-  player: string;
-  current: Report | null;
-} & SelectProps;
+type Props = {
+  matches: Match[];
+};
 
-export const MatchStep = ({
-  player,
-  value,
-  onChange,
-  current,
-}: MatchStepProps) => {
-  const playersContext = usePlayersState();
-
-  const { loading, getPlayerMatches, playerMatches } = playersContext;
-
-  useEffect(() => {
-    if (!current) {
-      getPlayerMatches(player);
-    }
-  }, []);
-
-  if (current) {
-    const {
-      match: {
-        homeTeam: { name: homeTeamName },
-        awayTeam: { name: awayTeamName },
-        date,
-      },
-    } = current;
-
+export const MatchStep = ({ matches }: Props) => {
+  if (matches.length === 0) {
     return (
       <Typography>
-        {formatDate(date, true)}: {homeTeamName} vs. {awayTeamName}
+        Drużyna zawodnika, którego wybrałeś, nie ma żadnego meczu zdefiniowanego
+        w bazie. Stwórz mecz w zakładce <strong>Mecze</strong> i wróć do
+        tworzenia raportu
       </Typography>
     );
   }
 
-  return (
-    <>
-      {loading && <Loader />}
-      <FormControl variant="outlined" fullWidth>
-        <MatchSelect
-          matchesData={playerMatches}
-          value={value}
-          onChange={onChange}
-        />
-      </FormControl>
-    </>
-  );
+  return <MatchSelect matchesData={matches} name="match" />;
 };

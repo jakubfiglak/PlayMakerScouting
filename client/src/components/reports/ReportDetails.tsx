@@ -18,7 +18,7 @@ type ReportDetailsProps = {
 export const ReportDetails = ({ id }: ReportDetailsProps) => {
   const reportsContext = useReportsState();
 
-  const { getReport, current, loading } = reportsContext;
+  const { getReport, reportData, loading } = reportsContext;
 
   useEffect(() => {
     getReport(id);
@@ -30,45 +30,45 @@ export const ReportDetails = ({ id }: ReportDetailsProps) => {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h5" align="center">
-            Raport z obserwacji nr {current?.docNumber}
+            Raport z obserwacji nr {reportData?.docNumber}
           </Typography>
         </Grid>
-        {current && (
+        {reportData && (
           <>
             <Grid item xs={12}>
               <ReportHeaderCard
-                player={current.player}
-                match={current.match}
-                scout={current.scout}
-                order={current.order}
-                createdAt={current.createdAt}
+                player={reportData.player}
+                match={reportData.match}
+                scout={reportData.scout}
+                order={reportData.order}
+                createdAt={reportData.createdAt}
               />
             </Grid>
             <Grid item xs={12}>
               <BasicReportData
-                minutesPlayed={current.minutesPlayed}
-                assists={current.assists}
-                goals={current.goals}
-                yellowCards={current.yellowCards}
-                redCards={current.redCards}
+                minutesPlayed={reportData.minutesPlayed}
+                assists={reportData.assists}
+                goals={reportData.goals}
+                yellowCards={reportData.yellowCards}
+                redCards={reportData.redCards}
               />
               <SkillsAccordion
-                skills={current.individualSkills}
+                skills={reportData.individualSkills}
                 id="individual-skills-header"
                 title="Ocena umiejętności indywidualnych"
               />
               <SkillsAccordion
-                skills={current.teamplaySkills}
+                skills={reportData.teamplaySkills}
                 id="teamplay-skills-header"
                 title="Ocena współdziałania z partnerami"
               />
-              <MotorSkillsAccordion skills={current.motorSkills} />
+              <MotorSkillsAccordion skills={reportData.motorSkills} />
               <ReportSummaryAccordion
-                summary={current.summary}
-                finalRating={current.finalRating}
-                individualAvg={current.individualAvg}
-                teamplayAvg={current.teamplayAvg}
-                avgRating={current.avgRating}
+                summary={reportData.summary}
+                finalRating={reportData.finalRating}
+                individualAvg={reportData.individualAvg}
+                teamplayAvg={reportData.teamplayAvg}
+                avgRating={reportData.avgRating}
               />
             </Grid>
           </>

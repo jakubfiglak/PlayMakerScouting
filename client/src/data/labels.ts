@@ -1,27 +1,27 @@
 export const positionLabels = [
   {
     value: 'GK',
-    label: 'Bramkarz',
+    label: 'bramkarz',
   },
   {
     value: 'CB',
-    label: 'Środkowy obrońca',
+    label: 'środkowy obrońca',
   },
   {
     value: 'FB',
-    label: 'Boczny obrońca',
+    label: 'boczny obrońca',
   },
   {
     value: 'CM',
-    label: 'Środkowy pomocnik',
+    label: 'środkowy pomocnik',
   },
   {
     value: 'WM',
-    label: 'Boczny pomocnik',
+    label: 'boczny pomocnik',
   },
   {
     value: 'F',
-    label: 'Napastnik',
+    label: 'napastnik',
   },
 ];
 
@@ -67,5 +67,35 @@ export const orderStatusLabels = [
   {
     value: 'closed',
     label: 'zamknięte',
+  },
+];
+
+export const errorLabels = [
+  {
+    value: 'Invalid credentials',
+    label: 'Nieprawidłowe dane logowania',
+  },
+  {
+    value: 'User already exists',
+    label: 'Na podany adres e-mail zarejestrowano już użytkownika',
+  },
+];
+
+export const messageLabels = [
+  {
+    value: 'Successfully created new user!',
+    label: 'Proces rejestracji zakończony pomyślnie, witamy!',
+  },
+  {
+    value: 'Login success!',
+    label: 'Proces logowania zakończony pomyślnie, witamy!',
+  },
+  {
+    value: 'Account details successfully updated!',
+    label: 'Twoje konto użytkownika zostało zaktualizowane pomyślnie',
+  },
+  {
+    value: 'Password updated successfully!',
+    label: 'Hasło zostało zmienione pomyślnie',
   },
 ];

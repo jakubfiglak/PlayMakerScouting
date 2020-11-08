@@ -1,48 +1,55 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { useField } from 'formik';
 // MUI components
 import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 // Types
 import { PlayerData } from '../../../types/simplifiedData';
+// Utils & data
+import { getLabel } from '../../../utils/getLabel';
+import { positionLabels } from '../../../data/labels';
 
-type PlayersComboProps = {
+type Props = {
   playersData: PlayerData[];
-  setFormData: Dispatch<SetStateAction<any>>;
-  value: string;
-  id: string;
   label: string;
   size?: 'medium' | 'small';
 };
 
-export const PlayersCombo = ({
-  playersData,
-  value,
-  setFormData,
-  id,
-  label,
-  size,
-}: PlayersComboProps) => {
+export const PlayersCombo = ({ playersData, label, size }: Props) => {
+  const [field, fieldMeta, fieldHelpers] = useField('player');
+
+  const { value } = field;
+  const { error, touched } = fieldMeta;
+  const { setValue } = fieldHelpers;
+
   return (
     <Autocomplete
-      id={id}
-      onChange={(_: any, newValue: string | null) => {
-        setFormData((prevData: any) => ({
-          ...prevData,
-          [id]: newValue,
-        }));
+      id="player"
+      {...field}
+      onChange={(_, newValue: string | null) => {
+        setValue(newValue);
       }}
       value={value}
-      options={playersData.map((player) => player._id)}
+      options={['', ...playersData.map((player) => player._id)]}
       getOptionLabel={(option) => {
         const player = playersData.find((p) => p._id === option);
         if (player) {
-          const { lastName, firstName, club } = player;
-          return `${lastName}, ${firstName} (${club.name})`;
+          const { lastName, firstName, club, position } = player;
+          return `${firstName[0]}. ${lastName}, ${getLabel(
+            position,
+            positionLabels,
+          )} (${club.name})`;
         }
         return '';
       }}
       renderInput={(params) => (
-        <TextField {...params} label={label} variant="outlined" name={id} />
+        <TextField
+          {...params}
+          label={label}
+          variant="outlined"
+          error={touched && !!error}
+          helperText={touched && error}
+        />
       )}
       size={size}
     />

@@ -1,71 +1,61 @@
-import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
+import { Formik, Form, Field } from 'formik';
 // MUI components
-import { TextField, Grid, FormControl } from '@material-ui/core';
+import { TextField, Grid } from '@material-ui/core';
 // Custom components
 import { DivisionSelect, VoivodeshipSelect } from '../selects';
 import { FilterFormActions } from '../actions';
 // Types
 import { ClubsFilterData } from '../../../types/clubs';
-// Hooks
-import { useForm } from '../../../hooks';
 // Styles
 import { useStyles } from '../styles';
 
-type FilterFormProps = {
+type Props = {
   setFilters: Dispatch<SetStateAction<ClubsFilterData>>;
 };
 
-const initialState: ClubsFilterData = {
+const initialFilters: ClubsFilterData = {
   name: '',
   division: '',
   voivodeship: '',
 };
 
-export const ClubsFilterForm = ({ setFilters }: FilterFormProps) => {
+export const ClubsFilterForm = ({ setFilters }: Props) => {
   const classes = useStyles();
-  const [formData, onInputChange, setFormData] = useForm(initialState);
-
-  const { name, division, voivodeship } = formData;
-
-  const handleClearFilter = () => {
-    setFormData(initialState);
-    setFilters(initialState);
-  };
-
-  const handleSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setFilters(formData);
-  };
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit}>
-      <Grid container justify="center" alignItems="center">
-        <Grid item xs={12} sm={6} lg={3} className={classes.input}>
-          <TextField
-            variant="outlined"
-            id="name"
-            label="Nazwa"
-            name="name"
-            size="small"
-            fullWidth
-            onChange={onInputChange}
-            value={name}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={3} className={classes.input}>
-          <FormControl variant="outlined" size="small" fullWidth>
-            <DivisionSelect onChange={onInputChange} value={division} />
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6} lg={3} className={classes.input}>
-          <VoivodeshipSelect
-            onChange={onInputChange}
-            value={voivodeship}
-            size="small"
-          />
-        </Grid>
-        <FilterFormActions handleClearFilter={handleClearFilter} />
-      </Grid>
-    </form>
+    <Formik
+      initialValues={initialFilters}
+      onSubmit={(data) => setFilters(data)}
+    >
+      {({ handleReset, initialValues }) => (
+        <Form autoComplete="off">
+          <Grid container justify="center" alignItems="center">
+            <Grid item xs={12} sm={6} lg={3} className={classes.input}>
+              <Field
+                name="name"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Nazwa"
+                size="small"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3} className={classes.input}>
+              <DivisionSelect size="small" />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3} className={classes.input}>
+              <VoivodeshipSelect name="voivodeship" size="small" />
+            </Grid>
+            <FilterFormActions
+              handleClearFilter={() => {
+                handleReset();
+                setFilters(initialValues);
+              }}
+            />
+          </Grid>
+        </Form>
+      )}
+    </Formik>
   );
 };

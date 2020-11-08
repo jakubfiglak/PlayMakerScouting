@@ -1,35 +1,24 @@
 import { PaginationData } from './common';
+import { Position } from './players';
 import { Match } from './matches';
 
-export type IndSkillsField = {
-  title: string;
-  radioName: keyof IndSkillsFormData;
-  textFieldName: keyof IndSkillsFormData;
-};
+export type RatingScore = 1 | 2 | 3 | 4;
 
-export type TeamplaySkillsField = {
-  title: string;
-  radioName: keyof TeamplaySkillsFormData;
-  textFieldName: keyof TeamplaySkillsFormData;
-};
-
-export type RatingScore = 0 | 1 | 2 | 3 | 4;
-
-type Rating = {
+export type Rating = {
   rating: RatingScore;
   note: string;
 };
 
 export type IndividualSkills = {
-  ballReception: Rating;
   holdPass: Rating;
   gainPass: Rating;
   keyPass: Rating;
-  defOneOnOne: Rating;
-  airPlay: Rating;
-  positioning: Rating;
-  attOneOnOne: Rating;
-  finishing: Rating;
+  ballReception: Rating;
+  defOneOnOne?: Rating;
+  airPlay?: Rating;
+  positioning?: Rating;
+  attOneOnOne?: Rating;
+  finishing?: Rating;
 };
 
 export type TeamplaySkills = {
@@ -52,7 +41,7 @@ type ReportData = {
   individualSkills: IndividualSkills;
   teamplaySkills: TeamplaySkills;
   motorSkills: MotorSkills;
-  finalRating: 1 | 2 | 3 | 4;
+  finalRating: RatingScore;
   summary: string;
 };
 
@@ -63,6 +52,11 @@ export type Report = {
     _id: string;
     firstName: string;
     lastName: string;
+    club: {
+      _id: string;
+      name: string;
+    };
+    position: Position;
   };
   match: Match;
   scout: {
@@ -81,41 +75,6 @@ export type Report = {
   createdAt: string;
 } & ReportData;
 
-export type IndSkillsFormData = {
-  ballReceptionRating: RatingScore;
-  ballReceptionNote: string;
-  holdPassRating: RatingScore;
-  holdPassNote: string;
-  gainPassRating: RatingScore;
-  gainPassNote: string;
-  keyPassRating: RatingScore;
-  keyPassNote: string;
-  defOneOnOneRating: RatingScore;
-  defOneOnOneNote: string;
-  airPlayRating: RatingScore;
-  airPlayNote: string;
-  positioningRating: RatingScore;
-  positioningNote: string;
-  attOneOnOneRating: RatingScore;
-  attOneOnOneNote: string;
-  finishingRating: RatingScore;
-  finishingNote: string;
-};
-
-export type TeamplaySkillsFormData = {
-  attackRating: RatingScore;
-  attackNote: string;
-  defenseRating: RatingScore;
-  defenseNote: string;
-  transitionRating: RatingScore;
-  transitionNote: string;
-};
-
-export type MotorSkillsFormData = {
-  leading: string;
-  neglected: string;
-};
-
 type CommonFormData = {
   order?: string;
   player: string;
@@ -125,16 +84,11 @@ type CommonFormData = {
   assists: number;
   yellowCards: number;
   redCards: number;
-  finalRating: 1 | 2 | 3 | 4;
+  finalRating: RatingScore;
   summary: string;
 };
 
-export type ReportFormData = CommonFormData &
-  IndSkillsFormData &
-  TeamplaySkillsFormData &
-  MotorSkillsFormData;
-
-export type FormattedReportFormData = {
+export type ReportFormData = {
   individualSkills: IndividualSkills;
   teamplaySkills: TeamplaySkills;
   motorSkills: MotorSkills;
@@ -144,31 +98,47 @@ export type ReportsData = {
   docs: Report[];
 } & PaginationData;
 
+export type ReportsFilterData = {
+  player: string;
+};
+
 export type State = {
   reportsData: ReportsData;
   myReportsData: ReportsData;
+  reportData: Report | null;
   current: Report | null;
   loading: boolean;
   error: string | null;
+  message: string | null;
   setLoading: () => void;
-  getReports: () => void;
-  getMyReports: () => void;
+  clearErrors: () => void;
+  clearMessage: () => void;
+  getReports: (filters: ReportsFilterData, page: number) => void;
+  getMyReports: (filters: ReportsFilterData, page: number) => void;
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
-  addReport: (report: FormattedReportFormData) => void;
-  editReport: (id: string, report: FormattedReportFormData) => void;
+  addReport: (report: ReportFormData) => void;
+  editReport: (id: string, report: ReportFormData) => void;
   setCurrent: (report: Report) => void;
   clearCurrent: () => void;
 };
 
 export type Action =
   | { type: 'SET_LOADING' }
+  | { type: 'CLEAR_ERRORS' }
+  | { type: 'CLEAR_MESSAGE' }
   | { type: 'SET_CURRENT'; payload: Report }
   | { type: 'CLEAR_CURRENT' }
   | { type: 'REPORTS_ERROR'; payload: string }
   | { type: 'GET_REPORTS_SUCCESS'; payload: ReportsData }
   | { type: 'GET_REPORT_SUCCESS'; payload: Report }
   | { type: 'GET_MY_REPORTS_SUCCESS'; payload: ReportsData }
-  | { type: 'CREATE_REPORT_SUCCESS' }
-  | { type: 'UPDATE_REPORT_SUCCESS' }
-  | { type: 'DELETE_REPORT_SUCCESS'; payload: string };
+  | {
+      type: 'CREATE_REPORT_SUCCESS';
+      payload: { report: Report; message: string };
+    }
+  | {
+      type: 'UPDATE_REPORT_SUCCESS';
+      payload: { report: Report; message: string };
+    }
+  | { type: 'DELETE_REPORT_SUCCESS'; payload: { id: string; message: string } };

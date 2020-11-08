@@ -13,12 +13,29 @@ import {
   useSimplifiedDataState,
   useAuthState,
 } from '../../context';
-import { useTabs, useTable } from '../../hooks';
+import { useTabs, useTable, useAlert } from '../../hooks';
 
 export const PlayersContent = () => {
-  const playersContext = usePlayersState();
-  const simplifiedDataContext = useSimplifiedDataState();
-  const authContext = useAuthState();
+  const {
+    loading,
+    getPlayers,
+    playersData: { docs, totalDocs },
+    setCurrent,
+    message,
+    error,
+    clearMessage,
+    clearErrors,
+  } = usePlayersState();
+
+  const {
+    loading: simpleDataLoading,
+    getClubs,
+    getMyClubs,
+    clubsData,
+    myClubsData,
+  } = useSimplifiedDataState();
+
+  const { user } = useAuthState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -31,22 +48,8 @@ export const PlayersContent = () => {
     handleSort,
   ] = useTable();
 
-  const {
-    loading,
-    getPlayers,
-    playersData: { docs, totalDocs },
-    setCurrent,
-  } = playersContext;
-
-  const {
-    loading: simpleDataLoading,
-    getClubs,
-    getMyClubs,
-    clubsData,
-    myClubsData,
-  } = simplifiedDataContext;
-
-  const { user } = authContext;
+  useAlert(error, 'error', clearErrors);
+  useAlert(message, 'success', clearMessage);
 
   const [filters, setFilters] = useState<PlayersFilterData>({
     lastName: '',
@@ -69,7 +72,7 @@ export const PlayersContent = () => {
     }
     getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, page, rowsPerPage, sortBy, order, filters]);
+  }, [page, rowsPerPage, sortBy, order, filters]);
 
   return (
     <>

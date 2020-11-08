@@ -1,23 +1,31 @@
-import React, { useEffect, SyntheticEvent } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
+import { useFormik } from 'formik';
+// MUI components
 import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
-
-import { useStyles } from './styles';
+// Types
 import { LoginFormData } from '../../../types/auth';
-import { useForm } from '../../../hooks';
+// Hooks
 import { useAuthState } from '../../../context';
-
-const initialState: LoginFormData = {
-  email: '',
-  password: '',
-};
+import { useAlert } from '../../../hooks';
+// Styles
+import { useStyles } from './styles';
+// Utils & data
+import { loginFormInitialValues } from '../initialValues';
+import { loginFormValidationSchema } from '../validationSchemas';
+import { errorLabels } from '../../../data';
+import { getLabel } from '../../../utils';
 
 export const LoginForm = () => {
   const classes = useStyles();
-  const authContext = useAuthState();
   const history = useHistory();
-
-  const { login, loading, isAuthenticated } = authContext;
+  const {
+    login,
+    loading,
+    isAuthenticated,
+    error,
+    clearErrors,
+  } = useAuthState();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,38 +33,43 @@ export const LoginForm = () => {
     }
   }, [isAuthenticated, history]);
 
-  const [loginData, onInputChange] = useForm(initialState);
+  useAlert(getLabel(error, errorLabels), 'error', clearErrors);
 
-  const onSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    login(loginData);
-  };
+  const formik = useFormik<LoginFormData>({
+    initialValues: loginFormInitialValues,
+    validationSchema: loginFormValidationSchema,
+    onSubmit: (values) => {
+      login(values);
+    },
+  });
+
+  const { handleSubmit, errors, touched, getFieldProps } = formik;
 
   return (
-    <form className={classes.form} onSubmit={onSubmit} autoComplete="off">
+    <form className={classes.form} onSubmit={handleSubmit}>
       <TextField
         variant="outlined"
         margin="normal"
-        required
         fullWidth
         id="email"
         label="Email"
-        name="email"
         autoComplete="email"
         autoFocus
-        onChange={onInputChange}
+        {...getFieldProps('email')}
+        error={touched.email && !!errors.email}
+        helperText={touched.email && !!errors.email && errors.email}
       />
       <TextField
         variant="outlined"
         margin="normal"
-        required
         fullWidth
-        name="password"
         label="Hasło"
         type="password"
         id="password"
         autoComplete="current-password"
-        onChange={onInputChange}
+        {...getFieldProps('password')}
+        error={touched.password && !!errors.password}
+        helperText={touched.password && !!errors.password && errors.password}
       />
       <Button
         type="submit"

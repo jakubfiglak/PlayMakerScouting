@@ -1,101 +1,102 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { Grid, TextField, TextFieldProps } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 
-type BasicDataStepProps = {
-  minutesPlayed: number;
-  goals: number;
-  assists: number;
-  yellowCards: number;
-  redCards: number;
-} & TextFieldProps;
+export const BasicDataStep = () => {
+  const [minutesField, minutesMeta] = useField('minutesPlayed');
+  const [goalsField, goalsMeta] = useField('goals');
+  const [assistsField, assistsMeta] = useField('assists');
+  const [yellowCardsField, yellowCardsMeta] = useField('yellowCards');
+  const [redCardsField, redCardsMeta] = useField('redCards');
 
-export const BasicDataStep = ({
-  minutesPlayed,
-  goals,
-  assists,
-  yellowCards,
-  redCards,
-  onChange,
-}: BasicDataStepProps) => {
+  const { error: minutesError, touched: minutesTouched } = minutesMeta;
+  const { error: goalsError, touched: goalsTouched } = goalsMeta;
+  const { error: assistsError, touched: assistsTouched } = assistsMeta;
+  const {
+    error: yellowCardsError,
+    touched: yellowCardsTouched,
+  } = yellowCardsMeta;
+  const { error: redCardsError, touched: redCardsTouched } = redCardsMeta;
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6} lg={2}>
         <TextField
+          {...minutesField}
           variant="outlined"
           fullWidth
           id="minutesPlayed"
           label="Rozegrane minuty"
-          name="minutesPlayed"
           type="number"
           inputProps={{
             min: 0,
             max: 90,
           }}
-          value={minutesPlayed}
-          onChange={onChange}
+          error={minutesTouched && !!minutesError}
+          helperText={minutesTouched && minutesError}
         />
       </Grid>
       <Grid item xs={12} sm={6} lg={2}>
         <TextField
+          {...goalsField}
           variant="outlined"
           fullWidth
           id="goals"
           label="Bramki"
-          name="goals"
           type="number"
           inputProps={{
             min: 0,
           }}
-          value={goals}
-          onChange={onChange}
+          error={goalsTouched && !!goalsError}
+          helperText={goalsTouched && goalsError}
         />
       </Grid>
       <Grid item xs={12} sm={4} lg={2}>
         <TextField
+          {...assistsField}
           variant="outlined"
           fullWidth
           id="assists"
           label="Asysty"
-          name="assists"
           type="number"
           inputProps={{
             min: 0,
           }}
-          value={assists}
-          onChange={onChange}
+          error={assistsTouched && !!assistsError}
+          helperText={assistsTouched && assistsError}
         />
       </Grid>
       <Grid item xs={12} sm={4} lg={2}>
         <TextField
+          {...yellowCardsField}
           variant="outlined"
           fullWidth
           id="yellowCards"
           label="Żółte kartki"
-          name="yellowCards"
           type="number"
           inputProps={{
             min: 0,
             max: 2,
           }}
-          value={yellowCards}
-          onChange={onChange}
+          error={yellowCardsTouched && !!yellowCardsError}
+          helperText={yellowCardsTouched && yellowCardsError}
         />
       </Grid>
       <Grid item xs={12} sm={4} lg={2}>
         <TextField
+          {...redCardsField}
           variant="outlined"
           fullWidth
           id="redCards"
           label="Czerwone kartki"
-          name="redCards"
           type="number"
           inputProps={{
             min: 0,
             max: 1,
           }}
-          value={redCards}
-          onChange={onChange}
+          error={redCardsTouched && !!redCardsError}
+          helperText={redCardsTouched && redCardsError}
         />
       </Grid>
     </Grid>

@@ -1,4 +1,4 @@
-import { Location, Address, Voivodeship } from './common';
+import { Location, Address } from './common';
 
 export type UserRole = 'admin' | 'playmaker-scout' | 'scout';
 
@@ -22,42 +22,19 @@ export type LoginFormData = {
   password: string;
 };
 
-type CommonFormData = {
+export type RegisterFormData = {
   firstName: string;
   lastName: string;
   email: string;
-  phone?: string;
+  phone: string;
+  address: Address;
   activeRadius: number;
   password: string;
   passwordConfirm: string;
 };
 
-export type RegisterFormData = {
-  street: string;
-  streetNo: string;
-  zipCode: string;
-  city: string;
-  voivodeship: Voivodeship | '';
-  country: string;
-} & CommonFormData;
-
-export type FormattedRegisterFormData = {
-  address: Address;
-} & CommonFormData;
-
 export type EditAccountData = {
-  phone?: string;
-  activeRadius: number;
-  street: string;
-  streetNo: string;
-  zipCode: string;
-  city: string;
-  voivodeship: Voivodeship | '';
-  country: string;
-};
-
-export type FormattedEditAccountData = {
-  phone?: string;
+  phone: string;
   activeRadius: number;
   address: Address;
 };
@@ -74,28 +51,35 @@ export type State = {
   isAuthenticated: boolean | null;
   loading: boolean;
   error: string | null;
+  message: string | null;
   setLoading: () => void;
+  clearErrors: () => void;
+  clearMessage: () => void;
   loadUser: () => void;
   login: (formData: LoginFormData) => void;
-  register: (formData: FormattedRegisterFormData) => void;
+  register: (formData: RegisterFormData) => void;
   logout: () => void;
-  editDetails: (formData: FormattedEditAccountData) => void;
+  editDetails: (formData: EditAccountData) => void;
   updatePassword: (formData: UpdatePasswordData) => void;
   addClubToFavorites: (id: string) => void;
   removeClubFromFavorites: (id: string) => void;
 };
 
 export type Action =
-  | { type: 'REGISTER_SUCCESS'; payload: string }
+  | { type: 'REGISTER_SUCCESS'; payload: { token: string; message: string } }
   | { type: 'USER_LOADED'; payload: User }
   | { type: 'AUTH_ERROR'; payload: string }
-  | { type: 'LOGIN_SUCCESS'; payload: string }
+  | { type: 'LOGIN_SUCCESS'; payload: { token: string; message: string } }
   | { type: 'LOGOUT' }
   | { type: 'CLEAR_ERRORS' }
+  | { type: 'CLEAR_MESSAGE' }
   | { type: 'SET_LOADING' }
-  | { type: 'EDIT_SUCCESS' }
+  | { type: 'EDIT_SUCCESS'; payload: { user: User; message: string } }
   | { type: 'EDIT_ERROR'; payload: string }
-  | { type: 'UPDATE_PASSWORD_SUCCESS'; payload: string }
-  | { type: 'ADD_CLUB_TO_FAVORITES_SUCCESS' }
-  | { type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS' }
+  | {
+      type: 'UPDATE_PASSWORD_SUCCESS';
+      payload: { token: string; message: string };
+    }
+  | { type: 'ADD_CLUB_TO_FAVORITES_SUCCESS'; payload: string }
+  | { type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS'; payload: string }
   | { type: 'CLUBS_ERROR'; payload: string };

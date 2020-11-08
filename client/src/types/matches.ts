@@ -48,7 +48,10 @@ export type State = {
   current: Match | null;
   loading: boolean;
   error: string | null;
+  message: string | null;
   setLoading: () => void;
+  clearErrors: () => void;
+  clearMessage: () => void;
   getMatches: GetMatches;
   getMatch: (id: string) => void;
   addMatch: (match: MatchesFormData) => void;
@@ -61,9 +64,11 @@ export type Action =
   | { type: 'SET_LOADING' }
   | { type: 'SET_CURRENT'; payload: Match }
   | { type: 'CLEAR_CURRENT' }
+  | { type: 'CLEAR_ERRORS' }
+  | { type: 'CLEAR_MESSAGE' }
   | { type: 'MATCHES_ERROR'; payload: string }
   | { type: 'GET_MATCHES_SUCCESS'; payload: MatchesData }
   | { type: 'GET_MATCH_SUCCESS'; payload: Match }
-  | { type: 'CREATE_MATCH_SUCCESS' }
-  | { type: 'UPDATE_MATCH_SUCCESS' }
+  | { type: 'CREATE_MATCH_SUCCESS'; payload: { match: Match; message: string } }
+  | { type: 'UPDATE_MATCH_SUCCESS'; payload: { match: Match; message: string } }
   | { type: 'DELETE_MATCH_SUCCESS'; payload: string };

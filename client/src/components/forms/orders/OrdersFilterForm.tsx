@@ -1,4 +1,5 @@
-import React, { SyntheticEvent, Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
+import { Formik, Form, Field } from 'formik';
 // MUI components
 import { TextField, Grid, FormControl } from '@material-ui/core';
 // Custom components
@@ -7,8 +8,6 @@ import { FilterFormActions } from '../actions';
 // Types
 import { OrdersFilterData } from '../../../types/orders';
 import { PlayerData } from '../../../types/simplifiedData';
-// Hooks
-import { useForm } from '../../../hooks';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../../utils';
 // Styles
@@ -19,7 +18,7 @@ type FilterFormProps = {
   setFilters: Dispatch<SetStateAction<OrdersFilterData>>;
 };
 
-const initialState: OrdersFilterData = {
+const initialFilters: OrdersFilterData = {
   player: '',
   status: 'open',
   createdAfter: formatDateObject(yearFromNow),
@@ -31,68 +30,60 @@ export const OrdersFilterForm = ({
   setFilters,
 }: FilterFormProps) => {
   const classes = useStyles();
-  const [formData, onInputChange, setFormData] = useForm(initialState);
-
-  const { player, status, createdAfter, createdBefore } = formData;
-
-  const handleClearFilter = () => {
-    setFormData(initialState);
-    setFilters(initialState);
-  };
-
-  const handleSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setFilters(formData);
-  };
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit}>
-      <Grid container justify="center" alignItems="center">
-        <Grid item xs={12} sm={6} lg={3} className={classes.input}>
-          <FormControl variant="outlined" size="small" fullWidth>
-            <PlayersCombo
-              id="player"
-              label="Zawodnik"
-              playersData={playersData}
-              setFormData={setFormData}
-              value={player}
-              size="small"
+    <Formik
+      initialValues={initialFilters}
+      onSubmit={(data) => setFilters(data)}
+    >
+      {({ handleReset, initialValues }) => (
+        <Form autoComplete="off">
+          <Grid container justify="center" alignItems="center">
+            <Grid item xs={12} sm={6} lg={3} className={classes.input}>
+              <FormControl variant="outlined" size="small" fullWidth>
+                <PlayersCombo
+                  playersData={playersData}
+                  label="Zawodnik"
+                  size="small"
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3} className={classes.input}>
+              <OrderStatusSelect size="small" />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3} className={classes.input}>
+              <Field
+                name="createdAfter"
+                as={TextField}
+                type="date"
+                variant="outlined"
+                fullWidth
+                label="Utworzone po"
+                id="createdAfter"
+                size="small"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3} className={classes.input}>
+              <Field
+                name="createdBefore"
+                as={TextField}
+                type="date"
+                variant="outlined"
+                fullWidth
+                label="Utworzone przed"
+                id="createdBefore"
+                size="small"
+              />
+            </Grid>
+            <FilterFormActions
+              handleClearFilter={() => {
+                handleReset();
+                setFilters(initialValues);
+              }}
             />
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6} lg={3} className={classes.input}>
-          <FormControl variant="outlined" size="small" fullWidth>
-            <OrderStatusSelect onChange={onInputChange} value={status} />
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6} lg={3} className={classes.input}>
-          <TextField
-            type="date"
-            variant="outlined"
-            fullWidth
-            label="Utworzone po"
-            id="createdAfter"
-            name="createdAfter"
-            size="small"
-            value={createdAfter}
-            onChange={onInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={3} className={classes.input}>
-          <TextField
-            type="date"
-            variant="outlined"
-            fullWidth
-            label="Utworzone przed"
-            id="createdBefore"
-            name="createdBefore"
-            size="small"
-            value={createdBefore}
-            onChange={onInputChange}
-          />
-        </Grid>
-        <FilterFormActions handleClearFilter={handleClearFilter} />
-      </Grid>
-    </form>
+          </Grid>
+        </Form>
+      )}
+    </Formik>
   );
 };

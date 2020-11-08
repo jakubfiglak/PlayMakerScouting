@@ -1,38 +1,34 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { useField } from 'formik';
 // MUI components
 import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 // Types
 import { ClubData } from '../../../types/simplifiedData';
 
-type ClubsComboProps = {
+type Props = {
   clubsData: ClubData[];
-  setFormData: Dispatch<SetStateAction<any>>;
-  value: string;
-  id: string;
+  name: string;
   label: string;
   size?: 'medium' | 'small';
 };
 
-export const ClubsCombo = ({
-  clubsData,
-  value,
-  setFormData,
-  id,
-  label,
-  size,
-}: ClubsComboProps) => {
+export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
+  const [field, fieldMeta, fieldHelpers] = useField(name);
+
+  const { value } = field;
+  const { error, touched } = fieldMeta;
+  const { setValue } = fieldHelpers;
+
   return (
     <Autocomplete
-      id={id}
-      onChange={(_: any, newValue: string | null) => {
-        setFormData((prevData: any) => ({
-          ...prevData,
-          [id]: newValue,
-        }));
+      id={name}
+      {...field}
+      onChange={(_, newValue: string | null) => {
+        setValue(newValue);
       }}
       value={value}
-      options={clubsData.map((club) => club._id)}
+      options={['', ...clubsData.map((club) => club._id)]}
       getOptionLabel={(option) => {
         const club = clubsData.find((c) => c._id === option);
         if (club) {
@@ -41,7 +37,13 @@ export const ClubsCombo = ({
         return '';
       }}
       renderInput={(params) => (
-        <TextField {...params} label={label} variant="outlined" name={id} />
+        <TextField
+          {...params}
+          label={label}
+          variant="outlined"
+          error={touched && !!error}
+          helperText={touched && error}
+        />
       )}
       size={size}
     />

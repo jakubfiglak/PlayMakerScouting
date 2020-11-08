@@ -11,10 +11,12 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Custom components
 import { FinalRatingChip } from './FinalRatingChip';
+// Types
+import { RatingScore } from '../../types/reports';
 
 type ReportSummaryAccordionProps = {
   summary: string;
-  finalRating: 1 | 2 | 3 | 4;
+  finalRating: RatingScore;
   individualAvg: number;
   teamplayAvg: number;
   avgRating: number;

@@ -19,14 +19,17 @@ export const PlayersState: React.FC = ({ children }) => {
     playerMatches: [],
     loading: false,
     error: null,
+    message: null,
     setLoading: () => null,
+    clearErrors: () => null,
+    clearMessage: () => null,
     getPlayers: () => null,
     getPlayer: () => null,
     getPlayerMatches: () => null,
     addPlayer: () => null,
+    editPlayer: () => null,
     setCurrent: () => null,
     clearCurrent: () => null,
-    editPlayer: () => null,
   };
 
   const [state, dispatch] = useReducer(playersReducer, initialState);
@@ -116,9 +119,10 @@ export const PlayersState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.post('/api/v1/players', player);
+      const res = await axiosJson.post('/api/v1/players', player);
       dispatch({
         type: 'CREATE_PLAYER_SUCCESS',
+        payload: { player: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -144,13 +148,14 @@ export const PlayersState: React.FC = ({ children }) => {
   };
 
   // Update player details
-  const editPlayer = async (player: PlayersFormData) => {
+  const editPlayer = async (id: string, data: PlayersFormData) => {
     setLoading();
 
     try {
-      await axiosJson.put(`/api/v1/players/${player._id}`, player);
+      const res = await axiosJson.put(`/api/v1/players/${id}`, data);
       dispatch({
         type: 'UPDATE_PLAYER_SUCCESS',
+        payload: { player: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -160,6 +165,18 @@ export const PlayersState: React.FC = ({ children }) => {
     }
   };
 
+  // Clear errors
+  const clearErrors = () =>
+    dispatch({
+      type: 'CLEAR_ERRORS',
+    });
+
+  // Clear message
+  const clearMessage = () =>
+    dispatch({
+      type: 'CLEAR_MESSAGE',
+    });
+
   const {
     playersData,
     playerData,
@@ -167,6 +184,7 @@ export const PlayersState: React.FC = ({ children }) => {
     current,
     loading,
     error,
+    message,
   } = state;
 
   return (
@@ -178,7 +196,10 @@ export const PlayersState: React.FC = ({ children }) => {
         current,
         loading,
         error,
+        message,
         setLoading,
+        clearErrors,
+        clearMessage,
         getPlayers,
         getPlayer,
         getPlayerMatches,

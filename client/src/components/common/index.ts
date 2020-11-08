@@ -1,5 +1,6 @@
 export { Loader } from './Loader/Loader';
 export { Modal } from './Modal/Modal';
+export { Alerts } from './Alerts/Alerts';
 
 export { StyledTableCell } from './Table/TableCell';
 export { StyledTableRow } from './Table/TableRow';

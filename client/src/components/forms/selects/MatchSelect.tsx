@@ -1,34 +1,36 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { Select, MenuItem, InputLabel, SelectProps } from '@material-ui/core';
+import {
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+} from '@material-ui/core';
 // Types
 import { Match } from '../../../types/matches';
 // Utils & data
 import { formatDate } from '../../../utils';
 
-type MatchSelectProps = {
+type Props = {
   matchesData: Match[];
-} & SelectProps;
+  name: string;
+};
 
-export const MatchSelect = ({
-  matchesData,
-  onChange,
-  value,
-  required,
-  id,
-  label,
-}: MatchSelectProps) => {
+export const MatchSelect = ({ matchesData, name }: Props) => {
+  const [field, meta] = useField(name);
+
+  const { error, touched } = meta;
+
   return (
-    <>
-      <InputLabel id={id || 'match'}>{label || 'Mecz'}</InputLabel>
+    <FormControl variant="outlined" fullWidth>
+      <InputLabel id="match">Mecz</InputLabel>
       <Select
-        labelId={id || 'match'}
-        id={id || 'match'}
-        label={label || 'Mecz'}
-        name={id || 'match'}
-        onChange={onChange}
-        value={value}
-        required={required}
+        {...field}
+        labelId="match"
+        label="Mecz"
+        error={touched && !!error}
       >
         {matchesData.map((matchData) => {
           const { _id, homeTeam, awayTeam, date } = matchData;
@@ -43,6 +45,7 @@ export const MatchSelect = ({
           );
         })}
       </Select>
-    </>
+      {touched && error && <FormHelperText>{error}</FormHelperText>}
+    </FormControl>
   );
 };

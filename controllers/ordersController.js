@@ -19,7 +19,11 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const order = await Order.create(req.body);
+  let order = await Order.create(req.body);
+
+  order = await order
+    .populate({ path: 'player', select: 'firstName lastName' })
+    .execPopulate();
 
   res.status(201).json({
     success: true,
@@ -39,7 +43,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
 
   const options = {
     sort: req.query.sort || '-createdAt',
-    limit: req.query.limit || 20,
+    limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate: [
       { path: 'player', select: ['firstName', 'lastName'] },
@@ -78,7 +82,7 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
 
   const options = {
     sort: req.query.sort || '-createdAt',
-    limit: req.query.limit || 20,
+    limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate: [
       { path: 'player', select: ['firstName', 'lastName'] },
@@ -96,6 +100,31 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
 
   return res.status(200).json({
     success: true,
+    data: orders,
+  });
+});
+
+// @desc Get my orders list with the status of "open"
+// @route GET /api/v1/orders/mylist
+// @access Private (admin and playmaker-scout-only)
+exports.getMyList = asyncHandler(async (req, res) => {
+  const orders = await Order.find({
+    scout: req.user._id,
+    status: 'accepted',
+  })
+    .select('player club docNumber')
+    .populate({
+      path: 'player',
+      select: 'firstName lastName club',
+      populate: {
+        path: 'club',
+        select: 'name',
+      },
+    });
+
+  res.status(200).json({
+    success: true,
+    count: orders.length,
     data: orders,
   });
 });
@@ -147,7 +176,7 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 exports.acceptOrder = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const order = await Order.findById(id);
+  let order = await Order.findById(id);
 
   if (!order) {
     return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
@@ -172,8 +201,10 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
   }
 
   // Grant user with an access to a player when order is accepted
+  // And add players club to users favorites
   if (req.user.role !== 'admin') {
     const user = await User.findById(req.user._id);
+    const player = await Player.findById(order.player);
 
     if (!user) {
       return next(
@@ -181,8 +212,19 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
       );
     }
 
+    if (!player) {
+      return next(
+        new ErrorResponse(`Player not found with id of ${order.player}`, 404)
+      );
+    }
+
     if (!user.myPlayers.includes(order.player)) {
       user.myPlayers.push(order.player);
+      await user.save();
+    }
+
+    if (!user.myClubs.includes(player.club)) {
+      user.myClubs.push(player.club);
       await user.save();
     }
   }
@@ -192,6 +234,13 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
   order.acceptDate = Date.now();
 
   await order.save();
+
+  order = await order
+    .populate([
+      { path: 'player', select: 'firstName lastName' },
+      { path: 'scout', select: 'firstName lastName' },
+    ])
+    .execPopulate();
 
   res.status(200).json({
     success: true,
@@ -206,7 +255,7 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
 exports.closeOrder = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const order = await Order.findById(id);
+  let order = await Order.findById(id);
 
   if (!order) {
     return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
@@ -234,6 +283,13 @@ exports.closeOrder = asyncHandler(async (req, res, next) => {
   order.closeDate = Date.now();
 
   await order.save();
+
+  order = await order
+    .populate([
+      { path: 'player', select: 'firstName lastName' },
+      { path: 'scout', select: 'firstName lastName' },
+    ])
+    .execPopulate();
 
   res.status(200).json({
     success: true,

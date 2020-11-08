@@ -4,13 +4,12 @@ import { Button } from '@material-ui/core';
 // Styles
 import { useStyles } from '../styles';
 
-type StepActionsProps = {
+type Props = {
   activeStep: number;
   steps: string[];
   handleBack: () => void;
   handleNext: () => void;
-  player: string;
-  match: string;
+  isNextButtonDisabled: boolean;
 };
 
 export const StepActions = ({
@@ -18,9 +17,8 @@ export const StepActions = ({
   steps,
   handleBack,
   handleNext,
-  player,
-  match,
-}: StepActionsProps) => {
+  isNextButtonDisabled,
+}: Props) => {
   const classes = useStyles();
 
   return (
@@ -38,9 +36,7 @@ export const StepActions = ({
           color="primary"
           onClick={handleNext}
           className={classes.button}
-          disabled={
-            (activeStep === 1 && !player) || (activeStep === 2 && !match)
-          }
+          disabled={isNextButtonDisabled}
         >
           {activeStep === steps.length - 1 ? 'Zapisz' : 'Dalej'}
         </Button>

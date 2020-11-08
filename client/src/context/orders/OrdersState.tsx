@@ -13,12 +13,16 @@ export const OrdersState: React.FC = ({ children }) => {
     current: null,
     loading: false,
     error: null,
+    message: null,
     setLoading: () => null,
+    clearErrors: () => null,
+    clearMessage: () => null,
     getOrders: () => null,
     getMyOrders: () => null,
     acceptOrder: () => null,
     getOrder: () => null,
     deleteOrder: () => null,
+    closeOrder: () => null,
     addOrder: () => null,
   };
 
@@ -32,12 +36,12 @@ export const OrdersState: React.FC = ({ children }) => {
   };
 
   // Get orders
-  const getOrders = async (filters: OrdersFilterData) => {
+  const getOrders = async (filters: OrdersFilterData, page = 1) => {
     setLoading();
 
     const { player, status, createdAfter, createdBefore } = filters;
 
-    let ordersURI = `/api/v1/orders?sort=-createdAt&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
+    let ordersURI = `/api/v1/orders?page=${page}&sort=-createdAt&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
 
     if (player) {
       ordersURI = ordersURI.concat(`&player=${player}`);
@@ -80,15 +84,15 @@ export const OrdersState: React.FC = ({ children }) => {
   };
 
   // Accept order
-  const acceptOrder = async (id: string, filters: OrdersFilterData) => {
+  const acceptOrder = async (id: string) => {
     setLoading();
 
     try {
-      await axiosJson.post(`/api/v1/orders/${id}/accept`);
+      const res = await axiosJson.post(`/api/v1/orders/${id}/accept`);
       dispatch({
         type: 'ACCEPT_ORDER_SUCCESS',
+        payload: { order: res.data.data, message: res.data.message },
       });
-      getOrders(filters);
     } catch (err) {
       dispatch({
         type: 'ORDERS_ERROR',
@@ -120,9 +124,10 @@ export const OrdersState: React.FC = ({ children }) => {
     setLoading();
 
     try {
-      await axiosJson.post('/api/v1/orders', order);
+      const res = await axiosJson.post('/api/v1/orders', order);
       dispatch({
         type: 'CREATE_ORDER_SUCCESS',
+        payload: { order: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -136,10 +141,10 @@ export const OrdersState: React.FC = ({ children }) => {
   const deleteOrder = async (id: string) => {
     setLoading();
     try {
-      await axiosJson.delete(`/api/v1/orders/${id}`);
+      const res = await axiosJson.delete(`/api/v1/orders/${id}`);
       dispatch({
         type: 'DELETE_ORDER_SUCCESS',
-        payload: id,
+        payload: { id, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -149,6 +154,35 @@ export const OrdersState: React.FC = ({ children }) => {
     }
   };
 
+  // Close order
+  const closeOrder = async (id: string) => {
+    setLoading();
+    try {
+      const res = await axiosJson.post(`/api/v1/orders/${id}/close`);
+      dispatch({
+        type: 'CLOSE_ORDER_SUCCESS',
+        payload: { order: res.data.data, message: res.data.message },
+      });
+    } catch (err) {
+      dispatch({
+        type: 'ORDERS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Clear errors
+  const clearErrors = () =>
+    dispatch({
+      type: 'CLEAR_ERRORS',
+    });
+
+  // Clear message
+  const clearMessage = () =>
+    dispatch({
+      type: 'CLEAR_MESSAGE',
+    });
+
   const {
     ordersData,
     myOrdersData,
@@ -156,6 +190,7 @@ export const OrdersState: React.FC = ({ children }) => {
     current,
     loading,
     error,
+    message,
   } = state;
 
   return (
@@ -167,6 +202,7 @@ export const OrdersState: React.FC = ({ children }) => {
         current,
         loading,
         error,
+        message,
         setLoading,
         getOrders,
         getMyOrders,
@@ -174,6 +210,9 @@ export const OrdersState: React.FC = ({ children }) => {
         getOrder,
         deleteOrder,
         addOrder,
+        closeOrder,
+        clearErrors,
+        clearMessage,
       }}
     >
       {children}

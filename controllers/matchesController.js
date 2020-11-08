@@ -27,7 +27,14 @@ exports.createMatch = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const match = await Match.create(req.body);
+  let match = await Match.create(req.body);
+
+  match = await match
+    .populate([
+      { path: 'homeTeam', select: 'name' },
+      { path: 'awayTeam', select: 'name' },
+    ])
+    .execPopulate();
 
   res.status(201).json({
     success: true,
@@ -45,19 +52,35 @@ exports.getMatches = asyncHandler(async (req, res) => {
   const { clubId } = req.params;
   const { playerId } = req.params;
 
+  const populate = [
+    {
+      path: 'homeTeam',
+      select: 'name',
+    },
+    { path: 'awayTeam', select: 'name' },
+  ];
+
+  if (playerId) {
+    const player = await Player.findById(playerId);
+    const { club } = player;
+
+    const matches = await Match.find({
+      $or: [{ homeTeam: club }, { awayTeam: club }],
+    }).populate(populate);
+
+    return res.status(200).json({
+      success: true,
+      data: matches,
+    });
+  }
+
   const reqQuery = prepareQuery(req.query);
 
   const options = {
     sort: req.query.sort || '_id',
     limit: req.query.limit || 20,
     page: req.query.page || 1,
-    populate: [
-      {
-        path: 'homeTeam',
-        select: 'name',
-      },
-      { path: 'awayTeam', select: 'name' },
-    ],
+    populate,
   };
 
   if (clubId) {
@@ -68,24 +91,7 @@ exports.getMatches = asyncHandler(async (req, res) => {
 
     const matches = await Match.paginate(query, options);
 
-    res.status(200).json({
-      success: true,
-      data: matches,
-    });
-  }
-
-  if (playerId) {
-    const player = await Player.findById(playerId);
-    const { club } = player;
-
-    const query = {
-      $or: [{ homeTeam: club }, { awayTeam: club }],
-      ...reqQuery,
-    };
-
-    const matches = await Match.paginate(query, options);
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: matches,
     });
@@ -137,10 +143,16 @@ exports.updateMatch = asyncHandler(async (req, res, next) => {
   match = await Match.findByIdAndUpdate(id, req.body, {
     new: true,
     runValidators: true,
-  });
+  })
+    .populate([
+      { path: 'homeTeam', select: 'name' },
+      { path: 'awayTeam', select: 'name' },
+    ])
+    .execPopulate();
 
   res.status(200).json({
     success: true,
+    message: `Match with the id of ${id} successfully updated!`,
     data: match,
   });
 });

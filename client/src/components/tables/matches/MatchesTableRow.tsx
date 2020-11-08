@@ -1,8 +1,4 @@
 import React from 'react';
-// MUI components
-import { IconButton, Tooltip } from '@material-ui/core';
-// MUI icons
-import EditIcon from '@material-ui/icons/Edit';
 // Custom components
 import { StyledTableRow, StyledTableCell } from '../../common';
 // Types
@@ -13,21 +9,13 @@ import { competitionLabels } from '../../../data';
 
 type TableRowProps = {
   match: Match;
-  handleSetCurrent: (match: Match) => void;
 };
 
-export const MatchesTableRow = ({ match, handleSetCurrent }: TableRowProps) => {
+export const MatchesTableRow = ({ match }: TableRowProps) => {
   const { homeTeam, awayTeam, date, competition } = match;
 
   return (
     <StyledTableRow>
-      <StyledTableCell>
-        <Tooltip title="Edytuj">
-          <IconButton aria-label="edit" onClick={() => handleSetCurrent(match)}>
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      </StyledTableCell>
       <StyledTableCell>{formatDate(date)}</StyledTableCell>
       <StyledTableCell>{homeTeam.name}</StyledTableCell>
       <StyledTableCell>{awayTeam.name}</StyledTableCell>

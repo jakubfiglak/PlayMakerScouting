@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 // MUI components
 import {
   AppBar,
@@ -15,12 +15,28 @@ import { TabPanel, Loader } from '../common';
 // Types
 import { Club, ClubsFilterData } from '../../types/clubs';
 // Hooks
-import { useTabs, useTable } from '../../hooks';
+import { useTabs, useTable, useAlert } from '../../hooks';
 import { useClubsState, useAuthState } from '../../context';
 
 export const ClubsContent = () => {
-  const clubsContext = useClubsState();
-  const authContext = useAuthState();
+  const {
+    loading,
+    getClubs,
+    clubsData,
+    myClubsData,
+    setCurrent,
+    error,
+    message,
+    clearErrors,
+    clearMessage,
+    addClubToFavorites,
+    removeClubFromFavorites,
+  } = useClubsState();
+
+  const {
+    addClubToFavorites: userAddClubToFavorites,
+    removeClubFromFavorites: userRemoveClubFromFavorites,
+  } = useAuthState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -33,20 +49,8 @@ export const ClubsContent = () => {
     handleSort,
   ] = useTable();
 
-  const {
-    loading,
-    getClubs,
-    clubsData,
-    myClubsData,
-    setCurrent,
-  } = clubsContext;
-
-  const {
-    loadUser,
-    loading: authLoading,
-    addClubToFavorites,
-    removeClubFromFavorites,
-  } = authContext;
+  useAlert(error, 'error', clearErrors);
+  useAlert(message, 'success', clearMessage);
 
   const [showMyClubs, setShowMyClubs] = useState(false);
 
@@ -56,7 +60,7 @@ export const ClubsContent = () => {
     voivodeship: '',
   });
 
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleCheckboxChange = () =>
     setShowMyClubs((prevShowMyClubs) => !prevShowMyClubs);
 
   const handleSetCurrent = (club: Club) => {
@@ -65,18 +69,32 @@ export const ClubsContent = () => {
   };
 
   useEffect(() => {
-    loadUser();
-    // get all clubs
-    getClubs(page + 1, rowsPerPage, sortBy, order, filters);
     // get my clubs
-    getClubs(page + 1, rowsPerPage, sortBy, order, filters, true);
-
+    if (showMyClubs) {
+      getClubs(page + 1, rowsPerPage, sortBy, order, filters, true);
+    } else {
+      // get all clubs
+      getClubs(page + 1, rowsPerPage, sortBy, order, filters);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, page, rowsPerPage, sortBy, order, filters, showMyClubs]);
+  }, [page, rowsPerPage, sortBy, order, filters, showMyClubs]);
+
+  const clubsToShow = showMyClubs ? myClubsData.docs : clubsData.docs;
+  const totalClubs = showMyClubs ? myClubsData.totalDocs : clubsData.totalDocs;
+
+  const handleAddToFavorites = (id: string) => {
+    addClubToFavorites(id);
+    userAddClubToFavorites(id);
+  };
+
+  const handleRemoveFromFavorites = (id: string) => {
+    removeClubFromFavorites(id);
+    userRemoveClubFromFavorites(id);
+  };
 
   return (
     <>
-      {(loading || authLoading) && <Loader />}
+      {loading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
           <Tab label="Baza klubów" id="clubs-0" aria-controls="clubs-0" />
@@ -106,11 +124,11 @@ export const ClubsContent = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          clubs={showMyClubs ? myClubsData.docs : clubsData.docs}
-          total={showMyClubs ? myClubsData.totalDocs : clubsData.totalDocs}
+          clubs={clubsToShow}
+          total={totalClubs}
           handleSetCurrent={handleSetCurrent}
-          addToFavorites={addClubToFavorites}
-          removeFromFavorites={removeClubFromFavorites}
+          addToFavorites={handleAddToFavorites}
+          removeFromFavorites={handleRemoveFromFavorites}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">

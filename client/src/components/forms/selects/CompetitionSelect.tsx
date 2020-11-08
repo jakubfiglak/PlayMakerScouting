@@ -1,25 +1,34 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { InputLabel, Select, MenuItem, SelectProps } from '@material-ui/core';
+import {
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+  FormControl,
+} from '@material-ui/core';
 // Data & utis
 import { competitions } from '../../../data';
 
-export const CompetitionSelect = ({
-  onChange,
-  value,
-  required,
-}: SelectProps) => {
+type Props = {
+  size?: 'small' | 'medium';
+};
+
+export const CompetitionSelect = ({ size }: Props) => {
+  const [field, meta] = useField('competition');
+
+  const { error, touched } = meta;
+
   return (
-    <>
+    <FormControl variant="outlined" fullWidth size={size}>
       <InputLabel id="competition">Rodzaj rozgrywek</InputLabel>
       <Select
+        {...field}
         labelId="competition"
         id="competition"
-        label="Poziom rozgrywkowy"
-        name="competition"
-        onChange={onChange}
-        value={value}
-        required={required}
+        label="Rodzaj rozgrywek"
+        error={touched && !!error}
       >
         <MenuItem value="">
           <em>None</em>
@@ -32,6 +41,7 @@ export const CompetitionSelect = ({
           );
         })}
       </Select>
-    </>
+      {touched && error && <FormHelperText>{error}</FormHelperText>}
+    </FormControl>
   );
 };

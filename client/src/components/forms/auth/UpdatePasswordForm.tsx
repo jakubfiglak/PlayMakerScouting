@@ -1,74 +1,68 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
+import { useFormik } from 'formik';
+// MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
-import { useStyles } from './styles';
-import { useForm } from '../../../hooks';
-import { useAuthState } from '../../../context';
+// Types
 import { UpdatePasswordData } from '../../../types/auth';
-
-const initialState: UpdatePasswordData = {
-  oldPassword: '',
-  newPassword: '',
-  newPasswordConfirm: '',
-};
+// Hooks
+import { useAuthState } from '../../../context';
+// Styles
+import { useStyles } from './styles';
+// Utils & data
+import { updatePasswordInitialValues } from '../initialValues';
+import { updatePasswordValidationSchema } from '../validationSchemas';
 
 export const UpdatePasswordForm = () => {
   const classes = useStyles();
-  const authContext = useAuthState();
+  const { loading, updatePassword } = useAuthState();
 
-  const { loading, updatePassword } = authContext;
+  const formik = useFormik<UpdatePasswordData>({
+    initialValues: updatePasswordInitialValues,
+    validationSchema: updatePasswordValidationSchema,
+    onSubmit: (values) => {
+      updatePassword(values);
+    },
+  });
 
-  const [updatePasswordData, onInputChange, setPasswordData] = useForm(
-    initialState,
-  );
-
-  const { oldPassword, newPassword, newPasswordConfirm } = updatePasswordData;
-
-  const onSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    updatePassword(updatePasswordData);
-    setPasswordData(initialState);
-  };
+  const { handleSubmit, errors, touched, getFieldProps } = formik;
 
   return (
-    <form className={classes.form} onSubmit={onSubmit}>
+    <form className={classes.form} onSubmit={handleSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
             variant="outlined"
-            required
             fullWidth
-            name="oldPassword"
             label="Bieżące hasło"
             type="password"
             id="oldPassword"
-            onChange={onInputChange}
-            value={oldPassword}
+            {...getFieldProps('oldPassword')}
+            error={touched.oldPassword && !!errors.oldPassword}
+            helperText={touched.oldPassword && errors.oldPassword}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             variant="outlined"
-            required
             fullWidth
-            name="newPassword"
             label="Nowe hasło"
             type="password"
             id="newPassword"
-            onChange={onInputChange}
-            value={newPassword}
+            {...getFieldProps('newPassword')}
+            error={touched.newPassword && !!errors.newPassword}
+            helperText={touched.newPassword && errors.newPassword}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             variant="outlined"
-            required
             fullWidth
-            name="newPasswordConfirm"
             label="Potwierdź nowe hasło"
             type="password"
             id="newPasswordConfirm"
-            onChange={onInputChange}
-            value={newPasswordConfirm}
+            {...getFieldProps('newPasswordConfirm')}
+            error={touched.newPasswordConfirm && !!errors.newPasswordConfirm}
+            helperText={touched.newPasswordConfirm && errors.newPasswordConfirm}
           />
         </Grid>
       </Grid>

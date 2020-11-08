@@ -5,8 +5,8 @@ import authReducer from './authReducer';
 import {
   State,
   LoginFormData,
-  FormattedRegisterFormData,
-  FormattedEditAccountData,
+  RegisterFormData,
+  EditAccountData,
   UpdatePasswordData,
 } from '../../types/auth';
 
@@ -17,7 +17,10 @@ export const AuthState: React.FC = ({ children }) => {
     isAuthenticated: null,
     loading: false,
     error: null,
+    message: null,
     setLoading: () => null,
+    clearErrors: () => null,
+    clearMessage: () => null,
     loadUser: () => null,
     login: () => null,
     register: () => null,
@@ -58,7 +61,7 @@ export const AuthState: React.FC = ({ children }) => {
   };
 
   // Register user
-  const register = async (formData: FormattedRegisterFormData) => {
+  const register = async (formData: RegisterFormData) => {
     setLoading();
 
     try {
@@ -66,7 +69,7 @@ export const AuthState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'REGISTER_SUCCESS',
-        payload: res.data.token,
+        payload: { token: res.data.token, message: res.data.message },
       });
 
       loadUser();
@@ -87,7 +90,7 @@ export const AuthState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'LOGIN_SUCCESS',
-        payload: res.data.token,
+        payload: { token: res.data.token, message: res.data.message },
       });
 
       loadUser();
@@ -108,7 +111,7 @@ export const AuthState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'UPDATE_PASSWORD_SUCCESS',
-        payload: res.data.token,
+        payload: { token: res.data.token, message: res.data.message },
       });
 
       loadUser();
@@ -128,17 +131,16 @@ export const AuthState: React.FC = ({ children }) => {
   };
 
   // Edit details
-  const editDetails = async (formData: FormattedEditAccountData) => {
+  const editDetails = async (formData: EditAccountData) => {
     setLoading();
 
     try {
-      await axiosJson.put('/api/v1/auth/updatedetails', formData);
+      const res = await axiosJson.put('/api/v1/auth/updatedetails', formData);
 
       dispatch({
         type: 'EDIT_SUCCESS',
+        payload: { user: res.data.data, message: res.data.message },
       });
-
-      loadUser();
     } catch (err) {
       dispatch({
         type: 'EDIT_ERROR',
@@ -149,43 +151,33 @@ export const AuthState: React.FC = ({ children }) => {
 
   // Add club to favorites
   const addClubToFavorites = async (id: string) => {
-    setLoading();
-
-    try {
-      await axiosJson.post(`/api/v1/clubs/${id}/addtofavorites`);
-      dispatch({
-        type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
-      });
-      loadUser();
-    } catch (err) {
-      dispatch({
-        type: 'CLUBS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
+    dispatch({
+      type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
+      payload: id,
+    });
   };
 
   // Remove club from favorites
   const removeClubFromFavorites = async (id: string) => {
-    setLoading();
-
-    try {
-      await axiosJson.post(`/api/v1/clubs/${id}/removefromfavorites`);
-      dispatch({
-        type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
-      });
-      loadUser();
-    } catch (err) {
-      dispatch({
-        type: 'CLUBS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
+    dispatch({
+      type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
+      payload: id,
+    });
   };
 
   // Clear errors
+  const clearErrors = () =>
+    dispatch({
+      type: 'CLEAR_ERRORS',
+    });
 
-  const { user, token, isAuthenticated, loading, error } = state;
+  // Clear message
+  const clearMessage = () =>
+    dispatch({
+      type: 'CLEAR_MESSAGE',
+    });
+
+  const { user, token, isAuthenticated, loading, error, message } = state;
 
   return (
     <AuthContext.Provider
@@ -195,7 +187,10 @@ export const AuthState: React.FC = ({ children }) => {
         isAuthenticated,
         loading,
         error,
+        message,
         setLoading,
+        clearErrors,
+        clearMessage,
         loadUser,
         login,
         logout,

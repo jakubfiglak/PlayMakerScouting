@@ -1,19 +1,31 @@
 import React from 'react';
+// MUI components
 import { TableHead, TableSortLabel } from '@material-ui/core';
+// Custom components
 import { StyledTableRow } from './TableRow';
 import { StyledTableCell } from './TableCell';
-import { TableHeaderProps } from './types';
+// Types
+import { Order } from '../../../types/common';
+
+type Props = {
+  headCells: { id: string; label: string }[];
+  sortBy: string;
+  order: Order;
+  handleSort: (id: string) => void;
+  actions?: boolean;
+};
 
 export const TableHeader = ({
   headCells,
   sortBy,
   order,
   handleSort,
-}: TableHeaderProps) => {
+  actions,
+}: Props) => {
   return (
     <TableHead>
       <StyledTableRow>
-        <StyledTableCell />
+        {actions && <StyledTableCell />}
         {headCells.map((headCell) => (
           <StyledTableCell key={headCell.id}>
             <TableSortLabel

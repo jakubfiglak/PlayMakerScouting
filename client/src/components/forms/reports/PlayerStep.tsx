@@ -1,95 +1,29 @@
-import React, { useEffect, Dispatch, SetStateAction } from 'react';
+import React from 'react';
 // MUI components
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectProps,
-  Typography,
-} from '@material-ui/core';
+import { FormControl, Typography } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../selects';
-import { Loader } from '../../common';
 // Types
-import { Report } from '../../../types/reports';
-// Hooks
-import { useSimplifiedDataState, useOrdersState } from '../../../context';
+import { PlayerData } from '../../../types/simplifiedData';
 
-type PlayerStepProps = {
-  order?: string;
-  current: Report | null;
-  setFormData: Dispatch<SetStateAction<any>>;
-} & SelectProps;
+type Props = {
+  playersData: PlayerData[];
+};
 
-export const PlayerStep = ({
-  order,
-  value,
-  onChange,
-  current,
-  setFormData,
-}: PlayerStepProps) => {
-  const ordersContext = useOrdersState();
-  const simplifiedDataContext = useSimplifiedDataState();
-
-  const { loading, getOrder, orderData } = ordersContext;
-  const {
-    loading: simpleDataLoading,
-    getPlayers,
-    playersData,
-  } = simplifiedDataContext;
-
-  useEffect(() => {
-    if (!current) {
-      if (order) {
-        getOrder(order);
-      } else {
-        getPlayers();
-      }
-    }
-  }, []);
-
-  if (current) {
-    const {
-      player: { lastName, firstName },
-    } = current;
-
+export const PlayerStep = ({ playersData }: Props) => {
+  if (playersData.length === 0) {
     return (
       <Typography>
-        {lastName}, {firstName}
+        Nie masz dostępu do żadnego zawodnika w bazie. Przyjmij do realizacji
+        jedno z otwartych zleceń lub stwórz zawodnika w zakładce{' '}
+        <strong>Zawodnicy</strong>
       </Typography>
     );
   }
+
   return (
-    <>
-      {(loading || simpleDataLoading) && <Loader />}
-      {order && orderData ? (
-        <FormControl variant="outlined" fullWidth>
-          <InputLabel id="player">Zawodnik</InputLabel>
-          <Select
-            labelId="player"
-            id="player"
-            label="Zawodnik"
-            name="player"
-            onChange={onChange}
-            value={value}
-          >
-            <MenuItem key={orderData.player._id} value={orderData.player._id}>
-              {`${orderData.player.lastName}, ${orderData.player.firstName}`}
-            </MenuItem>
-          </Select>
-        </FormControl>
-      ) : (
-        <FormControl variant="outlined" fullWidth>
-          <PlayersCombo
-            id="player"
-            label="Zawodnik"
-            playersData={playersData}
-            setFormData={setFormData}
-            value={value as string}
-          />
-        </FormControl>
-      )}
-    </>
+    <FormControl variant="outlined" fullWidth>
+      <PlayersCombo label="Zawodnik" playersData={playersData} />
+    </FormControl>
   );
 };

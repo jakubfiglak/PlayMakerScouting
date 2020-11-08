@@ -5,6 +5,30 @@ const Match = require('../models/Match');
 const Order = require('../models/Order');
 const ErrorResponse = require('../utils/errorResponse');
 const prepareQuery = require('../utils/prepareQuery');
+const getIndividualSkillsProps = require('../utils/getIndividualSkillsProps');
+
+const populate = [
+  {
+    path: 'player',
+    select: 'firstName lastName position',
+    populate: { path: 'club', select: 'name' },
+  },
+  {
+    path: 'scout',
+    select: 'firstName lastName',
+  },
+  {
+    path: 'order',
+    select: 'docNumber',
+  },
+  {
+    path: 'match',
+    populate: [
+      { path: 'homeTeam', select: 'name' },
+      { path: 'awayTeam', select: 'name' },
+    ],
+  },
+];
 
 // @desc Create new report
 // @route POST /api/v1/reports
@@ -12,17 +36,26 @@ const prepareQuery = require('../utils/prepareQuery');
 exports.createReport = asyncHandler(async (req, res, next) => {
   req.body.scout = req.user._id;
 
-  const playerId = req.body.player;
   const matchId = req.body.match;
   const orderId = req.body.order;
 
-  const player = await Player.findById(playerId);
   const match = await Match.findById(matchId);
   let order;
 
   if (orderId) {
     order = await Order.findById(orderId);
+  } else {
+    req.body.order = undefined;
   }
+
+  // If player is not provided and the report is generated based on the order,
+  // assign player ID from the order to req.body
+  if (!req.body.player && order) {
+    req.body.player = order.player;
+  }
+
+  const playerId = req.body.player;
+  const player = await Player.findById(playerId);
 
   if (!player) {
     return next(
@@ -58,14 +91,14 @@ exports.createReport = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Delete indivdualSkills field if the rating value is equal to 0
-  Object.entries(req.body.individualSkills).forEach(([key, value]) => {
-    if (value.rating === '0' || value.rating === 0) {
-      delete req.body.individualSkills[key];
-    }
-  });
+  req.body.individualSkills = getIndividualSkillsProps(
+    req.body.individualSkills,
+    player.position
+  );
 
-  const report = await Report.create(req.body);
+  let report = await Report.create(req.body);
+
+  report = await report.populate(populate).execPopulate();
 
   res.status(201).json({
     success: true,
@@ -84,29 +117,9 @@ exports.getReports = asyncHandler(async (req, res) => {
 
   const options = {
     sort: req.query.sort || '_id',
-    limit: req.query.limit || 20,
+    limit: req.query.limit || 10,
     page: req.query.page || 1,
-    populate: [
-      {
-        path: 'player',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'scout',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'order',
-        select: 'docNumber',
-      },
-      {
-        path: 'match',
-        populate: [
-          { path: 'homeTeam', select: 'name' },
-          { path: 'awayTeam', select: 'name' },
-        ],
-      },
-    ],
+    populate,
   };
 
   if (playerId) {
@@ -139,29 +152,9 @@ exports.getMyReports = asyncHandler(async (req, res) => {
 
   const options = {
     sort: req.query.sort || '_id',
-    limit: req.query.limit || 20,
+    limit: req.query.limit || 10,
     page: req.query.page || 1,
-    populate: [
-      {
-        path: 'player',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'scout',
-        select: 'firstName lastName',
-      },
-      {
-        path: 'order',
-        select: 'docNumber',
-      },
-      {
-        path: 'match',
-        populate: [
-          { path: 'homeTeam', select: 'name' },
-          { path: 'awayTeam', select: 'name' },
-        ],
-      },
-    ],
+    populate,
   };
 
   const query = {
@@ -183,27 +176,7 @@ exports.getMyReports = asyncHandler(async (req, res) => {
 exports.getReport = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const report = await Report.findById(id).populate([
-    {
-      path: 'player',
-      select: 'firstName lastName',
-    },
-    {
-      path: 'order',
-      select: 'docNumber',
-    },
-    {
-      path: 'match',
-      populate: [
-        { path: 'homeTeam', select: 'name' },
-        { path: 'awayTeam', select: 'name' },
-      ],
-    },
-    {
-      path: 'scout',
-      select: 'firstName lastName',
-    },
-  ]);
+  const report = await Report.findById(id).populate(populate);
 
   if (!report) {
     return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
@@ -233,7 +206,7 @@ exports.getReport = asyncHandler(async (req, res, next) => {
 exports.updateReport = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const report = await Report.findById(id);
+  let report = await Report.findById(id);
 
   if (!report) {
     return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
@@ -248,20 +221,29 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Delete indivdualSkills field if the rating value is equal to 0
-  Object.entries(req.body.individualSkills).forEach(([key, value]) => {
-    if (value.rating === '0' || value.rating === 0) {
-      delete req.body.individualSkills[key];
-    }
-  });
+  const player = await Player.findById(report.player);
+
+  if (!player) {
+    return next(
+      new ErrorResponse(`No player found with the id of ${report.player}`, 404)
+    );
+  }
+
+  req.body.individualSkills = getIndividualSkillsProps(
+    req.body.individualSkills,
+    player.position
+  );
 
   Object.keys(req.body).forEach((key) => (report[key] = req.body[key]));
 
   await report.save({ validateModifiedOnly: true });
 
+  report = await report.populate(populate).execPopulate();
+
   res.status(200).json({
     success: true,
     data: report,
+    message: `Report with the id of ${id} successfully updated!`,
   });
 });
 

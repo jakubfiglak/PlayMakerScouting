@@ -21,7 +21,7 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
-        current: action.payload,
+        reportData: action.payload,
       };
 
     case 'GET_MY_REPORTS_SUCCESS':
@@ -33,11 +33,43 @@ export default (state: State, action: Action): State => {
       };
 
     case 'CREATE_REPORT_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        message: action.payload.message,
+        reportsData: {
+          ...state.reportsData,
+          docs: [action.payload.report, ...state.reportsData.docs],
+        },
+        myReportsData: {
+          ...state.myReportsData,
+          docs: [action.payload.report, ...state.myReportsData.docs],
+        },
+      };
+
     case 'UPDATE_REPORT_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
+        message: action.payload.message,
+        reportsData: {
+          ...state.reportsData,
+          docs: state.reportsData.docs.map((report) =>
+            report._id === action.payload.report._id
+              ? action.payload.report
+              : report,
+          ),
+        },
+        myReportsData: {
+          ...state.myReportsData,
+          docs: state.myReportsData.docs.map((report) =>
+            report._id === action.payload.report._id
+              ? action.payload.report
+              : report,
+          ),
+        },
       };
 
     case 'DELETE_REPORT_SUCCESS':
@@ -45,6 +77,19 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
+        message: action.payload.message,
+        reportsData: {
+          ...state.reportsData,
+          docs: state.reportsData.docs.filter(
+            (report) => report._id !== action.payload.id,
+          ),
+        },
+        myReportsData: {
+          ...state.myReportsData,
+          docs: state.myReportsData.docs.filter(
+            (report) => report._id !== action.payload.id,
+          ),
+        },
       };
 
     case 'SET_CURRENT':
@@ -64,6 +109,18 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    case 'CLEAR_ERRORS':
+      return {
+        ...state,
+        error: null,
+      };
+
+    case 'CLEAR_MESSAGE':
+      return {
+        ...state,
+        message: null,
       };
 
     default:

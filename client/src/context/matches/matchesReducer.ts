@@ -17,11 +17,31 @@ export default (state: State, action: Action): State => {
       };
 
     case 'CREATE_MATCH_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        message: action.payload.message,
+        matchesData: {
+          ...state.matchesData,
+          docs: [action.payload.match, ...state.matchesData.docs],
+        },
+      };
+
     case 'UPDATE_MATCH_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
+        message: action.payload.message,
+        matchesData: {
+          ...state.matchesData,
+          docs: state.matchesData.docs.map((match) =>
+            match._id === action.payload.match._id
+              ? action.payload.match
+              : match,
+          ),
+        },
       };
 
     case 'MATCHES_ERROR':
@@ -41,6 +61,18 @@ export default (state: State, action: Action): State => {
       return {
         ...state,
         current: null,
+      };
+
+    case 'CLEAR_ERRORS':
+      return {
+        ...state,
+        error: null,
+      };
+
+    case 'CLEAR_MESSAGE':
+      return {
+        ...state,
+        message: null,
       };
 
     default:

@@ -1,35 +1,36 @@
 import React from 'react';
+import { useField } from 'formik';
 // MUI components
-import { Grid } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 // Custom components
-import { RatingInput } from './RatingInput';
-// Types
-import { OnChangeFn } from '../../../types/common';
+import { RatingSelect } from '../selects/RatingSelect';
 
-type SummaryStepProps = {
-  summary: string;
-  finalRating: 1 | 2 | 3 | 4;
-  onChange: OnChangeFn;
-};
+export const SummaryStep = () => {
+  const [field, meta] = useField('summary');
 
-export const SummaryStep = ({
-  summary,
-  finalRating,
-  onChange,
-}: SummaryStepProps) => {
+  const { error, touched } = meta;
+
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
+      <Grid item xs={4}>
+        <RatingSelect name="finalRating" />
+      </Grid>
       <Grid item xs={12}>
-        <RatingInput
-          title="Podsumowanie występu"
-          radioName="finalRating"
-          ratingValue={finalRating}
-          textFieldName="summary"
-          noteValue={summary}
-          onChange={onChange}
+        <TextField
+          {...field}
+          id="summary"
+          fullWidth
+          label="Opis"
+          multiline
+          rowsMax={4}
+          variant="outlined"
+          inputProps={{
+            maxlength: 400,
+          }}
+          error={touched && !!error}
+          helperText={touched && error}
         />
       </Grid>
-      <Grid item xs={12} />
     </Grid>
   );
 };
