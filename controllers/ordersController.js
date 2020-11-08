@@ -43,7 +43,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
 
   const options = {
     sort: req.query.sort || '-createdAt',
-    limit: req.query.limit || 20,
+    limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate: [
       { path: 'player', select: ['firstName', 'lastName'] },
@@ -82,7 +82,7 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
 
   const options = {
     sort: req.query.sort || '-createdAt',
-    limit: req.query.limit || 20,
+    limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate: [
       { path: 'player', select: ['firstName', 'lastName'] },

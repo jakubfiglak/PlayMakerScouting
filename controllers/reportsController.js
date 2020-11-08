@@ -117,7 +117,7 @@ exports.getReports = asyncHandler(async (req, res) => {
 
   const options = {
     sort: req.query.sort || '_id',
-    limit: req.query.limit || 20,
+    limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate,
   };
@@ -152,7 +152,7 @@ exports.getMyReports = asyncHandler(async (req, res) => {
 
   const options = {
     sort: req.query.sort || '_id',
-    limit: req.query.limit || 20,
+    limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate,
   };
@@ -183,8 +183,8 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   }
 
   if (
-    report.scout._id.toString() !== req.user._id
-    && req.user.role !== 'admin'
+    report.scout._id.toString() !== req.user._id &&
+    req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(
