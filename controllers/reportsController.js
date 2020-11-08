@@ -10,7 +10,8 @@ const getIndividualSkillsProps = require('../utils/getIndividualSkillsProps');
 const populate = [
   {
     path: 'player',
-    select: 'firstName lastName',
+    select: 'firstName lastName position',
+    populate: { path: 'club', select: 'name' },
   },
   {
     path: 'scout',
@@ -182,8 +183,8 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   }
 
   if (
-    report.scout._id.toString() !== req.user._id &&
-    req.user.role !== 'admin'
+    report.scout._id.toString() !== req.user._id
+    && req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(
@@ -242,6 +243,7 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: report,
+    message: `Report with the id of ${id} successfully updated!`,
   });
 });
 
