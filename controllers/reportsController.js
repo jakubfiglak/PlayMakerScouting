@@ -1,7 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Report = require('../models/Report');
 const Player = require('../models/Player');
-const Match = require('../models/Match');
 const Order = require('../models/Order');
 const ErrorResponse = require('../utils/errorResponse');
 const prepareQuery = require('../utils/prepareQuery');
@@ -21,13 +20,6 @@ const populate = [
     path: 'order',
     select: 'docNumber',
   },
-  {
-    path: 'match',
-    populate: [
-      { path: 'homeTeam', select: 'name' },
-      { path: 'awayTeam', select: 'name' },
-    ],
-  },
 ];
 
 // @desc Create new report
@@ -36,10 +28,8 @@ const populate = [
 exports.createReport = asyncHandler(async (req, res, next) => {
   req.body.scout = req.user._id;
 
-  const matchId = req.body.match;
   const orderId = req.body.order;
 
-  const match = await Match.findById(matchId);
   let order;
 
   if (orderId) {
@@ -60,12 +50,6 @@ exports.createReport = asyncHandler(async (req, res, next) => {
   if (!player) {
     return next(
       new ErrorResponse(`No player found with the id of ${playerId}`, 404)
-    );
-  }
-
-  if (!match) {
-    return next(
-      new ErrorResponse(`No match found with the id of ${matchId}`, 404)
     );
   }
 

@@ -50,7 +50,12 @@
     "activeRadius": 50,
     "password": "Password123",
     "passwordConfirm": "Password123",
-    "myClubs": [],
+    "myClubs": [
+      "5ee50570f75bec032c291c33",
+      "5ee5060ad784b010395a756e",
+      "5ee5062436d322bff641683d",
+      "5ee50640f75f558bc1fa5fbf"
+    ],
     "myPlayers": [
       "5ee50d4327c7c5c1998a4196",
       "5ee50d93e1a9105fcf95cb5f",
