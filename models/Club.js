@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
-const geocode = require('../middleware/geocode');
-const AddressSchema = require('../schemas/Address');
+const voivodeships = require('../utils/voivodeships');
 
 const { Schema, model } = mongoose;
 
@@ -10,20 +9,11 @@ const ClubSchema = new Schema({
     type: String,
     required: 'please add club name',
     trim: true,
-    unique: true,
   },
-  address: {
-    type: AddressSchema,
-  },
-  location: {
-    type: {
-      type: String,
-      enum: ['Point'],
-    },
-    coordinates: {
-      type: [Number],
-      index: '2dsphere',
-    },
+  voivodeship: {
+    type: String,
+    enum: [...voivodeships, 'Zagranica'],
+    required: 'please add clubs voivodeship',
   },
   division: {
     type: String,
@@ -46,7 +36,5 @@ const ClubSchema = new Schema({
 });
 
 ClubSchema.plugin(mongoosePaginate);
-
-ClubSchema.pre('save', geocode);
 
 module.exports = model('Club', ClubSchema);

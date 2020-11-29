@@ -8,15 +8,7 @@ const prepareQuery = require('../utils/prepareQuery');
 // @route POST /api/v1/clubs
 // @access Private (admin only)
 exports.createClub = asyncHandler(async (req, res, next) => {
-  const { name } = req.body;
-
-  let club = await Club.findOne({ name });
-
-  if (club) {
-    return next(new ErrorResponse('Club already exists', 400));
-  }
-
-  club = await Club.create(req.body);
+  const club = await Club.create(req.body);
 
   // If the user creating the club is not an admin, push the clubs ID to users myClubs array
   if (req.user.role !== 'admin') {
@@ -42,7 +34,7 @@ exports.createClub = asyncHandler(async (req, res, next) => {
 // @desc Get all clubs
 // @route GET /api/v1/clubs
 // @access Private
-exports.getClubs = asyncHandler(async (req, res) => {
+exports.getClubs = asyncHandler(async (req, res, next) => {
   const reqQuery = prepareQuery(req.query);
 
   const options = {
@@ -51,7 +43,24 @@ exports.getClubs = asyncHandler(async (req, res) => {
     page: req.query.page || 1,
   };
 
-  const clubs = await Club.paginate(reqQuery, options);
+  const query = { ...reqQuery };
+
+  // If user is not an admin return only clubs to which this user has access to
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with the id of ${req.user._id}`, 404)
+      );
+    }
+
+    const { myClubs } = user;
+
+    query._id = { $in: myClubs };
+  }
+
+  const clubs = await Club.paginate(query, options);
 
   res.status(200).json({
     success: true,
@@ -62,33 +71,25 @@ exports.getClubs = asyncHandler(async (req, res) => {
 // @desc Get clubs list
 // @route GET /api/v1/clubs/list
 // @access Private
-exports.getClubsList = asyncHandler(async (req, res) => {
-  const clubs = await Club.find().select('name').sort('name');
+exports.getClubsList = asyncHandler(async (req, res, next) => {
+  const query = {};
 
-  return res.status(200).json({
-    success: true,
-    count: clubs.length,
-    data: clubs,
-  });
-});
+  // If user is not an admin return only clubs to which this user has access to
+  if (req.user.role !== 'admin') {
+    const user = await User.findById(req.user._id);
 
-// @desc Get my clubs list
-// @route GET /api/v1/clubs/mylist
-// @access Private
-exports.getMyClubsList = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
+    if (!user) {
+      return next(
+        new ErrorResponse(`User not found with the id of ${req.user._id}`, 404)
+      );
+    }
 
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
+    const { myClubs } = user;
+
+    query._id = { $in: myClubs };
   }
 
-  const { myClubs } = user;
-
-  const clubs = await Club.find({ _id: { $in: myClubs } })
-    .select('name')
-    .sort('name');
+  const clubs = await Club.find(query).select('name').sort('name');
 
   return res.status(200).json({
     success: true,
@@ -101,57 +102,36 @@ exports.getMyClubsList = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/clubs/:id
 // @access Private
 exports.getClub = asyncHandler(async (req, res, next) => {
-  const club = await Club.findById(req.params.id);
+  const { id } = req.params;
+
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with the id of ${userId}`, 404)
+    );
+  }
+
+  if (!user.myClubs.includes(id)) {
+    return next(
+      new ErrorResponse(
+        `You don't have access to the club with the if of ${id}`,
+        400
+      )
+    );
+  }
+
+  const club = await Club.findById(id);
 
   if (!club) {
-    return next(
-      new ErrorResponse(`Club not found with id of ${req.params.id}`, 404)
-    );
+    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
   }
 
   res.status(200).json({
     success: true,
     data: club,
-  });
-});
-
-// @desc Get clubs in a voivodeship
-// @route GET /api/v1/clubs/voivodeship/:voivodeship
-// @access Private
-exports.getClubsInVoivodeship = asyncHandler(async (req, res) => {
-  const { voivodeship } = req.params;
-
-  const clubs = await Club.find({
-    'location.voivodeshipSlug': voivodeship,
-  });
-
-  res.status(200).json({
-    success: true,
-    count: clubs.length,
-    data: clubs,
-  });
-});
-
-// @desc Get clubs in an active radius
-// @route GET /api/v1/clubs/radius/activeradius
-// @access Private
-exports.getClubsInRadius = asyncHandler(async (req, res) => {
-  const { coords, activeRadius } = req.user;
-
-  const radius = activeRadius / 6378;
-
-  const clubs = await Club.find({
-    location: {
-      $geoWithin: {
-        $centerSphere: [coords, radius],
-      },
-    },
-  });
-
-  res.status(200).json({
-    success: true,
-    count: clubs.length,
-    data: clubs,
   });
 });
 
@@ -161,15 +141,29 @@ exports.getClubsInRadius = asyncHandler(async (req, res) => {
 exports.updateClub = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const club = await Club.findById(id);
+  const userId = req.user._id;
 
-  if (!club) {
-    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with the id of ${userId}`, 404)
+    );
   }
 
-  Object.keys(req.body).forEach((key) => (club[key] = req.body[key]));
+  if (!user.myClubs.includes(id)) {
+    return next(
+      new ErrorResponse(
+        `You don't have access to the club with the if of ${id}`,
+        400
+      )
+    );
+  }
 
-  await club.save({ validateModifiedOnly: true });
+  const club = await Club.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(200).json({
     success: true,
@@ -199,113 +193,38 @@ exports.deleteClub = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc Add to favorites
-// @route POST /api/v1/clubs/:id/addtofavorites
-// @access Private
-exports.addToFavorites = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+// @desc Grant user with an access to a specific club
+// @route POST /api/v1/clubs/grantaccess
+// @access Private (admin only)
+exports.grantAccess = asyncHandler(async (req, res, next) => {
+  const userId = req.body.user;
+  const clubId = req.body.club;
 
-  const club = await Club.findById(id);
-
-  if (!club) {
-    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
-  }
-
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(userId);
+  const club = await Club.findById(clubId);
 
   if (!user) {
     return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+      new ErrorResponse(`User not found with the id of ${userId}`, 404)
     );
   }
 
-  if (user.myClubs.includes(id)) {
+  if (!club) {
+    return next(
+      new ErrorResponse(`Club not found with the id of ${clubId}`, 404)
+    );
+  }
+
+  if (user.myClubs.includes(clubId)) {
     return next(
       new ErrorResponse(
-        `Club with the id of ${id} is already in your favorites`
+        `User with the id of ${userId} already has access to the club with the id of ${clubId}`
       )
     );
   }
 
-  user.myClubs.push(id);
-  await user.save();
-
   res.status(200).json({
     success: true,
-    message: `Successfully added club with the id of ${id} to favorites`,
-    data: club,
-  });
-});
-
-// @desc Remove from favorites
-// @route POST /api/v1/clubs/:id/removefromfavorites
-// @access Private
-exports.removeFromFavorites = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-
-  const club = await Club.findById(id);
-
-  if (!club) {
-    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
-  }
-
-  const user = await User.findById(req.user._id);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
-  }
-
-  if (!user.myClubs.includes(id)) {
-    return next(
-      new ErrorResponse(
-        `Club with the id of ${id} is already not in your favorites`
-      )
-    );
-  }
-
-  user.myClubs.pull(id);
-  await user.save();
-
-  res.status(200).json({
-    success: true,
-    message: `Successfully removed club with the id of ${id} from favorites`,
-    data: id,
-  });
-});
-
-// @desc Get my clubs
-// @route GET /api/v1/clubs/:my
-// @access Private
-exports.getMyClubs = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
-    );
-  }
-
-  const { myClubs } = user;
-
-  const reqQuery = prepareQuery(req.query);
-
-  const query = {
-    _id: { $in: myClubs },
-    ...reqQuery,
-  };
-
-  const options = {
-    sort: req.query.sort || '_id',
-    limit: req.query.limit || 20,
-    page: req.query.page || 1,
-  };
-
-  const clubs = await Club.paginate(query, options);
-
-  res.status(200).json({
-    success: true,
-    data: clubs,
+    message: `Successfully granted the user with the id of ${userId} with the access to the club with the id of ${clubId}`,
   });
 });

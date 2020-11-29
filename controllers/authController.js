@@ -80,18 +80,10 @@ exports.account = asyncHandler(async (req, res) => {
 // @desc Update account details
 // @route PUT /api/v1/auth/updatedetails
 // @access Private
-exports.updateDetails = asyncHandler(async (req, res, next) => {
+exports.updateDetails = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
-  let user = await User.findById(userId);
-
-  if (!user) {
-    return next(
-      new ErrorResponse(`No user found with the id of ${userId}`, 404)
-    );
-  }
-
-  user = await User.findByIdAndUpdate(userId, req.body, {
+  const user = await User.findByIdAndUpdate(userId, req.body, {
     new: true,
     runValidators: true,
   });

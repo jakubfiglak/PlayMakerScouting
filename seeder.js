@@ -8,7 +8,6 @@ dotenv.config({ path: './config/config.env' });
 const User = require('./models/User');
 const Club = require('./models/Club');
 const Player = require('./models/Player');
-const Match = require('./models/Match');
 const Order = require('./models/Order');
 const Report = require('./models/Report');
 
@@ -31,10 +30,6 @@ const players = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/players.json`, 'utf-8')
 );
 
-const matches = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/matches.json`, 'utf-8')
-);
-
 const orders = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/orders.json`, 'utf-8')
 );
@@ -48,7 +43,6 @@ const importData = async () => {
     await User.create(users);
     await Club.create(clubs);
     await Player.create(players);
-    await Match.create(matches);
     await Order.create(orders);
     await Report.create(reports);
 
@@ -64,7 +58,6 @@ const deleteData = async () => {
     await User.deleteMany();
     await Club.deleteMany();
     await Player.deleteMany();
-    await Match.deleteMany();
     await Order.deleteMany();
     await Report.deleteMany();
 

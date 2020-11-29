@@ -128,6 +128,24 @@ exports.getPlayersList = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.getPlayer = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with the id of ${userId}`, 404)
+    );
+  }
+
+  if (!user.myPlayers.includes(id)) {
+    return next(
+      new ErrorResponse(
+        `You don't have access to the player with the if of ${id}`,
+        400
+      )
+    );
+  }
 
   const player = await Player.findById(id)
     .populate({
@@ -151,14 +169,26 @@ exports.getPlayer = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.updatePlayer = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  const userId = req.user._id;
 
-  let player = await Player.findById(id);
+  const user = await User.findById(userId);
 
-  if (!player) {
-    return next(new ErrorResponse(`No player found with the id of ${id}`, 404));
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with the id of ${userId}`, 404)
+    );
   }
 
-  player = await Player.findByIdAndUpdate(req.params.id, req.body, {
+  if (!user.myPlayers.includes(id)) {
+    return next(
+      new ErrorResponse(
+        `You don't have access to the player with the if of ${id}`,
+        400
+      )
+    );
+  }
+
+  let player = await Player.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
