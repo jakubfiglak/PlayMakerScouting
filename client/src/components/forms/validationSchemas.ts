@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { Address } from '../../types/common';
+import { Address, Voivodeship } from '../../types/common';
 import {
   RegisterFormData,
   EditAccountData,
@@ -53,12 +53,6 @@ export const registerFormValidationSchema: yup.ObjectSchema<RegisterFormData> = 
     firstName: yup.string().required('Podaj imię'),
     lastName: yup.string().required('Podaj nazwisko'),
     email: yup.string().email().required('Podaj adres e-mail'),
-    phone: yup.string(),
-    address: addressValidationSchema,
-    activeRadius: yup
-      .number()
-      .min(0, 'Promień działania musi być większy lub równy 0 ')
-      .required('Podaj promień działania'),
     password: passwordValidationSchema,
     passwordConfirm: yup
       .string()
@@ -69,12 +63,14 @@ export const registerFormValidationSchema: yup.ObjectSchema<RegisterFormData> = 
 
 export const editAccountValidationSchema: yup.ObjectSchema<EditAccountData> = yup
   .object({
+    firstName: yup.string().required('Podaj imię'),
+    lastName: yup.string().required('Podaj nazwisko'),
+    city: yup.string(),
+    voivodeship: yup.mixed<Voivodeship | 'Zagranica'>(),
     phone: yup.string(),
     activeRadius: yup
       .number()
-      .min(0, 'Promień działania musi być większy lub równy 0 ')
-      .required('Podaj promień działania'),
-    address: addressValidationSchema,
+      .min(0, 'Promień działania musi być większy lub równy 0 '),
   })
   .defined();
 

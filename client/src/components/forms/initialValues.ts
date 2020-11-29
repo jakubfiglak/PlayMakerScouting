@@ -37,24 +37,17 @@ export const registerFormInitialValues: RegisterFormData = {
   firstName: '',
   lastName: '',
   email: '',
-  phone: '',
-  address: {
-    street: '',
-    streetNo: '',
-    zipCode: '',
-    city: '',
-    voivodeship: '',
-    country: 'Polska',
-  },
-  activeRadius: 0,
   password: '',
   passwordConfirm: '',
 };
 
 export const editAccountInitialValues: EditAccountData = {
+  firstName: '',
+  lastName: '',
+  city: '',
+  voivodeship: '',
   phone: '',
   activeRadius: 0,
-  address: initialAddress,
 };
 
 export const playersFormInitialValues: PlayersFormData = {

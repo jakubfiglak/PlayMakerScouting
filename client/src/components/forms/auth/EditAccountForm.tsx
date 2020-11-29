@@ -3,9 +3,11 @@ import { Formik, Form, Field } from 'formik';
 // MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Custom components
-import { AddressFieldset } from '../fieldsets';
+import { VoivodeshipSelect } from '../selects/VoivodeshipSelect';
 // Hooks
 import { useAuthState } from '../../../context';
+// Types
+import { EditAccountData } from '../../../types/auth';
 // Utils & data
 import { editAccountInitialValues } from '../initialValues';
 import { editAccountValidationSchema } from '../validationSchemas';
@@ -16,11 +18,14 @@ export const EditAccountForm = () => {
   const classes = useStyles();
   const { loading, editDetails, user } = useAuthState();
 
-  const initialValues = user
+  const initialValues: EditAccountData = user
     ? {
-        phone: user.phone,
-        activeRadius: user.activeRadius,
-        address: user.address,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        city: user.city || '',
+        voivodeship: user.voivodeship || '',
+        phone: user.phone || '',
+        activeRadius: user.activeRadius || 0,
       }
     : editAccountInitialValues;
 
@@ -33,12 +38,47 @@ export const EditAccountForm = () => {
       {({ errors, touched, handleReset }) => (
         <Form className={classes.form}>
           <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Field
+                name="firstName"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Imię"
+                error={touched.firstName && !!errors.firstName}
+                helperText={touched.firstName && errors.firstName}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                name="lastName"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Nazwisko"
+                error={touched.lastName && !!errors.lastName}
+                helperText={touched.lastName && errors.lastName}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                name="city"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Miasto"
+                error={touched.city && !!errors.city}
+                helperText={touched.city && errors.city}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <VoivodeshipSelect name="voivodeship" />
+            </Grid>
             <Grid item xs={12}>
               <Field
                 name="phone"
                 as={TextField}
                 variant="outlined"
-                autoComplete="phone"
                 fullWidth
                 label="Nr telefonu"
                 error={touched.phone && !!errors.phone}
@@ -48,7 +88,6 @@ export const EditAccountForm = () => {
                 }
               />
             </Grid>
-            <AddressFieldset namespace="address" />
             <Grid item xs={12}>
               <Field
                 name="activeRadius"
