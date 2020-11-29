@@ -3,8 +3,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const geocode = require('../middleware/geocode');
-const AddressSchema = require('../schemas/Address');
+const voivodeships = require('../utils/voivodeships');
 
 const { Schema, model } = mongoose;
 
@@ -32,22 +31,16 @@ const UserSchema = new Schema({
     trim: true,
     validate: [validator.isMobilePhone, 'phone number is not valid'],
   },
-  address: {
-    type: AddressSchema,
+  city: {
+    type: String,
+    trim: true,
   },
-  location: {
-    type: {
-      type: String,
-      enum: ['Point'],
-    },
-    coordinates: {
-      type: [Number],
-      index: '2dsphere',
-    },
+  voivodeship: {
+    type: String,
+    enum: [...voivodeships, 'Zagranica'],
   },
   activeRadius: {
     type: Number,
-    required: 'please add max operating distance [km]',
   },
   password: {
     type: String,
@@ -95,9 +88,6 @@ UserSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
 });
 
-// Geocode & create location field
-UserSchema.pre('save', geocode);
-
 // Get JWT token
 UserSchema.methods.getJwt = function () {
   return jwt.sign(
@@ -105,7 +95,6 @@ UserSchema.methods.getJwt = function () {
       _id: this._id,
       role: this.role,
       activeRadius: this.activeRadius,
-      coords: this.location.coordinates,
     },
     process.env.JWT_SECRET,
     {
