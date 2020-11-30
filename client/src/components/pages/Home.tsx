@@ -9,7 +9,7 @@ import { getLabel } from '../../utils';
 import { messageLabels } from '../../data/labels';
 
 export const Home = () => {
-  useAuthorization();
+  // useAuthorization();
 
   const { message, clearMessage } = useAuthState();
 

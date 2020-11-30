@@ -5,7 +5,7 @@ import { PlayersState } from '../../context';
 import { useAuthorization } from '../../hooks';
 
 export const Players: React.FC = () => {
-  useAuthorization();
+  // useAuthorization();
 
   return (
     <PlayersState>

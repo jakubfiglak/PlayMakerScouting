@@ -78,6 +78,7 @@ export const EditAccountForm = () => {
               <Field
                 name="phone"
                 as={TextField}
+                type="tel"
                 variant="outlined"
                 fullWidth
                 label="Nr telefonu"

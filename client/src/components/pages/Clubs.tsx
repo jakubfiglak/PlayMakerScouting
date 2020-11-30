@@ -5,7 +5,7 @@ import { ClubsState } from '../../context';
 import { useAuthorization } from '../../hooks';
 
 export const Clubs = () => {
-  useAuthorization();
+  // useAuthorization();
 
   return (
     <ClubsState>

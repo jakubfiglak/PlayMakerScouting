@@ -9,6 +9,7 @@ import {
   EditAccountData,
   UpdatePasswordData,
 } from '../../types/auth';
+import { Loader } from '../../components/common';
 
 export const AuthState: React.FC = ({ children }) => {
   const initialState: State = {
@@ -42,12 +43,14 @@ export const AuthState: React.FC = ({ children }) => {
 
   // Load user
   const loadUser = async () => {
+    setLoading();
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
 
     try {
       const res = await axiosJson.get('/api/v1/auth/account');
+      console.log(res);
       dispatch({
         type: 'USER_LOADED',
         payload: res.data.data,
@@ -72,7 +75,7 @@ export const AuthState: React.FC = ({ children }) => {
         payload: { token: res.data.token, message: res.data.message },
       });
 
-      loadUser();
+      // loadUser();
     } catch (err) {
       dispatch({
         type: 'AUTH_ERROR',
@@ -93,7 +96,7 @@ export const AuthState: React.FC = ({ children }) => {
         payload: { token: res.data.token, message: res.data.message },
       });
 
-      loadUser();
+      // loadUser();
     } catch (err) {
       dispatch({
         type: 'AUTH_ERROR',
@@ -178,6 +181,10 @@ export const AuthState: React.FC = ({ children }) => {
     });
 
   const { user, token, isAuthenticated, loading, error, message } = state;
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <AuthContext.Provider

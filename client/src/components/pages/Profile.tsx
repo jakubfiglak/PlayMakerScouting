@@ -12,7 +12,7 @@ import { errorLabels, messageLabels } from '../../data';
 import { getLabel } from '../../utils';
 
 export const Profile = () => {
-  useAuthorization();
+  // useAuthorization();
   const { user, error, clearErrors, message, clearMessage } = useAuthState();
 
   useAlert(getLabel(error, errorLabels), 'error', clearErrors);
@@ -20,7 +20,7 @@ export const Profile = () => {
 
   return (
     <MainTemplate>
-      <Grid container spacing={3}>
+      <Grid container>
         <Grid item lg={6} sm={12}>
           <DetailsCard user={user} />
         </Grid>

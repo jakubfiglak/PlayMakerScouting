@@ -30,7 +30,7 @@ const Sidebar: React.FC = () => {
   }
 
   const onLogout = () => {
-    history.push('/login');
+    history.push('/');
     logout();
   };
 

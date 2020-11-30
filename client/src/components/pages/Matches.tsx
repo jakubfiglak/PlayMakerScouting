@@ -5,7 +5,7 @@ import { MatchesState } from '../../context';
 import { useAuthorization } from '../../hooks';
 
 export const Matches = () => {
-  useAuthorization();
+  // useAuthorization();
 
   return (
     <MatchesState>

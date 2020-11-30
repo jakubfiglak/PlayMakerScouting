@@ -10,7 +10,7 @@ type ParamTypes = {
 };
 
 export const Report = () => {
-  useAuthorization();
+  // useAuthorization();
   const params = useParams<ParamTypes>();
 
   const { id } = params;

@@ -5,7 +5,7 @@ import { OrdersState } from '../../context';
 import { useAuthorization } from '../../hooks';
 
 export const Orders = () => {
-  useAuthorization();
+  // useAuthorization();
 
   return (
     <OrdersState>
