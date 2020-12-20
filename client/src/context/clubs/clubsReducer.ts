@@ -16,14 +16,6 @@ export default (state: State, action: Action): State => {
         clubsData: action.payload,
       };
 
-    case 'GET_MY_CLUBS_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        myClubsData: action.payload,
-      };
-
     case 'CREATE_CLUB_SUCCESS':
       return {
         ...state,
@@ -33,10 +25,6 @@ export default (state: State, action: Action): State => {
         clubsData: {
           ...state.clubsData,
           docs: [action.payload.club, ...state.clubsData.docs],
-        },
-        myClubsData: {
-          ...state.myClubsData,
-          docs: [action.payload.club, ...state.myClubsData.docs],
         },
       };
 
@@ -50,38 +38,6 @@ export default (state: State, action: Action): State => {
           ...state.clubsData,
           docs: state.clubsData.docs.map((club) =>
             club._id === action.payload.club._id ? action.payload.club : club,
-          ),
-        },
-        myClubsData: {
-          ...state.myClubsData,
-          docs: state.myClubsData.docs.map((club) =>
-            club._id === action.payload.club._id ? action.payload.club : club,
-          ),
-        },
-      };
-
-    case 'ADD_CLUB_TO_FAVORITES_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        message: action.payload.message,
-        myClubsData: {
-          ...state.myClubsData,
-          docs: [action.payload.club, ...state.clubsData.docs],
-        },
-      };
-
-    case 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        message: action.payload.message,
-        myClubsData: {
-          ...state.myClubsData,
-          docs: state.myClubsData.docs.filter(
-            (club) => club._id !== action.payload.id,
           ),
         },
       };

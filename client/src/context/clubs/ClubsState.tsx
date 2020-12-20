@@ -9,7 +9,6 @@ import { initialPaginatedData } from '../../data';
 export const ClubsState: React.FC = ({ children }) => {
   const initialState: State = {
     clubsData: initialPaginatedData,
-    myClubsData: initialPaginatedData,
     current: null,
     loading: false,
     error: null,
@@ -23,8 +22,6 @@ export const ClubsState: React.FC = ({ children }) => {
     editClub: () => null,
     setCurrent: () => null,
     clearCurrent: () => null,
-    addClubToFavorites: () => null,
-    removeClubFromFavorites: () => null,
   };
 
   const [state, dispatch] = useReducer(clubsReducer, initialState);
@@ -43,7 +40,6 @@ export const ClubsState: React.FC = ({ children }) => {
     sort = '_id',
     order: Order,
     filters: ClubsFilterData,
-    my?: boolean,
   ) => {
     setLoading();
     const orderSign = order === 'desc' ? '-' : '';
@@ -52,10 +48,6 @@ export const ClubsState: React.FC = ({ children }) => {
 
     // Generate query url
     let clubsURI = '/api/v1/clubs';
-
-    if (my) {
-      clubsURI = clubsURI.concat('/my');
-    }
 
     clubsURI = clubsURI.concat(
       `?page=${page}&limit=${limit}&sort=${orderSign}${sort}`,
@@ -70,22 +62,15 @@ export const ClubsState: React.FC = ({ children }) => {
     }
 
     if (voivodeship) {
-      clubsURI = clubsURI.concat(`&address.voivodeship[regex]=${voivodeship}`);
+      clubsURI = clubsURI.concat(`&voivodeship[regex]=${voivodeship}`);
     }
 
     try {
       const res = await axiosJson.get(clubsURI);
-      if (my) {
-        dispatch({
-          type: 'GET_MY_CLUBS_SUCCESS',
-          payload: res.data.data,
-        });
-      } else {
-        dispatch({
-          type: 'GET_CLUBS_SUCCESS',
-          payload: res.data.data,
-        });
-      }
+      dispatch({
+        type: 'GET_CLUBS_SUCCESS',
+        payload: res.data.data,
+      });
     } catch (err) {
       dispatch({
         type: 'CLUBS_ERROR',
@@ -163,44 +148,6 @@ export const ClubsState: React.FC = ({ children }) => {
     }
   };
 
-  // Add club to favorites
-  const addClubToFavorites = async (id: string) => {
-    setLoading();
-
-    try {
-      const res = await axiosJson.post(`/api/v1/clubs/${id}/addtofavorites`);
-      dispatch({
-        type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
-        payload: { club: res.data.data, message: res.data.message },
-      });
-    } catch (err) {
-      dispatch({
-        type: 'CLUBS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
-  };
-
-  // Remove club from favorites
-  const removeClubFromFavorites = async (id: string) => {
-    setLoading();
-
-    try {
-      const res = await axiosJson.post(
-        `/api/v1/clubs/${id}/removefromfavorites`,
-      );
-      dispatch({
-        type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
-        payload: { id: res.data.data, message: res.data.message },
-      });
-    } catch (err) {
-      dispatch({
-        type: 'CLUBS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
-  };
-
   // Clear errors
   const clearErrors = () =>
     dispatch({
@@ -213,13 +160,12 @@ export const ClubsState: React.FC = ({ children }) => {
       type: 'CLEAR_MESSAGE',
     });
 
-  const { clubsData, myClubsData, current, loading, error, message } = state;
+  const { clubsData, current, loading, error, message } = state;
 
   return (
     <ClubsContext.Provider
       value={{
         clubsData,
-        myClubsData,
         current,
         loading,
         error,
@@ -231,8 +177,6 @@ export const ClubsState: React.FC = ({ children }) => {
         setCurrent,
         clearCurrent,
         editClub,
-        addClubToFavorites,
-        removeClubFromFavorites,
         clearErrors,
         clearMessage,
       }}

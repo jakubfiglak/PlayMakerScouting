@@ -29,7 +29,7 @@ export const VoivodeshipSelect = ({ name, size }: VoivodeshipSelectProps) => {
         error={touched && !!error}
       >
         <MenuItem value="">
-          <em>Inne</em>
+          <em>Brak</em>
         </MenuItem>
         {voivodeships.map((voivodeship) => {
           return (
@@ -38,6 +38,7 @@ export const VoivodeshipSelect = ({ name, size }: VoivodeshipSelectProps) => {
             </MenuItem>
           );
         })}
+        <MenuItem value="Zagranica">Inne/Zagranica</MenuItem>
       </Select>
       {touched && error && <FormHelperText>{error}</FormHelperText>}
     </FormControl>

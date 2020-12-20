@@ -30,7 +30,7 @@ export const DivisionSelect = ({ size }: Props) => {
         error={touched && !!error}
       >
         <MenuItem value="">
-          <em>None</em>
+          <em>Brak</em>
         </MenuItem>
         {divisions.map((div) => {
           return (

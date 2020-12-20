@@ -3,26 +3,41 @@ import { Formik, Form, Field } from 'formik';
 // MUI components
 import { Grid, TextField } from '@material-ui/core';
 // Custom components
-import { DivisionSelect } from '../selects';
+import { DivisionSelect, VoivodeshipSelect } from '../selects';
 import { MainFormActions } from '../actions';
-import { AddressFieldset } from '../fieldsets';
 import { Loader } from '../../common';
 // Hooks
 import { useClubsState } from '../../../context';
+// Types
+import { ClubsFormData } from '../../../types/clubs';
 // Utils & data
 import { clubsFormInitialValues } from '../initialValues';
 import { clubsFormValidationSchema } from '../validationSchemas';
 
 export const ClubsForm = () => {
-  const { loading, addClub } = useClubsState();
+  const { loading, addClub, editClub, current, clearCurrent } = useClubsState();
+
+  const initialValues: ClubsFormData = current
+    ? {
+        name: current.name,
+        voivodeship: current.voivodeship,
+        division: current.division,
+        lnpID: current.lnpID,
+      }
+    : clubsFormInitialValues;
 
   return (
     <Formik
-      initialValues={clubsFormInitialValues}
+      initialValues={initialValues}
       validationSchema={clubsFormValidationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        addClub(data);
+        if (current) {
+          editClub(current._id, data);
+        } else {
+          addClub(data);
+        }
+        clearCurrent();
         resetForm();
       }}
     >
@@ -42,13 +57,15 @@ export const ClubsForm = () => {
                 helperText={touched.name && errors.name}
               />
             </Grid>
-            <AddressFieldset namespace="address" />
-            <Grid item xs={12}>
+            <Grid item xs={6}>
+              <VoivodeshipSelect name="voivodeship" />
+            </Grid>
+            <Grid item xs={6}>
               <DivisionSelect />
             </Grid>
             <MainFormActions
               label="klub"
-              current={false}
+              current={!!current}
               onCancelClick={handleReset}
             />
           </Grid>

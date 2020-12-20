@@ -110,7 +110,9 @@ export const clubsFormValidationSchema: yup.ObjectSchema<ClubsFormData> = yup
   .object({
     name: yup.string().required('Podaj nazwę klubu'),
     division: yup.mixed<Division>().required('Podaj poziom rozgrywkowy klubu'),
-    address: addressValidationSchema,
+    voivodeship: yup
+      .mixed<Voivodeship | 'Zagranica'>()
+      .required('Podaj województwo'),
   })
   .defined();
 

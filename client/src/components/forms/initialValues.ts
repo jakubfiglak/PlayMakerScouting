@@ -66,7 +66,8 @@ export const playersFormInitialValues: PlayersFormData = {
 export const clubsFormInitialValues: ClubsFormData = {
   name: '',
   division: '',
-  address: initialAddress,
+  voivodeship: '',
+  lnpID: '',
 };
 
 export const matchesFormInitialValues: MatchesFormData = {

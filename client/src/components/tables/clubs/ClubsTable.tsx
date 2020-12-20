@@ -15,8 +15,6 @@ import { ClubsTableRow } from './ClubsTableRow';
 // Types
 import { Club } from '../../../types/clubs';
 import { CommonTableProps } from '../../../types/common';
-// Hooks
-import { useAuthState } from '../../../context';
 // Utils & data
 import { clubsHeadCells } from '../data';
 // Styles
@@ -25,8 +23,6 @@ import { useStyles } from '../styles';
 type TableProps = {
   clubs: Club[];
   handleSetCurrent: (club: Club) => void;
-  addToFavorites: (id: string) => void;
-  removeFromFavorites: (id: string) => void;
 } & CommonTableProps;
 
 export const ClubsTable = ({
@@ -40,11 +36,8 @@ export const ClubsTable = ({
   clubs,
   total,
   handleSetCurrent,
-  addToFavorites,
-  removeFromFavorites,
 }: TableProps) => {
   const classes = useStyles();
-  const { user } = useAuthState();
 
   return (
     <TableContainer component={Paper} className={classes.paper}>
@@ -64,10 +57,7 @@ export const ClubsTable = ({
               <ClubsTableRow
                 key={_id}
                 club={club}
-                isFavorite={user?.myClubs.includes(_id) || false}
                 handleSetCurrent={handleSetCurrent}
-                addToFavorites={addToFavorites}
-                removeFromFavorites={removeFromFavorites}
               />
             );
           })}
