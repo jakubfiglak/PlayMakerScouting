@@ -17,14 +17,9 @@ export const AuthenticatedApp = () => {
   const { loadUser, user } = useAuthState();
 
   useEffect(() => {
-    console.log('loading user');
-  }, []);
-
-  useEffect(() => {
     if (!user) {
       loadUser();
     }
-    console.log('loading user');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 

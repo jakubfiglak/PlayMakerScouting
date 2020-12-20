@@ -50,7 +50,6 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.get('/api/v1/auth/account');
-      console.log(res);
       dispatch({
         type: 'USER_LOADED',
         payload: res.data.data,

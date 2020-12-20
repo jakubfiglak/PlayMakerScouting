@@ -6,13 +6,12 @@ import MainTemplate from '../templates/MainTemplate/MainTemplate';
 import { DetailsCard, PasswordCard } from '../profile';
 // Hooks
 import { useAuthState } from '../../context';
-import { useAuthorization, useAlert } from '../../hooks';
+import { useAlert } from '../../hooks';
 // Utils & data
 import { errorLabels, messageLabels } from '../../data';
 import { getLabel } from '../../utils';
 
 export const Profile = () => {
-  // useAuthorization();
   const { user, error, clearErrors, message, clearMessage } = useAuthState();
 
   useAlert(getLabel(error, errorLabels), 'error', clearErrors);
