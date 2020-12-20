@@ -24,14 +24,6 @@ export default (state: State, action: Action): State => {
         playerData: action.payload,
       };
 
-    case 'GET_PLAYER_MATCHES_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        playerMatches: action.payload,
-      };
-
     case 'CREATE_PLAYER_SUCCESS':
       return {
         ...state,

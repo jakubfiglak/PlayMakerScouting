@@ -91,15 +91,9 @@ export const playersFormValidationSchema: yup.ObjectSchema<PlayersFormData> = yu
     lastName: yup.string().required('Podaj nazwisko zawodnika'),
     club: yup.string().required('Wybierz klub zawodnika'),
     position: yup.mixed<Position>().required('Podaj pozycję zawodnika'),
-    dateOfBirth: yup.string().required('Podaj datę urodzenia zawodnika'),
-    height: yup
-      .number()
-      .min(0, 'Wzrost zawodnika musi być większy niż 0 cm')
-      .required('Podaj wzrost zawodnika'),
-    weight: yup
-      .number()
-      .min(0, 'Waga zawodnika musi być większa niż 0 kg')
-      .required('Podaj wzrost zawodnika'),
+    yearOfBirth: yup.number().required('Podaj rok urodzenia zawodnika'),
+    height: yup.number().min(0, 'Wzrost zawodnika musi być większy niż 0 cm'),
+    weight: yup.number().min(0, 'Waga zawodnika musi być większa niż 0 kg'),
     footed: yup.mixed<Foot>().required('Podaj preferowaną nogę zawodnika'),
     lnpID: yup.string().notRequired(),
     lnpProfileURL: yup.string().url('Niepoprawny format url').notRequired(),

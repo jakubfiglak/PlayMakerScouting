@@ -49,13 +49,7 @@ export const NewReportForm = () => {
 
   const { user } = useAuthState();
 
-  const {
-    loading: playerLoading,
-    getPlayer,
-    getPlayerMatches,
-    playerData,
-    playerMatches,
-  } = usePlayersState();
+  const { loading: playerLoading, getPlayer, playerData } = usePlayersState();
 
   const { loading: orderLoading, getOrder, orderData } = useOrdersState();
 
@@ -85,7 +79,7 @@ export const NewReportForm = () => {
   useEffect(() => {
     if (values.player) {
       getPlayer(values.player);
-      getPlayerMatches(values.player);
+      // getPlayerMatches(values.player);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.player]);
@@ -100,7 +94,7 @@ export const NewReportForm = () => {
   useEffect(() => {
     if (orderData) {
       getPlayer(orderData.player._id);
-      getPlayerMatches(orderData.player._id);
+      // getPlayerMatches(orderData.player._id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderData]);
@@ -132,7 +126,7 @@ export const NewReportForm = () => {
         }
         return <PlayerStep playersData={playersData} />;
       case 2:
-        return <MatchStep matches={playerMatches} />;
+        return <MatchStep matches={[]} />;
       case 3:
         return <IndividualSkillsStep position={playerData?.position} />;
       case 4:

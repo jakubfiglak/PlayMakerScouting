@@ -11,6 +11,7 @@ import { ClubData } from '../../../types/simplifiedData';
 import { PlayersFormData } from '../../../types/players';
 // Hooks
 import { usePlayersState } from '../../../context';
+import { useAuthenticatedUser } from '../../../hooks/useAuthenticatedUser';
 // Utils & data
 import { playersFormValidationSchema } from '../validationSchemas';
 import { playersFormInitialValues } from '../initialValues';
@@ -28,13 +29,15 @@ export const PlayersForm = ({ clubsData }: Props) => {
     editPlayer,
   } = usePlayersState();
 
+  const user = useAuthenticatedUser();
+
   const initialValues: PlayersFormData = current
     ? {
         firstName: current.firstName,
         lastName: current.lastName,
         club: current.club._id,
         position: current.position,
-        dateOfBirth: current.dateOfBirth.slice(0, 10),
+        yearOfBirth: current.yearOfBirth,
         height: current.height,
         weight: current.weight,
         footed: current.footed,
@@ -100,14 +103,14 @@ export const PlayersForm = ({ clubsData }: Props) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Field
-                name="dateOfBirth"
+                name="yearOfBirth"
                 as={TextField}
-                type="date"
+                type="number"
                 variant="outlined"
                 fullWidth
-                label="Data urodzenia"
-                error={touched.dateOfBirth && !!errors.dateOfBirth}
-                helperText={touched.dateOfBirth && errors.dateOfBirth}
+                label="Rok urodzenia"
+                error={touched.yearOfBirth && !!errors.yearOfBirth}
+                helperText={touched.yearOfBirth && errors.yearOfBirth}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -145,33 +148,37 @@ export const PlayersForm = ({ clubsData }: Props) => {
                 <FootSelect />
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <Field
-                name="lnpID"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="ID Łączy Nas Piłka"
-                error={touched.lnpID && !!errors.lnpID}
-                helperText={
-                  (touched.lnpID && errors.lnpID) || 'Pole opcjonalne'
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Field
-                name="lnpProfileURL"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Link do profilu ŁNP"
-                error={touched.lnpProfileURL && !!errors.lnpProfileURL}
-                helperText={
-                  (touched.lnpProfileURL && errors.lnpProfileURL) ||
-                  'Pole opcjonalne'
-                }
-              />
-            </Grid>
+            {user.role === 'admin' && (
+              <>
+                <Grid item xs={12} sm={6}>
+                  <Field
+                    name="lnpID"
+                    as={TextField}
+                    variant="outlined"
+                    fullWidth
+                    label="ID Łączy Nas Piłka"
+                    error={touched.lnpID && !!errors.lnpID}
+                    helperText={
+                      (touched.lnpID && errors.lnpID) || 'Pole opcjonalne'
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Field
+                    name="lnpProfileURL"
+                    as={TextField}
+                    variant="outlined"
+                    fullWidth
+                    label="Link do profilu ŁNP"
+                    error={touched.lnpProfileURL && !!errors.lnpProfileURL}
+                    helperText={
+                      (touched.lnpProfileURL && errors.lnpProfileURL) ||
+                      'Pole opcjonalne'
+                    }
+                  />
+                </Grid>
+              </>
+            )}
             <MainFormActions
               label="zawodnika"
               current={!!current}

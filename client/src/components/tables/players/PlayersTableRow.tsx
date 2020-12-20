@@ -8,7 +8,7 @@ import { StyledTableRow, StyledTableCell } from '../../common';
 // Types
 import { Player } from '../../../types/players';
 // Utils & data
-import { formatDate, getLabel } from '../../../utils';
+import { getLabel } from '../../../utils';
 import { footLabels, positionLabels } from '../../../data';
 
 type TableRowProps = {
@@ -20,7 +20,7 @@ export const PlayersTableRow = ({
   player,
   handleSetCurrent,
 }: TableRowProps) => {
-  const { firstName, lastName, club, position, dateOfBirth, footed } = player;
+  const { firstName, lastName, club, position, yearOfBirth, footed } = player;
 
   return (
     <StyledTableRow>
@@ -38,7 +38,7 @@ export const PlayersTableRow = ({
       <StyledTableCell>{firstName}</StyledTableCell>
       <StyledTableCell>{club.name}</StyledTableCell>
       <StyledTableCell>{getLabel(position, positionLabels)}</StyledTableCell>
-      <StyledTableCell>{formatDate(dateOfBirth)}</StyledTableCell>
+      <StyledTableCell>{yearOfBirth}</StyledTableCell>
       <StyledTableCell>{getLabel(footed, footLabels)}</StyledTableCell>
     </StyledTableRow>
   );

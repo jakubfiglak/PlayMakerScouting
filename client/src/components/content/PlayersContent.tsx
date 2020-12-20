@@ -8,11 +8,7 @@ import { TabPanel, Loader } from '../common';
 // Types
 import { PlayersFilterData, Player } from '../../types/players';
 // Hooks
-import {
-  usePlayersState,
-  useSimplifiedDataState,
-  useAuthState,
-} from '../../context';
+import { usePlayersState, useSimplifiedDataState } from '../../context';
 import { useTabs, useTable, useAlert } from '../../hooks';
 
 export const PlayersContent = () => {
@@ -30,12 +26,8 @@ export const PlayersContent = () => {
   const {
     loading: simpleDataLoading,
     getClubs,
-    getMyClubs,
     clubsData,
-    myClubsData,
   } = useSimplifiedDataState();
-
-  const { user } = useAuthState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -62,14 +54,12 @@ export const PlayersContent = () => {
     setActiveTab(1);
   };
 
-  const isAdmin = user?.role === 'admin';
+  useEffect(() => {
+    getClubs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    if (isAdmin) {
-      getClubs();
-    } else {
-      getMyClubs();
-    }
     getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters]);
@@ -88,10 +78,7 @@ export const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
-        <PlayersFilterForm
-          clubsData={isAdmin ? clubsData : myClubsData}
-          setFilters={setFilters}
-        />
+        <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
         <PlayersTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -106,7 +93,7 @@ export const PlayersContent = () => {
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
-        <PlayersForm clubsData={isAdmin ? clubsData : myClubsData} />
+        <PlayersForm clubsData={clubsData} />
       </TabPanel>
     </>
   );

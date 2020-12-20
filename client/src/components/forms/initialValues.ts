@@ -55,7 +55,7 @@ export const playersFormInitialValues: PlayersFormData = {
   lastName: '',
   club: '',
   position: 'CM',
-  dateOfBirth: '2000-01-01',
+  yearOfBirth: 2000,
   height: 0,
   weight: 0,
   footed: 'R',

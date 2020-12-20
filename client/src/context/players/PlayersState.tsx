@@ -17,7 +17,6 @@ export const PlayersState: React.FC = ({ children }) => {
     playersData: initialPaginatedData,
     playerData: null,
     current: null,
-    playerMatches: [],
     loading: false,
     error: null,
     message: null,
@@ -26,7 +25,6 @@ export const PlayersState: React.FC = ({ children }) => {
     clearMessage: () => null,
     getPlayers: () => null,
     getPlayer: () => null,
-    getPlayerMatches: () => null,
     addPlayer: () => null,
     editPlayer: () => null,
     setCurrent: () => null,
@@ -88,24 +86,6 @@ export const PlayersState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'GET_PLAYER_SUCCESS',
-        payload: res.data.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: 'PLAYERS_ERROR',
-        payload: err.response.data.error,
-      });
-    }
-  };
-
-  // Get matches for a player
-  const getPlayerMatches = async (id: string) => {
-    setLoading();
-
-    try {
-      const res = await axiosJson.get(`/api/v1/players/${id}/matches`);
-      dispatch({
-        type: 'GET_PLAYER_MATCHES_SUCCESS',
         payload: res.data.data,
       });
     } catch (err) {
@@ -197,21 +177,12 @@ export const PlayersState: React.FC = ({ children }) => {
       type: 'CLEAR_MESSAGE',
     });
 
-  const {
-    playersData,
-    playerData,
-    playerMatches,
-    current,
-    loading,
-    error,
-    message,
-  } = state;
+  const { playersData, playerData, current, loading, error, message } = state;
 
   return (
     <PlayersContext.Provider
       value={{
         playersData,
-        playerMatches,
         playerData,
         current,
         loading,
@@ -222,7 +193,6 @@ export const PlayersState: React.FC = ({ children }) => {
         clearMessage,
         getPlayers,
         getPlayer,
-        getPlayerMatches,
         addPlayer,
         grantAccess,
         setCurrent,
