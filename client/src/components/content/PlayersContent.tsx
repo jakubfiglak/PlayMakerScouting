@@ -5,10 +5,11 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { PlayersTable } from '../tables';
 import { PlayersFilterForm, PlayersForm } from '../forms';
 import { TabPanel, Loader } from '../common';
+import { AddClubModal } from '../modals/AddClubModal';
 // Types
 import { PlayersFilterData, Player } from '../../types/players';
 // Hooks
-import { usePlayersState, useSimplifiedDataState } from '../../context';
+import { usePlayersState, useClubsState } from '../../context';
 import { useTabs, useTable, useAlert } from '../../hooks';
 
 export const PlayersContent = () => {
@@ -23,11 +24,7 @@ export const PlayersContent = () => {
     clearErrors,
   } = usePlayersState();
 
-  const {
-    loading: simpleDataLoading,
-    getClubs,
-    clubsData,
-  } = useSimplifiedDataState();
+  const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -49,13 +46,15 @@ export const PlayersContent = () => {
     position: '',
   });
 
+  const [isAddClubModalOpen, setIsAddClubModalOpen] = useState(false);
+
   const handleSetCurrent = (player: Player) => {
     setCurrent(player);
     setActiveTab(1);
   };
 
   useEffect(() => {
-    getClubs();
+    getClubsList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -66,7 +65,7 @@ export const PlayersContent = () => {
 
   return (
     <>
-      {(loading || simpleDataLoading) && <Loader />}
+      {(loading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
           <Tab
@@ -78,7 +77,7 @@ export const PlayersContent = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
-        <PlayersFilterForm clubsData={clubsData} setFilters={setFilters} />
+        <PlayersFilterForm clubsData={clubsList} setFilters={setFilters} />
         <PlayersTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -93,7 +92,13 @@ export const PlayersContent = () => {
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
-        <PlayersForm clubsData={clubsData} />
+        <PlayersForm
+          clubsData={clubsList}
+          onAddClubClick={() => setIsAddClubModalOpen(true)}
+        />
+        {isAddClubModalOpen && (
+          <AddClubModal onClose={() => setIsAddClubModalOpen(false)} />
+        )}
       </TabPanel>
     </>
   );

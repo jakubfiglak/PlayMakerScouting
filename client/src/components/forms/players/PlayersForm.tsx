@@ -1,7 +1,16 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import { Grid, TextField, FormControl } from '@material-ui/core';
+import {
+  Grid,
+  TextField,
+  FormControl,
+  IconButton,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
+// MUI icons
+import AddIcon from '@material-ui/icons/Add';
 // Custom components
 import { PositionSelect, FootSelect, ClubsCombo } from '../selects';
 import { MainFormActions } from '../actions';
@@ -18,9 +27,12 @@ import { playersFormInitialValues } from '../initialValues';
 
 type Props = {
   clubsData: ClubData[];
+  onAddClubClick: () => void;
 };
 
-export const PlayersForm = ({ clubsData }: Props) => {
+export const PlayersForm = ({ clubsData, onAddClubClick }: Props) => {
+  const classes = useStyles();
+
   const {
     loading,
     addPlayer,
@@ -92,9 +104,18 @@ export const PlayersForm = ({ clubsData }: Props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControl variant="outlined" fullWidth>
-                <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
-              </FormControl>
+              <div className={classes.clubContainer}>
+                <FormControl variant="outlined" fullWidth>
+                  <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
+                </FormControl>
+                <IconButton
+                  aria-label="add club"
+                  className={classes.addClubButton}
+                  onClick={onAddClubClick}
+                >
+                  <AddIcon />
+                </IconButton>
+              </div>
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl variant="outlined" fullWidth>
@@ -190,3 +211,18 @@ export const PlayersForm = ({ clubsData }: Props) => {
     </Formik>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  clubContainer: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: `${theme.spacing(1)}px`,
+  },
+  addClubButton: {
+    background: theme.palette.secondary.light,
+    width: 40,
+    height: 40,
+  },
+}));

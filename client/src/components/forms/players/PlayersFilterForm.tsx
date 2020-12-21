@@ -7,12 +7,12 @@ import { PositionSelect, ClubsCombo } from '../selects';
 import { FilterFormActions } from '../actions';
 // Types
 import { PlayersFilterData } from '../../../types/players';
-import { ClubData } from '../../../types/simplifiedData';
+import { ClubBasicInfo } from '../../../types/clubs';
 // Styles
 import { useStyles } from '../styles';
 
 type Props = {
-  clubsData: ClubData[];
+  clubsData: ClubBasicInfo[];
   setFilters: Dispatch<SetStateAction<PlayersFilterData>>;
 };
 

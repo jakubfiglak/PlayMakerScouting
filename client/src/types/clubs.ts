@@ -19,6 +19,8 @@ export type Club = {
   lnpID?: string;
 };
 
+export type ClubBasicInfo = Pick<Club, '_id' | 'name'>;
+
 export type ClubsFormData = Omit<Club, '_id' | 'division' | 'voivodeship'> & {
   voivodeship: Voivodeship | 'Zagranica' | '';
   division: Division | '';
@@ -45,6 +47,7 @@ export type GetClubs = (
 
 export type State = {
   clubsData: ClubsData;
+  clubsList: ClubBasicInfo[];
   current: Club | null;
   loading: boolean;
   error: string | null;
@@ -53,6 +56,7 @@ export type State = {
   clearErrors: () => void;
   clearMessage: () => void;
   getClubs: GetClubs;
+  getClubsList: () => void;
   getClub: (id: string) => void;
   addClub: (club: ClubsFormData) => void;
   editClub: (id: string, club: ClubsFormData) => void;
@@ -68,6 +72,7 @@ export type Action =
   | { type: 'CLEAR_MESSAGE' }
   | { type: 'CLUBS_ERROR'; payload: string }
   | { type: 'GET_CLUBS_SUCCESS'; payload: ClubsData }
+  | { type: 'GET_CLUBS_LIST_SUCCESS'; payload: ClubBasicInfo[] }
   | { type: 'GET_CLUB_SUCCESS'; payload: Club }
   | { type: 'CREATE_CLUB_SUCCESS'; payload: { club: Club; message: string } }
   | { type: 'UPDATE_CLUB_SUCCESS'; payload: { club: Club; message: string } };

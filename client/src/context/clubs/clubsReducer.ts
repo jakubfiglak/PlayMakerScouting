@@ -16,6 +16,14 @@ export default (state: State, action: Action): State => {
         clubsData: action.payload,
       };
 
+    case 'GET_CLUBS_LIST_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        clubsList: action.payload,
+      };
+
     case 'CREATE_CLUB_SUCCESS':
       return {
         ...state,
@@ -26,6 +34,10 @@ export default (state: State, action: Action): State => {
           ...state.clubsData,
           docs: [action.payload.club, ...state.clubsData.docs],
         },
+        clubsList: [
+          ...state.clubsList,
+          { _id: action.payload.club._id, name: action.payload.club.name },
+        ],
       };
 
     case 'UPDATE_CLUB_SUCCESS':
@@ -40,6 +52,11 @@ export default (state: State, action: Action): State => {
             club._id === action.payload.club._id ? action.payload.club : club,
           ),
         },
+        clubsList: state.clubsList.map((club) =>
+          club._id === action.payload.club._id
+            ? { ...club, name: action.payload.club.name }
+            : club,
+        ),
       };
 
     case 'CLUBS_ERROR':

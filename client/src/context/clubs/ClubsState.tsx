@@ -9,6 +9,7 @@ import { initialPaginatedData } from '../../data';
 export const ClubsState: React.FC = ({ children }) => {
   const initialState: State = {
     clubsData: initialPaginatedData,
+    clubsList: [],
     current: null,
     loading: false,
     error: null,
@@ -17,6 +18,7 @@ export const ClubsState: React.FC = ({ children }) => {
     clearErrors: () => null,
     clearMessage: () => null,
     getClubs: () => null,
+    getClubsList: () => null,
     getClub: () => null,
     addClub: () => null,
     editClub: () => null,
@@ -79,7 +81,22 @@ export const ClubsState: React.FC = ({ children }) => {
     }
   };
 
-  // Get clubs in active radius
+  // Get clubs list
+  const getClubsList = async () => {
+    setLoading();
+    try {
+      const res = await axiosJson.get('/api/v1/clubs/list');
+      dispatch({
+        type: 'GET_CLUBS_LIST_SUCCESS',
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'CLUBS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
 
   // Get club
   const getClub = async (id: string) => {
@@ -160,18 +177,20 @@ export const ClubsState: React.FC = ({ children }) => {
       type: 'CLEAR_MESSAGE',
     });
 
-  const { clubsData, current, loading, error, message } = state;
+  const { clubsData, clubsList, current, loading, error, message } = state;
 
   return (
     <ClubsContext.Provider
       value={{
         clubsData,
+        clubsList,
         current,
         loading,
         error,
         message,
         setLoading,
         getClubs,
+        getClubsList,
         getClub,
         addClub,
         setCurrent,
