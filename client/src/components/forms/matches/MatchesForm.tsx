@@ -95,7 +95,7 @@ export const MatchesForm = ({ clubsData }: MatchesFormProps) => {
             </Grid>
             <MainFormActions
               label="mecz"
-              current={!!current}
+              isEditState={!!current}
               onCancelClick={handleReset}
             />
           </Grid>

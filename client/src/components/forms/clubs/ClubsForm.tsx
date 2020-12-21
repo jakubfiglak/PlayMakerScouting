@@ -65,7 +65,7 @@ export const ClubsForm = () => {
             </Grid>
             <MainFormActions
               label="klub"
-              current={!!current}
+              isEditState={!!current}
               onCancelClick={handleReset}
             />
           </Grid>

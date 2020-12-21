@@ -1,32 +1,58 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { ClubsForm } from '../forms';
+import { Formik, Form, Field } from 'formik';
+// MUI components
+import { Grid, TextField } from '@material-ui/core';
+// Custom components
+import { FormModal } from '../common/FormModal';
+import { VoivodeshipSelect, DivisionSelect } from '../forms/selects';
+// Types
+import { ClubsFormData } from '../../types/clubs';
+// Utils & data
+import { clubsFormInitialValues } from '../forms/initialValues';
+import { clubsFormValidationSchema } from '../forms/validationSchemas';
 
 type Props = {
   onClose: () => void;
+  onSubmit: (data: ClubsFormData) => void;
 };
 
-export const AddClubModal = ({ onClose }: Props) => {
+export const AddClubModal = ({ onClose, onSubmit }: Props) => {
   return (
-    <Dialog open onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-      <DialogContent>
-        <ClubsForm />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={onClose} color="primary">
-          Subscribe
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <Formik
+      initialValues={clubsFormInitialValues}
+      validationSchema={clubsFormValidationSchema}
+      enableReinitialize
+      onSubmit={(data) => {
+        onSubmit(data);
+        onClose();
+      }}
+    >
+      {({ errors, touched, handleSubmit }) => (
+        <FormModal title="Dodaj klub" onClose={onClose} onSubmit={handleSubmit}>
+          <Form>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Field
+                  name="name"
+                  as={TextField}
+                  variant="outlined"
+                  fullWidth
+                  label="Nazwa"
+                  autoFocus
+                  error={touched.name && !!errors.name}
+                  helperText={touched.name && errors.name}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <VoivodeshipSelect name="voivodeship" />
+              </Grid>
+              <Grid item xs={12}>
+                <DivisionSelect />
+              </Grid>
+            </Grid>
+          </Form>
+        </FormModal>
+      )}
+    </Formik>
   );
 };

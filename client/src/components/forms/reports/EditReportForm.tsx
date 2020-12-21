@@ -143,7 +143,7 @@ export const EditReportForm = ({ report }: Props) => {
             <Grid container spacing={2}>
               <MainFormActions
                 label="raport"
-                current
+                isEditState
                 onCancelClick={() => {
                   handleReset();
                 }}

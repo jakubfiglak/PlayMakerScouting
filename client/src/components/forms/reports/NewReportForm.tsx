@@ -188,7 +188,7 @@ export const NewReportForm = () => {
                 <Grid container spacing={2}>
                   <MainFormActions
                     label="raport"
-                    current={false}
+                    isEditState={false}
                     onCancelClick={() => {
                       handleReset();
                       resetStepper();

@@ -50,7 +50,7 @@ export const OrdersForm = ({ playersData }: Props) => {
             <MainFormActions
               label="zlecenie"
               onCancelClick={handleReset}
-              current={false}
+              isEditState={false}
             />
           </Grid>
         </Form>

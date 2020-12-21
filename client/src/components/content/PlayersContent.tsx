@@ -7,7 +7,11 @@ import { PlayersFilterForm, PlayersForm } from '../forms';
 import { TabPanel, Loader } from '../common';
 import { AddClubModal } from '../modals/AddClubModal';
 // Types
-import { PlayersFilterData, Player } from '../../types/players';
+import {
+  PlayersFilterData,
+  Player,
+  PlayersFormData,
+} from '../../types/players';
 // Hooks
 import { usePlayersState, useClubsState } from '../../context';
 import { useTabs, useTable, useAlert } from '../../hooks';
@@ -17,14 +21,27 @@ export const PlayersContent = () => {
     loading,
     getPlayers,
     playersData: { docs, totalDocs },
+    addPlayer,
+    editPlayer,
+    current,
     setCurrent,
     message,
     error,
     clearMessage,
     clearErrors,
+    clearCurrent,
   } = usePlayersState();
 
-  const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
+  const {
+    loading: clubsLoading,
+    getClubsList,
+    clubsList,
+    message: clubsMessage,
+    error: clubsError,
+    clearErrors: clearClubsErrors,
+    clearMessage: clearClubsMessage,
+    addClub,
+  } = useClubsState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -38,7 +55,9 @@ export const PlayersContent = () => {
   ] = useTable();
 
   useAlert(error, 'error', clearErrors);
+  useAlert(clubsError, 'error', clearClubsErrors);
   useAlert(message, 'success', clearMessage);
+  useAlert(clubsMessage, 'success', clearClubsMessage);
 
   const [filters, setFilters] = useState<PlayersFilterData>({
     lastName: '',
@@ -62,6 +81,15 @@ export const PlayersContent = () => {
     getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters]);
+
+  const handlePlayersFormSubmit = (data: PlayersFormData) => {
+    if (current) {
+      editPlayer(current._id, data);
+      clearCurrent();
+    } else {
+      addPlayer(data);
+    }
+  };
 
   return (
     <>
@@ -94,10 +122,15 @@ export const PlayersContent = () => {
       <TabPanel value={activeTab} index={1} title="players">
         <PlayersForm
           clubsData={clubsList}
+          current={current}
+          onSubmit={handlePlayersFormSubmit}
           onAddClubClick={() => setIsAddClubModalOpen(true)}
         />
         {isAddClubModalOpen && (
-          <AddClubModal onClose={() => setIsAddClubModalOpen(false)} />
+          <AddClubModal
+            onClose={() => setIsAddClubModalOpen(false)}
+            onSubmit={addClub}
+          />
         )}
       </TabPanel>
     </>

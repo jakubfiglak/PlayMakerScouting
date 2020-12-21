@@ -4,7 +4,7 @@ import { Grid, Button } from '@material-ui/core';
 
 type MainFormActionsProps = {
   label: string;
-  current: boolean;
+  isEditState: boolean;
   onCancelClick: () => void;
   goBack?: () => void;
   activeStep?: number;
@@ -13,7 +13,7 @@ type MainFormActionsProps = {
 
 export const MainFormActions = ({
   label,
-  current,
+  isEditState,
   onCancelClick,
   goBack,
   activeStep,
@@ -23,7 +23,7 @@ export const MainFormActions = ({
     <>
       <Grid item xs={12} sm={4}>
         <Button type="submit" fullWidth variant="contained" color="primary">
-          {current ? `Edytuj ${label}` : `Dodaj ${label}`}
+          {isEditState ? `Edytuj ${label}` : `Dodaj ${label}`}
         </Button>
       </Grid>
       {goBack && (

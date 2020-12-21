@@ -14,12 +14,10 @@ import AddIcon from '@material-ui/icons/Add';
 // Custom components
 import { PositionSelect, FootSelect, ClubsCombo } from '../selects';
 import { MainFormActions } from '../actions';
-import { Loader } from '../../common';
 // Types
 import { ClubData } from '../../../types/simplifiedData';
-import { PlayersFormData } from '../../../types/players';
+import { Player, PlayersFormData } from '../../../types/players';
 // Hooks
-import { usePlayersState } from '../../../context';
 import { useAuthenticatedUser } from '../../../hooks/useAuthenticatedUser';
 // Utils & data
 import { playersFormValidationSchema } from '../validationSchemas';
@@ -27,19 +25,18 @@ import { playersFormInitialValues } from '../initialValues';
 
 type Props = {
   clubsData: ClubData[];
+  current: Player | null;
+  onSubmit: (data: PlayersFormData) => void;
   onAddClubClick: () => void;
 };
 
-export const PlayersForm = ({ clubsData, onAddClubClick }: Props) => {
+export const PlayersForm = ({
+  clubsData,
+  current,
+  onSubmit,
+  onAddClubClick,
+}: Props) => {
   const classes = useStyles();
-
-  const {
-    loading,
-    addPlayer,
-    current,
-    clearCurrent,
-    editPlayer,
-  } = usePlayersState();
 
   const user = useAuthenticatedUser();
 
@@ -64,19 +61,12 @@ export const PlayersForm = ({ clubsData, onAddClubClick }: Props) => {
       validationSchema={playersFormValidationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        if (current) {
-          editPlayer(current._id, data);
-          clearCurrent();
-          resetForm();
-        } else {
-          addPlayer(data);
-          resetForm();
-        }
+        onSubmit(data);
+        resetForm();
       }}
     >
       {({ errors, touched, handleReset }) => (
         <Form>
-          {loading && <Loader />}
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Field
@@ -202,7 +192,7 @@ export const PlayersForm = ({ clubsData, onAddClubClick }: Props) => {
             )}
             <MainFormActions
               label="zawodnika"
-              current={!!current}
+              isEditState={!!current}
               onCancelClick={handleReset}
             />
           </Grid>
