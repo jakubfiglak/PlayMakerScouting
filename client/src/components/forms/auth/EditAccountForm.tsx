@@ -5,7 +5,7 @@ import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Custom components
 import { VoivodeshipSelect } from '../selects/VoivodeshipSelect';
 // Hooks
-import { useAuthState } from '../../../context';
+import { useAuthState } from '../../../context/auth/useAuthState';
 // Types
 import { EditAccountData } from '../../../types/auth';
 // Utils & data

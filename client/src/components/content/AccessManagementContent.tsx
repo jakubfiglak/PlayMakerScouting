@@ -5,11 +5,9 @@ import { Typography, Grid } from '@material-ui/core';
 import { GrantAccessForm, AssignPlaymakerRoleForm } from '../forms';
 import { Loader } from '../common';
 // Hooks
-import {
-  useSimplifiedDataState,
-  usePlayersState,
-  useUsersState,
-} from '../../context';
+import { usePlayersState } from '../../context/players/usePlayersState';
+import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
+import { useUsersState } from '../../context/users/useUsersState';
 import { useAlert } from '../../hooks';
 
 export const AccessManagementContent = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 // MUI components
 import { Alert } from '@material-ui/lab';
 // Hooks
-import { useAlertsState } from '../../../context';
+import { useAlertsState } from '../../../context/alerts/useAlertsState';
 // Styles
 import { useStyles } from '../styles';
 

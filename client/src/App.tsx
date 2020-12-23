@@ -3,10 +3,10 @@ import { ThemeProvider } from '@material-ui/core';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AuthenticatedApp } from './AuthenticatedApp';
 import { UnauthenticatedApp } from './UnauthenticatedApp';
-import { useAuthState } from './context';
 import { Alerts } from './components/common';
 import { ErrorFallback } from './components/common/ErrorFallback';
 import theme from './theme/theme';
+import { useAuthState } from './context/auth/useAuthState';
 
 const App = () => {
   const { token } = useAuthState();

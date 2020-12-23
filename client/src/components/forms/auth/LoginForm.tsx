@@ -6,8 +6,8 @@ import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 // Types
 import { LoginFormData } from '../../../types/auth';
 // Hooks
-import { useAuthState } from '../../../context';
 import { useAlert } from '../../../hooks';
+import { useAuthState } from '../../../context/auth/useAuthState';
 // Styles
 import { useStyles } from './styles';
 // Utils & data

@@ -10,7 +10,7 @@ import { Loader } from '../../common';
 import { MatchesFormData } from '../../../types/matches';
 import { ClubData } from '../../../types/simplifiedData';
 // Hooks
-import { useMatchesState } from '../../../context';
+import { useMatchesState } from '../../../context/matches/useMatchesState';
 // Utils & data
 import { matchesFormInitialValues } from '../initialValues';
 import { matchesFormValidationSchema } from '../validationSchemas';

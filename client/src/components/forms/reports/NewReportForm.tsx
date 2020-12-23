@@ -24,12 +24,10 @@ import { BottomNav } from './BottomNav';
 import { Loader } from '../../common';
 // Hooks
 import { useStepper } from '../../../hooks';
-import {
-  useOrdersState,
-  useSimplifiedDataState,
-  usePlayersState,
-  useAuthState,
-} from '../../../context';
+import { useAuthState } from '../../../context/auth/useAuthState';
+import { useOrdersState } from '../../../context/orders/useOrdersState';
+import { usePlayersState } from '../../../context/players/usePlayersState';
+import { useSimplifiedDataState } from '../../../context/simplifiedData/useSimplifiedDataState';
 // Types
 import { ReportFormData } from '../../../types/reports';
 // Styles

@@ -11,7 +11,7 @@ import {
 import NavElement from './NavElement';
 import NavButton from './NavButton';
 import useStyles from './styles';
-import { useAuthState } from '../../context';
+import { useAuthState } from '../../context/auth/useAuthState';
 
 const TopbarMenu: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

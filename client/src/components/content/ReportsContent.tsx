@@ -10,12 +10,10 @@ import { EditReportForm, NewReportForm, ReportsFilterForm } from '../forms';
 // Types
 import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 // Hooks
-import {
-  useReportsState,
-  useSimplifiedDataState,
-  useAuthState,
-} from '../../context';
 import { useAlert, useTabs } from '../../hooks';
+import { useAuthState } from '../../context/auth/useAuthState';
+import { useReportsState } from '../../context/reports/useReportsState';
+import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
 // Styles
 import { useStyles } from './styles';
 // Utils & data

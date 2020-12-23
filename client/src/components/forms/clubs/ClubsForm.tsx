@@ -7,7 +7,7 @@ import { DivisionSelect, VoivodeshipSelect } from '../selects';
 import { MainFormActions } from '../actions';
 import { Loader } from '../../common';
 // Hooks
-import { useClubsState } from '../../../context';
+import { useClubsState } from '../../../context/clubs/useClubsState';
 // Types
 import { ClubsFormData } from '../../../types/clubs';
 // Utils & data

@@ -7,7 +7,7 @@ import { UsersCombo } from '../selects';
 // Types
 import { UserData } from '../../../types/simplifiedData';
 // Hooks
-import { useUsersState } from '../../../context';
+import { useUsersState } from '../../../context/users/useUsersState';
 // Styles
 import { useStyles } from './styles';
 // Utils & data

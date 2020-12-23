@@ -8,8 +8,9 @@ import { MatchesTable } from '../tables';
 // Types
 import { MatchesFilterData } from '../../types/matches';
 // Hooks
-import { useMatchesState, useSimplifiedDataState } from '../../context';
 import { useTabs, useTable, useAlert } from '../../hooks';
+import { useMatchesState } from '../../context/matches/useMatchesState';
+import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
 // Utils & data
 import { formatDateObject, tomorrow, yearFromNow } from '../../utils';
 

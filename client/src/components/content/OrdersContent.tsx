@@ -9,12 +9,10 @@ import { OrdersGrid } from '../orders';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 // Hooks
-import {
-  useOrdersState,
-  useSimplifiedDataState,
-  useAuthState,
-} from '../../context';
 import { useTabs, useAlert } from '../../hooks';
+import { useAuthState } from '../../context/auth/useAuthState';
+import { useOrdersState } from '../../context/orders/useOrdersState';
+import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
 // Styles
 import { useStyles } from './styles';
 // Utils & data

@@ -7,7 +7,7 @@ import { PlayersCombo, UsersCombo } from '../selects';
 // Types
 import { PlayerData, UserData } from '../../../types/simplifiedData';
 // Hooks
-import { usePlayersState } from '../../../context';
+import { usePlayersState } from '../../../context/players/usePlayersState';
 // Styles
 import { useStyles } from './styles';
 // Utils & data

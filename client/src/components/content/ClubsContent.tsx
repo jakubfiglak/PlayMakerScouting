@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // MUI components
-import {
-  AppBar,
-  Tabs,
-  Tab,
-  FormControlLabel,
-  Checkbox,
-  Box,
-} from '@material-ui/core';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { ClubsTable } from '../tables';
 import { ClubsFilterForm, ClubsForm } from '../forms';
@@ -16,7 +9,7 @@ import { TabPanel, Loader } from '../common';
 import { Club, ClubsFilterData } from '../../types/clubs';
 // Hooks
 import { useTabs, useTable, useAlert } from '../../hooks';
-import { useClubsState } from '../../context';
+import { useClubsState } from '../../context/clubs/useClubsState';
 
 export const ClubsContent = () => {
   const {

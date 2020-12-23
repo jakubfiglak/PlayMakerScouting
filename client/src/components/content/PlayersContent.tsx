@@ -13,8 +13,9 @@ import {
   PlayersFormData,
 } from '../../types/players';
 // Hooks
-import { usePlayersState, useClubsState } from '../../context';
 import { useTabs, useTable, useAlert } from '../../hooks';
+import { useClubsState } from '../../context/clubs/useClubsState';
+import { usePlayersState } from '../../context/players/usePlayersState';
 
 export const PlayersContent = () => {
   const {

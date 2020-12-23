@@ -23,8 +23,8 @@ import { Modal, Loader } from '../common';
 // Types
 import { Order } from '../../types/orders';
 // Hooks
-import { useAuthState } from '../../context';
 import { useModal } from '../../hooks';
+import { useAuthState } from '../../context/auth/useAuthState';
 // Utils & data
 import { formatDate, getLabel } from '../../utils';
 import { orderStatusLabels } from '../../data';

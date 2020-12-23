@@ -9,7 +9,7 @@ import { MotorSkillsAccordion } from './MotorSkillsAccordion';
 import { ReportSummaryAccordion } from './ReportSummaryAccordion';
 import { Loader } from '../common';
 // Hooks
-import { useReportsState } from '../../context';
+import { useReportsState } from '../../context/reports/useReportsState';
 
 type ReportDetailsProps = {
   id: string;

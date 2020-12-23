@@ -9,7 +9,7 @@ import { Loader } from '../../common';
 // Types
 import { PlayerData } from '../../../types/simplifiedData';
 // Hooks
-import { useOrdersState } from '../../../context';
+import { useOrdersState } from '../../../context/orders/useOrdersState';
 // Utils & data
 import { ordersFormInitialValues } from '../initialValues';
 import { ordersFormValidationSchema } from '../validationSchemas';

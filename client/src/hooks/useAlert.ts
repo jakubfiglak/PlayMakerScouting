@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { AlertType } from '../types/alerts';
-import { useAlertsState } from '../context';
+import { useAlertsState } from '../context/alerts/useAlertsState';
 
 export const useAlert = (
   message: string | null,

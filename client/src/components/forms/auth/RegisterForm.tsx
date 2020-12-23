@@ -4,8 +4,8 @@ import { Formik, Form, Field } from 'formik';
 // MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Hooks
-import { useAuthState } from '../../../context';
 import { useAlert } from '../../../hooks';
+import { useAuthState } from '../../../context/auth/useAuthState';
 // Utils & data
 import { registerFormInitialValues } from '../initialValues';
 import { registerFormValidationSchema } from '../validationSchemas';

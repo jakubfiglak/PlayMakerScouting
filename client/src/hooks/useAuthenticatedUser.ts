@@ -1,4 +1,4 @@
-import { useAuthState } from '../context';
+import { useAuthState } from '../context/auth/useAuthState';
 
 export const useAuthenticatedUser = () => {
   const { user } = useAuthState();
