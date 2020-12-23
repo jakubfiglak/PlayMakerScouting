@@ -10,7 +10,7 @@ import {
   Reports,
   Report,
   AccessManagement,
-} from './components/pages';
+} from './pages';
 import { SimplifiedDataState, useAuthState } from './context';
 
 export const AuthenticatedApp = () => {

@@ -1,16 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import MainTemplate from '../templates/MainTemplate/MainTemplate';
-import { ReportsState } from '../../context';
-import { useAuthorization } from '../../hooks';
-import { ReportDetails } from '../reports';
+import MainTemplate from '../templates/MainTemplate';
+import { ReportsState } from '../context';
+import { ReportDetails } from '../components/reports';
 
 type ParamTypes = {
   id: string;
 };
 
 export const Report = () => {
-  // useAuthorization();
   const params = useParams<ParamTypes>();
 
   const { id } = params;

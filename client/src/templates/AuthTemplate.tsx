@@ -1,7 +1,13 @@
 import React from 'react';
-import { Container, CssBaseline, Avatar, Typography } from '@material-ui/core';
-import useStyles from './styles';
-import logo from '../../../assets/logo.png';
+import {
+  Container,
+  CssBaseline,
+  Avatar,
+  Typography,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
+import logo from '../assets/logo.png';
 
 const AuthTemplate: React.FC<{ title: string }> = ({ title, children }) => {
   const classes = useStyles();
@@ -24,5 +30,19 @@ const AuthTemplate: React.FC<{ title: string }> = ({ title, children }) => {
     </Container>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    width: '92px',
+    height: '84px',
+  },
+}));
 
 export default AuthTemplate;

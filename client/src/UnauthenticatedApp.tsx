@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Login, Register } from './components/pages';
+import { Login, Register } from './pages';
 
 export const UnauthenticatedApp = () => {
   return (

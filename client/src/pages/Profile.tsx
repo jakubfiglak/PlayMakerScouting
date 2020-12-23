@@ -2,14 +2,14 @@ import React from 'react';
 // MUI components
 import { Grid } from '@material-ui/core';
 // Custom components
-import MainTemplate from '../templates/MainTemplate/MainTemplate';
-import { DetailsCard, PasswordCard } from '../profile';
+import MainTemplate from '../templates/MainTemplate';
+import { DetailsCard, PasswordCard } from '../components/profile';
 // Hooks
-import { useAuthState } from '../../context';
-import { useAlert } from '../../hooks';
+import { useAuthState } from '../context';
+import { useAlert } from '../hooks';
 // Utils & data
-import { errorLabels, messageLabels } from '../../data';
-import { getLabel } from '../../utils';
+import { errorLabels, messageLabels } from '../data';
+import { getLabel } from '../utils';
 
 export const Profile = () => {
   const { user, error, clearErrors, message, clearMessage } = useAuthState();
