@@ -13,7 +13,6 @@ import {
 import { ReportTypeStep } from './ReportTypeStep';
 import { OrderStep } from './OrderStep';
 import { PlayerStep } from './PlayerStep';
-import { MatchStep } from './MatchStep';
 import { BasicDataStep } from './BasicDataStep';
 import { IndividualSkillsStep } from './IndividualSkillsStep';
 import { TeamplaySkillsStep } from './TeamplaySkillsStep';
@@ -124,7 +123,7 @@ export const NewReportForm = () => {
         }
         return <PlayerStep playersData={playersData} />;
       case 2:
-        return <MatchStep matches={[]} />;
+        return <div />;
       case 3:
         return <IndividualSkillsStep position={playerData?.position} />;
       case 4:

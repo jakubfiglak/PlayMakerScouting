@@ -1,6 +1,6 @@
 import React from 'react';
 // Custom components
-import MainTemplate from '../../templates/MainTemplate';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useAlert } from '../../hooks';
 import { useAuthState } from '../../context/auth/useAuthState';

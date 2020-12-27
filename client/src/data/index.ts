@@ -1,4 +1,3 @@
-export { competitions } from './competitions';
 export { divisions } from './divisions';
 export { skills, individualSkills, teamplaySkills } from './skills';
 export { voivodeships } from './voivodeships';

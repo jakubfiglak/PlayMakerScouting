@@ -1,10 +1,8 @@
 import React from 'react';
 // MUI components
 import { Card, CardContent, Grid, Typography } from '@material-ui/core';
-// Types
-import { Match } from '../../types/matches';
 // Utils & data
-import { replaceCompetitionName, formatDate } from '../../utils';
+import { formatDate } from '../../utils';
 
 type ReportHeaderCardProps = {
   player: {
@@ -12,7 +10,7 @@ type ReportHeaderCardProps = {
     firstName: string;
     lastName: string;
   };
-  match: Match;
+  match: string;
   order?: {
     _id: string;
     docNumber: string;
@@ -45,11 +43,7 @@ export const ReportHeaderCard = ({
           <Grid item xs={12}>
             <Typography>
               <strong>Mecz: </strong>
-              {`${match.homeTeam.name} - ${
-                match.awayTeam.name
-              } (${replaceCompetitionName(match.competition)}, ${formatDate(
-                match.date,
-              )})`}
+              {match}
             </Typography>
           </Grid>
           {order && (

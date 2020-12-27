@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { AccessManagementPage } from './pages/AccessManegement/AccessManagementPage';
 import { ClubsPage } from './pages/Clubs/ClubsPage';
 import { HomePage } from './pages/Home/HomePage';
-import { MatchesPage } from './pages/Matches/MatchesPage';
 import { OrdersPage } from './pages/Orders/OrdersPage';
 import { PlayersPage } from './pages/Players/PlayersPage';
 import { ProfilePage } from './pages/Profile/ProfilePage';
@@ -14,7 +13,6 @@ import { useAuthState } from './context/auth/useAuthState';
 import { PlayersState } from './context/players/PlayersState';
 import { UsersState } from './context/users/UsersState';
 import { ClubsState } from './context/clubs/ClubsState';
-import { MatchesState } from './context/matches/MatchesState';
 import { OrdersState } from './context/orders/OrdersState';
 import { ReportsState } from './context/reports/ReportsState';
 
@@ -36,25 +34,22 @@ export const AuthenticatedApp = () => {
           <Route exact path="/account" component={ProfilePage} />
           <ClubsState>
             <PlayersState>
-              <MatchesState>
-                <Route exact path="/players" component={PlayersPage} />
-                <Route exact path="/clubs" component={ClubsPage} />
-                <Route exact path="/matches" component={MatchesPage} />
-                <OrdersState>
-                  <Route exact path="/orders" component={OrdersPage} />
-                </OrdersState>
-                <ReportsState>
-                  <Route exact path="/reports" component={ReportsPage} />
-                  <Route exact path="/reports/:id" component={ReportPage} />
-                </ReportsState>
-                <UsersState>
-                  <Route
-                    exact
-                    path="/accessmanagement"
-                    component={AccessManagementPage}
-                  />
-                </UsersState>
-              </MatchesState>
+              <Route exact path="/players" component={PlayersPage} />
+              <Route exact path="/clubs" component={ClubsPage} />
+              <OrdersState>
+                <Route exact path="/orders" component={OrdersPage} />
+              </OrdersState>
+              <ReportsState>
+                <Route exact path="/reports" component={ReportsPage} />
+                <Route exact path="/reports/:id" component={ReportPage} />
+              </ReportsState>
+              <UsersState>
+                <Route
+                  exact
+                  path="/accessmanagement"
+                  component={AccessManagementPage}
+                />
+              </UsersState>
             </PlayersState>
           </ClubsState>
         </Switch>

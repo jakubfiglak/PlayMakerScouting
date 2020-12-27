@@ -49,13 +49,7 @@ export const EditReportForm = ({ report }: Props) => {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Typography>
-          <strong>Mecz: </strong>
-          {`${match.homeTeam.name} - ${match.awayTeam.name} (${getLabel(
-            match.competition,
-            competitionLabels,
-          )}, ${formatDate(match.date)})`}
-        </Typography>
+        <div>hello</div>
       </Grid>
       {order && (
         <Grid item xs={12}>

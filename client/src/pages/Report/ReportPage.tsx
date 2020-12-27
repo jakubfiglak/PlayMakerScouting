@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import MainTemplate from '../../templates/MainTemplate';
+import { MainTemplate } from '../../templates/MainTemplate';
 import { ReportDetails } from '../../components/reports';
 
 type ParamTypes = {

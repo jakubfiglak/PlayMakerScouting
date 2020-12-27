@@ -9,7 +9,10 @@ import {
 } from '@material-ui/core';
 import logo from '../assets/logo.png';
 
-const AuthTemplate: React.FC<{ title: string }> = ({ title, children }) => {
+export const AuthTemplate: React.FC<{ title: string }> = ({
+  title,
+  children,
+}) => {
   const classes = useStyles();
 
   return (
@@ -44,5 +47,3 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '84px',
   },
 }));
-
-export default AuthTemplate;

@@ -1,4 +1,3 @@
-import { Address } from '../../types/common';
 import {
   RegisterFormData,
   EditAccountData,
@@ -7,20 +6,9 @@ import {
 } from '../../types/auth';
 import { PlayersFormData, GrantAccessFormData } from '../../types/players';
 import { ClubsFormData } from '../../types/clubs';
-import { MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
 import { ReportFormData } from '../../types/reports';
-import { formatDateObject } from '../../utils';
 import { AssignPlaymakerRoleData } from '../../types/users';
-
-const initialAddress: Address = {
-  street: '',
-  streetNo: '',
-  zipCode: '',
-  city: '',
-  voivodeship: '',
-  country: 'Polska',
-};
 
 export const loginFormInitialValues: LoginFormData = {
   email: '',
@@ -68,13 +56,6 @@ export const clubsFormInitialValues: ClubsFormData = {
   division: '',
   voivodeship: '',
   lnpID: '',
-};
-
-export const matchesFormInitialValues: MatchesFormData = {
-  homeTeam: '',
-  awayTeam: '',
-  competition: '',
-  date: formatDateObject(new Date()),
 };
 
 export const ordersFormInitialValues: OrderFormData = {

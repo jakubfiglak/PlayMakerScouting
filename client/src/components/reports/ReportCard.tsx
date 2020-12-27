@@ -20,7 +20,7 @@ import { FinalRatingChip } from './FinalRatingChip';
 // Types
 import { Report } from '../../types/reports';
 // Utils & data
-import { formatDate, replaceCompetitionName } from '../../utils';
+import { formatDate } from '../../utils';
 
 type ReportCardProps = {
   report: Report;
@@ -47,11 +47,7 @@ export const ReportCard = ({ report, onEditClick }: ReportCardProps) => {
           <Grid item xs={12}>
             <Typography>
               <strong>Mecz: </strong>
-              {`${match.homeTeam.name} - ${
-                match.awayTeam.name
-              } (${replaceCompetitionName(match.competition)}, ${formatDate(
-                match.date,
-              )})`}
+              {match}
             </Typography>
           </Grid>
           <Grid item xs={12}>

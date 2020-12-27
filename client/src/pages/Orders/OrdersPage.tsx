@@ -1,11 +1,108 @@
-import React from 'react';
-import MainTemplate from '../../templates/MainTemplate';
-import { OrdersContent } from '../../components/content';
+import React, { useState, useEffect } from 'react';
+// MUI components
+import { AppBar, Tabs, Tab } from '@material-ui/core';
+// Custom components
+import { MainTemplate } from '../../templates/MainTemplate';
+import { TabPanel, Loader } from '../../components/common';
+import { OrdersForm, OrdersFilterForm } from '../../components/forms';
+import { OrdersGrid } from '../../components/orders';
+// Types
+import { OrdersFilterData } from '../../types/orders';
+// Hooks
+import { useTabs, useAlert } from '../../hooks';
+import { useAuthState } from '../../context/auth/useAuthState';
+import { useOrdersState } from '../../context/orders/useOrdersState';
+import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
+// Utils & data
+import { formatDateObject, yearFromNow, tomorrow } from '../../utils';
 
 export const OrdersPage = () => {
+  const {
+    loading,
+    getOrders,
+    getMyOrders,
+    acceptOrder,
+    ordersData,
+    myOrdersData,
+    deleteOrder,
+    closeOrder,
+    error,
+    message,
+    clearErrors,
+    clearMessage,
+  } = useOrdersState();
+
+  const {
+    loading: simpleDataLoading,
+    getPlayers,
+    playersData,
+  } = useSimplifiedDataState();
+
+  const { loading: userLoading, user } = useAuthState();
+
+  const [activeTab, handleTabChange] = useTabs();
+
+  useAlert(error, 'error', clearErrors);
+  useAlert(message, 'success', clearMessage);
+
+  const [filters, setFilters] = useState<OrdersFilterData>({
+    player: '',
+    status: 'open',
+    createdAfter: formatDateObject(yearFromNow),
+    createdBefore: formatDateObject(tomorrow),
+  });
+
+  useEffect(() => {
+    getPlayers();
+    getOrders(filters, 1);
+    getMyOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
+
+  const isAdmin = user?.role === 'admin';
+
+  if (user?.role === 'scout') {
+    return <p>Aby mieć dostęp do zleceń, zostań scoutem Playmakera!</p>;
+  }
+
   return (
     <MainTemplate>
-      <OrdersContent />
+      {(loading || simpleDataLoading || userLoading) && <Loader />}
+      <AppBar position="static">
+        <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
+          <Tab label="Baza zleceń" id="orders-0" aria-controls="orders-0" />
+          <Tab label="Moje zlecenia" id="orders-1" aria-controls="orders-1" />
+          {isAdmin && (
+            <Tab
+              label="Stwórz zlecenie"
+              id="orders-2"
+              aria-controls="orders-2"
+            />
+          )}
+        </Tabs>
+      </AppBar>
+      <TabPanel value={activeTab} index={0} title="matches">
+        <OrdersFilterForm playersData={playersData} setFilters={setFilters} />
+        <OrdersGrid
+          ordersData={ordersData}
+          deleteOrder={deleteOrder}
+          acceptOrder={acceptOrder}
+          closeOrder={closeOrder}
+        />
+      </TabPanel>
+      <TabPanel value={activeTab} index={1} title="my-orders">
+        <OrdersGrid
+          ordersData={myOrdersData}
+          deleteOrder={deleteOrder}
+          acceptOrder={acceptOrder}
+          closeOrder={closeOrder}
+        />
+      </TabPanel>
+      {isAdmin && (
+        <TabPanel value={activeTab} index={2} title="orders-form">
+          <OrdersForm playersData={playersData} />
+        </TabPanel>
+      )}
     </MainTemplate>
   );
 };

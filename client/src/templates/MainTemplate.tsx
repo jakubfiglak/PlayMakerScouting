@@ -8,7 +8,7 @@ import {
 import Sidebar from '../components/nav/Sidebar';
 import Topbar from '../components/nav/Topbar';
 
-const MainTemplate: React.FC = ({ children }) => {
+export const MainTemplate: React.FC = ({ children }) => {
   const classes = useStyles();
 
   return (
@@ -42,5 +42,3 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbar: theme.mixins.toolbar,
   }),
 );
-
-export default MainTemplate;

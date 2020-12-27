@@ -2,7 +2,7 @@ import React from 'react';
 // MUI components
 import { Grid } from '@material-ui/core';
 // Custom components
-import MainTemplate from '../../templates/MainTemplate';
+import { MainTemplate } from '../../templates/MainTemplate';
 import { DetailsCard, PasswordCard } from '../../components/profile';
 // Hooks
 import { useAlert } from '../../hooks';

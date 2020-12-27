@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { Address, Voivodeship } from '../../types/common';
+import { Voivodeship } from '../../types/common';
 import {
   RegisterFormData,
   EditAccountData,
@@ -13,21 +13,9 @@ import {
   GrantAccessFormData,
 } from '../../types/players';
 import { ClubsFormData, Division } from '../../types/clubs';
-import { Competition, MatchesFormData } from '../../types/matches';
 import { OrderFormData } from '../../types/orders';
 import { ReportFormData, Rating, RatingScore } from '../../types/reports';
 import { AssignPlaymakerRoleData } from '../../types/users';
-
-const addressValidationSchema: yup.ObjectSchema<Address> = yup
-  .object({
-    street: yup.string().required('Podaj ulicę'),
-    streetNo: yup.string().required('Podaj numer ulicy'),
-    zipCode: yup.string().required('Podaj kod pocztowy'),
-    city: yup.string().required('Podaj miasto'),
-    voivodeship: yup.string(),
-    country: yup.string().required('Podaj kraj'),
-  })
-  .defined();
 
 const passwordValidationSchema = yup
   .string()
@@ -107,15 +95,6 @@ export const clubsFormValidationSchema: yup.ObjectSchema<ClubsFormData> = yup
     voivodeship: yup
       .mixed<Voivodeship | 'Zagranica'>()
       .required('Podaj województwo'),
-  })
-  .defined();
-
-export const matchesFormValidationSchema: yup.ObjectSchema<MatchesFormData> = yup
-  .object({
-    homeTeam: yup.string().required('Wybierz drużynę gospodarzy'),
-    awayTeam: yup.string().required('Wybierz drużynę gości'),
-    competition: yup.mixed<Competition>().required('Wybierz rodzaj rozgrywek'),
-    date: yup.string().required('Podaj datę rozgrywania meczu'),
   })
   .defined();
 
