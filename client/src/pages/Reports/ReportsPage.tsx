@@ -3,14 +3,13 @@ import { Formik } from 'formik';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
+import { ReportsGrid } from './ReportsGrid';
+import { ReportsFilterForm } from './ReportsFilterForm';
+import { NewReportForm } from './forms/NewReportForm';
+import { EditReportForm } from './forms/EditReportForm';
 import { MainTemplate } from '../../templates/MainTemplate';
-import { TabPanel, Loader } from '../../components/common';
-import { ReportsGrid } from '../../components/reports';
-import {
-  EditReportForm,
-  NewReportForm,
-  ReportsFilterForm,
-} from '../../components/forms';
+import { TabPanel } from '../../components/TabPanel';
+import { Loader } from '../../components/Loader';
 // Types
 import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 // Hooks

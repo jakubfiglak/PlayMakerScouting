@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
+import { OrdersForm } from './OrdersForm';
+import { OrdersFilterForm } from './OrdersFilterForm';
 import { MainTemplate } from '../../templates/MainTemplate';
-import { TabPanel, Loader } from '../../components/common';
-import { OrdersForm, OrdersFilterForm } from '../../components/forms';
-import { OrdersGrid } from '../../components/orders';
+import { TabPanel } from '../../components/TabPanel';
+import { Loader } from '../../components/Loader';
+import { OrdersGrid } from './OrdersGrid';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 // Hooks

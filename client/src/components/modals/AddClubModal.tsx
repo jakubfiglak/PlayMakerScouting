@@ -3,8 +3,9 @@ import { Formik, Form, Field } from 'formik';
 // MUI components
 import { Grid, TextField } from '@material-ui/core';
 // Custom components
-import { FormModal } from '../common/FormModal';
-import { VoivodeshipSelect, DivisionSelect } from '../forms/selects';
+import { FormModal } from '../FormModal';
+import { VoivodeshipSelect } from '../selects/VoivodeshipSelect';
+import { DivisionSelect } from '../selects/DivisionSelect';
 // Types
 import { ClubsFormData } from '../../types/clubs';
 // Utils & data

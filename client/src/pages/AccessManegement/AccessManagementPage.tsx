@@ -2,12 +2,10 @@ import React, { useEffect } from 'react';
 // MUI components
 import { Typography, Grid } from '@material-ui/core';
 // Custom components
+import { GrantAccessForm } from './GrantAccessForm';
+import { AssignPlaymakerRoleForm } from './AssignPlaymakerRoleForm';
 import { MainTemplate } from '../../templates/MainTemplate';
-import {
-  GrantAccessForm,
-  AssignPlaymakerRoleForm,
-} from '../../components/forms';
-import { Loader } from '../../components/common';
+import { Loader } from '../../components/Loader';
 // Hooks
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';

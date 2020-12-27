@@ -9,7 +9,7 @@ import {
   EditAccountData,
   UpdatePasswordData,
 } from '../../types/auth';
-import { Loader } from '../../components/common';
+import { Loader } from '../../components/Loader';
 
 export const AuthState: React.FC = ({ children }) => {
   const initialState: State = {

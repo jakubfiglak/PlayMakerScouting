@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
+import { ClubsForm } from './ClubsForm';
+import { ClubsFilterForm } from './ClubsFilterForm';
+import { ClubsTable } from './ClubsTable';
 import { MainTemplate } from '../../templates/MainTemplate';
-import { ClubsTable } from '../../components/tables';
-import { ClubsFilterForm, ClubsForm } from '../../components/forms';
-import { TabPanel, Loader } from '../../components/common';
+import { TabPanel } from '../../components/TabPanel';
+import { Loader } from '../../components/Loader';
 // Types
 import { Club, ClubsFilterData } from '../../types/clubs';
 // Hooks
