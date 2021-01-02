@@ -1,33 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+// MUI components
 import { Menu, Divider, IconButton } from '@material-ui/core';
+// MUI icons
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
+// Custom components
+import { NavElement } from './NavElement';
+import { NavButton } from './NavButton';
+// Hooks
+import { useAuthState } from '../../context/auth/useAuthState';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+// Utils & data
 import {
   scoutNavElements,
   playmakerScoutNavElements,
   adminNavElements,
 } from './data';
-import NavElement from './NavElement';
-import NavButton from './NavButton';
-import useStyles from './styles';
-import { useAuthState } from '../../context/auth/useAuthState';
+// Styles
+import { useStyles } from './styles';
 
-const TopbarMenu: React.FC = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+export const TopbarMenu = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const classes = useStyles();
   const authContext = useAuthState();
   const history = useHistory();
 
-  const { logout, user } = authContext;
+  const { logout } = authContext;
+  const user = useAuthenticatedUser();
 
   let navElements = scoutNavElements;
 
-  if (user?.role === 'admin') {
+  if (user.role === 'admin') {
     navElements = adminNavElements;
   }
 
-  if (user?.role === 'playmaker-scout') {
+  if (user.role === 'playmaker-scout') {
     navElements = playmakerScoutNavElements;
   }
 
@@ -36,13 +44,7 @@ const TopbarMenu: React.FC = () => {
     logout();
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const ref = useRef<HTMLButtonElement>(null);
 
   return (
     <div>
@@ -52,16 +54,17 @@ const TopbarMenu: React.FC = () => {
         aria-label="menu"
         aria-controls="menu"
         aria-haspopup="true"
-        onClick={handleClick}
+        onClick={() => setIsMenuOpen(true)}
+        ref={ref}
       >
         <MenuIcon />
       </IconButton>
       <Menu
         id="menu"
-        anchorEl={anchorEl}
+        anchorEl={ref.current}
         keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
+        open={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
       >
         {navElements.map((element) => {
           const { Icon, text, link } = element;
@@ -86,5 +89,3 @@ const TopbarMenu: React.FC = () => {
     </div>
   );
 };
-
-export default TopbarMenu;

@@ -1,31 +1,38 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+// MUI Components
 import { Drawer, Divider } from '@material-ui/core';
+// MUI Icons
 import ExitToApp from '@material-ui/icons/ExitToApp';
-import useStyles from './styles';
+// Custom components
+import { NavElement } from './NavElement';
+import { NavButton } from './NavButton';
+// Hooks
+import { useAuthState } from '../../context/auth/useAuthState';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import {
   scoutNavElements,
   adminNavElements,
   playmakerScoutNavElements,
 } from './data';
-import NavElement from './NavElement';
-import NavButton from './NavButton';
-import { useAuthState } from '../../context/auth/useAuthState';
+// Styles
+import { useStyles } from './styles';
 
-const Sidebar: React.FC = () => {
+const Sidebar = () => {
   const classes = useStyles();
   const authContext = useAuthState();
   const history = useHistory();
 
-  const { logout, user } = authContext;
+  const { logout } = authContext;
+  const user = useAuthenticatedUser();
 
   let navElements = scoutNavElements;
 
-  if (user?.role === 'admin') {
+  if (user.role === 'admin') {
     navElements = adminNavElements;
   }
 
-  if (user?.role === 'playmaker-scout') {
+  if (user.role === 'playmaker-scout') {
     navElements = playmakerScoutNavElements;
   }
 

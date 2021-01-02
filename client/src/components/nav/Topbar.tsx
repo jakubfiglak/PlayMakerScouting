@@ -1,9 +1,12 @@
 import React from 'react';
+// MUI components
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
-import useStyles from './styles';
-import TopbarMenu from './TopbarMenu';
+// Custom components
+import { TopbarMenu } from './TopbarMenu';
+// Styles
+import { useStyles } from './styles';
 
-const Topbar: React.FC = () => {
+const Topbar = () => {
   const classes = useStyles();
 
   return (

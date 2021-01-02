@@ -3,7 +3,7 @@ import { white, semiGray } from '../../theme/colors';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme: Theme) => ({
+export const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,

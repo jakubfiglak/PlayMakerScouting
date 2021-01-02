@@ -6,14 +6,14 @@ import {
   Button,
 } from '@material-ui/core';
 import { NavButtonProps } from './types';
-import useStyles from './styles';
+import { useStyles } from './styles';
 
-const NavButton: React.FC<NavButtonProps> = ({
+export const NavButton = ({
   Icon,
   text,
   onClick,
   className,
-}) => {
+}: NavButtonProps) => {
   const classes = useStyles();
 
   return (
@@ -27,5 +27,3 @@ const NavButton: React.FC<NavButtonProps> = ({
     </Button>
   );
 };
-
-export default NavButton;

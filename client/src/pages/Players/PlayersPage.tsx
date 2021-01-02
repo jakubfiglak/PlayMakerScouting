@@ -5,10 +5,10 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { PlayersForm } from './PlayersForm';
 import { PlayersTable } from './PlayersTable';
 import { PlayersFilterForm } from './PlayersFilterForm';
+import { AddClubModal } from './AddClubModal';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
-import { AddClubModal } from '../../components/modals/AddClubModal';
 // Types
 import {
   PlayersFilterData,

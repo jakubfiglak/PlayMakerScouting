@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ThemeProvider } from '@material-ui/core';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AuthenticatedApp } from './AuthenticatedApp';
@@ -9,13 +9,20 @@ import theme from './theme/theme';
 import { useAuthState } from './context/auth/useAuthState';
 
 const App = () => {
-  const { token } = useAuthState();
+  const { loadUser, user } = useAuthState();
+
+  useEffect(() => {
+    if (!user) {
+      loadUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <ThemeProvider theme={theme}>
         <Alerts />
-        {token ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+        {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
       </ThemeProvider>
     </ErrorBoundary>
   );

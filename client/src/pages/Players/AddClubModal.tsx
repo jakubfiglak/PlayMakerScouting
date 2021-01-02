@@ -3,14 +3,14 @@ import { Formik, Form, Field } from 'formik';
 // MUI components
 import { Grid, TextField } from '@material-ui/core';
 // Custom components
-import { FormModal } from '../FormModal';
-import { VoivodeshipSelect } from '../selects/VoivodeshipSelect';
-import { DivisionSelect } from '../selects/DivisionSelect';
+import { FormModal } from '../../components/FormModal';
+import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
+import { DivisionSelect } from '../../components/selects/DivisionSelect';
 // Types
 import { ClubsFormData } from '../../types/clubs';
 // Utils & data
-import { clubsFormInitialValues } from '../forms/initialValues';
-import { clubsFormValidationSchema } from '../forms/validationSchemas';
+import { clubsFormInitialValues } from '../../components/forms/initialValues';
+import { clubsFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
   onClose: () => void;

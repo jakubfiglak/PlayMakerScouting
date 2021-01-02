@@ -1,15 +1,13 @@
 import React from 'react';
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
+// MUI components
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+// Types
 import { NavLinkProps } from './types';
-import useStyles from './styles';
+// Styles
+import { useStyles } from './styles';
 
-const NavElement: React.FC<NavLinkProps> = ({
-  Icon,
-  text,
-  link,
-  className,
-}) => {
+export const NavElement = ({ Icon, text, link, className }: NavLinkProps) => {
   const classes = useStyles();
 
   return (
