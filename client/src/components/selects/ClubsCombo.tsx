@@ -1,8 +1,17 @@
 import React from 'react';
 import { useField } from 'formik';
 // MUI components
-import { TextField } from '@material-ui/core';
+import {
+  TextField,
+  Paper,
+  MenuItem,
+  Button,
+  Divider,
+  PaperProps,
+} from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+// MUI icons
+import AddIcon from '@material-ui/icons/AddOutlined';
 // Types
 import { ClubData } from '../../types/simplifiedData';
 
@@ -11,9 +20,18 @@ type Props = {
   name: string;
   label: string;
   size?: 'medium' | 'small';
+  addClubOption?: boolean;
+  onAddClubClick?: () => void;
 };
 
-export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
+export const ClubsCombo = ({
+  clubsData,
+  name,
+  label,
+  size,
+  addClubOption,
+  onAddClubClick,
+}: Props) => {
   const [field, fieldMeta, fieldHelpers] = useField(name);
 
   const { value } = field;
@@ -34,7 +52,7 @@ export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
         if (club) {
           return club.name;
         }
-        return '';
+        return 'brak';
       }}
       renderInput={(params) => (
         <TextField
@@ -46,6 +64,26 @@ export const ClubsCombo = ({ clubsData, name, label, size }: Props) => {
         />
       )}
       size={size}
+      PaperComponent={
+        addClubOption
+          ? (props: PaperProps) => (
+              <Paper {...props}>
+                <MenuItem>
+                  <Button
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={onAddClubClick}
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    Dodaj nowy klub
+                  </Button>
+                </MenuItem>
+                <Divider />
+                {props.children}
+              </Paper>
+            )
+          : Paper
+      }
     />
   );
 };

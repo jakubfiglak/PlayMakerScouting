@@ -1,14 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import {
-  Grid,
-  TextField,
-  FormControl,
-  IconButton,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { Grid, TextField, FormControl } from '@material-ui/core';
 // MUI icons
 import AddIcon from '@material-ui/icons/Add';
 // Custom components
@@ -38,8 +31,6 @@ export const PlayersForm = ({
   onSubmit,
   onAddClubClick,
 }: Props) => {
-  const classes = useStyles();
-
   const user = useAuthenticatedUser();
 
   const initialValues: PlayersFormData = current
@@ -96,18 +87,15 @@ export const PlayersForm = ({
               />
             </Grid>
             <Grid item xs={12}>
-              <div className={classes.clubContainer}>
-                <FormControl variant="outlined" fullWidth>
-                  <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
-                </FormControl>
-                <IconButton
-                  aria-label="add club"
-                  className={classes.addClubButton}
-                  onClick={onAddClubClick}
-                >
-                  <AddIcon />
-                </IconButton>
-              </div>
+              <FormControl variant="outlined" fullWidth>
+                <ClubsCombo
+                  clubsData={clubsData}
+                  name="club"
+                  label="Klub"
+                  addClubOption
+                  onAddClubClick={onAddClubClick}
+                />
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl variant="outlined" fullWidth>
@@ -203,18 +191,3 @@ export const PlayersForm = ({
     </Formik>
   );
 };
-
-const useStyles = makeStyles((theme: Theme) => ({
-  clubContainer: {
-    display: 'flex',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: `${theme.spacing(1)}px`,
-  },
-  addClubButton: {
-    background: theme.palette.secondary.light,
-    width: 40,
-    height: 40,
-  },
-}));
