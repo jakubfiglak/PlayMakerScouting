@@ -66,7 +66,11 @@ export const ordersFormInitialValues: OrderFormData = {
 export const reportsFormInitialValues: ReportFormData = {
   order: '',
   player: '',
-  match: '',
+  match: {
+    location: 'home',
+    against: '',
+    competition: 'league',
+  },
   minutesPlayed: 0,
   goals: 0,
   assists: 0,
@@ -77,15 +81,7 @@ export const reportsFormInitialValues: ReportFormData = {
       rating: 1,
       note: '',
     },
-    holdPass: {
-      rating: 1,
-      note: '',
-    },
-    gainPass: {
-      rating: 1,
-      note: '',
-    },
-    keyPass: {
+    passing: {
       rating: 1,
       note: '',
     },

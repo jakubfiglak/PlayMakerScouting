@@ -9,11 +9,11 @@ import {
   ReportsFilterData,
 } from '../../types/reports';
 import { initialPaginatedData } from '../../data';
+import { SortingOrder } from '../../types/common';
 
 export const ReportsState: React.FC = ({ children }) => {
   const initialState: State = {
     reportsData: initialPaginatedData,
-    myReportsData: initialPaginatedData,
     reportData: null,
     current: null,
     loading: false,
@@ -23,7 +23,6 @@ export const ReportsState: React.FC = ({ children }) => {
     clearErrors: () => null,
     clearMessage: () => null,
     getReports: () => null,
-    getMyReports: () => null,
     getReport: () => null,
     deleteReport: () => null,
     addReport: () => null,
@@ -57,10 +56,17 @@ export const ReportsState: React.FC = ({ children }) => {
   };
 
   // Get reports
-  const getReports = async (filters: ReportsFilterData, page = 1) => {
+  const getReports = async (
+    page = 1,
+    limit = 20,
+    sort = '-createdAt',
+    order: SortingOrder,
+    filters: ReportsFilterData,
+  ) => {
     setLoading();
+    const orderSign = order === 'desc' ? '-' : '';
 
-    let reportsURI = `/api/v1/reports?page=${page}`;
+    let reportsURI = `/api/v1/reports?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
 
     if (filters.player) {
       reportsURI = reportsURI.concat(`&player=${filters.player}`);
@@ -76,30 +82,6 @@ export const ReportsState: React.FC = ({ children }) => {
       dispatch({
         type: 'REPORTS_ERROR',
         payload: err.response.data.error,
-      });
-    }
-  };
-
-  // Get my reports
-  const getMyReports = async (filters: ReportsFilterData, page = 1) => {
-    setLoading();
-
-    let reportsURI = `/api/v1/reports/my?page=${page}`;
-
-    if (filters.player) {
-      reportsURI = reportsURI.concat(`&player=${filters.player}`);
-    }
-
-    try {
-      const res = await axiosJson.get(reportsURI);
-      dispatch({
-        type: 'GET_MY_REPORTS_SUCCESS',
-        payload: res.data.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: 'REPORTS_ERROR',
-        payload: 'err.response.data.error',
       });
     }
   };
@@ -188,21 +170,12 @@ export const ReportsState: React.FC = ({ children }) => {
       type: 'CLEAR_MESSAGE',
     });
 
-  const {
-    reportsData,
-    myReportsData,
-    reportData,
-    current,
-    loading,
-    error,
-    message,
-  } = state;
+  const { reportsData, reportData, current, loading, error, message } = state;
 
   return (
     <ReportsContext.Provider
       value={{
         reportsData,
-        myReportsData,
         reportData,
         current,
         loading,
@@ -210,7 +183,6 @@ export const ReportsState: React.FC = ({ children }) => {
         message,
         setLoading,
         getReports,
-        getMyReports,
         getReport,
         deleteReport,
         addReport,

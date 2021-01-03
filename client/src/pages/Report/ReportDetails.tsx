@@ -28,11 +28,6 @@ export const ReportDetails = ({ id }: ReportDetailsProps) => {
     <>
       {loading && <Loader />}
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h5" align="center">
-            Raport z obserwacji nr {reportData?.docNumber}
-          </Typography>
-        </Grid>
         {reportData && (
           <>
             <Grid item xs={12}>

@@ -14,7 +14,13 @@ import {
 } from '../../types/players';
 import { ClubsFormData, Division } from '../../types/clubs';
 import { OrderFormData } from '../../types/orders';
-import { ReportFormData, Rating, RatingScore } from '../../types/reports';
+import {
+  ReportFormData,
+  Rating,
+  RatingScore,
+  Competition,
+  MatchLocation,
+} from '../../types/reports';
 import { AssignPlaymakerRoleData } from '../../types/users';
 
 const passwordValidationSchema = yup
@@ -116,7 +122,13 @@ export const reportsFormValidationSchema: yup.ObjectSchema<ReportFormData> = yup
   .object({
     order: yup.string(),
     player: yup.string(),
-    match: yup.string().required('Wybierz mecz, którego dotyczy raport'),
+    match: yup
+      .object({
+        location: yup.mixed<MatchLocation>(),
+        against: yup.string(),
+        competition: yup.mixed<Competition>(),
+      })
+      .defined(),
     minutesPlayed: yup
       .number()
       .min(0, 'Liczba rozegranych minut musi być wartością pomiędzy 0 a 90')
@@ -143,9 +155,7 @@ export const reportsFormValidationSchema: yup.ObjectSchema<ReportFormData> = yup
     individualSkills: yup
       .object({
         ballReception: ratingValidationSchema,
-        holdPass: ratingValidationSchema,
-        gainPass: ratingValidationSchema,
-        keyPass: ratingValidationSchema,
+        passing: ratingValidationSchema,
         defOneOnOne: ratingValidationSchema,
         airPlay: ratingValidationSchema,
         positioning: ratingValidationSchema,

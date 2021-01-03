@@ -28,7 +28,7 @@ type Props = {
 };
 
 export const EditReportForm = ({ report }: Props) => {
-  const { docNumber, player, match, order, scout, createdAt } = report;
+  const { _id, player, match, order, scout, createdAt } = report;
 
   const { handleReset } = useFormikContext();
 
@@ -36,7 +36,7 @@ export const EditReportForm = ({ report }: Props) => {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h5" align="center">
-          Edycja raportu nr {docNumber}
+          Edycja raportu nr {_id}
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -55,7 +55,7 @@ export const EditReportForm = ({ report }: Props) => {
         <Grid item xs={12}>
           <Typography>
             <strong>Nr zlecenia: </strong>
-            {order.docNumber}
+            {order}
           </Typography>
         </Grid>
       )}

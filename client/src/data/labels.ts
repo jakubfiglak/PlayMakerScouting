@@ -99,3 +99,22 @@ export const messageLabels = [
     label: 'Hasło zostało zmienione pomyślnie',
   },
 ];
+
+export const ratingLabels = [
+  {
+    value: 1,
+    label: 'Selekcja negatywna',
+  },
+  {
+    value: 2,
+    label: 'Brak decyzji',
+  },
+  {
+    value: 3,
+    label: 'Do obserwacji',
+  },
+  {
+    value: 4,
+    label: 'Selekcja pozytywna',
+  },
+];

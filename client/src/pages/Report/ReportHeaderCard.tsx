@@ -1,6 +1,8 @@
 import React from 'react';
 // MUI components
 import { Card, CardContent, Grid, Typography } from '@material-ui/core';
+// Types
+import { MatchData } from '../../types/reports';
 // Utils & data
 import { formatDate } from '../../utils';
 
@@ -10,11 +12,8 @@ type ReportHeaderCardProps = {
     firstName: string;
     lastName: string;
   };
-  match: string;
-  order?: {
-    _id: string;
-    docNumber: string;
-  };
+  match: MatchData;
+  order?: string;
   scout: {
     _id: string;
     firstName: string;
@@ -50,7 +49,7 @@ export const ReportHeaderCard = ({
             <Grid item xs={12}>
               <Typography>
                 <strong>Nr zlecenia: </strong>
-                {order.docNumber}
+                {order}
               </Typography>
             </Grid>
           )}

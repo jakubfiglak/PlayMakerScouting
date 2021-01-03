@@ -24,14 +24,6 @@ export default (state: State, action: Action): State => {
         reportData: action.payload,
       };
 
-    case 'GET_MY_REPORTS_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        myReportsData: action.payload,
-      };
-
     case 'CREATE_REPORT_SUCCESS':
       return {
         ...state,
@@ -41,10 +33,6 @@ export default (state: State, action: Action): State => {
         reportsData: {
           ...state.reportsData,
           docs: [action.payload.report, ...state.reportsData.docs],
-        },
-        myReportsData: {
-          ...state.myReportsData,
-          docs: [action.payload.report, ...state.myReportsData.docs],
         },
       };
 
@@ -62,14 +50,6 @@ export default (state: State, action: Action): State => {
               : report,
           ),
         },
-        myReportsData: {
-          ...state.myReportsData,
-          docs: state.myReportsData.docs.map((report) =>
-            report._id === action.payload.report._id
-              ? action.payload.report
-              : report,
-          ),
-        },
       };
 
     case 'DELETE_REPORT_SUCCESS':
@@ -81,12 +61,6 @@ export default (state: State, action: Action): State => {
         reportsData: {
           ...state.reportsData,
           docs: state.reportsData.docs.filter(
-            (report) => report._id !== action.payload.id,
-          ),
-        },
-        myReportsData: {
-          ...state.myReportsData,
-          docs: state.myReportsData.docs.filter(
             (report) => report._id !== action.payload.id,
           ),
         },

@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
-import { ReportsGrid } from './ReportsGrid';
+import { ReportsTable } from './ReportsTable';
 import { ReportsFilterForm } from './ReportsFilterForm';
 import { NewReportForm } from './forms/NewReportForm';
 import { EditReportForm } from './forms/EditReportForm';
@@ -14,9 +14,9 @@ import { Loader } from '../../components/Loader';
 import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 // Hooks
 import { useAlert, useTabs } from '../../hooks';
-import { useAuthState } from '../../context/auth/useAuthState';
+import { useTable } from '../../hooks/useTable';
 import { useReportsState } from '../../context/reports/useReportsState';
-import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
+import { usePlayersState } from '../../context/players/usePlayersState';
 // Utils & data
 import { reportsFormInitialValues } from '../../components/forms/initialValues';
 import { reportsFormValidationSchema } from '../../components/forms/validationSchemas';
@@ -24,9 +24,7 @@ import { reportsFormValidationSchema } from '../../components/forms/validationSc
 export const ReportsPage = () => {
   const {
     loading,
-    getMyReports,
     getReports,
-    myReportsData,
     reportsData,
     setCurrent,
     addReport,
@@ -40,14 +38,22 @@ export const ReportsPage = () => {
   } = useReportsState();
 
   const {
-    loading: simpleDataLoading,
-    getPlayers,
-    playersData,
-  } = useSimplifiedDataState();
-
-  const { loading: userLoading, user } = useAuthState();
+    loading: playersLoading,
+    getPlayersList,
+    playersList,
+  } = usePlayersState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
+
+  const [
+    page,
+    rowsPerPage,
+    sortBy,
+    order,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleSort,
+  ] = useTable();
 
   const [filters, setFilters] = useState<ReportsFilterData>({
     player: '',
@@ -55,7 +61,7 @@ export const ReportsPage = () => {
 
   const initialValues: ReportFormData = current
     ? {
-        order: current?.order?._id || '',
+        order: current.order,
         player: current.player._id,
         match: current.match,
         minutesPlayed: current.minutesPlayed,
@@ -71,17 +77,15 @@ export const ReportsPage = () => {
       }
     : reportsFormInitialValues;
 
-  const isAdmin = user?.role === 'admin';
+  useEffect(() => {
+    getPlayersList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    getPlayers();
-    if (isAdmin) {
-      getReports(filters, 1);
-    } else {
-      getMyReports(filters, 1);
-    }
+    getReports(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [page, rowsPerPage, sortBy, order, filters]);
 
   useEffect(() => {
     if (activeTab === 0 && current) {
@@ -100,7 +104,7 @@ export const ReportsPage = () => {
 
   return (
     <MainTemplate>
-      {(loading || simpleDataLoading || userLoading) && <Loader />}
+      {(loading || playersLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
           <Tab label="Raporty" id="reports-0" aria-controls="reports-0" />
@@ -108,10 +112,18 @@ export const ReportsPage = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="reports">
-        <ReportsFilterForm playersData={playersData} setFilters={setFilters} />
-        <ReportsGrid
-          reports={isAdmin ? reportsData.docs : myReportsData.docs}
-          onEditClick={handleSetCurrent}
+        <ReportsFilterForm playersData={playersList} setFilters={setFilters} />
+        <ReportsTable
+          page={page}
+          rowsPerPage={rowsPerPage}
+          sortBy={sortBy}
+          order={order}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          handleSort={handleSort}
+          total={reportsData.totalDocs}
+          reports={reportsData.docs}
+          handleEditClick={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
