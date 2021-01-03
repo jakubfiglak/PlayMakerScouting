@@ -16,10 +16,6 @@ const populate = [
     path: 'scout',
     select: 'firstName lastName',
   },
-  {
-    path: 'order',
-    select: 'docNumber',
-  },
 ];
 
 // @desc Create new report
@@ -94,9 +90,10 @@ exports.createReport = asyncHandler(async (req, res, next) => {
 // @desc Get all reports
 // @route GET /api/v1/reports
 // @route GET /api/v1/players/:playerId/reports
-// @access Private (admin only)
+// @access Private
 exports.getReports = asyncHandler(async (req, res) => {
   const { playerId } = req.params;
+
   const reqQuery = prepareQuery(req.query);
 
   const options = {
@@ -106,11 +103,17 @@ exports.getReports = asyncHandler(async (req, res) => {
     populate,
   };
 
+  // If club ID is provided in query params, return only reports associated with that player
   if (playerId) {
     const query = {
       player: playerId,
       ...reqQuery,
     };
+
+    // If user is not and admin, return only reports created by this user
+    if (req.user.role !== 'admin') {
+      query.scout = req.user._id;
+    }
 
     const reports = await Report.paginate(query, options);
 
@@ -167,8 +170,8 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   }
 
   if (
-    report.scout._id.toString() !== req.user._id &&
-    req.user.role !== 'admin'
+    report.scout._id.toString() !== req.user._id
+    && req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(
