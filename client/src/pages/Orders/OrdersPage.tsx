@@ -4,7 +4,6 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { OrdersForm } from './OrdersForm';
 import { OrdersFilterForm } from './OrdersFilterForm';
-import { OrdersGrid } from './OrdersGrid';
 import { OrdersTable } from './OrdersTable';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
@@ -14,7 +13,7 @@ import { OrdersFilterData } from '../../types/orders';
 // Hooks
 import { useTabs, useAlert } from '../../hooks';
 import { useTable } from '../../hooks/useTable';
-import { useAuthState } from '../../context/auth/useAuthState';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
 // Utils & data
@@ -36,13 +35,13 @@ export const OrdersPage = () => {
     clearMessage,
   } = useOrdersState();
 
+  const user = useAuthenticatedUser();
+
   const {
     loading: simpleDataLoading,
     getPlayers,
     playersData,
   } = useSimplifiedDataState();
-
-  const { loading: userLoading, user } = useAuthState();
 
   const [activeTab, handleTabChange] = useTabs();
 
@@ -73,24 +72,19 @@ export const OrdersPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
-  const isAdmin = user?.role === 'admin';
-
-  if (user?.role === 'scout') {
-    return <p>Aby mieć dostęp do zleceń, zostań scoutem Playmakera!</p>;
-  }
+  const isAdmin = user.role === 'admin';
 
   return (
     <MainTemplate>
-      {(loading || simpleDataLoading || userLoading) && <Loader />}
+      {(loading || simpleDataLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
           <Tab label="Baza zleceń" id="orders-0" aria-controls="orders-0" />
-          <Tab label="Moje zlecenia" id="orders-1" aria-controls="orders-1" />
           {isAdmin && (
             <Tab
               label="Stwórz zlecenie"
-              id="orders-2"
-              aria-controls="orders-2"
+              id="orders-1"
+              aria-controls="orders-1"
             />
           )}
         </Tabs>
@@ -108,23 +102,9 @@ export const OrdersPage = () => {
           total={ordersData.totalDocs}
           orders={ordersData.docs}
         />
-        <OrdersGrid
-          ordersData={ordersData}
-          deleteOrder={deleteOrder}
-          acceptOrder={acceptOrder}
-          closeOrder={closeOrder}
-        />
-      </TabPanel>
-      <TabPanel value={activeTab} index={1} title="my-orders">
-        <OrdersGrid
-          ordersData={myOrdersData}
-          deleteOrder={deleteOrder}
-          acceptOrder={acceptOrder}
-          closeOrder={closeOrder}
-        />
       </TabPanel>
       {isAdmin && (
-        <TabPanel value={activeTab} index={2} title="orders-form">
+        <TabPanel value={activeTab} index={1} title="orders-form">
           <OrdersForm playersData={playersData} />
         </TabPanel>
       )}

@@ -62,6 +62,7 @@ export default (state: State, action: Action): State => {
           ...state.myOrdersData,
           docs: [action.payload.order, ...state.myOrdersData.docs],
         },
+        orderData: action.payload.order,
       };
 
     case 'CLOSE_ORDER_SUCCESS':
@@ -78,6 +79,7 @@ export default (state: State, action: Action): State => {
               : order,
           ),
         },
+        orderData: action.payload.order,
       };
 
     case 'DELETE_ORDER_SUCCESS':
