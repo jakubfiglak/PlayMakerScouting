@@ -149,14 +149,17 @@ exports.getMyOrdersForPlayer = asyncHandler(async (req, res) => {
 // @route GET /api/v1/orders/:id
 // @access Private (admin and playmaker-scout only)
 exports.getOrder = asyncHandler(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate({
-    path: 'player',
-    select: 'firstName lastName club',
-    populate: {
-      path: 'club',
-      select: 'name',
+  const order = await Order.findById(req.params.id).populate([
+    {
+      path: 'player',
+      select: 'firstName lastName club',
+      populate: {
+        path: 'club',
+        select: 'name',
+      },
     },
-  });
+    { path: 'scout', select: ['firstName', 'lastName'] },
+  ]);
 
   if (!order) {
     return next(
