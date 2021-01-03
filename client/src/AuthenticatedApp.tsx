@@ -10,6 +10,7 @@ import { SimplifiedDataState } from './context/simplifiedData/SimplifiedDataStat
 import { PlayersState } from './context/players/PlayersState';
 import { ClubsState } from './context/clubs/ClubsState';
 import { ReportsState } from './context/reports/ReportsState';
+import { OrdersState } from './context/orders/OrdersState';
 import { PlaymakerScoutRoutes } from './routes/PlaymakerScoutRoutes';
 import { AdminRoutes } from './routes/AdminRoutes';
 import { useAuthenticatedUser } from './hooks/useAuthenticatedUser';
@@ -27,17 +28,16 @@ export const AuthenticatedApp = () => {
             <PlayersState>
               <Route exact path="/players" component={PlayersPage} />
               <Route exact path="/clubs" component={ClubsPage} />
-              <ReportsState>
-                <Route exact path="/reports" component={ReportsPage} />
-                <Route exact path="/reports/:id" component={ReportPage} />
-              </ReportsState>
-              {user.role === 'playmaker-scout' && <PlaymakerScoutRoutes />}
-              {user.role === 'admin' && (
-                <>
+              <OrdersState>
+                <ReportsState>
+                  <Route exact path="/reports" component={ReportsPage} />
+                  <Route exact path="/reports/:id" component={ReportPage} />
+                </ReportsState>
+                {(user.role === 'playmaker-scout' || user.role === 'admin') && (
                   <PlaymakerScoutRoutes />
-                  <AdminRoutes />
-                </>
-              )}
+                )}
+              </OrdersState>
+              {user.role === 'admin' && <AdminRoutes />}
             </PlayersState>
           </ClubsState>
         </Switch>

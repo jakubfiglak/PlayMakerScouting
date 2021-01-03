@@ -34,7 +34,6 @@ export const OrdersPage = () => {
   const {
     loading,
     getOrders,
-    getMyOrders,
     addOrder,
     acceptOrder,
     ordersData,
@@ -91,7 +90,6 @@ export const OrdersPage = () => {
 
   useEffect(() => {
     getOrders(page + 1, rowsPerPage, sortBy, order, filters, scoutId);
-    getMyOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters, scoutId]);
 

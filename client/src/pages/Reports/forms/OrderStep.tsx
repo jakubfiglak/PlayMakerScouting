@@ -4,10 +4,10 @@ import { Typography } from '@material-ui/core';
 // Custom components
 import { OrdersSelect } from '../../../components/selects/OrdersSelect';
 // Types
-import { OrderData } from '../../../types/simplifiedData';
+import { OrderBasicInfo } from '../../../types/orders';
 
 type Props = {
-  ordersData: OrderData[];
+  ordersData: OrderBasicInfo[];
 };
 
 export const OrderStep = ({ ordersData }: Props) => {

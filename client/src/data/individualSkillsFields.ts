@@ -1,15 +1,7 @@
 export const commonIndSkillsFields = [
   {
-    title: 'Podania utrzymujące',
-    namespace: 'holdPass',
-  },
-  {
-    title: 'Podania zdobywające',
-    namespace: 'gainPass',
-  },
-  {
-    title: 'Podania kluczowe',
-    namespace: 'keyPass',
+    title: 'Podania',
+    namespace: 'passing',
   },
   {
     title: 'Przyjęcie piłki',

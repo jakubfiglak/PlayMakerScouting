@@ -1,4 +1,5 @@
 import { PaginationData, SortingOrder } from './common';
+import { Position } from './players';
 
 export type OrderStatus = 'open' | 'accepted' | 'closed';
 
@@ -8,6 +9,7 @@ export type Order = {
     _id: string;
     firstName: string;
     lastName: string;
+    position: Position;
   };
   status: 'open' | 'accepted' | 'closed';
   scout?: {
@@ -20,6 +22,8 @@ export type Order = {
   closeDate?: string;
   notes?: string;
 };
+
+export type OrderBasicInfo = Pick<Order, '_id' | 'player'>;
 
 export type OrderFormData = {
   player: string;
@@ -48,7 +52,7 @@ export type GetOrders = (
 
 export type State = {
   ordersData: OrdersData;
-  myOrdersData: OrdersData;
+  ordersList: OrderBasicInfo[];
   orderData: Order | null;
   current: Order | null;
   loading: boolean;
@@ -58,7 +62,7 @@ export type State = {
   clearErrors: () => void;
   clearMessage: () => void;
   getOrders: GetOrders;
-  getMyOrders: () => void;
+  getOrdersList: () => void;
   acceptOrder: (id: string) => void;
   getOrder: (id: string) => void;
   deleteOrder: (id: string) => void;
@@ -72,8 +76,8 @@ export type Action =
   | { type: 'CLEAR_MESSAGE' }
   | { type: 'ORDERS_ERROR'; payload: string }
   | { type: 'GET_ORDERS_SUCCESS'; payload: OrdersData }
+  | { type: 'GET_ORDERS_LIST_SUCCESS'; payload: OrderBasicInfo[] }
   | { type: 'GET_ORDER_SUCCESS'; payload: Order }
-  | { type: 'GET_MY_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'ACCEPT_ORDER_SUCCESS'; payload: { order: Order; message: string } }
   | { type: 'CREATE_ORDER_SUCCESS'; payload: { order: Order; message: string } }
   | { type: 'CLOSE_ORDER_SUCCESS'; payload: { order: Order; message: string } }

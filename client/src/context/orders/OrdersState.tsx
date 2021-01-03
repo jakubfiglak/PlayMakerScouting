@@ -9,7 +9,7 @@ import { initialPaginatedData } from '../../data';
 export const OrdersState: React.FC = ({ children }) => {
   const initialState: State = {
     ordersData: initialPaginatedData,
-    myOrdersData: initialPaginatedData,
+    ordersList: [],
     orderData: null,
     current: null,
     loading: false,
@@ -19,7 +19,7 @@ export const OrdersState: React.FC = ({ children }) => {
     clearErrors: () => null,
     clearMessage: () => null,
     getOrders: () => null,
-    getMyOrders: () => null,
+    getOrdersList: () => null,
     acceptOrder: () => null,
     getOrder: () => null,
     deleteOrder: () => null,
@@ -78,20 +78,20 @@ export const OrdersState: React.FC = ({ children }) => {
     }
   };
 
-  // Get my orders
-  const getMyOrders = async () => {
+  // Get orders list
+  const getOrdersList = async () => {
     setLoading();
 
     try {
-      const res = await axiosJson.get('/api/v1/orders/my');
+      const res = await axiosJson.get('/api/v1/orders/mylist');
       dispatch({
-        type: 'GET_MY_ORDERS_SUCCESS',
+        type: 'GET_ORDERS_LIST_SUCCESS',
         payload: res.data.data,
       });
     } catch (err) {
       dispatch({
         type: 'ORDERS_ERROR',
-        payload: 'err.response.data.error',
+        payload: err.response.data.error,
       });
     }
   };
@@ -198,7 +198,7 @@ export const OrdersState: React.FC = ({ children }) => {
 
   const {
     ordersData,
-    myOrdersData,
+    ordersList,
     orderData,
     current,
     loading,
@@ -210,7 +210,7 @@ export const OrdersState: React.FC = ({ children }) => {
     <OrdersContext.Provider
       value={{
         ordersData,
-        myOrdersData,
+        ordersList,
         orderData,
         current,
         loading,
@@ -218,7 +218,7 @@ export const OrdersState: React.FC = ({ children }) => {
         message,
         setLoading,
         getOrders,
-        getMyOrders,
+        getOrdersList,
         acceptOrder,
         getOrder,
         deleteOrder,

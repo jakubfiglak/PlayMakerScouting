@@ -16,12 +16,12 @@ export default (state: State, action: Action): State => {
         ordersData: action.payload,
       };
 
-    case 'GET_MY_ORDERS_SUCCESS':
+    case 'GET_ORDERS_LIST_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
-        myOrdersData: action.payload,
+        ordersList: action.payload,
       };
 
     case 'GET_ORDER_SUCCESS':
@@ -57,10 +57,6 @@ export default (state: State, action: Action): State => {
               ? action.payload.order
               : order,
           ),
-        },
-        myOrdersData: {
-          ...state.myOrdersData,
-          docs: [action.payload.order, ...state.myOrdersData.docs],
         },
         orderData: action.payload.order,
       };

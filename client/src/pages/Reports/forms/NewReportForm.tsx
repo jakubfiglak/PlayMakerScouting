@@ -18,22 +18,25 @@ import { IndividualSkillsStep } from './IndividualSkillsStep';
 import { TeamplaySkillsStep } from './TeamplaySkillsStep';
 import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
+import { MatchStep } from './MatchStep';
 import { StepActions } from '../../../components/formActions/StepActions';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 import { BottomNav } from '../BottomNav';
 import { Loader } from '../../../components/Loader';
 // Hooks
 import { useStepper } from '../../../hooks';
-import { useAuthState } from '../../../context/auth/useAuthState';
 import { useOrdersState } from '../../../context/orders/useOrdersState';
 import { usePlayersState } from '../../../context/players/usePlayersState';
-import { useSimplifiedDataState } from '../../../context/simplifiedData/useSimplifiedDataState';
 // Types
 import { ReportFormData } from '../../../types/reports';
 // Utils & data
 import { reportsFormInitialValues } from '../../../components/forms/initialValues';
 
-export const NewReportForm = () => {
+type Props = {
+  isOrderOptionDisabled: boolean;
+};
+
+export const NewReportForm = ({ isOrderOptionDisabled }: Props) => {
   // const classes = useStyles();
   const [
     activeStep,
@@ -43,19 +46,21 @@ export const NewReportForm = () => {
     setActiveStep,
   ] = useStepper();
 
-  const { user } = useAuthState();
-
-  const { loading: playerLoading, getPlayer, playerData } = usePlayersState();
-
-  const { loading: orderLoading, getOrder, orderData } = useOrdersState();
+  const {
+    loading: playerLoading,
+    getPlayer,
+    playerData,
+    getPlayersList,
+    playersList,
+  } = usePlayersState();
 
   const {
-    loading: simpleDataLoading,
-    getPlayers,
-    getMyOrders,
-    playersData,
-    myOrdersData,
-  } = useSimplifiedDataState();
+    loading: orderLoading,
+    getOrder,
+    orderData,
+    getOrdersList,
+    ordersList,
+  } = useOrdersState();
 
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
 
@@ -63,11 +68,11 @@ export const NewReportForm = () => {
 
   useEffect(() => {
     setValues(reportsFormInitialValues);
-    if (reportType === 'custom' && playersData.length === 0) {
-      getPlayers();
+    if (reportType === 'custom' && playersList.length === 0) {
+      getPlayersList();
     }
-    if (reportType === 'order' && myOrdersData.length === 0) {
-      getMyOrders();
+    if (reportType === 'order' && ordersList.length === 0) {
+      getOrdersList();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportType]);
@@ -98,7 +103,7 @@ export const NewReportForm = () => {
   const steps = [
     'Rodzaj raportu',
     reportType === 'custom' ? 'Wybierz zawodnika' : 'Wybierz zlecenie',
-    'Wybierz mecz',
+    'Informacje o meczu',
     'Ocena umiejętności indywidualnych',
     'Ocena współdziałania z partnerami',
     'Ocena potencjału motorycznego',
@@ -113,16 +118,16 @@ export const NewReportForm = () => {
           <ReportTypeStep
             reportType={reportType}
             setReportType={setReportType}
-            isOrderOptionDisabled={user?.role === 'scout'}
+            isOrderOptionDisabled={isOrderOptionDisabled}
           />
         );
       case 1:
         if (reportType === 'order') {
-          return <OrderStep ordersData={myOrdersData} />;
+          return <OrderStep ordersData={ordersList} />;
         }
-        return <PlayerStep playersData={playersData} />;
+        return <PlayerStep playersData={playersList} />;
       case 2:
-        return <div />;
+        return <MatchStep />;
       case 3:
         return <IndividualSkillsStep position={playerData?.position} />;
       case 4:
@@ -144,7 +149,7 @@ export const NewReportForm = () => {
 
   return (
     <Grid container>
-      {(simpleDataLoading || playerLoading || orderLoading) && <Loader />}
+      {(playerLoading || orderLoading) && <Loader />}
       <Grid item xs={12}>
         <Typography variant="h5" align="center">
           Tworzenie nowego raportu

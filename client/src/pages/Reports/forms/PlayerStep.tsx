@@ -4,10 +4,10 @@ import { FormControl, Typography } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../../../components/selects/PlayersCombo';
 // Types
-import { PlayerData } from '../../../types/simplifiedData';
+import { PlayerBasicInfo } from '../../../types/players';
 
 type Props = {
-  playersData: PlayerData[];
+  playersData: PlayerBasicInfo[];
 };
 
 export const PlayerStep = ({ playersData }: Props) => {

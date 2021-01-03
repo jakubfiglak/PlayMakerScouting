@@ -15,6 +15,7 @@ import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 // Hooks
 import { useAlert, useTabs } from '../../hooks';
 import { useTable } from '../../hooks/useTable';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
 // Utils & data
@@ -42,6 +43,8 @@ export const ReportsPage = () => {
     getPlayersList,
     playersList,
   } = usePlayersState();
+
+  const user = useAuthenticatedUser();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
@@ -140,7 +143,11 @@ export const ReportsPage = () => {
           }}
         >
           {() =>
-            current ? <EditReportForm report={current} /> : <NewReportForm />
+            current ? (
+              <EditReportForm report={current} />
+            ) : (
+              <NewReportForm isOrderOptionDisabled={user.role === 'scout'} />
+            )
           }
         </Formik>
       </TabPanel>
