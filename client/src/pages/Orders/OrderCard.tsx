@@ -59,7 +59,6 @@ export const OrderCard = ({
 
   const {
     _id,
-    docNumber,
     player,
     status,
     scout,
@@ -73,10 +72,7 @@ export const OrderCard = ({
     <Card>
       {loading && <Loader />}
       <CardContent>
-        <CardHeader
-          title="Zlecenie obserwacji"
-          subheader={`Nr: ${docNumber}`}
-        />
+        <CardHeader title="Zlecenie obserwacji" />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography>

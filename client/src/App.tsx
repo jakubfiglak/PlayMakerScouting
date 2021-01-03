@@ -9,10 +9,10 @@ import theme from './theme/theme';
 import { useAuthState } from './context/auth/useAuthState';
 
 const App = () => {
-  const { loadUser, user } = useAuthState();
+  const { loadUser, user, token } = useAuthState();
 
   useEffect(() => {
-    if (!user) {
+    if (!user && token) {
       loadUser();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

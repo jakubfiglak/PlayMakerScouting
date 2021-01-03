@@ -4,14 +4,16 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { OrdersForm } from './OrdersForm';
 import { OrdersFilterForm } from './OrdersFilterForm';
+import { OrdersGrid } from './OrdersGrid';
+import { OrdersTable } from './OrdersTable';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
-import { OrdersGrid } from './OrdersGrid';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 // Hooks
 import { useTabs, useAlert } from '../../hooks';
+import { useTable } from '../../hooks/useTable';
 import { useAuthState } from '../../context/auth/useAuthState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
@@ -43,6 +45,16 @@ export const OrdersPage = () => {
   const { loading: userLoading, user } = useAuthState();
 
   const [activeTab, handleTabChange] = useTabs();
+
+  const [
+    page,
+    rowsPerPage,
+    sortBy,
+    order,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleSort,
+  ] = useTable();
 
   useAlert(error, 'error', clearErrors);
   useAlert(message, 'success', clearMessage);
@@ -83,8 +95,19 @@ export const OrdersPage = () => {
           )}
         </Tabs>
       </AppBar>
-      <TabPanel value={activeTab} index={0} title="matches">
+      <TabPanel value={activeTab} index={0} title="orders">
         <OrdersFilterForm playersData={playersData} setFilters={setFilters} />
+        <OrdersTable
+          page={page}
+          rowsPerPage={rowsPerPage}
+          sortBy={sortBy}
+          order={order}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          handleSort={handleSort}
+          total={ordersData.totalDocs}
+          orders={ordersData.docs}
+        />
         <OrdersGrid
           ordersData={ordersData}
           deleteOrder={deleteOrder}

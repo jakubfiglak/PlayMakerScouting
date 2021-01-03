@@ -44,6 +44,7 @@ export const AuthState: React.FC = ({ children }) => {
   // Load user
   const loadUser = async () => {
     setLoading();
+
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }

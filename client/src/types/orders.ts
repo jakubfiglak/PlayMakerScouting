@@ -18,7 +18,6 @@ export type Order = {
   createdAt: string;
   acceptDate?: string;
   closeDate?: string;
-  docNumber: string;
   notes?: string;
 };
 
