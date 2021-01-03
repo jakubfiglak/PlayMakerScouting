@@ -46,7 +46,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
     limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate: [
-      { path: 'player', select: ['firstName', 'lastName'] },
+      { path: 'player', select: ['firstName', 'lastName', 'position'] },
       { path: 'scout', select: ['firstName', 'lastName'] },
       { path: 'reports', select: ['_id'] },
     ],
@@ -112,10 +112,10 @@ exports.getMyList = asyncHandler(async (req, res) => {
     scout: req.user._id,
     status: 'accepted',
   })
-    .select('player club docNumber')
+    .select('player club')
     .populate({
       path: 'player',
-      select: 'firstName lastName club',
+      select: 'firstName lastName club position',
       populate: {
         path: 'club',
         select: 'name',
