@@ -43,6 +43,7 @@ export type GetOrders = (
   sort: string,
   order: SortingOrder,
   filters: OrdersFilterData,
+  scoutId: string | null,
 ) => void;
 
 export type State = {

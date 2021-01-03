@@ -11,6 +11,7 @@ type Props = {
   title: string;
   onClose: () => void;
   onSubmit: (data: any) => void;
+  open: boolean;
 };
 
 export const FormModal: FC<Props> = ({
@@ -18,9 +19,10 @@ export const FormModal: FC<Props> = ({
   title,
   onClose,
   onSubmit,
+  open,
 }) => {
   return (
-    <Dialog open onClose={onClose} aria-labelledby="form-dialog-title">
+    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>

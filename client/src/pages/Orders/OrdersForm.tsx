@@ -5,35 +5,44 @@ import { Grid, FormControl, TextField } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
-import { Loader } from '../../components/Loader';
 // Types
-import { PlayerData } from '../../types/simplifiedData';
-// Hooks
-import { useOrdersState } from '../../context/orders/useOrdersState';
+import { PlayerBasicInfo } from '../../types/players';
+import { OrderFormData } from '../../types/orders';
 // Utils & data
 import { ordersFormInitialValues } from '../../components/forms/initialValues';
 import { ordersFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
-  playersData: PlayerData[];
+  playersData: PlayerBasicInfo[];
+  onSubmit: (data: OrderFormData) => void;
+  onAddPlayerClick: () => void;
 };
 
-export const OrdersForm = ({ playersData }: Props) => {
-  const { addOrder, loading } = useOrdersState();
-
+export const OrdersForm = ({
+  playersData,
+  onSubmit,
+  onAddPlayerClick,
+}: Props) => {
   return (
     <Formik
       initialValues={ordersFormInitialValues}
       validationSchema={ordersFormValidationSchema}
-      onSubmit={(data) => addOrder(data)}
+      onSubmit={(data, { resetForm }) => {
+        onSubmit(data);
+        resetForm();
+      }}
     >
       {({ handleReset, touched, errors }) => (
         <Form>
-          {loading && <Loader />}
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControl variant="outlined" fullWidth>
-                <PlayersCombo playersData={playersData} label="Zawodnik" />
+                <PlayersCombo
+                  playersData={playersData}
+                  label="Zawodnik"
+                  addPlayerOption
+                  onAddPlayerClick={onAddPlayerClick}
+                />
               </FormControl>
             </Grid>
             <Grid item xs={12}>

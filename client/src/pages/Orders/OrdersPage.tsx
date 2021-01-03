@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 // MUI components
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import {
+  AppBar,
+  Tabs,
+  Tab,
+  FormControlLabel,
+  Checkbox,
+  makeStyles,
+} from '@material-ui/core';
 // Custom components
 import { OrdersForm } from './OrdersForm';
 import { OrdersFilterForm } from './OrdersFilterForm';
@@ -8,6 +15,7 @@ import { OrdersTable } from './OrdersTable';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
+import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 // Hooks
@@ -16,18 +24,20 @@ import { useTable } from '../../hooks/useTable';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
+import { useClubsState } from '../../context/clubs/useClubsState';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils';
 
 export const OrdersPage = () => {
+  const classes = useStyles();
+
   const {
     loading,
     getOrders,
     getMyOrders,
+    addOrder,
     acceptOrder,
     ordersData,
-    myOrdersData,
-    deleteOrder,
     closeOrder,
     error,
     message,
@@ -39,7 +49,14 @@ export const OrdersPage = () => {
     loading: playersLoading,
     getPlayersList,
     playersList,
+    addPlayer,
+    message: playersMessage,
+    error: playersError,
+    clearErrors: clearPlayersErrors,
+    clearMessage: clearPlayersMessage,
   } = usePlayersState();
+
+  const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
 
   const user = useAuthenticatedUser();
 
@@ -55,24 +72,32 @@ export const OrdersPage = () => {
     handleSort,
   ] = useTable();
 
+  const [areMyOrdersChecked, setMyOrdersChecked] = useState(false);
+  const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
+
+  const scoutId = areMyOrdersChecked ? user._id : null;
+
   useAlert(error, 'error', clearErrors);
+  useAlert(playersError, 'error', clearPlayersErrors);
   useAlert(message, 'success', clearMessage);
+  useAlert(playersMessage, 'success', clearPlayersMessage);
 
   const [filters, setFilters] = useState<OrdersFilterData>({
     player: '',
-    status: 'open',
+    status: '',
     createdAfter: formatDateObject(yearFromNow),
     createdBefore: formatDateObject(tomorrow),
   });
 
   useEffect(() => {
-    getOrders(page + 1, rowsPerPage, sortBy, order, filters);
+    getOrders(page + 1, rowsPerPage, sortBy, order, filters, scoutId);
     getMyOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
+  }, [page, rowsPerPage, sortBy, order, filters, scoutId]);
 
   useEffect(() => {
     getPlayersList();
+    getClubsList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -80,7 +105,7 @@ export const OrdersPage = () => {
 
   return (
     <MainTemplate>
-      {(loading || playersLoading) && <Loader />}
+      {(loading || playersLoading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
           <Tab label="Baza zleceń" id="orders-0" aria-controls="orders-0" />
@@ -94,6 +119,21 @@ export const OrdersPage = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="orders">
+        <div className={classes.checkboxContainer}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={areMyOrdersChecked}
+                onChange={(e) => {
+                  setMyOrdersChecked(e.target.checked);
+                }}
+                name="myOrders"
+                color="primary"
+              />
+            }
+            label="Pokaż tylko moje zlecenia"
+          />
+        </div>
         <OrdersFilterForm playersData={playersList} setFilters={setFilters} />
         <OrdersTable
           page={page}
@@ -112,9 +152,26 @@ export const OrdersPage = () => {
       </TabPanel>
       {isAdmin && (
         <TabPanel value={activeTab} index={1} title="orders-form">
-          <OrdersForm playersData={playersList} />
+          <OrdersForm
+            playersData={playersList}
+            onSubmit={addOrder}
+            onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
+          />
+          <AddPlayerModal
+            clubsData={clubsList}
+            onClose={() => setIsAddPlayerModalOpen(false)}
+            onSubmit={addPlayer}
+            open={isAddPlayerModalOpen}
+          />
         </TabPanel>
       )}
     </MainTemplate>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  checkboxContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}));

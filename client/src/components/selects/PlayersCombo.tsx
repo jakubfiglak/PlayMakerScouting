@@ -1,21 +1,38 @@
 import React from 'react';
 import { useField } from 'formik';
 // MUI components
-import { TextField } from '@material-ui/core';
+import {
+  TextField,
+  Paper,
+  MenuItem,
+  Button,
+  Divider,
+  PaperProps,
+} from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+// MUI icons
+import { Add as AddIcon } from '@material-ui/icons';
 // Types
-import { PlayerData } from '../../types/simplifiedData';
+import { PlayerBasicInfo } from '../../types/players';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
 import { positionLabels } from '../../data/labels';
 
 type Props = {
-  playersData: PlayerData[];
+  playersData: PlayerBasicInfo[];
   label: string;
   size?: 'medium' | 'small';
+  addPlayerOption?: boolean;
+  onAddPlayerClick?: () => void;
 };
 
-export const PlayersCombo = ({ playersData, label, size }: Props) => {
+export const PlayersCombo = ({
+  playersData,
+  label,
+  size,
+  addPlayerOption,
+  onAddPlayerClick,
+}: Props) => {
   const [field, fieldMeta, fieldHelpers] = useField('player');
 
   const { value } = field;
@@ -52,6 +69,26 @@ export const PlayersCombo = ({ playersData, label, size }: Props) => {
         />
       )}
       size={size}
+      PaperComponent={
+        addPlayerOption
+          ? (props: PaperProps) => (
+              <Paper {...props}>
+                <MenuItem>
+                  <Button
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={onAddPlayerClick}
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    Dodaj nowy klub
+                  </Button>
+                </MenuItem>
+                <Divider />
+                {props.children}
+              </Paper>
+            )
+          : Paper
+      }
     />
   );
 };

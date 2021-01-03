@@ -43,6 +43,7 @@ export const OrdersState: React.FC = ({ children }) => {
     sort = '-createdAt',
     order: SortingOrder,
     filters: OrdersFilterData,
+    scoutId: string | null,
   ) => {
     setLoading();
     const orderSign = order === 'desc' ? '-' : '';
@@ -57,6 +58,10 @@ export const OrdersState: React.FC = ({ children }) => {
 
     if (status) {
       ordersURI = ordersURI.concat(`&status=${status}`);
+    }
+
+    if (scoutId) {
+      ordersURI = ordersURI.concat(`&scout=${scoutId}`);
     }
 
     try {

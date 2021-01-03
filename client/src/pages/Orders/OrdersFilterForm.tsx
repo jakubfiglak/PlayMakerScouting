@@ -19,7 +19,7 @@ type FilterFormProps = {
 
 const initialFilters: OrdersFilterData = {
   player: '',
-  status: 'open',
+  status: '',
   createdAfter: formatDateObject(yearFromNow),
   createdBefore: formatDateObject(tomorrow),
 };
@@ -31,6 +31,7 @@ export const OrdersFilterForm = ({
   return (
     <Formik
       initialValues={initialFilters}
+      enableReinitialize
       onSubmit={(data) => setFilters(data)}
     >
       {({ handleReset, initialValues }) => (

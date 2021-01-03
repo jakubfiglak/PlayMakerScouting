@@ -13,11 +13,12 @@ import { clubsFormInitialValues } from '../../components/forms/initialValues';
 import { clubsFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
+  open: boolean;
   onClose: () => void;
   onSubmit: (data: ClubsFormData) => void;
 };
 
-export const AddClubModal = ({ onClose, onSubmit }: Props) => {
+export const AddClubModal = ({ onClose, onSubmit, open }: Props) => {
   return (
     <Formik
       initialValues={clubsFormInitialValues}
@@ -29,7 +30,12 @@ export const AddClubModal = ({ onClose, onSubmit }: Props) => {
       }}
     >
       {({ errors, touched, handleSubmit }) => (
-        <FormModal title="Dodaj klub" onClose={onClose} onSubmit={handleSubmit}>
+        <FormModal
+          title="Dodaj klub"
+          onClose={onClose}
+          onSubmit={handleSubmit}
+          open={open}
+        >
           <Form>
             <Grid container spacing={2}>
               <Grid item xs={12}>

@@ -2,8 +2,6 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
 import { Grid, TextField, FormControl } from '@material-ui/core';
-// MUI icons
-import AddIcon from '@material-ui/icons/Add';
 // Custom components
 import { PositionSelect } from '../../components/selects/PositionSelect';
 import { FootSelect } from '../../components/selects/FootSelect';

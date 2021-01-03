@@ -130,12 +130,11 @@ export const PlayersPage = () => {
           onSubmit={handlePlayersFormSubmit}
           onAddClubClick={() => setIsAddClubModalOpen(true)}
         />
-        {isAddClubModalOpen && (
-          <AddClubModal
-            onClose={() => setIsAddClubModalOpen(false)}
-            onSubmit={addClub}
-          />
-        )}
+        <AddClubModal
+          onClose={() => setIsAddClubModalOpen(false)}
+          onSubmit={addClub}
+          open={isAddClubModalOpen}
+        />
       </TabPanel>
     </MainTemplate>
   );

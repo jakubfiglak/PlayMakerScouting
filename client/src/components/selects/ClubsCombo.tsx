@@ -13,10 +13,10 @@ import { Autocomplete } from '@material-ui/lab';
 // MUI icons
 import AddIcon from '@material-ui/icons/AddOutlined';
 // Types
-import { ClubData } from '../../types/simplifiedData';
+import { ClubBasicInfo } from '../../types/clubs';
 
 type Props = {
-  clubsData: ClubData[];
+  clubsData: ClubBasicInfo[];
   name: string;
   label: string;
   size?: 'medium' | 'small';

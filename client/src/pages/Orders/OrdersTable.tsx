@@ -94,7 +94,7 @@ export const OrdersTable = ({
                   </IconButton>
                 </Tooltip>
                 {areAdminOptionsEnabled && (
-                  <Tooltip title="Zamknij">
+                  <Tooltip title="Zamknij zlecenie">
                     <IconButton
                       aria-label="close order"
                       className={classes.delete}
