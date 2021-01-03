@@ -14,8 +14,8 @@ import { OrdersFilterData } from '../../types/orders';
 import { useTabs, useAlert } from '../../hooks';
 import { useTable } from '../../hooks/useTable';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
-import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils';
 
@@ -35,13 +35,13 @@ export const OrdersPage = () => {
     clearMessage,
   } = useOrdersState();
 
-  const user = useAuthenticatedUser();
-
   const {
-    loading: simpleDataLoading,
-    getPlayers,
-    playersData,
-  } = useSimplifiedDataState();
+    loading: playersLoading,
+    getPlayersList,
+    playersList,
+  } = usePlayersState();
+
+  const user = useAuthenticatedUser();
 
   const [activeTab, handleTabChange] = useTabs();
 
@@ -66,17 +66,21 @@ export const OrdersPage = () => {
   });
 
   useEffect(() => {
-    getPlayers();
-    getOrders(filters, 1);
+    getOrders(page + 1, rowsPerPage, sortBy, order, filters);
     getMyOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [page, rowsPerPage, sortBy, order, filters]);
+
+  useEffect(() => {
+    getPlayersList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isAdmin = user.role === 'admin';
 
   return (
     <MainTemplate>
-      {(loading || simpleDataLoading) && <Loader />}
+      {(loading || playersLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
           <Tab label="Baza zleceń" id="orders-0" aria-controls="orders-0" />
@@ -90,7 +94,7 @@ export const OrdersPage = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="orders">
-        <OrdersFilterForm playersData={playersData} setFilters={setFilters} />
+        <OrdersFilterForm playersData={playersList} setFilters={setFilters} />
         <OrdersTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -101,11 +105,14 @@ export const OrdersPage = () => {
           handleSort={handleSort}
           total={ordersData.totalDocs}
           orders={ordersData.docs}
+          onAcceptOrderClick={acceptOrder}
+          onCloseOrderClick={closeOrder}
+          areAdminOptionsEnabled={isAdmin}
         />
       </TabPanel>
       {isAdmin && (
         <TabPanel value={activeTab} index={1} title="orders-form">
-          <OrdersForm playersData={playersData} />
+          <OrdersForm playersData={playersList} />
         </TabPanel>
       )}
     </MainTemplate>

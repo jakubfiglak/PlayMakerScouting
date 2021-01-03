@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { Order } from '../types/common';
+import { SortingOrder } from '../types/common';
 
-// hook for a paginated table with sorting
-
-export const useTable = (sort?: string, sortOrder?: Order) => {
+export const useTable = (sort?: string, sortOrder?: SortingOrder) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [sortBy, setSortBy] = useState(sort || '_id');
-  const [order, setOrder] = useState<Order>(sortOrder || 'desc');
+  const [order, setOrder] = useState<SortingOrder>(sortOrder || 'desc');
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,

@@ -1,4 +1,4 @@
-import { Order, PaginationData, Voivodeship } from './common';
+import { SortingOrder, PaginationData, Voivodeship } from './common';
 
 export type Division =
   | 'Ekstraklasa'
@@ -40,7 +40,7 @@ export type GetClubs = (
   page: number,
   limit: number,
   sort: string,
-  order: Order,
+  order: SortingOrder,
   filters: ClubsFilterData,
   my?: boolean,
 ) => void;

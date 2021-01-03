@@ -1,4 +1,4 @@
-import { PaginationData } from './common';
+import { PaginationData, SortingOrder } from './common';
 
 export type OrderStatus = 'open' | 'accepted' | 'closed';
 
@@ -41,7 +41,7 @@ export type GetOrders = (
   page: number,
   limit: number,
   sort: string,
-  order: Order,
+  order: SortingOrder,
   filters: OrdersFilterData,
 ) => void;
 
@@ -56,7 +56,7 @@ export type State = {
   setLoading: () => void;
   clearErrors: () => void;
   clearMessage: () => void;
-  getOrders: (filters: OrdersFilterData, page: number) => void;
+  getOrders: GetOrders;
   getMyOrders: () => void;
   acceptOrder: (id: string) => void;
   getOrder: (id: string) => void;

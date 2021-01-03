@@ -5,12 +5,12 @@ import { TableHead, TableSortLabel } from '@material-ui/core';
 import { StyledTableRow } from './TableRow';
 import { StyledTableCell } from './TableCell';
 // Types
-import { Order } from '../../types/common';
+import { SortingOrder } from '../../types/common';
 
 type Props = {
   headCells: { id: string; label: string }[];
   sortBy: string;
-  order: Order;
+  order: SortingOrder;
   handleSort: (id: string) => void;
   actions?: boolean;
 };

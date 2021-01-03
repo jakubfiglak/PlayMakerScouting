@@ -9,12 +9,13 @@ import {
   Player,
   GrantAccessFormData,
 } from '../../types/players';
-import { Order } from '../../types/common';
+import { SortingOrder } from '../../types/common';
 import { initialPaginatedData } from '../../data';
 
 export const PlayersState: React.FC = ({ children }) => {
   const initialState: State = {
     playersData: initialPaginatedData,
+    playersList: [],
     playerData: null,
     current: null,
     loading: false,
@@ -24,6 +25,7 @@ export const PlayersState: React.FC = ({ children }) => {
     clearErrors: () => null,
     clearMessage: () => null,
     getPlayers: () => null,
+    getPlayersList: () => null,
     getPlayer: () => null,
     addPlayer: () => null,
     editPlayer: () => null,
@@ -46,7 +48,7 @@ export const PlayersState: React.FC = ({ children }) => {
     page = 1,
     limit = 20,
     sort = '_id',
-    order: Order,
+    order: SortingOrder,
     filters: PlayersFilterData,
   ) => {
     setLoading();
@@ -67,6 +69,24 @@ export const PlayersState: React.FC = ({ children }) => {
       const res = await axiosJson.get(playersURI);
       dispatch({
         type: 'GET_PLAYERS_SUCCESS',
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'PLAYERS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
+  // Get players list
+  const getPlayersList = async () => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.get('/api/v1/players/list');
+      dispatch({
+        type: 'GET_PLAYERS_LIST_SUCCESS',
         payload: res.data.data,
       });
     } catch (err) {
@@ -177,12 +197,21 @@ export const PlayersState: React.FC = ({ children }) => {
       type: 'CLEAR_MESSAGE',
     });
 
-  const { playersData, playerData, current, loading, error, message } = state;
+  const {
+    playersData,
+    playersList,
+    playerData,
+    current,
+    loading,
+    error,
+    message,
+  } = state;
 
   return (
     <PlayersContext.Provider
       value={{
         playersData,
+        playersList,
         playerData,
         current,
         loading,
@@ -192,6 +221,7 @@ export const PlayersState: React.FC = ({ children }) => {
         clearErrors,
         clearMessage,
         getPlayers,
+        getPlayersList,
         getPlayer,
         addPlayer,
         grantAccess,

@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import OrdersContext from './ordersContext';
 import ordersReducer from './ordersReducer';
+import { SortingOrder } from '../../types/common';
 import { State, OrderFormData, OrdersFilterData } from '../../types/orders';
 import { initialPaginatedData } from '../../data';
 
@@ -36,12 +37,19 @@ export const OrdersState: React.FC = ({ children }) => {
   };
 
   // Get orders
-  const getOrders = async (filters: OrdersFilterData, page = 1) => {
+  const getOrders = async (
+    page = 1,
+    limit = 20,
+    sort = '-createdAt',
+    order: SortingOrder,
+    filters: OrdersFilterData,
+  ) => {
     setLoading();
+    const orderSign = order === 'desc' ? '-' : '';
 
     const { player, status, createdAfter, createdBefore } = filters;
 
-    let ordersURI = `/api/v1/orders?page=${page}&sort=-createdAt&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
+    let ordersURI = `/api/v1/orders?page=${page}&limit=${limit}&sort=${orderSign}${sort}&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
 
     if (player) {
       ordersURI = ordersURI.concat(`&player=${player}`);

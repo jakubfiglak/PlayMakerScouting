@@ -1,11 +1,19 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // MUI components
-import { Box, IconButton, Tooltip, Link } from '@material-ui/core';
+import {
+  IconButton,
+  Tooltip,
+  Link,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
 // MUI icons
 import {
   Search as SearchIcon,
   AssignmentLate as NoteIcon,
+  CancelOutlined as CloseIcon,
+  AssignmentTurnedIn as AcceptIcon,
 } from '@material-ui/icons';
 // Custom components
 import { OrderStatusChip } from './OrderStatusChip';
@@ -20,6 +28,9 @@ import { formatDate } from '../../utils/formatDate';
 
 type Props = {
   orders: Order[];
+  onAcceptOrderClick: (id: string) => void;
+  onCloseOrderClick: (id: string) => void;
+  areAdminOptionsEnabled: boolean;
 } & CommonTableProps;
 
 const headCells = [
@@ -40,7 +51,12 @@ export const OrdersTable = ({
   handleSort,
   total,
   orders,
+  onAcceptOrderClick,
+  onCloseOrderClick,
+  areAdminOptionsEnabled,
 }: Props) => {
+  const classes = useStyles();
+
   return (
     <Table
       page={page}
@@ -58,8 +74,8 @@ export const OrdersTable = ({
 
         return (
           <StyledTableRow key={_id}>
-            <StyledTableCell>
-              <Box display="flex">
+            <StyledTableCell padding="checkbox">
+              <div className={classes.buttonsContainer}>
                 <Tooltip title="Zobacz szczegóły">
                   <Link component={RouterLink} to={`/orders/${_id}`}>
                     <IconButton aria-label="go to order">
@@ -67,7 +83,29 @@ export const OrdersTable = ({
                     </IconButton>
                   </Link>
                 </Tooltip>
-              </Box>
+                <Tooltip title="Przyjmij zlecenie">
+                  <IconButton
+                    aria-label="edit match"
+                    className={classes.accept}
+                    disabled={status !== 'open'}
+                    onClick={() => onAcceptOrderClick(_id)}
+                  >
+                    <AcceptIcon />
+                  </IconButton>
+                </Tooltip>
+                {areAdminOptionsEnabled && (
+                  <Tooltip title="Zamknij">
+                    <IconButton
+                      aria-label="close order"
+                      className={classes.delete}
+                      disabled={status === 'closed'}
+                      onClick={() => onCloseOrderClick(_id)}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </div>
             </StyledTableCell>
             <StyledTableCell>{`${player.firstName} ${player.lastName}`}</StyledTableCell>
             <StyledTableCell>
@@ -77,10 +115,24 @@ export const OrdersTable = ({
               {scout ? `${scout.firstName} ${scout.lastName}` : ''}
             </StyledTableCell>
             <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
-            <StyledTableCell>{notes && <NoteIcon />}</StyledTableCell>
+            <StyledTableCell padding="checkbox" align="center">
+              {notes && <NoteIcon />}
+            </StyledTableCell>
           </StyledTableRow>
         );
       })}
     </Table>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  buttonsContainer: {
+    display: 'flex',
+  },
+  delete: {
+    color: theme.palette.error.light,
+  },
+  accept: {
+    color: theme.palette.success.light,
+  },
+}));

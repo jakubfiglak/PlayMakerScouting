@@ -3,7 +3,7 @@ import { axiosJson } from '../../config/axios';
 import ClubsContext from './clubsContext';
 import clubsReducer from './clubsReducer';
 import { State, Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
-import { Order } from '../../types/common';
+import { SortingOrder } from '../../types/common';
 import { initialPaginatedData } from '../../data';
 
 export const ClubsState: React.FC = ({ children }) => {
@@ -40,7 +40,7 @@ export const ClubsState: React.FC = ({ children }) => {
     page = 1,
     limit = 20,
     sort = '_id',
-    order: Order,
+    order: SortingOrder,
     filters: ClubsFilterData,
   ) => {
     setLoading();

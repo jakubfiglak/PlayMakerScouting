@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 
-export type Order = 'asc' | 'desc';
+export type SortingOrder = 'asc' | 'desc';
 
 export type PaginationData = {
   totalDocs: number;
@@ -50,7 +50,7 @@ export type CommonTableProps = {
   page: number;
   rowsPerPage: number;
   sortBy: string;
-  order: Order;
+  order: SortingOrder;
   handleChangePage: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
     newPage: number,
