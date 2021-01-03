@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import {
   CssBaseline,
   makeStyles,
@@ -8,7 +8,7 @@ import {
 import Sidebar from '../components/nav/Sidebar';
 import Topbar from '../components/nav/Topbar';
 
-export const MainTemplate: React.FC = ({ children }) => {
+export const MainTemplate: FC = ({ children }) => {
   const classes = useStyles();
 
   return (

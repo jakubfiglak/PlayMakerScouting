@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import {
   Container,
   CssBaseline,
@@ -9,10 +9,11 @@ import {
 } from '@material-ui/core';
 import logo from '../assets/logo.png';
 
-export const AuthTemplate: React.FC<{ title: string }> = ({
-  title,
-  children,
-}) => {
+type Props = {
+  title: string;
+};
+
+export const AuthTemplate: FC<Props> = ({ title, children }) => {
   const classes = useStyles();
 
   return (

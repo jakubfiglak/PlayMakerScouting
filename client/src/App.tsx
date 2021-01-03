@@ -4,7 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { AuthenticatedApp } from './AuthenticatedApp';
 import { UnauthenticatedApp } from './UnauthenticatedApp';
 import { Alerts } from './components/Alerts';
-import { ErrorFallback } from './components/ErrorFallback';
+import { ErrorPage } from './pages/Error/ErrorPage';
 import theme from './theme/theme';
 import { useAuthState } from './context/auth/useAuthState';
 
@@ -19,7 +19,7 @@ const App = () => {
   }, []);
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <ErrorBoundary FallbackComponent={ErrorPage}>
       <ThemeProvider theme={theme}>
         <Alerts />
         {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
