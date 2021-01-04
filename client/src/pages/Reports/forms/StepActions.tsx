@@ -1,12 +1,10 @@
 import React from 'react';
 // MUI components
-import { Button } from '@material-ui/core';
-// Styles
-import { useStyles } from './styles';
+import { Button, makeStyles, Theme } from '@material-ui/core';
 
 type Props = {
   activeStep: number;
-  steps: string[];
+  totalSteps: number;
   handleBack: () => void;
   handleNext: () => void;
   isNextButtonDisabled: boolean;
@@ -14,7 +12,7 @@ type Props = {
 
 export const StepActions = ({
   activeStep,
-  steps,
+  totalSteps,
   handleBack,
   handleNext,
   isNextButtonDisabled,
@@ -38,9 +36,19 @@ export const StepActions = ({
           className={classes.button}
           disabled={isNextButtonDisabled}
         >
-          {activeStep === steps.length - 1 ? 'Zapisz' : 'Dalej'}
+          {activeStep === totalSteps - 1 ? 'Zapisz' : 'Dalej'}
         </Button>
       </div>
     </div>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  actionsContainer: {
+    marginBottom: theme.spacing(2),
+  },
+  button: {
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
+}));

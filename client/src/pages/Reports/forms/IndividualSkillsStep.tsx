@@ -10,7 +10,7 @@ import { commonIndSkillsFields } from '../../../data';
 import { getIndSkillsFields } from '../../../utils';
 
 type Props = {
-  position?: Position;
+  position: Position | null;
 };
 
 export const IndividualSkillsStep = ({ position }: Props) => {

@@ -8,7 +8,7 @@ type MainFormActionsProps = {
   onCancelClick: () => void;
   goBack?: () => void;
   activeStep?: number;
-  steps?: string[];
+  totalSteps?: number;
 };
 
 export const MainFormActions = ({
@@ -17,7 +17,7 @@ export const MainFormActions = ({
   onCancelClick,
   goBack,
   activeStep,
-  steps,
+  totalSteps,
 }: MainFormActionsProps) => {
   return (
     <>
@@ -26,14 +26,14 @@ export const MainFormActions = ({
           {isEditState ? `Edytuj ${label}` : `Dodaj ${label}`}
         </Button>
       </Grid>
-      {goBack && steps && (
+      {goBack && totalSteps && (
         <Grid item xs={12} sm={4}>
           <Button
             fullWidth
             variant="contained"
             color="default"
             onClick={goBack}
-            disabled={activeStep !== steps.length}
+            disabled={activeStep !== totalSteps}
           >
             Wróć do edycji
           </Button>
