@@ -80,7 +80,7 @@ export const PlayersCombo = ({
                     onClick={onAddPlayerClick}
                     onMouseDown={(e) => e.preventDefault()}
                   >
-                    Dodaj nowy klub
+                    Dodaj zawodnika
                   </Button>
                 </MenuItem>
                 <Divider />

@@ -14,9 +14,6 @@ import { ReportTypeStep } from './ReportTypeStep';
 import { OrderStep } from './OrderStep';
 import { PlayerStep } from './PlayerStep';
 import { BasicDataStep } from './BasicDataStep';
-import { IndividualSkillsStep } from './IndividualSkillsStep';
-import { TeamplaySkillsStep } from './TeamplaySkillsStep';
-import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
 import { SkillsRatingStep } from './SkillsRatingStep';
 import { MatchStep } from './MatchStep';
@@ -29,16 +26,25 @@ import { useStepper } from '../../../hooks';
 import { useOrdersState } from '../../../context/orders/useOrdersState';
 import { usePlayersState } from '../../../context/players/usePlayersState';
 // Types
-import { Position } from '../../../types/players';
+import { Position, PlayerBasicInfo } from '../../../types/players';
+import { OrderBasicInfo } from '../../../types/orders';
 import { ReportFormData } from '../../../types/reports';
 // Utils & data
 import { reportsFormInitialValues } from '../../../components/forms/initialValues';
 
 type Props = {
   isOrderOptionDisabled: boolean;
+  playersList: PlayerBasicInfo[];
+  ordersList: OrderBasicInfo[];
+  onAddPlayerClick: () => void;
 };
 
-export const NewReportForm = ({ isOrderOptionDisabled }: Props) => {
+export const NewReportForm = ({
+  isOrderOptionDisabled,
+  playersList,
+  ordersList,
+  onAddPlayerClick,
+}: Props) => {
   // const classes = useStyles();
   const [
     activeStep,
@@ -48,21 +54,21 @@ export const NewReportForm = ({ isOrderOptionDisabled }: Props) => {
     setActiveStep,
   ] = useStepper();
 
-  const {
-    loading: playerLoading,
-    getPlayer,
-    playerData,
-    getPlayersList,
-    playersList,
-  } = usePlayersState();
+  // const {
+  //   loading: playerLoading,
+  //   getPlayer,
+  //   playerData,
+  //   getPlayersList,
+  //   playersList,
+  // } = usePlayersState();
 
-  const {
-    loading: orderLoading,
-    getOrder,
-    orderData,
-    getOrdersList,
-    ordersList,
-  } = useOrdersState();
+  // const {
+  //   loading: orderLoading,
+  //   getOrder,
+  //   orderData,
+  //   getOrdersList,
+  //   ordersList,
+  // } = useOrdersState();
 
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
   const [position, setPosition] = useState<Position | null>(null);
@@ -71,14 +77,8 @@ export const NewReportForm = ({ isOrderOptionDisabled }: Props) => {
 
   useEffect(() => {
     setValues(reportsFormInitialValues);
-    if (reportType === 'custom' && playersList.length === 0) {
-      getPlayersList();
-    }
-    if (reportType === 'order' && ordersList.length === 0) {
-      getOrdersList();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reportType]);
+  }, []);
 
   useEffect(() => {
     if (values.order) {
@@ -113,7 +113,10 @@ export const NewReportForm = ({ isOrderOptionDisabled }: Props) => {
         reportType === 'order' ? (
           <OrderStep ordersData={ordersList} />
         ) : (
-          <PlayerStep playersData={playersList} />
+          <PlayerStep
+            playersData={playersList}
+            onAddPlayerClick={onAddPlayerClick}
+          />
         ),
     },
     {
@@ -140,7 +143,6 @@ export const NewReportForm = ({ isOrderOptionDisabled }: Props) => {
 
   return (
     <Grid container>
-      {(playerLoading || orderLoading) && <Loader />}
       <Grid item xs={12}>
         <Typography variant="h5" align="center">
           Tworzenie nowego raportu

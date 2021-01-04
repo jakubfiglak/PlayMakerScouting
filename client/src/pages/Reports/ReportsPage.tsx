@@ -10,6 +10,7 @@ import { EditReportForm } from './forms/EditReportForm';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
+import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 // Types
 import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 // Hooks
@@ -18,6 +19,8 @@ import { useTable } from '../../hooks/useTable';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
+import { useClubsState } from '../../context/clubs/useClubsState';
+import { useOrdersState } from '../../context/orders/useOrdersState';
 // Utils & data
 import { reportsFormInitialValues } from '../../components/forms/initialValues';
 import { reportsFormValidationSchema } from '../../components/forms/validationSchemas';
@@ -42,7 +45,20 @@ export const ReportsPage = () => {
     loading: playersLoading,
     getPlayersList,
     playersList,
+    addPlayer,
+    message: playersMessage,
+    clearMessage: clearPlayersMessage,
+    error: playersError,
+    clearErrors: clearPlayersErrors,
   } = usePlayersState();
+
+  const {
+    loading: ordersLoading,
+    getOrdersList,
+    ordersList,
+  } = useOrdersState();
+
+  const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
 
   const user = useAuthenticatedUser();
 
@@ -57,6 +73,8 @@ export const ReportsPage = () => {
     handleChangeRowsPerPage,
     handleSort,
   ] = useTable();
+
+  const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
 
   const [filters, setFilters] = useState<ReportsFilterData>({
     player: '',
@@ -82,6 +100,8 @@ export const ReportsPage = () => {
 
   useEffect(() => {
     getPlayersList();
+    getClubsList();
+    getOrdersList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -98,7 +118,9 @@ export const ReportsPage = () => {
   }, [activeTab, current]);
 
   useAlert(error, 'error', clearErrors);
+  useAlert(playersError, 'error', clearPlayersErrors);
   useAlert(message, 'success', clearMessage);
+  useAlert(playersMessage, 'success', clearPlayersMessage);
 
   const handleSetCurrent = (report: Report) => {
     setCurrent(report);
@@ -107,7 +129,9 @@ export const ReportsPage = () => {
 
   return (
     <MainTemplate>
-      {(loading || playersLoading) && <Loader />}
+      {(loading || playersLoading || clubsLoading || ordersLoading) && (
+        <Loader />
+      )}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
           <Tab label="Raporty" id="reports-0" aria-controls="reports-0" />
@@ -146,10 +170,21 @@ export const ReportsPage = () => {
             current ? (
               <EditReportForm report={current} />
             ) : (
-              <NewReportForm isOrderOptionDisabled={user.role === 'scout'} />
+              <NewReportForm
+                isOrderOptionDisabled={user.role === 'scout'}
+                playersList={playersList}
+                ordersList={ordersList}
+                onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
+              />
             )
           }
         </Formik>
+        <AddPlayerModal
+          clubsData={clubsList}
+          onClose={() => setIsAddPlayerModalOpen(false)}
+          onSubmit={addPlayer}
+          open={isAddPlayerModalOpen}
+        />
       </TabPanel>
     </MainTemplate>
   );
