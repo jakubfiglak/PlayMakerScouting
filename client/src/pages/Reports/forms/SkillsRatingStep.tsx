@@ -5,6 +5,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
+  makeStyles,
+  Theme,
 } from '@material-ui/core';
 // MUI icons
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -20,9 +22,11 @@ type Props = {
 };
 
 export const SkillsRatingStep = ({ position }: Props) => {
+  const classes = useStyles();
+
   return (
     <>
-      <Accordion>
+      <Accordion className={classes.root}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="individual-skills-content"
@@ -34,7 +38,7 @@ export const SkillsRatingStep = ({ position }: Props) => {
           <IndividualSkillsStep position={position} />
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion className={classes.root}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="teamplay-skills-content"
@@ -46,7 +50,7 @@ export const SkillsRatingStep = ({ position }: Props) => {
           <TeamplaySkillsStep />
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion className={classes.root}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="motor-skills-content"
@@ -61,3 +65,9 @@ export const SkillsRatingStep = ({ position }: Props) => {
     </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    background: theme.palette.background.default,
+  },
+}));

@@ -1,9 +1,16 @@
 import React from 'react';
 import { useField } from 'formik';
 // MUI components
-import { Grid, Typography, TextField } from '@material-ui/core';
-// Custom components
-import { RatingSelect } from '../../../components/selects/RatingSelect';
+import {
+  Grid,
+  Typography,
+  TextField,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
+import { Rating } from '@material-ui/lab';
+// MUI icons
+import { SportsSoccer as BallIcon } from '@material-ui/icons';
 
 type Props = {
   title: string;
@@ -12,17 +19,25 @@ type Props = {
 };
 
 export const RatingInput = ({ title, namespace, placeholder }: Props) => {
+  const classes = useStyles();
+
   const [field, meta] = useField(`${namespace}.note`);
+  const [ratingField] = useField(`${namespace}.rating`);
 
   const { error, touched } = meta;
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h6">{title}</Typography>
-      </Grid>
-      <Grid item xs={4}>
-        <RatingSelect name={`${namespace}.rating`} />
+        <div className={classes.container}>
+          <Typography variant="h6">{title}</Typography>
+          <Rating
+            {...ratingField}
+            name={`${namespace}.rating`}
+            max={4}
+            icon={<BallIcon />}
+          />
+        </div>
       </Grid>
       <Grid item xs={12}>
         <TextField
@@ -44,3 +59,11 @@ export const RatingInput = ({ title, namespace, placeholder }: Props) => {
     </Grid>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: `${theme.spacing(1)}px`,
+  },
+}));
