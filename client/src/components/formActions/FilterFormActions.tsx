@@ -14,7 +14,7 @@ export const FilterFormActions = ({
   const classes = useStyles();
 
   return (
-    <Grid container xs={12} sm={6} lg={3} className={classes.input} spacing={2}>
+    <Grid container className={classes.input} spacing={2}>
       <Grid item xs={12} sm={6}>
         <Button type="submit" variant="contained" color="secondary" fullWidth>
           Filtruj

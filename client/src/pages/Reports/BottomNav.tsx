@@ -7,10 +7,12 @@ import {
   Theme,
 } from '@material-ui/core';
 // MUI icons
-import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
-import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
-import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
-import PeopleIcon from '@material-ui/icons/People';
+import {
+  SportsSoccer as BallIcon,
+  Note as NotesIcon,
+  FormatListNumbered as StatsIcon,
+  RateReview as RatesIcon,
+} from '@material-ui/icons';
 
 type BottomNavProps = {
   activeStep: number;
@@ -30,28 +32,28 @@ export const BottomNav = ({ activeStep, setActiveStep }: BottomNavProps) => {
       className={classes.bottomNav}
     >
       <BottomNavigationAction
-        label="Indywidualne"
-        icon={<SportsSoccerIcon />}
-        disabled={activeStep <= 2}
+        label="Mecz"
+        icon={<BallIcon />}
+        disabled={activeStep <= 1}
+        value={2}
+      />
+      <BottomNavigationAction
+        label="Notatki"
+        icon={<NotesIcon />}
+        disabled={activeStep <= 1}
         value={3}
       />
       <BottomNavigationAction
-        label="Współdziałanie"
-        icon={<PeopleIcon />}
-        disabled={activeStep <= 2}
+        label="Oceny"
+        icon={<RatesIcon />}
+        disabled={activeStep <= 1}
         value={4}
       />
       <BottomNavigationAction
-        label="Motoryczne"
-        icon={<DirectionsRunIcon />}
-        disabled={activeStep <= 2}
-        value={5}
-      />
-      <BottomNavigationAction
         label="Statystyki"
-        icon={<FormatListNumberedIcon />}
-        disabled={activeStep <= 2}
-        value={7}
+        icon={<StatsIcon />}
+        disabled={activeStep <= 1}
+        value={5}
       />
     </BottomNavigation>
   );
@@ -66,6 +68,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     transform: 'translateX(calc(-50% + 120px))',
     backgroundColor: theme.palette.secondary.main,
     zIndex: 1000,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
 
     [theme.breakpoints.down('sm')]: {
       width: '100%',

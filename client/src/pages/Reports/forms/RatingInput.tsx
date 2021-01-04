@@ -8,9 +8,10 @@ import { RatingSelect } from '../../../components/selects/RatingSelect';
 type Props = {
   title: string;
   namespace: string;
+  placeholder?: string;
 };
 
-export const RatingInput = ({ title, namespace }: Props) => {
+export const RatingInput = ({ title, namespace, placeholder }: Props) => {
   const [field, meta] = useField(`${namespace}.note`);
 
   const { error, touched } = meta;
@@ -28,6 +29,7 @@ export const RatingInput = ({ title, namespace }: Props) => {
           {...field}
           id={`${namespace}.note`}
           fullWidth
+          placeholder={placeholder}
           label="Opis"
           multiline
           rowsMax={4}

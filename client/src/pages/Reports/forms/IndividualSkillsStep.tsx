@@ -14,7 +14,11 @@ type Props = {
 };
 
 export const IndividualSkillsStep = ({ position }: Props) => {
-  let specificIndSkillsFields: { title: string; namespace: string }[] = [];
+  let specificIndSkillsFields: {
+    title: string;
+    namespace: string;
+    placeholder?: string;
+  }[] = [];
 
   if (position) {
     specificIndSkillsFields = getIndSkillsFields(position);
@@ -24,11 +28,12 @@ export const IndividualSkillsStep = ({ position }: Props) => {
 
   return (
     <Grid container spacing={3}>
-      {skillsFields.map(({ title, namespace }) => (
+      {skillsFields.map(({ title, namespace, placeholder }) => (
         <Grid item xs={12} key={title}>
           <RatingInput
             title={title}
             namespace={`individualSkills.${namespace}`}
+            placeholder={placeholder}
           />
         </Grid>
       ))}

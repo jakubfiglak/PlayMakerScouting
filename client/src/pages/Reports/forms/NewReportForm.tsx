@@ -18,6 +18,7 @@ import { IndividualSkillsStep } from './IndividualSkillsStep';
 import { TeamplaySkillsStep } from './TeamplaySkillsStep';
 import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
+import { SkillsRatingStep } from './SkillsRatingStep';
 import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
@@ -120,24 +121,12 @@ export const NewReportForm = ({ isOrderOptionDisabled }: Props) => {
       content: <MatchStep />,
     },
     {
-      title: 'Ocena umiejętności indywidualnych',
-      content: <IndividualSkillsStep position={position} />,
-    },
-    {
-      title: 'Ocena współdziałania z partnerami',
-      content: <TeamplaySkillsStep />,
-    },
-    {
-      title: 'Ocena potencjału motorycznego',
-      content: <MotorSkillsStep />,
-    },
-    {
-      title: 'Podsumowanie występu',
+      title: 'Notatki/podsumowanie',
       content: <SummaryStep />,
     },
     {
-      title: 'Podsumowanie występu',
-      content: <SummaryStep />,
+      title: 'Oceny',
+      content: <SkillsRatingStep position={position} />,
     },
     {
       title: 'Statystyki',

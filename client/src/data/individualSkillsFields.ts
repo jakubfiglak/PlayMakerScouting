@@ -2,6 +2,7 @@ export const commonIndSkillsFields = [
   {
     title: 'Podania',
     namespace: 'passing',
+    placeholder: 'Opisz podania kluczowe, otwierające i prostopadłe',
   },
   {
     title: 'Przyjęcie piłki',
