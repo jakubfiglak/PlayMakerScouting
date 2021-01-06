@@ -15,24 +15,29 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FinalRatingChip } from '../Reports/FinalRatingChip';
 // Types
 import { Report } from '../../types/reports';
+// Styles
+import { yellow, yellowTransparent } from '../../theme/colors';
 
 const options = {
   maintainAspectRatio: false,
   legend: { display: false },
   scale: {
-    ticks: { beginAtZero: true },
+    ticks: { beginAtZero: true, min: 0, max: 4, stepSize: 1 },
   },
+  max: 1,
+  stepSize: 1,
 };
 
 type Props = Pick<
   Report,
-  'summary' | 'finalRating' | 'individualAvg' | 'teamplayAvg' | 'avgRating'
-> & {
-  chartData: {
-    labels: string[];
-    data: number[];
-  };
-};
+  | 'summary'
+  | 'finalRating'
+  | 'individualAvg'
+  | 'teamplayAvg'
+  | 'avgRating'
+  | 'individualSkills'
+  | 'teamplaySkills'
+>;
 
 export const ReportSummaryAccordion = ({
   summary,
@@ -40,24 +45,24 @@ export const ReportSummaryAccordion = ({
   individualAvg,
   teamplayAvg,
   avgRating,
-  chartData,
+  individualSkills,
+  teamplaySkills,
 }: Props) => {
   const classes = useStyles();
 
+  const skills = { ...individualSkills, ...teamplaySkills };
+
   const data = {
-    labels: chartData.labels,
+    labels: Object.keys(skills),
     datasets: [
       {
-        data: chartData.data || [2, 2, 2],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
+        data: Object.entries(skills).map(([_, value]) => value?.rating),
+        backgroundColor: yellowTransparent,
+        borderColor: yellow,
         borderWidth: 1,
       },
     ],
   };
-
-  console.log({ chartData });
-  console.log({ data });
 
   return (
     <Accordion>
@@ -97,9 +102,7 @@ export const ReportSummaryAccordion = ({
             </Typography>
           </div>
           <div>
-            {data.datasets[0].data.length > 0 && (
-              <Radar data={data} options={options} width={250} height={250} />
-            )}
+            <Radar data={data} options={options} width={250} height={250} />
           </div>
         </div>
       </AccordionDetails>
