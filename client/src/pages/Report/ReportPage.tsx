@@ -12,6 +12,7 @@ import { Loader } from '../../components/Loader';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
+import { individualSkills, teamplaySkills } from '../../data';
 
 type ParamTypes = {
   id: string;
@@ -27,6 +28,29 @@ export const ReportPage = () => {
     getReport(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  const chartData: { labels: string[]; data: number[] } = {
+    labels: [],
+    data: [],
+  };
+
+  useEffect(() => {
+    if (reportData) {
+      const skillsObject = {
+        ...reportData.individualSkills,
+        ...reportData.teamplaySkills,
+      };
+
+      chartData.labels = Object.keys(skillsObject);
+
+      const skillsValues = Object.values(skillsObject).map(
+        (value) => value?.rating as number,
+      );
+
+      chartData.data = skillsValues;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportData]);
 
   return (
     <MainTemplate>
@@ -72,6 +96,7 @@ export const ReportPage = () => {
               individualAvg={reportData.individualAvg}
               teamplayAvg={reportData.teamplayAvg}
               avgRating={reportData.avgRating}
+              chartData={chartData}
             />
           </Grid>
         </Grid>
