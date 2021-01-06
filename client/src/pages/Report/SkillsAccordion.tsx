@@ -7,11 +7,15 @@ import {
   Typography,
   Grid,
   AccordionSummaryProps,
+  makeStyles,
+  Theme,
 } from '@material-ui/core';
-// Custom components
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Rating } from './Rating';
+import { Rating } from '@material-ui/lab';
 // MUI icons
+import {
+  SportsSoccer as BallIcon,
+  ExpandMore as ExpandMoreIcon,
+} from '@material-ui/icons';
 // Types
 import { IndividualSkills, TeamplaySkills } from '../../types/reports';
 // Utils & data
@@ -27,6 +31,8 @@ export const SkillsAccordion = ({
   id,
   title,
 }: BasicReportDataProps) => {
+  const classes = useStyles();
+
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} id={id}>
@@ -37,12 +43,23 @@ export const SkillsAccordion = ({
           {Object.entries(skills).map(
             ([key, value]) =>
               value && (
-                <Rating
-                  key={key}
-                  label={getRatingLabel(key)}
-                  rating={value.rating}
-                  note={value.note}
-                />
+                <Grid item xs={12}>
+                  <div className={classes.container}>
+                    <Typography>
+                      <strong>{getRatingLabel(key)}</strong>
+                    </Typography>
+                    <Rating
+                      name={`${key}.rating`}
+                      value={value.rating}
+                      max={4}
+                      icon={<BallIcon />}
+                      readOnly
+                    />
+                  </div>
+                  <Typography variant="body2" color="textSecondary">
+                    {value.note}
+                  </Typography>
+                </Grid>
               ),
           )}
         </Grid>
@@ -50,3 +67,11 @@ export const SkillsAccordion = ({
     </Accordion>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: `${theme.spacing(1)}px`,
+  },
+}));

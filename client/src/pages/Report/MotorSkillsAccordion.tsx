@@ -12,11 +12,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Types
 import { MotorSkills } from '../../types/reports';
 
-type MotorSkillsAccordionProps = {
+type Props = {
   skills: MotorSkills;
 };
 
-export const MotorSkillsAccordion = ({ skills }: MotorSkillsAccordionProps) => {
+export const MotorSkillsAccordion = ({ skills }: Props) => {
   const { leading, neglected } = skills;
 
   return (

@@ -118,3 +118,14 @@ export const ratingLabels = [
     label: 'Selekcja pozytywna',
   },
 ];
+
+export const matchLocationLabels = [
+  {
+    value: 'home',
+    label: 'dom',
+  },
+  {
+    value: 'away',
+    label: 'wyjazd',
+  },
+];

@@ -25,13 +25,13 @@ export const PlayersTableRow = ({
 
   return (
     <StyledTableRow>
-      <StyledTableCell>
+      <StyledTableCell padding="checkbox">
         <Tooltip title="Edytuj">
           <IconButton
             aria-label="edit"
             onClick={() => handleSetCurrent(player)}
           >
-            <EditIcon fontSize="small" />
+            <EditIcon />
           </IconButton>
         </Tooltip>
       </StyledTableCell>

@@ -2,25 +2,13 @@ import React from 'react';
 // MUI components
 import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 // Types
-import { MatchData } from '../../types/reports';
+import { Report } from '../../types/reports';
 // Utils & data
-import { formatDate } from '../../utils';
+import { formatDate } from '../../utils/formatDate';
+import { getLabel } from '../../utils/getLabel';
+import { matchLocationLabels } from '../../data/labels';
 
-type ReportHeaderCardProps = {
-  player: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  match: MatchData;
-  order?: string;
-  scout: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  createdAt: string;
-};
+type Props = Pick<Report, 'player' | 'match' | 'order' | 'scout' | 'createdAt'>;
 
 export const ReportHeaderCard = ({
   player,
@@ -28,7 +16,7 @@ export const ReportHeaderCard = ({
   order,
   scout,
   createdAt,
-}: ReportHeaderCardProps) => {
+}: Props) => {
   return (
     <Card>
       <CardContent>
@@ -42,7 +30,10 @@ export const ReportHeaderCard = ({
           <Grid item xs={12}>
             <Typography>
               <strong>Mecz: </strong>
-              {match}
+              {`vs. ${match.against} (${getLabel(
+                match.location,
+                matchLocationLabels,
+              )}), ${match.competition}`}
             </Typography>
           </Grid>
           {order && (

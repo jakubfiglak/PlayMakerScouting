@@ -1,6 +1,6 @@
 import React from 'react';
 // MUI components
-import { IconButton, Tooltip, Box } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 // MUI icons
 import EditIcon from '@material-ui/icons/Edit';
 // Custom components
@@ -19,17 +19,12 @@ export const ClubsTableRow = ({ club, handleSetCurrent }: Props) => {
 
   return (
     <StyledTableRow>
-      <StyledTableCell>
-        <Box display="flex">
-          <Tooltip title="Edytuj">
-            <IconButton
-              aria-label="edit"
-              onClick={() => handleSetCurrent(club)}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        </Box>
+      <StyledTableCell padding="checkbox">
+        <Tooltip title="Edytuj">
+          <IconButton aria-label="edit" onClick={() => handleSetCurrent(club)}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
       </StyledTableCell>
       <StyledTableCell>{name}</StyledTableCell>
       <StyledTableCell>{division}</StyledTableCell>

@@ -4,16 +4,8 @@ export const skills = [
     label: 'Przyjęcie piłki',
   },
   {
-    value: 'holdPass',
-    label: 'Podania utrzymujące',
-  },
-  {
-    value: 'gainPass',
-    label: 'Podania zdobywające',
-  },
-  {
-    value: 'keyPass',
-    label: 'Podania kluczowe',
+    value: 'passing',
+    label: 'Podania',
   },
   {
     value: 'defOneOnOne',

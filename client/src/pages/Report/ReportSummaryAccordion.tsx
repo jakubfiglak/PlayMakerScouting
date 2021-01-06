@@ -6,21 +6,20 @@ import {
   AccordionDetails,
   Typography,
   Grid,
+  makeStyles,
+  Theme,
 } from '@material-ui/core';
 // MUI icons
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Custom components
 import { FinalRatingChip } from '../Reports/FinalRatingChip';
 // Types
-import { RatingScore } from '../../types/reports';
+import { Report } from '../../types/reports';
 
-type ReportSummaryAccordionProps = {
-  summary: string;
-  finalRating: RatingScore;
-  individualAvg: number;
-  teamplayAvg: number;
-  avgRating: number;
-};
+type Props = Pick<
+  Report,
+  'summary' | 'finalRating' | 'individualAvg' | 'teamplayAvg' | 'avgRating'
+>;
 
 export const ReportSummaryAccordion = ({
   summary,
@@ -28,7 +27,9 @@ export const ReportSummaryAccordion = ({
   individualAvg,
   teamplayAvg,
   avgRating,
-}: ReportSummaryAccordionProps) => {
+}: Props) => {
+  const classes = useStyles();
+
   return (
     <Accordion>
       <AccordionSummary
@@ -49,7 +50,12 @@ export const ReportSummaryAccordion = ({
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <FinalRatingChip finalRating={finalRating} />
+            <div className={classes.container}>
+              <Typography>
+                <strong>Ocena ostateczna: </strong>
+              </Typography>
+              <FinalRatingChip finalRating={finalRating} />
+            </div>
           </Grid>
           <Grid item xs={12}>
             <Typography>
@@ -74,3 +80,11 @@ export const ReportSummaryAccordion = ({
     </Accordion>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: `${theme.spacing(1)}px`,
+  },
+}));

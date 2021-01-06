@@ -20,11 +20,8 @@ import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 import { BottomNav } from '../BottomNav';
-import { Loader } from '../../../components/Loader';
 // Hooks
 import { useStepper } from '../../../hooks';
-import { useOrdersState } from '../../../context/orders/useOrdersState';
-import { usePlayersState } from '../../../context/players/usePlayersState';
 // Types
 import { Position, PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';
@@ -45,7 +42,6 @@ export const NewReportForm = ({
   ordersList,
   onAddPlayerClick,
 }: Props) => {
-  // const classes = useStyles();
   const [
     activeStep,
     handleNext,
@@ -53,22 +49,6 @@ export const NewReportForm = ({
     resetStepper,
     setActiveStep,
   ] = useStepper();
-
-  // const {
-  //   loading: playerLoading,
-  //   getPlayer,
-  //   playerData,
-  //   getPlayersList,
-  //   playersList,
-  // } = usePlayersState();
-
-  // const {
-  //   loading: orderLoading,
-  //   getOrder,
-  //   orderData,
-  //   getOrdersList,
-  //   ordersList,
-  // } = useOrdersState();
 
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
   const [position, setPosition] = useState<Position | null>(null);

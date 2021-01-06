@@ -8,6 +8,8 @@ import {
   FormHelperText,
   FormControl,
 } from '@material-ui/core';
+// Utils & data
+import { matchLocationLabels } from '../../data/labels';
 
 type Props = {
   name: string;
@@ -21,16 +23,19 @@ export const MatchLocationSelect = ({ name, size }: Props) => {
 
   return (
     <FormControl variant="outlined" fullWidth size={size}>
-      <InputLabel id="location">Mecz u siebie/na wyjeździe</InputLabel>
+      <InputLabel id="location">Dom/wyjazd</InputLabel>
       <Select
         {...field}
         labelId="location"
         id="location"
-        label="Mecz u siebie/na wyjeździe"
+        label="Dom/wyjazd"
         error={touched && !!error}
       >
-        <MenuItem value="home">U siebie</MenuItem>
-        <MenuItem value="away">Na wyjeździe</MenuItem>
+        {matchLocationLabels.map((location) => (
+          <MenuItem value={location.value} key={location.value}>
+            {location.label}
+          </MenuItem>
+        ))}
       </Select>
       {touched && error && <FormHelperText>{error}</FormHelperText>}
     </FormControl>
