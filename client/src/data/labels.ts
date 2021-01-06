@@ -43,15 +43,15 @@ export const footLabels = [
 export const competitionLabels = [
   {
     value: 'league',
-    label: 'Liga',
+    label: 'liga',
   },
   {
     value: 'cup',
-    label: 'Puchar',
+    label: 'puchar',
   },
   {
     value: 'friendly',
-    label: 'Towarzyski',
+    label: 'towarzyski',
   },
 ];
 
