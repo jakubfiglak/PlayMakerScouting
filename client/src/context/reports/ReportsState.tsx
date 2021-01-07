@@ -42,6 +42,7 @@ export const ReportsState: React.FC = ({ children }) => {
 
   // Set current
   const setCurrent = (report: Report) => {
+    console.log('setting current report');
     dispatch({
       type: 'SET_CURRENT',
       payload: report,

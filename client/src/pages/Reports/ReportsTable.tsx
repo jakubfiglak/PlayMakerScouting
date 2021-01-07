@@ -3,7 +3,11 @@ import { Link as RouterLink } from 'react-router-dom';
 // MUI components
 import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
 // MUI icons
-import { Search as SearchIcon, Edit as EditIcon } from '@material-ui/icons';
+import {
+  Search as SearchIcon,
+  Edit as EditIcon,
+  Print as PrintIcon,
+} from '@material-ui/icons';
 // Custom components
 import { FinalRatingChip } from './FinalRatingChip';
 import { Table } from '../../components/table/Table';
@@ -18,6 +22,7 @@ import { formatDate } from '../../utils/formatDate';
 type Props = {
   reports: Report[];
   handleEditClick: (report: Report) => void;
+  handlePrintClick: (report: Report) => void;
 } & CommonTableProps;
 
 const headCells = [
@@ -39,6 +44,7 @@ export const ReportsTable = ({
   total,
   reports,
   handleEditClick,
+  handlePrintClick,
 }: Props) => {
   const classes = useStyles();
 
@@ -75,12 +81,20 @@ export const ReportsTable = ({
                     </IconButton>
                   </Link>
                 </Tooltip>
-                <Tooltip title="Edytuj raport">
+                <Tooltip title="Edytuj">
                   <IconButton
                     aria-label="edit report"
                     onClick={() => handleEditClick(report)}
                   >
                     <EditIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Drukuj">
+                  <IconButton
+                    aria-label="print report"
+                    onClick={() => handlePrintClick(report)}
+                  >
+                    <PrintIcon />
                   </IconButton>
                 </Tooltip>
               </div>

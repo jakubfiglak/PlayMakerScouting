@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Formik } from 'formik';
+import { useReactToPrint } from 'react-to-print';
 // MUI components
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import { AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
 // Custom components
 import { ReportsTable } from './ReportsTable';
 import { ReportsFilterForm } from './ReportsFilterForm';
 import { NewReportForm } from './forms/NewReportForm';
 import { EditReportForm } from './forms/EditReportForm';
+import { PrinteableReport } from '../Report/PrinteableReport';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
@@ -26,6 +28,9 @@ import { reportsFormInitialValues } from '../../components/forms/initialValues';
 import { reportsFormValidationSchema } from '../../components/forms/validationSchemas';
 
 export const ReportsPage = () => {
+  const classes = useStyles();
+  const ref = useRef<HTMLDivElement | null>(null);
+
   const {
     loading,
     getReports,
@@ -110,13 +115,6 @@ export const ReportsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters]);
 
-  useEffect(() => {
-    if (activeTab === 0 && current) {
-      clearCurrent();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, current]);
-
   useAlert(error, 'error', clearErrors);
   useAlert(playersError, 'error', clearPlayersErrors);
   useAlert(message, 'success', clearMessage);
@@ -125,6 +123,17 @@ export const ReportsPage = () => {
   const handleSetCurrent = (report: Report) => {
     setCurrent(report);
     setActiveTab(1);
+  };
+
+  const handlePrint = useReactToPrint({
+    content: () => ref.current,
+    documentTitle: `PlaymakerReport_${current?._id}`,
+    onAfterPrint: () => clearCurrent(),
+  }) as () => void;
+
+  const handlePrintClick = (report: Report) => {
+    setCurrent(report);
+    setTimeout(() => handlePrint(), 10);
   };
 
   return (
@@ -151,7 +160,15 @@ export const ReportsPage = () => {
           total={reportsData.totalDocs}
           reports={reportsData.docs}
           handleEditClick={handleSetCurrent}
+          handlePrintClick={handlePrintClick}
         />
+        {current && (
+          <div className={classes.print}>
+            <div ref={ref}>
+              <PrinteableReport report={current} />
+            </div>
+          </div>
+        )}
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
         <Formik
@@ -189,3 +206,10 @@ export const ReportsPage = () => {
     </MainTemplate>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  print: {
+    overflow: 'hidden',
+    height: 0,
+  },
+}));
