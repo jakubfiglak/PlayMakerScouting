@@ -12,7 +12,6 @@ import {
 import { OrdersForm } from './OrdersForm';
 import { OrdersFilterForm } from './OrdersFilterForm';
 import { OrdersTable } from './OrdersTable';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
@@ -102,7 +101,7 @@ export const OrdersPage = () => {
   const isAdmin = user.role === 'admin';
 
   return (
-    <MainTemplate>
+    <>
       {(loading || playersLoading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
@@ -163,7 +162,7 @@ export const OrdersPage = () => {
           />
         </TabPanel>
       )}
-    </MainTemplate>
+    </>
   );
 };
 

@@ -1,16 +1,7 @@
-import { SvgIconTypeMap } from '@material-ui/core/SvgIcon';
-import { OverridableComponent } from '@material-ui/core/OverridableComponent';
+import { ReactElement } from 'react';
 
-export type NavLinkProps = {
-  Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+export type NavItem = {
+  icon: ReactElement;
   text: string;
-  link: string;
-  className?: string;
-};
-
-export type NavButtonProps = {
-  Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
-  text: string;
-  className?: string;
-  onClick: () => void;
+  to: string;
 };

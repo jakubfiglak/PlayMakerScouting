@@ -9,7 +9,6 @@ import { ReportsFilterForm } from './ReportsFilterForm';
 import { NewReportForm } from './forms/NewReportForm';
 import { EditReportForm } from './forms/EditReportForm';
 import { PrinteableReport } from '../Report/PrinteableReport';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
@@ -137,7 +136,7 @@ export const ReportsPage = () => {
   };
 
   return (
-    <MainTemplate>
+    <>
       {(loading || playersLoading || clubsLoading || ordersLoading) && (
         <Loader />
       )}
@@ -203,7 +202,7 @@ export const ReportsPage = () => {
           open={isAddPlayerModalOpen}
         />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };
 

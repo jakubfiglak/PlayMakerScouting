@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // Custom components
 import { OrderDetails } from './OrderDetails';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { useAlert } from '../../hooks/useAlert';
@@ -39,7 +38,7 @@ export const OrderPage = () => {
   }, [id]);
 
   return (
-    <MainTemplate>
+    <>
       {loading && <Loader />}
       {orderData && (
         <OrderDetails
@@ -49,6 +48,6 @@ export const OrderPage = () => {
           areAdminOptionsEnabled={user.role === 'admin'}
         />
       )}
-    </MainTemplate>
+    </>
   );
 };

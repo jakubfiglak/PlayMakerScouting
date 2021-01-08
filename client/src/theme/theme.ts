@@ -2,6 +2,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import {
   lightGray,
   darkGray,
+  semiGray,
   red,
   yellow,
   white,
@@ -18,6 +19,7 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: darkGray,
+      light: semiGray,
     },
     secondary: {
       main: yellow,

@@ -5,7 +5,6 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { ClubsForm } from './ClubsForm';
 import { ClubsFilterForm } from './ClubsFilterForm';
 import { ClubsTable } from './ClubsTable';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 // Types
@@ -60,7 +59,7 @@ export const ClubsPage = () => {
   );
 
   return (
-    <MainTemplate>
+    <>
       {loading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
@@ -86,6 +85,6 @@ export const ClubsPage = () => {
       <TabPanel value={activeTab} index={1} title="clubs">
         <ClubsForm />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };

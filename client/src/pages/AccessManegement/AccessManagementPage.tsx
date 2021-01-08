@@ -4,7 +4,6 @@ import { Typography, Grid } from '@material-ui/core';
 // Custom components
 import { GrantAccessForm } from './GrantAccessForm';
 import { AssignPlaymakerRoleForm } from './AssignPlaymakerRoleForm';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { usePlayersState } from '../../context/players/usePlayersState';
@@ -49,7 +48,7 @@ export const AccessManagementPage = () => {
   const regularScoutUsers = usersData.filter((user) => user.role === 'scout');
 
   return (
-    <MainTemplate>
+    <>
       {loading && <Loader />}
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -72,6 +71,6 @@ export const AccessManagementPage = () => {
           <AssignPlaymakerRoleForm usersData={regularScoutUsers} />
         </Grid>
       </Grid>
-    </MainTemplate>
+    </>
   );
 };

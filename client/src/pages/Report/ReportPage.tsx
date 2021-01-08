@@ -27,7 +27,6 @@ import { ReportSummary } from './ReportSummary';
 import { ReportSkills } from './ReportSkills';
 import { PrinteableReport } from './PrinteableReport';
 import { Loader } from '../../components/Loader';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
 
@@ -56,7 +55,7 @@ export const ReportPage = () => {
   }, [id]);
 
   return (
-    <MainTemplate>
+    <>
       {loading && <Loader />}
       {reportData && (
         <>
@@ -170,7 +169,7 @@ export const ReportPage = () => {
           </div>
         </>
       )}
-    </MainTemplate>
+    </>
   );
 };
 

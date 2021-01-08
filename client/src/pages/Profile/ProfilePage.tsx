@@ -4,7 +4,6 @@ import { Grid } from '@material-ui/core';
 // Custom components
 import { DetailsCard } from './DetailsCard';
 import { PasswordCard } from './PasswordCard';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useAlert } from '../../hooks';
 import { useAuthState } from '../../context/auth/useAuthState';
@@ -19,7 +18,7 @@ export const ProfilePage = () => {
   useAlert(getLabel(message, messageLabels), 'success', clearMessage);
 
   return (
-    <MainTemplate>
+    <>
       <Grid container>
         <Grid item lg={6} sm={12}>
           <DetailsCard user={user} />
@@ -28,6 +27,6 @@ export const ProfilePage = () => {
           <PasswordCard />
         </Grid>
       </Grid>
-    </MainTemplate>
+    </>
   );
 };

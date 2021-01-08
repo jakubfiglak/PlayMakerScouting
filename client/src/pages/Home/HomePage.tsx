@@ -1,6 +1,5 @@
 import React from 'react';
 // Custom components
-import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useAlert } from '../../hooks';
 import { useAuthState } from '../../context/auth/useAuthState';
@@ -14,8 +13,8 @@ export const HomePage = () => {
   useAlert(getLabel(message, messageLabels), 'success', clearMessage);
 
   return (
-    <MainTemplate>
+    <>
       <h1>hello</h1>
-    </MainTemplate>
+    </>
   );
 };

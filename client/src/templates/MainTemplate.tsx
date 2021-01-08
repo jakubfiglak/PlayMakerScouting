@@ -1,21 +1,36 @@
 import React, { FC } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   CssBaseline,
   makeStyles,
   createStyles,
   Theme,
 } from '@material-ui/core';
-import Sidebar from '../components/nav/Sidebar';
-import Topbar from '../components/nav/Topbar';
+import { Sidebar } from '../components/nav/Sidebar';
+import { Topbar } from '../components/nav/Topbar';
+import { NavItem } from '../components/nav/types';
+import { useAuthState } from '../context/auth/useAuthState';
 
-export const MainTemplate: FC = ({ children }) => {
+type Props = {
+  navElements: NavItem[];
+};
+
+export const MainTemplate: FC<Props> = ({ children, navElements }) => {
+  const history = useHistory();
   const classes = useStyles();
+
+  const { logout } = useAuthState();
+
+  const onLogout = () => {
+    history.push('/');
+    logout();
+  };
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Topbar />
-      <Sidebar />
+      <Topbar navElements={navElements} onLogout={onLogout} />
+      <Sidebar navElements={navElements} onLogout={onLogout} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {children}
@@ -36,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: '100%',
 
       [theme.breakpoints.down('sm')]: {
-        padding: `${theme.spacing(3)}px 0`,
+        padding: theme.spacing(3, 1),
       },
     },
     toolbar: theme.mixins.toolbar,

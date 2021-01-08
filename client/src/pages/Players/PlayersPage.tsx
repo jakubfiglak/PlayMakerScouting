@@ -6,7 +6,6 @@ import { PlayersForm } from './PlayersForm';
 import { PlayersTable } from './PlayersTable';
 import { PlayersFilterForm } from './PlayersFilterForm';
 import { AddClubModal } from './AddClubModal';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 // Types
@@ -96,7 +95,7 @@ export const PlayersPage = () => {
   };
 
   return (
-    <MainTemplate>
+    <>
       {(loading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
@@ -136,6 +135,6 @@ export const PlayersPage = () => {
           open={isAddClubModalOpen}
         />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };
