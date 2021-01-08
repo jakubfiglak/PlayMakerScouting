@@ -1,42 +1,36 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
+import { Grid, TextField, Button } from '@material-ui/core';
 // Custom components
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
-// Hooks
-import { useAuthState } from '../../context/auth/useAuthState';
 // Types
-import { EditAccountData } from '../../types/auth';
+import { EditAccountData, User } from '../../types/auth';
 // Utils & data
-import { editAccountInitialValues } from '../../components/forms/initialValues';
 import { editAccountValidationSchema } from '../../components/forms/validationSchemas';
-// Styles
-import { useStyles } from './styles';
 
-export const EditAccountForm = () => {
-  const classes = useStyles();
-  const { loading, editDetails, user } = useAuthState();
+type Props = {
+  user: User;
+  onSubmit: (data: EditAccountData) => void;
+};
 
-  const initialValues: EditAccountData = user
-    ? {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        city: user.city || '',
-        voivodeship: user.voivodeship || '',
-        phone: user.phone || '',
-        activeRadius: user.activeRadius || 0,
-      }
-    : editAccountInitialValues;
-
+export const EditAccountForm = ({ user, onSubmit }: Props) => {
+  const initialValues: EditAccountData = {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    city: user.city || '',
+    voivodeship: user.voivodeship || '',
+    phone: user.phone || '',
+    activeRadius: user.activeRadius || 0,
+  };
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(data) => editDetails(data)}
+      onSubmit={(data) => onSubmit(data)}
       validationSchema={editAccountValidationSchema}
     >
       {({ errors, touched, handleReset }) => (
-        <Form className={classes.form}>
+        <Form>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Field
@@ -107,28 +101,27 @@ export const EditAccountForm = () => {
                 }}
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
+                Zapisz zmiany
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                onClick={handleReset}
+              >
+                Reset
+              </Button>
+            </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            disabled={loading}
-          >
-            Zapisz zmiany
-            {loading && (
-              <CircularProgress size={24} className={classes.buttonProgress} />
-            )}
-          </Button>
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            onClick={handleReset}
-          >
-            Reset
-          </Button>
         </Form>
       )}
     </Formik>

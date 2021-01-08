@@ -1,33 +1,30 @@
 import React from 'react';
 import { useFormik } from 'formik';
 // MUI components
-import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
+import { Grid, TextField, Button } from '@material-ui/core';
 // Types
 import { UpdatePasswordData } from '../../types/auth';
-// Hooks
-import { useAuthState } from '../../context/auth/useAuthState';
-// Styles
-import { useStyles } from './styles';
 // Utils & data
 import { updatePasswordInitialValues } from '../../components/forms/initialValues';
 import { updatePasswordValidationSchema } from '../../components/forms/validationSchemas';
 
-export const UpdatePasswordForm = () => {
-  const classes = useStyles();
-  const { loading, updatePassword } = useAuthState();
+type Props = {
+  onSubmit: (data: UpdatePasswordData) => void;
+};
 
+export const UpdatePasswordForm = ({ onSubmit }: Props) => {
   const formik = useFormik<UpdatePasswordData>({
     initialValues: updatePasswordInitialValues,
     validationSchema: updatePasswordValidationSchema,
     onSubmit: (values) => {
-      updatePassword(values);
+      onSubmit(values);
     },
   });
 
   const { handleSubmit, errors, touched, getFieldProps } = formik;
 
   return (
-    <form className={classes.form} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
@@ -65,20 +62,12 @@ export const UpdatePasswordForm = () => {
             helperText={touched.newPasswordConfirm && errors.newPasswordConfirm}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Button type="submit" fullWidth variant="contained" color="primary">
+            Zmień hasło
+          </Button>
+        </Grid>
       </Grid>
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        color="primary"
-        className={classes.submit}
-        disabled={loading}
-      >
-        Zmień hasło
-        {loading && (
-          <CircularProgress size={24} className={classes.buttonProgress} />
-        )}
-      </Button>
     </form>
   );
 };

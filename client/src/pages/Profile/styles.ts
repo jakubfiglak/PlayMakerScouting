@@ -3,7 +3,6 @@ import { makeStyles, Theme } from '@material-ui/core';
 export const useStyles = makeStyles((theme: Theme) => ({
   form: {
     width: '100%',
-    marginTop: theme.spacing(3),
   },
   submit: {
     position: 'relative',
