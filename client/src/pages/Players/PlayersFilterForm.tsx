@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import { TextField, Grid, FormControl } from '@material-ui/core';
+import { TextField, FormControl } from '@material-ui/core';
 // Custom components
 import { PositionSelect } from '../../components/selects/PositionSelect';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
+import { FormContainer } from '../../components/FormContainer';
 // Types
 import { PlayersFilterData } from '../../types/players';
 import { ClubBasicInfo } from '../../types/clubs';
@@ -23,39 +24,33 @@ export const PlayersFilterForm = ({ clubsData, setFilters }: Props) => {
     >
       {({ handleReset, initialValues }) => (
         <Form autoComplete="off">
-          <Grid container justify="center" alignItems="center">
-            <Grid item xs={12} sm={6} lg={3}>
-              <Field
-                name="lastName"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Nazwisko"
+          <FormContainer>
+            <Field
+              name="lastName"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Nazwisko"
+              size="small"
+            />
+            <FormControl variant="outlined" size="small" fullWidth>
+              <ClubsCombo
+                clubsData={clubsData}
+                name="club"
+                label="Klub"
                 size="small"
               />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={3}>
-              <FormControl variant="outlined" size="small" fullWidth>
-                <ClubsCombo
-                  clubsData={clubsData}
-                  name="club"
-                  label="Klub"
-                  size="small"
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6} lg={3}>
-              <FormControl variant="outlined" size="small" fullWidth>
-                <PositionSelect />
-              </FormControl>
-            </Grid>
+            </FormControl>
+            <FormControl variant="outlined" size="small" fullWidth>
+              <PositionSelect />
+            </FormControl>
             <FilterFormActions
               handleClearFilter={() => {
                 handleReset();
                 setFilters(initialValues);
               }}
             />
-          </Grid>
+          </FormContainer>
         </Form>
       )}
     </Formik>

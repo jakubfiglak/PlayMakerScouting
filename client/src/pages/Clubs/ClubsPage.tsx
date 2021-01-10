@@ -7,8 +7,9 @@ import { ClubsFilterForm } from './ClubsFilterForm';
 import { ClubsTable } from './ClubsTable';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
 // Types
-import { Club, ClubsFilterData } from '../../types/clubs';
+import { Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 // Hooks
 import { useTabs, useTable, useAlert } from '../../hooks';
 import { useClubsState } from '../../context/clubs/useClubsState';
@@ -16,11 +17,15 @@ import { useClubsState } from '../../context/clubs/useClubsState';
 export const ClubsPage = () => {
   const {
     loading,
+    current,
     getClubs,
+    addClub,
+    editClub,
     clubsData,
     setCurrent,
     error,
     message,
+    clearCurrent,
     clearErrors,
     clearMessage,
   } = useClubsState();
@@ -50,6 +55,15 @@ export const ClubsPage = () => {
     setActiveTab(1);
   };
 
+  const handleSubmit = (data: ClubsFormData) => {
+    if (current) {
+      editClub(current._id, data);
+      clearCurrent();
+    } else {
+      addClub(data);
+    }
+  };
+
   useEffect(
     () => {
       getClubs(page + 1, rowsPerPage, sortBy, order, filters);
@@ -63,11 +77,12 @@ export const ClubsPage = () => {
       {loading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
-          <Tab label="Baza klubów" id="clubs-0" aria-controls="clubs-0" />
+          <Tab label="Kluby" id="clubs-0" aria-controls="clubs-0" />
           <Tab label="Dodaj/edytuj" id="clubs-1" aria-controls="clubs-1" />
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="clubs">
+        <PageHeading title="Baza klubów" />
         <ClubsFilterForm setFilters={setFilters} />
         <ClubsTable
           page={page}
@@ -83,7 +98,11 @@ export const ClubsPage = () => {
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">
-        <ClubsForm />
+        <PageHeading
+          title={current ? 'Edycja klubu' : 'Tworzenie nowego klubu'}
+        />
+
+        <ClubsForm current={current} onSubmit={handleSubmit} />
       </TabPanel>
     </>
   );

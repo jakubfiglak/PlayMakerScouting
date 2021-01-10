@@ -56,8 +56,8 @@ export const ReportSummary = ({
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.propsContainer}>
+    <>
+      <div className={classes.container}>
         <Typography>
           <strong>Podsumowanie występu</strong>
         </Typography>
@@ -86,19 +86,16 @@ export const ReportSummary = ({
       <div>
         <Radar data={data} options={options} width={250} height={250} />
       </div>
-    </div>
+    </>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  propsContainer: {
+  container: {
     display: 'flex',
     flexDirection: 'column',
     gap: `${theme.spacing(2)}px`,
-  },
-  container: {
-    display: 'flex',
-    gap: `${theme.spacing(6)}px`,
+    marginBottom: theme.spacing(2),
   },
   ratingContainer: {
     display: 'flex',

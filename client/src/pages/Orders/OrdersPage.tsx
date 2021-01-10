@@ -7,6 +7,7 @@ import {
   FormControlLabel,
   Checkbox,
   makeStyles,
+  Theme,
 } from '@material-ui/core';
 // Custom components
 import { OrdersForm } from './OrdersForm';
@@ -14,6 +15,7 @@ import { OrdersFilterForm } from './OrdersFilterForm';
 import { OrdersTable } from './OrdersTable';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 // Types
 import { OrdersFilterData } from '../../types/orders';
@@ -105,7 +107,7 @@ export const OrdersPage = () => {
       {(loading || playersLoading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
-          <Tab label="Baza zleceń" id="orders-0" aria-controls="orders-0" />
+          <Tab label="Zlecenia" id="orders-0" aria-controls="orders-0" />
           {isAdmin && (
             <Tab
               label="Stwórz zlecenie"
@@ -116,6 +118,7 @@ export const OrdersPage = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="orders">
+        <PageHeading title="Baza zleceń" />
         <div className={classes.checkboxContainer}>
           <FormControlLabel
             control={
@@ -149,6 +152,7 @@ export const OrdersPage = () => {
       </TabPanel>
       {isAdmin && (
         <TabPanel value={activeTab} index={1} title="orders-form">
+          <PageHeading title="Tworzenie nowego zlecenia" />
           <OrdersForm
             playersData={playersList}
             onSubmit={addOrder}
@@ -166,9 +170,10 @@ export const OrdersPage = () => {
   );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   checkboxContainer: {
     display: 'flex',
     justifyContent: 'center',
+    marginBottom: theme.spacing(1),
   },
 }));

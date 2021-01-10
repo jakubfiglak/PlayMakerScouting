@@ -13,6 +13,7 @@ import { PrinteableReport } from '../Report/PrinteableReport';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
+import { PageHeading } from '../../components/PageHeading';
 // Types
 import {
   Competition,
@@ -153,6 +154,7 @@ export const ReportsPage = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="reports">
+        <PageHeading title="Baza raportów" />
         <ReportsFilterForm playersData={playersList} setFilters={setFilters} />
         <ReportsTable
           page={page}
@@ -176,6 +178,13 @@ export const ReportsPage = () => {
         )}
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
+        <PageHeading
+          title={
+            current
+              ? `Edycja raportu nr ${current._id}`
+              : 'Tworzenie nowego raportu'
+          }
+        />
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}

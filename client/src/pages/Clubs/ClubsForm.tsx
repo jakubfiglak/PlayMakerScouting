@@ -1,23 +1,24 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import { Grid, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 // Custom components
 import { DivisionSelect } from '../../components/selects/DivisionSelect';
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
-import { Loader } from '../../components/Loader';
-// Hooks
-import { useClubsState } from '../../context/clubs/useClubsState';
+import { FormContainer } from '../../components/FormContainer';
 // Types
-import { ClubsFormData } from '../../types/clubs';
+import { Club, ClubsFormData } from '../../types/clubs';
 // Utils & data
 import { clubsFormInitialValues } from '../../data/forms/initialValues';
 import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
 
-export const ClubsForm = () => {
-  const { loading, addClub, editClub, current, clearCurrent } = useClubsState();
+type Props = {
+  current: Club | null;
+  onSubmit: (data: ClubsFormData) => void;
+};
 
+export const ClubsForm = ({ current, onSubmit }: Props) => {
   const initialValues: ClubsFormData = current
     ? {
         name: current.name,
@@ -33,43 +34,31 @@ export const ClubsForm = () => {
       validationSchema={clubsFormValidationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        if (current) {
-          editClub(current._id, data);
-        } else {
-          addClub(data);
-        }
-        clearCurrent();
+        onSubmit(data);
         resetForm();
       }}
     >
       {({ errors, touched, handleReset }) => (
         <Form>
-          {loading && <Loader />}
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Field
-                name="name"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Nazwa"
-                autoFocus
-                error={touched.name && !!errors.name}
-                helperText={touched.name && errors.name}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <VoivodeshipSelect name="voivodeship" />
-            </Grid>
-            <Grid item xs={6}>
-              <DivisionSelect />
-            </Grid>
+          <FormContainer>
+            <Field
+              name="name"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Nazwa"
+              autoFocus
+              error={touched.name && !!errors.name}
+              helperText={touched.name && errors.name}
+            />
+            <VoivodeshipSelect name="voivodeship" />
+            <DivisionSelect />
             <MainFormActions
               label="klub"
               isEditState={!!current}
               onCancelClick={handleReset}
             />
-          </Grid>
+          </FormContainer>
         </Form>
       )}
     </Formik>

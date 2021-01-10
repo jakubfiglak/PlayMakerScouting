@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import { Grid, TextField, FormControl } from '@material-ui/core';
+import { TextField, FormControl, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { FormModal } from '../FormModal';
 import { PositionSelect } from '../selects/PositionSelect';
@@ -27,6 +27,8 @@ export const AddPlayerModal = ({
   onClose,
   onSubmit,
 }: Props) => {
+  const classes = useStyles();
+
   return (
     <Formik
       initialValues={playersFormInitialValues}
@@ -44,64 +46,58 @@ export const AddPlayerModal = ({
           onSubmit={handleSubmit}
           open={open}
         >
-          <Form>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Field
-                  name="firstName"
-                  as={TextField}
-                  variant="outlined"
-                  autoComplete="fname"
-                  fullWidth
-                  label="Imię"
-                  autoFocus
-                  error={touched.firstName && !!errors.firstName}
-                  helperText={touched.firstName && errors.firstName}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Field
-                  name="lastName"
-                  as={TextField}
-                  variant="outlined"
-                  autoComplete="lname"
-                  fullWidth
-                  label="Nazwisko"
-                  error={touched.lastName && !!errors.lastName}
-                  helperText={touched.lastName && errors.lastName}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl variant="outlined" fullWidth>
-                  <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <PositionSelect />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Field
-                  name="yearOfBirth"
-                  as={TextField}
-                  type="number"
-                  variant="outlined"
-                  fullWidth
-                  label="Rok urodzenia"
-                  error={touched.yearOfBirth && !!errors.yearOfBirth}
-                  helperText={touched.yearOfBirth && errors.yearOfBirth}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <FootSelect />
-                </FormControl>
-              </Grid>
-            </Grid>
+          <Form className={classes.container}>
+            <Field
+              name="firstName"
+              as={TextField}
+              variant="outlined"
+              autoComplete="fname"
+              fullWidth
+              label="Imię"
+              autoFocus
+              error={touched.firstName && !!errors.firstName}
+              helperText={touched.firstName && errors.firstName}
+            />
+            <Field
+              name="lastName"
+              as={TextField}
+              variant="outlined"
+              autoComplete="lname"
+              fullWidth
+              label="Nazwisko"
+              error={touched.lastName && !!errors.lastName}
+              helperText={touched.lastName && errors.lastName}
+            />
+            <FormControl variant="outlined" fullWidth>
+              <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
+            </FormControl>
+            <FormControl variant="outlined" fullWidth>
+              <PositionSelect />
+            </FormControl>
+            <Field
+              name="yearOfBirth"
+              as={TextField}
+              type="number"
+              variant="outlined"
+              fullWidth
+              label="Rok urodzenia"
+              error={touched.yearOfBirth && !!errors.yearOfBirth}
+              helperText={touched.yearOfBirth && errors.yearOfBirth}
+            />
+            <FormControl variant="outlined" fullWidth>
+              <FootSelect />
+            </FormControl>
           </Form>
         </FormModal>
       )}
     </Formik>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: `${theme.spacing(2)}px`,
+  },
+}));

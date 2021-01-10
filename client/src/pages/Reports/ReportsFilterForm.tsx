@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Formik, Form } from 'formik';
 // MUI components
-import { Grid, FormControl } from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
+import { FormContainer } from '../../components/FormContainer';
 // Types
 import { ReportsFilterData } from '../../types/reports';
 import { PlayerBasicInfo } from '../../types/players';
@@ -29,23 +30,21 @@ export const ReportsFilterForm = ({
     >
       {({ handleReset, initialValues }) => (
         <Form autoComplete="off">
-          <Grid container justify="center" alignItems="center">
-            <Grid item xs={12} sm={6} lg={3}>
-              <FormControl variant="outlined" size="small" fullWidth>
-                <PlayersCombo
-                  playersData={playersData}
-                  label="Zawodnik"
-                  size="small"
-                />
-              </FormControl>
-            </Grid>
+          <FormContainer>
+            <FormControl variant="outlined" size="small" fullWidth>
+              <PlayersCombo
+                playersData={playersData}
+                label="Zawodnik"
+                size="small"
+              />
+            </FormControl>
             <FilterFormActions
               handleClearFilter={() => {
                 handleReset();
                 setFilters(initialValues);
               }}
             />
-          </Grid>
+          </FormContainer>
         </Form>
       )}
     </Formik>

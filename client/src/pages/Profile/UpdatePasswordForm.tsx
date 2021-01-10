@@ -2,7 +2,9 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
 // MUI components
-import { Grid, TextField, Button, makeStyles } from '@material-ui/core';
+import { TextField, Button, makeStyles } from '@material-ui/core';
+// Custom components
+import { FormContainer } from '../../components/FormContainer';
 // Types
 import { UpdatePasswordData } from '../../types/auth';
 // Utils & data
@@ -26,62 +28,47 @@ export const UpdatePasswordForm = ({ onSubmit }: Props) => {
       validationSchema={validationSchema}
     >
       {({ errors, touched }) => (
-        <Form className={classes.form}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Field
-                name="oldPassword"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Bieżące hasło"
-                type="password"
-                id="oldPassword"
-                error={touched.oldPassword && !!errors.oldPassword}
-                helperText={touched.oldPassword && errors.oldPassword}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Field
-                name="newPassword"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Nowe hasło"
-                type="password"
-                id="newPassword"
-                error={touched.newPassword && !!errors.newPassword}
-                helperText={touched.newPassword && errors.newPassword}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Field
-                name="newPasswordConfirm"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Potwierdź nowe hasło"
-                type="password"
-                id="newPasswordConfirm"
-                error={
-                  touched.newPasswordConfirm && !!errors.newPasswordConfirm
-                }
-                helperText={
-                  touched.newPasswordConfirm && errors.newPasswordConfirm
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-              >
-                Zmień hasło
-              </Button>
-            </Grid>
-          </Grid>
+        <Form className={classes.container}>
+          <FormContainer>
+            <Field
+              name="oldPassword"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Bieżące hasło"
+              type="password"
+              id="oldPassword"
+              error={touched.oldPassword && !!errors.oldPassword}
+              helperText={touched.oldPassword && errors.oldPassword}
+            />
+            <Field
+              name="newPassword"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Nowe hasło"
+              type="password"
+              id="newPassword"
+              error={touched.newPassword && !!errors.newPassword}
+              helperText={touched.newPassword && errors.newPassword}
+            />
+            <Field
+              name="newPasswordConfirm"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Potwierdź nowe hasło"
+              type="password"
+              id="newPasswordConfirm"
+              error={touched.newPasswordConfirm && !!errors.newPasswordConfirm}
+              helperText={
+                touched.newPasswordConfirm && errors.newPasswordConfirm
+              }
+            />
+            <Button type="submit" fullWidth variant="contained" color="primary">
+              Zmień hasło
+            </Button>
+          </FormContainer>
         </Form>
       )}
     </Formik>
@@ -89,7 +76,7 @@ export const UpdatePasswordForm = ({ onSubmit }: Props) => {
 };
 
 const useStyles = makeStyles(() => ({
-  form: {
+  container: {
     width: '100%',
   },
 }));

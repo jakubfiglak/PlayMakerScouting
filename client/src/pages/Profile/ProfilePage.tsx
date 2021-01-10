@@ -18,6 +18,7 @@ import { ExpandMore as AccordionIcon } from '@material-ui/icons';
 import { EditAccountForm } from './EditAccountForm';
 import { UpdatePasswordForm } from './UpdatePasswordForm';
 import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
 // Hooks
 import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
@@ -46,14 +47,7 @@ export const ProfilePage = () => {
   return (
     <>
       {loading && <Loader />}
-      <Typography
-        variant="h6"
-        component="h2"
-        align="center"
-        className={classes.header}
-      >
-        Profil użytkownika
-      </Typography>
+      <PageHeading title="Profil użytkownika" />
       <Card>
         <CardHeader
           avatar={
@@ -99,10 +93,7 @@ export const ProfilePage = () => {
   );
 };
 
-export const useStyles = makeStyles((theme: Theme) => ({
-  header: {
-    marginBottom: theme.spacing(2),
-  },
+const useStyles = makeStyles((theme: Theme) => ({
   avatar: {
     backgroundColor: theme.palette.error.main,
   },

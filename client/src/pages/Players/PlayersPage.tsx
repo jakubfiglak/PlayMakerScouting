@@ -8,6 +8,7 @@ import { PlayersFilterForm } from './PlayersFilterForm';
 import { AddClubModal } from './AddClubModal';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
 // Types
 import {
   PlayersFilterData,
@@ -99,15 +100,12 @@ export const PlayersPage = () => {
       {(loading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
-          <Tab
-            label="Baza zawodników"
-            id="players-0"
-            aria-controls="players-0"
-          />
+          <Tab label="Zawodnicy" id="players-0" aria-controls="players-0" />
           <Tab label="Dodaj/edytuj" id="players-1" aria-controls="players-1" />
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
+        <PageHeading title="Baza zawodników" />
         <PlayersFilterForm clubsData={clubsList} setFilters={setFilters} />
         <PlayersTable
           page={page}
@@ -123,6 +121,9 @@ export const PlayersPage = () => {
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
+        <PageHeading
+          title={current ? 'Edycja zawodnika' : 'Tworzenie nowego zawodnika'}
+        />
         <PlayersForm
           clubsData={clubsList}
           current={current}

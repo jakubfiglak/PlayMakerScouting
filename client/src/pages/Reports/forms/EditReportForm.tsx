@@ -35,11 +35,6 @@ export const EditReportForm = ({ report }: Props) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h5" align="center">
-          Edycja raportu nr {_id}
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
         <Typography>
           <strong>Zawodnik: </strong>
           {`${player.firstName} ${player.lastName}, ${getLabel(

@@ -2,9 +2,10 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
 // MUI components
-import { Grid, TextField, Button } from '@material-ui/core';
+import { TextField, Button, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
+import { FormContainer } from '../../components/FormContainer';
 // Types
 import { EditAccountData, User } from '../../types/auth';
 import { Voivodeship } from '../../types/common';
@@ -15,6 +16,8 @@ type Props = {
 };
 
 export const EditAccountForm = ({ user, onSubmit }: Props) => {
+  const classes = useStyles();
+
   const initialValues: EditAccountData = {
     firstName: user.firstName,
     lastName: user.lastName,
@@ -30,78 +33,66 @@ export const EditAccountForm = ({ user, onSubmit }: Props) => {
       validationSchema={validationSchema}
     >
       {({ errors, touched, handleReset }) => (
-        <Form>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <Field
-                name="firstName"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Imię"
-                error={touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Field
-                name="lastName"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Nazwisko"
-                error={touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Field
-                name="city"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Miasto"
-                error={touched.city && !!errors.city}
-                helperText={touched.city && errors.city}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <VoivodeshipSelect name="voivodeship" />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Field
-                name="phone"
-                as={TextField}
-                type="tel"
-                variant="outlined"
-                fullWidth
-                label="Nr telefonu"
-                error={touched.phone && !!errors.phone}
-                helperText={
-                  (touched.phone && errors.phone) ||
-                  'np. 123456789 (bez myślników)'
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Field
-                name="activeRadius"
-                type="number"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Promień działania"
-                error={touched.activeRadius && !!errors.activeRadius}
-                helperText={
-                  (touched.activeRadius && errors.activeRadius) ||
-                  'Podaj maksymalną odległość w km, jaką możesz pokonać w celu obserwacji zawodnika'
-                }
-                inputProps={{
-                  min: 0,
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+        <Form className={classes.container}>
+          <FormContainer>
+            <Field
+              name="firstName"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Imię"
+              error={touched.firstName && !!errors.firstName}
+              helperText={touched.firstName && errors.firstName}
+            />
+            <Field
+              name="lastName"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Nazwisko"
+              error={touched.lastName && !!errors.lastName}
+              helperText={touched.lastName && errors.lastName}
+            />
+            <Field
+              name="city"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Miasto"
+              error={touched.city && !!errors.city}
+              helperText={touched.city && errors.city}
+            />
+            <VoivodeshipSelect name="voivodeship" />
+            <Field
+              name="phone"
+              as={TextField}
+              type="tel"
+              variant="outlined"
+              fullWidth
+              label="Nr telefonu"
+              error={touched.phone && !!errors.phone}
+              helperText={
+                (touched.phone && errors.phone) ||
+                'np. 123456789 (bez myślników)'
+              }
+            />
+            <Field
+              name="activeRadius"
+              type="number"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Promień działania"
+              error={touched.activeRadius && !!errors.activeRadius}
+              helperText={
+                (touched.activeRadius && errors.activeRadius) ||
+                'Podaj maksymalną odległość w km, jaką możesz pokonać w celu obserwacji zawodnika'
+              }
+              inputProps={{
+                min: 0,
+              }}
+            />
+            <div className={classes.buttonsContainer}>
               <Button
                 type="submit"
                 fullWidth
@@ -110,8 +101,6 @@ export const EditAccountForm = ({ user, onSubmit }: Props) => {
               >
                 Zapisz zmiany
               </Button>
-            </Grid>
-            <Grid item xs={12} sm={6}>
               <Button
                 fullWidth
                 variant="contained"
@@ -120,13 +109,23 @@ export const EditAccountForm = ({ user, onSubmit }: Props) => {
               >
                 Reset
               </Button>
-            </Grid>
-          </Grid>
+            </div>
+          </FormContainer>
         </Form>
       )}
     </Formik>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    width: '100%',
+  },
+  buttonsContainer: {
+    display: 'flex',
+    gap: `${theme.spacing(2)}px`,
+  },
+}));
 
 const validationSchema: yup.ObjectSchema<EditAccountData> = yup
   .object({

@@ -128,6 +128,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     maxWidth: 500,
     textAlign: 'center',
+    margin: '0 auto',
   },
   delete: {
     color: theme.palette.error.light,

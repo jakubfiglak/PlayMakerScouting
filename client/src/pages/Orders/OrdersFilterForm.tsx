@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import { TextField, Grid, FormControl } from '@material-ui/core';
+import { TextField, FormControl } from '@material-ui/core';
 // Custom components
 import { OrderStatusSelect } from '../../components/selects/OrderStatusSelect';
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
+import { FormContainer } from '../../components/FormContainer';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 import { PlayerBasicInfo } from '../../types/players';
@@ -36,50 +37,42 @@ export const OrdersFilterForm = ({
     >
       {({ handleReset, initialValues }) => (
         <Form autoComplete="off">
-          <Grid container justify="center" alignItems="center">
-            <Grid item xs={12} sm={6} lg={3}>
-              <FormControl variant="outlined" size="small" fullWidth>
-                <PlayersCombo
-                  playersData={playersData}
-                  label="Zawodnik"
-                  size="small"
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6} lg={3}>
-              <OrderStatusSelect size="small" />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={3}>
-              <Field
-                name="createdAfter"
-                as={TextField}
-                type="date"
-                variant="outlined"
-                fullWidth
-                label="Utworzone po"
-                id="createdAfter"
+          <FormContainer>
+            <FormControl variant="outlined" size="small" fullWidth>
+              <PlayersCombo
+                playersData={playersData}
+                label="Zawodnik"
                 size="small"
               />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={3}>
-              <Field
-                name="createdBefore"
-                as={TextField}
-                type="date"
-                variant="outlined"
-                fullWidth
-                label="Utworzone przed"
-                id="createdBefore"
-                size="small"
-              />
-            </Grid>
+            </FormControl>
+            <OrderStatusSelect size="small" />
+            <Field
+              name="createdAfter"
+              as={TextField}
+              type="date"
+              variant="outlined"
+              fullWidth
+              label="Utworzone po"
+              id="createdAfter"
+              size="small"
+            />
+            <Field
+              name="createdBefore"
+              as={TextField}
+              type="date"
+              variant="outlined"
+              fullWidth
+              label="Utworzone przed"
+              id="createdBefore"
+              size="small"
+            />
             <FilterFormActions
               handleClearFilter={() => {
                 handleReset();
                 setFilters(initialValues);
               }}
             />
-          </Grid>
+          </FormContainer>
         </Form>
       )}
     </Formik>

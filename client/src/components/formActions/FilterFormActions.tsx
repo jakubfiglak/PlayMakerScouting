@@ -1,35 +1,34 @@
 import React from 'react';
 // MUI components
-import { Grid, Button } from '@material-ui/core';
-// Styles
-import { useStyles } from './styles';
+import { Button, makeStyles, Theme } from '@material-ui/core';
 
-type FilterFormActionsProps = {
+type Props = {
   handleClearFilter: () => void;
 };
 
-export const FilterFormActions = ({
-  handleClearFilter,
-}: FilterFormActionsProps) => {
+export const FilterFormActions = ({ handleClearFilter }: Props) => {
   const classes = useStyles();
 
   return (
-    <Grid container className={classes.input} spacing={2}>
-      <Grid item xs={12} sm={6}>
-        <Button type="submit" variant="contained" color="secondary" fullWidth>
-          Filtruj
-        </Button>
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleClearFilter}
-        >
-          Wyczyść filtr
-        </Button>
-      </Grid>
-    </Grid>
+    <div className={classes.container}>
+      <Button type="submit" variant="contained" color="secondary" fullWidth>
+        Filtruj
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        onClick={handleClearFilter}
+      >
+        Wyczyść filtr
+      </Button>
+    </div>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    gap: `${theme.spacing(2)}px`,
+  },
+}));

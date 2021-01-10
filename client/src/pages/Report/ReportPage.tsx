@@ -27,6 +27,7 @@ import { ReportSummary } from './ReportSummary';
 import { ReportSkills } from './ReportSkills';
 import { PrinteableReport } from './PrinteableReport';
 import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
 
@@ -59,109 +60,99 @@ export const ReportPage = () => {
       {loading && <Loader />}
       {reportData && (
         <>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <div className={classes.headerContainer}>
-                <Typography variant="h6">
-                  Raport z obserwacji nr {reportData._id}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  startIcon={<PrintIcon />}
-                  onClick={handlePrint}
-                >
-                  Drukuj
-                </Button>
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <Card>
-                <CardContent>
-                  <ReportBasicInfo
-                    player={reportData.player}
-                    match={reportData.match}
-                    scout={reportData.scout}
-                    order={reportData.order}
-                    createdAt={reportData.createdAt}
-                  />
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12}>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="basic-data-content"
-                  id="basic-data-header"
-                >
-                  <Typography>Dane podstawowe</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <ReportMatchStats
-                    minutesPlayed={reportData.minutesPlayed}
-                    assists={reportData.assists}
-                    goals={reportData.goals}
-                    yellowCards={reportData.yellowCards}
-                    redCards={reportData.redCards}
-                  />
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id="individual-skills-header"
-                >
-                  <Typography>Ocena umiejętności indywidualnych</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <ReportSkills skills={reportData.individualSkills} />
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id="teamplay-skills-header"
-                >
-                  <Typography>Ocena współdziałania z partnerami</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <ReportSkills skills={reportData.teamplaySkills} />
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id="motor-skills-header"
-                >
-                  <Typography>Ocena cech motorycznych</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <ReportMotorSkills skills={reportData.motorSkills} />
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="report-summary-content"
-                  id="report-summary-header"
-                >
-                  <Typography>Podsumowanie</Typography>
-                </AccordionSummary>
-                <AccordionDetails className={classes.accordionDetails}>
-                  <ReportSummary
-                    summary={reportData.summary}
-                    finalRating={reportData.finalRating}
-                    individualAvg={reportData.individualAvg}
-                    teamplayAvg={reportData.teamplayAvg}
-                    avgRating={reportData.avgRating}
-                    individualSkills={reportData.individualSkills}
-                    teamplaySkills={reportData.teamplaySkills}
-                  />
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
-          </Grid>
+          <div className={classes.headerContainer}>
+            <PageHeading title={`Raport nr ${reportData._id}`} />
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<PrintIcon />}
+              onClick={handlePrint}
+            >
+              Drukuj
+            </Button>
+          </div>
+          <Card className={classes.card}>
+            <CardContent>
+              <ReportBasicInfo
+                player={reportData.player}
+                match={reportData.match}
+                scout={reportData.scout}
+                order={reportData.order}
+                createdAt={reportData.createdAt}
+              />
+            </CardContent>
+          </Card>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="basic-data-content"
+              id="basic-data-header"
+            >
+              <Typography>Dane podstawowe</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <ReportMatchStats
+                minutesPlayed={reportData.minutesPlayed}
+                assists={reportData.assists}
+                goals={reportData.goals}
+                yellowCards={reportData.yellowCards}
+                redCards={reportData.redCards}
+              />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="individual-skills-header"
+            >
+              <Typography>Ocena umiejętności indywidualnych</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <ReportSkills skills={reportData.individualSkills} />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="teamplay-skills-header"
+            >
+              <Typography>Ocena współdziałania z partnerami</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <ReportSkills skills={reportData.teamplaySkills} />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="motor-skills-header"
+            >
+              <Typography>Ocena cech motorycznych</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <ReportMotorSkills skills={reportData.motorSkills} />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="report-summary-content"
+              id="report-summary-header"
+            >
+              <Typography>Podsumowanie</Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.accordionDetails}>
+              <ReportSummary
+                summary={reportData.summary}
+                finalRating={reportData.finalRating}
+                individualAvg={reportData.individualAvg}
+                teamplayAvg={reportData.teamplayAvg}
+                avgRating={reportData.avgRating}
+                individualSkills={reportData.individualSkills}
+                teamplaySkills={reportData.teamplaySkills}
+              />
+            </AccordionDetails>
+          </Accordion>
           <div className={classes.print}>
             <div ref={ref}>
               <PrinteableReport report={reportData} />
@@ -179,7 +170,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: `${theme.spacing(2)}px`,
+  },
+  card: {
+    margin: theme.spacing(2, 0),
   },
   print: {
     overflow: 'hidden',

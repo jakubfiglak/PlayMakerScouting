@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import { TextField, Grid } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 // Custom components
 import { DivisionSelect } from '../../components/selects/DivisionSelect';
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
+import { FormContainer } from '../../components/FormContainer';
 // Types
 import { ClubsFilterData } from '../../types/clubs';
 
@@ -27,30 +28,24 @@ export const ClubsFilterForm = ({ setFilters }: Props) => {
     >
       {({ handleReset, initialValues }) => (
         <Form autoComplete="off">
-          <Grid container justify="center" alignItems="center">
-            <Grid item xs={12} sm={6} lg={3}>
-              <Field
-                name="name"
-                as={TextField}
-                variant="outlined"
-                fullWidth
-                label="Nazwa"
-                size="small"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={3}>
-              <DivisionSelect size="small" />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={3}>
-              <VoivodeshipSelect name="voivodeship" size="small" />
-            </Grid>
+          <FormContainer>
+            <Field
+              name="name"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Nazwa"
+              size="small"
+            />
+            <DivisionSelect size="small" />
+            <VoivodeshipSelect name="voivodeship" size="small" />
             <FilterFormActions
               handleClearFilter={() => {
                 handleReset();
                 setFilters(initialValues);
               }}
             />
-          </Grid>
+          </FormContainer>
         </Form>
       )}
     </Formik>

@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  makeStyles,
 } from '@material-ui/core';
 
 type Props = {
@@ -21,8 +22,15 @@ export const FormModal: FC<Props> = ({
   onSubmit,
   open,
 }) => {
+  const classes = useStyles();
+
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="form-dialog-title"
+      classes={{ paper: classes.container }}
+    >
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
@@ -36,3 +44,9 @@ export const FormModal: FC<Props> = ({
     </Dialog>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  container: {
+    width: '95%',
+  },
+}));

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 // Custom components
 import { OrderDetails } from './OrderDetails';
 import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
 // Hooks
 import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
@@ -40,6 +41,7 @@ export const OrderPage = () => {
   return (
     <>
       {loading && <Loader />}
+      <PageHeading title={`Zlecenie obserwacji nr ${orderData?._id}`} />
       {orderData && (
         <OrderDetails
           order={orderData}

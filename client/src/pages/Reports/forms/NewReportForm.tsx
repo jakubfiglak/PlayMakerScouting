@@ -117,11 +117,6 @@ export const NewReportForm = ({
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h5" align="center">
-          Tworzenie nowego raportu
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
         <Form>
           <Grid container>
             <Grid item xs={12}>
