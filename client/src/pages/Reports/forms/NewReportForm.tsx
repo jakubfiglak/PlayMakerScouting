@@ -26,8 +26,6 @@ import { useStepper } from '../../../hooks';
 import { Position, PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';
 import { ReportFormData } from '../../../types/reports';
-// Utils & data
-import { reportsFormInitialValues } from '../../../components/forms/initialValues';
 
 type Props = {
   isOrderOptionDisabled: boolean;
@@ -53,12 +51,7 @@ export const NewReportForm = ({
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
   const [position, setPosition] = useState<Position | null>(null);
 
-  const { values, setValues, handleReset } = useFormikContext<ReportFormData>();
-
-  useEffect(() => {
-    setValues(reportsFormInitialValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { values, handleReset } = useFormikContext<ReportFormData>();
 
   useEffect(() => {
     if (values.order) {

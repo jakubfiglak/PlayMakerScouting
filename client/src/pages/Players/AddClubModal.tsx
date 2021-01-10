@@ -9,8 +9,8 @@ import { DivisionSelect } from '../../components/selects/DivisionSelect';
 // Types
 import { ClubsFormData } from '../../types/clubs';
 // Utils & data
-import { clubsFormInitialValues } from '../../components/forms/initialValues';
-import { clubsFormValidationSchema } from '../../components/forms/validationSchemas';
+import { clubsFormInitialValues } from '../../data/forms/initialValues';
+import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
 
 type Props = {
   open: boolean;

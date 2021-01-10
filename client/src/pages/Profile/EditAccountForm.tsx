@@ -1,13 +1,13 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
+import * as yup from 'yup';
 // MUI components
 import { Grid, TextField, Button } from '@material-ui/core';
 // Custom components
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
 // Types
 import { EditAccountData, User } from '../../types/auth';
-// Utils & data
-import { editAccountValidationSchema } from '../../components/forms/validationSchemas';
+import { Voivodeship } from '../../types/common';
 
 type Props = {
   user: User;
@@ -27,7 +27,7 @@ export const EditAccountForm = ({ user, onSubmit }: Props) => {
     <Formik
       initialValues={initialValues}
       onSubmit={(data) => onSubmit(data)}
-      validationSchema={editAccountValidationSchema}
+      validationSchema={validationSchema}
     >
       {({ errors, touched, handleReset }) => (
         <Form>
@@ -127,3 +127,16 @@ export const EditAccountForm = ({ user, onSubmit }: Props) => {
     </Formik>
   );
 };
+
+const validationSchema: yup.ObjectSchema<EditAccountData> = yup
+  .object({
+    firstName: yup.string().required('Podaj imię'),
+    lastName: yup.string().required('Podaj nazwisko'),
+    city: yup.string(),
+    voivodeship: yup.mixed<Voivodeship | 'Zagranica'>(),
+    phone: yup.string(),
+    activeRadius: yup
+      .number()
+      .min(0, 'Promień działania musi być większy lub równy 0 '),
+  })
+  .defined();

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
+import * as yup from 'yup';
 // MUI components
 import { Grid, TextField, Button, makeStyles } from '@material-ui/core';
 // Types
 import { UpdatePasswordData } from '../../types/auth';
 // Utils & data
-import { updatePasswordInitialValues } from '../../components/forms/initialValues';
-import { updatePasswordValidationSchema } from '../../components/forms/validationSchemas';
+import { passwordValidationSchema } from '../../data/forms/validationSchemas';
 
 type Props = {
   onSubmit: (data: UpdatePasswordData) => void;
@@ -17,9 +17,13 @@ export const UpdatePasswordForm = ({ onSubmit }: Props) => {
 
   return (
     <Formik
-      initialValues={updatePasswordInitialValues}
+      initialValues={{
+        oldPassword: '',
+        newPassword: '',
+        newPasswordConfirm: '',
+      }}
       onSubmit={(data) => onSubmit(data)}
-      validationSchema={updatePasswordValidationSchema}
+      validationSchema={validationSchema}
     >
       {({ errors, touched }) => (
         <Form className={classes.form}>
@@ -89,3 +93,14 @@ const useStyles = makeStyles(() => ({
     width: '100%',
   },
 }));
+
+const validationSchema: yup.ObjectSchema<UpdatePasswordData> = yup
+  .object({
+    oldPassword: yup.string().required('Podaj aktualne hasło'),
+    newPassword: passwordValidationSchema,
+    newPasswordConfirm: yup
+      .string()
+      .oneOf([yup.ref('newPassword')], 'Podane hasła muszą być takie same')
+      .required('Potwierdź hasło'),
+  })
+  .defined();

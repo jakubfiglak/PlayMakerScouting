@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
+import * as yup from 'yup';
 // MUI components
 import { Grid, FormControl, TextField } from '@material-ui/core';
 // Custom components
@@ -8,9 +9,6 @@ import { MainFormActions } from '../../components/formActions/MainFormActions';
 // Types
 import { PlayerBasicInfo } from '../../types/players';
 import { OrderFormData } from '../../types/orders';
-// Utils & data
-import { ordersFormInitialValues } from '../../components/forms/initialValues';
-import { ordersFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
   playersData: PlayerBasicInfo[];
@@ -25,8 +23,11 @@ export const OrdersForm = ({
 }: Props) => {
   return (
     <Formik
-      initialValues={ordersFormInitialValues}
-      validationSchema={ordersFormValidationSchema}
+      initialValues={{
+        player: '',
+        notes: '',
+      }}
+      validationSchema={validationSchema}
       onSubmit={(data, { resetForm }) => {
         onSubmit(data);
         resetForm();
@@ -67,3 +68,10 @@ export const OrdersForm = ({
     </Formik>
   );
 };
+
+const validationSchema: yup.ObjectSchema<OrderFormData> = yup
+  .object({
+    player: yup.string().required('Wybierz zawodnika'),
+    notes: yup.string().notRequired(),
+  })
+  .defined();

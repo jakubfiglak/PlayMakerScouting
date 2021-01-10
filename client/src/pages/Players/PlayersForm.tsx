@@ -13,8 +13,8 @@ import { Player, PlayersFormData } from '../../types/players';
 // Hooks
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Utils & data
-import { playersFormValidationSchema } from '../../components/forms/validationSchemas';
-import { playersFormInitialValues } from '../../components/forms/initialValues';
+import { playersFormValidationSchema } from '../../data/forms/validationSchemas';
+import { playersFormInitialValues } from '../../data/forms/initialValues';
 
 type Props = {
   clubsData: ClubBasicInfo[];

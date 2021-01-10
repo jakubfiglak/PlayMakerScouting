@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
+import * as yup from 'yup';
 // MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Hooks
 import { useAlert } from '../../hooks';
 import { useAuthState } from '../../context/auth/useAuthState';
-// Utils & data
-import { registerFormInitialValues } from '../../components/forms/initialValues';
-import { registerFormValidationSchema } from '../../components/forms/validationSchemas';
+// Types
+import { RegisterFormData } from '../../types/auth';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
+import { passwordValidationSchema } from '../../data/forms/validationSchemas';
 import { errorLabels } from '../../data';
 import { getLabel } from '../../utils';
 
@@ -36,11 +37,17 @@ export const RegisterForm = () => {
 
   return (
     <Formik
-      initialValues={registerFormInitialValues}
+      initialValues={{
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        passwordConfirm: '',
+      }}
       onSubmit={(data) => {
         register(data);
       }}
-      validationSchema={registerFormValidationSchema}
+      validationSchema={validationSchema}
     >
       {({ errors, touched }) => (
         <Form className={classes.form}>
@@ -131,3 +138,16 @@ export const RegisterForm = () => {
     </Formik>
   );
 };
+
+const validationSchema: yup.ObjectSchema<RegisterFormData> = yup
+  .object({
+    firstName: yup.string().required('Podaj imię'),
+    lastName: yup.string().required('Podaj nazwisko'),
+    email: yup.string().email().required('Podaj adres e-mail'),
+    password: passwordValidationSchema,
+    passwordConfirm: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Podane hasła muszą być takie same')
+      .required('Potwierdź hasło'),
+  })
+  .defined();

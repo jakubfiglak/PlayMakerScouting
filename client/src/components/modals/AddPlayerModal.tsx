@@ -11,8 +11,8 @@ import { ClubsCombo } from '../selects/ClubsCombo';
 import { ClubBasicInfo } from '../../types/clubs';
 import { PlayersFormData } from '../../types/players';
 // Utils & data
-import { playersFormValidationSchema } from '../forms/validationSchemas';
-import { playersFormInitialValues } from '../forms/initialValues';
+import { playersFormValidationSchema } from '../../data/forms/validationSchemas';
+import { playersFormInitialValues } from '../../data/forms/initialValues';
 
 type Props = {
   clubsData: ClubBasicInfo[];

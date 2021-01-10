@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Formik } from 'formik';
 import { useReactToPrint } from 'react-to-print';
+import * as yup from 'yup';
 // MUI components
 import { AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
 // Custom components
@@ -13,7 +14,15 @@ import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 // Types
-import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
+import {
+  Competition,
+  MatchLocation,
+  Rating,
+  RatingScore,
+  Report,
+  ReportFormData,
+  ReportsFilterData,
+} from '../../types/reports';
 // Hooks
 import { useAlert, useTabs } from '../../hooks';
 import { useTable } from '../../hooks/useTable';
@@ -22,9 +31,6 @@ import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
-// Utils & data
-import { reportsFormInitialValues } from '../../components/forms/initialValues';
-import { reportsFormValidationSchema } from '../../components/forms/validationSchemas';
 
 export const ReportsPage = () => {
   const classes = useStyles();
@@ -172,7 +178,7 @@ export const ReportsPage = () => {
       <TabPanel value={activeTab} index={1} title="reports">
         <Formik
           initialValues={initialValues}
-          validationSchema={reportsFormValidationSchema}
+          validationSchema={validationSchema}
           onSubmit={(data, { resetForm }) => {
             if (current) {
               editReport(current._id, data);
@@ -212,3 +218,138 @@ const useStyles = makeStyles(() => ({
     height: 0,
   },
 }));
+
+const reportsFormInitialValues: ReportFormData = {
+  order: '',
+  player: '',
+  match: {
+    location: 'home',
+    against: '',
+    competition: 'league',
+  },
+  minutesPlayed: 0,
+  goals: 0,
+  assists: 0,
+  yellowCards: 0,
+  redCards: 0,
+  individualSkills: {
+    ballReception: {
+      rating: 1,
+      note: '',
+    },
+    passing: {
+      rating: 1,
+      note: '',
+    },
+    defOneOnOne: {
+      rating: 1,
+      note: '',
+    },
+    airPlay: {
+      rating: 1,
+      note: '',
+    },
+    positioning: {
+      rating: 1,
+      note: '',
+    },
+    attOneOnOne: {
+      rating: 1,
+      note: '',
+    },
+    finishing: {
+      rating: 1,
+      note: '',
+    },
+  },
+  teamplaySkills: {
+    attack: {
+      rating: 1,
+      note: '',
+    },
+    defense: {
+      rating: 1,
+      note: '',
+    },
+    transition: {
+      rating: 1,
+      note: '',
+    },
+  },
+  motorSkills: {
+    leading: '',
+    neglected: '',
+  },
+  summary: '',
+  finalRating: 1,
+};
+
+const ratingValidationSchema: yup.ObjectSchema<Rating> = yup
+  .object({
+    rating: yup.mixed<RatingScore>(),
+    note: yup.string(),
+  })
+  .defined();
+
+export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
+  .object({
+    order: yup.string(),
+    player: yup.string(),
+    match: yup
+      .object({
+        location: yup.mixed<MatchLocation>(),
+        against: yup.string(),
+        competition: yup.mixed<Competition>(),
+      })
+      .defined(),
+    minutesPlayed: yup
+      .number()
+      .min(0, 'Liczba rozegranych minut musi być wartością pomiędzy 0 a 90')
+      .max(90, 'Liczba rozegranych minut musi mieć wartość pomiędzy 0 a 90')
+      .required(),
+    goals: yup
+      .number()
+      .min(0, 'Liczba goli nie może być mniejsza od 0')
+      .required(),
+    assists: yup
+      .number()
+      .min(0, 'Liczba asyst nie może być mniejsza od 0')
+      .required(),
+    yellowCards: yup
+      .number()
+      .min(0, 'Liczba żółtych kartek musi mieć wartość 0, 1 lub 2')
+      .max(2, 'Liczba żółtych kartek musi mieć wartość 0, 1 lub 2')
+      .required(),
+    redCards: yup
+      .number()
+      .min(0, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
+      .max(1, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
+      .required(),
+    individualSkills: yup
+      .object({
+        ballReception: ratingValidationSchema,
+        passing: ratingValidationSchema,
+        defOneOnOne: ratingValidationSchema,
+        airPlay: ratingValidationSchema,
+        positioning: ratingValidationSchema,
+        attOneOnOne: ratingValidationSchema,
+        finishing: ratingValidationSchema,
+      })
+      .defined(),
+    teamplaySkills: yup
+      .object({
+        attack: ratingValidationSchema,
+        defense: ratingValidationSchema,
+        transition: ratingValidationSchema,
+      })
+      .defined(),
+    motorSkills: yup
+      .object({
+        leading: yup.string(),
+        neglected: yup.string(),
+      })
+      .defined(),
+    summary: yup.string(),
+    finalRating: yup.mixed<RatingScore>(),
+  })
+  .defined();

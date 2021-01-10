@@ -12,8 +12,8 @@ import { useClubsState } from '../../context/clubs/useClubsState';
 // Types
 import { ClubsFormData } from '../../types/clubs';
 // Utils & data
-import { clubsFormInitialValues } from '../../components/forms/initialValues';
-import { clubsFormValidationSchema } from '../../components/forms/validationSchemas';
+import { clubsFormInitialValues } from '../../data/forms/initialValues';
+import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
 
 export const ClubsForm = () => {
   const { loading, addClub, editClub, current, clearCurrent } = useClubsState();

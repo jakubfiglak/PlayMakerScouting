@@ -1,14 +1,12 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
+import * as yup from 'yup';
 // MUI components
 import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
 // Custom components
 import { UsersCombo } from '../../components/selects/UsersCombo';
 // Types
 import { AssignPlaymakerRoleData, UserBasicInfo } from '../../types/users';
-// Utils & data
-import { assignPlaymakerRoleFormInitialValues } from '../../components/forms/initialValues';
-import { assignPlaymakerRoleFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
   usersData: UserBasicInfo[];
@@ -20,8 +18,8 @@ export const AssignPlaymakerRoleForm = ({ usersData, onSubmit }: Props) => {
 
   return (
     <Formik
-      initialValues={assignPlaymakerRoleFormInitialValues}
-      validationSchema={assignPlaymakerRoleFormValidationSchema}
+      initialValues={{ user: '' }}
+      validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
         onSubmit(data);
@@ -58,3 +56,9 @@ const useStyles = makeStyles(() => ({
     width: '100%',
   },
 }));
+
+const validationSchema: yup.ObjectSchema<AssignPlaymakerRoleData> = yup
+  .object({
+    user: yup.string().required('Wybierz użytkownika'),
+  })
+  .defined();

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
+import * as yup from 'yup';
 // MUI components
 import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 // Types
@@ -11,8 +12,6 @@ import { useAuthState } from '../../context/auth/useAuthState';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
-import { loginFormInitialValues } from '../../components/forms/initialValues';
-import { loginFormValidationSchema } from '../../components/forms/validationSchemas';
 import { errorLabels } from '../../data';
 import { getLabel } from '../../utils';
 
@@ -36,8 +35,11 @@ export const LoginForm = () => {
   useAlert(getLabel(error, errorLabels), 'error', clearErrors);
 
   const formik = useFormik<LoginFormData>({
-    initialValues: loginFormInitialValues,
-    validationSchema: loginFormValidationSchema,
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema,
     onSubmit: (values) => {
       login(values);
     },
@@ -99,3 +101,13 @@ export const LoginForm = () => {
     </form>
   );
 };
+
+const validationSchema: yup.ObjectSchema<LoginFormData> = yup
+  .object({
+    email: yup
+      .string()
+      .email('Niepoprawny adres e-mail')
+      .required('Podaj adres e-mail'),
+    password: yup.string().required('Podaj hasło'),
+  })
+  .defined();

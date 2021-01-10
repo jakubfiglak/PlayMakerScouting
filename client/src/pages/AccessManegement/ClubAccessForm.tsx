@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
+import * as yup from 'yup';
 // MUI components
 import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
 // Custom components
@@ -8,9 +9,6 @@ import { UsersCombo } from '../../components/selects/UsersCombo';
 // Types
 import { ClubBasicInfo, GrantAccessFormData } from '../../types/clubs';
 import { UserBasicInfo } from '../../types/users';
-// Utils & data
-import { clubAccessFormInitialValues } from '../../components/forms/initialValues';
-import { clubAccessFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
   usersData: UserBasicInfo[];
@@ -23,8 +21,11 @@ export const ClubAccessForm = ({ usersData, clubsData, onSubmit }: Props) => {
 
   return (
     <Formik
-      initialValues={clubAccessFormInitialValues}
-      validationSchema={clubAccessFormValidationSchema}
+      initialValues={{
+        user: '',
+        club: '',
+      }}
+      validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
         onSubmit(data);
@@ -66,3 +67,10 @@ const useStyles = makeStyles(() => ({
     width: '100%',
   },
 }));
+
+const validationSchema: yup.ObjectSchema<GrantAccessFormData> = yup
+  .object({
+    user: yup.string().required('Wybierz użytkownika'),
+    club: yup.string().required('Wybierz klub'),
+  })
+  .defined();

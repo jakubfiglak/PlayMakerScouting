@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
+import * as yup from 'yup';
 // MUI components
 import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
 // Custom components
@@ -8,9 +9,6 @@ import { UsersCombo } from '../../components/selects/UsersCombo';
 // Types
 import { GrantAccessFormData, PlayerBasicInfo } from '../../types/players';
 import { UserBasicInfo } from '../../types/users';
-// Utils & data
-import { playerAccessFormInitialValues } from '../../components/forms/initialValues';
-import { playerAccessFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
   usersData: UserBasicInfo[];
@@ -27,8 +25,11 @@ export const PlayerAccessForm = ({
 
   return (
     <Formik
-      initialValues={playerAccessFormInitialValues}
-      validationSchema={playerAccessFormValidationSchema}
+      initialValues={{
+        user: '',
+        player: '',
+      }}
+      validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
         onSubmit(data);
@@ -70,3 +71,10 @@ const useStyles = makeStyles(() => ({
     width: '100%',
   },
 }));
+
+const validationSchema: yup.ObjectSchema<GrantAccessFormData> = yup
+  .object({
+    user: yup.string().required('Wybierz użytkownika'),
+    player: yup.string().required('Wybierz zawodnika'),
+  })
+  .defined();
