@@ -5,7 +5,7 @@ import * as yup from 'yup';
 // MUI components
 import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 // Hooks
-import { useAlert } from '../../hooks';
+import { useAlert } from '../../hooks/useAlert';
 import { useAuthState } from '../../context/auth/useAuthState';
 // Types
 import { RegisterFormData } from '../../types/auth';

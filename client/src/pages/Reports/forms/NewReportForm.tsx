@@ -21,7 +21,7 @@ import { StepActions } from './StepActions';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 import { BottomNav } from '../BottomNav';
 // Hooks
-import { useStepper } from '../../../hooks';
+import { useStepper } from '../../../hooks/useStepper';
 // Types
 import { Position, PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';

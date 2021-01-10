@@ -25,8 +25,9 @@ import {
   ReportsFilterData,
 } from '../../types/reports';
 // Hooks
-import { useAlert, useTabs } from '../../hooks';
+import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
+import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';

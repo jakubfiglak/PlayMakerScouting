@@ -1,7 +1,7 @@
 import React from 'react';
 // Custom components
 // Hooks
-import { useAlert } from '../../hooks';
+import { useAlert } from '../../hooks/useAlert';
 import { useAuthState } from '../../context/auth/useAuthState';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';

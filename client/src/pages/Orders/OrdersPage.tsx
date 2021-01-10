@@ -20,8 +20,9 @@ import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 // Hooks
-import { useTabs, useAlert } from '../../hooks';
+import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
+import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';

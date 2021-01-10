@@ -16,7 +16,9 @@ import {
   PlayersFormData,
 } from '../../types/players';
 // Hooks
-import { useTabs, useTable, useAlert } from '../../hooks';
+import { useTabs } from '../../hooks/useTabs';
+import { useTable } from '../../hooks/useTable';
+import { useAlert } from '../../hooks/useAlert';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
 

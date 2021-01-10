@@ -19,7 +19,7 @@ import { Loader } from '../../components/Loader';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { useUsersState } from '../../context/users/useUsersState';
-import { useAlert } from '../../hooks';
+import { useAlert } from '../../hooks/useAlert';
 
 export const AccessManagementPage = () => {
   const classes = useStyles();

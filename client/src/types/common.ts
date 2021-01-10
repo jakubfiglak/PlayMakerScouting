@@ -32,20 +32,6 @@ export type Voivodeship =
   | 'Podlaskie'
   | 'Świętokrzyskie';
 
-export type Location = {
-  type: string;
-  coordinates: number[];
-};
-
-export type Address = {
-  street: string;
-  streetNo: string;
-  zipCode: string;
-  city: string;
-  voivodeship?: Voivodeship | '';
-  country: string;
-};
-
 export type CommonTableProps = {
   page: number;
   rowsPerPage: number;
@@ -61,13 +47,3 @@ export type CommonTableProps = {
   handleSort: (id: string) => void;
   total: number;
 };
-
-export type OnChangeFn = (
-  e: ChangeEvent<
-    | HTMLInputElement
-    | {
-        name?: string | undefined;
-        value: unknown;
-      }
-  >,
-) => void;
