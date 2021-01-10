@@ -6,9 +6,11 @@ import { AssignPlaymakerRoleData, State } from '../../types/users';
 
 export const UsersState: React.FC = ({ children }) => {
   const initialState: State = {
+    usersList: [],
     loading: false,
     error: null,
     message: null,
+    getUsersList: () => null,
     setLoading: () => null,
     clearErrors: () => null,
     clearMessage: () => null,
@@ -22,6 +24,23 @@ export const UsersState: React.FC = ({ children }) => {
     dispatch({
       type: 'SET_LOADING',
     });
+  };
+
+  // Get users
+  const getUsersList = async () => {
+    setLoading();
+    try {
+      const res = await axiosJson.get('/api/v1/users/list');
+      dispatch({
+        type: 'GET_USERS_LIST_SUCCESS',
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'USERS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
   };
 
   // Clear errors
@@ -43,7 +62,7 @@ export const UsersState: React.FC = ({ children }) => {
       const res = await axiosJson.post('/api/v1/users/assignplaymaker', data);
       dispatch({
         type: 'ASSIGN_ROLE_SUCCESS',
-        payload: { message: res.data.message },
+        payload: { user: res.data.data, message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -53,14 +72,16 @@ export const UsersState: React.FC = ({ children }) => {
     }
   };
 
-  const { loading, error, message } = state;
+  const { usersList, loading, error, message } = state;
 
   return (
     <UsersContext.Provider
       value={{
+        usersList,
         loading,
         error,
         message,
+        getUsersList,
         setLoading,
         clearErrors,
         clearMessage,

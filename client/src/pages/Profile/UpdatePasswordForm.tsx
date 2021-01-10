@@ -1,7 +1,7 @@
 import React from 'react';
-import { useFormik } from 'formik';
+import { Formik, Form, Field } from 'formik';
 // MUI components
-import { Grid, TextField, Button } from '@material-ui/core';
+import { Grid, TextField, Button, makeStyles } from '@material-ui/core';
 // Types
 import { UpdatePasswordData } from '../../types/auth';
 // Utils & data
@@ -13,61 +13,79 @@ type Props = {
 };
 
 export const UpdatePasswordForm = ({ onSubmit }: Props) => {
-  const formik = useFormik<UpdatePasswordData>({
-    initialValues: updatePasswordInitialValues,
-    validationSchema: updatePasswordValidationSchema,
-    onSubmit: (values) => {
-      onSubmit(values);
-    },
-  });
-
-  const { handleSubmit, errors, touched, getFieldProps } = formik;
+  const classes = useStyles();
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label="Bieżące hasło"
-            type="password"
-            id="oldPassword"
-            {...getFieldProps('oldPassword')}
-            error={touched.oldPassword && !!errors.oldPassword}
-            helperText={touched.oldPassword && errors.oldPassword}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label="Nowe hasło"
-            type="password"
-            id="newPassword"
-            {...getFieldProps('newPassword')}
-            error={touched.newPassword && !!errors.newPassword}
-            helperText={touched.newPassword && errors.newPassword}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label="Potwierdź nowe hasło"
-            type="password"
-            id="newPasswordConfirm"
-            {...getFieldProps('newPasswordConfirm')}
-            error={touched.newPasswordConfirm && !!errors.newPasswordConfirm}
-            helperText={touched.newPasswordConfirm && errors.newPasswordConfirm}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" fullWidth variant="contained" color="primary">
-            Zmień hasło
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+    <Formik
+      initialValues={updatePasswordInitialValues}
+      onSubmit={(data) => onSubmit(data)}
+      validationSchema={updatePasswordValidationSchema}
+    >
+      {({ errors, touched }) => (
+        <Form className={classes.form}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Field
+                name="oldPassword"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Bieżące hasło"
+                type="password"
+                id="oldPassword"
+                error={touched.oldPassword && !!errors.oldPassword}
+                helperText={touched.oldPassword && errors.oldPassword}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Field
+                name="newPassword"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Nowe hasło"
+                type="password"
+                id="newPassword"
+                error={touched.newPassword && !!errors.newPassword}
+                helperText={touched.newPassword && errors.newPassword}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Field
+                name="newPasswordConfirm"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Potwierdź nowe hasło"
+                type="password"
+                id="newPasswordConfirm"
+                error={
+                  touched.newPasswordConfirm && !!errors.newPasswordConfirm
+                }
+                helperText={
+                  touched.newPasswordConfirm && errors.newPasswordConfirm
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
+                Zmień hasło
+              </Button>
+            </Grid>
+          </Grid>
+        </Form>
+      )}
+    </Formik>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  form: {
+    width: '100%',
+  },
+}));

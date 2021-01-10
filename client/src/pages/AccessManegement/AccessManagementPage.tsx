@@ -1,76 +1,152 @@
 import React, { useEffect } from 'react';
 // MUI components
-import { Typography, Grid } from '@material-ui/core';
+import {
+  Typography,
+  makeStyles,
+  Theme,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from '@material-ui/core';
+// MUI icons
+import { ExpandMore as AccordionIcon } from '@material-ui/icons';
 // Custom components
-import { GrantAccessForm } from './GrantAccessForm';
 import { AssignPlaymakerRoleForm } from './AssignPlaymakerRoleForm';
+import { PlayerAccessForm } from './PlayerAccessForm';
+import { ClubAccessForm } from './ClubAccessForm';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { usePlayersState } from '../../context/players/usePlayersState';
-import { useSimplifiedDataState } from '../../context/simplifiedData/useSimplifiedDataState';
+import { useClubsState } from '../../context/clubs/useClubsState';
 import { useUsersState } from '../../context/users/useUsersState';
 import { useAlert } from '../../hooks';
 
 export const AccessManagementPage = () => {
-  const {
-    getPlayers,
-    getUsers,
-    loading,
-    playersData,
-    usersData,
-  } = useSimplifiedDataState();
+  const classes = useStyles();
 
   const {
+    loading,
+    usersList,
+    getUsersList,
+    message,
+    error,
+    clearMessage,
+    clearErrors,
+    assignPlaymakerRole,
+  } = useUsersState();
+
+  const {
+    playersList,
+    getPlayersList,
+    loading: playersLoading,
     message: playersMessage,
     error: playersError,
     clearMessage: clearPlayersMessage,
-    clearErrors: clearPlayersError,
+    clearErrors: clearPlayersErrors,
+    grantAccess,
   } = usePlayersState();
+
   const {
-    message: usersMessage,
-    error: usersError,
-    clearMessage: clearUsersMessage,
-    clearErrors: clearUsersError,
-  } = useUsersState();
+    clubsList,
+    getClubsList,
+    loading: clubsLoading,
+    message: clubsMessage,
+    error: clubsError,
+    clearMessage: clearClubsMessage,
+    clearErrors: clearClubsErrors,
+    grantAccess: grantClubAccess,
+  } = useClubsState();
 
   useEffect(() => {
-    getPlayers();
-    getUsers();
+    getPlayersList();
+    getClubsList();
+    getUsersList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useAlert(playersError, 'error', clearPlayersError);
-  useAlert(usersError, 'error', clearUsersError);
+  useAlert(playersError, 'error', clearPlayersErrors);
+  useAlert(clubsError, 'error', clearClubsErrors);
+  useAlert(error, 'error', clearErrors);
   useAlert(playersMessage, 'success', clearPlayersMessage);
-  useAlert(usersMessage, 'success', clearUsersMessage);
+  useAlert(clubsMessage, 'success', clearClubsMessage);
+  useAlert(message, 'success', clearMessage);
 
-  const nonAdminUsers = usersData.filter((user) => user.role !== 'admin');
-  const regularScoutUsers = usersData.filter((user) => user.role === 'scout');
+  const nonAdminUsers = usersList.filter((user) => user.role !== 'admin');
+  const regularScoutUsers = usersList.filter((user) => user.role === 'scout');
 
   return (
     <>
-      {loading && <Loader />}
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h5" align="center">
-            Przyznawanie użytkownikom dostępu do zawodników
+      {(loading || playersLoading || clubsLoading) && <Loader />}
+      <Typography
+        variant="h6"
+        component="h2"
+        align="center"
+        className={classes.header}
+      >
+        Zarządzanie dostępami
+      </Typography>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<AccordionIcon />}
+          aria-controls="assign-role-content"
+          id="assign-role-header"
+        >
+          <Typography className={classes.accordionTitle}>
+            Nadaj rolę playmaker-scout
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <GrantAccessForm
-            playersData={playersData}
-            usersData={nonAdminUsers}
+        </AccordionSummary>
+        <AccordionDetails>
+          <AssignPlaymakerRoleForm
+            usersData={regularScoutUsers}
+            onSubmit={assignPlaymakerRole}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5" align="center">
-            Przyznawanie użytkownikom roli <strong>playmaker-scout</strong>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<AccordionIcon />}
+          aria-controls="grant-player-access-content"
+          id="grant-player-access-header"
+        >
+          <Typography className={classes.accordionTitle}>
+            Przyznaj dostęp do zawodnika
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <AssignPlaymakerRoleForm usersData={regularScoutUsers} />
-        </Grid>
-      </Grid>
+        </AccordionSummary>
+        <AccordionDetails>
+          <PlayerAccessForm
+            playersData={playersList}
+            usersData={nonAdminUsers}
+            onSubmit={grantAccess}
+          />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<AccordionIcon />}
+          aria-controls="grant-club-access-content"
+          id="grant-club-access-header"
+        >
+          <Typography className={classes.accordionTitle}>
+            Przyznaj dostęp do klubu
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ClubAccessForm
+            clubsData={clubsList}
+            usersData={nonAdminUsers}
+            onSubmit={grantClubAccess}
+          />
+        </AccordionDetails>
+      </Accordion>
     </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  header: {
+    marginBottom: theme.spacing(2),
+  },
+  accordionTitle: {
+    fontWeight: 'bold',
+  },
+}));

@@ -2,7 +2,13 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import ClubsContext from './clubsContext';
 import clubsReducer from './clubsReducer';
-import { State, Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
+import {
+  State,
+  Club,
+  ClubsFilterData,
+  ClubsFormData,
+  GrantAccessFormData,
+} from '../../types/clubs';
 import { SortingOrder } from '../../types/common';
 import { initialPaginatedData } from '../../data';
 
@@ -24,6 +30,7 @@ export const ClubsState: React.FC = ({ children }) => {
     editClub: () => null,
     setCurrent: () => null,
     clearCurrent: () => null,
+    grantAccess: () => null,
   };
 
   const [state, dispatch] = useReducer(clubsReducer, initialState);
@@ -140,6 +147,24 @@ export const ClubsState: React.FC = ({ children }) => {
     });
   };
 
+  // Grant user with an access to a specific player
+  const grantAccess = async (data: GrantAccessFormData) => {
+    setLoading();
+
+    try {
+      const res = await axiosJson.post('/api/v1/clubs/grantaccess', data);
+      dispatch({
+        type: 'GRANT_ACCESS_SUCCESS',
+        payload: { message: res.data.message },
+      });
+    } catch (err) {
+      dispatch({
+        type: 'CLUBS_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
+
   // Clear current
   const clearCurrent = () => {
     dispatch({
@@ -196,6 +221,7 @@ export const ClubsState: React.FC = ({ children }) => {
         setCurrent,
         clearCurrent,
         editClub,
+        grantAccess,
         clearErrors,
         clearMessage,
       }}

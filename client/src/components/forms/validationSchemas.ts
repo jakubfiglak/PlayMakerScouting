@@ -10,9 +10,13 @@ import {
   PlayersFormData,
   Position,
   Foot,
-  GrantAccessFormData,
+  GrantAccessFormData as PlayerAccessFormData,
 } from '../../types/players';
-import { ClubsFormData, Division } from '../../types/clubs';
+import {
+  ClubsFormData,
+  Division,
+  GrantAccessFormData as ClubAccessFormData,
+} from '../../types/clubs';
 import { OrderFormData } from '../../types/orders';
 import {
   ReportFormData,
@@ -181,10 +185,17 @@ export const reportsFormValidationSchema: yup.ObjectSchema<ReportFormData> = yup
   })
   .defined();
 
-export const grantAccessFormValidationSchema: yup.ObjectSchema<GrantAccessFormData> = yup
+export const playerAccessFormValidationSchema: yup.ObjectSchema<PlayerAccessFormData> = yup
   .object({
     user: yup.string().required('Wybierz użytkownika'),
     player: yup.string().required('Wybierz zawodnika'),
+  })
+  .defined();
+
+export const clubAccessFormValidationSchema: yup.ObjectSchema<ClubAccessFormData> = yup
+  .object({
+    user: yup.string().required('Wybierz użytkownika'),
+    club: yup.string().required('Wybierz klub'),
   })
   .defined();
 

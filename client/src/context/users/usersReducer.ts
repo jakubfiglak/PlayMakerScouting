@@ -8,6 +8,14 @@ export default (state: State, action: Action): State => {
         loading: true,
       };
 
+    case 'GET_USERS_LIST_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        usersList: action.payload,
+      };
+
     case 'CLEAR_ERRORS':
       return {
         ...state,
@@ -28,6 +36,9 @@ export default (state: State, action: Action): State => {
         ...state,
         loading: false,
         error: null,
+        usersList: state.usersList.map((user) =>
+          user._id === action.payload.user._id ? action.payload.user : user,
+        ),
         message: action.payload.message,
       };
 

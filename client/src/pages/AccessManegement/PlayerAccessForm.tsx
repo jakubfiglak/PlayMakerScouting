@@ -1,41 +1,42 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
 // MUI components
-import { Grid, CircularProgress, FormControl, Button } from '@material-ui/core';
+import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
 // Types
 import { PlayerData, UserData } from '../../types/simplifiedData';
-// Hooks
-import { usePlayersState } from '../../context/players/usePlayersState';
-// Styles
-import { useStyles } from './styles';
+import { GrantAccessFormData } from '../../types/players';
 // Utils & data
-import { grantAccessFormInitialValues } from '../../components/forms/initialValues';
-import { grantAccessFormValidationSchema } from '../../components/forms/validationSchemas';
+import { playerAccessFormInitialValues } from '../../components/forms/initialValues';
+import { playerAccessFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
   usersData: UserData[];
   playersData: PlayerData[];
+  onSubmit: (data: GrantAccessFormData) => void;
 };
 
-export const GrantAccessForm = ({ usersData, playersData }: Props) => {
+export const PlayerAccessForm = ({
+  usersData,
+  playersData,
+  onSubmit,
+}: Props) => {
   const classes = useStyles();
-  const { loading, grantAccess } = usePlayersState();
 
   return (
     <Formik
-      initialValues={grantAccessFormInitialValues}
-      validationSchema={grantAccessFormValidationSchema}
+      initialValues={playerAccessFormInitialValues}
+      validationSchema={playerAccessFormValidationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        grantAccess(data);
+        onSubmit(data);
         resetForm();
       }}
     >
       {() => (
-        <Form>
+        <Form className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <FormControl variant="outlined" fullWidth>
@@ -47,22 +48,14 @@ export const GrantAccessForm = ({ usersData, playersData }: Props) => {
                 <PlayersCombo playersData={playersData} label="Zawodnik" />
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
-                className={classes.submit}
-                disabled={loading}
               >
                 Przyznaj dostęp
-                {loading && (
-                  <CircularProgress
-                    size={24}
-                    className={classes.buttonProgress}
-                  />
-                )}
               </Button>
             </Grid>
           </Grid>
@@ -71,3 +64,9 @@ export const GrantAccessForm = ({ usersData, playersData }: Props) => {
     </Formik>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  form: {
+    width: '100%',
+  },
+}));

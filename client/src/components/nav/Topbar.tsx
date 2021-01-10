@@ -34,14 +34,9 @@ export const Topbar = ({ navElements, onLogout }: Props) => {
 
   return (
     <AppBar position="fixed" classes={{ root: classes.appBar }}>
-      <Toolbar>
+      <Toolbar className={classes.toolbar}>
         <Link to="/" className={classes.title}>
-          <Typography
-            variant="h6"
-            noWrap
-            // className={classes.title}
-            component="h1"
-          >
+          <Typography variant="h6" noWrap component="h1">
             PlayMaker Pro Scouting
           </Typography>
         </Link>
@@ -68,7 +63,13 @@ export const Topbar = ({ navElements, onLogout }: Props) => {
               {navElements.map((element) => {
                 const { icon, text, to } = element;
                 return (
-                  <NavElement icon={icon} text={text} to={to} key={text} />
+                  <NavElement
+                    icon={icon}
+                    text={text}
+                    to={to}
+                    key={text}
+                    onClick={() => setIsMenuOpen(false)}
+                  />
                 );
               })}
               <Divider />
@@ -102,11 +103,13 @@ const useStyles = makeStyles((theme: Theme) => ({
       width: '100%',
     },
   },
+  toolbar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   title: {
-    display: 'block',
     textDecoration: 'none',
     color: theme.palette.background.paper,
-    flexGrow: 1,
   },
   list: {
     textTransform: 'uppercase',

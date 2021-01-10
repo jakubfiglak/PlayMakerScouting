@@ -3,26 +3,28 @@ import { Formik, Form } from 'formik';
 // MUI components
 import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
 // Custom components
+import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
 // Types
-import { UserData } from '../../types/simplifiedData';
-import { AssignPlaymakerRoleData } from '../../types/users';
+import { ClubBasicInfo, GrantAccessFormData } from '../../types/clubs';
+import { UserBasicInfo } from '../../types/users';
 // Utils & data
-import { assignPlaymakerRoleFormInitialValues } from '../../components/forms/initialValues';
-import { assignPlaymakerRoleFormValidationSchema } from '../../components/forms/validationSchemas';
+import { clubAccessFormInitialValues } from '../../components/forms/initialValues';
+import { clubAccessFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
-  usersData: UserData[];
-  onSubmit: (data: AssignPlaymakerRoleData) => void;
+  usersData: UserBasicInfo[];
+  clubsData: ClubBasicInfo[];
+  onSubmit: (data: GrantAccessFormData) => void;
 };
 
-export const AssignPlaymakerRoleForm = ({ usersData, onSubmit }: Props) => {
+export const ClubAccessForm = ({ usersData, clubsData, onSubmit }: Props) => {
   const classes = useStyles();
 
   return (
     <Formik
-      initialValues={assignPlaymakerRoleFormInitialValues}
-      validationSchema={assignPlaymakerRoleFormValidationSchema}
+      initialValues={clubAccessFormInitialValues}
+      validationSchema={clubAccessFormValidationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
         onSubmit(data);
@@ -31,10 +33,15 @@ export const AssignPlaymakerRoleForm = ({ usersData, onSubmit }: Props) => {
     >
       {() => (
         <Form className={classes.form}>
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <FormControl variant="outlined" fullWidth>
                 <UsersCombo usersData={usersData} label="Użytkownik" />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl variant="outlined" fullWidth>
+                <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -44,7 +51,7 @@ export const AssignPlaymakerRoleForm = ({ usersData, onSubmit }: Props) => {
                 variant="contained"
                 color="primary"
               >
-                Nadaj rolę
+                Przyznaj dostęp
               </Button>
             </Grid>
           </Grid>

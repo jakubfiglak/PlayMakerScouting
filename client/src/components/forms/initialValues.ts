@@ -4,8 +4,14 @@ import {
   LoginFormData,
   UpdatePasswordData,
 } from '../../types/auth';
-import { PlayersFormData, GrantAccessFormData } from '../../types/players';
-import { ClubsFormData } from '../../types/clubs';
+import {
+  PlayersFormData,
+  GrantAccessFormData as PlayerAccessFormData,
+} from '../../types/players';
+import {
+  ClubsFormData,
+  GrantAccessFormData as ClubAccessFormData,
+} from '../../types/clubs';
 import { OrderFormData } from '../../types/orders';
 import { ReportFormData } from '../../types/reports';
 import { AssignPlaymakerRoleData } from '../../types/users';
@@ -128,9 +134,14 @@ export const reportsFormInitialValues: ReportFormData = {
   finalRating: 1,
 };
 
-export const grantAccessFormInitialValues: GrantAccessFormData = {
+export const playerAccessFormInitialValues: PlayerAccessFormData = {
   user: '',
   player: '',
+};
+
+export const clubAccessFormInitialValues: ClubAccessFormData = {
+  user: '',
+  club: '',
 };
 
 export const assignPlaymakerRoleFormInitialValues: AssignPlaymakerRoleData = {

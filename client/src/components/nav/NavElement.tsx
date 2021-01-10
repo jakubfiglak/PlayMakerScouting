@@ -11,9 +11,11 @@ import {
 // Types
 import { NavItem } from './types';
 
-type Props = NavItem;
+type Props = NavItem & {
+  onClick?: () => void;
+};
 
-export const NavElement = ({ icon, text, to }: Props) => {
+export const NavElement = ({ icon, text, to, onClick }: Props) => {
   const classes = useStyles();
 
   const renderLink = useMemo(
@@ -33,7 +35,7 @@ export const NavElement = ({ icon, text, to }: Props) => {
 
   return (
     <li>
-      <ListItem button component={renderLink}>
+      <ListItem button component={renderLink} onClick={onClick}>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText
           primary={text}
@@ -46,7 +48,7 @@ export const NavElement = ({ icon, text, to }: Props) => {
 
 const useStyles = makeStyles((theme: Theme) => ({
   active: {
-    background: theme.palette.primary.light,
+    background: theme.palette.action.hover,
   },
 }));
 

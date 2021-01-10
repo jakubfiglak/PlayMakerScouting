@@ -36,6 +36,11 @@ export type ClubsFilterData = {
   voivodeship: string;
 };
 
+export type GrantAccessFormData = {
+  user: string;
+  club: string;
+};
+
 export type GetClubs = (
   page: number,
   limit: number,
@@ -60,6 +65,7 @@ export type State = {
   getClub: (id: string) => void;
   addClub: (club: ClubsFormData) => void;
   editClub: (id: string, club: ClubsFormData) => void;
+  grantAccess: (data: GrantAccessFormData) => void;
   setCurrent: (club: Club) => void;
   clearCurrent: () => void;
 };
@@ -75,4 +81,5 @@ export type Action =
   | { type: 'GET_CLUBS_LIST_SUCCESS'; payload: ClubBasicInfo[] }
   | { type: 'GET_CLUB_SUCCESS'; payload: Club }
   | { type: 'CREATE_CLUB_SUCCESS'; payload: { club: Club; message: string } }
-  | { type: 'UPDATE_CLUB_SUCCESS'; payload: { club: Club; message: string } };
+  | { type: 'UPDATE_CLUB_SUCCESS'; payload: { club: Club; message: string } }
+  | { type: 'GRANT_ACCESS_SUCCESS'; payload: { message: string } };

@@ -68,7 +68,7 @@ export const EditAccountForm = ({ user, onSubmit }: Props) => {
             <Grid item xs={12} sm={6}>
               <VoivodeshipSelect name="voivodeship" />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <Field
                 name="phone"
                 as={TextField}
@@ -83,7 +83,7 @@ export const EditAccountForm = ({ user, onSubmit }: Props) => {
                 }
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <Field
                 name="activeRadius"
                 type="number"

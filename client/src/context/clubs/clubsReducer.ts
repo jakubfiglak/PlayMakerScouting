@@ -59,6 +59,14 @@ export default (state: State, action: Action): State => {
         ),
       };
 
+    case 'GRANT_ACCESS_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        message: action.payload.message,
+      };
+
     case 'CLUBS_ERROR':
       return {
         ...state,
