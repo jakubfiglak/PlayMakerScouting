@@ -16,7 +16,6 @@ import { Add as AddIcon } from '@material-ui/icons';
 import { PlayerBasicInfo } from '../../types/players';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
-import { positionLabels } from '../../data/labels';
 
 type Props = {
   playersData: PlayerBasicInfo[];
@@ -52,10 +51,9 @@ export const PlayersCombo = ({
         const player = playersData.find((p) => p._id === option);
         if (player) {
           const { lastName, firstName, club, position } = player;
-          return `${firstName[0]}. ${lastName}, ${getLabel(
-            position,
-            positionLabels,
-          )} (${club.name})`;
+          return `${firstName[0]}. ${lastName}, ${getLabel(position)} (${
+            club.name
+          })`;
         }
         return '';
       }}

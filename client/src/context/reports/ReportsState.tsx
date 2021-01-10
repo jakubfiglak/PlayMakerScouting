@@ -8,7 +8,7 @@ import {
   ReportFormData,
   ReportsFilterData,
 } from '../../types/reports';
-import { initialPaginatedData } from '../../data';
+import { initialPaginatedData } from '../../data/initialPaginatedData';
 import { SortingOrder } from '../../types/common';
 
 export const ReportsState: React.FC = ({ children }) => {

@@ -6,12 +6,23 @@ import { RatingInput } from './RatingInput';
 // Types
 import { Position } from '../../../types/players';
 // Utils & data
-import { commonIndSkillsFields } from '../../../data';
-import { getIndSkillsFields } from '../../../utils';
+import { getIndSkillsFields } from '../../../utils/getIndSkillsFields';
 
 type Props = {
   position: Position | null;
 };
+
+const commonIndSkillsFields = [
+  {
+    title: 'Podania',
+    namespace: 'passing',
+    placeholder: 'Opisz podania kluczowe, otwierające i prostopadłe',
+  },
+  {
+    title: 'Przyjęcie piłki',
+    namespace: 'ballReception',
+  },
+];
 
 export const IndividualSkillsStep = ({ position }: Props) => {
   let specificIndSkillsFields: {

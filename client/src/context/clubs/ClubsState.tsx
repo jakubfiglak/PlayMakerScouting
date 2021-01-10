@@ -10,7 +10,7 @@ import {
   GrantAccessFormData,
 } from '../../types/clubs';
 import { SortingOrder } from '../../types/common';
-import { initialPaginatedData } from '../../data';
+import { initialPaginatedData } from '../../data/initialPaginatedData';
 
 export const ClubsState: React.FC = ({ children }) => {
   const initialState: State = {

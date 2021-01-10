@@ -13,8 +13,7 @@ import { RegisterFormData } from '../../types/auth';
 import { useStyles } from './styles';
 // Utils & data
 import { passwordValidationSchema } from '../../data/forms/validationSchemas';
-import { errorLabels } from '../../data';
-import { getLabel } from '../../utils';
+import { getLabel } from '../../utils/getLabel';
 
 export const RegisterForm = () => {
   const classes = useStyles();
@@ -33,7 +32,7 @@ export const RegisterForm = () => {
     }
   }, [isAuthenticated, history]);
 
-  useAlert(getLabel(error, errorLabels), 'error', clearErrors);
+  useAlert(getLabel(error), 'error', clearErrors);
 
   return (
     <Formik

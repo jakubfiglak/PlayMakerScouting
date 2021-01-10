@@ -4,7 +4,7 @@ import OrdersContext from './ordersContext';
 import ordersReducer from './ordersReducer';
 import { SortingOrder } from '../../types/common';
 import { State, OrderFormData, OrdersFilterData } from '../../types/orders';
-import { initialPaginatedData } from '../../data';
+import { initialPaginatedData } from '../../data/initialPaginatedData';
 
 export const OrdersState: React.FC = ({ children }) => {
   const initialState: State = {

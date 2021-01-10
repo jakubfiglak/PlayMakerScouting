@@ -5,7 +5,6 @@ import { Chip, Avatar, makeStyles, Theme } from '@material-ui/core';
 // Types
 import { OrderStatus } from '../../types/orders';
 // Utils & data
-import { orderStatusLabels } from '../../data/labels';
 import { getLabel } from '../../utils/getLabel';
 
 type Props = {
@@ -30,7 +29,7 @@ export const OrderStatusChip = ({ status }: Props) => {
           {status[0].toUpperCase()}
         </Avatar>
       }
-      label={getLabel(status, orderStatusLabels)}
+      label={getLabel(status)}
       className={clsx({
         [classes.chip]: true,
         [classes.open]: status === 'open',

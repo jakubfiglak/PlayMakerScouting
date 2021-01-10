@@ -8,8 +8,25 @@ import {
   FormControl,
   FormHelperText,
 } from '@material-ui/core';
-// Data & utils
-import { voivodeships } from '../../data';
+
+const voivodeships = [
+  'Dolnośląskie',
+  'Kujawsko-Pomorskie',
+  'Lubelskie',
+  'Lubuskie',
+  'Łódzkie',
+  'Mazowieckie',
+  'Małopolskie',
+  'Opolskie',
+  'Podkarpackie',
+  'Podlaskie',
+  'Pomorskie',
+  'Śląskie',
+  'Świętokrzyskie',
+  'Warmińsko-Mazurskie',
+  'Wielkopolskie',
+  'Zachodniopomorskie',
+];
 
 type VoivodeshipSelectProps = { size?: 'small' | 'medium'; name: string };
 

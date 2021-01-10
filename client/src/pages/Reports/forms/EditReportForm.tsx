@@ -20,8 +20,8 @@ import { MainFormActions } from '../../../components/formActions/MainFormActions
 // Types
 import { Report } from '../../../types/reports';
 // Utils & data
-import { getLabel, formatDate } from '../../../utils';
-import { positionLabels } from '../../../data/labels';
+import { getLabel } from '../../../utils/getLabel';
+import { formatDate } from '../../../utils/dates';
 
 type Props = {
   report: Report;
@@ -44,7 +44,6 @@ export const EditReportForm = ({ report }: Props) => {
           <strong>Zawodnik: </strong>
           {`${player.firstName} ${player.lastName}, ${getLabel(
             player.position,
-            positionLabels,
           )} (${player.club.name})`}
         </Typography>
       </Grid>

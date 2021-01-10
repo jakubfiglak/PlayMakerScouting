@@ -20,7 +20,7 @@ import { OrderStatusChip } from '../Orders/OrderStatusChip';
 // Types
 import { Order } from '../../types/orders';
 // Utils & data
-import { formatDate } from '../../utils';
+import { formatDate } from '../../utils/dates';
 
 type Props = {
   order: Order;

@@ -25,7 +25,7 @@ import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
 // Utils & data
-import { formatDateObject, yearFromNow, tomorrow } from '../../utils';
+import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
 export const OrdersPage = () => {
   const classes = useStyles();

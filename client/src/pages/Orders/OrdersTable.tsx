@@ -24,7 +24,7 @@ import { StyledTableRow } from '../../components/table/TableRow';
 import { Order } from '../../types/orders';
 import { CommonTableProps } from '../../types/common';
 // Utils & data
-import { formatDate } from '../../utils/formatDate';
+import { formatDate } from '../../utils/dates';
 
 type Props = {
   orders: Order[];

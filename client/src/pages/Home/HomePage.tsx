@@ -4,13 +4,12 @@ import React from 'react';
 import { useAlert } from '../../hooks';
 import { useAuthState } from '../../context/auth/useAuthState';
 // Utils & data
-import { getLabel } from '../../utils';
-import { messageLabels } from '../../data/labels';
+import { getLabel } from '../../utils/getLabel';
 
 export const HomePage = () => {
   const { message, clearMessage } = useAuthState();
 
-  useAlert(getLabel(message, messageLabels), 'success', clearMessage);
+  useAlert(getLabel(message), 'success', clearMessage);
 
   return (
     <>

@@ -17,7 +17,7 @@ import { StyledTableRow } from '../../components/table/TableRow';
 import { Report } from '../../types/reports';
 import { CommonTableProps } from '../../types/common';
 // Utils & data
-import { formatDate } from '../../utils/formatDate';
+import { formatDate } from '../../utils/dates';
 
 type Props = {
   reports: Report[];

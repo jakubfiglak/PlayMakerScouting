@@ -12,8 +12,7 @@ import { useAuthState } from '../../context/auth/useAuthState';
 // Styles
 import { useStyles } from './styles';
 // Utils & data
-import { errorLabels } from '../../data';
-import { getLabel } from '../../utils';
+import { getLabel } from '../../utils/getLabel';
 
 export const LoginForm = () => {
   const classes = useStyles();
@@ -32,7 +31,7 @@ export const LoginForm = () => {
     }
   }, [isAuthenticated, history]);
 
-  useAlert(getLabel(error, errorLabels), 'error', clearErrors);
+  useAlert(getLabel(error), 'error', clearErrors);
 
   const formik = useFormik<LoginFormData>({
     initialValues: {

@@ -5,7 +5,6 @@ import { Chip, makeStyles, Theme } from '@material-ui/core';
 // Types
 import { RatingScore } from '../../types/reports';
 // Utils & data
-import { ratingLabels } from '../../data/labels';
 import { getLabel } from '../../utils/getLabel';
 
 type Props = {
@@ -18,7 +17,7 @@ export const FinalRatingChip = ({ finalRating }: Props) => {
   return (
     <Chip
       size="small"
-      label={getLabel(finalRating, ratingLabels)}
+      label={getLabel(finalRating)}
       className={clsx({
         [classes.chip]: true,
         [classes.negative]: finalRating === 1,

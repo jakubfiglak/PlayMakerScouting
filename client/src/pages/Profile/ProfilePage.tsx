@@ -23,8 +23,7 @@ import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useAuthState } from '../../context/auth/useAuthState';
 // Utils & data
-import { errorLabels, messageLabels } from '../../data';
-import { getLabel } from '../../utils';
+import { getLabel } from '../../utils/getLabel';
 
 export const ProfilePage = () => {
   const classes = useStyles();
@@ -39,8 +38,8 @@ export const ProfilePage = () => {
     loading,
   } = useAuthState();
 
-  useAlert(getLabel(error, errorLabels), 'error', clearErrors);
-  useAlert(getLabel(message, messageLabels), 'success', clearMessage);
+  useAlert(getLabel(error), 'error', clearErrors);
+  useAlert(getLabel(message), 'success', clearMessage);
 
   const { firstName, lastName, role, email } = user;
 

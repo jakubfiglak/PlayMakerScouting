@@ -7,7 +7,7 @@ import { SportsSoccer as BallIcon } from '@material-ui/icons';
 // Types
 import { IndividualSkills, TeamplaySkills } from '../../types/reports';
 // Utils & data
-import { getRatingLabel } from '../../utils';
+import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   skills: IndividualSkills | TeamplaySkills;
@@ -24,7 +24,7 @@ export const ReportSkills = ({ skills }: Props) => {
             <Grid item xs={12} key={key}>
               <div className={classes.container}>
                 <Typography>
-                  <strong>{getRatingLabel(key)}</strong>
+                  <strong>{getLabel(key)}</strong>
                 </Typography>
                 <Rating
                   name={`${key}.rating`}

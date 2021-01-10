@@ -9,8 +9,7 @@ import { StyledTableRow } from '../../components/table/TableRow';
 // Types
 import { Player } from '../../types/players';
 // Utils & data
-import { getLabel } from '../../utils';
-import { footLabels, positionLabels } from '../../data';
+import { getLabel } from '../../utils/getLabel';
 
 type TableRowProps = {
   player: Player;
@@ -38,9 +37,9 @@ export const PlayersTableRow = ({
       <StyledTableCell>{lastName}</StyledTableCell>
       <StyledTableCell>{firstName}</StyledTableCell>
       <StyledTableCell>{club.name}</StyledTableCell>
-      <StyledTableCell>{getLabel(position, positionLabels)}</StyledTableCell>
+      <StyledTableCell>{getLabel(position)}</StyledTableCell>
       <StyledTableCell>{yearOfBirth}</StyledTableCell>
-      <StyledTableCell>{getLabel(footed, footLabels)}</StyledTableCell>
+      <StyledTableCell>{getLabel(footed)}</StyledTableCell>
     </StyledTableRow>
   );
 };

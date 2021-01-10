@@ -8,13 +8,22 @@ import {
   FormHelperText,
   FormControl,
 } from '@material-ui/core';
-// Utils & data
-import { matchLocationLabels } from '../../data/labels';
 
 type Props = {
   name: string;
   size?: 'small' | 'medium';
 };
+
+const matchLocations = [
+  {
+    value: 'home',
+    label: 'dom',
+  },
+  {
+    value: 'away',
+    label: 'wyjazd',
+  },
+];
 
 export const MatchLocationSelect = ({ name, size }: Props) => {
   const [field, meta] = useField(name);
@@ -31,7 +40,7 @@ export const MatchLocationSelect = ({ name, size }: Props) => {
         label="Dom/wyjazd"
         error={touched && !!error}
       >
-        {matchLocationLabels.map((location) => (
+        {matchLocations.map((location) => (
           <MenuItem value={location.value} key={location.value}>
             {location.label}
           </MenuItem>

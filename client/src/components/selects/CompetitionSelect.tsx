@@ -8,13 +8,26 @@ import {
   FormHelperText,
   FormControl,
 } from '@material-ui/core';
-// Data & utis
-import { competitions } from '../../data/competitions';
 
 type Props = {
   name: string;
   size?: 'small' | 'medium';
 };
+
+const competitions = [
+  {
+    value: 'league',
+    label: 'Liga',
+  },
+  {
+    value: 'cup',
+    label: 'Puchar',
+  },
+  {
+    value: 'friendly',
+    label: 'Towarzyski',
+  },
+];
 
 export const CompetitionSelect = ({ name, size }: Props) => {
   const [field, meta] = useField(name);

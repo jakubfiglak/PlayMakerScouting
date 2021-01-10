@@ -3,8 +3,21 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 // Custom components
 import { RatingInput } from './RatingInput';
-// Utils & data
-import { teamplaySkillsFields } from '../../../data';
+
+const teamplaySkillsFields = [
+  {
+    title: 'Udział w ataku',
+    namespace: 'attack',
+  },
+  {
+    title: 'Praca w obronie',
+    namespace: 'defense',
+  },
+  {
+    title: 'Fazy przejściowe',
+    namespace: 'transition',
+  },
+];
 
 export const TeamplaySkillsStep = () => {
   return (

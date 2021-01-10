@@ -10,7 +10,7 @@ import { FilterFormActions } from '../../components/formActions/FilterFormAction
 import { OrdersFilterData } from '../../types/orders';
 import { PlayerBasicInfo } from '../../types/players';
 // Utils & data
-import { formatDateObject, yearFromNow, tomorrow } from '../../utils';
+import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
 type FilterFormProps = {
   playersData: PlayerBasicInfo[];
