@@ -6,7 +6,6 @@ import { PlayersPage } from './pages/Players/PlayersPage';
 import { ProfilePage } from './pages/Profile/ProfilePage';
 import { ReportPage } from './pages/Report/ReportPage';
 import { ReportsPage } from './pages/Reports/ReportsPage';
-import { SimplifiedDataState } from './context/simplifiedData/SimplifiedDataState';
 import { PlayersState } from './context/players/PlayersState';
 import { ClubsState } from './context/clubs/ClubsState';
 import { ReportsState } from './context/reports/ReportsState';
@@ -35,30 +34,29 @@ export const AuthenticatedApp = () => {
   }, [user.role]);
 
   return (
-    <SimplifiedDataState>
-      <Router>
-        <MainTemplate navElements={navElements}>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/account" component={ProfilePage} />
-            <ClubsState>
-              <PlayersState>
-                <Route exact path="/players" component={PlayersPage} />
-                <Route exact path="/clubs" component={ClubsPage} />
-                <OrdersState>
-                  <ReportsState>
-                    <Route exact path="/reports" component={ReportsPage} />
-                    <Route exact path="/reports/:id" component={ReportPage} />
-                  </ReportsState>
-                  {(user.role === 'playmaker-scout' ||
-                    user.role === 'admin') && <PlaymakerScoutRoutes />}
-                </OrdersState>
-                {user.role === 'admin' && <AdminRoutes />}
-              </PlayersState>
-            </ClubsState>
-          </Switch>
-        </MainTemplate>
-      </Router>
-    </SimplifiedDataState>
+    <Router>
+      <MainTemplate navElements={navElements}>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/account" component={ProfilePage} />
+          <ClubsState>
+            <PlayersState>
+              <Route exact path="/players" component={PlayersPage} />
+              <Route exact path="/clubs" component={ClubsPage} />
+              <OrdersState>
+                <ReportsState>
+                  <Route exact path="/reports" component={ReportsPage} />
+                  <Route exact path="/reports/:id" component={ReportPage} />
+                </ReportsState>
+                {(user.role === 'playmaker-scout' || user.role === 'admin') && (
+                  <PlaymakerScoutRoutes />
+                )}
+              </OrdersState>
+              {user.role === 'admin' && <AdminRoutes />}
+            </PlayersState>
+          </ClubsState>
+        </Switch>
+      </MainTemplate>
+    </Router>
   );
 };

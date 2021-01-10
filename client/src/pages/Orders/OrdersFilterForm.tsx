@@ -8,12 +8,12 @@ import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
 // Types
 import { OrdersFilterData } from '../../types/orders';
-import { PlayerData } from '../../types/simplifiedData';
+import { PlayerBasicInfo } from '../../types/players';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils';
 
 type FilterFormProps = {
-  playersData: PlayerData[];
+  playersData: PlayerBasicInfo[];
   setFilters: Dispatch<SetStateAction<OrdersFilterData>>;
 };
 

@@ -5,14 +5,13 @@ import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
 // Custom components
 import { UsersCombo } from '../../components/selects/UsersCombo';
 // Types
-import { UserData } from '../../types/simplifiedData';
-import { AssignPlaymakerRoleData } from '../../types/users';
+import { AssignPlaymakerRoleData, UserBasicInfo } from '../../types/users';
 // Utils & data
 import { assignPlaymakerRoleFormInitialValues } from '../../components/forms/initialValues';
 import { assignPlaymakerRoleFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
-  usersData: UserData[];
+  usersData: UserBasicInfo[];
   onSubmit: (data: AssignPlaymakerRoleData) => void;
 };
 

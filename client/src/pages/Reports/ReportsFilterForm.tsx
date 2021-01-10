@@ -7,10 +7,10 @@ import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
 // Types
 import { ReportsFilterData } from '../../types/reports';
-import { PlayerData } from '../../types/simplifiedData';
+import { PlayerBasicInfo } from '../../types/players';
 
 type FilterFormProps = {
-  playersData: PlayerData[];
+  playersData: PlayerBasicInfo[];
   setFilters: Dispatch<SetStateAction<ReportsFilterData>>;
 };
 

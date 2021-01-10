@@ -8,7 +8,7 @@ import { FootSelect } from '../../components/selects/FootSelect';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 // Types
-import { ClubData } from '../../types/simplifiedData';
+import { ClubBasicInfo } from '../../types/clubs';
 import { Player, PlayersFormData } from '../../types/players';
 // Hooks
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
@@ -17,7 +17,7 @@ import { playersFormValidationSchema } from '../../components/forms/validationSc
 import { playersFormInitialValues } from '../../components/forms/initialValues';
 
 type Props = {
-  clubsData: ClubData[];
+  clubsData: ClubBasicInfo[];
   current: Player | null;
   onSubmit: (data: PlayersFormData) => void;
   onAddClubClick: () => void;

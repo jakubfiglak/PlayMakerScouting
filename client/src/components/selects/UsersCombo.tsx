@@ -4,10 +4,10 @@ import { useField } from 'formik';
 import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 // Types
-import { UserData } from '../../types/simplifiedData';
+import { UserBasicInfo } from '../../types/users';
 
 type Props = {
-  usersData: UserData[];
+  usersData: UserBasicInfo[];
   label: string;
   size?: 'medium' | 'small';
 };

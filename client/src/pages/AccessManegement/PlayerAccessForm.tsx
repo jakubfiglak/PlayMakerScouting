@@ -6,15 +6,15 @@ import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
 // Types
-import { PlayerData, UserData } from '../../types/simplifiedData';
-import { GrantAccessFormData } from '../../types/players';
+import { GrantAccessFormData, PlayerBasicInfo } from '../../types/players';
+import { UserBasicInfo } from '../../types/users';
 // Utils & data
 import { playerAccessFormInitialValues } from '../../components/forms/initialValues';
 import { playerAccessFormValidationSchema } from '../../components/forms/validationSchemas';
 
 type Props = {
-  usersData: UserData[];
-  playersData: PlayerData[];
+  usersData: UserBasicInfo[];
+  playersData: PlayerBasicInfo[];
   onSubmit: (data: GrantAccessFormData) => void;
 };
 
