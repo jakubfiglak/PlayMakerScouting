@@ -6,7 +6,6 @@ import {
   AccordionSummary,
   Typography,
   makeStyles,
-  Theme,
 } from '@material-ui/core';
 // MUI icons
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -26,37 +25,43 @@ export const SkillsRatingStep = ({ position }: Props) => {
 
   return (
     <>
-      <Accordion className={classes.root}>
+      <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="individual-skills-content"
           id="individual-skills"
         >
-          <Typography>Ocena umiejętności indywidualnych</Typography>
+          <Typography className={classes.title}>
+            Ocena umiejętności indywidualnych
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <IndividualSkillsStep position={position} />
         </AccordionDetails>
       </Accordion>
-      <Accordion className={classes.root}>
+      <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="teamplay-skills-content"
           id="teamplay-skills"
         >
-          <Typography>Ocena współdziałania z partnerami</Typography>
+          <Typography className={classes.title}>
+            Ocena współdziałania z partnerami
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <TeamplaySkillsStep />
         </AccordionDetails>
       </Accordion>
-      <Accordion className={classes.root}>
+      <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="motor-skills-content"
           id="motor-skills"
         >
-          <Typography>Ocena potencjału motorycznego</Typography>
+          <Typography className={classes.title}>
+            Ocena potencjału motorycznego
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <MotorSkillsStep />
@@ -66,8 +71,8 @@ export const SkillsRatingStep = ({ position }: Props) => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    background: theme.palette.background.default,
+const useStyles = makeStyles(() => ({
+  title: {
+    fontWeight: 'bold',
   },
 }));

@@ -6,8 +6,8 @@ import {
   Step,
   StepLabel,
   StepContent,
-  Typography,
-  Grid,
+  makeStyles,
+  Theme,
 } from '@material-ui/core/';
 // Custom components
 import { ReportTypeStep } from './ReportTypeStep';
@@ -18,8 +18,8 @@ import { SummaryStep } from './SummaryStep';
 import { SkillsRatingStep } from './SkillsRatingStep';
 import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
-import { MainFormActions } from '../../../components/formActions/MainFormActions';
 import { BottomNav } from '../BottomNav';
+import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Hooks
 import { useStepper } from '../../../hooks/useStepper';
 // Types
@@ -40,6 +40,8 @@ export const NewReportForm = ({
   ordersList,
   onAddPlayerClick,
 }: Props) => {
+  const classes = useStyles();
+
   const [
     activeStep,
     handleNext,
@@ -115,55 +117,58 @@ export const NewReportForm = ({
   };
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <Form>
-          <Grid container>
-            <Grid item xs={12}>
-              <Stepper activeStep={activeStep} orientation="vertical">
-                {steps.map(({ title, content }) => (
-                  <Step key={title}>
-                    <StepLabel>{title}</StepLabel>
-                    <StepContent>
-                      <Typography component="div">{content}</Typography>
-                      <StepActions
-                        activeStep={activeStep}
-                        totalSteps={steps.length}
-                        handleBack={handleBack}
-                        handleNext={handleNext}
-                        isNextButtonDisabled={
-                          (activeStep === 1 &&
-                            !values.player &&
-                            !values.order) ||
-                          (activeStep === 2 && !values.match)
-                        }
-                      />
-                    </StepContent>
-                  </Step>
-                ))}
-              </Stepper>
-            </Grid>
-            {activeStep === steps.length && (
-              <Grid item xs={12}>
-                <Grid container spacing={2}>
-                  <MainFormActions
-                    label="raport"
-                    isEditState={false}
-                    onCancelClick={() => {
-                      handleReset();
-                      resetStepper();
-                    }}
-                    goBack={handleGoBack}
-                    activeStep={activeStep}
-                    totalSteps={steps.length}
-                  />
-                </Grid>
-              </Grid>
-            )}
-          </Grid>
-        </Form>
-      </Grid>
+    <>
+      <Form>
+        <Stepper
+          activeStep={activeStep}
+          orientation="vertical"
+          className={classes.root}
+        >
+          {steps.map(({ title, content }) => (
+            <Step key={title}>
+              <StepLabel>{title}</StepLabel>
+              <StepContent>
+                <div className={classes.content}>{content}</div>
+                <StepActions
+                  activeStep={activeStep}
+                  totalSteps={steps.length}
+                  handleBack={handleBack}
+                  handleNext={handleNext}
+                  isNextButtonDisabled={
+                    (activeStep === 1 && !values.player && !values.order) ||
+                    (activeStep === 2 && !values.match)
+                  }
+                />
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep === steps.length && (
+          <MainFormActions
+            label="raport"
+            isEditState={false}
+            onCancelClick={() => {
+              handleReset();
+              resetStepper();
+            }}
+            goBack={handleGoBack}
+            activeStep={activeStep}
+            totalSteps={steps.length}
+          />
+        )}
+      </Form>
       <BottomNav activeStep={activeStep} setActiveStep={setActiveStep} />
-    </Grid>
+    </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(2, 1),
+    },
+  },
+  content: {
+    marginTop: theme.spacing(1),
+  },
+}));

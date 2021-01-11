@@ -15,6 +15,7 @@ import { AssignPlaymakerRoleForm } from './AssignPlaymakerRoleForm';
 import { PlayerAccessForm } from './PlayerAccessForm';
 import { ClubAccessForm } from './ClubAccessForm';
 import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
 // Hooks
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
@@ -77,14 +78,7 @@ export const AccessManagementPage = () => {
   return (
     <>
       {(loading || playersLoading || clubsLoading) && <Loader />}
-      <Typography
-        variant="h6"
-        component="h2"
-        align="center"
-        className={classes.header}
-      >
-        Zarządzanie dostępami
-      </Typography>
+      <PageHeading title="Zarządzanie dostępami" />
       <Accordion>
         <AccordionSummary
           expandIcon={<AccordionIcon />}

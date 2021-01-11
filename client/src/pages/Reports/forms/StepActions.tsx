@@ -20,33 +20,28 @@ export const StepActions = ({
   const classes = useStyles();
 
   return (
-    <div className={classes.actionsContainer}>
-      <div>
-        <Button
-          disabled={activeStep === 0}
-          onClick={handleBack}
-          className={classes.button}
-        >
-          Wstecz
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNext}
-          className={classes.button}
-          disabled={isNextButtonDisabled}
-        >
-          {activeStep === totalSteps - 1 ? 'Zapisz' : 'Dalej'}
-        </Button>
-      </div>
+    <div>
+      <Button
+        disabled={activeStep === 0}
+        onClick={handleBack}
+        className={classes.button}
+      >
+        Wstecz
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleNext}
+        className={classes.button}
+        disabled={isNextButtonDisabled}
+      >
+        {activeStep === totalSteps - 1 ? 'Zapisz' : 'Dalej'}
+      </Button>
     </div>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  actionsContainer: {
-    marginBottom: theme.spacing(2),
-  },
   button: {
     marginTop: theme.spacing(1),
     marginRight: theme.spacing(1),

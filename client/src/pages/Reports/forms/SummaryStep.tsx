@@ -24,7 +24,7 @@ export const SummaryStep = () => {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <div className={classes.container}>
-          <Typography variant="h6">Ocena ostateczna</Typography>
+          <Typography className={classes.title}>Ocena ostateczna</Typography>
           <Rating
             {...ratingField}
             name="finalRating"
@@ -55,5 +55,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     gap: `${theme.spacing(1)}px`,
+  },
+  title: {
+    fontWeight: 'bold',
   },
 }));

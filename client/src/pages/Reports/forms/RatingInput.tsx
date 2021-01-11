@@ -30,7 +30,7 @@ export const RatingInput = ({ title, namespace, placeholder }: Props) => {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <div className={classes.container}>
-          <Typography variant="h6">{title}</Typography>
+          <Typography className={classes.title}>{title}</Typography>
           <Rating
             {...ratingField}
             name={`${namespace}.rating`}
@@ -65,5 +65,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     gap: `${theme.spacing(1)}px`,
+  },
+  title: {
+    fontWeight: 'bold',
   },
 }));

@@ -2,10 +2,11 @@ import React from 'react';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 // MUI components
-import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
+import { FormControl, Button, makeStyles } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
+import { FormContainer } from '../../components/FormContainer';
 // Types
 import { GrantAccessFormData, PlayerBasicInfo } from '../../types/players';
 import { UserBasicInfo } from '../../types/users';
@@ -38,28 +39,17 @@ export const PlayerAccessForm = ({
     >
       {() => (
         <Form className={classes.form}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <FormControl variant="outlined" fullWidth>
-                <UsersCombo usersData={usersData} label="Użytkownik" />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl variant="outlined" fullWidth>
-                <PlayersCombo playersData={playersData} label="Zawodnik" />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-              >
-                Przyznaj dostęp
-              </Button>
-            </Grid>
-          </Grid>
+          <FormContainer>
+            <FormControl variant="outlined" fullWidth>
+              <UsersCombo usersData={usersData} label="Użytkownik" />
+            </FormControl>
+            <FormControl variant="outlined" fullWidth>
+              <PlayersCombo playersData={playersData} label="Zawodnik" />
+            </FormControl>
+            <Button type="submit" fullWidth variant="contained" color="primary">
+              Przyznaj dostęp
+            </Button>
+          </FormContainer>
         </Form>
       )}
     </Formik>

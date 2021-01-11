@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
 import {
-  Grid,
   Typography,
   Card,
   CardContent,

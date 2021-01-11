@@ -2,9 +2,10 @@ import React from 'react';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 // MUI components
-import { Grid, FormControl, Button, makeStyles } from '@material-ui/core';
+import { FormControl, Button, makeStyles } from '@material-ui/core';
 // Custom components
 import { UsersCombo } from '../../components/selects/UsersCombo';
+import { FormContainer } from '../../components/FormContainer';
 // Types
 import { AssignPlaymakerRoleData, UserBasicInfo } from '../../types/users';
 
@@ -28,23 +29,14 @@ export const AssignPlaymakerRoleForm = ({ usersData, onSubmit }: Props) => {
     >
       {() => (
         <Form className={classes.form}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} sm={6}>
-              <FormControl variant="outlined" fullWidth>
-                <UsersCombo usersData={usersData} label="Użytkownik" />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-              >
-                Nadaj rolę
-              </Button>
-            </Grid>
-          </Grid>
+          <FormContainer>
+            <FormControl variant="outlined" fullWidth>
+              <UsersCombo usersData={usersData} label="Użytkownik" />
+            </FormControl>
+            <Button type="submit" fullWidth variant="contained" color="primary">
+              Nadaj rolę
+            </Button>
+          </FormContainer>
         </Form>
       )}
     </Formik>
