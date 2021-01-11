@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import { plPL } from '@material-ui/core/locale';
 import {
   lightGray,
   darkGray,
@@ -9,51 +10,54 @@ import {
   redTransparent,
 } from './colors';
 
-const theme = createMuiTheme({
-  typography: {
-    h2: {
-      fontSize: '32px',
-      fontWeight: 'bold',
+const theme = createMuiTheme(
+  {
+    typography: {
+      h2: {
+        fontSize: '32px',
+        fontWeight: 'bold',
+      },
     },
-  },
-  palette: {
-    primary: {
-      main: darkGray,
-      light: semiGray,
+    palette: {
+      primary: {
+        main: darkGray,
+        light: semiGray,
+      },
+      secondary: {
+        main: yellow,
+      },
+      error: {
+        main: red,
+        light: redTransparent,
+      },
+      background: {
+        default: lightGray,
+      },
+      common: {
+        white,
+      },
     },
-    secondary: {
-      main: yellow,
-    },
-    error: {
-      main: red,
-      light: redTransparent,
-    },
-    background: {
-      default: lightGray,
-    },
-    common: {
-      white,
-    },
-  },
-  overrides: {
-    MuiTableSortLabel: {
-      root: {
-        '&$active': {
-          color: yellow,
+    overrides: {
+      MuiTableSortLabel: {
+        root: {
+          '&$active': {
+            color: yellow,
 
-          '&& $icon': {
+            '&& $icon': {
+              color: yellow,
+            },
+          },
+          '&:hover': {
             color: yellow,
           },
-        },
-        '&:hover': {
-          color: yellow,
-        },
-        '&:focus': {
-          color: yellow,
+          '&:focus': {
+            color: yellow,
+          },
         },
       },
     },
   },
-});
+  plPL,
+);
 
 export default theme;
