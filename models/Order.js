@@ -29,9 +29,6 @@ const OrderSchema = new Schema(
     closeDate: {
       type: Date,
     },
-    docNumber: {
-      type: String,
-    },
     notes: {
       type: String,
     },
@@ -43,13 +40,6 @@ const OrderSchema = new Schema(
 );
 
 OrderSchema.plugin(mongoosePaginate);
-
-OrderSchema.pre('save', async function (next) {
-  const count = await model('Order', OrderSchema).countDocuments();
-  const date = new Date();
-  this.docNumber = `ORD/${date.toISOString().slice(0, 10)}/${count + 1}`;
-  next();
-});
 
 OrderSchema.virtual('reports', {
   ref: 'Report',

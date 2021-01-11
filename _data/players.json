@@ -5,7 +5,7 @@
     "lastName": "Doe",
     "club": "5ee50570f75bec032c291c33",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R",
@@ -18,7 +18,7 @@
     "lastName": "Josephe",
     "club": "5ee50570f75bec032c291c33",
     "position": "CM",
-    "dateOfBirth": "1997-03-06",
+    "yearOfBirth": "1997",
     "height": "181",
     "weight": "75",
     "footed": "both"
@@ -29,7 +29,7 @@
     "lastName": "Brenda",
     "club": "5ee5060ad784b010395a756e",
     "position": "GK",
-    "dateOfBirth": "1999-11-22",
+    "yearOfBirth": "1999",
     "height": "199",
     "weight": "90",
     "footed": "L"
@@ -40,7 +40,7 @@
     "lastName": "Mieszko",
     "club": "5ee5060ad784b010395a756e",
     "position": "FB",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "188",
     "weight": "77",
     "footed": "L"
@@ -51,7 +51,7 @@
     "lastName": "Tymon",
     "club": "5ee5062436d322bff641683d",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -62,7 +62,7 @@
     "lastName": "Łucjan",
     "club": "5ee5062436d322bff641683d",
     "position": "CB",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -73,7 +73,7 @@
     "lastName": "Więcesław",
     "club": "5ee50640f75f558bc1fa5fbf",
     "position": "GK",
-    "dateOfBirth": "1987-06-30",
+    "yearOfBirth": "1987",
     "height": "196",
     "weight": "80",
     "footed": "R"
@@ -84,7 +84,7 @@
     "lastName": "Uriasz",
     "club": "5ee50640f75f558bc1fa5fbf",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -95,7 +95,7 @@
     "lastName": "Gerard",
     "club": "5ee5065ca84f5c2e6a18d3ca",
     "position": "CB",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -106,7 +106,7 @@
     "lastName": "Iwan",
     "club": "5ee5065ca84f5c2e6a18d3ca",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -117,7 +117,7 @@
     "lastName": "Norbert",
     "club": "5ee50678b381dd897dd5be4c",
     "position": "WM",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "both"
@@ -128,7 +128,7 @@
     "lastName": "Marek",
     "club": "5ee50678b381dd897dd5be4c",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -139,7 +139,7 @@
     "lastName": "Dariusz",
     "club": "5ee5069a48e704cd7e434f1a",
     "position": "FB",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -150,7 +150,7 @@
     "lastName": "Uriasz",
     "club": "5ee5069a48e704cd7e434f1a",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "both"
@@ -161,7 +161,7 @@
     "lastName": "Zbigniew",
     "club": "5ee506e65623b4b72c9e0379",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -172,7 +172,7 @@
     "lastName": "Radzimierz",
     "club": "5ee506e65623b4b72c9e0379",
     "position": "GK",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -183,7 +183,7 @@
     "lastName": "Ernest",
     "club": "5ee50703d1aeb981e0ea7c15",
     "position": "CM",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "L"
@@ -194,7 +194,7 @@
     "lastName": "Mateusz",
     "club": "5ee50703d1aeb981e0ea7c15",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -205,7 +205,7 @@
     "lastName": "Lew",
     "club": "5ee5071b4d4c6dfcce318e68",
     "position": "FB",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -216,7 +216,7 @@
     "lastName": "Rajmund",
     "club": "5ee5071b4d4c6dfcce318e68",
     "position": "F",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -227,7 +227,7 @@
     "lastName": "Bolek",
     "club": "5ee5073106bbf18cb5217d47",
     "position": "CB",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"
@@ -238,7 +238,7 @@
     "lastName": "Bonifacy",
     "club": "5ee5073106bbf18cb5217d47",
     "position": "FB",
-    "dateOfBirth": "2000-02-04",
+    "yearOfBirth": "2000",
     "height": "178",
     "weight": "70",
     "footed": "R"

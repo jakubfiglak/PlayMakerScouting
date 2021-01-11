@@ -9,15 +9,15 @@ import {
   Player,
   GrantAccessFormData,
 } from '../../types/players';
-import { Order } from '../../types/common';
-import { initialPaginatedData } from '../../data';
+import { SortingOrder } from '../../types/common';
+import { initialPaginatedData } from '../../data/initialPaginatedData';
 
 export const PlayersState: React.FC = ({ children }) => {
   const initialState: State = {
     playersData: initialPaginatedData,
+    playersList: [],
     playerData: null,
     current: null,
-    playerMatches: [],
     loading: false,
     error: null,
     message: null,
@@ -25,8 +25,8 @@ export const PlayersState: React.FC = ({ children }) => {
     clearErrors: () => null,
     clearMessage: () => null,
     getPlayers: () => null,
+    getPlayersList: () => null,
     getPlayer: () => null,
-    getPlayerMatches: () => null,
     addPlayer: () => null,
     editPlayer: () => null,
     setCurrent: () => null,
@@ -48,7 +48,7 @@ export const PlayersState: React.FC = ({ children }) => {
     page = 1,
     limit = 20,
     sort = '_id',
-    order: Order,
+    order: SortingOrder,
     filters: PlayersFilterData,
   ) => {
     setLoading();
@@ -79,15 +79,14 @@ export const PlayersState: React.FC = ({ children }) => {
     }
   };
 
-  // Get player
-  const getPlayer = async (id: string) => {
+  // Get players list
+  const getPlayersList = async () => {
     setLoading();
 
     try {
-      const res = await axiosJson.get(`/api/v1/players/${id}`);
-
+      const res = await axiosJson.get('/api/v1/players/list');
       dispatch({
-        type: 'GET_PLAYER_SUCCESS',
+        type: 'GET_PLAYERS_LIST_SUCCESS',
         payload: res.data.data,
       });
     } catch (err) {
@@ -98,14 +97,15 @@ export const PlayersState: React.FC = ({ children }) => {
     }
   };
 
-  // Get matches for a player
-  const getPlayerMatches = async (id: string) => {
+  // Get player
+  const getPlayer = async (id: string) => {
     setLoading();
 
     try {
-      const res = await axiosJson.get(`/api/v1/players/${id}/matches`);
+      const res = await axiosJson.get(`/api/v1/players/${id}`);
+
       dispatch({
-        type: 'GET_PLAYER_MATCHES_SUCCESS',
+        type: 'GET_PLAYER_SUCCESS',
         payload: res.data.data,
       });
     } catch (err) {
@@ -199,8 +199,8 @@ export const PlayersState: React.FC = ({ children }) => {
 
   const {
     playersData,
+    playersList,
     playerData,
-    playerMatches,
     current,
     loading,
     error,
@@ -211,7 +211,7 @@ export const PlayersState: React.FC = ({ children }) => {
     <PlayersContext.Provider
       value={{
         playersData,
-        playerMatches,
+        playersList,
         playerData,
         current,
         loading,
@@ -221,8 +221,8 @@ export const PlayersState: React.FC = ({ children }) => {
         clearErrors,
         clearMessage,
         getPlayers,
+        getPlayersList,
         getPlayer,
-        getPlayerMatches,
         addPlayer,
         grantAccess,
         setCurrent,

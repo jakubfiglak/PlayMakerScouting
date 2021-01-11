@@ -1,10 +1,64 @@
-import {
-  cbIndSkillsFields,
-  fbIndSkillsFields,
-  mIndSkillsFields,
-  fIndSkillsFields,
-} from '../data/individualSkillsFields';
 import { Position } from '../types/players';
+
+const cbIndSkillsFields = [
+  {
+    title: 'Gra 1v1 w obronie',
+    namespace: 'defOneOnOne',
+  },
+  {
+    title: 'Gra w powietrzu',
+    namespace: 'airPlay',
+  },
+  {
+    title: 'Ustawianie się',
+    namespace: 'positioning',
+  },
+];
+
+const fbIndSkillsFields = [
+  {
+    title: 'Gra 1v1 w obronie',
+    namespace: 'defOneOnOne',
+  },
+  {
+    title: 'Gra 1v1 w ataku',
+    namespace: 'attOneOnOne',
+  },
+  {
+    title: 'Gra w powietrzu',
+    namespace: 'airPlay',
+  },
+];
+
+const mIndSkillsFields = [
+  {
+    title: 'Finalizacja akcji',
+    namespace: 'finishing',
+  },
+  {
+    title: 'Gra 1v1 w ataku',
+    namespace: 'attOneOnOne',
+  },
+  {
+    title: 'Gra 1v1 w obronie',
+    namespace: 'defOneOnOne',
+  },
+];
+
+const fIndSkillsFields = [
+  {
+    title: 'Finalizacja akcji',
+    namespace: 'finishing',
+  },
+  {
+    title: 'Gra w powietrzu',
+    namespace: 'airPlay',
+  },
+  {
+    title: 'Gra 1v1 w ataku',
+    namespace: 'attOneOnOne',
+  },
+];
 
 export const getIndSkillsFields = (position: Position) => {
   switch (position) {

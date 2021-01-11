@@ -1,4 +1,4 @@
-import { Location, Address } from './common';
+import { Voivodeship } from './common';
 
 export type UserRole = 'admin' | 'playmaker-scout' | 'scout';
 
@@ -8,11 +8,11 @@ export type User = {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
-  activeRadius: number;
+  city?: string;
+  voivodeship?: Voivodeship | 'Zagranica';
+  phone?: string;
+  activeRadius?: number;
   createdAt: string;
-  location: Location;
-  address: Address;
   myClubs: string[];
   myPlayers: string[];
 };
@@ -26,18 +26,20 @@ export type RegisterFormData = {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
-  address: Address;
-  activeRadius: number;
   password: string;
   passwordConfirm: string;
 };
 
-export type EditAccountData = {
-  phone: string;
-  activeRadius: number;
-  address: Address;
-};
+export type EditAccountData = Omit<
+  User,
+  | '_id'
+  | 'email'
+  | 'role'
+  | 'createdAt'
+  | 'myClubs'
+  | 'myPlayers'
+  | 'voivodeship'
+> & { voivodeship: Voivodeship | 'Zagranica' | '' };
 
 export type UpdatePasswordData = {
   oldPassword: string;

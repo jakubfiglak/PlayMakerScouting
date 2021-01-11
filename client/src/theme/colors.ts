@@ -5,5 +5,6 @@ export const backgroundColor = '#fbfbfb';
 export const red = '#ed2228';
 export const redTransparent = 'rgba(237,34,40, 0.54)';
 export const yellow = '#f9a930';
+export const yellowTransparent = 'rgba(249, 169, 48, 0.2)';
 export const green = '#50b33d';
 export const white = '#ffffff';

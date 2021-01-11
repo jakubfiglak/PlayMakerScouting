@@ -16,20 +16,20 @@ export default (state: State, action: Action): State => {
         playersData: action.payload,
       };
 
+    case 'GET_PLAYERS_LIST_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        playersList: action.payload,
+      };
+
     case 'GET_PLAYER_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
         playerData: action.payload,
-      };
-
-    case 'GET_PLAYER_MATCHES_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        playerMatches: action.payload,
       };
 
     case 'CREATE_PLAYER_SUCCESS':
@@ -42,6 +42,16 @@ export default (state: State, action: Action): State => {
           ...state.playersData,
           docs: [action.payload.player, ...state.playersData.docs],
         },
+        playersList: [
+          ...state.playersList,
+          {
+            _id: action.payload.player._id,
+            firstName: action.payload.player.firstName,
+            lastName: action.payload.player.lastName,
+            position: action.payload.player.position,
+            club: action.payload.player.club,
+          },
+        ],
       };
 
     case 'UPDATE_PLAYER_SUCCESS':
@@ -58,6 +68,17 @@ export default (state: State, action: Action): State => {
               : player,
           ),
         },
+        playersList: state.playersList.map((player) =>
+          player._id === action.payload.player._id
+            ? {
+                ...player,
+                firstName: action.payload.player.firstName,
+                lastName: action.payload.player.lastName,
+                position: action.payload.player.position,
+                club: action.payload.player.club,
+              }
+            : player,
+        ),
       };
 
     case 'GRANT_ACCESS_SUCCESS':

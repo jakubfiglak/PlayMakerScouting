@@ -37,6 +37,7 @@ module.exports = {
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-use-before-define": "off",
     "no-underscore-dangle": ["error", { "allow": ["_id"]}],
     "import/prefer-default-export": "off",
     "react/jsx-one-expression-per-line": "off",

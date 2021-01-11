@@ -1,9 +1,7 @@
 const getIndividualSkillsProps = (individualSkills, position) => {
   const {
     ballReception,
-    holdPass,
-    gainPass,
-    keyPass,
+    passing,
     defOneOnOne,
     airPlay,
     positioning,
@@ -11,7 +9,7 @@ const getIndividualSkillsProps = (individualSkills, position) => {
     finishing,
   } = individualSkills;
 
-  const commonFields = { holdPass, gainPass, keyPass, ballReception };
+  const commonFields = { passing, ballReception };
 
   switch (position) {
     case 'CB':

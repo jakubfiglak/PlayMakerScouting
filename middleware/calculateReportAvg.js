@@ -2,7 +2,7 @@ const calculateAvg = require('../utils/calculateAvg');
 
 const getAvg = (object) => {
   const ratings = Object.entries(object)
-    .map(([key, value]) => value.rating)
+    .map(([_, value]) => value.rating)
     .filter((el) => el !== undefined);
 
   return calculateAvg(...ratings);

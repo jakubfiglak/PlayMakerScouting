@@ -1,8 +1,14 @@
-import { PaginationData } from './common';
+import { PaginationData, SortingOrder } from './common';
 import { Position } from './players';
-import { Match } from './matches';
 
 export type RatingScore = 1 | 2 | 3 | 4;
+export type MatchLocation = 'home' | 'away';
+export type Competition = 'league' | 'cup' | 'friendly';
+export type MatchData = {
+  location: MatchLocation;
+  against: string;
+  competition: Competition;
+};
 
 export type Rating = {
   rating: RatingScore;
@@ -10,10 +16,8 @@ export type Rating = {
 };
 
 export type IndividualSkills = {
-  holdPass: Rating;
-  gainPass: Rating;
-  keyPass: Rating;
   ballReception: Rating;
+  passing: Rating;
   defOneOnOne?: Rating;
   airPlay?: Rating;
   positioning?: Rating;
@@ -32,22 +36,8 @@ export type MotorSkills = {
   neglected: string;
 };
 
-type ReportData = {
-  minutesPlayed: number;
-  goals: number;
-  assists: number;
-  yellowCards: number;
-  redCards: number;
-  individualSkills: IndividualSkills;
-  teamplaySkills: TeamplaySkills;
-  motorSkills: MotorSkills;
-  finalRating: RatingScore;
-  summary: string;
-};
-
 export type Report = {
   _id: string;
-  docNumber: string;
   player: {
     _id: string;
     firstName: string;
@@ -58,27 +48,34 @@ export type Report = {
     };
     position: Position;
   };
-  match: Match;
+  match: MatchData;
   scout: {
     _id: string;
     firstName: string;
     lastName: string;
   };
-  order?: {
-    _id: string;
-    docNumber: string;
-  };
+  order?: string;
+  minutesPlayed: number;
+  goals: number;
+  assists: number;
+  yellowCards: number;
+  redCards: number;
+  individualSkills: IndividualSkills;
+  teamplaySkills: TeamplaySkills;
+  motorSkills: MotorSkills;
+  finalRating: RatingScore;
+  summary: string;
   individualAvg: number;
   teamplayAvg: number;
   motorAvg: number;
   avgRating: number;
   createdAt: string;
-} & ReportData;
+};
 
 type CommonFormData = {
   order?: string;
   player: string;
-  match: string;
+  match: MatchData;
   minutesPlayed: number;
   goals: number;
   assists: number;
@@ -102,9 +99,16 @@ export type ReportsFilterData = {
   player: string;
 };
 
+export type GetReports = (
+  page: number,
+  limit: number,
+  sort: string,
+  order: SortingOrder,
+  filters: ReportsFilterData,
+) => void;
+
 export type State = {
   reportsData: ReportsData;
-  myReportsData: ReportsData;
   reportData: Report | null;
   current: Report | null;
   loading: boolean;
@@ -113,8 +117,7 @@ export type State = {
   setLoading: () => void;
   clearErrors: () => void;
   clearMessage: () => void;
-  getReports: (filters: ReportsFilterData, page: number) => void;
-  getMyReports: (filters: ReportsFilterData, page: number) => void;
+  getReports: GetReports;
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
   addReport: (report: ReportFormData) => void;
@@ -132,7 +135,6 @@ export type Action =
   | { type: 'REPORTS_ERROR'; payload: string }
   | { type: 'GET_REPORTS_SUCCESS'; payload: ReportsData }
   | { type: 'GET_REPORT_SUCCESS'; payload: Report }
-  | { type: 'GET_MY_REPORTS_SUCCESS'; payload: ReportsData }
   | {
       type: 'CREATE_REPORT_SUCCESS';
       payload: { report: Report; message: string };

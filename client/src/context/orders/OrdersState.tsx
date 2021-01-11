@@ -2,13 +2,14 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import OrdersContext from './ordersContext';
 import ordersReducer from './ordersReducer';
+import { SortingOrder } from '../../types/common';
 import { State, OrderFormData, OrdersFilterData } from '../../types/orders';
-import { initialPaginatedData } from '../../data';
+import { initialPaginatedData } from '../../data/initialPaginatedData';
 
 export const OrdersState: React.FC = ({ children }) => {
   const initialState: State = {
     ordersData: initialPaginatedData,
-    myOrdersData: initialPaginatedData,
+    ordersList: [],
     orderData: null,
     current: null,
     loading: false,
@@ -18,7 +19,7 @@ export const OrdersState: React.FC = ({ children }) => {
     clearErrors: () => null,
     clearMessage: () => null,
     getOrders: () => null,
-    getMyOrders: () => null,
+    getOrdersList: () => null,
     acceptOrder: () => null,
     getOrder: () => null,
     deleteOrder: () => null,
@@ -36,12 +37,20 @@ export const OrdersState: React.FC = ({ children }) => {
   };
 
   // Get orders
-  const getOrders = async (filters: OrdersFilterData, page = 1) => {
+  const getOrders = async (
+    page = 1,
+    limit = 20,
+    sort = '-createdAt',
+    order: SortingOrder,
+    filters: OrdersFilterData,
+    scoutId: string | null,
+  ) => {
     setLoading();
+    const orderSign = order === 'desc' ? '-' : '';
 
     const { player, status, createdAfter, createdBefore } = filters;
 
-    let ordersURI = `/api/v1/orders?page=${page}&sort=-createdAt&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
+    let ordersURI = `/api/v1/orders?page=${page}&limit=${limit}&sort=${orderSign}${sort}&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
 
     if (player) {
       ordersURI = ordersURI.concat(`&player=${player}`);
@@ -49,6 +58,10 @@ export const OrdersState: React.FC = ({ children }) => {
 
     if (status) {
       ordersURI = ordersURI.concat(`&status=${status}`);
+    }
+
+    if (scoutId) {
+      ordersURI = ordersURI.concat(`&scout=${scoutId}`);
     }
 
     try {
@@ -65,20 +78,20 @@ export const OrdersState: React.FC = ({ children }) => {
     }
   };
 
-  // Get my orders
-  const getMyOrders = async () => {
+  // Get orders list
+  const getOrdersList = async () => {
     setLoading();
 
     try {
-      const res = await axiosJson.get('/api/v1/orders/my');
+      const res = await axiosJson.get('/api/v1/orders/mylist');
       dispatch({
-        type: 'GET_MY_ORDERS_SUCCESS',
+        type: 'GET_ORDERS_LIST_SUCCESS',
         payload: res.data.data,
       });
     } catch (err) {
       dispatch({
         type: 'ORDERS_ERROR',
-        payload: 'err.response.data.error',
+        payload: err.response.data.error,
       });
     }
   };
@@ -185,7 +198,7 @@ export const OrdersState: React.FC = ({ children }) => {
 
   const {
     ordersData,
-    myOrdersData,
+    ordersList,
     orderData,
     current,
     loading,
@@ -197,7 +210,7 @@ export const OrdersState: React.FC = ({ children }) => {
     <OrdersContext.Provider
       value={{
         ordersData,
-        myOrdersData,
+        ordersList,
         orderData,
         current,
         loading,
@@ -205,7 +218,7 @@ export const OrdersState: React.FC = ({ children }) => {
         message,
         setLoading,
         getOrders,
-        getMyOrders,
+        getOrdersList,
         acceptOrder,
         getOrder,
         deleteOrder,

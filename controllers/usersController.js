@@ -106,6 +106,7 @@ exports.assignPlaymakerRole = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    data: user,
     message: `Successfully assigned the role of 'playmaker-scout' to the user with the id of ${userId}`,
   });
 });

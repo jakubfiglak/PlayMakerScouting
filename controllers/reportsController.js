@@ -1,7 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Report = require('../models/Report');
 const Player = require('../models/Player');
-const Match = require('../models/Match');
 const Order = require('../models/Order');
 const ErrorResponse = require('../utils/errorResponse');
 const prepareQuery = require('../utils/prepareQuery');
@@ -17,17 +16,6 @@ const populate = [
     path: 'scout',
     select: 'firstName lastName',
   },
-  {
-    path: 'order',
-    select: 'docNumber',
-  },
-  {
-    path: 'match',
-    populate: [
-      { path: 'homeTeam', select: 'name' },
-      { path: 'awayTeam', select: 'name' },
-    ],
-  },
 ];
 
 // @desc Create new report
@@ -36,10 +24,8 @@ const populate = [
 exports.createReport = asyncHandler(async (req, res, next) => {
   req.body.scout = req.user._id;
 
-  const matchId = req.body.match;
   const orderId = req.body.order;
 
-  const match = await Match.findById(matchId);
   let order;
 
   if (orderId) {
@@ -60,12 +46,6 @@ exports.createReport = asyncHandler(async (req, res, next) => {
   if (!player) {
     return next(
       new ErrorResponse(`No player found with the id of ${playerId}`, 404)
-    );
-  }
-
-  if (!match) {
-    return next(
-      new ErrorResponse(`No match found with the id of ${matchId}`, 404)
     );
   }
 
@@ -110,9 +90,10 @@ exports.createReport = asyncHandler(async (req, res, next) => {
 // @desc Get all reports
 // @route GET /api/v1/reports
 // @route GET /api/v1/players/:playerId/reports
-// @access Private (admin only)
+// @access Private
 exports.getReports = asyncHandler(async (req, res) => {
   const { playerId } = req.params;
+
   const reqQuery = prepareQuery(req.query);
 
   const options = {
@@ -122,21 +103,19 @@ exports.getReports = asyncHandler(async (req, res) => {
     populate,
   };
 
+  const query = { ...reqQuery };
+
+  // If club ID is provided in query params, return only reports associated with that player
   if (playerId) {
-    const query = {
-      player: playerId,
-      ...reqQuery,
-    };
-
-    const reports = await Report.paginate(query, options);
-
-    return res.status(200).json({
-      success: true,
-      data: reports,
-    });
+    query.player = playerId;
   }
 
-  const reports = await Report.paginate(reqQuery, options);
+  // If user is not and admin, return only reports created by this user
+  if (req.user.role !== 'admin') {
+    query.scout = req.user._id;
+  }
+
+  const reports = await Report.paginate(query, options);
 
   return res.status(200).json({
     success: true,

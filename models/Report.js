@@ -22,11 +22,6 @@ const ReportSchema = new Schema({
     ref: 'Player',
     required: 'Please add a player',
   },
-  match: {
-    type: Schema.ObjectId,
-    ref: 'Match',
-    required: 'Please add a match',
-  },
   scout: {
     type: Schema.ObjectId,
     ref: 'User',
@@ -35,6 +30,19 @@ const ReportSchema = new Schema({
   order: {
     type: Schema.ObjectId,
     ref: 'Order',
+  },
+  match: {
+    location: {
+      type: String,
+      enum: ['home', 'away'],
+    },
+    against: {
+      type: String,
+    },
+    competition: {
+      type: String,
+      enum: ['league', 'cup', 'friendly'],
+    },
   },
   minutesPlayed: {
     type: Number,
@@ -59,9 +67,7 @@ const ReportSchema = new Schema({
   },
   individualSkills: {
     ballReception: ratingType,
-    holdPass: ratingType,
-    gainPass: ratingType,
-    keyPass: ratingType,
+    passing: ratingType,
     defOneOnOne: ratingType,
     airPlay: ratingType,
     positioning: ratingType,
@@ -98,19 +104,9 @@ const ReportSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  docNumber: {
-    type: String,
-  },
 });
 
 ReportSchema.plugin(mongoosePaginate);
-
-ReportSchema.pre('save', async function (next) {
-  const count = await model('Report', ReportSchema).countDocuments();
-  const date = new Date();
-  this.docNumber = `REP/${date.toISOString().slice(0, 10)}/${count + 1}`;
-  next();
-});
 
 ReportSchema.pre('save', calculateReportAvg);
 

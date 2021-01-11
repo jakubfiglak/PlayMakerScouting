@@ -16,12 +16,12 @@ export default (state: State, action: Action): State => {
         clubsData: action.payload,
       };
 
-    case 'GET_MY_CLUBS_SUCCESS':
+    case 'GET_CLUBS_LIST_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
-        myClubsData: action.payload,
+        clubsList: action.payload,
       };
 
     case 'CREATE_CLUB_SUCCESS':
@@ -34,10 +34,10 @@ export default (state: State, action: Action): State => {
           ...state.clubsData,
           docs: [action.payload.club, ...state.clubsData.docs],
         },
-        myClubsData: {
-          ...state.myClubsData,
-          docs: [action.payload.club, ...state.myClubsData.docs],
-        },
+        clubsList: [
+          ...state.clubsList,
+          { _id: action.payload.club._id, name: action.payload.club.name },
+        ],
       };
 
     case 'UPDATE_CLUB_SUCCESS':
@@ -52,38 +52,19 @@ export default (state: State, action: Action): State => {
             club._id === action.payload.club._id ? action.payload.club : club,
           ),
         },
-        myClubsData: {
-          ...state.myClubsData,
-          docs: state.myClubsData.docs.map((club) =>
-            club._id === action.payload.club._id ? action.payload.club : club,
-          ),
-        },
+        clubsList: state.clubsList.map((club) =>
+          club._id === action.payload.club._id
+            ? { ...club, name: action.payload.club.name }
+            : club,
+        ),
       };
 
-    case 'ADD_CLUB_TO_FAVORITES_SUCCESS':
+    case 'GRANT_ACCESS_SUCCESS':
       return {
         ...state,
         loading: false,
         error: null,
         message: action.payload.message,
-        myClubsData: {
-          ...state.myClubsData,
-          docs: [action.payload.club, ...state.clubsData.docs],
-        },
-      };
-
-    case 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        message: action.payload.message,
-        myClubsData: {
-          ...state.myClubsData,
-          docs: state.myClubsData.docs.filter(
-            (club) => club._id !== action.payload.id,
-          ),
-        },
       };
 
     case 'CLUBS_ERROR':

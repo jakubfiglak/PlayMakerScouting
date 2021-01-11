@@ -24,21 +24,17 @@ const PlayerSchema = new Schema(
       required: 'Please choose a position',
       enum: ['GK', 'FB', 'CB', 'CM', 'WM', 'F'],
     },
-    dateOfBirth: {
-      type: Date,
-      required: 'Please add a date of birth',
+    yearOfBirth: {
+      type: Number,
     },
     height: {
       type: Number,
-      required: 'Please enter players height [cm]',
     },
     weight: {
       type: Number,
-      required: 'Please enter players weight [kg]',
     },
     footed: {
       type: String,
-      required: 'Please choose players preferred leg',
       enum: ['L', 'R', 'both'],
     },
     lnpID: {
