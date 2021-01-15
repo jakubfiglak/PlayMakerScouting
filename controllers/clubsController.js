@@ -223,6 +223,9 @@ exports.grantAccess = asyncHandler(async (req, res, next) => {
     );
   }
 
+  user.myClubs.push(clubId);
+  await user.save();
+
   res.status(200).json({
     success: true,
     message: `Successfully granted the user with the id of ${userId} with the access to the club with the id of ${clubId}`,
