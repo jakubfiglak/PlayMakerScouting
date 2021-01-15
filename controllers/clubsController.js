@@ -137,7 +137,7 @@ exports.getClub = asyncHandler(async (req, res, next) => {
 
 // @desc Update club details
 // @route PUT /api/v1/clubs/:id
-// @access Private (admin only)
+// @access Private
 exports.updateClub = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
@@ -151,7 +151,7 @@ exports.updateClub = asyncHandler(async (req, res, next) => {
     );
   }
 
-  if (!user.myClubs.includes(id)) {
+  if (!user.myClubs.includes(id) && user.role !== 'admin') {
     return next(
       new ErrorResponse(
         `You don't have access to the club with the if of ${id}`,

@@ -179,7 +179,7 @@ exports.updatePlayer = asyncHandler(async (req, res, next) => {
     );
   }
 
-  if (!user.myPlayers.includes(id)) {
+  if (!user.myPlayers.includes(id) && user.role !== 'admin') {
     return next(
       new ErrorResponse(
         `You don't have access to the player with the if of ${id}`,
