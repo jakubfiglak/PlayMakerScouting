@@ -125,6 +125,13 @@ export const ReportsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters]);
 
+  useEffect(() => {
+    if (current) {
+      setActiveTab(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current]);
+
   useAlert(error, 'error', clearErrors);
   useAlert(playersError, 'error', clearPlayersErrors);
   useAlert(message, 'success', clearMessage);
@@ -154,6 +161,7 @@ export const ReportsPage = () => {
   const handleEditFormReset = () => {
     setActiveTab(0);
     setAlert('Zmiany zostały anulowane', 'warning');
+    clearCurrent();
   };
 
   return (

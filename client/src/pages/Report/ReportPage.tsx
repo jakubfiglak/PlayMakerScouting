@@ -17,6 +17,7 @@ import {
 import {
   ExpandMore as ExpandMoreIcon,
   Print as PrintIcon,
+  Edit as EditIcon,
 } from '@material-ui/icons';
 // Custom components
 import { ReportMatchStats } from './ReportMatchStats';
@@ -40,7 +41,7 @@ export const ReportPage = () => {
 
   const classes = useStyles();
 
-  const { loading, getReport, reportData } = useReportsState();
+  const { loading, getReport, reportData, setCurrent } = useReportsState();
 
   const { id } = params;
 
@@ -70,14 +71,26 @@ export const ReportPage = () => {
               Wróć do listy raportów
             </Button>
             <PageHeading title={`Raport nr ${reportData._id}`} />
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<PrintIcon />}
-              onClick={handlePrint}
-            >
-              Drukuj
-            </Button>
+            <div className={classes.buttonsContainer}>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<PrintIcon />}
+                onClick={handlePrint}
+              >
+                Drukuj
+              </Button>
+              <Button
+                to="/reports"
+                component={RouterLink}
+                variant="contained"
+                color="primary"
+                onClick={() => setCurrent(reportData)}
+                startIcon={<EditIcon />}
+              >
+                Edytuj
+              </Button>
+            </div>
           </div>
           <Card className={classes.card}>
             <CardContent>
@@ -178,6 +191,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  buttonsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: `${theme.spacing(1)}px`,
   },
   link: {
     marginBottom: theme.spacing(1),

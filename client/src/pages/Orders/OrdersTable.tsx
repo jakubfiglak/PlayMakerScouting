@@ -88,7 +88,7 @@ export const OrdersTable = ({
                 </Tooltip>
                 <Tooltip title="Przyjmij zlecenie">
                   <IconButton
-                    aria-label="edit match"
+                    aria-label="accept order"
                     className={classes.accept}
                     disabled={status !== 'open'}
                     onClick={() => onAcceptOrderClick(_id)}
