@@ -34,9 +34,9 @@ export type EditAccountData = Pick<
   User,
   'firstName' | 'lastName' | 'activeRadius'
 > & {
-  city: string | null;
-  voivodeship: Voivodeship | 'Zagranica' | null;
-  phone: string | null;
+  city: string | '';
+  voivodeship: Voivodeship | 'Zagranica' | '';
+  phone: string | '';
 };
 
 export type UpdatePasswordData = {

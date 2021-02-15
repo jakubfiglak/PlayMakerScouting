@@ -83,7 +83,11 @@ exports.account = asyncHandler(async (req, res) => {
 exports.updateDetails = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
-  const user = await User.findByIdAndUpdate(userId, req.body, {
+  const updates = Object.fromEntries(
+    Object.entries(req.body).filter(([_, value]) => value !== '')
+  );
+
+  const user = await User.findByIdAndUpdate(userId, updates, {
     new: true,
     runValidators: true,
   });
