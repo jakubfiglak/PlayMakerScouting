@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
 import {
@@ -17,6 +17,7 @@ import {
 import {
   ExpandMore as ExpandMoreIcon,
   Print as PrintIcon,
+  Edit as EditIcon,
 } from '@material-ui/icons';
 // Custom components
 import { ReportMatchStats } from './ReportMatchStats';
@@ -40,7 +41,7 @@ export const ReportPage = () => {
 
   const classes = useStyles();
 
-  const { loading, getReport, reportData } = useReportsState();
+  const { loading, getReport, reportData, setCurrent } = useReportsState();
 
   const { id } = params;
 
@@ -60,15 +61,36 @@ export const ReportPage = () => {
       {reportData && (
         <>
           <div className={classes.headerContainer}>
-            <PageHeading title={`Raport nr ${reportData._id}`} />
             <Button
+              to="/reports"
+              component={RouterLink}
               variant="contained"
-              color="secondary"
-              startIcon={<PrintIcon />}
-              onClick={handlePrint}
+              color="primary"
+              className={classes.link}
             >
-              Drukuj
+              Wróć do listy raportów
             </Button>
+            <PageHeading title={`Raport nr ${reportData._id}`} />
+            <div className={classes.buttonsContainer}>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<PrintIcon />}
+                onClick={handlePrint}
+              >
+                Drukuj
+              </Button>
+              <Button
+                to="/reports"
+                component={RouterLink}
+                variant="contained"
+                color="primary"
+                onClick={() => setCurrent(reportData)}
+                startIcon={<EditIcon />}
+              >
+                Edytuj
+              </Button>
+            </div>
           </div>
           <Card className={classes.card}>
             <CardContent>
@@ -169,6 +191,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  buttonsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: `${theme.spacing(1)}px`,
+  },
+  link: {
+    marginBottom: theme.spacing(1),
   },
   card: {
     margin: theme.spacing(2, 0),

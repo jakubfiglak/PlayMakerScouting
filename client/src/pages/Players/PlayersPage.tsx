@@ -92,8 +92,10 @@ export const PlayersPage = () => {
     if (current) {
       editPlayer(current._id, data);
       clearCurrent();
+      setActiveTab(0);
     } else {
       addPlayer(data);
+      setActiveTab(0);
     }
   };
 

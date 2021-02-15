@@ -41,6 +41,7 @@ const UserSchema = new Schema({
   },
   activeRadius: {
     type: Number,
+    default: 0,
   },
   password: {
     type: String,

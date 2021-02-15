@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+// MUI components
+import { Button, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { OrderDetails } from './OrderDetails';
 import { Loader } from '../../components/Loader';
@@ -14,6 +16,7 @@ type ParamTypes = {
 };
 
 export const OrderPage = () => {
+  const classes = useStyles();
   const params = useParams<ParamTypes>();
   const user = useAuthenticatedUser();
   const {
@@ -41,7 +44,18 @@ export const OrderPage = () => {
   return (
     <>
       {loading && <Loader />}
-      <PageHeading title={`Zlecenie obserwacji nr ${orderData?._id}`} />
+      <div className={classes.container}>
+        <Button
+          to="/orders"
+          component={RouterLink}
+          variant="contained"
+          color="primary"
+          className={classes.link}
+        >
+          Wróć do listy zleceń
+        </Button>
+        <PageHeading title={`Zlecenie obserwacji nr ${orderData?._id}`} />
+      </div>
       {orderData && (
         <OrderDetails
           order={orderData}
@@ -53,3 +67,15 @@ export const OrderPage = () => {
     </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  link: {
+    marginBottom: theme.spacing(1),
+  },
+}));

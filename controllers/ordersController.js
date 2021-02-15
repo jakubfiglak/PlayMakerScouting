@@ -313,6 +313,12 @@ exports.deleteOrder = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
   }
 
+  if (order.status !== 'open') {
+    return next(
+      new ErrorResponse("You can delete only orders with the status of 'open'")
+    );
+  }
+
   await order.remove();
 
   res.status(200).json({

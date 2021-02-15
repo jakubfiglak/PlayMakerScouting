@@ -30,16 +30,14 @@ export type RegisterFormData = {
   passwordConfirm: string;
 };
 
-export type EditAccountData = Omit<
+export type EditAccountData = Pick<
   User,
-  | '_id'
-  | 'email'
-  | 'role'
-  | 'createdAt'
-  | 'myClubs'
-  | 'myPlayers'
-  | 'voivodeship'
-> & { voivodeship: Voivodeship | 'Zagranica' | '' };
+  'firstName' | 'lastName' | 'activeRadius'
+> & {
+  city: string | '';
+  voivodeship: Voivodeship | 'Zagranica' | '';
+  phone: string | '';
+};
 
 export type UpdatePasswordData = {
   oldPassword: string;
