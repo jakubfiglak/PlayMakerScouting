@@ -27,9 +27,10 @@ import { Report } from '../../../types/reports';
 
 type Props = {
   report: Report;
+  onReset: () => void;
 };
 
-export const EditReportForm = ({ report }: Props) => {
+export const EditReportForm = ({ report, onReset }: Props) => {
   const classes = useStyles();
   const { player, match, order, scout, createdAt } = report;
 
@@ -115,6 +116,7 @@ export const EditReportForm = ({ report }: Props) => {
             isEditState
             onCancelClick={() => {
               handleReset();
+              onReset();
             }}
           />
         </div>

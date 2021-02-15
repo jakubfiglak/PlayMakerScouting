@@ -33,6 +33,7 @@ import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 export const ReportsPage = () => {
   const classes = useStyles();
@@ -71,6 +72,8 @@ export const ReportsPage = () => {
   } = useOrdersState();
 
   const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
+
+  const { setAlert } = useAlertsState();
 
   const user = useAuthenticatedUser();
 
@@ -143,6 +146,16 @@ export const ReportsPage = () => {
     setTimeout(() => handlePrint(), 10);
   };
 
+  const onAddReport = (data: ReportFormData) => {
+    addReport(data);
+    setActiveTab(0);
+  };
+
+  const handleEditFormReset = () => {
+    setActiveTab(0);
+    setAlert('Zmiany zostały anulowane', 'warning');
+  };
+
   return (
     <>
       {(loading || playersLoading || clubsLoading || ordersLoading) && (
@@ -193,14 +206,14 @@ export const ReportsPage = () => {
             if (current) {
               editReport(current._id, data);
             } else {
-              addReport(data);
+              onAddReport(data);
               resetForm();
             }
           }}
         >
           {() =>
             current ? (
-              <EditReportForm report={current} />
+              <EditReportForm report={current} onReset={handleEditFormReset} />
             ) : (
               <NewReportForm
                 isOrderOptionDisabled={user.role === 'scout'}
