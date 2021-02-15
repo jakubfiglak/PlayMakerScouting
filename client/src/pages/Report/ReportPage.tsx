@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
 import {
@@ -60,6 +60,15 @@ export const ReportPage = () => {
       {reportData && (
         <>
           <div className={classes.headerContainer}>
+            <Button
+              to="/reports"
+              component={RouterLink}
+              variant="contained"
+              color="primary"
+              className={classes.link}
+            >
+              Wróć do listy raportów
+            </Button>
             <PageHeading title={`Raport nr ${reportData._id}`} />
             <Button
               variant="contained"
@@ -169,6 +178,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  link: {
+    marginBottom: theme.spacing(1),
   },
   card: {
     margin: theme.spacing(2, 0),
