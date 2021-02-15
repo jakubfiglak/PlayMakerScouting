@@ -40,6 +40,7 @@ export const OrdersPage = () => {
     acceptOrder,
     ordersData,
     closeOrder,
+    deleteOrder,
     error,
     message,
     clearErrors,
@@ -148,6 +149,7 @@ export const OrdersPage = () => {
           orders={ordersData.docs}
           onAcceptOrderClick={acceptOrder}
           onCloseOrderClick={closeOrder}
+          onDeleteOrderClick={deleteOrder}
           areAdminOptionsEnabled={isAdmin}
         />
       </TabPanel>

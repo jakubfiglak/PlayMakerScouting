@@ -14,6 +14,7 @@ import {
   AssignmentLate as NoteIcon,
   CancelOutlined as CloseIcon,
   AssignmentTurnedIn as AcceptIcon,
+  Delete as DeleteIcon,
 } from '@material-ui/icons';
 // Custom components
 import { OrderStatusChip } from './OrderStatusChip';
@@ -30,6 +31,7 @@ type Props = {
   orders: Order[];
   onAcceptOrderClick: (id: string) => void;
   onCloseOrderClick: (id: string) => void;
+  onDeleteOrderClick: (id: string) => void;
   areAdminOptionsEnabled: boolean;
 } & CommonTableProps;
 
@@ -53,6 +55,7 @@ export const OrdersTable = ({
   orders,
   onAcceptOrderClick,
   onCloseOrderClick,
+  onDeleteOrderClick,
   areAdminOptionsEnabled,
 }: Props) => {
   const classes = useStyles();
@@ -94,16 +97,28 @@ export const OrdersTable = ({
                   </IconButton>
                 </Tooltip>
                 {areAdminOptionsEnabled && (
-                  <Tooltip title="Zamknij zlecenie">
-                    <IconButton
-                      aria-label="close order"
-                      className={classes.delete}
-                      disabled={status === 'closed'}
-                      onClick={() => onCloseOrderClick(_id)}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <>
+                    <Tooltip title="Zamknij zlecenie">
+                      <IconButton
+                        aria-label="close order"
+                        className={classes.delete}
+                        disabled={status === 'closed'}
+                        onClick={() => onCloseOrderClick(_id)}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Usuń zlecenie">
+                      <IconButton
+                        aria-label="delete order"
+                        className={classes.delete}
+                        disabled={status !== 'open'}
+                        onClick={() => onDeleteOrderClick(_id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
                 )}
               </div>
             </StyledTableCell>

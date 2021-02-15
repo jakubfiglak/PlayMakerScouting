@@ -21,9 +21,9 @@ export const EditAccountForm = ({ user, onSubmit }: Props) => {
   const initialValues: EditAccountData = {
     firstName: user.firstName,
     lastName: user.lastName,
-    city: user.city || '',
-    voivodeship: user.voivodeship || '',
-    phone: user.phone || '',
+    city: user.city || null,
+    voivodeship: user.voivodeship || null,
+    phone: user.phone || null,
     activeRadius: user.activeRadius || 0,
   };
   return (
@@ -131,9 +131,9 @@ const validationSchema: yup.ObjectSchema<EditAccountData> = yup
   .object({
     firstName: yup.string().required('Podaj imię'),
     lastName: yup.string().required('Podaj nazwisko'),
-    city: yup.string(),
-    voivodeship: yup.mixed<Voivodeship | 'Zagranica'>(),
-    phone: yup.string(),
+    city: yup.string().defined().nullable(),
+    voivodeship: yup.mixed<Voivodeship | 'Zagranica'>().nullable(),
+    phone: yup.string().defined().nullable(),
     activeRadius: yup
       .number()
       .min(0, 'Promień działania musi być większy lub równy 0 '),
