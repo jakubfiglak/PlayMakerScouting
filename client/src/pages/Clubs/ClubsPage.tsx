@@ -61,8 +61,10 @@ export const ClubsPage = () => {
     if (current) {
       editClub(current._id, data);
       clearCurrent();
+      setActiveTab(0);
     } else {
       addClub(data);
+      setActiveTab(0);
     }
   };
 

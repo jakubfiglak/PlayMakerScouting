@@ -131,7 +131,11 @@ export const OrdersTable = ({
             </StyledTableCell>
             <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
             <StyledTableCell padding="checkbox" align="center">
-              {notes && <NoteIcon />}
+              {notes && (
+                <Tooltip title={notes}>
+                  <NoteIcon />
+                </Tooltip>
+              )}
             </StyledTableCell>
           </StyledTableRow>
         );

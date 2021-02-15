@@ -18,7 +18,7 @@ import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 // Types
-import { OrdersFilterData } from '../../types/orders';
+import { OrderFormData, OrdersFilterData } from '../../types/orders';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
@@ -62,7 +62,7 @@ export const OrdersPage = () => {
 
   const user = useAuthenticatedUser();
 
-  const [activeTab, handleTabChange] = useTabs();
+  const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
   const [
     page,
@@ -103,6 +103,11 @@ export const OrdersPage = () => {
   }, []);
 
   const isAdmin = user.role === 'admin';
+
+  const handleAddOrder = (data: OrderFormData) => {
+    addOrder(data);
+    setActiveTab(0);
+  };
 
   return (
     <>
@@ -158,7 +163,7 @@ export const OrdersPage = () => {
           <PageHeading title="Tworzenie nowego zlecenia" />
           <OrdersForm
             playersData={playersList}
-            onSubmit={addOrder}
+            onSubmit={handleAddOrder}
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
           />
           <AddPlayerModal
