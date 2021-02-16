@@ -10,8 +10,16 @@ export default (state: State, action: Action): State => {
         user: action.payload,
       };
 
-    case 'LOGIN_SUCCESS':
     case 'REGISTER_SUCCESS':
+    case 'CONFIRMATION_SUCCESS':
+      return {
+        ...state,
+        message: action.payload.message,
+        loading: false,
+        error: null,
+      };
+
+    case 'LOGIN_SUCCESS':
     case 'UPDATE_PASSWORD_SUCCESS':
       localStorage.setItem('token', action.payload.token);
       return {
@@ -77,26 +85,6 @@ export default (state: State, action: Action): State => {
         ...state,
         error: action.payload,
         loading: false,
-      };
-
-    case 'ADD_CLUB_TO_FAVORITES_SUCCESS':
-      return {
-        ...state,
-        user: {
-          ...state.user!,
-          myClubs: [action.payload, ...state.user!.myClubs],
-        },
-      };
-
-    case 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS':
-      return {
-        ...state,
-        user: {
-          ...state.user!,
-          myClubs: state.user!.myClubs.filter(
-            (club) => club !== action.payload,
-          ),
-        },
       };
 
     default:

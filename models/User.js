@@ -12,11 +12,13 @@ const UserSchema = new Schema({
     type: String,
     required: 'please add a first name',
     trim: true,
+    maxlength: 30,
   },
   lastName: {
     type: String,
     required: 'please add a last name',
     trim: true,
+    maxlength: 30,
   },
   email: {
     type: String,
@@ -34,6 +36,7 @@ const UserSchema = new Schema({
   city: {
     type: String,
     trim: true,
+    maxlength: 30,
   },
   voivodeship: {
     type: String,
@@ -52,6 +55,7 @@ const UserSchema = new Schema({
       'password must contain at least 1 lowercase letter, 1 uppercase letter and 1 digit',
     ],
     select: false,
+    maxlength: 30,
   },
   role: {
     type: String,
@@ -70,6 +74,15 @@ const UserSchema = new Schema({
       ref: 'Player',
     },
   ],
+  status: {
+    type: String,
+    enum: ['pending', 'active', 'blocked'],
+    default: 'pending',
+  },
+  confirmationCode: {
+    type: String,
+    unique: true,
+  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   createdAt: {

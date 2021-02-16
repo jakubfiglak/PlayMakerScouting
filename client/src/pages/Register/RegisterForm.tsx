@@ -1,38 +1,20 @@
-import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
 // MUI components
-import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
-// Hooks
-import { useAlert } from '../../hooks/useAlert';
-import { useAuthState } from '../../context/auth/useAuthState';
+import { Grid, TextField, Button, makeStyles, Theme } from '@material-ui/core';
 // Types
 import { RegisterFormData } from '../../types/auth';
-// Styles
-import { useStyles } from './styles';
 // Utils & data
 import { passwordValidationSchema } from '../../data/forms/validationSchemas';
-import { getLabel } from '../../utils/getLabel';
 
-export const RegisterForm = () => {
+type Props = {
+  onSubmit: (data: RegisterFormData) => void;
+};
+
+export const RegisterForm = ({ onSubmit }: Props) => {
   const classes = useStyles();
-  const history = useHistory();
-  const {
-    register,
-    loading,
-    isAuthenticated,
-    error,
-    clearErrors,
-  } = useAuthState();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      history.push('/');
-    }
-  }, [isAuthenticated, history]);
-
-  useAlert(getLabel(error), 'error', clearErrors);
 
   return (
     <Formik
@@ -44,7 +26,7 @@ export const RegisterForm = () => {
         passwordConfirm: '',
       }}
       onSubmit={(data) => {
-        register(data);
+        onSubmit(data);
       }}
       validationSchema={validationSchema}
     >
@@ -118,16 +100,12 @@ export const RegisterForm = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}
           >
             Zarejestruj się
-            {loading && (
-              <CircularProgress size={24} className={classes.buttonProgress} />
-            )}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/login" className={classes.link}>
+              <Link to="/" className={classes.link}>
                 Jesteś już zarejestrowany? Zaloguj się
               </Link>
             </Grid>
@@ -137,6 +115,25 @@ export const RegisterForm = () => {
     </Formik>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    position: 'relative',
+    margin: theme.spacing(3, 0, 2),
+  },
+  link: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+}));
 
 const validationSchema: yup.ObjectSchema<RegisterFormData> = yup
   .object({

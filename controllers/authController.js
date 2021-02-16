@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const sendEmail = require('../utils/sendEmail');
@@ -20,17 +21,55 @@ exports.register = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Passwords do not match', 400));
   }
 
-  user = await User.create(req.body);
+  const confirmationCode = jwt.sign({ email }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
 
-  const token = user.getJwt();
+  user = await User.create({ ...req.body, confirmationCode });
 
+  console.log(process.env.APP_HOST);
+
+  const link = `${process.env.APP_HOST}/confirm/${confirmationCode}`;
+
+  console.log(link);
+
+  await sendEmail({
+    email,
+    subject: 'Aktywuj swoje konto w aplikacji PlaymakerPro Scouting',
+    html: `<h2>Witaj ${user.firstName}</h2>
+          <p>Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w <a href="${link}">link</a></p>
+    `,
+  });
   res.status(201).json({
     success: true,
     message: 'Successfully created new user!',
     data: user,
-    token,
+    // token,
   });
 });
+
+// @desc Verify user
+// @route GET /api/v1/auth/confirm/:confirmationCode
+// @access Public
+exports.verifyUser = async (req, res, next) => {
+  const { confirmationCode } = req.params;
+
+  const user = await User.findOne({ confirmationCode });
+
+  if (!user) {
+    return next(new ErrorResponse('User not found', 404));
+  }
+
+  user.status = 'active';
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    data: user,
+    message: 'Account activated successfully, you can now log in to the app!',
+  });
+};
 
 // @desc Login user
 // @route POST /api/v1/auth/login
@@ -43,11 +82,19 @@ exports.login = asyncHandler(async (req, res, next) => {
       new ErrorResponse('Please provide an email and a password', 400)
     );
   }
-
   const user = await User.findOne({ email }).select('+password');
 
   if (!user) {
     return next(new ErrorResponse('Invalid credentials', 401));
+  }
+
+  if (user.status !== 'active') {
+    return next(
+      new ErrorResponse(
+        'Your account is not active, please verify your email',
+        401
+      )
+    );
   }
 
   const match = await user.comparePasswords(password);

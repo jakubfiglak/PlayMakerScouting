@@ -23,13 +23,12 @@ export const AuthState: React.FC = ({ children }) => {
     clearErrors: () => null,
     clearMessage: () => null,
     loadUser: () => null,
-    login: () => null,
     register: () => null,
+    confirmAccount: () => null,
+    login: () => null,
     logout: () => null,
     editDetails: () => null,
     updatePassword: () => null,
-    addClubToFavorites: () => null,
-    removeClubFromFavorites: () => null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -74,8 +73,24 @@ export const AuthState: React.FC = ({ children }) => {
         type: 'REGISTER_SUCCESS',
         payload: { token: res.data.token, message: res.data.message },
       });
+    } catch (err) {
+      dispatch({
+        type: 'AUTH_ERROR',
+        payload: err.response.data.error,
+      });
+    }
+  };
 
-      // loadUser();
+  // Confirm account
+  const confirmAccount = async (confirmationCode: string) => {
+    try {
+      const res = await axiosJson.get(
+        `/api/v1/auth/confirm/${confirmationCode}`,
+      );
+      dispatch({
+        type: 'CONFIRMATION_SUCCESS',
+        payload: { message: res.data.message },
+      });
     } catch (err) {
       dispatch({
         type: 'AUTH_ERROR',
@@ -95,8 +110,6 @@ export const AuthState: React.FC = ({ children }) => {
         type: 'LOGIN_SUCCESS',
         payload: { token: res.data.token, message: res.data.message },
       });
-
-      // loadUser();
     } catch (err) {
       dispatch({
         type: 'AUTH_ERROR',
@@ -152,22 +165,6 @@ export const AuthState: React.FC = ({ children }) => {
     }
   };
 
-  // Add club to favorites
-  const addClubToFavorites = async (id: string) => {
-    dispatch({
-      type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
-      payload: id,
-    });
-  };
-
-  // Remove club from favorites
-  const removeClubFromFavorites = async (id: string) => {
-    dispatch({
-      type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
-      payload: id,
-    });
-  };
-
   // Clear errors
   const clearErrors = () =>
     dispatch({
@@ -202,10 +199,9 @@ export const AuthState: React.FC = ({ children }) => {
         login,
         logout,
         register,
+        confirmAccount,
         editDetails,
         updatePassword,
-        addClubToFavorites,
-        removeClubFromFavorites,
       }}
     >
       {children}
