@@ -8,14 +8,19 @@ import {
   RegisterFormData,
   EditAccountData,
   UpdatePasswordData,
+  User,
 } from '../../types/auth';
-import { Loader } from '../../components/Loader';
 
 export const AuthState: React.FC = ({ children }) => {
+  const localStorageUser = localStorage.getItem('user');
+  const localStorageIsAuthenticated = localStorage.getItem('isAuthenticated');
+
   const initialState: State = {
-    user: null,
+    user: localStorageUser ? (JSON.parse(localStorageUser) as User) : null,
     token: localStorage.getItem('token'),
-    isAuthenticated: null,
+    isAuthenticated: localStorageIsAuthenticated
+      ? (JSON.parse(localStorageIsAuthenticated) as boolean)
+      : null,
     loading: false,
     error: null,
     message: null,
@@ -30,7 +35,6 @@ export const AuthState: React.FC = ({ children }) => {
     editDetails: () => null,
     updatePassword: () => null,
   };
-
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Set loading
@@ -44,8 +48,9 @@ export const AuthState: React.FC = ({ children }) => {
   const loadUser = async () => {
     setLoading();
 
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
+    // It breaks on refresh for now - data is being fetched before the token in set on axios instance. Perhaps switching to cookies will fix this
+    if (token) {
+      setAuthToken(token);
     }
 
     try {
@@ -71,7 +76,7 @@ export const AuthState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'REGISTER_SUCCESS',
-        payload: { token: res.data.token, message: res.data.message },
+        payload: { message: res.data.message },
       });
     } catch (err) {
       dispatch({
@@ -105,10 +110,15 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/auth/login', formData);
+      setAuthToken(res.data.token);
 
       dispatch({
         type: 'LOGIN_SUCCESS',
-        payload: { token: res.data.token, message: res.data.message },
+        payload: {
+          token: res.data.token,
+          message: res.data.message,
+          user: res.data.data,
+        },
       });
     } catch (err) {
       dispatch({
@@ -178,10 +188,6 @@ export const AuthState: React.FC = ({ children }) => {
     });
 
   const { user, token, isAuthenticated, loading, error, message } = state;
-
-  if (loading) {
-    return <Loader />;
-  }
 
   return (
     <AuthContext.Provider

@@ -20,6 +20,19 @@ export default (state: State, action: Action): State => {
       };
 
     case 'LOGIN_SUCCESS':
+      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
+      localStorage.setItem('isAuthenticated', 'true');
+      return {
+        ...state,
+        token: action.payload.token,
+        message: action.payload.message,
+        user: action.payload.user,
+        isAuthenticated: true,
+        loading: false,
+        error: null,
+      };
+
     case 'UPDATE_PASSWORD_SUCCESS':
       localStorage.setItem('token', action.payload.token);
       return {
@@ -33,6 +46,8 @@ export default (state: State, action: Action): State => {
 
     case 'AUTH_ERROR':
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isAuthenticated');
       return {
         ...state,
         token: null,
@@ -44,6 +59,8 @@ export default (state: State, action: Action): State => {
 
     case 'LOGOUT':
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isAuthenticated');
       return {
         ...state,
         isAuthenticated: false,

@@ -8,22 +8,24 @@ import {
 } from '@material-ui/core';
 import { Sidebar } from '../components/nav/Sidebar';
 import { Topbar } from '../components/nav/Topbar';
-import { NavItem } from '../components/nav/types';
 import { useAuthState } from '../context/auth/useAuthState';
+import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
+import { navItems } from '../components/nav/navItems';
 
-type Props = {
-  navElements: NavItem[];
-};
-
-export const MainTemplate: FC<Props> = ({ children, navElements }) => {
+export const MainTemplate: FC = ({ children }) => {
   const history = useHistory();
   const classes = useStyles();
 
   const { logout } = useAuthState();
+  const user = useAuthenticatedUser();
+
+  const navElements = navItems.filter((item) =>
+    item.allowedRoles.includes(user.role),
+  );
 
   const onLogout = () => {
-    history.push('/');
     logout();
+    history.push('/login');
   };
 
   return (

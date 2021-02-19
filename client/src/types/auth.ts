@@ -69,7 +69,10 @@ export type Action =
   | { type: 'CONFIRMATION_SUCCESS'; payload: { message: string } }
   | { type: 'USER_LOADED'; payload: User }
   | { type: 'AUTH_ERROR'; payload: string }
-  | { type: 'LOGIN_SUCCESS'; payload: { token: string; message: string } }
+  | {
+      type: 'LOGIN_SUCCESS';
+      payload: { token: string; message: string; user: User };
+    }
   | { type: 'LOGOUT' }
   | { type: 'CLEAR_ERRORS' }
   | { type: 'CLEAR_MESSAGE' }

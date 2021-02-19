@@ -11,7 +11,7 @@ import {
 // Types
 import { NavItem } from './types';
 
-type Props = NavItem & {
+type Props = Omit<NavItem, 'allowedRoles'> & {
   onClick?: () => void;
 };
 
