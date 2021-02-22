@@ -6,6 +6,7 @@ import { Button, makeStyles, Theme } from '@material-ui/core';
 import { OrderDetails } from './OrderDetails';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
@@ -42,7 +43,7 @@ export const OrderPage = () => {
   }, [id]);
 
   return (
-    <>
+    <MainTemplate>
       {loading && <Loader />}
       <div className={classes.container}>
         <Button
@@ -64,7 +65,7 @@ export const OrderPage = () => {
           areAdminOptionsEnabled={user.role === 'admin'}
         />
       )}
-    </>
+    </MainTemplate>
   );
 };
 

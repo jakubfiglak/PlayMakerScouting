@@ -16,6 +16,7 @@ import { PlayerAccessForm } from './PlayerAccessForm';
 import { ClubAccessForm } from './ClubAccessForm';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
@@ -76,7 +77,7 @@ export const AccessManagementPage = () => {
   const regularScoutUsers = usersList.filter((user) => user.role === 'scout');
 
   return (
-    <>
+    <MainTemplate>
       {(loading || playersLoading || clubsLoading) && <Loader />}
       <PageHeading title="Zarządzanie dostępami" />
       <Accordion>
@@ -132,7 +133,7 @@ export const AccessManagementPage = () => {
           />
         </AccordionDetails>
       </Accordion>
-    </>
+    </MainTemplate>
   );
 };
 

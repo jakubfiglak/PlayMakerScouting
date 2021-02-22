@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
-  Typography,
   makeStyles,
   Theme,
   Divider,
@@ -19,6 +18,7 @@ import {
 import { Menu as MenuIcon, ExitToApp as LogoutIcon } from '@material-ui/icons';
 // Custom components
 import { NavElement } from './NavElement';
+import { PlaymakerLogo } from '../PlaymakerLogo';
 // Types
 import { NavItem } from './types';
 
@@ -36,9 +36,7 @@ export const Topbar = ({ navElements, onLogout }: Props) => {
     <AppBar position="fixed" classes={{ root: classes.appBar }}>
       <Toolbar className={classes.toolbar}>
         <Link to="/" className={classes.title}>
-          <Typography variant="h6" noWrap component="h1">
-            PlayMaker Pro Scouting
-          </Typography>
+          <PlaymakerLogo />
         </Link>
         <div>
           <IconButton

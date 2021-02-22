@@ -105,7 +105,7 @@ export const RegisterForm = ({ onSubmit }: Props) => {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/" className={classes.link}>
+              <Link to="/login" className={classes.link}>
                 Jesteś już zarejestrowany? Zaloguj się
               </Link>
             </Grid>

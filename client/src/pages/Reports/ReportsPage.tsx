@@ -14,6 +14,7 @@ import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import {
   Competition,
@@ -165,7 +166,7 @@ export const ReportsPage = () => {
   };
 
   return (
-    <>
+    <MainTemplate>
       {(loading || playersLoading || clubsLoading || ordersLoading) && (
         <Loader />
       )}
@@ -239,7 +240,7 @@ export const ReportsPage = () => {
           open={isAddPlayerModalOpen}
         />
       </TabPanel>
-    </>
+    </MainTemplate>
   );
 };
 

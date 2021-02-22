@@ -1,4 +1,5 @@
 export const darkGray = '#333d4a';
+export const darkGrayTransparent = 'rgba(51,61,74,0.2)';
 export const lightGray = '#ededed';
 export const semiGray = '#747b84';
 export const backgroundColor = '#fbfbfb';

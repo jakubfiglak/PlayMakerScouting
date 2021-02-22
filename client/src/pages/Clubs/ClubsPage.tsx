@@ -8,6 +8,7 @@ import { ClubsTable } from './ClubsTable';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import { Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 // Hooks
@@ -77,7 +78,7 @@ export const ClubsPage = () => {
   );
 
   return (
-    <>
+    <MainTemplate>
       {loading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
@@ -108,6 +109,6 @@ export const ClubsPage = () => {
 
         <ClubsForm current={current} onSubmit={handleSubmit} />
       </TabPanel>
-    </>
+    </MainTemplate>
   );
 };

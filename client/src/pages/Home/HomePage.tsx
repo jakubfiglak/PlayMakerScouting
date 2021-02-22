@@ -1,89 +1,95 @@
 import React from 'react';
-// MUI components
+import { Link } from 'react-router-dom';
 import {
-  Avatar,
+  AppBar,
+  Toolbar,
   Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+  CssBaseline,
+  Button,
   makeStyles,
   Theme,
 } from '@material-ui/core';
-// MUI icons
-import { SportsSoccer as BallIcon } from '@material-ui/icons';
-// Hooks
-import { useAlert } from '../../hooks/useAlert';
+import { PlaymakerLogo } from '../../components/PlaymakerLogo';
 import { useAuthState } from '../../context/auth/useAuthState';
-// Assets
-import logo from '../../assets/logo.png';
-// Utils & data
-import { getLabel } from '../../utils/getLabel';
 
 export const HomePage = () => {
   const classes = useStyles();
 
-  const { message, clearMessage } = useAuthState();
-
-  useAlert(getLabel(message), 'success', clearMessage);
+  const { user } = useAuthState();
 
   return (
-    <div className={classes.container}>
-      <div className={classes.logoContainer}>
-        <Avatar
-          alt="Playmaker logo"
-          src={logo}
-          variant="square"
-          className={classes.avatar}
-        />
-      </div>
-      <Typography variant="h6" align="center" className={classes.heading}>
-        Witaj w aplikacji scoutingowej Playmaker Pro
-      </Typography>
-      <Typography>Produkt umożliwia: </Typography>
-      <List>
-        <ListItem>
-          <ListItemIcon>
-            <BallIcon />
-          </ListItemIcon>
-          <ListItemText primary="Tworzenie bazy klubów oraz zawodników wartych obserwowania" />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <BallIcon />
-          </ListItemIcon>
-          <ListItemText primary="Tworzenie raportów z obserwacji meczowej zawodnika" />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <BallIcon />
-          </ListItemIcon>
-          <ListItemText primary="Przyjmowanie i realizację zleceń wystawianych przez zespół Playmaker Pro" />
-        </ListItem>
-      </List>
-      <Typography>
-        Chcesz zostać scoutem Playmaker Pro? Napisz do nas!
-      </Typography>
+    <div className={classes.wrapper}>
+      <CssBaseline />
+      <AppBar position="static">
+        <Toolbar>
+          <PlaymakerLogo />
+        </Toolbar>
+      </AppBar>
+      <main className={classes.main}>
+        <div className={classes.innerWrapper}>
+          <Typography
+            variant="h2"
+            color="inherit"
+            className={classes.mainHeading}
+          >
+            Skauting Playmaker.Pro
+          </Typography>
+          <Typography variant="h3" color="inherit">
+            Szukaj talentów, twórz raporty, podejmij współpracę z Playmaker.Pro
+          </Typography>
+          <Link to={user ? '/dashboard' : '/login'} className={classes.link}>
+            <Button variant="contained" color="secondary" size="large">
+              Start
+            </Button>
+          </Link>
+        </div>
+      </main>
     </div>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    maxWidth: 800,
-    margin: '0 auto',
-    textAlign: 'center',
-  },
-  logoContainer: {
+  wrapper: {
+    height: '100vh',
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
   },
-  avatar: {
-    width: 100,
-    height: 100,
-    paddingBottom: theme.spacing(2),
+  main: {
+    backgroundImage:
+      'url("https://images.unsplash.com/photo-1556056504-5c7696c4c28d?crop=entropy&cs=srgb&fm=jpg&ixid=MXwxMDYwMDR8MHwxfGFsbHx8fHx8fHx8&ixlib=rb-1.2.1&q=85")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+    position: 'relative',
+    flexGrow: 1,
+
+    '&::after': {
+      content: "''",
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      top: 0,
+      left: 0,
+      background: 'rgba(51,61,74,0.6)',
+    },
   },
-  heading: {
-    marginBottom: theme.spacing(2),
+  innerWrapper: {
+    position: 'relative',
+    zIndex: 5,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    color: theme.palette.background.paper,
+    padding: theme.spacing(8, 1),
+  },
+  mainHeading: {
+    textTransform: 'uppercase',
+    margin: theme.spacing(5, 0),
+  },
+  link: {
+    color: theme.palette.background.paper,
+    textDecoration: 'none',
+    margin: theme.spacing(5, 0),
   },
 }));

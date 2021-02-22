@@ -26,7 +26,7 @@ export const LoginPage = () => {
   useEffect(() => {
     if (isAuthenticated) {
       setTimeout(() => {
-        history.push('/');
+        history.push('/dashboard');
       }, 1000);
     }
   }, [isAuthenticated]);

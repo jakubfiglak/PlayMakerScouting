@@ -19,6 +19,7 @@ import { EditAccountForm } from './EditAccountForm';
 import { UpdatePasswordForm } from './UpdatePasswordForm';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
@@ -45,7 +46,7 @@ export const ProfilePage = () => {
   const { firstName, lastName, role, email } = user;
 
   return (
-    <>
+    <MainTemplate>
       {loading && <Loader />}
       <PageHeading title="Profil użytkownika" />
       <Card>
@@ -89,7 +90,7 @@ export const ProfilePage = () => {
           </Accordion>
         </CardContent>
       </Card>
-    </>
+    </MainTemplate>
   );
 };
 
