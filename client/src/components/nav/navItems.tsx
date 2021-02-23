@@ -6,10 +6,17 @@ import {
   Assignment as OrdersIcon,
   Assessment as ReportsIcon,
   Settings as AccessManagementIcon,
+  Home as HomeIcon,
 } from '@material-ui/icons';
 import { NavItem } from './types';
 
 export const navItems: NavItem[] = [
+  {
+    icon: <HomeIcon color="error" />,
+    text: 'Strona główna',
+    to: '/dashboard',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
+  },
   {
     icon: <AccountIcon color="error" />,
     text: 'Mój profil',

@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { axiosJson, setAuthToken } from '../../config/axios';
+import { axiosJson } from '../../config/axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
 import {
@@ -13,13 +13,12 @@ import {
 
 export const AuthState: React.FC = ({ children }) => {
   const localStorageUser = localStorage.getItem('user');
-  const localStorageIsAuthenticated = localStorage.getItem('isAuthenticated');
+  const localStorageExpiresAt = localStorage.getItem('expiresAt');
 
   const initialState: State = {
     user: localStorageUser ? (JSON.parse(localStorageUser) as User) : null,
-    token: localStorage.getItem('token'),
-    isAuthenticated: localStorageIsAuthenticated
-      ? (JSON.parse(localStorageIsAuthenticated) as boolean)
+    expiresAt: localStorageExpiresAt
+      ? parseInt(localStorageExpiresAt, 10)
       : null,
     loading: false,
     error: null,
@@ -27,13 +26,13 @@ export const AuthState: React.FC = ({ children }) => {
     setLoading: () => null,
     clearErrors: () => null,
     clearMessage: () => null,
-    loadUser: () => null,
     register: () => null,
     confirmAccount: () => null,
     login: () => null,
     logout: () => null,
     editDetails: () => null,
     updatePassword: () => null,
+    isAuthenticated: () => false,
   };
   const [state, dispatch] = useReducer(authReducer, initialState);
 
@@ -42,29 +41,6 @@ export const AuthState: React.FC = ({ children }) => {
     dispatch({
       type: 'SET_LOADING',
     });
-  };
-
-  // Load user
-  const loadUser = async () => {
-    setLoading();
-
-    // It breaks on refresh for now - data is being fetched before the token in set on axios instance. Perhaps switching to cookies will fix this
-    if (token) {
-      setAuthToken(token);
-    }
-
-    try {
-      const res = await axiosJson.get('/api/v1/auth/account');
-      dispatch({
-        type: 'USER_LOADED',
-        payload: res.data.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: 'AUTH_ERROR',
-        payload: err.response.data.error,
-      });
-    }
   };
 
   // Register user
@@ -110,14 +86,15 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/auth/login', formData);
-      setAuthToken(res.data.token);
 
       dispatch({
         type: 'LOGIN_SUCCESS',
         payload: {
-          token: res.data.token,
           message: res.data.message,
-          user: res.data.data,
+          data: {
+            user: res.data.data.user,
+            expiresAt: res.data.data.expiresAt,
+          },
         },
       });
     } catch (err) {
@@ -137,10 +114,8 @@ export const AuthState: React.FC = ({ children }) => {
 
       dispatch({
         type: 'UPDATE_PASSWORD_SUCCESS',
-        payload: { token: res.data.token, message: res.data.message },
+        payload: { expiresAt: res.data.expiresAt, message: res.data.message },
       });
-
-      loadUser();
     } catch (err) {
       dispatch({
         type: 'AUTH_ERROR',
@@ -187,27 +162,34 @@ export const AuthState: React.FC = ({ children }) => {
       type: 'CLEAR_MESSAGE',
     });
 
-  const { user, token, isAuthenticated, loading, error, message } = state;
+  // Check if the user is authenticated
+  const isAuthenticated = () => {
+    if (!state.expiresAt) {
+      return false;
+    }
+    return new Date().getTime() / 1000 < state.expiresAt;
+  };
+
+  const { user, expiresAt, loading, error, message } = state;
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
-        isAuthenticated,
+        expiresAt,
         loading,
         error,
         message,
         setLoading,
         clearErrors,
         clearMessage,
-        loadUser,
         login,
         logout,
         register,
         confirmAccount,
         editDetails,
         updatePassword,
+        isAuthenticated,
       }}
     >
       {children}

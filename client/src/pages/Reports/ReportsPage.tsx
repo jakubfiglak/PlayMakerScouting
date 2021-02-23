@@ -117,7 +117,9 @@ export const ReportsPage = () => {
   useEffect(() => {
     getPlayersList();
     getClubsList();
-    getOrdersList();
+    if (user.role !== 'scout') {
+      getOrdersList();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

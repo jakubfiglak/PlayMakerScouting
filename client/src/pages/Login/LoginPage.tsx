@@ -24,7 +24,7 @@ export const LoginPage = () => {
   useAlert(error, 'error', clearErrors);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated()) {
       setTimeout(() => {
         history.push('/dashboard');
       }, 1000);

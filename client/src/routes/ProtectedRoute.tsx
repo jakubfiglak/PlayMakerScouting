@@ -14,7 +14,8 @@ export const ProtectedRoute: FC<Props> = ({
 }) => {
   const { isAuthenticated, user } = useAuthState();
 
-  const isAllowed = isAuthenticated && user && allowedRoles.includes(user.role);
+  const isAllowed =
+    isAuthenticated() && user && allowedRoles.includes(user.role);
 
   return (
     <Route

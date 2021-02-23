@@ -2,14 +2,6 @@ import { State, Action } from '../../types/auth';
 
 export default (state: State, action: Action): State => {
   switch (action.type) {
-    case 'USER_LOADED':
-      return {
-        ...state,
-        isAuthenticated: true,
-        loading: false,
-        user: action.payload,
-      };
-
     case 'REGISTER_SUCCESS':
     case 'CONFIRMATION_SUCCESS':
       return {
@@ -20,51 +12,46 @@ export default (state: State, action: Action): State => {
       };
 
     case 'LOGIN_SUCCESS':
-      localStorage.setItem('token', action.payload.token);
-      localStorage.setItem('user', JSON.stringify(action.payload.user));
-      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('user', JSON.stringify(action.payload.data.user));
+      localStorage.setItem(
+        'expiresAt',
+        JSON.stringify(action.payload.data.expiresAt),
+      );
       return {
         ...state,
-        token: action.payload.token,
         message: action.payload.message,
-        user: action.payload.user,
-        isAuthenticated: true,
+        user: action.payload.data.user,
+        expiresAt: action.payload.data.expiresAt,
         loading: false,
         error: null,
       };
 
     case 'UPDATE_PASSWORD_SUCCESS':
-      localStorage.setItem('token', action.payload.token);
       return {
         ...state,
-        token: action.payload.token,
+        expiresAt: action.payload.expiresAt,
         message: action.payload.message,
-        isAuthenticated: true,
         loading: false,
         error: null,
       };
 
     case 'AUTH_ERROR':
-      localStorage.removeItem('token');
       localStorage.removeItem('user');
-      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('expiresAt');
       return {
         ...state,
-        token: null,
-        isAuthenticated: false,
         loading: false,
         user: null,
+        expiresAt: null,
         error: action.payload,
       };
 
     case 'LOGOUT':
-      localStorage.removeItem('token');
       localStorage.removeItem('user');
-      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('expiresAt');
       return {
         ...state,
-        isAuthenticated: false,
-        token: null,
+        expiresAt: null,
         loading: false,
         user: null,
         error: null,
@@ -89,6 +76,7 @@ export default (state: State, action: Action): State => {
       };
 
     case 'EDIT_SUCCESS':
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
       return {
         ...state,
         user: action.payload.user,

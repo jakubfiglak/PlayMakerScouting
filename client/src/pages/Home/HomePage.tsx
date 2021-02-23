@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { PlaymakerLogo } from '../../components/PlaymakerLogo';
 import { useAuthState } from '../../context/auth/useAuthState';
+import soccerField from '../../assets/soccer_field.jpg';
 
 export const HomePage = () => {
   const classes = useStyles();
@@ -55,8 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
   },
   main: {
-    backgroundImage:
-      'url("https://images.unsplash.com/photo-1556056504-5c7696c4c28d?crop=entropy&cs=srgb&fm=jpg&ixid=MXwxMDYwMDR8MHwxfGFsbHx8fHx8fHx8&ixlib=rb-1.2.1&q=85")',
+    backgroundImage: `url(${soccerField})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     position: 'relative',

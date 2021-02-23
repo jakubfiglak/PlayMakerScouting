@@ -3,12 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 
 // Route protection
 exports.protect = (req, res, next) => {
-  let token;
-  const auth = req.headers.authorization;
-
-  if (auth && auth.startsWith('Bearer')) {
-    [, token] = auth.split(' ');
-  }
+  const { token } = req.cookies;
 
   if (!token) {
     return next(

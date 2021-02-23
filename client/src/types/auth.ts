@@ -47,31 +47,29 @@ export type UpdatePasswordData = {
 
 export type State = {
   user: User | null;
-  token: string | null;
-  isAuthenticated: boolean | null;
+  expiresAt: number | null;
   loading: boolean;
   error: string | null;
   message: string | null;
   setLoading: () => void;
   clearErrors: () => void;
   clearMessage: () => void;
-  loadUser: () => void;
   register: (formData: RegisterFormData) => void;
   confirmAccount: (confirmationCode: string) => void;
   login: (formData: LoginFormData) => void;
   logout: () => void;
   editDetails: (formData: EditAccountData) => void;
   updatePassword: (formData: UpdatePasswordData) => void;
+  isAuthenticated: () => boolean;
 };
 
 export type Action =
   | { type: 'REGISTER_SUCCESS'; payload: { message: string } }
   | { type: 'CONFIRMATION_SUCCESS'; payload: { message: string } }
-  | { type: 'USER_LOADED'; payload: User }
   | { type: 'AUTH_ERROR'; payload: string }
   | {
       type: 'LOGIN_SUCCESS';
-      payload: { token: string; message: string; user: User };
+      payload: { message: string; data: { user: User; expiresAt: number } };
     }
   | { type: 'LOGOUT' }
   | { type: 'CLEAR_ERRORS' }
@@ -81,6 +79,6 @@ export type Action =
   | { type: 'EDIT_ERROR'; payload: string }
   | {
       type: 'UPDATE_PASSWORD_SUCCESS';
-      payload: { token: string; message: string };
+      payload: { expiresAt: number; message: string };
     }
   | { type: 'CLUBS_ERROR'; payload: string };

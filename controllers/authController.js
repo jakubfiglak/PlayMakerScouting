@@ -51,7 +51,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 // @desc Verify user
 // @route GET /api/v1/auth/confirm/:confirmationCode
 // @access Public
-exports.verifyUser = async (req, res, next) => {
+exports.verifyUser = asyncHandler(async (req, res, next) => {
   const { confirmationCode } = req.params;
 
   const user = await User.findOne({ confirmationCode });
@@ -61,6 +61,7 @@ exports.verifyUser = async (req, res, next) => {
   }
 
   user.status = 'active';
+  user.confirmationCode = undefined;
 
   await user.save();
 
@@ -69,7 +70,7 @@ exports.verifyUser = async (req, res, next) => {
     data: user,
     message: 'Account activated successfully, you can now log in to the app!',
   });
-};
+});
 
 // @desc Login user
 // @route POST /api/v1/auth/login
@@ -104,12 +105,22 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   const token = user.getJwt();
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userData = await User.findById(user._id).lean();
 
-  res.status(200).json({
-    success: true,
-    message: 'Login success!',
-    token,
-  });
+  res
+    .status(200)
+    .cookie('token', token, {
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: 'Login success!',
+      data: {
+        user: userData,
+        expiresAt: decoded.exp,
+      },
+    });
 });
 
 // @desc View account details
@@ -168,12 +179,18 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateModifiedOnly: true });
 
   const token = user.getJwt();
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  res.status(200).json({
-    success: true,
-    message: 'Password updated successfully!',
-    token,
-  });
+  res
+    .status(200)
+    .cookie('token', token, {
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: 'Password updated successfully!',
+      expiresAt: decoded.exp,
+    });
 });
 
 // @desc forgot password
