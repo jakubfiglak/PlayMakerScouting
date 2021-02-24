@@ -52,21 +52,18 @@ exports.getOrders = asyncHandler(async (req, res) => {
     ],
   };
 
+  const query = { ...reqQuery };
+
+  // If player ID is provided in query params, return only orders assinged to this player
   if (playerId) {
-    const query = {
-      player: playerId,
-      ...reqQuery,
-    };
-
-    const orders = await Order.paginate(query, options);
-
-    return res.status(200).json({
-      success: true,
-      data: orders,
-    });
+    query.player = playerId;
   }
 
-  const orders = await Order.paginate(reqQuery, options);
+  // If user is not an admin, return only orders assigned to that user and orders with the status of 'open'
+  if (req.user.role !== 'admin') {
+    query.$or = [{ scout: req.user._id }, { status: 'open' }];
+  }
+  const orders = await Order.paginate(query, options);
 
   return res.status(200).json({
     success: true,

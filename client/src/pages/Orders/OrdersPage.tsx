@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // MUI components
-import {
-  AppBar,
-  Tabs,
-  Tab,
-  FormControlLabel,
-  Checkbox,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { OrdersForm } from './OrdersForm';
 import { OrdersFilterForm } from './OrdersFilterForm';
@@ -31,8 +23,6 @@ import { useClubsState } from '../../context/clubs/useClubsState';
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
 export const OrdersPage = () => {
-  const classes = useStyles();
-
   const {
     loading,
     getOrders,
@@ -66,22 +56,19 @@ export const OrdersPage = () => {
     handleSort,
   ] = useTable();
 
-  const [areMyOrdersChecked, setMyOrdersChecked] = useState(false);
   const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
-
-  const scoutId = areMyOrdersChecked ? user._id : null;
 
   const [filters, setFilters] = useState<OrdersFilterData>({
     player: '',
-    status: '',
+    status: 'open',
     createdAfter: formatDateObject(yearFromNow),
     createdBefore: formatDateObject(tomorrow),
   });
 
   useEffect(() => {
-    getOrders(page + 1, rowsPerPage, sortBy, order, filters, scoutId);
+    getOrders(page + 1, rowsPerPage, sortBy, order, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters, scoutId]);
+  }, [page, rowsPerPage, sortBy, order, filters]);
 
   useEffect(() => {
     getPlayersList();
@@ -113,21 +100,6 @@ export const OrdersPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="orders">
         <PageHeading title="Baza zleceń" />
-        <div className={classes.checkboxContainer}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={areMyOrdersChecked}
-                onChange={(e) => {
-                  setMyOrdersChecked(e.target.checked);
-                }}
-                name="myOrders"
-                color="primary"
-              />
-            }
-            label="Pokaż tylko moje zlecenia"
-          />
-        </div>
         <OrdersFilterForm playersData={playersList} setFilters={setFilters} />
         <OrdersTable
           page={page}
@@ -164,11 +136,3 @@ export const OrdersPage = () => {
     </MainTemplate>
   );
 };
-
-const useStyles = makeStyles((theme: Theme) => ({
-  checkboxContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginBottom: theme.spacing(1),
-  },
-}));

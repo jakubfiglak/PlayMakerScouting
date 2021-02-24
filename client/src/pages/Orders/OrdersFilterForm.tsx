@@ -20,7 +20,7 @@ type FilterFormProps = {
 
 const initialFilters: OrdersFilterData = {
   player: '',
-  status: '',
+  status: 'open',
   createdAfter: formatDateObject(yearFromNow),
   createdBefore: formatDateObject(tomorrow),
 };
