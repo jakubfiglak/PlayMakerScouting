@@ -61,8 +61,6 @@ export type State = {
   error: string | null;
   message: string | null;
   setLoading: () => void;
-  clearErrors: () => void;
-  clearMessage: () => void;
   getPlayers: GetPlayers;
   getPlayersList: () => void;
   getPlayer: (id: string) => void;
@@ -77,8 +75,6 @@ export type Action =
   | { type: 'SET_LOADING' }
   | { type: 'SET_CURRENT'; payload: Player }
   | { type: 'CLEAR_CURRENT' }
-  | { type: 'CLEAR_ERRORS' }
-  | { type: 'CLEAR_MESSAGE' }
   | { type: 'PLAYERS_ERROR'; payload: string }
   | { type: 'GET_PLAYERS_SUCCESS'; payload: PlayersData }
   | { type: 'GET_PLAYERS_LIST_SUCCESS'; payload: PlayerBasicInfo[] }

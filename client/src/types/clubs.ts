@@ -58,8 +58,6 @@ export type State = {
   error: string | null;
   message: string | null;
   setLoading: () => void;
-  clearErrors: () => void;
-  clearMessage: () => void;
   getClubs: GetClubs;
   getClubsList: () => void;
   getClub: (id: string) => void;
@@ -74,8 +72,6 @@ export type Action =
   | { type: 'SET_LOADING' }
   | { type: 'SET_CURRENT'; payload: Club }
   | { type: 'CLEAR_CURRENT' }
-  | { type: 'CLEAR_ERRORS' }
-  | { type: 'CLEAR_MESSAGE' }
   | { type: 'CLUBS_ERROR'; payload: string }
   | { type: 'GET_CLUBS_SUCCESS'; payload: ClubsData }
   | { type: 'GET_CLUBS_LIST_SUCCESS'; payload: ClubBasicInfo[] }

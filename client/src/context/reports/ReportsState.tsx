@@ -10,8 +10,11 @@ import {
 } from '../../types/reports';
 import { initialPaginatedData } from '../../data/initialPaginatedData';
 import { SortingOrder } from '../../types/common';
+import { useAlertsState } from '../alerts/useAlertsState';
 
 export const ReportsState: React.FC = ({ children }) => {
+  const { setAlert } = useAlertsState();
+
   const initialState: State = {
     reportsData: initialPaginatedData,
     reportData: null,
@@ -20,8 +23,6 @@ export const ReportsState: React.FC = ({ children }) => {
     error: null,
     message: null,
     setLoading: () => null,
-    clearErrors: () => null,
-    clearMessage: () => null,
     getReports: () => null,
     getReport: () => null,
     deleteReport: () => null,
@@ -42,7 +43,6 @@ export const ReportsState: React.FC = ({ children }) => {
 
   // Set current
   const setCurrent = (report: Report) => {
-    console.log('setting current report');
     dispatch({
       type: 'SET_CURRENT',
       payload: report,
@@ -80,6 +80,8 @@ export const ReportsState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'REPORTS_ERROR',
         payload: err.response.data.error,
@@ -98,6 +100,8 @@ export const ReportsState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'REPORTS_ERROR',
         payload: err.response.data.error,
@@ -111,11 +115,15 @@ export const ReportsState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/reports', report);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'CREATE_REPORT_SUCCESS',
         payload: { report: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'REPORTS_ERROR',
         payload: err.response.data.error,
@@ -129,11 +137,15 @@ export const ReportsState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put(`/api/v1/reports/${id}`, report);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'UPDATE_REPORT_SUCCESS',
         payload: { report: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'REPORTS_ERROR',
         payload: err.response.data.error,
@@ -147,29 +159,21 @@ export const ReportsState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.delete(`/api/v1/reports/${id}`);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'DELETE_REPORT_SUCCESS',
         payload: { id, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'REPORTS_ERROR',
         payload: err.response.data.error,
       });
     }
   };
-
-  // Clear errors
-  const clearErrors = () =>
-    dispatch({
-      type: 'CLEAR_ERRORS',
-    });
-
-  // Clear message
-  const clearMessage = () =>
-    dispatch({
-      type: 'CLEAR_MESSAGE',
-    });
 
   const { reportsData, reportData, current, loading, error, message } = state;
 
@@ -190,8 +194,6 @@ export const ReportsState: React.FC = ({ children }) => {
         editReport,
         setCurrent,
         clearCurrent,
-        clearErrors,
-        clearMessage,
       }}
     >
       {children}

@@ -63,18 +63,6 @@ export default (state: State, action: Action): State => {
         loading: true,
       };
 
-    case 'CLEAR_ERRORS':
-      return {
-        ...state,
-        error: null,
-      };
-
-    case 'CLEAR_MESSAGE':
-      return {
-        ...state,
-        message: null,
-      };
-
     case 'EDIT_SUCCESS':
       localStorage.setItem('user', JSON.stringify(action.payload.user));
       return {

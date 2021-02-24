@@ -23,7 +23,6 @@ import { OrderFormData, OrdersFilterData } from '../../types/orders';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
@@ -42,10 +41,6 @@ export const OrdersPage = () => {
     ordersData,
     closeOrder,
     deleteOrder,
-    error,
-    message,
-    clearErrors,
-    clearMessage,
   } = useOrdersState();
 
   const {
@@ -53,10 +48,6 @@ export const OrdersPage = () => {
     getPlayersList,
     playersList,
     addPlayer,
-    message: playersMessage,
-    error: playersError,
-    clearErrors: clearPlayersErrors,
-    clearMessage: clearPlayersMessage,
   } = usePlayersState();
 
   const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
@@ -79,11 +70,6 @@ export const OrdersPage = () => {
   const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
 
   const scoutId = areMyOrdersChecked ? user._id : null;
-
-  useAlert(error, 'error', clearErrors);
-  useAlert(playersError, 'error', clearPlayersErrors);
-  useAlert(message, 'success', clearMessage);
-  useAlert(playersMessage, 'success', clearPlayersMessage);
 
   const [filters, setFilters] = useState<OrdersFilterData>({
     player: '',

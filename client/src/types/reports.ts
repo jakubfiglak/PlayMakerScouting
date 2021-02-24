@@ -115,8 +115,6 @@ export type State = {
   error: string | null;
   message: string | null;
   setLoading: () => void;
-  clearErrors: () => void;
-  clearMessage: () => void;
   getReports: GetReports;
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
@@ -128,8 +126,6 @@ export type State = {
 
 export type Action =
   | { type: 'SET_LOADING' }
-  | { type: 'CLEAR_ERRORS' }
-  | { type: 'CLEAR_MESSAGE' }
   | { type: 'SET_CURRENT'; payload: Report }
   | { type: 'CLEAR_CURRENT' }
   | { type: 'REPORTS_ERROR'; payload: string }

@@ -52,8 +52,6 @@ export type State = {
   error: string | null;
   message: string | null;
   setLoading: () => void;
-  clearErrors: () => void;
-  clearMessage: () => void;
   register: (formData: RegisterFormData) => void;
   confirmAccount: (confirmationCode: string) => void;
   login: (formData: LoginFormData) => void;
@@ -72,8 +70,6 @@ export type Action =
       payload: { message: string; data: { user: User; expiresAt: number } };
     }
   | { type: 'LOGOUT' }
-  | { type: 'CLEAR_ERRORS' }
-  | { type: 'CLEAR_MESSAGE' }
   | { type: 'SET_LOADING' }
   | { type: 'EDIT_SUCCESS'; payload: { user: User; message: string } }
   | { type: 'EDIT_ERROR'; payload: string }

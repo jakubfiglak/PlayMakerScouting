@@ -19,7 +19,6 @@ import {
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useAlert } from '../../hooks/useAlert';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
 
@@ -32,10 +31,6 @@ export const PlayersPage = () => {
     editPlayer,
     current,
     setCurrent,
-    message,
-    error,
-    clearMessage,
-    clearErrors,
     clearCurrent,
   } = usePlayersState();
 
@@ -43,10 +38,7 @@ export const PlayersPage = () => {
     loading: clubsLoading,
     getClubsList,
     clubsList,
-    message: clubsMessage,
-    error: clubsError,
-    clearErrors: clearClubsErrors,
-    clearMessage: clearClubsMessage,
+
     addClub,
   } = useClubsState();
 
@@ -60,11 +52,6 @@ export const PlayersPage = () => {
     handleChangeRowsPerPage,
     handleSort,
   ] = useTable();
-
-  useAlert(error, 'error', clearErrors);
-  useAlert(clubsError, 'error', clearClubsErrors);
-  useAlert(message, 'success', clearMessage);
-  useAlert(clubsMessage, 'success', clearClubsMessage);
 
   const [filters, setFilters] = useState<PlayersFilterData>({
     lastName: '',

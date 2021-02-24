@@ -12,21 +12,13 @@ import {
 } from '@material-ui/core';
 // MUI icons
 import { SportsSoccer as BallIcon } from '@material-ui/icons';
-// Hooks
-import { useAlert } from '../../hooks/useAlert';
-import { useAuthState } from '../../context/auth/useAuthState';
 // Assets
 import logo from '../../assets/logo.png';
 // Utils & data
-import { getLabel } from '../../utils/getLabel';
 import { MainTemplate } from '../../templates/MainTemplate';
 
 export const DashboardPage = () => {
   const classes = useStyles();
-
-  const { message, clearMessage } = useAuthState();
-
-  useAlert(getLabel(message), 'success', clearMessage);
 
   return (
     <MainTemplate>

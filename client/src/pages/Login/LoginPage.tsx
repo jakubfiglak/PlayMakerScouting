@@ -6,22 +6,10 @@ import { AuthTemplate } from '../../templates/AuthTemplate';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { useAuthState } from '../../context/auth/useAuthState';
-import { useAlert } from '../../hooks/useAlert';
 
 export const LoginPage = () => {
   const history = useHistory();
-  const {
-    login,
-    loading,
-    isAuthenticated,
-    message,
-    error,
-    clearErrors,
-    clearMessage,
-  } = useAuthState();
-
-  useAlert(message, 'success', clearMessage);
-  useAlert(error, 'error', clearErrors);
+  const { login, loading, isAuthenticated } = useAuthState();
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -29,6 +17,7 @@ export const LoginPage = () => {
         history.push('/dashboard');
       }, 1000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   return (

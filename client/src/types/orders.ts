@@ -59,8 +59,6 @@ export type State = {
   error: string | null;
   message: string | null;
   setLoading: () => void;
-  clearErrors: () => void;
-  clearMessage: () => void;
   getOrders: GetOrders;
   getOrdersList: () => void;
   acceptOrder: (id: string) => void;
@@ -72,8 +70,6 @@ export type State = {
 
 export type Action =
   | { type: 'SET_LOADING' }
-  | { type: 'CLEAR_ERRORS' }
-  | { type: 'CLEAR_MESSAGE' }
   | { type: 'ORDERS_ERROR'; payload: string }
   | { type: 'GET_ORDERS_SUCCESS'; payload: OrdersData }
   | { type: 'GET_ORDERS_LIST_SUCCESS'; payload: OrderBasicInfo[] }

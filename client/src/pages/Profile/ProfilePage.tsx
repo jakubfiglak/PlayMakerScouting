@@ -21,27 +21,13 @@ import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
-import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useAuthState } from '../../context/auth/useAuthState';
-// Utils & data
-import { getLabel } from '../../utils/getLabel';
 
 export const ProfilePage = () => {
   const classes = useStyles();
   const user = useAuthenticatedUser();
-  const {
-    error,
-    clearErrors,
-    message,
-    clearMessage,
-    editDetails,
-    updatePassword,
-    loading,
-  } = useAuthState();
-
-  useAlert(getLabel(error), 'error', clearErrors);
-  useAlert(getLabel(message), 'success', clearMessage);
+  const { editDetails, updatePassword, loading } = useAuthState();
 
   const { firstName, lastName, role, email } = user;
 

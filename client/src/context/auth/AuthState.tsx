@@ -10,8 +10,11 @@ import {
   UpdatePasswordData,
   User,
 } from '../../types/auth';
+import { useAlertsState } from '../alerts/useAlertsState';
 
 export const AuthState: React.FC = ({ children }) => {
+  const { setAlert } = useAlertsState();
+
   const localStorageUser = localStorage.getItem('user');
   const localStorageExpiresAt = localStorage.getItem('expiresAt');
 
@@ -24,8 +27,6 @@ export const AuthState: React.FC = ({ children }) => {
     error: null,
     message: null,
     setLoading: () => null,
-    clearErrors: () => null,
-    clearMessage: () => null,
     register: () => null,
     confirmAccount: () => null,
     login: () => null,
@@ -49,12 +50,15 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/auth/register', formData);
+      setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
         type: 'REGISTER_SUCCESS',
         payload: { message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'AUTH_ERROR',
         payload: err.response.data.error,
@@ -68,11 +72,15 @@ export const AuthState: React.FC = ({ children }) => {
       const res = await axiosJson.get(
         `/api/v1/auth/confirm/${confirmationCode}`,
       );
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'CONFIRMATION_SUCCESS',
         payload: { message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'AUTH_ERROR',
         payload: err.response.data.error,
@@ -86,6 +94,7 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/auth/login', formData);
+      setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
         type: 'LOGIN_SUCCESS',
@@ -98,6 +107,8 @@ export const AuthState: React.FC = ({ children }) => {
         },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'AUTH_ERROR',
         payload: err.response.data.error,
@@ -111,12 +122,15 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put('/api/v1/auth/updatepassword', formData);
+      setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
         type: 'UPDATE_PASSWORD_SUCCESS',
         payload: { expiresAt: res.data.expiresAt, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'AUTH_ERROR',
         payload: err.response.data.error,
@@ -137,30 +151,21 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put('/api/v1/auth/updatedetails', formData);
+      setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
         type: 'EDIT_SUCCESS',
         payload: { user: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'EDIT_ERROR',
         payload: err.response.data.error,
       });
     }
   };
-
-  // Clear errors
-  const clearErrors = () =>
-    dispatch({
-      type: 'CLEAR_ERRORS',
-    });
-
-  // Clear message
-  const clearMessage = () =>
-    dispatch({
-      type: 'CLEAR_MESSAGE',
-    });
 
   // Check if the user is authenticated
   const isAuthenticated = () => {
@@ -181,8 +186,6 @@ export const AuthState: React.FC = ({ children }) => {
         error,
         message,
         setLoading,
-        clearErrors,
-        clearMessage,
         login,
         logout,
         register,

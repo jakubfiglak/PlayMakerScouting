@@ -112,6 +112,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     .status(200)
     .cookie('token', token, {
       httpOnly: true,
+      expires: new Date(Date.now() + 30 * 1000 * 60 * 60 * 24),
     })
     .json({
       success: true,
@@ -185,6 +186,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
     .status(200)
     .cookie('token', token, {
       httpOnly: true,
+      expires: new Date(Date.now() + 30 * 1000 * 60 * 60 * 24),
     })
     .json({
       success: true,

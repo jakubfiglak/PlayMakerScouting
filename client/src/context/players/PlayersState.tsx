@@ -11,8 +11,11 @@ import {
 } from '../../types/players';
 import { SortingOrder } from '../../types/common';
 import { initialPaginatedData } from '../../data/initialPaginatedData';
+import { useAlertsState } from '../alerts/useAlertsState';
 
 export const PlayersState: React.FC = ({ children }) => {
+  const { setAlert } = useAlertsState();
+
   const initialState: State = {
     playersData: initialPaginatedData,
     playersList: [],
@@ -22,8 +25,6 @@ export const PlayersState: React.FC = ({ children }) => {
     error: null,
     message: null,
     setLoading: () => null,
-    clearErrors: () => null,
-    clearMessage: () => null,
     getPlayers: () => null,
     getPlayersList: () => null,
     getPlayer: () => null,
@@ -72,6 +73,8 @@ export const PlayersState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'PLAYERS_ERROR',
         payload: err.response.data.error,
@@ -90,6 +93,8 @@ export const PlayersState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'PLAYERS_ERROR',
         payload: err.response.data.error,
@@ -109,6 +114,8 @@ export const PlayersState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'PLAYERS_ERROR',
         payload: err.response.data.error,
@@ -122,11 +129,15 @@ export const PlayersState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/players', player);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'CREATE_PLAYER_SUCCESS',
         payload: { player: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'PLAYERS_ERROR',
         payload: err.response.data.error,
@@ -140,11 +151,15 @@ export const PlayersState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/players/grantaccess', data);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'GRANT_ACCESS_SUCCESS',
         payload: { message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'PLAYERS_ERROR',
         payload: err.response.data.error,
@@ -173,29 +188,21 @@ export const PlayersState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put(`/api/v1/players/${id}`, data);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'UPDATE_PLAYER_SUCCESS',
         payload: { player: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'PLAYERS_ERROR',
         payload: err.response.data.error,
       });
     }
   };
-
-  // Clear errors
-  const clearErrors = () =>
-    dispatch({
-      type: 'CLEAR_ERRORS',
-    });
-
-  // Clear message
-  const clearMessage = () =>
-    dispatch({
-      type: 'CLEAR_MESSAGE',
-    });
 
   const {
     playersData,
@@ -218,8 +225,6 @@ export const PlayersState: React.FC = ({ children }) => {
         error,
         message,
         setLoading,
-        clearErrors,
-        clearMessage,
         getPlayers,
         getPlayersList,
         getPlayer,

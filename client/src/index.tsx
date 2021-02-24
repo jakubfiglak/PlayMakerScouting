@@ -6,11 +6,11 @@ import { AuthState } from './context/auth/AuthState';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthState>
-      <AlertsState>
+    <AlertsState>
+      <AuthState>
         <App />
-      </AlertsState>
-    </AuthState>
+      </AuthState>
+    </AlertsState>
   </React.StrictMode>,
   document.getElementById('root'),
 );

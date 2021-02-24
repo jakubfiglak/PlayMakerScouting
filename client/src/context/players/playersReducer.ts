@@ -108,18 +108,6 @@ export default (state: State, action: Action): State => {
         current: null,
       };
 
-    case 'CLEAR_ERRORS':
-      return {
-        ...state,
-        error: null,
-      };
-
-    case 'CLEAR_MESSAGE':
-      return {
-        ...state,
-        message: null,
-      };
-
     default:
       return state;
   }

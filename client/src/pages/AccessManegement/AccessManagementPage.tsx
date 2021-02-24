@@ -21,7 +21,6 @@ import { MainTemplate } from '../../templates/MainTemplate';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { useUsersState } from '../../context/users/useUsersState';
-import { useAlert } from '../../hooks/useAlert';
 
 export const AccessManagementPage = () => {
   const classes = useStyles();
@@ -30,10 +29,6 @@ export const AccessManagementPage = () => {
     loading,
     usersList,
     getUsersList,
-    message,
-    error,
-    clearMessage,
-    clearErrors,
     assignPlaymakerRole,
   } = useUsersState();
 
@@ -41,10 +36,7 @@ export const AccessManagementPage = () => {
     playersList,
     getPlayersList,
     loading: playersLoading,
-    message: playersMessage,
-    error: playersError,
-    clearMessage: clearPlayersMessage,
-    clearErrors: clearPlayersErrors,
+
     grantAccess,
   } = usePlayersState();
 
@@ -52,10 +44,7 @@ export const AccessManagementPage = () => {
     clubsList,
     getClubsList,
     loading: clubsLoading,
-    message: clubsMessage,
-    error: clubsError,
-    clearMessage: clearClubsMessage,
-    clearErrors: clearClubsErrors,
+
     grantAccess: grantClubAccess,
   } = useClubsState();
 
@@ -65,13 +54,6 @@ export const AccessManagementPage = () => {
     getUsersList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useAlert(playersError, 'error', clearPlayersErrors);
-  useAlert(clubsError, 'error', clearClubsErrors);
-  useAlert(error, 'error', clearErrors);
-  useAlert(playersMessage, 'success', clearPlayersMessage);
-  useAlert(clubsMessage, 'success', clearClubsMessage);
-  useAlert(message, 'success', clearMessage);
 
   const nonAdminUsers = usersList.filter((user) => user.role !== 'admin');
   const regularScoutUsers = usersList.filter((user) => user.role === 'scout');

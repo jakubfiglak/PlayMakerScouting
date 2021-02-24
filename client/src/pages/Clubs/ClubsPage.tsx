@@ -14,7 +14,6 @@ import { Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useAlert } from '../../hooks/useAlert';
 import { useClubsState } from '../../context/clubs/useClubsState';
 
 export const ClubsPage = () => {
@@ -26,11 +25,7 @@ export const ClubsPage = () => {
     editClub,
     clubsData,
     setCurrent,
-    error,
-    message,
     clearCurrent,
-    clearErrors,
-    clearMessage,
   } = useClubsState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
@@ -43,9 +38,6 @@ export const ClubsPage = () => {
     handleChangeRowsPerPage,
     handleSort,
   ] = useTable();
-
-  useAlert(error, 'error', clearErrors);
-  useAlert(message, 'success', clearMessage);
 
   const [filters, setFilters] = useState<ClubsFilterData>({
     name: '',

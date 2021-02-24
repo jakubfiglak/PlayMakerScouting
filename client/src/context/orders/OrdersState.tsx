@@ -5,8 +5,11 @@ import ordersReducer from './ordersReducer';
 import { SortingOrder } from '../../types/common';
 import { State, OrderFormData, OrdersFilterData } from '../../types/orders';
 import { initialPaginatedData } from '../../data/initialPaginatedData';
+import { useAlertsState } from '../alerts/useAlertsState';
 
 export const OrdersState: React.FC = ({ children }) => {
+  const { setAlert } = useAlertsState();
+
   const initialState: State = {
     ordersData: initialPaginatedData,
     ordersList: [],
@@ -16,8 +19,6 @@ export const OrdersState: React.FC = ({ children }) => {
     error: null,
     message: null,
     setLoading: () => null,
-    clearErrors: () => null,
-    clearMessage: () => null,
     getOrders: () => null,
     getOrdersList: () => null,
     acceptOrder: () => null,
@@ -89,6 +90,8 @@ export const OrdersState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'ORDERS_ERROR',
         payload: err.response.data.error,
@@ -102,11 +105,15 @@ export const OrdersState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post(`/api/v1/orders/${id}/accept`);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'ACCEPT_ORDER_SUCCESS',
         payload: { order: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'ORDERS_ERROR',
         payload: err.response.data.error,
@@ -125,6 +132,8 @@ export const OrdersState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'ORDERS_ERROR',
         payload: err.response.data.error,
@@ -138,11 +147,15 @@ export const OrdersState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/orders', order);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'CREATE_ORDER_SUCCESS',
         payload: { order: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'ORDERS_ERROR',
         payload: err.response.data.error,
@@ -155,11 +168,15 @@ export const OrdersState: React.FC = ({ children }) => {
     setLoading();
     try {
       const res = await axiosJson.delete(`/api/v1/orders/${id}`);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'DELETE_ORDER_SUCCESS',
         payload: { id, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'ORDERS_ERROR',
         payload: err.response.data.error,
@@ -172,29 +189,21 @@ export const OrdersState: React.FC = ({ children }) => {
     setLoading();
     try {
       const res = await axiosJson.post(`/api/v1/orders/${id}/close`);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'CLOSE_ORDER_SUCCESS',
         payload: { order: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'ORDERS_ERROR',
         payload: err.response.data.error,
       });
     }
   };
-
-  // Clear errors
-  const clearErrors = () =>
-    dispatch({
-      type: 'CLEAR_ERRORS',
-    });
-
-  // Clear message
-  const clearMessage = () =>
-    dispatch({
-      type: 'CLEAR_MESSAGE',
-    });
 
   const {
     ordersData,
@@ -224,8 +233,6 @@ export const OrdersState: React.FC = ({ children }) => {
         deleteOrder,
         addOrder,
         closeOrder,
-        clearErrors,
-        clearMessage,
       }}
     >
       {children}

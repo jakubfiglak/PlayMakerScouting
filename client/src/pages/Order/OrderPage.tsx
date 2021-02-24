@@ -8,7 +8,6 @@ import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
-import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 
@@ -26,16 +25,9 @@ export const OrderPage = () => {
     getOrder,
     acceptOrder,
     closeOrder,
-    error,
-    message,
-    clearErrors,
-    clearMessage,
   } = useOrdersState();
 
   const { id } = params;
-
-  useAlert(error, 'error', clearErrors);
-  useAlert(message, 'success', clearMessage);
 
   useEffect(() => {
     getOrder(id);
