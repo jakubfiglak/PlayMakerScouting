@@ -194,6 +194,7 @@ export const ClubsState: React.FC = ({ children }) => {
     try {
       const res = await axiosJson.put(`/api/v1/clubs/${id}`, club);
       setAlert({ msg: res.data.message, type: 'success' });
+      clearCurrent();
 
       dispatch({
         type: 'UPDATE_CLUB_SUCCESS',

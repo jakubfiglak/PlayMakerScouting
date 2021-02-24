@@ -21,8 +21,11 @@ import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 export const PlayersPage = () => {
+  const { setAlert } = useAlertsState();
+
   const {
     loading,
     getPlayers,
@@ -79,12 +82,17 @@ export const PlayersPage = () => {
   const handlePlayersFormSubmit = (data: PlayersFormData) => {
     if (current) {
       editPlayer(current._id, data);
-      clearCurrent();
       setActiveTab(0);
     } else {
       addPlayer(data);
       setActiveTab(0);
     }
+  };
+
+  const handleFormReset = () => {
+    setActiveTab(0);
+    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
+    clearCurrent();
   };
 
   return (
@@ -121,6 +129,7 @@ export const PlayersPage = () => {
           current={current}
           onSubmit={handlePlayersFormSubmit}
           onAddClubClick={() => setIsAddClubModalOpen(true)}
+          onCancelClick={handleFormReset}
         />
         <AddClubModal
           onClose={() => setIsAddClubModalOpen(false)}

@@ -189,6 +189,7 @@ export const PlayersState: React.FC = ({ children }) => {
     try {
       const res = await axiosJson.put(`/api/v1/players/${id}`, data);
       setAlert({ msg: res.data.message, type: 'success' });
+      clearCurrent();
 
       dispatch({
         type: 'UPDATE_PLAYER_SUCCESS',

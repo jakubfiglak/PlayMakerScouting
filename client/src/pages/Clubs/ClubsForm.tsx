@@ -16,9 +16,10 @@ import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
 type Props = {
   current: Club | null;
   onSubmit: (data: ClubsFormData) => void;
+  onCancelClick: () => void;
 };
 
-export const ClubsForm = ({ current, onSubmit }: Props) => {
+export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
   const initialValues: ClubsFormData = current
     ? {
         name: current.name,
@@ -56,7 +57,10 @@ export const ClubsForm = ({ current, onSubmit }: Props) => {
             <MainFormActions
               label="klub"
               isEditState={!!current}
-              onCancelClick={handleReset}
+              onCancelClick={() => {
+                onCancelClick();
+                handleReset();
+              }}
             />
           </FormContainer>
         </Form>

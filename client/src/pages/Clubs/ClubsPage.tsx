@@ -15,8 +15,11 @@ import { Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useClubsState } from '../../context/clubs/useClubsState';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 export const ClubsPage = () => {
+  const { setAlert } = useAlertsState();
+
   const {
     loading,
     current,
@@ -53,12 +56,17 @@ export const ClubsPage = () => {
   const handleSubmit = (data: ClubsFormData) => {
     if (current) {
       editClub(current._id, data);
-      clearCurrent();
       setActiveTab(0);
     } else {
       addClub(data);
       setActiveTab(0);
     }
+  };
+
+  const handleFormReset = () => {
+    setActiveTab(0);
+    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
+    clearCurrent();
   };
 
   useEffect(
@@ -99,7 +107,11 @@ export const ClubsPage = () => {
           title={current ? 'Edycja klubu' : 'Tworzenie nowego klubu'}
         />
 
-        <ClubsForm current={current} onSubmit={handleSubmit} />
+        <ClubsForm
+          current={current}
+          onSubmit={handleSubmit}
+          onCancelClick={handleFormReset}
+        />
       </TabPanel>
     </MainTemplate>
   );

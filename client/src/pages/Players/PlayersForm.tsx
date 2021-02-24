@@ -22,6 +22,7 @@ type Props = {
   current: Player | null;
   onSubmit: (data: PlayersFormData) => void;
   onAddClubClick: () => void;
+  onCancelClick: () => void;
 };
 
 export const PlayersForm = ({
@@ -29,6 +30,7 @@ export const PlayersForm = ({
   current,
   onSubmit,
   onAddClubClick,
+  onCancelClick,
 }: Props) => {
   const user = useAuthenticatedUser();
 
@@ -162,7 +164,10 @@ export const PlayersForm = ({
             <MainFormActions
               label="zawodnika"
               isEditState={!!current}
-              onCancelClick={handleReset}
+              onCancelClick={() => {
+                onCancelClick();
+                handleReset();
+              }}
             />
           </FormContainer>
         </Form>

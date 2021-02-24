@@ -138,6 +138,7 @@ export const ReportsState: React.FC = ({ children }) => {
     try {
       const res = await axiosJson.put(`/api/v1/reports/${id}`, report);
       setAlert({ msg: res.data.message, type: 'success' });
+      clearCurrent();
 
       dispatch({
         type: 'UPDATE_REPORT_SUCCESS',
