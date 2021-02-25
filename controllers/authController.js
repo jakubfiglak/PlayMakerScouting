@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
-const sendEmail = require('../utils/sendEmail');
+const sgMail = require('../config/sendgrid');
 
 // @desc Register user
 // @route POST /api/v1/auth/register
@@ -27,24 +27,29 @@ exports.register = asyncHandler(async (req, res, next) => {
 
   user = await User.create({ ...req.body, confirmationCode });
 
-  console.log(process.env.APP_HOST);
+  const confirmationURL = `http://${req.headers.host}/confirm/${confirmationCode}`;
 
-  const link = `${process.env.APP_HOST}/confirm/${confirmationCode}`;
+  try {
+    await sgMail.send({
+      to: email,
+      from: 'playmakerscoutingapp@gmail.com',
+      subject: 'Aktywuj swoje konto w aplikacji PlaymakerPro Scouting',
+      text: `Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w link ${confirmationURL}`,
+      html: `<h2>Witaj ${user.firstName}</h2>
+            <p>Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w <a href="${confirmationURL}">link</a></p>
+      `,
+    });
+  } catch (error) {
+    console.error(error);
+    user.confirmationCode = undefined;
+    await user.save({ validateBeforeSave: false });
+    return next(new ErrorResponse('Confirmation email could not be sent', 500));
+  }
 
-  console.log(link);
-
-  await sendEmail({
-    email,
-    subject: 'Aktywuj swoje konto w aplikacji PlaymakerPro Scouting',
-    html: `<h2>Witaj ${user.firstName}</h2>
-          <p>Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w <a href="${link}">link</a></p>
-    `,
-  });
   res.status(201).json({
     success: true,
     message: 'Successfully created new user!',
     data: user,
-    // token,
   });
 });
 
@@ -216,8 +221,9 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const text = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}`;
 
   try {
-    await sendEmail({
-      email: user.email,
+    await sgMail.send({
+      to: user.email,
+      from: 'playmakerscoutingapp@gmail.com',
       subject: 'Password reset token',
       text,
     });
