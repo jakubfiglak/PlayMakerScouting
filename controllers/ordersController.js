@@ -101,7 +101,7 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc Get my orders list with the status of "open"
+// @desc Get my orders list with the status of "accepted"
 // @route GET /api/v1/orders/mylist
 // @access Private (admin and playmaker-scout-only)
 exports.getMyList = asyncHandler(async (req, res) => {

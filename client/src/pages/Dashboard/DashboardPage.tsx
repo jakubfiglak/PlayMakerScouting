@@ -1,84 +1,84 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // MUI components
-import {
-  Avatar,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 // MUI icons
-import { SportsSoccer as BallIcon } from '@material-ui/icons';
-// Assets
-import logo from '../../assets/logo.png';
+import {
+  DirectionsRun as PlayersIcon,
+  Security as ClubsIcon,
+  Assignment as OrdersIcon,
+  Assessment as ReportsIcon,
+} from '@material-ui/icons';
+// Custom components
+import { CountCard } from './CountCard';
+import { PageHeading } from '../../components/PageHeading';
+// Hooks
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+import { useDashboardData } from '../../operations/queries/useDashboardData';
 // Utils & data
 import { MainTemplate } from '../../templates/MainTemplate';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { Loader } from '../../components/Loader';
 
 export const DashboardPage = () => {
   const classes = useStyles();
+  const user = useAuthenticatedUser();
+  const { setAlert } = useAlertsState();
+
+  const isPrivilegedUser = user.role !== 'scout';
+
+  const { data, error, isLoading } = useDashboardData();
+
+  useEffect(() => {
+    if (error) {
+      setAlert({ msg: error.response.data.error, type: 'error' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   return (
     <MainTemplate>
-      <div className={classes.container}>
-        <div className={classes.logoContainer}>
-          <Avatar
-            alt="Playmaker logo"
-            src={logo}
-            variant="square"
-            className={classes.avatar}
-          />
-        </div>
-        <Typography variant="h6" align="center" className={classes.heading}>
-          Witaj w aplikacji scoutingowej Playmaker Pro
-        </Typography>
-        <Typography>Produkt umożliwia: </Typography>
-        <List>
-          <ListItem>
-            <ListItemIcon>
-              <BallIcon />
-            </ListItemIcon>
-            <ListItemText primary="Tworzenie bazy klubów oraz zawodników wartych obserwowania" />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <BallIcon />
-            </ListItemIcon>
-            <ListItemText primary="Tworzenie raportów z obserwacji meczowej zawodnika" />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <BallIcon />
-            </ListItemIcon>
-            <ListItemText primary="Przyjmowanie i realizację zleceń wystawianych przez zespół Playmaker Pro" />
-          </ListItem>
-        </List>
-        <Typography>
-          Chcesz zostać scoutem Playmaker Pro? Napisz do nas!
-        </Typography>
+      {isLoading && <Loader />}
+      <PageHeading title="Twoje statystyki" />
+      <div className={classes.countCardContainer}>
+        <CountCard
+          title="Zawodników w bazie"
+          count={data?.playersCount}
+          icon={<PlayersIcon />}
+        />
+        <CountCard
+          title="Klubów w bazie"
+          count={data?.clubsCount}
+          icon={<ClubsIcon />}
+        />
+        {isPrivilegedUser && (
+          <>
+            <CountCard
+              title="Zrealizowane zlecenia"
+              count={data?.closedOrdersCount || 0}
+              icon={<OrdersIcon />}
+            />
+            <CountCard
+              title="Zlecenia w realizacji"
+              count={data?.acceptedOrdersCount || 0}
+              icon={<OrdersIcon />}
+            />
+          </>
+        )}
+        <CountCard
+          title="Sporządzonych raportów"
+          count={data?.reportsCount}
+          icon={<ReportsIcon />}
+        />
       </div>
     </MainTemplate>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    maxWidth: 800,
-    margin: '0 auto',
-    textAlign: 'center',
-  },
-  logoContainer: {
-    display: 'flex',
+  countCardContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     justifyContent: 'center',
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    paddingBottom: theme.spacing(2),
-  },
-  heading: {
-    marginBottom: theme.spacing(2),
+    gap: `${theme.spacing(2)}px`,
   },
 }));

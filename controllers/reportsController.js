@@ -149,18 +149,6 @@ exports.getMyReports = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc Get report with the highest average rating
-// @route GET /api/v1/reports/highestAvg
-// @access Private
-exports.getHighestRatedReport = asyncHandler(async (req, res, next) => {
-  // TODO:
-  // const report = await Report.findOne({ $max: 'avgRating' });
-  // res.status(200).json({
-  //   success: true,
-  //   data: report,
-  // });
-});
-
 // @desc Get single report
 // @route GET /api/v1/reports/:id
 // @access Private (author or admin only)
@@ -174,8 +162,8 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   }
 
   if (
-    report.scout._id.toString() !== req.user._id &&
-    req.user.role !== 'admin'
+    report.scout._id.toString() !== req.user._id
+    && req.user.role !== 'admin'
   ) {
     return next(
       new ErrorResponse(

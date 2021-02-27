@@ -24,6 +24,7 @@ const players = require('./routes/players');
 const matches = require('./routes/matches');
 const orders = require('./routes/orders');
 const reports = require('./routes/reports');
+const dashboard = require('./routes/dashboard');
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use(`${process.env.BASE_URL}/players`, players);
 app.use(`${process.env.BASE_URL}/matches`, matches);
 app.use(`${process.env.BASE_URL}/orders`, orders);
 app.use(`${process.env.BASE_URL}/reports`, reports);
+app.use(`${process.env.BASE_URL}/dashboard`, dashboard);
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -56,7 +58,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
   app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')));
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  );
 }
 
 app.use(errorHandler);

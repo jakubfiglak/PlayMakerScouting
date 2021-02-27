@@ -47,3 +47,12 @@ export type CommonTableProps = {
   handleSort: (id: string) => void;
   total: number;
 };
+
+export interface ApiError extends Error {
+  response: {
+    data: {
+      error: string;
+      success: boolean;
+    };
+  };
+}
