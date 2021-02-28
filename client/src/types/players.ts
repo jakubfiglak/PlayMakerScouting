@@ -1,3 +1,4 @@
+import { Division } from './clubs';
 import { SortingOrder, PaginationData } from './common';
 
 export type Position = 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
@@ -15,9 +16,12 @@ export type Player = {
   club: {
     _id: string;
     name: string;
+    division: Division;
   };
   lnpID?: string;
   lnpProfileURL?: string;
+  minut90ProfileURL?: string;
+  transfermarktProfileURL?: string;
 };
 
 export type PlayerBasicInfo = Pick<

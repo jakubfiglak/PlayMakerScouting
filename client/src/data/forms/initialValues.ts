@@ -12,6 +12,8 @@ export const playersFormInitialValues: PlayersFormData = {
   footed: 'R',
   lnpID: '',
   lnpProfileURL: '',
+  minut90ProfileURL: '',
+  transfermarktProfileURL: '',
 };
 
 export const clubsFormInitialValues: ClubsFormData = {

@@ -24,6 +24,11 @@ export const playersFormValidationSchema: yup.ObjectSchema<PlayersFormData> = yu
     footed: yup.mixed<Foot>().required('Podaj preferowaną nogę zawodnika'),
     lnpID: yup.string().notRequired(),
     lnpProfileURL: yup.string().url('Niepoprawny format url').notRequired(),
+    minut90ProfileURL: yup.string().url('Niepoprawny format url').notRequired(),
+    transfermarktProfileURL: yup
+      .string()
+      .url('Niepoprawny format url')
+      .notRequired(),
   })
   .defined();
 

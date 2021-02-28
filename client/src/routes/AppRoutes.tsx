@@ -8,6 +8,7 @@ import { HomePage } from '../pages/Home/HomePage';
 import { LoginPage } from '../pages/Login/LoginPage';
 import { OrderPage } from '../pages/Order/OrderPage';
 import { OrdersPage } from '../pages/Orders/OrdersPage';
+import { PlayerPage } from '../pages/Player/PlayerPage';
 import { PlayersPage } from '../pages/Players/PlayersPage';
 import { ProfilePage } from '../pages/Profile/ProfilePage';
 import { RegisterPage } from '../pages/Register/RegisterPage';
@@ -37,10 +38,17 @@ export const AppRoutes = () => {
           <ProfilePage />
         </ProtectedRoute>
         <ProtectedRoute
+          exact
           path="/players"
           allowedRoles={['admin', 'playmaker-scout', 'scout']}
         >
           <PlayersPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/players/:id"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <PlayerPage />
         </ProtectedRoute>
         <ProtectedRoute
           path="/clubs"
