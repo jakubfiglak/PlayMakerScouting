@@ -8,6 +8,7 @@ export type MatchData = {
   location: MatchLocation;
   against: string;
   competition: Competition;
+  date: string;
 };
 
 export type Rating = {

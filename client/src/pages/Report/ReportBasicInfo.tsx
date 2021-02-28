@@ -4,7 +4,7 @@ import { Grid, Typography } from '@material-ui/core';
 // Types
 import { Report } from '../../types/reports';
 // Utils & data
-import { formatDate } from '../../utils/dates';
+import { formatDate, formatDateObject } from '../../utils/dates';
 import { getLabel } from '../../utils/getLabel';
 
 type Props = Pick<Report, 'player' | 'match' | 'order' | 'scout' | 'createdAt'>;
@@ -30,9 +30,9 @@ export const ReportBasicInfo = ({
         <Grid item xs={12}>
           <Typography>
             <strong>Mecz: </strong>
-            {`vs. ${match.against} (${getLabel(match.location)}), ${getLabel(
-              match.competition,
-            )}`}
+            {`${formatDate(match.date, true)} vs. ${match.against} (${getLabel(
+              match.location,
+            )}), ${getLabel(match.competition)}`}
           </Typography>
         </Grid>
         {order && (

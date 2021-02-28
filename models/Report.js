@@ -43,6 +43,9 @@ const ReportSchema = new Schema({
       type: String,
       enum: ['league', 'cup', 'friendly'],
     },
+    date: {
+      type: Date,
+    },
   },
   minutesPlayed: {
     type: Number,

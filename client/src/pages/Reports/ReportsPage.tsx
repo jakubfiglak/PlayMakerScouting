@@ -239,6 +239,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const date = new Date(Date.now());
+const dateString = date.toISOString().slice(0, 16);
+
 const reportsFormInitialValues: ReportFormData = {
   order: '',
   player: '',
@@ -246,6 +249,7 @@ const reportsFormInitialValues: ReportFormData = {
     location: 'home',
     against: '',
     competition: 'league',
+    date: dateString,
   },
   minutesPlayed: 0,
   goals: 0,
@@ -320,6 +324,7 @@ export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
         location: yup.mixed<MatchLocation>(),
         against: yup.string(),
         competition: yup.mixed<Competition>(),
+        date: yup.string(),
       })
       .defined(),
     minutesPlayed: yup
