@@ -21,6 +21,7 @@ import { OrderStatusChip } from '../Orders/OrderStatusChip';
 import { Order } from '../../types/orders';
 // Utils & data
 import { formatDate } from '../../utils/dates';
+import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   order: Order;
@@ -48,6 +49,8 @@ export const OrderDetails = ({
     notes,
   } = order;
 
+  console.log(player);
+
   return (
     <Card className={classes.container}>
       <CardContent>
@@ -60,7 +63,9 @@ export const OrderDetails = ({
           </Grid>
           <Grid item xs={12}>
             <Typography>
-              <strong>Zawodnik:</strong> {player.firstName} {player.lastName}
+              <strong>Zawodnik:</strong> {player.firstName} {player.lastName},{' '}
+              {getLabel(player.position)} ({player.club.name},{' '}
+              {player.club.division})
             </Typography>
           </Grid>
           {scout && (
@@ -126,7 +131,7 @@ export const OrderDetails = ({
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    maxWidth: 500,
+    maxWidth: 800,
     textAlign: 'center',
     margin: '0 auto',
   },

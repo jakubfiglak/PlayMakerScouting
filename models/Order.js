@@ -43,16 +43,16 @@ const OrderSchema = new Schema(
 OrderSchema.plugin(mongoosePaginate);
 OrderSchema.plugin(AutoIncrement, { inc_field: 'orderNo', start_seq: 50 });
 
+OrderSchema.virtual('docNumber').get(function () {
+  const date = new Date(this.createdAt);
+  return `${this.orderNo.toString().padStart(4, '0')}/${date.getFullYear()}`;
+});
+
 OrderSchema.virtual('reports', {
   ref: 'Report',
   localField: '_id',
   foreignField: 'order',
   justOne: false,
-});
-
-OrderSchema.virtual('docNumber').get(function () {
-  const date = new Date(this.createdAt);
-  return `${this.orderNo.toString().padStart(4, '0')}/${date.getFullYear()}`;
 });
 
 module.exports = model('Order', OrderSchema);

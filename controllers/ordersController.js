@@ -5,6 +5,8 @@ const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const prepareQuery = require('../utils/prepareQuery');
 
+// TODO: extract populate fields into a variable
+
 // @desc Create new order
 // @route POST /api/v1/orders
 // @access Private (admin only)
@@ -46,9 +48,13 @@ exports.getOrders = asyncHandler(async (req, res) => {
     limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate: [
-      { path: 'player', select: ['firstName', 'lastName', 'position'] },
+      {
+        path: 'player',
+        select: ['firstName', 'lastName', 'club'],
+        populate: { path: 'club', select: ['name', 'division'] },
+      },
       { path: 'scout', select: ['firstName', 'lastName'] },
-      { path: 'reports', select: ['_id'] },
+      { path: 'reports', select: ['_id', 'reportNo', 'createdAt'] },
     ],
   };
 
@@ -82,7 +88,11 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
     limit: req.query.limit || 10,
     page: req.query.page || 1,
     populate: [
-      { path: 'player', select: ['firstName', 'lastName'] },
+      {
+        path: 'player',
+        select: ['firstName', 'lastName', 'club'],
+        populate: { path: 'club', select: ['name', 'division'] },
+      },
       { path: 'scout', select: ['firstName', 'lastName'] },
       { path: 'reports', select: ['_id'] },
     ],
@@ -109,14 +119,16 @@ exports.getMyList = asyncHandler(async (req, res) => {
     scout: req.user._id,
     status: 'accepted',
   })
-    .select('player club')
+    .select('player club orderNo createdAt docNumber')
     .populate({
       path: 'player',
       select: 'firstName lastName club position',
-      populate: {
-        path: 'club',
-        select: 'name',
-      },
+      populate: [
+        {
+          path: 'club',
+          select: 'name',
+        },
+      ],
     });
 
   res.status(200).json({
@@ -149,10 +161,10 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id).populate([
     {
       path: 'player',
-      select: 'firstName lastName club',
+      select: 'firstName lastName club position',
       populate: {
         path: 'club',
-        select: 'name',
+        select: ['name', 'division'],
       },
     },
     { path: 'scout', select: ['firstName', 'lastName'] },

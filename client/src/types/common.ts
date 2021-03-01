@@ -2,7 +2,8 @@ import { ChangeEvent } from 'react';
 
 export type SortingOrder = 'asc' | 'desc';
 
-export type PaginationData = {
+export type PaginatedData<T> = {
+  docs: T[];
   totalDocs: number;
   limit: number;
   totalPages: number;

@@ -21,6 +21,8 @@ const ordersPopulate = {
   populate: { path: 'club', select: 'name' },
 };
 
+// TODO: adjust this controller - it should return whole collection count for clubs and players if user is admin
+
 // @desc Get dashboard data
 // @route GET /api/v1/dashboard
 // @access Private

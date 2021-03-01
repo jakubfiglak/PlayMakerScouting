@@ -1,5 +1,5 @@
 import { Division } from './clubs';
-import { SortingOrder, PaginationData } from './common';
+import { SortingOrder, PaginatedData } from './common';
 
 export type Position = 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
 export type Foot = 'L' | 'R' | 'both';
@@ -33,10 +33,6 @@ export type PlayersFormData = Omit<Player, '_id' | 'club'> & {
   club: string;
 };
 
-export type PlayersData = {
-  docs: Player[];
-} & PaginationData;
-
 export type PlayersFilterData = {
   lastName: string;
   club: string;
@@ -57,7 +53,7 @@ export type GetPlayers = (
 ) => void;
 
 export type State = {
-  playersData: PlayersData;
+  playersData: PaginatedData<Player>;
   playersList: PlayerBasicInfo[];
   playerData: Player | null;
   current: Player | null;
@@ -80,7 +76,7 @@ export type Action =
   | { type: 'SET_CURRENT'; payload: Player }
   | { type: 'CLEAR_CURRENT' }
   | { type: 'PLAYERS_ERROR'; payload: string }
-  | { type: 'GET_PLAYERS_SUCCESS'; payload: PlayersData }
+  | { type: 'GET_PLAYERS_SUCCESS'; payload: PaginatedData<Player> }
   | { type: 'GET_PLAYERS_LIST_SUCCESS'; payload: PlayerBasicInfo[] }
   | { type: 'GET_PLAYER_SUCCESS'; payload: Player }
   | {

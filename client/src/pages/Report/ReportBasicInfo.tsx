@@ -4,7 +4,7 @@ import { Grid, Typography } from '@material-ui/core';
 // Types
 import { Report } from '../../types/reports';
 // Utils & data
-import { formatDate, formatDateObject } from '../../utils/dates';
+import { formatDate } from '../../utils/dates';
 import { getLabel } from '../../utils/getLabel';
 
 type Props = Pick<Report, 'player' | 'match' | 'order' | 'scout' | 'createdAt'>;
@@ -39,7 +39,7 @@ export const ReportBasicInfo = ({
           <Grid item xs={12}>
             <Typography>
               <strong>Nr zlecenia: </strong>
-              {order}
+              {order.docNumber}
             </Typography>
           </Grid>
         )}

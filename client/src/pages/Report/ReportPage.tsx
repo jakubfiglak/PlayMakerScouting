@@ -71,7 +71,7 @@ export const ReportPage = () => {
             >
               Wróć do listy raportów
             </Button>
-            <PageHeading title={`Raport nr ${reportData._id}`} />
+            <PageHeading title={`Raport nr ${reportData.docNumber}`} />
             <div className={classes.buttonsContainer}>
               <Button
                 variant="contained"

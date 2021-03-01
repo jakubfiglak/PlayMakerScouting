@@ -47,7 +47,7 @@ export const OrderPage = () => {
         >
           Wróć do listy zleceń
         </Button>
-        <PageHeading title={`Zlecenie obserwacji nr ${orderData?._id}`} />
+        <PageHeading title={`Zlecenie obserwacji nr ${orderData?.docNumber}`} />
       </div>
       {orderData && (
         <OrderDetails
