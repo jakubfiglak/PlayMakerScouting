@@ -5,7 +5,13 @@ const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const prepareQuery = require('../utils/prepareQuery');
 
-// TODO: extract populate fields into a variable
+const populatePlayer = {
+  path: 'player',
+  select: ['firstName', 'lastName', 'club'],
+  populate: { path: 'club', select: ['name', 'division'] },
+};
+
+const populateScout = { path: 'scout', select: ['firstName', 'lastName'] };
 
 // @desc Create new order
 // @route POST /api/v1/orders
@@ -23,9 +29,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 
   let order = await Order.create(req.body);
 
-  order = await order
-    .populate({ path: 'player', select: 'firstName lastName' })
-    .execPopulate();
+  order = await order.populate([populatePlayer, populateScout]).execPopulate();
 
   res.status(201).json({
     success: true,
@@ -47,15 +51,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
     sort: req.query.sort || '-createdAt',
     limit: req.query.limit || 10,
     page: req.query.page || 1,
-    populate: [
-      {
-        path: 'player',
-        select: ['firstName', 'lastName', 'club'],
-        populate: { path: 'club', select: ['name', 'division'] },
-      },
-      { path: 'scout', select: ['firstName', 'lastName'] },
-      { path: 'reports', select: ['_id', 'reportNo', 'createdAt'] },
-    ],
+    populate: [populatePlayer, populateScout],
   };
 
   const query = { ...reqQuery };
@@ -87,15 +83,7 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
     sort: req.query.sort || '-createdAt',
     limit: req.query.limit || 10,
     page: req.query.page || 1,
-    populate: [
-      {
-        path: 'player',
-        select: ['firstName', 'lastName', 'club'],
-        populate: { path: 'club', select: ['name', 'division'] },
-      },
-      { path: 'scout', select: ['firstName', 'lastName'] },
-      { path: 'reports', select: ['_id'] },
-    ],
+    populate: [populatePlayer, populateScout],
   };
 
   const query = {
@@ -120,16 +108,7 @@ exports.getMyList = asyncHandler(async (req, res) => {
     status: 'accepted',
   })
     .select('player club orderNo createdAt docNumber')
-    .populate({
-      path: 'player',
-      select: 'firstName lastName club position',
-      populate: [
-        {
-          path: 'club',
-          select: 'name',
-        },
-      ],
-    });
+    .populate([populatePlayer]);
 
   res.status(200).json({
     success: true,
@@ -158,17 +137,7 @@ exports.getMyOrdersForPlayer = asyncHandler(async (req, res) => {
 // @route GET /api/v1/orders/:id
 // @access Private (admin and playmaker-scout only)
 exports.getOrder = asyncHandler(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate([
-    {
-      path: 'player',
-      select: 'firstName lastName club position',
-      populate: {
-        path: 'club',
-        select: ['name', 'division'],
-      },
-    },
-    { path: 'scout', select: ['firstName', 'lastName'] },
-  ]);
+  const order = await Order.findById(req.params.id).populate(populatePlayer);
 
   if (!order) {
     return next(
@@ -247,12 +216,7 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
 
   await order.save();
 
-  order = await order
-    .populate([
-      { path: 'player', select: 'firstName lastName' },
-      { path: 'scout', select: 'firstName lastName' },
-    ])
-    .execPopulate();
+  order = await order.populate([populatePlayer, populateScout]).execPopulate();
 
   res.status(200).json({
     success: true,
@@ -296,12 +260,7 @@ exports.closeOrder = asyncHandler(async (req, res, next) => {
 
   await order.save();
 
-  order = await order
-    .populate([
-      { path: 'player', select: 'firstName lastName' },
-      { path: 'scout', select: 'firstName lastName' },
-    ])
-    .execPopulate();
+  order = await order.populate([populatePlayer, populateScout]).execPopulate();
 
   res.status(200).json({
     success: true,

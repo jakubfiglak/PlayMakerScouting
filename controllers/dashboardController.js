@@ -2,8 +2,10 @@ const asyncHandler = require('express-async-handler');
 const Report = require('../models/Report');
 const User = require('../models/User');
 const Order = require('../models/Order');
+const Player = require('../models/Player');
+const Club = require('../models/Club');
 
-const reportsPopulate = [
+const populateReports = [
   {
     path: 'player',
     select: 'firstName lastName position',
@@ -15,94 +17,160 @@ const reportsPopulate = [
   },
 ];
 
-const ordersPopulate = {
+const populateOrders = {
   path: 'player',
   select: 'firstName lastName position',
   populate: { path: 'club', select: 'name' },
 };
 
-// TODO: adjust this controller - it should return whole collection count for clubs and players if user is admin
+const getHighestRatedReport = ({ userRole, userID }) => {
+  const query = userRole === 'admin' ? {} : { scout: userID };
+
+  return Report.find(query)
+    .sort('-avgRating')
+    .limit(1)
+    .populate(populateReports);
+};
+
+const getLatestReport = ({ userRole, userID }) => {
+  const query = userRole === 'admin' ? {} : { scout: userID };
+
+  return Report.find(query)
+    .sort('-createdAt')
+    .limit(1)
+    .populate(populateReports);
+};
+
+const getReportsCount = ({ userRole, userID }) => {
+  const query = userRole === 'admin' ? {} : { scout: userID };
+
+  return Report.countDocuments(query);
+};
+
+const getUser = (userID) => User.findById(userID).lean();
+
+const getLatestOrder = () =>
+  Order.find({
+    status: 'open',
+  })
+    .sort('-createdAt')
+    .limit(1)
+    .populate(populateOrders);
+
+const getAcceptedOrdersCount = ({ userRole, userID }) => {
+  const query = userRole === 'admin' ? {} : { scout: userID };
+
+  return Order.countDocuments({ ...query, status: 'accepted' });
+};
+
+const getClosedOrdersCount = ({ userRole, userID }) => {
+  const query = userRole === 'admin' ? {} : { scout: userID };
+
+  return Order.countDocuments({ ...query, status: 'closed' });
+};
+
+const getPlayersCount = () => Player.countDocuments();
+const getClubsCount = () => Club.countDocuments();
 
 // @desc Get dashboard data
 // @route GET /api/v1/dashboard
 // @access Private
 exports.getDashboardData = asyncHandler(async (req, res) => {
-  const userPromise = User.findById(req.user._id).lean();
-  const isPrivilegedUser = req.user.role !== 'scout';
-
-  const highestRatedReportsPromise = await Report.find({
-    scout: req.user._id,
-  })
-    .sort('-avgRating')
-    .limit(1)
-    .populate(reportsPopulate)
-
-    .lean();
-
-  const latestReportsPromise = await Report.find({
-    scout: req.user._id,
-  })
-    .sort('-createdAt')
-    .limit(1)
-    .populate(reportsPopulate)
-    .lean();
-
-  const reportsCountPromise = await Report.countDocuments({
-    scout: req.user._id,
-  });
+  const userID = req.user._id;
+  const userRole = req.user.role;
 
   const promiseArr = [
-    userPromise,
-    highestRatedReportsPromise,
-    latestReportsPromise,
-    reportsCountPromise,
+    getUser(userID),
+    getHighestRatedReport({ userID, userRole }),
+    getLatestReport({ userID, userRole }),
+    getReportsCount({ userID, userRole }),
   ];
 
-  if (isPrivilegedUser) {
-    const ordersPromise = Order.find({
-      status: 'open',
-    })
-      .sort('-createdAt')
-      .limit(1)
-      .populate(ordersPopulate)
-      .lean();
+  if (userRole === 'scout') {
+    const [
+      user,
+      highestRatedReport,
+      latestReport,
+      reportsCount,
+    ] = await Promise.all(promiseArr);
 
-    const acceptedOrdersCountPromise = Order.countDocuments({
-      scout: req.user._id,
-      status: 'accepted',
+    return res.status(200).json({
+      success: true,
+      data: {
+        clubsCount: user.myClubs.length,
+        playersCount: user.myPlayers.length,
+        highestRatedReport: highestRatedReport[0] || null,
+        latestReport: latestReport[0] || null,
+        reportsCount,
+        latestOrder: null,
+        acceptedOrdersCount: null,
+        closedOrdersCount: null,
+      },
     });
-
-    const closedOrdersCountPromise = Order.countDocuments({
-      scout: req.user._id,
-      status: 'closed',
-    });
-
-    promiseArr.push(
-      ordersPromise,
-      acceptedOrdersCountPromise,
-      closedOrdersCountPromise
-    );
   }
 
+  if (userRole === 'playmaker-scout') {
+    promiseArr.push(
+      getLatestOrder(),
+      getAcceptedOrdersCount({ userRole, userID }),
+      getClosedOrdersCount({ userRole, userID })
+    );
+
+    const [
+      user,
+      highestRatedReport,
+      latestReport,
+      reportsCount,
+      latestOrder,
+      acceptedOrdersCount,
+      closedOrdersCount,
+    ] = await Promise.all(promiseArr);
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        clubsCount: user.myClubs.length,
+        playersCount: user.myPlayers.length,
+        highestRatedReport: highestRatedReport[0] || null,
+        latestReport: latestReport[0] || null,
+        reportsCount,
+        latestOrder: latestOrder[0] || null,
+        acceptedOrdersCount,
+        closedOrdersCount,
+      },
+    });
+  }
+
+  promiseArr.shift();
+  promiseArr.unshift(getClubsCount(), getPlayersCount());
+  promiseArr.push(
+    getLatestOrder(),
+    getAcceptedOrdersCount({ userRole, userID }),
+    getClosedOrdersCount({ userRole, userID })
+  );
+
   const [
-    user,
-    highestRatedReports,
-    latestReports,
+    clubsCount,
+    playersCount,
+    highestRatedReport,
+    latestReport,
     reportsCount,
-    ...ordersData
+    latestOrder,
+    acceptedOrdersCount,
+    closedOrdersCount,
   ] = await Promise.all(promiseArr);
 
   res.status(200).json({
     success: true,
     data: {
-      clubsCount: user.myClubs.length,
-      playersCount: user.myPlayers.length,
-      highestRatedReport: highestRatedReports[0] || null,
-      latestReport: latestReports[0] || null,
+      clubsCount,
+      playersCount,
+      highestRatedReport: highestRatedReport[0] || null,
+      latestReport: latestReport[0] || null,
       reportsCount,
-      latestOrder: isPrivilegedUser ? ordersData[0][0] || null : null,
-      acceptedOrdersCount: isPrivilegedUser ? ordersData[1] : null,
-      closedOrdersCount: isPrivilegedUser ? ordersData[2] : null,
+      latestOrder: latestOrder[0] || null,
+      acceptedOrdersCount,
+      closedOrdersCount,
     },
   });
 });
