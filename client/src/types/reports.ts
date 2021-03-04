@@ -42,16 +42,7 @@ export type MotorSkills = {
 export type Report = {
   _id: string;
   docNumber: string;
-  player: Pick<
-    Player,
-    | '_id'
-    | 'firstName'
-    | 'lastName'
-    | 'club'
-    | 'position'
-    | 'minut90ProfileURL'
-    | 'transfermarktProfileURL'
-  >;
+  player: Player;
   match: MatchData;
   scout: Pick<User, '_id' | 'firstName' | 'lastName'>;
   order?: Pick<Order, '_id' | 'docNumber'>;

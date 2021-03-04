@@ -4,6 +4,8 @@ import { useReactToPrint } from 'react-to-print';
 import * as yup from 'yup';
 // MUI components
 import { AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
+// Assets
+import background from '../../assets/report_background.png';
 // Custom components
 import { ReportsTable } from './ReportsTable';
 import { ReportsFilterForm } from './ReportsFilterForm';
@@ -89,7 +91,7 @@ export const ReportsPage = () => {
 
   const initialValues: ReportFormData = current
     ? {
-        order: current.order,
+        order: current.order?._id,
         player: current.player._id,
         match: current.match,
         minutesPlayed: current.minutesPlayed,
@@ -119,12 +121,12 @@ export const ReportsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters]);
 
-  useEffect(() => {
-    if (current) {
-      setActiveTab(1);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current]);
+  // useEffect(() => {
+  //   if (current) {
+  //     setActiveTab(1);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [current]);
 
   const handleSetCurrent = (report: Report) => {
     setCurrent(report);
@@ -134,6 +136,7 @@ export const ReportsPage = () => {
   const handlePrint = useReactToPrint({
     content: () => ref.current,
     documentTitle: `PlaymakerReport_${current?._id}`,
+    bodyClass: classes.pageBody,
     onAfterPrint: () => clearCurrent(),
   }) as () => void;
 
@@ -236,6 +239,11 @@ const useStyles = makeStyles(() => ({
   print: {
     overflow: 'hidden',
     height: 0,
+  },
+  pageBody: {
+    backgroundImage: `url(${background})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
   },
 }));
 

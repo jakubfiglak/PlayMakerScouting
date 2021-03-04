@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 // MUI components
 import { Typography, Grid, makeStyles, Theme } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
@@ -11,9 +12,10 @@ import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   skills: IndividualSkills | TeamplaySkills;
+  printeable?: boolean;
 };
 
-export const ReportSkills = ({ skills }: Props) => {
+export const ReportSkills = ({ skills, printeable }: Props) => {
   const classes = useStyles();
 
   return (
@@ -23,18 +25,34 @@ export const ReportSkills = ({ skills }: Props) => {
           value && (
             <Grid item xs={12} key={key}>
               <div className={classes.container}>
-                <Typography>
+                <Typography
+                  className={clsx({
+                    [classes.text]: printeable,
+                  })}
+                >
                   <strong>{getLabel(key)}</strong>
                 </Typography>
                 <Rating
                   name={`${key}.rating`}
                   value={value.rating}
                   max={4}
-                  icon={<BallIcon />}
+                  icon={<BallIcon fontSize="inherit" />}
                   readOnly
+                  size={printeable ? 'small' : 'medium'}
                 />
+                {printeable && (
+                  <Typography className={classes.text}>
+                    <strong>{value.rating}/4</strong>
+                  </Typography>
+                )}
               </div>
-              <Typography variant="body2" color="textSecondary">
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                className={clsx({
+                  [classes.text]: printeable,
+                })}
+              >
                 {value.note}
               </Typography>
             </Grid>
@@ -49,5 +67,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     gap: `${theme.spacing(1)}px`,
+  },
+  text: {
+    fontSize: 10,
   },
 }));

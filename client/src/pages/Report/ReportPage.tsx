@@ -19,6 +19,8 @@ import {
   Print as PrintIcon,
   Edit as EditIcon,
 } from '@material-ui/icons';
+// Assets
+import background from '../../assets/report_background.png';
 // Custom components
 import { ReportMatchStats } from './ReportMatchStats';
 import { ReportMotorSkills } from './ReportMotorSkills';
@@ -48,6 +50,7 @@ export const ReportPage = () => {
 
   const handlePrint = useReactToPrint({
     content: () => ref.current,
+    bodyClass: classes.pageBody,
     documentTitle: `PlaymakerReport_${id}`,
   });
 
@@ -211,5 +214,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   accordionDetails: {
     flexDirection: 'column',
+  },
+  pageBody: {
+    backgroundImage: `url(${background})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
   },
 }));

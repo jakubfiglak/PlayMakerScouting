@@ -9,22 +9,26 @@ import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   finalRating: RatingScore;
+  printeable?: boolean;
 };
 
-export const FinalRatingChip = ({ finalRating }: Props) => {
+export const FinalRatingChip = ({ finalRating, printeable }: Props) => {
   const classes = useStyles();
 
   return (
     <Chip
       size="small"
       label={getLabel(finalRating)}
-      className={clsx({
-        [classes.chip]: true,
-        [classes.negative]: finalRating === 1,
-        [classes.unknown]: finalRating === 2,
-        [classes.observe]: finalRating === 3,
-        [classes.positive]: finalRating === 4,
-      })}
+      classes={{
+        root: clsx({
+          [classes.chip]: true,
+          [classes.negative]: finalRating === 1,
+          [classes.unknown]: finalRating === 2,
+          [classes.observe]: finalRating === 3,
+          [classes.positive]: finalRating === 4,
+        }),
+        label: clsx({ [classes.label]: printeable }),
+      }}
     />
   );
 };
@@ -45,5 +49,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   positive: {
     background: theme.palette.success.light,
+  },
+  label: {
+    fontSize: 10,
   },
 }));
