@@ -29,6 +29,9 @@ export const FilterFormActions = ({ handleClearFilter }: Props) => {
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
-    gap: `${theme.spacing(2)}px`,
+
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
   },
 }));

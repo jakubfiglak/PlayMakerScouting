@@ -43,7 +43,7 @@ type LocationState = { setActiveTab: number };
 export const ReportsPage = () => {
   const classes = useStyles();
   const ref = useRef<HTMLDivElement | null>(null);
-  const { state } = useLocation<LocationState>();
+  const { state } = useLocation<LocationState | null>();
 
   const {
     loading,
@@ -126,11 +126,11 @@ export const ReportsPage = () => {
   }, [page, rowsPerPage, sortBy, order, filters]);
 
   useEffect(() => {
-    if (state.setActiveTab) {
+    if (state?.setActiveTab) {
       setActiveTab(state.setActiveTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.setActiveTab]);
+  }, [state?.setActiveTab]);
 
   const handleSetCurrent = (report: Report) => {
     setCurrent(report);
