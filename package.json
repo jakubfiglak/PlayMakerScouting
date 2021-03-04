@@ -16,7 +16,7 @@
     "testOne": "jest --watch --detectOpenHandles",
     "import-data": "node seeder -import",
     "destroy-data": "node seeder -destroy",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client & migrate-mongo up"
   },
   "author": "Jakub Figlak",
   "license": "ISC",
