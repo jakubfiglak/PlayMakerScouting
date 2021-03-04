@@ -85,7 +85,7 @@ export const ReportPage = () => {
                 Drukuj
               </Button>
               <Button
-                to="/reports"
+                to={{ pathname: '/reports', state: { setActiveTab: 1 } }}
                 component={RouterLink}
                 variant="contained"
                 color="primary"

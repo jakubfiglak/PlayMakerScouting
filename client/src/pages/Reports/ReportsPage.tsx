@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Formik } from 'formik';
 import { useReactToPrint } from 'react-to-print';
 import * as yup from 'yup';
@@ -37,9 +38,12 @@ import { useClubsState } from '../../context/clubs/useClubsState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
+type LocationState = { setActiveTab: number };
+
 export const ReportsPage = () => {
   const classes = useStyles();
   const ref = useRef<HTMLDivElement | null>(null);
+  const { state } = useLocation<LocationState>();
 
   const {
     loading,
@@ -121,12 +125,12 @@ export const ReportsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, sortBy, order, filters]);
 
-  // useEffect(() => {
-  //   if (current) {
-  //     setActiveTab(1);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [current]);
+  useEffect(() => {
+    if (state.setActiveTab) {
+      setActiveTab(state.setActiveTab);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.setActiveTab]);
 
   const handleSetCurrent = (report: Report) => {
     setCurrent(report);
