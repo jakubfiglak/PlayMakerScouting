@@ -22,6 +22,7 @@ type Props = {
   current: Player | null;
   onSubmit: (data: PlayersFormData) => void;
   onAddClubClick: () => void;
+  onCancelClick: () => void;
 };
 
 export const PlayersForm = ({
@@ -29,6 +30,7 @@ export const PlayersForm = ({
   current,
   onSubmit,
   onAddClubClick,
+  onCancelClick,
 }: Props) => {
   const user = useAuthenticatedUser();
 
@@ -44,6 +46,8 @@ export const PlayersForm = ({
         footed: current.footed,
         lnpID: current.lnpID,
         lnpProfileURL: current.lnpProfileURL,
+        minut90ProfileURL: current.minut90ProfileURL,
+        transfermarktProfileURL: current.transfermarktProfileURL,
       }
     : playersFormInitialValues;
 
@@ -157,12 +161,45 @@ export const PlayersForm = ({
                     'Pole opcjonalne'
                   }
                 />
+                <Field
+                  name="minut90ProfileURL"
+                  as={TextField}
+                  variant="outlined"
+                  fullWidth
+                  label="Link do profilu 90minut"
+                  error={
+                    touched.minut90ProfileURL && !!errors.minut90ProfileURL
+                  }
+                  helperText={
+                    (touched.minut90ProfileURL && errors.minut90ProfileURL) ||
+                    'Pole opcjonalne'
+                  }
+                />
+                <Field
+                  name="transfermarktProfileURL"
+                  as={TextField}
+                  variant="outlined"
+                  fullWidth
+                  label="Link do profilu Transfermarkt"
+                  error={
+                    touched.transfermarktProfileURL &&
+                    !!errors.transfermarktProfileURL
+                  }
+                  helperText={
+                    (touched.transfermarktProfileURL &&
+                      errors.transfermarktProfileURL) ||
+                    'Pole opcjonalne'
+                  }
+                />
               </>
             )}
             <MainFormActions
               label="zawodnika"
               isEditState={!!current}
-              onCancelClick={handleReset}
+              onCancelClick={() => {
+                onCancelClick();
+                handleReset();
+              }}
             />
           </FormContainer>
         </Form>

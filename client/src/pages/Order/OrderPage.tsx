@@ -6,8 +6,8 @@ import { Button, makeStyles, Theme } from '@material-ui/core';
 import { OrderDetails } from './OrderDetails';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
-import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 
@@ -25,16 +25,9 @@ export const OrderPage = () => {
     getOrder,
     acceptOrder,
     closeOrder,
-    error,
-    message,
-    clearErrors,
-    clearMessage,
   } = useOrdersState();
 
   const { id } = params;
-
-  useAlert(error, 'error', clearErrors);
-  useAlert(message, 'success', clearMessage);
 
   useEffect(() => {
     getOrder(id);
@@ -42,7 +35,7 @@ export const OrderPage = () => {
   }, [id]);
 
   return (
-    <>
+    <MainTemplate>
       {loading && <Loader />}
       <div className={classes.container}>
         <Button
@@ -54,7 +47,7 @@ export const OrderPage = () => {
         >
           Wróć do listy zleceń
         </Button>
-        <PageHeading title={`Zlecenie obserwacji nr ${orderData?._id}`} />
+        <PageHeading title={`Zlecenie obserwacji nr ${orderData?.docNumber}`} />
       </div>
       {orderData && (
         <OrderDetails
@@ -64,7 +57,7 @@ export const OrderPage = () => {
           areAdminOptionsEnabled={user.role === 'admin'}
         />
       )}
-    </>
+    </MainTemplate>
   );
 };
 

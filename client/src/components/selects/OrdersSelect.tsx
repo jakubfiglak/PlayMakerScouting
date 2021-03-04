@@ -31,11 +31,11 @@ export const OrdersSelect = ({ ordersData, name }: Props) => {
         error={touched && !!error}
       >
         {ordersData.map((orderData) => {
-          const { _id, player } = orderData;
+          const { _id, player, docNumber } = orderData;
 
           return (
             <MenuItem key={_id} value={_id}>
-              {`Zlecenie nr ${_id} ${player.lastName}, ${player.firstName}`}
+              {`Zlecenie nr ${docNumber} ${player.lastName}, ${player.firstName}`}
             </MenuItem>
           );
         })}

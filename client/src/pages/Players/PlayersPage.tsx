@@ -9,6 +9,7 @@ import { AddClubModal } from './AddClubModal';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import {
   PlayersFilterData,
@@ -18,11 +19,13 @@ import {
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useAlert } from '../../hooks/useAlert';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 export const PlayersPage = () => {
+  const { setAlert } = useAlertsState();
+
   const {
     loading,
     getPlayers,
@@ -31,10 +34,6 @@ export const PlayersPage = () => {
     editPlayer,
     current,
     setCurrent,
-    message,
-    error,
-    clearMessage,
-    clearErrors,
     clearCurrent,
   } = usePlayersState();
 
@@ -42,10 +41,7 @@ export const PlayersPage = () => {
     loading: clubsLoading,
     getClubsList,
     clubsList,
-    message: clubsMessage,
-    error: clubsError,
-    clearErrors: clearClubsErrors,
-    clearMessage: clearClubsMessage,
+
     addClub,
   } = useClubsState();
 
@@ -59,11 +55,6 @@ export const PlayersPage = () => {
     handleChangeRowsPerPage,
     handleSort,
   ] = useTable();
-
-  useAlert(error, 'error', clearErrors);
-  useAlert(clubsError, 'error', clearClubsErrors);
-  useAlert(message, 'success', clearMessage);
-  useAlert(clubsMessage, 'success', clearClubsMessage);
 
   const [filters, setFilters] = useState<PlayersFilterData>({
     lastName: '',
@@ -91,7 +82,6 @@ export const PlayersPage = () => {
   const handlePlayersFormSubmit = (data: PlayersFormData) => {
     if (current) {
       editPlayer(current._id, data);
-      clearCurrent();
       setActiveTab(0);
     } else {
       addPlayer(data);
@@ -99,8 +89,14 @@ export const PlayersPage = () => {
     }
   };
 
+  const handleFormReset = () => {
+    setActiveTab(0);
+    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
+    clearCurrent();
+  };
+
   return (
-    <>
+    <MainTemplate>
       {(loading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
@@ -133,6 +129,7 @@ export const PlayersPage = () => {
           current={current}
           onSubmit={handlePlayersFormSubmit}
           onAddClubClick={() => setIsAddClubModalOpen(true)}
+          onCancelClick={handleFormReset}
         />
         <AddClubModal
           onClose={() => setIsAddClubModalOpen(false)}
@@ -140,6 +137,6 @@ export const PlayersPage = () => {
           open={isAddClubModalOpen}
         />
       </TabPanel>
-    </>
+    </MainTemplate>
   );
 };

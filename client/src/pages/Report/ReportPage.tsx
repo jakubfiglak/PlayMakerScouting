@@ -19,6 +19,8 @@ import {
   Print as PrintIcon,
   Edit as EditIcon,
 } from '@material-ui/icons';
+// Assets
+import background from '../../assets/report_background.png';
 // Custom components
 import { ReportMatchStats } from './ReportMatchStats';
 import { ReportMotorSkills } from './ReportMotorSkills';
@@ -28,6 +30,7 @@ import { ReportSkills } from './ReportSkills';
 import { PrinteableReport } from './PrinteableReport';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
 
@@ -47,6 +50,7 @@ export const ReportPage = () => {
 
   const handlePrint = useReactToPrint({
     content: () => ref.current,
+    bodyClass: classes.pageBody,
     documentTitle: `PlaymakerReport_${id}`,
   });
 
@@ -56,7 +60,7 @@ export const ReportPage = () => {
   }, [id]);
 
   return (
-    <>
+    <MainTemplate>
       {loading && <Loader />}
       {reportData && (
         <>
@@ -70,7 +74,7 @@ export const ReportPage = () => {
             >
               Wróć do listy raportów
             </Button>
-            <PageHeading title={`Raport nr ${reportData._id}`} />
+            <PageHeading title={`Raport nr ${reportData.docNumber}`} />
             <div className={classes.buttonsContainer}>
               <Button
                 variant="contained"
@@ -81,7 +85,7 @@ export const ReportPage = () => {
                 Drukuj
               </Button>
               <Button
-                to="/reports"
+                to={{ pathname: '/reports', state: { setActiveTab: 1 } }}
                 component={RouterLink}
                 variant="contained"
                 color="primary"
@@ -181,7 +185,7 @@ export const ReportPage = () => {
           </div>
         </>
       )}
-    </>
+    </MainTemplate>
   );
 };
 
@@ -210,5 +214,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   accordionDetails: {
     flexDirection: 'column',
+  },
+  pageBody: {
+    backgroundImage: `url(${background})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
   },
 }));

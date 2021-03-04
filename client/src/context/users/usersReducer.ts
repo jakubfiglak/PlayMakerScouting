@@ -16,18 +16,6 @@ export default (state: State, action: Action): State => {
         usersList: action.payload,
       };
 
-    case 'CLEAR_ERRORS':
-      return {
-        ...state,
-        error: null,
-      };
-
-    case 'CLEAR_MESSAGE':
-      return {
-        ...state,
-        message: null,
-      };
-
     case 'USERS_ERROR':
       return { ...state, loading: false, error: action.payload };
 

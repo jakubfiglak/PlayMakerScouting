@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Formik } from 'formik';
 import { useReactToPrint } from 'react-to-print';
 import * as yup from 'yup';
 // MUI components
 import { AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
+// Assets
+import background from '../../assets/report_background.png';
 // Custom components
 import { ReportsTable } from './ReportsTable';
 import { ReportsFilterForm } from './ReportsFilterForm';
@@ -14,6 +17,7 @@ import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import {
   Competition,
@@ -27,7 +31,6 @@ import {
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useAlert } from '../../hooks/useAlert';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
@@ -35,9 +38,12 @@ import { useClubsState } from '../../context/clubs/useClubsState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
+type LocationState = { setActiveTab: number };
+
 export const ReportsPage = () => {
   const classes = useStyles();
   const ref = useRef<HTMLDivElement | null>(null);
+  const { state } = useLocation<LocationState | null>();
 
   const {
     loading,
@@ -46,10 +52,6 @@ export const ReportsPage = () => {
     setCurrent,
     addReport,
     editReport,
-    error,
-    message,
-    clearErrors,
-    clearMessage,
     clearCurrent,
     current,
   } = useReportsState();
@@ -59,10 +61,6 @@ export const ReportsPage = () => {
     getPlayersList,
     playersList,
     addPlayer,
-    message: playersMessage,
-    clearMessage: clearPlayersMessage,
-    error: playersError,
-    clearErrors: clearPlayersErrors,
   } = usePlayersState();
 
   const {
@@ -97,7 +95,7 @@ export const ReportsPage = () => {
 
   const initialValues: ReportFormData = current
     ? {
-        order: current.order,
+        order: current.order?._id,
         player: current.player._id,
         match: current.match,
         minutesPlayed: current.minutesPlayed,
@@ -116,7 +114,9 @@ export const ReportsPage = () => {
   useEffect(() => {
     getPlayersList();
     getClubsList();
-    getOrdersList();
+    if (user.role !== 'scout') {
+      getOrdersList();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -126,16 +126,11 @@ export const ReportsPage = () => {
   }, [page, rowsPerPage, sortBy, order, filters]);
 
   useEffect(() => {
-    if (current) {
-      setActiveTab(1);
+    if (state?.setActiveTab) {
+      setActiveTab(state.setActiveTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current]);
-
-  useAlert(error, 'error', clearErrors);
-  useAlert(playersError, 'error', clearPlayersErrors);
-  useAlert(message, 'success', clearMessage);
-  useAlert(playersMessage, 'success', clearPlayersMessage);
+  }, [state?.setActiveTab]);
 
   const handleSetCurrent = (report: Report) => {
     setCurrent(report);
@@ -145,6 +140,7 @@ export const ReportsPage = () => {
   const handlePrint = useReactToPrint({
     content: () => ref.current,
     documentTitle: `PlaymakerReport_${current?._id}`,
+    bodyClass: classes.pageBody,
     onAfterPrint: () => clearCurrent(),
   }) as () => void;
 
@@ -160,12 +156,12 @@ export const ReportsPage = () => {
 
   const handleEditFormReset = () => {
     setActiveTab(0);
-    setAlert('Zmiany zostały anulowane', 'warning');
+    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
     clearCurrent();
   };
 
   return (
-    <>
+    <MainTemplate>
       {(loading || playersLoading || clubsLoading || ordersLoading) && (
         <Loader />
       )}
@@ -239,7 +235,7 @@ export const ReportsPage = () => {
           open={isAddPlayerModalOpen}
         />
       </TabPanel>
-    </>
+    </MainTemplate>
   );
 };
 
@@ -248,7 +244,15 @@ const useStyles = makeStyles(() => ({
     overflow: 'hidden',
     height: 0,
   },
+  pageBody: {
+    backgroundImage: `url(${background})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+  },
 }));
+
+const date = new Date(Date.now());
+const dateString = date.toISOString().slice(0, 16);
 
 const reportsFormInitialValues: ReportFormData = {
   order: '',
@@ -257,6 +261,7 @@ const reportsFormInitialValues: ReportFormData = {
     location: 'home',
     against: '',
     competition: 'league',
+    date: dateString,
   },
   minutesPlayed: 0,
   goals: 0,
@@ -331,6 +336,7 @@ export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
         location: yup.mixed<MatchLocation>(),
         against: yup.string(),
         competition: yup.mixed<Competition>(),
+        date: yup.string(),
       })
       .defined(),
     minutesPlayed: yup

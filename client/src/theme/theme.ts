@@ -14,8 +14,11 @@ const theme = createMuiTheme(
   {
     typography: {
       h2: {
-        fontSize: '32px',
+        fontSize: '2rem',
         fontWeight: 'bold',
+      },
+      h3: {
+        fontSize: '1.5rem',
       },
     },
     palette: {

@@ -1,5 +1,7 @@
-import { PaginationData, SortingOrder } from './common';
-import { Position } from './players';
+import { PaginatedData, SortingOrder } from './common';
+import { User } from './auth';
+import { Player } from './players';
+import { Order } from './orders';
 
 export type RatingScore = 1 | 2 | 3 | 4;
 export type MatchLocation = 'home' | 'away';
@@ -8,6 +10,7 @@ export type MatchData = {
   location: MatchLocation;
   against: string;
   competition: Competition;
+  date: string;
 };
 
 export type Rating = {
@@ -38,23 +41,11 @@ export type MotorSkills = {
 
 export type Report = {
   _id: string;
-  player: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    club: {
-      _id: string;
-      name: string;
-    };
-    position: Position;
-  };
+  docNumber: string;
+  player: Player;
   match: MatchData;
-  scout: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  order?: string;
+  scout: Pick<User, '_id' | 'firstName' | 'lastName'>;
+  order?: Pick<Order, '_id' | 'docNumber'>;
   minutesPlayed: number;
   goals: number;
   assists: number;
@@ -91,10 +82,6 @@ export type ReportFormData = {
   motorSkills: MotorSkills;
 } & CommonFormData;
 
-export type ReportsData = {
-  docs: Report[];
-} & PaginationData;
-
 export type ReportsFilterData = {
   player: string;
 };
@@ -108,15 +95,13 @@ export type GetReports = (
 ) => void;
 
 export type State = {
-  reportsData: ReportsData;
+  reportsData: PaginatedData<Report>;
   reportData: Report | null;
   current: Report | null;
   loading: boolean;
   error: string | null;
   message: string | null;
   setLoading: () => void;
-  clearErrors: () => void;
-  clearMessage: () => void;
   getReports: GetReports;
   getReport: (id: string) => void;
   deleteReport: (id: string) => void;
@@ -128,12 +113,10 @@ export type State = {
 
 export type Action =
   | { type: 'SET_LOADING' }
-  | { type: 'CLEAR_ERRORS' }
-  | { type: 'CLEAR_MESSAGE' }
   | { type: 'SET_CURRENT'; payload: Report }
   | { type: 'CLEAR_CURRENT' }
   | { type: 'REPORTS_ERROR'; payload: string }
-  | { type: 'GET_REPORTS_SUCCESS'; payload: ReportsData }
+  | { type: 'GET_REPORTS_SUCCESS'; payload: PaginatedData<Report> }
   | { type: 'GET_REPORT_SUCCESS'; payload: Report }
   | {
       type: 'CREATE_REPORT_SUCCESS';

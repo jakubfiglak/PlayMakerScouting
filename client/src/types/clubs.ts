@@ -1,4 +1,4 @@
-import { SortingOrder, PaginationData, Voivodeship } from './common';
+import { SortingOrder, PaginatedData, Voivodeship } from './common';
 
 export type Division =
   | 'Ekstraklasa'
@@ -26,10 +26,6 @@ export type ClubsFormData = Omit<Club, '_id' | 'division' | 'voivodeship'> & {
   division: Division | '';
 };
 
-export type ClubsData = {
-  docs: Club[];
-} & PaginationData;
-
 export type ClubsFilterData = {
   name: string;
   division: Division | '';
@@ -51,15 +47,13 @@ export type GetClubs = (
 ) => void;
 
 export type State = {
-  clubsData: ClubsData;
+  clubsData: PaginatedData<Club>;
   clubsList: ClubBasicInfo[];
   current: Club | null;
   loading: boolean;
   error: string | null;
   message: string | null;
   setLoading: () => void;
-  clearErrors: () => void;
-  clearMessage: () => void;
   getClubs: GetClubs;
   getClubsList: () => void;
   getClub: (id: string) => void;
@@ -74,10 +68,8 @@ export type Action =
   | { type: 'SET_LOADING' }
   | { type: 'SET_CURRENT'; payload: Club }
   | { type: 'CLEAR_CURRENT' }
-  | { type: 'CLEAR_ERRORS' }
-  | { type: 'CLEAR_MESSAGE' }
   | { type: 'CLUBS_ERROR'; payload: string }
-  | { type: 'GET_CLUBS_SUCCESS'; payload: ClubsData }
+  | { type: 'GET_CLUBS_SUCCESS'; payload: PaginatedData<Club> }
   | { type: 'GET_CLUBS_LIST_SUCCESS'; payload: ClubBasicInfo[] }
   | { type: 'GET_CLUB_SUCCESS'; payload: Club }
   | { type: 'CREATE_CLUB_SUCCESS'; payload: { club: Club; message: string } }

@@ -59,7 +59,7 @@ exports.getPlayers = asyncHandler(async (req, res, next) => {
     sort: req.query.sort || '_id',
     limit: req.query.limit || 20,
     page: req.query.page || 1,
-    populate: [{ path: 'club', select: 'name' }],
+    populate: [{ path: 'club', select: 'name division' }],
   };
 
   const query = { ...reqQuery };
@@ -138,7 +138,7 @@ exports.getPlayer = asyncHandler(async (req, res, next) => {
     );
   }
 
-  if (!user.myPlayers.includes(id)) {
+  if (user.role !== 'admin' && !user.myPlayers.includes(id)) {
     return next(
       new ErrorResponse(
         `You don't have access to the player with the if of ${id}`,

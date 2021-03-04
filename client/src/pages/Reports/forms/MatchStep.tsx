@@ -7,9 +7,11 @@ import { CompetitionSelect } from '../../../components/selects/CompetitionSelect
 import { MatchLocationSelect } from '../../../components/selects/MatchLocationSelect';
 
 export const MatchStep = () => {
-  const [field, meta] = useField('match.against');
+  const [againstField, againstMeta] = useField('match.against');
+  const [dateField, dateMeta] = useField('match.date');
 
-  const { error, touched } = meta;
+  const { error: againstError, touched: againstTouched } = againstMeta;
+  const { error: dateError, touched: dateTouched } = dateMeta;
 
   return (
     <Grid container spacing={2}>
@@ -19,15 +21,27 @@ export const MatchStep = () => {
       <Grid item xs={6}>
         <MatchLocationSelect name="match.location" />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={6}>
         <TextField
-          {...field}
+          {...againstField}
           id="against"
           fullWidth
           label="Przeciwnik"
           variant="outlined"
-          error={touched && !!error}
-          helperText={touched && error}
+          error={againstTouched && !!againstError}
+          helperText={againstTouched && againstError}
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <TextField
+          {...dateField}
+          type="datetime-local"
+          id="date"
+          fullWidth
+          label="Data"
+          variant="outlined"
+          error={dateTouched && !!dateError}
+          helperText={dateTouched && dateError}
         />
       </Grid>
     </Grid>

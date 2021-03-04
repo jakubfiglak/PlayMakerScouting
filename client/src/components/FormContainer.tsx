@@ -11,8 +11,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: `${theme.spacing(2)}px`,
     margin: theme.spacing(0, 'auto', 2),
+
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
 
     [theme.breakpoints.up('sm')]: {
       width: '50%',

@@ -6,55 +6,51 @@ import {
   Assignment as OrdersIcon,
   Assessment as ReportsIcon,
   Settings as AccessManagementIcon,
+  Home as HomeIcon,
 } from '@material-ui/icons';
+import { NavItem } from './types';
 
-const account = {
-  icon: <AccountIcon color="error" />,
-  text: 'Mój profil',
-  to: '/account',
-};
-
-const players = {
-  icon: <PlayersIcon color="error" />,
-  text: 'Zawodnicy',
-  to: '/players',
-};
-
-const clubs = {
-  icon: <ClubsIcon color="error" />,
-  text: 'Kluby',
-  to: '/clubs',
-};
-
-const orders = {
-  icon: <OrdersIcon color="error" />,
-  text: 'Zlecenia',
-  to: '/orders',
-};
-
-const reports = {
-  icon: <ReportsIcon color="error" />,
-  text: 'Raporty',
-  to: '/reports',
-};
-
-const accessManagement = {
-  icon: <AccessManagementIcon color="error" />,
-  text: 'Zarządzanie dostępami',
-  to: '/accessmanagement',
-};
-
-export const scoutNavElements = [account, clubs, players, reports];
-
-export const playmakerScoutNavElements = [
-  account,
-  clubs,
-  players,
-  orders,
-  reports,
-];
-
-export const adminNavElements = [
-  ...playmakerScoutNavElements,
-  accessManagement,
+export const navItems: NavItem[] = [
+  {
+    icon: <HomeIcon color="error" />,
+    text: 'Strona główna',
+    to: '/dashboard',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
+  },
+  {
+    icon: <AccountIcon color="error" />,
+    text: 'Mój profil',
+    to: '/account',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
+  },
+  {
+    icon: <ClubsIcon color="error" />,
+    text: 'Kluby',
+    to: '/clubs',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
+  },
+  {
+    icon: <PlayersIcon color="error" />,
+    text: 'Zawodnicy',
+    to: '/players',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
+  },
+  {
+    icon: <OrdersIcon color="error" />,
+    text: 'Zlecenia',
+    to: '/orders',
+    allowedRoles: ['admin', 'playmaker-scout'],
+  },
+  {
+    icon: <ReportsIcon color="error" />,
+    text: 'Raporty',
+    to: '/reports',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
+  },
+  {
+    icon: <AccessManagementIcon color="error" />,
+    text: 'Zarządzanie dostępami',
+    to: '/accessmanagement',
+    allowedRoles: ['admin'],
+  },
 ];

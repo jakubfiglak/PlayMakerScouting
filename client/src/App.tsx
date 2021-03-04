@@ -1,29 +1,40 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { ThemeProvider } from '@material-ui/core';
 import { ErrorBoundary } from 'react-error-boundary';
-import { AuthenticatedApp } from './AuthenticatedApp';
-import { UnauthenticatedApp } from './UnauthenticatedApp';
 import { Alerts } from './components/Alerts';
 import { ErrorPage } from './pages/Error/ErrorPage';
 import theme from './theme/theme';
-import { useAuthState } from './context/auth/useAuthState';
+import { AppRoutes } from './routes/AppRoutes';
+import { ClubsState } from './context/clubs/ClubsState';
+import { OrdersState } from './context/orders/OrdersState';
+import { PlayersState } from './context/players/PlayersState';
+import { ReportsState } from './context/reports/ReportsState';
+import { UsersState } from './context/users/UsersState';
+
+const queryClient = new QueryClient();
 
 const App = () => {
-  const { loadUser, user, token } = useAuthState();
-
-  useEffect(() => {
-    if (!user && token) {
-      loadUser();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>
-      <ThemeProvider theme={theme}>
-        <Alerts />
-        {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <Alerts />
+          <ClubsState>
+            <PlayersState>
+              <OrdersState>
+                <ReportsState>
+                  <UsersState>
+                    <AppRoutes />
+                  </UsersState>
+                </ReportsState>
+              </OrdersState>
+            </PlayersState>
+          </ClubsState>
+        </ThemeProvider>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 };

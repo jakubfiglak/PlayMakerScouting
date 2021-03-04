@@ -2,44 +2,56 @@ import { State, Action } from '../../types/auth';
 
 export default (state: State, action: Action): State => {
   switch (action.type) {
-    case 'USER_LOADED':
+    case 'REGISTER_SUCCESS':
+    case 'CONFIRMATION_SUCCESS':
       return {
         ...state,
-        isAuthenticated: true,
+        message: action.payload.message,
         loading: false,
-        user: action.payload,
+        error: null,
       };
 
     case 'LOGIN_SUCCESS':
-    case 'REGISTER_SUCCESS':
-    case 'UPDATE_PASSWORD_SUCCESS':
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('user', JSON.stringify(action.payload.data.user));
+      localStorage.setItem(
+        'expiresAt',
+        JSON.stringify(action.payload.data.expiresAt),
+      );
       return {
         ...state,
-        token: action.payload.token,
         message: action.payload.message,
-        isAuthenticated: true,
+        user: action.payload.data.user,
+        expiresAt: action.payload.data.expiresAt,
+        loading: false,
+        error: null,
+      };
+
+    case 'UPDATE_PASSWORD_SUCCESS':
+      return {
+        ...state,
+        expiresAt: action.payload.expiresAt,
+        message: action.payload.message,
         loading: false,
         error: null,
       };
 
     case 'AUTH_ERROR':
-      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('expiresAt');
       return {
         ...state,
-        token: null,
-        isAuthenticated: false,
         loading: false,
         user: null,
+        expiresAt: null,
         error: action.payload,
       };
 
     case 'LOGOUT':
-      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('expiresAt');
       return {
         ...state,
-        isAuthenticated: false,
-        token: null,
+        expiresAt: null,
         loading: false,
         user: null,
         error: null,
@@ -51,19 +63,8 @@ export default (state: State, action: Action): State => {
         loading: true,
       };
 
-    case 'CLEAR_ERRORS':
-      return {
-        ...state,
-        error: null,
-      };
-
-    case 'CLEAR_MESSAGE':
-      return {
-        ...state,
-        message: null,
-      };
-
     case 'EDIT_SUCCESS':
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
       return {
         ...state,
         user: action.payload.user,
@@ -77,26 +78,6 @@ export default (state: State, action: Action): State => {
         ...state,
         error: action.payload,
         loading: false,
-      };
-
-    case 'ADD_CLUB_TO_FAVORITES_SUCCESS':
-      return {
-        ...state,
-        user: {
-          ...state.user!,
-          myClubs: [action.payload, ...state.user!.myClubs],
-        },
-      };
-
-    case 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS':
-      return {
-        ...state,
-        user: {
-          ...state.user!,
-          myClubs: state.user!.myClubs.filter(
-            (club) => club !== action.payload,
-          ),
-        },
       };
 
     default:

@@ -11,8 +11,11 @@ import {
 } from '../../types/clubs';
 import { SortingOrder } from '../../types/common';
 import { initialPaginatedData } from '../../data/initialPaginatedData';
+import { useAlertsState } from '../alerts/useAlertsState';
 
 export const ClubsState: React.FC = ({ children }) => {
+  const { setAlert } = useAlertsState();
+
   const initialState: State = {
     clubsData: initialPaginatedData,
     clubsList: [],
@@ -21,8 +24,6 @@ export const ClubsState: React.FC = ({ children }) => {
     error: null,
     message: null,
     setLoading: () => null,
-    clearErrors: () => null,
-    clearMessage: () => null,
     getClubs: () => null,
     getClubsList: () => null,
     getClub: () => null,
@@ -81,6 +82,8 @@ export const ClubsState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'CLUBS_ERROR',
         payload: err.response.data.error,
@@ -98,6 +101,8 @@ export const ClubsState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'CLUBS_ERROR',
         payload: err.response.data.error,
@@ -114,6 +119,8 @@ export const ClubsState: React.FC = ({ children }) => {
         payload: res.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'CLUBS_ERROR',
         payload: err.response.data.error,
@@ -127,11 +134,15 @@ export const ClubsState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/clubs', club);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'CREATE_CLUB_SUCCESS',
         payload: { club: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'CLUBS_ERROR',
         payload: err.response.data.error,
@@ -153,11 +164,15 @@ export const ClubsState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/clubs/grantaccess', data);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'GRANT_ACCESS_SUCCESS',
         payload: { message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'CLUBS_ERROR',
         payload: err.response.data.error,
@@ -178,29 +193,22 @@ export const ClubsState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put(`/api/v1/clubs/${id}`, club);
+      setAlert({ msg: res.data.message, type: 'success' });
+      clearCurrent();
+
       dispatch({
         type: 'UPDATE_CLUB_SUCCESS',
         payload: { club: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'CLUBS_ERROR',
         payload: err.response.data.error,
       });
     }
   };
-
-  // Clear errors
-  const clearErrors = () =>
-    dispatch({
-      type: 'CLEAR_ERRORS',
-    });
-
-  // Clear message
-  const clearMessage = () =>
-    dispatch({
-      type: 'CLEAR_MESSAGE',
-    });
 
   const { clubsData, clubsList, current, loading, error, message } = state;
 
@@ -222,8 +230,6 @@ export const ClubsState: React.FC = ({ children }) => {
         clearCurrent,
         editClub,
         grantAccess,
-        clearErrors,
-        clearMessage,
       }}
     >
       {children}

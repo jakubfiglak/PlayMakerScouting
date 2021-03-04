@@ -30,16 +30,16 @@ export const ReportBasicInfo = ({
         <Grid item xs={12}>
           <Typography>
             <strong>Mecz: </strong>
-            {`vs. ${match.against} (${getLabel(match.location)}), ${getLabel(
-              match.competition,
-            )}`}
+            {`${formatDate(match.date, true)} vs. ${match.against} (${getLabel(
+              match.location,
+            )}), ${getLabel(match.competition)}`}
           </Typography>
         </Grid>
         {order && (
           <Grid item xs={12}>
             <Typography>
               <strong>Nr zlecenia: </strong>
-              {order}
+              {order.docNumber}
             </Typography>
           </Grid>
         )}

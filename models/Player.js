@@ -43,6 +43,12 @@ const PlayerSchema = new Schema(
     lnpProfileURL: {
       type: String,
     },
+    minut90ProfileURL: {
+      type: String,
+    },
+    transfermarktProfileURL: {
+      type: String,
+    },
   },
   {
     toJSON: { virtuals: true },

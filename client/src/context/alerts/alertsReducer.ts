@@ -8,6 +8,19 @@ export default (state: State, action: Action): State => {
         alerts: [...state.alerts, action.payload],
       };
 
+    case 'HIDE_ALERT':
+      return {
+        ...state,
+        alerts: state.alerts.map((alert) =>
+          alert.id === action.payload
+            ? {
+                ...alert,
+                isVisible: false,
+              }
+            : alert,
+        ),
+      };
+
     case 'REMOVE_ALERT':
       return {
         ...state,

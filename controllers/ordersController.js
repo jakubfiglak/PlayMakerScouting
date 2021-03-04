@@ -5,6 +5,14 @@ const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const prepareQuery = require('../utils/prepareQuery');
 
+const populatePlayer = {
+  path: 'player',
+  select: ['firstName', 'lastName', 'club'],
+  populate: { path: 'club', select: ['name', 'division'] },
+};
+
+const populateScout = { path: 'scout', select: ['firstName', 'lastName'] };
+
 // @desc Create new order
 // @route POST /api/v1/orders
 // @access Private (admin only)
@@ -21,9 +29,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 
   let order = await Order.create(req.body);
 
-  order = await order
-    .populate({ path: 'player', select: 'firstName lastName' })
-    .execPopulate();
+  order = await order.populate([populatePlayer, populateScout]).execPopulate();
 
   res.status(201).json({
     success: true,
@@ -45,28 +51,21 @@ exports.getOrders = asyncHandler(async (req, res) => {
     sort: req.query.sort || '-createdAt',
     limit: req.query.limit || 10,
     page: req.query.page || 1,
-    populate: [
-      { path: 'player', select: ['firstName', 'lastName', 'position'] },
-      { path: 'scout', select: ['firstName', 'lastName'] },
-      { path: 'reports', select: ['_id'] },
-    ],
+    populate: [populatePlayer, populateScout],
   };
 
+  const query = { ...reqQuery };
+
+  // If player ID is provided in query params, return only orders assinged to this player
   if (playerId) {
-    const query = {
-      player: playerId,
-      ...reqQuery,
-    };
-
-    const orders = await Order.paginate(query, options);
-
-    return res.status(200).json({
-      success: true,
-      data: orders,
-    });
+    query.player = playerId;
   }
 
-  const orders = await Order.paginate(reqQuery, options);
+  // If user is not an admin, return only orders assigned to that user and orders with the status of 'open'
+  if (req.user.role !== 'admin') {
+    query.$or = [{ scout: req.user._id }, { status: 'open' }];
+  }
+  const orders = await Order.paginate(query, options);
 
   return res.status(200).json({
     success: true,
@@ -84,11 +83,7 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
     sort: req.query.sort || '-createdAt',
     limit: req.query.limit || 10,
     page: req.query.page || 1,
-    populate: [
-      { path: 'player', select: ['firstName', 'lastName'] },
-      { path: 'scout', select: ['firstName', 'lastName'] },
-      { path: 'reports', select: ['_id'] },
-    ],
+    populate: [populatePlayer, populateScout],
   };
 
   const query = {
@@ -104,7 +99,7 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc Get my orders list with the status of "open"
+// @desc Get my orders list with the status of "accepted"
 // @route GET /api/v1/orders/mylist
 // @access Private (admin and playmaker-scout-only)
 exports.getMyList = asyncHandler(async (req, res) => {
@@ -112,15 +107,8 @@ exports.getMyList = asyncHandler(async (req, res) => {
     scout: req.user._id,
     status: 'accepted',
   })
-    .select('player club')
-    .populate({
-      path: 'player',
-      select: 'firstName lastName club position',
-      populate: {
-        path: 'club',
-        select: 'name',
-      },
-    });
+    .select('player club orderNo createdAt docNumber')
+    .populate([populatePlayer]);
 
   res.status(200).json({
     success: true,
@@ -149,17 +137,7 @@ exports.getMyOrdersForPlayer = asyncHandler(async (req, res) => {
 // @route GET /api/v1/orders/:id
 // @access Private (admin and playmaker-scout only)
 exports.getOrder = asyncHandler(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate([
-    {
-      path: 'player',
-      select: 'firstName lastName club',
-      populate: {
-        path: 'club',
-        select: 'name',
-      },
-    },
-    { path: 'scout', select: ['firstName', 'lastName'] },
-  ]);
+  const order = await Order.findById(req.params.id).populate(populatePlayer);
 
   if (!order) {
     return next(
@@ -238,12 +216,7 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
 
   await order.save();
 
-  order = await order
-    .populate([
-      { path: 'player', select: 'firstName lastName' },
-      { path: 'scout', select: 'firstName lastName' },
-    ])
-    .execPopulate();
+  order = await order.populate([populatePlayer, populateScout]).execPopulate();
 
   res.status(200).json({
     success: true,
@@ -287,12 +260,7 @@ exports.closeOrder = asyncHandler(async (req, res, next) => {
 
   await order.save();
 
-  order = await order
-    .populate([
-      { path: 'player', select: 'firstName lastName' },
-      { path: 'scout', select: 'firstName lastName' },
-    ])
-    .execPopulate();
+  order = await order.populate([populatePlayer, populateScout]).execPopulate();
 
   res.status(200).json({
     success: true,

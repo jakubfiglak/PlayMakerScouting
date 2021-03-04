@@ -1,37 +1,18 @@
-import React, { useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 // MUI components
-import { TextField, Button, Grid, CircularProgress } from '@material-ui/core';
+import { TextField, Button, Grid, makeStyles, Theme } from '@material-ui/core';
 // Types
 import { LoginFormData } from '../../types/auth';
-// Hooks
-import { useAlert } from '../../hooks/useAlert';
-import { useAuthState } from '../../context/auth/useAuthState';
-// Styles
-import { useStyles } from './styles';
-// Utils & data
-import { getLabel } from '../../utils/getLabel';
 
-export const LoginForm = () => {
+type Props = {
+  onSubmit: (data: LoginFormData) => void;
+};
+
+export const LoginForm = ({ onSubmit }: Props) => {
   const classes = useStyles();
-  const history = useHistory();
-  const {
-    login,
-    loading,
-    isAuthenticated,
-    error,
-    clearErrors,
-  } = useAuthState();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      history.push('/');
-    }
-  }, [isAuthenticated, history]);
-
-  useAlert(getLabel(error), 'error', clearErrors);
 
   const formik = useFormik<LoginFormData>({
     initialValues: {
@@ -40,7 +21,7 @@ export const LoginForm = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      login(values);
+      onSubmit(values);
     },
   });
 
@@ -78,12 +59,8 @@ export const LoginForm = () => {
         variant="contained"
         color="primary"
         className={classes.submit}
-        disabled={loading}
       >
         Zaloguj się
-        {loading && (
-          <CircularProgress size={24} className={classes.buttonProgress} />
-        )}
       </Button>
       <Grid container>
         <Grid item xs>
@@ -100,6 +77,25 @@ export const LoginForm = () => {
     </form>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    position: 'relative',
+    margin: theme.spacing(3, 0, 2),
+  },
+  link: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+}));
 
 const validationSchema: yup.ObjectSchema<LoginFormData> = yup
   .object({

@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { axiosJson, setAuthToken } from '../../config/axios';
+import { axiosJson } from '../../config/axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
 import {
@@ -8,30 +8,33 @@ import {
   RegisterFormData,
   EditAccountData,
   UpdatePasswordData,
+  User,
 } from '../../types/auth';
-import { Loader } from '../../components/Loader';
+import { useAlertsState } from '../alerts/useAlertsState';
 
 export const AuthState: React.FC = ({ children }) => {
+  const { setAlert } = useAlertsState();
+
+  const localStorageUser = localStorage.getItem('user');
+  const localStorageExpiresAt = localStorage.getItem('expiresAt');
+
   const initialState: State = {
-    user: null,
-    token: localStorage.getItem('token'),
-    isAuthenticated: null,
+    user: localStorageUser ? (JSON.parse(localStorageUser) as User) : null,
+    expiresAt: localStorageExpiresAt
+      ? parseInt(localStorageExpiresAt, 10)
+      : null,
     loading: false,
     error: null,
     message: null,
     setLoading: () => null,
-    clearErrors: () => null,
-    clearMessage: () => null,
-    loadUser: () => null,
-    login: () => null,
     register: () => null,
+    confirmAccount: () => null,
+    login: () => null,
     logout: () => null,
     editDetails: () => null,
     updatePassword: () => null,
-    addClubToFavorites: () => null,
-    removeClubFromFavorites: () => null,
+    isAuthenticated: () => false,
   };
-
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Set loading
@@ -41,21 +44,21 @@ export const AuthState: React.FC = ({ children }) => {
     });
   };
 
-  // Load user
-  const loadUser = async () => {
+  // Register user
+  const register = async (formData: RegisterFormData) => {
     setLoading();
 
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-
     try {
-      const res = await axiosJson.get('/api/v1/auth/account');
+      const res = await axiosJson.post('/api/v1/auth/register', formData);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
-        type: 'USER_LOADED',
-        payload: res.data.data,
+        type: 'REGISTER_SUCCESS',
+        payload: { message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'AUTH_ERROR',
         payload: err.response.data.error,
@@ -63,20 +66,21 @@ export const AuthState: React.FC = ({ children }) => {
     }
   };
 
-  // Register user
-  const register = async (formData: RegisterFormData) => {
-    setLoading();
-
+  // Confirm account
+  const confirmAccount = async (confirmationCode: string) => {
     try {
-      const res = await axiosJson.post('/api/v1/auth/register', formData);
+      const res = await axiosJson.get(
+        `/api/v1/auth/confirm/${confirmationCode}`,
+      );
+      setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
-        type: 'REGISTER_SUCCESS',
-        payload: { token: res.data.token, message: res.data.message },
+        type: 'CONFIRMATION_SUCCESS',
+        payload: { message: res.data.message },
       });
-
-      // loadUser();
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'AUTH_ERROR',
         payload: err.response.data.error,
@@ -90,14 +94,21 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/auth/login', formData);
+      setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
         type: 'LOGIN_SUCCESS',
-        payload: { token: res.data.token, message: res.data.message },
+        payload: {
+          message: res.data.message,
+          data: {
+            user: res.data.data.user,
+            expiresAt: res.data.data.expiresAt,
+          },
+        },
       });
-
-      // loadUser();
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'AUTH_ERROR',
         payload: err.response.data.error,
@@ -111,14 +122,15 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put('/api/v1/auth/updatepassword', formData);
+      setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
         type: 'UPDATE_PASSWORD_SUCCESS',
-        payload: { token: res.data.token, message: res.data.message },
+        payload: { expiresAt: res.data.expiresAt, message: res.data.message },
       });
-
-      loadUser();
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'AUTH_ERROR',
         payload: err.response.data.error,
@@ -139,12 +151,15 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put('/api/v1/auth/updatedetails', formData);
+      setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
         type: 'EDIT_SUCCESS',
         payload: { user: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'EDIT_ERROR',
         payload: err.response.data.error,
@@ -152,60 +167,32 @@ export const AuthState: React.FC = ({ children }) => {
     }
   };
 
-  // Add club to favorites
-  const addClubToFavorites = async (id: string) => {
-    dispatch({
-      type: 'ADD_CLUB_TO_FAVORITES_SUCCESS',
-      payload: id,
-    });
+  // Check if the user is authenticated
+  const isAuthenticated = () => {
+    if (!state.expiresAt) {
+      return false;
+    }
+    return new Date().getTime() / 1000 < state.expiresAt;
   };
 
-  // Remove club from favorites
-  const removeClubFromFavorites = async (id: string) => {
-    dispatch({
-      type: 'REMOVE_CLUB_FROM_FAVORITES_SUCCESS',
-      payload: id,
-    });
-  };
-
-  // Clear errors
-  const clearErrors = () =>
-    dispatch({
-      type: 'CLEAR_ERRORS',
-    });
-
-  // Clear message
-  const clearMessage = () =>
-    dispatch({
-      type: 'CLEAR_MESSAGE',
-    });
-
-  const { user, token, isAuthenticated, loading, error, message } = state;
-
-  if (loading) {
-    return <Loader />;
-  }
+  const { user, expiresAt, loading, error, message } = state;
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
-        isAuthenticated,
+        expiresAt,
         loading,
         error,
         message,
         setLoading,
-        clearErrors,
-        clearMessage,
-        loadUser,
         login,
         logout,
         register,
+        confirmAccount,
         editDetails,
         updatePassword,
-        addClubToFavorites,
-        removeClubFromFavorites,
+        isAuthenticated,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 import React from 'react';
 // MUI components
-import { makeStyles, Theme } from '@material-ui/core';
+import { Slide, makeStyles, Theme } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 // Hooks
 import { useAlertsState } from '../context/alerts/useAlertsState';
@@ -14,11 +14,23 @@ export const Alerts = () => {
   return (
     <div className={classes.alertsContainer}>
       {alerts.length > 0 &&
-        alerts.map((alert) => (
-          <Alert key={alert.id} severity={alert.type} variant="filled">
-            {alert.msg}
-          </Alert>
-        ))}
+        alerts.map((alert) => {
+          const { id, isVisible, msg, type } = alert;
+
+          return (
+            <Slide
+              key={id}
+              in={isVisible}
+              direction="down"
+              mountOnEnter
+              unmountOnExit
+            >
+              <Alert severity={type} variant="filled">
+                {msg}
+              </Alert>
+            </Slide>
+          );
+        })}
     </div>
   );
 };

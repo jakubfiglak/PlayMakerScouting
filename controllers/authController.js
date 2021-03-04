@@ -1,34 +1,85 @@
 const asyncHandler = require('express-async-handler');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
-const sendEmail = require('../utils/sendEmail');
+const sgMail = require('../config/sendgrid');
 
 // @desc Register user
 // @route POST /api/v1/auth/register
 // @access Public
-exports.register = asyncHandler(async (req, res, next) => {
-  const { email, password, passwordConfirm } = req.body;
+exports.register = asyncHandler(
+  async (req, res, next) =>
+    res.status(403).json({
+      success: false,
+      message: 'Registering new users is forbidden in the test version',
+    })
 
-  let user = await User.findOne({ email });
+  // const { email, password, passwordConfirm } = req.body;
 
-  if (user) {
-    return next(new ErrorResponse('User already exists', 400));
+  // let user = await User.findOne({ email });
+
+  // if (user) {
+  //   return next(new ErrorResponse('User already exists', 400));
+  // }
+
+  // if (password !== passwordConfirm) {
+  //   return next(new ErrorResponse('Passwords do not match', 400));
+  // }
+
+  // const confirmationCode = jwt.sign({ email }, process.env.JWT_SECRET, {
+  //   expiresIn: process.env.JWT_EXPIRE,
+  // });
+
+  // user = await User.create({ ...req.body, confirmationCode });
+
+  // const confirmationURL = `http://${req.headers.host}/confirm/${confirmationCode}`;
+
+  // try {
+  //   await sgMail.send({
+  //     to: email,
+  //     from: 'playmakerscoutingapp@gmail.com',
+  //     subject: 'Aktywuj swoje konto w aplikacji PlaymakerPro Scouting',
+  //     text: `Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w link ${confirmationURL}`,
+  //     html: `<h2>Witaj ${user.firstName}</h2>
+  //           <p>Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w <a href="${confirmationURL}">link</a></p>
+  //     `,
+  //   });
+  // } catch (error) {
+  //   console.error(error);
+  //   user.confirmationCode = undefined;
+  //   await user.save({ validateBeforeSave: false });
+  //   return next(new ErrorResponse('Confirmation email could not be sent', 500));
+  // }
+
+  // res.status(201).json({
+  //   success: true,
+  //   message: 'Successfully created new user!',
+  //   data: user,
+  // });
+);
+
+// @desc Verify user
+// @route GET /api/v1/auth/confirm/:confirmationCode
+// @access Public
+exports.verifyUser = asyncHandler(async (req, res, next) => {
+  const { confirmationCode } = req.params;
+
+  const user = await User.findOne({ confirmationCode });
+
+  if (!user) {
+    return next(new ErrorResponse('User not found', 404));
   }
 
-  if (password !== passwordConfirm) {
-    return next(new ErrorResponse('Passwords do not match', 400));
-  }
+  user.status = 'active';
+  user.confirmationCode = undefined;
 
-  user = await User.create(req.body);
+  await user.save();
 
-  const token = user.getJwt();
-
-  res.status(201).json({
+  res.status(200).json({
     success: true,
-    message: 'Successfully created new user!',
     data: user,
-    token,
+    message: 'Account activated successfully, you can now log in to the app!',
   });
 });
 
@@ -43,11 +94,19 @@ exports.login = asyncHandler(async (req, res, next) => {
       new ErrorResponse('Please provide an email and a password', 400)
     );
   }
-
   const user = await User.findOne({ email }).select('+password');
 
   if (!user) {
     return next(new ErrorResponse('Invalid credentials', 401));
+  }
+
+  if (user.status !== 'active') {
+    return next(
+      new ErrorResponse(
+        'Your account is not active, please verify your email',
+        401
+      )
+    );
   }
 
   const match = await user.comparePasswords(password);
@@ -57,12 +116,23 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   const token = user.getJwt();
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userData = await User.findById(user._id).lean();
 
-  res.status(200).json({
-    success: true,
-    message: 'Login success!',
-    token,
-  });
+  res
+    .status(200)
+    .cookie('token', token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 30 * 1000 * 60 * 60 * 24),
+    })
+    .json({
+      success: true,
+      message: 'Login success!',
+      data: {
+        user: userData,
+        expiresAt: decoded.exp,
+      },
+    });
 });
 
 // @desc View account details
@@ -121,12 +191,19 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateModifiedOnly: true });
 
   const token = user.getJwt();
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  res.status(200).json({
-    success: true,
-    message: 'Password updated successfully!',
-    token,
-  });
+  res
+    .status(200)
+    .cookie('token', token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 30 * 1000 * 60 * 60 * 24),
+    })
+    .json({
+      success: true,
+      message: 'Password updated successfully!',
+      expiresAt: decoded.exp,
+    });
 });
 
 // @desc forgot password
@@ -150,8 +227,9 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const text = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}`;
 
   try {
-    await sendEmail({
-      email: user.email,
+    await sgMail.send({
+      to: user.email,
+      from: 'playmakerscoutingapp@gmail.com',
       subject: 'Password reset token',
       text,
     });

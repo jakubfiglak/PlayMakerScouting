@@ -8,15 +8,18 @@ import { ClubsTable } from './ClubsTable';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import { Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useAlert } from '../../hooks/useAlert';
 import { useClubsState } from '../../context/clubs/useClubsState';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 export const ClubsPage = () => {
+  const { setAlert } = useAlertsState();
+
   const {
     loading,
     current,
@@ -25,11 +28,7 @@ export const ClubsPage = () => {
     editClub,
     clubsData,
     setCurrent,
-    error,
-    message,
     clearCurrent,
-    clearErrors,
-    clearMessage,
   } = useClubsState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
@@ -42,9 +41,6 @@ export const ClubsPage = () => {
     handleChangeRowsPerPage,
     handleSort,
   ] = useTable();
-
-  useAlert(error, 'error', clearErrors);
-  useAlert(message, 'success', clearMessage);
 
   const [filters, setFilters] = useState<ClubsFilterData>({
     name: '',
@@ -60,12 +56,17 @@ export const ClubsPage = () => {
   const handleSubmit = (data: ClubsFormData) => {
     if (current) {
       editClub(current._id, data);
-      clearCurrent();
       setActiveTab(0);
     } else {
       addClub(data);
       setActiveTab(0);
     }
+  };
+
+  const handleFormReset = () => {
+    setActiveTab(0);
+    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
+    clearCurrent();
   };
 
   useEffect(
@@ -77,7 +78,7 @@ export const ClubsPage = () => {
   );
 
   return (
-    <>
+    <MainTemplate>
       {loading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
@@ -106,8 +107,12 @@ export const ClubsPage = () => {
           title={current ? 'Edycja klubu' : 'Tworzenie nowego klubu'}
         />
 
-        <ClubsForm current={current} onSubmit={handleSubmit} />
+        <ClubsForm
+          current={current}
+          onSubmit={handleSubmit}
+          onCancelClick={handleFormReset}
+        />
       </TabPanel>
-    </>
+    </MainTemplate>
   );
 };

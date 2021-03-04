@@ -123,7 +123,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   buttonsContainer: {
     display: 'flex',
-    gap: `${theme.spacing(2)}px`,
+
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
   },
 }));
 

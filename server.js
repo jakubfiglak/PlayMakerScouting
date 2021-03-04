@@ -3,6 +3,7 @@ const colors = require('colors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const xss = require('xss-clean');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
@@ -23,11 +24,15 @@ const players = require('./routes/players');
 const matches = require('./routes/matches');
 const orders = require('./routes/orders');
 const reports = require('./routes/reports');
+const dashboard = require('./routes/dashboard');
 
 const app = express();
 
 // Body parser
 app.use(express.json());
+
+// Cookie parser
+app.use(cookieParser());
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
@@ -45,6 +50,7 @@ app.use(`${process.env.BASE_URL}/players`, players);
 app.use(`${process.env.BASE_URL}/matches`, matches);
 app.use(`${process.env.BASE_URL}/orders`, orders);
 app.use(`${process.env.BASE_URL}/reports`, reports);
+app.use(`${process.env.BASE_URL}/dashboard`, dashboard);
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

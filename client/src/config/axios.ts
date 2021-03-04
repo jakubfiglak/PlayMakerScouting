@@ -6,10 +6,10 @@ export const axiosJson = axios.create({
   },
 });
 
-export const setAuthToken = (token: string) => {
-  if (token) {
-    axiosJson.defaults.headers.common.authorization = `Bearer ${token}`;
-  } else {
-    delete axios.defaults.headers.common.authorization;
-  }
-};
+// export const setAuthToken = (token: string) => {
+//   if (token) {
+//     axiosJson.defaults.headers.common.authorization = `Bearer ${token}`;
+//   } else {
+//     delete axios.defaults.headers.common.authorization;
+//   }
+// };

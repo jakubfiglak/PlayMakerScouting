@@ -3,8 +3,11 @@ import { axiosJson } from '../../config/axios';
 import UsersContext from './usersContext';
 import usersReducer from './usersReducer';
 import { AssignPlaymakerRoleData, State } from '../../types/users';
+import { useAlertsState } from '../alerts/useAlertsState';
 
 export const UsersState: React.FC = ({ children }) => {
+  const { setAlert } = useAlertsState();
+
   const initialState: State = {
     usersList: [],
     loading: false,
@@ -12,8 +15,6 @@ export const UsersState: React.FC = ({ children }) => {
     message: null,
     getUsersList: () => null,
     setLoading: () => null,
-    clearErrors: () => null,
-    clearMessage: () => null,
     assignPlaymakerRole: () => null,
   };
 
@@ -36,6 +37,8 @@ export const UsersState: React.FC = ({ children }) => {
         payload: res.data.data,
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'USERS_ERROR',
         payload: err.response.data.error,
@@ -43,28 +46,20 @@ export const UsersState: React.FC = ({ children }) => {
     }
   };
 
-  // Clear errors
-  const clearErrors = () =>
-    dispatch({
-      type: 'CLEAR_ERRORS',
-    });
-
-  // Clear message
-  const clearMessage = () =>
-    dispatch({
-      type: 'CLEAR_MESSAGE',
-    });
-
   // Assign playmaker-scout role
   const assignPlaymakerRole = async (data: AssignPlaymakerRoleData) => {
     setLoading();
     try {
       const res = await axiosJson.post('/api/v1/users/assignplaymaker', data);
+      setAlert({ msg: res.data.message, type: 'success' });
+
       dispatch({
         type: 'ASSIGN_ROLE_SUCCESS',
         payload: { user: res.data.data, message: res.data.message },
       });
     } catch (err) {
+      setAlert({ msg: err.response.data.error, type: 'error' });
+
       dispatch({
         type: 'USERS_ERROR',
         payload: err.response.data.error,
@@ -83,8 +78,6 @@ export const UsersState: React.FC = ({ children }) => {
         message,
         getUsersList,
         setLoading,
-        clearErrors,
-        clearMessage,
         assignPlaymakerRole,
       }}
     >
