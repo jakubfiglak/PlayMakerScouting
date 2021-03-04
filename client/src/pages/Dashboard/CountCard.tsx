@@ -19,19 +19,17 @@ export const CountCard = ({ title, count, icon }: Props) => {
 
   return (
     <Card>
-      <CardContent>
-        <div className={classes.container}>
-          <div>
-            <Typography color="textSecondary" gutterBottom variant="h6">
-              {title.toUpperCase()}
-            </Typography>
-            <Typography color="textPrimary" variant="h3" component="p">
-              {count ? <CountUp end={count} /> : 0}
-            </Typography>
-          </div>
-          <div>
-            <Avatar className={classes.avatar}>{icon}</Avatar>
-          </div>
+      <CardContent className={classes.container}>
+        <div>
+          <Typography color="textSecondary" gutterBottom variant="h6">
+            {title.toUpperCase()}
+          </Typography>
+          <Typography color="textPrimary" variant="h3" component="p">
+            {count ? <CountUp end={count} /> : 0}
+          </Typography>
+        </div>
+        <div>
+          <Avatar className={classes.avatar}>{icon}</Avatar>
         </div>
       </CardContent>
     </Card>
@@ -40,6 +38,7 @@ export const CountCard = ({ title, count, icon }: Props) => {
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',

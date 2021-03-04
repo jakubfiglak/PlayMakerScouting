@@ -25,7 +25,7 @@ export const MainTemplate: FC = ({ children }) => {
 
   const onLogout = () => {
     logout();
-    history.push('/');
+    history.push('/login');
   };
 
   return (

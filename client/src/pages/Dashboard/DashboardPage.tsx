@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // MUI components
 import { makeStyles, Theme } from '@material-ui/core';
 // MUI icons
@@ -10,36 +10,29 @@ import {
 } from '@material-ui/icons';
 // Custom components
 import { CountCard } from './CountCard';
+import { ReportCard } from './ReportCard';
+import { OrderCard } from './OrderCard';
 import { PageHeading } from '../../components/PageHeading';
 // Hooks
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useDashboardData } from '../../operations/queries/useDashboardData';
 // Utils & data
 import { MainTemplate } from '../../templates/MainTemplate';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { Loader } from '../../components/Loader';
 
 export const DashboardPage = () => {
   const classes = useStyles();
   const user = useAuthenticatedUser();
-  const { setAlert } = useAlertsState();
 
   const isPrivilegedUser = user.role !== 'scout';
 
-  const { data, error, isLoading } = useDashboardData();
-
-  useEffect(() => {
-    if (error) {
-      setAlert({ msg: error.response.data.error, type: 'error' });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  const { data, isLoading } = useDashboardData();
 
   return (
     <MainTemplate>
       {isLoading && <Loader />}
-      <PageHeading title="Twoje statystyki" />
-      <div className={classes.countCardContainer}>
+      <PageHeading title="Twoja aktywność" />
+      <div className={classes.container}>
         <CountCard
           title="Zawodników w bazie"
           count={data?.playersCount}
@@ -70,15 +63,30 @@ export const DashboardPage = () => {
           icon={<ReportsIcon />}
         />
       </div>
+      <div className={classes.container}>
+        {data?.latestReport && (
+          <ReportCard title="Najnowszy raport" report={data.latestReport} />
+        )}
+        {data?.highestRatedReport && (
+          <ReportCard
+            title="Najwyżej oceniony raport"
+            report={data.highestRatedReport}
+          />
+        )}
+        {isPrivilegedUser && data?.latestOrder && (
+          <OrderCard title="Najnowsze zlecenie" order={data.latestOrder} />
+        )}
+      </div>
     </MainTemplate>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  countCardContainer: {
+  container: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     justifyContent: 'center',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
     gap: `${theme.spacing(2)}px`,
+    marginTop: theme.spacing(2),
   },
 }));

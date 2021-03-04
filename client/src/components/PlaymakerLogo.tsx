@@ -13,7 +13,7 @@ export const PlaymakerLogo = () => {
         src={logo}
         alt="PlaymakerPro Logo"
       />
-      <Typography variant="h6" noWrap component="h1">
+      <Typography variant="h6" noWrap component="h1" className={classes.title}>
         PlayMaker Pro Scouting
       </Typography>
     </div>
@@ -32,5 +32,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     borderRadius: '50%',
     boxShadow: theme.shadows[5],
+  },
+  title: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 16,
+    },
   },
 }));

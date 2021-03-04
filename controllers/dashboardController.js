@@ -9,7 +9,7 @@ const populateReports = [
   {
     path: 'player',
     select: 'firstName lastName position',
-    populate: { path: 'club', select: 'name' },
+    populate: { path: 'club', select: 'name division' },
   },
   {
     path: 'scout',

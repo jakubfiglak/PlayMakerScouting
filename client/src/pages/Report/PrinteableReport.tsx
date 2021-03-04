@@ -96,7 +96,7 @@ export const PrinteableReport = ({ report }: Props) => {
               className={clsx(classes.text, classes.marginLeft)}
               gutterBottom
             >
-              <strong>Data meczu: </strong>
+              <strong>Data utworzenia: </strong>
               {formatDate(createdAt, true)}
             </Typography>
           </div>
