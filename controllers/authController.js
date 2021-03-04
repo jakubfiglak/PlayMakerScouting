@@ -8,50 +8,56 @@ const sgMail = require('../config/sendgrid');
 // @desc Register user
 // @route POST /api/v1/auth/register
 // @access Public
-exports.register = asyncHandler(async (req, res, next) => {
-  const { email, password, passwordConfirm } = req.body;
+exports.register = asyncHandler(
+  async (req, res, next) =>
+    res.status(403).json({
+      success: false,
+      message: 'Registering new users is forbidden in the test version',
+    })
 
-  let user = await User.findOne({ email });
+  // const { email, password, passwordConfirm } = req.body;
 
-  if (user) {
-    return next(new ErrorResponse('User already exists', 400));
-  }
+  // let user = await User.findOne({ email });
 
-  if (password !== passwordConfirm) {
-    return next(new ErrorResponse('Passwords do not match', 400));
-  }
+  // if (user) {
+  //   return next(new ErrorResponse('User already exists', 400));
+  // }
 
-  const confirmationCode = jwt.sign({ email }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
+  // if (password !== passwordConfirm) {
+  //   return next(new ErrorResponse('Passwords do not match', 400));
+  // }
 
-  user = await User.create({ ...req.body, confirmationCode });
+  // const confirmationCode = jwt.sign({ email }, process.env.JWT_SECRET, {
+  //   expiresIn: process.env.JWT_EXPIRE,
+  // });
 
-  const confirmationURL = `http://${req.headers.host}/confirm/${confirmationCode}`;
+  // user = await User.create({ ...req.body, confirmationCode });
 
-  try {
-    await sgMail.send({
-      to: email,
-      from: 'playmakerscoutingapp@gmail.com',
-      subject: 'Aktywuj swoje konto w aplikacji PlaymakerPro Scouting',
-      text: `Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w link ${confirmationURL}`,
-      html: `<h2>Witaj ${user.firstName}</h2>
-            <p>Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w <a href="${confirmationURL}">link</a></p>
-      `,
-    });
-  } catch (error) {
-    console.error(error);
-    user.confirmationCode = undefined;
-    await user.save({ validateBeforeSave: false });
-    return next(new ErrorResponse('Confirmation email could not be sent', 500));
-  }
+  // const confirmationURL = `http://${req.headers.host}/confirm/${confirmationCode}`;
 
-  res.status(201).json({
-    success: true,
-    message: 'Successfully created new user!',
-    data: user,
-  });
-});
+  // try {
+  //   await sgMail.send({
+  //     to: email,
+  //     from: 'playmakerscoutingapp@gmail.com',
+  //     subject: 'Aktywuj swoje konto w aplikacji PlaymakerPro Scouting',
+  //     text: `Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w link ${confirmationURL}`,
+  //     html: `<h2>Witaj ${user.firstName}</h2>
+  //           <p>Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w <a href="${confirmationURL}">link</a></p>
+  //     `,
+  //   });
+  // } catch (error) {
+  //   console.error(error);
+  //   user.confirmationCode = undefined;
+  //   await user.save({ validateBeforeSave: false });
+  //   return next(new ErrorResponse('Confirmation email could not be sent', 500));
+  // }
+
+  // res.status(201).json({
+  //   success: true,
+  //   message: 'Successfully created new user!',
+  //   data: user,
+  // });
+);
 
 // @desc Verify user
 // @route GET /api/v1/auth/confirm/:confirmationCode
