@@ -3,95 +3,96 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const toJson = require('@meanie/mongoose-to-json');
 const voivodeships = require('../utils/voivodeships');
 
 const { Schema, model } = mongoose;
 
-const UserSchema = new Schema({
-  firstName: {
-    type: String,
-    required: 'please add a first name',
-    trim: true,
-    maxlength: 30,
-  },
-  lastName: {
-    type: String,
-    required: 'please add a last name',
-    trim: true,
-    maxlength: 30,
-  },
-  email: {
-    type: String,
-    unique: true,
-    lowercase: true,
-    trim: true,
-    validate: [validator.isEmail, 'email address is not valid'],
-    required: 'please add an email address',
-  },
-  phone: {
-    type: String,
-    trim: true,
-    validate: [validator.isMobilePhone, 'phone number is not valid'],
-  },
-  city: {
-    type: String,
-    trim: true,
-    maxlength: 30,
-  },
-  voivodeship: {
-    type: String,
-    enum: [...voivodeships, 'Zagranica'],
-  },
-  activeRadius: {
-    type: Number,
-    default: 0,
-  },
-  password: {
-    type: String,
-    required: 'please add a password',
-    minlength: [6, 'password must be at least 6 characters long'],
-    match: [
-      /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
-      'password must contain at least 1 lowercase letter, 1 uppercase letter and 1 digit',
+const UserSchema = new Schema(
+  {
+    firstName: {
+      type: String,
+      required: 'please add a first name',
+      trim: true,
+      maxlength: 30,
+    },
+    lastName: {
+      type: String,
+      required: 'please add a last name',
+      trim: true,
+      maxlength: 30,
+    },
+    email: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      validate: [validator.isEmail, 'email address is not valid'],
+      required: 'please add an email address',
+    },
+    phone: {
+      type: String,
+      trim: true,
+      validate: [validator.isMobilePhone, 'phone number is not valid'],
+    },
+    city: {
+      type: String,
+      trim: true,
+      maxlength: 30,
+    },
+    voivodeship: {
+      type: String,
+      enum: [...voivodeships, 'Zagranica'],
+    },
+    activeRadius: {
+      type: Number,
+      default: 0,
+    },
+    password: {
+      type: String,
+      required: 'please add a password',
+      minlength: [6, 'password must be at least 6 characters long'],
+      match: [
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
+        'password must contain at least 1 lowercase letter, 1 uppercase letter and 1 digit',
+      ],
+      maxlength: 30,
+      private: true,
+    },
+    role: {
+      type: String,
+      enum: ['admin', 'playmaker-scout', 'scout'],
+      default: 'scout',
+    },
+    myClubs: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Club',
+      },
     ],
-    select: false,
-    maxlength: 30,
-  },
-  role: {
-    type: String,
-    enum: ['admin', 'playmaker-scout', 'scout'],
-    default: 'scout',
-  },
-  myClubs: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Club',
+    myPlayers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Player',
+      },
+    ],
+    status: {
+      type: String,
+      enum: ['pending', 'active', 'blocked'],
+      default: 'pending',
     },
-  ],
-  myPlayers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Player',
+    confirmationCode: {
+      type: String,
+      unique: true,
     },
-  ],
-  status: {
-    type: String,
-    enum: ['pending', 'active', 'blocked'],
-    default: 'pending',
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
   },
-  confirmationCode: {
-    type: String,
-    unique: true,
-  },
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true }
+);
 
 UserSchema.plugin(mongoosePaginate);
+UserSchema.plugin(toJson);
 
 // Encrypt the password before each model save
 UserSchema.pre('save', async function (next) {
