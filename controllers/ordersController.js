@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Order = require('../models/Order');
 const Player = require('../models/Player');
 const User = require('../models/User');
-const ErrorResponse = require('../utils/errorResponse');
+const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 
 const populatePlayer = {
@@ -23,7 +23,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 
   if (!player) {
     return next(
-      new ErrorResponse(`No player found with the id of ${playerId}`, 404)
+      new ApiError(`No player found with the id of ${playerId}`, 404)
     );
   }
 
@@ -141,7 +141,7 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 
   if (!order) {
     return next(
-      new ErrorResponse(`No order found with the id of ${req.params.id}`, 404)
+      new ApiError(`No order found with the id of ${req.params.id}`, 404)
     );
   }
 
@@ -160,12 +160,12 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
   let order = await Order.findById(id);
 
   if (!order) {
-    return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
+    return next(new ApiError(`No order found with the id of ${id}`, 404));
   }
 
   if (order.status === 'accepted') {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `Order with the id of ${id} has been already accepted by another user`,
         400
       )
@@ -174,10 +174,7 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
 
   if (order.status === 'closed') {
     return next(
-      new ErrorResponse(
-        `Order with the id of ${id} has already been closed`,
-        400
-      )
+      new ApiError(`Order with the id of ${id} has already been closed`, 400)
     );
   }
 
@@ -189,13 +186,13 @@ exports.acceptOrder = asyncHandler(async (req, res, next) => {
 
     if (!user) {
       return next(
-        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+        new ApiError(`User not found with id of ${req.user._id}`, 404)
       );
     }
 
     if (!player) {
       return next(
-        new ErrorResponse(`Player not found with id of ${order.player}`, 404)
+        new ApiError(`Player not found with id of ${order.player}`, 404)
       );
     }
 
@@ -234,24 +231,18 @@ exports.closeOrder = asyncHandler(async (req, res, next) => {
   let order = await Order.findById(id);
 
   if (!order) {
-    return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
+    return next(new ApiError(`No order found with the id of ${id}`, 404));
   }
 
   if (order.status === 'open') {
     return next(
-      new ErrorResponse(
-        `Order with the id of ${id} has not been accepted yet`,
-        400
-      )
+      new ApiError(`Order with the id of ${id} has not been accepted yet`, 400)
     );
   }
 
   if (order.status === 'closed') {
     return next(
-      new ErrorResponse(
-        `Order with the id of ${id} has already been closed`,
-        400
-      )
+      new ApiError(`Order with the id of ${id} has already been closed`, 400)
     );
   }
 
@@ -278,12 +269,12 @@ exports.deleteOrder = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(id);
 
   if (!order) {
-    return next(new ErrorResponse(`No order found with the id of ${id}`, 404));
+    return next(new ApiError(`No order found with the id of ${id}`, 404));
   }
 
   if (order.status !== 'open') {
     return next(
-      new ErrorResponse("You can delete only orders with the status of 'open'")
+      new ApiError("You can delete only orders with the status of 'open'")
     );
   }
 

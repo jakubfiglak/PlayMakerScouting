@@ -21,7 +21,6 @@ const auth = require('./routes/auth');
 const users = require('./routes/users');
 const clubs = require('./routes/clubs');
 const players = require('./routes/players');
-const matches = require('./routes/matches');
 const orders = require('./routes/orders');
 const reports = require('./routes/reports');
 const dashboard = require('./routes/dashboard');
@@ -47,7 +46,6 @@ app.use(`${process.env.BASE_URL}/auth`, auth);
 app.use(`${process.env.BASE_URL}/users`, users);
 app.use(`${process.env.BASE_URL}/clubs`, clubs);
 app.use(`${process.env.BASE_URL}/players`, players);
-app.use(`${process.env.BASE_URL}/matches`, matches);
 app.use(`${process.env.BASE_URL}/orders`, orders);
 app.use(`${process.env.BASE_URL}/reports`, reports);
 app.use(`${process.env.BASE_URL}/dashboard`, dashboard);
@@ -58,8 +56,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
   app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-  );
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')));
 }
 
 app.use(errorHandler);

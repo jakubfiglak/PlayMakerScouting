@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Club = require('../models/Club');
 const User = require('../models/User');
-const ErrorResponse = require('../utils/errorResponse');
+const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new club
@@ -16,7 +16,7 @@ exports.createClub = asyncHandler(async (req, res, next) => {
 
     if (!user) {
       return next(
-        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+        new ApiError(`User not found with id of ${req.user._id}`, 404)
       );
     }
 
@@ -51,7 +51,7 @@ exports.getClubs = asyncHandler(async (req, res, next) => {
 
     if (!user) {
       return next(
-        new ErrorResponse(`User not found with the id of ${req.user._id}`, 404)
+        new ApiError(`User not found with the id of ${req.user._id}`, 404)
       );
     }
 
@@ -80,7 +80,7 @@ exports.getClubsList = asyncHandler(async (req, res, next) => {
 
     if (!user) {
       return next(
-        new ErrorResponse(`User not found with the id of ${req.user._id}`, 404)
+        new ApiError(`User not found with the id of ${req.user._id}`, 404)
       );
     }
 
@@ -109,14 +109,12 @@ exports.getClub = asyncHandler(async (req, res, next) => {
   const user = await User.findById(userId);
 
   if (!user) {
-    return next(
-      new ErrorResponse(`User not found with the id of ${userId}`, 404)
-    );
+    return next(new ApiError(`User not found with the id of ${userId}`, 404));
   }
 
   if (!user.myClubs.includes(id)) {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `You don't have access to the club with the if of ${id}`,
         400
       )
@@ -126,7 +124,7 @@ exports.getClub = asyncHandler(async (req, res, next) => {
   const club = await Club.findById(id);
 
   if (!club) {
-    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
+    return next(new ApiError(`Club not found with id of ${id}`, 404));
   }
 
   res.status(200).json({
@@ -146,14 +144,12 @@ exports.updateClub = asyncHandler(async (req, res, next) => {
   const user = await User.findById(userId);
 
   if (!user) {
-    return next(
-      new ErrorResponse(`User not found with the id of ${userId}`, 404)
-    );
+    return next(new ApiError(`User not found with the id of ${userId}`, 404));
   }
 
   if (!user.myClubs.includes(id) && user.role !== 'admin') {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `You don't have access to the club with the if of ${id}`,
         400
       )
@@ -181,7 +177,7 @@ exports.deleteClub = asyncHandler(async (req, res, next) => {
   const club = await Club.findById(id);
 
   if (!club) {
-    return next(new ErrorResponse(`Club not found with id of ${id}`, 404));
+    return next(new ApiError(`Club not found with id of ${id}`, 404));
   }
 
   await club.remove();
@@ -204,20 +200,16 @@ exports.grantAccess = asyncHandler(async (req, res, next) => {
   const club = await Club.findById(clubId);
 
   if (!user) {
-    return next(
-      new ErrorResponse(`User not found with the id of ${userId}`, 404)
-    );
+    return next(new ApiError(`User not found with the id of ${userId}`, 404));
   }
 
   if (!club) {
-    return next(
-      new ErrorResponse(`Club not found with the id of ${clubId}`, 404)
-    );
+    return next(new ApiError(`Club not found with the id of ${clubId}`, 404));
   }
 
   if (user.myClubs.includes(clubId)) {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `User with the id of ${userId} already has access to the club with the id of ${clubId}`
       )
     );

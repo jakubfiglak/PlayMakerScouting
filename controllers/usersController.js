@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
-const ErrorResponse = require('../utils/errorResponse');
+const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Get all users
@@ -45,7 +45,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(id);
 
   if (!user) {
-    return next(new ErrorResponse(`User not found with the id of ${id}`, 404));
+    return next(new ApiError(`User not found with the id of ${id}`, 404));
   }
 
   res.status(200).json({
@@ -63,7 +63,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(id);
 
   if (!user) {
-    return next(new ErrorResponse(`User not found with the id of ${id}`, 404));
+    return next(new ApiError(`User not found with the id of ${id}`, 404));
   }
 
   await user.remove();
@@ -83,21 +83,17 @@ exports.assignPlaymakerRole = asyncHandler(async (req, res, next) => {
   const user = await User.findById(userId);
 
   if (!user) {
-    return next(
-      new ErrorResponse(`User not found with the id of ${userId}`, 404)
-    );
+    return next(new ApiError(`User not found with the id of ${userId}`, 404));
   }
 
   if (user.role === 'playmaker-scout') {
     return next(
-      new ErrorResponse(
-        `User with the id of ${userId} is already a playmaker-scout`
-      )
+      new ApiError(`User with the id of ${userId} is already a playmaker-scout`)
     );
   }
 
   if (user.role === 'admin') {
-    return next(new ErrorResponse(`User with the id of ${userId} is an admin`));
+    return next(new ApiError(`User with the id of ${userId} is an admin`));
   }
 
   user.role = 'playmaker-scout';

@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const ErrorResponse = require('../utils/errorResponse');
+const ApiError = require('../utils/ApiError');
 const sgMail = require('../config/sendgrid');
 
 // @desc Register user
@@ -68,7 +68,7 @@ exports.verifyUser = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ confirmationCode });
 
   if (!user) {
-    return next(new ErrorResponse('User not found', 404));
+    return next(new ApiError('User not found', 404));
   }
 
   user.status = 'active';
@@ -90,29 +90,24 @@ exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return next(
-      new ErrorResponse('Please provide an email and a password', 400)
-    );
+    return next(new ApiError('Please provide an email and a password', 400));
   }
   const user = await User.findOne({ email }).select('+password');
 
   if (!user) {
-    return next(new ErrorResponse('Invalid credentials', 401));
+    return next(new ApiError('Invalid credentials', 401));
   }
 
   if (user.status !== 'active') {
     return next(
-      new ErrorResponse(
-        'Your account is not active, please verify your email',
-        401
-      )
+      new ApiError('Your account is not active, please verify your email', 401)
     );
   }
 
   const match = await user.comparePasswords(password);
 
   if (!match) {
-    return next(new ErrorResponse('Invalid credentials', 401));
+    return next(new ApiError('Invalid credentials', 401));
   }
 
   const token = user.getJwt();
@@ -180,11 +175,11 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   const match = await user.comparePasswords(oldPassword);
 
   if (!match) {
-    return next(new ErrorResponse('Incorrect password', 401));
+    return next(new ApiError('Incorrect password', 401));
   }
 
   if (newPassword !== newPasswordConfirm) {
-    return next(new ErrorResponse('Passwords do not match', 400));
+    return next(new ApiError('Passwords do not match', 400));
   }
 
   user.password = newPassword;
@@ -214,7 +209,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    return next(new ErrorResponse('No account with that email exists', 400));
+    return next(new ApiError('No account with that email exists', 400));
   }
 
   user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
@@ -244,7 +239,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
     await user.save({ validateBeforeSave: false });
 
-    return next(new ErrorResponse('Email could not be sent', 500));
+    return next(new ApiError('Email could not be sent', 500));
   }
 });
 
@@ -262,12 +257,12 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new ErrorResponse('Password reset token is invalid or has expired.')
+      new ApiError('Password reset token is invalid or has expired.')
     );
   }
 
   if (newPassword !== newPasswordConfirm) {
-    return next(new ErrorResponse('Passwords do not match', 400));
+    return next(new ApiError('Passwords do not match', 400));
   }
 
   user.password = newPassword;

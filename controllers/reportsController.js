@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Report = require('../models/Report');
 const Player = require('../models/Player');
 const Order = require('../models/Order');
-const ErrorResponse = require('../utils/errorResponse');
+const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 const getIndividualSkillsProps = require('../utils/getIndividualSkillsProps');
 
@@ -48,19 +48,17 @@ exports.createReport = asyncHandler(async (req, res, next) => {
 
   if (!player) {
     return next(
-      new ErrorResponse(`No player found with the id of ${playerId}`, 404)
+      new ApiError(`No player found with the id of ${playerId}`, 404)
     );
   }
 
   if (orderId && !order) {
-    return next(
-      new ErrorResponse(`No order found with the id of ${orderId}`, 404)
-    );
+    return next(new ApiError(`No order found with the id of ${orderId}`, 404));
   }
 
   if (orderId && order.status === 'open') {
     return next(
-      new ErrorResponse(
+      new ApiError(
         'You have to accept the order before creating a report attached to that order'
       )
     );
@@ -68,7 +66,7 @@ exports.createReport = asyncHandler(async (req, res, next) => {
 
   if (orderId && order.status === 'closed') {
     return next(
-      new ErrorResponse(
+      new ApiError(
         'You cannot create a report attached to an order that has already been closed'
       )
     );
@@ -161,15 +159,15 @@ exports.getReport = asyncHandler(async (req, res, next) => {
   const report = await Report.findById(id).populate(populate);
 
   if (!report) {
-    return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
+    return next(new ApiError(`No report found with the id of ${id}`, 404));
   }
 
   if (
-    report.scout._id.toString() !== req.user._id
-    && req.user.role !== 'admin'
+    report.scout._id.toString() !== req.user._id &&
+    req.user.role !== 'admin'
   ) {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `User ${req.user._id} is not authorized to view report with the id of ${id}`,
         401
       )
@@ -191,12 +189,12 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
   let report = await Report.findById(id);
 
   if (!report) {
-    return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
+    return next(new ApiError(`No report found with the id of ${id}`, 404));
   }
 
   if (report.scout.toString() !== req.user._id && req.user.role !== 'admin') {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `User ${req.user._id} is not authorized to update report with the id of ${id}`,
         401
       )
@@ -207,7 +205,7 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
 
   if (!player) {
     return next(
-      new ErrorResponse(`No player found with the id of ${report.player}`, 404)
+      new ApiError(`No player found with the id of ${report.player}`, 404)
     );
   }
 
@@ -238,12 +236,12 @@ exports.deleteReport = asyncHandler(async (req, res, next) => {
   const report = await Report.findById(id);
 
   if (!report) {
-    return next(new ErrorResponse(`No report found with the id of ${id}`, 404));
+    return next(new ApiError(`No report found with the id of ${id}`, 404));
   }
 
   if (report.scout.toString() !== req.user._id && req.user.role !== 'admin') {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `User ${req.user._id} is not authorized to delete report with the id of ${id}`,
         401
       )

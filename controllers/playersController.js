@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Player = require('../models/Player');
 const Club = require('../models/Club');
 const User = require('../models/User');
-const ErrorResponse = require('../utils/errorResponse');
+const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 
 // @desc Create new player
@@ -14,9 +14,7 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
   const club = await Club.findById(clubId);
 
   if (!club) {
-    return next(
-      new ErrorResponse(`No club found with the id of ${clubId}`, 404)
-    );
+    return next(new ApiError(`No club found with the id of ${clubId}`, 404));
   }
 
   let player = await Player.create(req.body);
@@ -31,7 +29,7 @@ exports.createPlayer = asyncHandler(async (req, res, next) => {
 
     if (!user) {
       return next(
-        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+        new ApiError(`User not found with id of ${req.user._id}`, 404)
       );
     }
 
@@ -75,7 +73,7 @@ exports.getPlayers = asyncHandler(async (req, res, next) => {
 
     if (!user) {
       return next(
-        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+        new ApiError(`User not found with id of ${req.user._id}`, 404)
       );
     }
 
@@ -103,7 +101,7 @@ exports.getPlayersList = asyncHandler(async (req, res, next) => {
 
     if (!user) {
       return next(
-        new ErrorResponse(`User not found with id of ${req.user._id}`, 404)
+        new ApiError(`User not found with id of ${req.user._id}`, 404)
       );
     }
 
@@ -133,14 +131,12 @@ exports.getPlayer = asyncHandler(async (req, res, next) => {
   const user = await User.findById(userId);
 
   if (!user) {
-    return next(
-      new ErrorResponse(`User not found with the id of ${userId}`, 404)
-    );
+    return next(new ApiError(`User not found with the id of ${userId}`, 404));
   }
 
   if (user.role !== 'admin' && !user.myPlayers.includes(id)) {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `You don't have access to the player with the if of ${id}`,
         400
       )
@@ -155,7 +151,7 @@ exports.getPlayer = asyncHandler(async (req, res, next) => {
     .populate('reports');
 
   if (!player) {
-    return next(new ErrorResponse(`No player found with the id of ${id}`, 404));
+    return next(new ApiError(`No player found with the id of ${id}`, 404));
   }
 
   res.status(200).json({
@@ -174,14 +170,12 @@ exports.updatePlayer = asyncHandler(async (req, res, next) => {
   const user = await User.findById(userId);
 
   if (!user) {
-    return next(
-      new ErrorResponse(`User not found with the id of ${userId}`, 404)
-    );
+    return next(new ApiError(`User not found with the id of ${userId}`, 404));
   }
 
   if (!user.myPlayers.includes(id) && user.role !== 'admin') {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `You don't have access to the player with the if of ${id}`,
         400
       )
@@ -213,7 +207,7 @@ exports.deletePlayer = asyncHandler(async (req, res, next) => {
   const player = await Player.findById(id);
 
   if (!player) {
-    return next(new ErrorResponse(`No player found with the id of ${id}`, 404));
+    return next(new ApiError(`No player found with the id of ${id}`, 404));
   }
 
   await player.remove();
@@ -235,20 +229,18 @@ exports.grantAccess = asyncHandler(async (req, res, next) => {
   const player = await Player.findById(playerId);
 
   if (!user) {
-    return next(
-      new ErrorResponse(`User not found with the id of ${userId}`, 404)
-    );
+    return next(new ApiError(`User not found with the id of ${userId}`, 404));
   }
 
   if (!player) {
     return next(
-      new ErrorResponse(`Player not found with the id of ${playerId}`, 404)
+      new ApiError(`Player not found with the id of ${playerId}`, 404)
     );
   }
 
   if (user.myPlayers.includes(playerId)) {
     return next(
-      new ErrorResponse(
+      new ApiError(
         `User with the id of ${userId} already has access to the player with the id of ${playerId}`
       )
     );
