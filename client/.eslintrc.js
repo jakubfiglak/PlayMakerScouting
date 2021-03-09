@@ -34,6 +34,9 @@ module.exports = {
       "prop": "ignore"
     }],
     "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "react/jsx-indent": "warn",
+    "react/jsx-curly-newline": "warn",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",

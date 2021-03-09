@@ -177,6 +177,12 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 
   const user = await User.findById(req.user._id).select('+password');
 
+  if (user.email.includes('@example')) {
+    return next(
+      new ErrorResponse('You cannot change password for the test user', 403)
+    );
+  }
+
   const match = await user.comparePasswords(oldPassword);
 
   if (!match) {
