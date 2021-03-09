@@ -31,7 +31,7 @@ Registering new users is blocked in the test version of the app. If you want to 
 
 ```
 login: playmakertest@example.com
-password: SomePassword12345
+password: 2021PMplaymakertest
 ```
 
 ## Tech stack 🔨
