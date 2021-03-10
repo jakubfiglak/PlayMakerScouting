@@ -5,13 +5,13 @@ tomorrow.setDate(tomorrow.getDate() + 1);
 yearFromNow.setDate(yearFromNow.getDate() - 365);
 
 const formatDate = (date: string, hour?: boolean) => {
-  let options = {
+  let options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
   };
 
-  const hourOptions = {
+  const hourOptions: Intl.DateTimeFormatOptions = {
     hour: 'numeric',
     minute: 'numeric',
   };
