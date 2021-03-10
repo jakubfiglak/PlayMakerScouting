@@ -15,4 +15,20 @@ const buildUser = (overrides = {}) => ({
   ...overrides,
 });
 
-module.exports = { buildUser };
+const buildReq = (overrides = {}) => {
+  const req = { body: {}, params: {}, ...overrides };
+  return req;
+};
+
+const buildRes = (overrides = {}) => {
+  const res = {
+    json: jest.fn(() => res).mockName('json'),
+    status: jest.fn(() => res).mockName('status'),
+    ...overrides,
+  };
+  return res;
+};
+
+const buildNext = (impl) => jest.fn(impl).mockName('next');
+
+module.exports = { buildUser, buildReq, buildRes, buildNext };
