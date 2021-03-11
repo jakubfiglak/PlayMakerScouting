@@ -14,6 +14,7 @@
     "test-coverage": "jest --watchAll --verbose --runInBand --detectOpenHandles --coverage",
     "test": "jest --watchAll --verbose --runInBand --detectOpenHandles",
     "testOne": "jest --watch --detectOpenHandles",
+    "seed-users": "node scripts/seed-users",
     "import-data": "node seeder -import",
     "destroy-data": "node seeder -destroy",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client & migrate-mongo up"

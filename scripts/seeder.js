@@ -5,11 +5,11 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './config/config.env' });
 
-const User = require('./models/User');
-const Club = require('./models/Club');
-const Player = require('./models/Player');
-const Order = require('./models/Order');
-const Report = require('./models/Report');
+const User = require('../models/User');
+const Club = require('../models/Club');
+const Player = require('../models/Player');
+const Order = require('../models/Order');
+const Report = require('../models/Report');
 
 mongoose.connect(process.env.DB_CONNECT, {
   useNewUrlParser: true,
