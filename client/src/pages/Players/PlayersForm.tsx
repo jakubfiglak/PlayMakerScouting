@@ -11,8 +11,6 @@ import { FormContainer } from '../../components/FormContainer';
 // Types
 import { ClubBasicInfo } from '../../types/clubs';
 import { Player, PlayersFormData } from '../../types/players';
-// Hooks
-import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Utils & data
 import { playersFormValidationSchema } from '../../data/forms/validationSchemas';
 import { playersFormInitialValues } from '../../data/forms/initialValues';
@@ -23,6 +21,7 @@ type Props = {
   onSubmit: (data: PlayersFormData) => void;
   onAddClubClick: () => void;
   onCancelClick: () => void;
+  onEditCancelClick: () => void;
 };
 
 export const PlayersForm = ({
@@ -31,9 +30,8 @@ export const PlayersForm = ({
   onSubmit,
   onAddClubClick,
   onCancelClick,
+  onEditCancelClick,
 }: Props) => {
-  const user = useAuthenticatedUser();
-
   const initialValues: PlayersFormData = current
     ? {
         firstName: current.firstName,
@@ -136,63 +134,56 @@ export const PlayersForm = ({
             <FormControl variant="outlined" fullWidth>
               <FootSelect />
             </FormControl>
-            {user.role === 'admin' && (
-              <>
-                <Field
-                  name="lnpID"
-                  as={TextField}
-                  variant="outlined"
-                  fullWidth
-                  label="ID Łączy Nas Piłka"
-                  error={touched.lnpID && !!errors.lnpID}
-                  helperText={
-                    (touched.lnpID && errors.lnpID) || 'Pole opcjonalne'
-                  }
-                />
-                <Field
-                  name="lnpProfileURL"
-                  as={TextField}
-                  variant="outlined"
-                  fullWidth
-                  label="Link do profilu ŁNP"
-                  error={touched.lnpProfileURL && !!errors.lnpProfileURL}
-                  helperText={
-                    (touched.lnpProfileURL && errors.lnpProfileURL) ||
-                    'Pole opcjonalne'
-                  }
-                />
-                <Field
-                  name="minut90ProfileURL"
-                  as={TextField}
-                  variant="outlined"
-                  fullWidth
-                  label="Link do profilu 90minut"
-                  error={
-                    touched.minut90ProfileURL && !!errors.minut90ProfileURL
-                  }
-                  helperText={
-                    (touched.minut90ProfileURL && errors.minut90ProfileURL) ||
-                    'Pole opcjonalne'
-                  }
-                />
-                <Field
-                  name="transfermarktProfileURL"
-                  as={TextField}
-                  variant="outlined"
-                  fullWidth
-                  label="Link do profilu Transfermarkt"
-                  error={
-                    touched.transfermarktProfileURL &&
-                    !!errors.transfermarktProfileURL
-                  }
-                  helperText={
-                    (touched.transfermarktProfileURL &&
-                      errors.transfermarktProfileURL) ||
-                    'Pole opcjonalne'
-                  }
-                />
-              </>
-            )}
+
+            <Field
+              name="lnpID"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="ID Łączy Nas Piłka"
+              error={touched.lnpID && !!errors.lnpID}
+              helperText={(touched.lnpID && errors.lnpID) || 'Pole opcjonalne'}
+            />
+            <Field
+              name="lnpProfileURL"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Link do profilu ŁNP"
+              error={touched.lnpProfileURL && !!errors.lnpProfileURL}
+              helperText={
+                (touched.lnpProfileURL && errors.lnpProfileURL) ||
+                'Pole opcjonalne'
+              }
+            />
+            <Field
+              name="minut90ProfileURL"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Link do profilu 90minut"
+              error={touched.minut90ProfileURL && !!errors.minut90ProfileURL}
+              helperText={
+                (touched.minut90ProfileURL && errors.minut90ProfileURL) ||
+                'Pole opcjonalne'
+              }
+            />
+            <Field
+              name="transfermarktProfileURL"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="Link do profilu Transfermarkt"
+              error={
+                touched.transfermarktProfileURL &&
+                !!errors.transfermarktProfileURL
+              }
+              helperText={
+                (touched.transfermarktProfileURL &&
+                  errors.transfermarktProfileURL) ||
+                'Pole opcjonalne'
+              }
+            />
             <MainFormActions
               label="zawodnika"
               isEditState={!!current}
@@ -200,6 +191,7 @@ export const PlayersForm = ({
                 onCancelClick();
                 handleReset();
               }}
+              onEditCancelClick={onEditCancelClick}
             />
           </FormContainer>
         </Form>

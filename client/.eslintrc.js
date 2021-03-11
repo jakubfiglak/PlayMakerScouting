@@ -1,12 +1,21 @@
 module.exports = {
   parser: "@typescript-eslint/parser",
+  root: true,
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parserOptions: {
+        project: ['./tsconfig.json']
+      } 
+    }
+  ],
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: "module",
     ecmaFeatures: {
       jsx: true 
     },
-    project: './tsconfig.json'
+    project: './tsconfig.json',
   },
   settings: {
     react: {

@@ -16,6 +16,9 @@ const options = {
   },
   max: 1,
   stepSize: 1,
+  animation: {
+    duration: 0,
+  },
 };
 
 export const SkillsChart = ({ individualSkills, teamplaySkills }: Props) => {

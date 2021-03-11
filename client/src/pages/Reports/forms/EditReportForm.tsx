@@ -7,7 +7,6 @@ import {
   AccordionSummary,
   Card,
   CardContent,
-  Grid,
   Typography,
   makeStyles,
   Theme,
@@ -28,9 +27,14 @@ import { Report } from '../../../types/reports';
 type Props = {
   report: Report;
   onReset: () => void;
+  onEditCancelClick: () => void;
 };
 
-export const EditReportForm = ({ report, onReset }: Props) => {
+export const EditReportForm = ({
+  report,
+  onReset,
+  onEditCancelClick,
+}: Props) => {
   const classes = useStyles();
   const { player, match, order, scout, createdAt } = report;
 
@@ -118,6 +122,7 @@ export const EditReportForm = ({ report, onReset }: Props) => {
               handleReset();
               onReset();
             }}
+            onEditCancelClick={onEditCancelClick}
           />
         </div>
       </Form>
@@ -130,7 +135,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(2),
   },
   container: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(2, 'auto'),
 
     [theme.breakpoints.up('sm')]: {
       width: '50%',

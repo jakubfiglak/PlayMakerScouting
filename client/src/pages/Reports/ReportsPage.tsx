@@ -146,7 +146,7 @@ export const ReportsPage = () => {
 
   const handlePrintClick = (report: Report) => {
     setCurrent(report);
-    setTimeout(() => handlePrint(), 10);
+    setTimeout(() => handlePrint(), 100);
   };
 
   const onAddReport = (data: ReportFormData) => {
@@ -158,6 +158,11 @@ export const ReportsPage = () => {
     setActiveTab(0);
     setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
     clearCurrent();
+  };
+
+  const handleEditCancelClick = () => {
+    clearCurrent();
+    setAlert({ msg: 'Anulowano edycję', type: 'warning' });
   };
 
   return (
@@ -217,7 +222,11 @@ export const ReportsPage = () => {
         >
           {() =>
             current ? (
-              <EditReportForm report={current} onReset={handleEditFormReset} />
+              <EditReportForm
+                report={current}
+                onReset={handleEditFormReset}
+                onEditCancelClick={handleEditCancelClick}
+              />
             ) : (
               <NewReportForm
                 isOrderOptionDisabled={user.role === 'scout'}
