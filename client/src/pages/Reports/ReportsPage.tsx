@@ -146,7 +146,7 @@ export const ReportsPage = () => {
 
   const handlePrintClick = (report: Report) => {
     setCurrent(report);
-    setTimeout(() => handlePrint(), 10);
+    setTimeout(() => handlePrint(), 100);
   };
 
   const onAddReport = (data: ReportFormData) => {
