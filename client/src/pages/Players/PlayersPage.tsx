@@ -95,6 +95,11 @@ export const PlayersPage = () => {
     clearCurrent();
   };
 
+  const handleEditCancelClick = () => {
+    clearCurrent();
+    setAlert({ msg: 'Anulowano edycję', type: 'warning' });
+  };
+
   return (
     <MainTemplate>
       {(loading || clubsLoading) && <Loader />}
@@ -130,6 +135,7 @@ export const PlayersPage = () => {
           onSubmit={handlePlayersFormSubmit}
           onAddClubClick={() => setIsAddClubModalOpen(true)}
           onCancelClick={handleFormReset}
+          onEditCancelClick={handleEditCancelClick}
         />
         <AddClubModal
           onClose={() => setIsAddClubModalOpen(false)}

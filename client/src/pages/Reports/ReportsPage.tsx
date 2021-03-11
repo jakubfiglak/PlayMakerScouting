@@ -160,6 +160,11 @@ export const ReportsPage = () => {
     clearCurrent();
   };
 
+  const handleEditCancelClick = () => {
+    clearCurrent();
+    setAlert({ msg: 'Anulowano edycję', type: 'warning' });
+  };
+
   return (
     <MainTemplate>
       {(loading || playersLoading || clubsLoading || ordersLoading) && (
@@ -217,7 +222,11 @@ export const ReportsPage = () => {
         >
           {() =>
             current ? (
-              <EditReportForm report={current} onReset={handleEditFormReset} />
+              <EditReportForm
+                report={current}
+                onReset={handleEditFormReset}
+                onEditCancelClick={handleEditCancelClick}
+              />
             ) : (
               <NewReportForm
                 isOrderOptionDisabled={user.role === 'scout'}
