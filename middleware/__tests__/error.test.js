@@ -1,3 +1,4 @@
+const { Error } = require('mongoose');
 const { buildReq, buildRes, buildNext } = require('../../test/utils');
 const errorHandler = require('../error');
 
@@ -7,9 +8,12 @@ describe('error middleware', () => {
     const res = buildRes();
     const next = buildNext();
 
-    const error = new Error();
-    error.name = 'CastError';
-    error.value = 'SOME-RESOURCE-ID';
+    const error = new Error.CastError(
+      'SOME-TYPE',
+      'SOME-RESOURCE-ID',
+      'SOME-PATH'
+    );
+
     errorHandler(error, req, res, next);
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.status).toHaveBeenCalledTimes(1);
@@ -46,8 +50,7 @@ describe('error middleware', () => {
     const res = buildRes();
     const next = buildNext();
 
-    const error = new Error();
-    error.name = 'ValidationError';
+    const error = new Error.ValidationError();
     error.errors = {
       'SOME-KEY': {
         message: 'SOME-VALIDATION-MESSAGE',
