@@ -17,9 +17,15 @@ type Props = {
   current: Club | null;
   onSubmit: (data: ClubsFormData) => void;
   onCancelClick: () => void;
+  onEditCancelClick: () => void;
 };
 
-export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
+export const ClubsForm = ({
+  current,
+  onSubmit,
+  onCancelClick,
+  onEditCancelClick,
+}: Props) => {
   const initialValues: ClubsFormData = current
     ? {
         name: current.name,
@@ -61,6 +67,7 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
                 onCancelClick();
                 handleReset();
               }}
+              onEditCancelClick={onEditCancelClick}
             />
           </FormContainer>
         </Form>
