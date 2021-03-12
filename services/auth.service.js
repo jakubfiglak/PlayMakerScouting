@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
 const emailService = require('./email.service');
 const usersService = require('./users.service');
@@ -22,7 +22,7 @@ const registerUser = async ({ reqBody, host }) => {
     expiresIn: process.env.JWT_EXPIRE,
   });
 
-  user = await User.create({ ...reqBody, confirmationCode });
+  user = await usersService.createUser({ ...reqBody, confirmationCode });
 
   const confirmationURL = `http://${host}/confirm/${confirmationCode}`;
 

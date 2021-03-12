@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const colors = require('colors');
 const connectDB = require('../config/db');
-const User = require('../models/User');
+const User = require('../models/user.model');
 
 dotenv.config({ path: './config/config.env' });
 

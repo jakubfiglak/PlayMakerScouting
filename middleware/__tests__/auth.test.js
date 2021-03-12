@@ -5,7 +5,7 @@ const {
   buildRes,
   buildNext,
 } = require('../../test/utils');
-const User = require('../../models/User');
+const User = require('../../models/user.model');
 
 describe('route protection middleware', () => {
   it('should throw a 401 error if no token provided', () => {

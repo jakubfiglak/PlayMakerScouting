@@ -1,10 +1,17 @@
-const User = require('../models/User');
+const User = require('../models/user.model');
 
-const getUserById = async (id) => User.findById(id);
+const getUserById = (id) => User.findById(id);
 
-const getUserByEmail = async (email) => User.findOne({ email });
+const getUserByEmail = (email) => User.findOne({ email });
 
-const getUserByConfirmationCode = async (confirmationCode) =>
+const getUserByConfirmationCode = (confirmationCode) =>
   User.findOne({ confirmationCode });
 
-module.exports = { getUserById, getUserByEmail, getUserByConfirmationCode };
+const createUser = (reqBody) => User.create(reqBody);
+
+module.exports = {
+  getUserById,
+  getUserByEmail,
+  getUserByConfirmationCode,
+  createUser,
+};

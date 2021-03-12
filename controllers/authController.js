@@ -1,8 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const ErrorResponse = require('../utils/errorResponse');
+const User = require('../models/user.model');
+const ErrorResponse = require('../utils/ApiError');
 const sgMail = require('../config/sendgrid');
 
 // @desc Register user

@@ -9,7 +9,7 @@ const buildUser = (overrides = {}) => ({
   firstName: getFirstName(),
   lastName: getLastName(),
   email: getEmail(),
-  password: getPassword(),
+  password: `aB1${getPassword()}`,
   role: 'scout',
   status: 'active',
   ...overrides,
