@@ -5,7 +5,7 @@ const getLastName = faker.name.lastName;
 const getEmail = faker.internet.email;
 const getPassword = faker.internet.password;
 
-const password = `ab1${getPassword()}`;
+const password = `aB1${getPassword()}`;
 const email = getEmail().toLowerCase();
 
 const buildUser = (overrides = {}) => ({
@@ -33,6 +33,13 @@ const buildLoginForm = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildUpdatePasswordForm = (overrides = {}) => ({
+  oldPassword: password,
+  newPassword: password,
+  newPasswordConfirm: password,
+  ...overrides,
+});
+
 const buildReq = (overrides = {}) => {
   const req = { body: {}, params: {}, ...overrides };
   return req;
@@ -53,6 +60,7 @@ module.exports = {
   buildUser,
   buildRegisterForm,
   buildLoginForm,
+  buildUpdatePasswordForm,
   buildReq,
   buildRes,
   buildNext,

@@ -6,6 +6,7 @@ const {
   buildUser,
   buildRegisterForm,
   buildLoginForm,
+  buildUpdatePasswordForm,
 } = require('../../test/utils');
 const { insertUsers, insertTestUser } = require('../../test/db-utils');
 const emailService = require('../../services/email.service');
@@ -91,7 +92,7 @@ describe('POST api/v1/auth/register', () => {
       id: expect.anything(),
       firstName: registerData.firstName,
       lastName: registerData.lastName,
-      email: registerData.email.toLowerCase(),
+      email: registerData.email,
       role: 'scout',
       status: 'pending',
       confirmationCode: expect.anything(),
@@ -191,7 +192,7 @@ describe('POST api/v1/auth/login', () => {
     );
   });
 
-  it("should return 401 error if user status is other than 'active'", async () => {
+  it('should return 401 error if password is not valid', async () => {
     const user = buildUser({ password: 'SoMe-PASSWORD123' });
 
     await insertUsers([user]);
@@ -231,14 +232,146 @@ describe('POST api/v1/auth/login', () => {
 });
 
 describe('GET api/v1/auth/account', () => {
-  it('should do something', async () => {
+  it('should return account details of the user making the request', async () => {
     const { user, token } = await insertTestUser();
-    console.log(user);
-    console.log(token);
 
     const response = await api.get('/auth/account', {
-      headers: { Cookie: 'asdasdasd' },
+      headers: { Cookie: `token=${token}` },
     });
-    console.log(response);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.data).toMatchObject({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    });
+  });
+});
+
+describe('PUT api/v1/auth/updatedetails', () => {
+  it('should properly update user data excluding forbidden keys and empty values, and return the updated user object', async () => {
+    const password = 'SoMe-PASSWORD123';
+
+    const { user, token } = await insertTestUser({
+      password,
+    });
+
+    const updates = {
+      firstName: 'UPDATED-FIRST-NAME',
+      lastName: '',
+      password: 'TrY-TO-UPDATE123',
+      email: 'try-to-update@example.com',
+      role: 'admin',
+      city: 'UPDATED-CITY',
+    };
+
+    const response = await api.put('/auth/updatedetails', updates, {
+      headers: { Cookie: `token=${token}` },
+    });
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toMatchInlineSnapshot(
+      '"Account details successfully updated!"'
+    );
+
+    const updatedUser = response.data.data;
+
+    expect(updatedUser).toMatchObject({
+      firstName: updates.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      city: updates.city,
+    });
+
+    // Check if the password remained unchanged
+    const match = await user.comparePasswords(password);
+    expect(match).toBe(true);
+  });
+});
+
+describe('PUT api/v1/auth/updatepassword', () => {
+  it('should return 401 error if password is incorrect', async () => {
+    const { token } = await insertTestUser({
+      password: 'SoMe-PASSWORD123',
+    });
+
+    const updatePasswordFormData = buildUpdatePasswordForm({
+      oldPassword: 'SOME-OTHER-PASSWORD',
+    });
+
+    const { response } = await api
+      .put('/auth/updatepassword', updatePasswordFormData, {
+        headers: { Cookie: `token=${token}` },
+      })
+      .catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot('"Incorrect password"');
+  });
+
+  it('should return 401 error if newPassword and newPasswordConfirm are not equal', async () => {
+    const { token } = await insertTestUser({
+      password: 'SoMe-PASSWORD123',
+    });
+
+    const updatePasswordFormData = buildUpdatePasswordForm({
+      oldPassword: 'SoMe-PASSWORD123',
+      newPassword: 'NEW-PASSWORD',
+      newPasswordConfirm: 'OTHER-NEW-PASSWORD',
+    });
+
+    const { response } = await api
+      .put('/auth/updatepassword', updatePasswordFormData, {
+        headers: { Cookie: `token=${token}` },
+      })
+      .catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"Passwords do not match"'
+    );
+  });
+
+  it('should return 200 status, change the password and set a cookie if the data is valid', async () => {
+    const { user, token } = await insertTestUser({
+      password: 'SoMe-PASSWORD123',
+    });
+
+    const updatePasswordFormData = buildUpdatePasswordForm({
+      oldPassword: 'SoMe-PASSWORD123',
+    });
+
+    const response = await api.put(
+      'auth/updatepassword',
+      updatePasswordFormData,
+      {
+        headers: { Cookie: `token=${token}` },
+      }
+    );
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toMatchInlineSnapshot(
+      '"Password updated successfully!"'
+    );
+
+    expect(response.headers['set-cookie'][0]).toBeDefined();
+    expect(response.headers['set-cookie'][0]).toContain('token');
+
+    // User can now log in with the new password
+    const loginData = buildLoginForm({
+      email: user.email,
+      password: updatePasswordFormData.newPassword,
+    });
+
+    const loginResponse = await api.post('auth/login', loginData);
+    expect(loginResponse.status).toBe(httpStatus.OK);
+    expect(loginResponse.data.success).toBe(true);
+    expect(loginResponse.data.message).toMatchInlineSnapshot(
+      '"Login success!"'
+    );
   });
 });

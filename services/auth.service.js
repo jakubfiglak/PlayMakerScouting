@@ -86,8 +86,23 @@ const login = async ({ email, password }) => {
 };
 
 const updateDetails = async ({ id, reqBody }) => {
+  // Keys which user cannot update manually
+  const forbiddenKeys = [
+    'email',
+    'password',
+    'role',
+    'status',
+    'confirmationCode',
+    'resetPasswordToken',
+    'resetPasswordExpires',
+    'createdAt',
+    'updatedAt',
+  ];
+
   const updates = Object.fromEntries(
-    Object.entries(reqBody).filter(([_, value]) => value !== '')
+    Object.entries(reqBody).filter(
+      ([key, value]) => !forbiddenKeys.includes(key) && value !== ''
+    )
   );
 
   const user = await User.findByIdAndUpdate(id, updates, {
@@ -100,10 +115,8 @@ const updateDetails = async ({ id, reqBody }) => {
 
 const updatePassword = async ({ userId, reqBody }) => {
   const { oldPassword, newPassword, newPasswordConfirm } = reqBody;
-
   const user = await usersService.getUserById(userId);
   const match = await user.comparePasswords(oldPassword);
-
   if (!match) {
     throw new ApiError('Incorrect password', httpStatus.UNAUTHORIZED);
   }

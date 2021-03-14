@@ -92,7 +92,7 @@ exports.updateDetails = asyncHandler(async (req, res) => {
 // @route PUT /api/v1/auth/updatepassword
 // @access Private
 exports.updatePassword = asyncHandler(async (req, res) => {
-  const { token, expiresAt } = authService.updatePassword({
+  const { token, expiresAt } = await authService.updatePassword({
     userId: req.user._id,
     reqBody: req.body,
   });
