@@ -24,6 +24,7 @@
   "dependencies": {
     "@meanie/mongoose-to-json": "^2.5.0",
     "@sendgrid/mail": "^7.4.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.5",

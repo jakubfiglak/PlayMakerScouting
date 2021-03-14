@@ -5,13 +5,31 @@ const getLastName = faker.name.lastName;
 const getEmail = faker.internet.email;
 const getPassword = faker.internet.password;
 
+const password = `ab1${getPassword()}`;
+const email = getEmail().toLowerCase();
+
 const buildUser = (overrides = {}) => ({
   firstName: getFirstName(),
   lastName: getLastName(),
-  email: getEmail(),
-  password: `aB1${getPassword()}`,
+  email,
+  password,
   role: 'scout',
   status: 'active',
+  ...overrides,
+});
+
+const buildRegisterForm = (overrides = {}) => ({
+  firstName: getFirstName(),
+  lastName: getLastName(),
+  email,
+  password,
+  passwordConfirm: password,
+  ...overrides,
+});
+
+const buildLoginForm = (overrides = {}) => ({
+  email,
+  password,
   ...overrides,
 });
 
@@ -31,4 +49,11 @@ const buildRes = (overrides = {}) => {
 
 const buildNext = (impl) => jest.fn(impl).mockName('next');
 
-module.exports = { buildUser, buildReq, buildRes, buildNext };
+module.exports = {
+  buildUser,
+  buildRegisterForm,
+  buildLoginForm,
+  buildReq,
+  buildRes,
+  buildNext,
+};

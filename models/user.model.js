@@ -56,7 +56,6 @@ const UserSchema = new Schema(
         /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
         'password must contain at least 1 lowercase letter, 1 uppercase letter and 1 digit',
       ],
-      maxlength: 30,
       private: true,
     },
     role: {

@@ -32,7 +32,7 @@ exports.verifyUser = asyncHandler(async (req, res) => {
 
   const user = await authService.verifyUser(confirmationCode);
 
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     data: user,
     message: 'Account activated successfully, you can now log in to the app!',
@@ -50,7 +50,7 @@ exports.login = asyncHandler(async (req, res) => {
     password,
   });
 
-  res.status(200).cookie('token', token, cookieOptions).json({
+  res.status(httpStatus.OK).cookie('token', token, cookieOptions).json({
     success: true,
     message: 'Login success!',
     data: {
