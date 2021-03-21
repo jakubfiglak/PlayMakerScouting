@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
+const Club = require('../models/club.model');
 const { buildUser } = require('./utils');
 
 const salt = bcrypt.genSaltSync(10);
@@ -18,4 +19,8 @@ const insertTestUser = async (overrides = {}) => {
   return { user, token: user.getJwt() };
 };
 
-module.exports = { insertUsers, insertTestUser };
+const insertClubs = async (clubs) => {
+  Club.insertMany(clubs);
+};
+
+module.exports = { insertUsers, insertTestUser, insertClubs };

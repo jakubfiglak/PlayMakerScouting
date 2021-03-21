@@ -38,9 +38,7 @@ describe('POST api/v1/auth/register', () => {
       email: 'already-taken@example.com',
     });
 
-    const { response } = await api
-      .post('auth/register', newUserRegisterData)
-      .catch((e) => e);
+    const { response } = await api.post('auth/register', newUserRegisterData).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
     expect(response.data.success).toBe(false);
@@ -53,15 +51,11 @@ describe('POST api/v1/auth/register', () => {
       passwordConfirm: 'SOME-OTHER-PASSWORD',
     });
 
-    const { response } = await api
-      .post('auth/register', registerData)
-      .catch((e) => e);
+    const { response } = await api.post('auth/register', registerData).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toMatchInlineSnapshot(
-      '"Passwords do not match"'
-    );
+    expect(response.data.error).toMatchInlineSnapshot('"Passwords do not match"');
   });
 
   it('should return 201 status and the user object, send a confirmation email and successfully save the user to the database if request data is valid', async () => {
@@ -70,13 +64,8 @@ describe('POST api/v1/auth/register', () => {
     const response = await api.post('auth/register', registerData);
 
     expect(emailService.sendEmail).toHaveBeenCalledTimes(1);
-    expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty(
-      'to',
-      registerData.email
-    );
-    expect(
-      emailService.sendEmail.mock.calls[0][0].subject
-    ).toMatchInlineSnapshot(
+    expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty('to', registerData.email);
+    expect(emailService.sendEmail.mock.calls[0][0].subject).toMatchInlineSnapshot(
       '"Aktywuj swoje konto w aplikacji PlaymakerPro Scouting"'
     );
     expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty('text');
@@ -84,9 +73,7 @@ describe('POST api/v1/auth/register', () => {
 
     expect(response.status).toBe(httpStatus.CREATED);
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toMatchInlineSnapshot(
-      '"Successfully created new user!"'
-    );
+    expect(response.data.message).toMatchInlineSnapshot('"Successfully created new user!"');
     expect(response.data.data).not.toHaveProperty('password');
     expect(response.data.data).toMatchObject({
       id: expect.anything(),
@@ -106,9 +93,7 @@ describe('POST api/v1/auth/register', () => {
 
 describe('GET api/v1/auth/confirm/:confirmationCode', () => {
   it("should return 404 error if the user with the given confirmation code doesn't exist", async () => {
-    const { response } = await api
-      .get('auth/confirm/FAKE-CODE')
-      .catch((e) => e);
+    const { response } = await api.get('auth/confirm/FAKE-CODE').catch((e) => e);
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);
     expect(response.data.success).toBe(false);
@@ -135,37 +120,27 @@ describe('POST api/v1/auth/login', () => {
   it('should return 400 error if email is not provided', async () => {
     const loginData = buildLoginForm({ email: '' });
 
-    const { response } = await api
-      .post('auth/login', loginData)
-      .catch((e) => e);
+    const { response } = await api.post('auth/login', loginData).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toMatchInlineSnapshot(
-      '"Please provide an email and a password"'
-    );
+    expect(response.data.error).toMatchInlineSnapshot('"Please provide an email and a password"');
   });
 
   it('should return 400 error if password is not provided', async () => {
     const loginData = buildLoginForm({ password: '' });
 
-    const { response } = await api
-      .post('auth/login', loginData)
-      .catch((e) => e);
+    const { response } = await api.post('auth/login', loginData).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toMatchInlineSnapshot(
-      '"Please provide an email and a password"'
-    );
+    expect(response.data.error).toMatchInlineSnapshot('"Please provide an email and a password"');
   });
 
   it("should return 401 error if user doesn't exist", async () => {
     const loginData = buildLoginForm();
 
-    const { response } = await api
-      .post('auth/login', loginData)
-      .catch((e) => e);
+    const { response } = await api.post('auth/login', loginData).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     expect(response.data.success).toBe(false);
@@ -181,9 +156,7 @@ describe('POST api/v1/auth/login', () => {
       password: user.password,
     });
 
-    const { response } = await api
-      .post('auth/login', loginData)
-      .catch((e) => e);
+    const { response } = await api.post('auth/login', loginData).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     expect(response.data.success).toBe(false);
@@ -201,9 +174,7 @@ describe('POST api/v1/auth/login', () => {
       password: 'SOME-OTHER-PASSWORD',
     });
 
-    const { response } = await api
-      .post('auth/login', loginData)
-      .catch((e) => e);
+    const { response } = await api.post('auth/login', loginData).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     expect(response.data.success).toBe(false);
@@ -270,9 +241,7 @@ describe('PUT api/v1/auth/updatedetails', () => {
     });
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toMatchInlineSnapshot(
-      '"Account details successfully updated!"'
-    );
+    expect(response.data.message).toMatchInlineSnapshot('"Account details successfully updated!"');
 
     const updatedUser = response.data.data;
 
@@ -330,9 +299,7 @@ describe('PUT api/v1/auth/updatepassword', () => {
 
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toMatchInlineSnapshot(
-      '"Passwords do not match"'
-    );
+    expect(response.data.error).toMatchInlineSnapshot('"Passwords do not match"');
   });
 
   it('should return 200 status, change the password and set a cookie if the data is valid', async () => {
@@ -344,19 +311,13 @@ describe('PUT api/v1/auth/updatepassword', () => {
       oldPassword: 'SoMe-PASSWORD123',
     });
 
-    const response = await api.put(
-      'auth/updatepassword',
-      updatePasswordFormData,
-      {
-        headers: { Cookie: `token=${token}` },
-      }
-    );
+    const response = await api.put('auth/updatepassword', updatePasswordFormData, {
+      headers: { Cookie: `token=${token}` },
+    });
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toMatchInlineSnapshot(
-      '"Password updated successfully!"'
-    );
+    expect(response.data.message).toMatchInlineSnapshot('"Password updated successfully!"');
 
     expect(response.headers['set-cookie'][0]).toBeDefined();
     expect(response.headers['set-cookie'][0]).toContain('token');
@@ -370,8 +331,6 @@ describe('PUT api/v1/auth/updatepassword', () => {
     const loginResponse = await api.post('auth/login', loginData);
     expect(loginResponse.status).toBe(httpStatus.OK);
     expect(loginResponse.data.success).toBe(true);
-    expect(loginResponse.data.message).toMatchInlineSnapshot(
-      '"Login success!"'
-    );
+    expect(loginResponse.data.message).toMatchInlineSnapshot('"Login success!"');
   });
 });
