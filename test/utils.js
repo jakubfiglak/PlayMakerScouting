@@ -46,6 +46,13 @@ const buildClub = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildPlayer = (overrides = {}) => ({
+  firstName: getFirstName(),
+  lastName: getLastName(),
+  position: 'CM',
+  ...overrides,
+});
+
 const buildReq = (overrides = {}) => {
   const req = { body: {}, params: {}, ...overrides };
   return req;
@@ -68,6 +75,7 @@ module.exports = {
   buildLoginForm,
   buildUpdatePasswordForm,
   buildClub,
+  buildPlayer,
   buildReq,
   buildRes,
   buildNext,
