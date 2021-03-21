@@ -80,10 +80,7 @@ const UserSchema = new Schema(
       enum: ['pending', 'active', 'blocked'],
       default: 'pending',
     },
-    confirmationCode: {
-      type: String,
-      unique: true,
-    },
+    confirmationCode: String,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
   },

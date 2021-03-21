@@ -6,12 +6,11 @@ const getEmail = faker.internet.email;
 const getPassword = faker.internet.password;
 
 const password = `aB1${getPassword()}`;
-const email = getEmail().toLowerCase();
 
 const buildUser = (overrides = {}) => ({
   firstName: getFirstName(),
   lastName: getLastName(),
-  email,
+  email: getEmail().toLowerCase(),
   password,
   role: 'scout',
   status: 'active',
@@ -21,14 +20,14 @@ const buildUser = (overrides = {}) => ({
 const buildRegisterForm = (overrides = {}) => ({
   firstName: getFirstName(),
   lastName: getLastName(),
-  email,
+  email: getEmail().toLowerCase(),
   password,
   passwordConfirm: password,
   ...overrides,
 });
 
 const buildLoginForm = (overrides = {}) => ({
-  email,
+  email: getEmail().toLowerCase(),
   password,
   ...overrides,
 });
@@ -37,6 +36,13 @@ const buildUpdatePasswordForm = (overrides = {}) => ({
   oldPassword: password,
   newPassword: password,
   newPasswordConfirm: password,
+  ...overrides,
+});
+
+const buildClub = (overrides = {}) => ({
+  name: faker.company.companyName(),
+  voivodeship: 'Wielkopolskie',
+  division: 'Ekstraklasa',
   ...overrides,
 });
 
@@ -61,6 +67,7 @@ module.exports = {
   buildRegisterForm,
   buildLoginForm,
   buildUpdatePasswordForm,
+  buildClub,
   buildReq,
   buildRes,
   buildNext,
