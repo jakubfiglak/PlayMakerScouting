@@ -7,7 +7,7 @@ const {
   updateClub,
   deleteClub,
   grantAccess,
-} = require('../controllers/clubsController');
+} = require('../controllers/clubs.controller');
 const { protect, authorize } = require('../middleware/auth');
 
 const playersRouter = require('./players');

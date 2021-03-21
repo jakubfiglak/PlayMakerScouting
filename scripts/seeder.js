@@ -6,8 +6,8 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
 
 const User = require('../models/user.model');
-const Club = require('../models/Club');
-const Player = require('../models/Player');
+const Club = require('../models/club.model');
+const Player = require('../models/player.model');
 const Order = require('../models/Order');
 const Report = require('../models/Report');
 

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
+const toJson = require('@meanie/mongoose-to-json');
 
 const { Schema, model } = mongoose;
 
@@ -49,20 +50,19 @@ const PlayerSchema = new Schema(
     transfermarktProfileURL: {
       type: String,
     },
+    authorizedUsers: {
+      type: [Schema.Types.ObjectId],
+      ref: 'User',
+      default: [],
+      private: true,
+    },
   },
   {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    timestamps: true,
   }
 );
 
 PlayerSchema.plugin(mongoosePaginate);
-
-PlayerSchema.virtual('reports', {
-  ref: 'Report',
-  localField: '_id',
-  foreignField: 'player',
-  justOne: false,
-});
+PlayerSchema.plugin(toJson);
 
 module.exports = model('Player', PlayerSchema);

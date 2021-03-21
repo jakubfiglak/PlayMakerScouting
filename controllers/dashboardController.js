@@ -2,8 +2,8 @@ const asyncHandler = require('express-async-handler');
 const Report = require('../models/Report');
 const User = require('../models/user.model');
 const Order = require('../models/Order');
-const Player = require('../models/Player');
-const Club = require('../models/Club');
+const Player = require('../models/player.model');
+const Club = require('../models/club.model');
 
 const populateReports = [
   {
