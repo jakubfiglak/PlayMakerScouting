@@ -1,9 +1,10 @@
 const axios = require('axios').default;
+const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
-const { buildUser, buildClub } = require('../../test/utils');
-const { insertClubs, insertTestUser } = require('../../test/db-utils');
+const { buildClub, buildPlayer, buildUser } = require('../../test/utils');
+const { insertClubs, insertTestUser, insertPlayers, insertUsers } = require('../../test/db-utils');
 const Club = require('../../models/club.model');
 
 let api = axios.create();
@@ -30,7 +31,8 @@ describe('POST api/v1/clubs', () => {
     expect(response.status).toBe(httpStatus.CREATED);
     expect(response.data.success).toBe(true);
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new club!"');
-    expect(response.data.data).toMatchObject(newClub);
+    expect(response.data.data.id).toBe(newClub._id.toHexString());
+    expect(response.data.data.name).toBe(newClub.name);
 
     // Check if the authors id have been successfully put into authorizedUsers array
     const createdClub = await Club.findById(response.data.data.id);
@@ -52,9 +54,12 @@ describe('GET api/v1/clubs', () => {
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
     expect(response.data.data.totalDocs).toBe(3);
-    expect(response.data.data.docs[0]).toMatchObject(club1);
-    expect(response.data.data.docs[1]).toMatchObject(club2);
-    expect(response.data.data.docs[2]).toMatchObject(club3);
+    expect(response.data.data.docs[0].id).toBe(club1._id.toHexString());
+    expect(response.data.data.docs[1].id).toBe(club2._id.toHexString());
+    expect(response.data.data.docs[2].id).toBe(club3._id.toHexString());
+    expect(response.data.data.docs[0].name).toBe(club1.name);
+    expect(response.data.data.docs[1].name).toBe(club2.name);
+    expect(response.data.data.docs[2].name).toBe(club3.name);
   });
 
   it('should return only the clubs with users id in authorizedUsers array if user is not an admin', async () => {
@@ -71,6 +76,8 @@ describe('GET api/v1/clubs', () => {
     expect(response.data.data.totalDocs).toBe(2);
     expect(response.data.data.docs[0].name).toBe(club1.name);
     expect(response.data.data.docs[1].name).toBe(club2.name);
+    expect(response.data.data.docs[0].id).toBe(club1._id.toHexString());
+    expect(response.data.data.docs[1].id).toBe(club2._id.toHexString());
   });
 });
 
@@ -113,5 +120,226 @@ describe('GET api/v1/clubs/list', () => {
     expect(names).toContain(club1.name);
     expect(names).toContain(club2.name);
     expect(names).not.toContain(club3.name);
+  });
+});
+
+describe('GET api/v1/clubs/:id', () => {
+  it('should return club data if user is an admin', async () => {
+    const newClub = buildClub();
+
+    await insertClubs([newClub]);
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    const response = await api.get(`clubs/${newClub._id}`, {
+      headers: { Cookie: `token=${token}` },
+    });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.id).toBe(newClub._id.toHexString());
+    expect(response.data.data.name).toBe(newClub.name);
+  });
+
+  it('should return club data if user is authorized', async () => {
+    const newClub = buildClub({ authorizedUsers: [testUser._id] });
+
+    await insertClubs([newClub]);
+
+    const response = await api.get(`clubs/${newClub._id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.id).toBe(newClub._id.toHexString());
+    expect(response.data.data.name).toBe(newClub.name);
+  });
+
+  it('should return a 401 error if user is not authorized to get club data', async () => {
+    const newClub = buildClub();
+
+    await insertClubs([newClub]);
+
+    const { response } = await api.get(`clubs/${newClub._id}`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain("You don't have access");
+  });
+});
+
+describe('PUT /api/v1/clubs/:id', () => {
+  it('should return 404 error if the club does not exist', async () => {
+    const { response } = await api.put('clubs/NON-EXISTING-ID', {}).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"Resource not found with id of NON-EXISTING-ID"'
+    );
+  });
+
+  it('should return 401 error if user is not authorized to edit club data', async () => {
+    const newClub = buildClub();
+
+    await insertClubs([newClub]);
+
+    const { response } = await api.put(`clubs/${newClub._id}`, {}).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain("You don't have access");
+  });
+
+  it('should properly update club data if request is valid', async () => {
+    const newClub = buildClub({ authorizedUsers: [testUser._id] });
+    await insertClubs([newClub]);
+    const updates = { name: 'NEW-NAME', authorizedUsers: ['FAKE-USERID1', 'FAKE-USERID2'] };
+
+    const response = await api.put(`clubs/${newClub._id}`, updates);
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.name).toBe('NEW-NAME');
+
+    // Check if the authorizedUsers array remained unchanged
+    const club = await Club.findById(newClub._id);
+    expect(club.authorizedUsers).toContainEqual(testUser._id);
+    expect(club.authorizedUsers).not.toContain('FAKE-USERID1');
+    expect(club.authorizedUsers).not.toContain('FAKE-USERID2');
+  });
+});
+
+describe('DELETE /api/v1/clubs/:id', () => {
+  it('should return 400 error if the club has at least one player assigned to it', async () => {
+    const newClub = buildClub();
+    const newPlayer = buildPlayer({ club: newClub._id });
+    await Promise.all([insertClubs([newClub]), insertPlayers([newPlayer])]);
+
+    const { response } = await api.delete(`clubs/${newClub._id}`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"You cannot delete a club with players linked"'
+    );
+  });
+
+  it('should return 404 error if the club does not exist', async () => {
+    const { response } = await api.delete('clubs/NON-EXISTING-ID').catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"Resource not found with id of NON-EXISTING-ID"'
+    );
+  });
+
+  it('should return 403 error if the user is not authorized to delete a club', async () => {
+    const newClub = buildClub();
+    await insertClubs([newClub]);
+
+    const { response } = await api.delete(`clubs/${newClub._id}`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain("You don't have access");
+  });
+
+  it('should delete the club if the request is valid', async () => {
+    const newClub = buildClub({ authorizedUsers: [testUser._id] });
+    await insertClubs([newClub]);
+
+    const response = await api.delete(`clubs/${newClub._id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('successfully removed');
+    expect(response.data.data).toBe(newClub._id.toHexString());
+  });
+});
+
+describe('POST /api/v1/clubs/grantaccess', () => {
+  it('should return 404 error if user does not exist', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+    const newClub = buildClub();
+    await insertClubs([newClub]);
+
+    const requestBody = {
+      user: new mongoose.Types.ObjectId().toHexString(),
+      club: newClub._id.toHexString(),
+    };
+
+    const { response } = await api
+      .post('clubs/grantaccess', requestBody, {
+        headers: { Cookie: `token=${token}` },
+      })
+      .catch((e) => e);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('User not found');
+  });
+
+  it('should return 404 error if club does not exist', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+    const user = buildUser();
+    await insertUsers([user]);
+
+    const requestBody = {
+      user: user._id.toHexString(),
+      club: new mongoose.Types.ObjectId().toHexString(),
+    };
+
+    const { response } = await api
+      .post('clubs/grantaccess', requestBody, {
+        headers: { Cookie: `token=${token}` },
+      })
+      .catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('Club not found');
+  });
+
+  it('should return 400 error if user already has access to the club', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+    const user = buildUser();
+    const club = buildClub({ authorizedUsers: [user._id.toHexString()] });
+    await Promise.all([insertClubs([club]), insertUsers([user])]);
+
+    const requestBody = {
+      user: user._id.toHexString(),
+      club: club._id.toHexString(),
+    };
+
+    const { response } = await api
+      .post('clubs/grantaccess', requestBody, {
+        headers: { Cookie: `token=${token}` },
+      })
+      .catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('already has access');
+  });
+
+  it('should add user id to clubs authorizedUsers array if the request is valid', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+    const user = buildUser();
+    const club = buildClub();
+    await Promise.all([insertClubs([club]), insertUsers([user])]);
+
+    const requestBody = {
+      user: user._id.toHexString(),
+      club: club._id.toHexString(),
+    };
+
+    const response = await api.post('clubs/grantaccess', requestBody, {
+      headers: { Cookie: `token=${token}` },
+    });
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted the user with the id of');
+
+    // Check if the authorizedUsers has been populated with user id
+    const DBclub = await Club.findById(club._id);
+    expect(DBclub.authorizedUsers).toContainEqual(user._id);
   });
 });

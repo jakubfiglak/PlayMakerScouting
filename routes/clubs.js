@@ -21,7 +21,7 @@ router.get('/', protect, getClubs);
 router.get('/list', protect, getClubsList);
 router.get('/:id', protect, getClub);
 router.put('/:id', protect, updateClub);
-router.delete('/:id', [protect, authorize('admin')], deleteClub);
+router.delete('/:id', protect, deleteClub);
 router.post('/grantaccess', [protect, authorize('admin')], grantAccess);
 
 module.exports = router;

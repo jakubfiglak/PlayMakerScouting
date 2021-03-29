@@ -1,4 +1,5 @@
 const faker = require('faker');
+const mongoose = require('mongoose');
 
 const getFirstName = faker.name.firstName;
 const getLastName = faker.name.lastName;
@@ -8,6 +9,7 @@ const getPassword = faker.internet.password;
 const password = `aB1${getPassword()}`;
 
 const buildUser = (overrides = {}) => ({
+  _id: new mongoose.Types.ObjectId(),
   firstName: getFirstName(),
   lastName: getLastName(),
   email: getEmail().toLowerCase(),
@@ -40,6 +42,7 @@ const buildUpdatePasswordForm = (overrides = {}) => ({
 });
 
 const buildClub = (overrides = {}) => ({
+  _id: new mongoose.Types.ObjectId(),
   name: faker.company.companyName(),
   voivodeship: 'Wielkopolskie',
   division: 'Ekstraklasa',
@@ -47,6 +50,7 @@ const buildClub = (overrides = {}) => ({
 });
 
 const buildPlayer = (overrides = {}) => ({
+  _id: new mongoose.Types.ObjectId(),
   firstName: getFirstName(),
   lastName: getLastName(),
   position: 'CM',

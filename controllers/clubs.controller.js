@@ -68,7 +68,7 @@ exports.getClub = asyncHandler(async (req, res) => {
     userRole: req.user.role,
   });
 
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     data: club,
   });
@@ -100,7 +100,7 @@ exports.deleteClub = asyncHandler(async (req, res) => {
 
   await clubsService.deleteClub({ clubId, userId: req.user._id, userRole: req.user.role });
 
-  res.status(httpStatus.NO_CONTENT).json({
+  res.status(httpStatus.OK).json({
     success: true,
     message: `Club with the id of ${clubId} successfully removed!`,
     data: clubId,
@@ -116,7 +116,7 @@ exports.grantAccess = asyncHandler(async (req, res) => {
 
   await clubsService.grantAccess({ clubId, userId });
 
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     message: `Successfully granted the user with the id of ${userId} with the access to the club with the id of ${clubId}`,
   });

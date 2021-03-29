@@ -61,7 +61,7 @@ async function getClub({ clubId, userId, userRole }) {
   if (!isAuthorized) {
     throw new ApiError(
       `You don't have access to the club with the id of ${clubId}`,
-      httpStatus.BAD_REQUEST
+      httpStatus.UNAUTHORIZED
     );
   }
   return club;
@@ -69,11 +69,6 @@ async function getClub({ clubId, userId, userRole }) {
 
 async function updateClub({ clubId, clubData, userId, userRole }) {
   const forbiddenKeys = ['authorizedUsers'];
-
-  const updates = Object.fromEntries(
-    Object.entries(clubData).filter(([key, _]) => !forbiddenKeys.includes(key))
-  );
-
   let club = await Club.findById(clubId);
 
   const isAuthorized = userRole === 'admin' || club.authorizedUsers.includes(userId);
@@ -81,11 +76,17 @@ async function updateClub({ clubId, clubData, userId, userRole }) {
   if (!isAuthorized) {
     throw new ApiError(
       `You don't have access to the club with the id of ${clubId}`,
-      httpStatus.BAD_REQUEST
+      httpStatus.UNAUTHORIZED
     );
   }
 
-  club = await club.update(updates);
+  const updates = Object.fromEntries(
+    Object.entries(clubData).filter(([key, _]) => !forbiddenKeys.includes(key))
+  );
+
+  Object.keys(updates).forEach((key) => (club[key] = updates[key]));
+
+  club = await club.save();
 
   return club;
 }
@@ -108,7 +109,7 @@ async function deleteClub({ clubId, userId, userRole }) {
   if (!isAuthorized) {
     throw new ApiError(
       `You don't have access to the club with the id of ${clubId}`,
-      httpStatus.BAD_REQUEST
+      httpStatus.UNAUTHORIZED
     );
   }
 
@@ -136,7 +137,7 @@ async function grantAccess({ clubId, userId }) {
   }
 
   club.authorizedUsers.push(userId);
-  await user.save();
+  await club.save();
 }
 
 module.exports = {
