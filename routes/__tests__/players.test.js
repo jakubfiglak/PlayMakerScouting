@@ -6,6 +6,7 @@ const setupTestDB = require('../../test/setupTestDB');
 const { buildClub, buildPlayer, buildUser } = require('../../test/utils');
 const { insertClubs, insertTestUser, insertPlayers, insertUsers } = require('../../test/db-utils');
 const Player = require('../../models/player.model');
+const Club = require('../../models/club.model');
 const dbService = require('../../services/db.service');
 
 let api = axios.create();
@@ -52,5 +53,87 @@ describe('POST /api/v1/players', () => {
     // Check if the authors id have beeen successfully put into authorizedUsers array
     const createdPlayer = await dbService.getPlayerById(player._id);
     expect(createdPlayer.authorizedUsers).toContainEqual(testUser._id);
+  });
+});
+
+describe('GET /api/v1/players', () => {
+  it('should return all the players if the user is an admin', async () => {
+    const player1 = buildPlayer();
+    const player2 = buildPlayer();
+    const player3 = buildPlayer();
+
+    await insertPlayers([player1, player2, player3]);
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    const response = await api.get('players', { headers: { Cookie: `token=${token}` } });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.totalDocs).toBe(3);
+    expect(response.data.data.docs[0].id).toBe(player1._id.toHexString());
+    expect(response.data.data.docs[1].id).toBe(player2._id.toHexString());
+    expect(response.data.data.docs[2].id).toBe(player3._id.toHexString());
+    expect(response.data.data.docs[0].lastName).toBe(player1.lastName);
+    expect(response.data.data.docs[1].lastName).toBe(player2.lastName);
+    expect(response.data.data.docs[2].lastName).toBe(player3.lastName);
+  });
+
+  it('should return only the players with users id in authorizedUsers array if user is not an admin', async () => {
+    const player1 = buildPlayer({ authorizedUsers: [testUser._id] });
+    const player2 = buildPlayer({ authorizedUsers: [testUser._id] });
+    const player3 = buildPlayer();
+
+    await insertPlayers([player1, player2, player3]);
+
+    const response = await api.get('players');
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.totalDocs).toBe(2);
+    expect(response.data.data.docs[0].id).toBe(player1._id.toHexString());
+    expect(response.data.data.docs[1].id).toBe(player2._id.toHexString());
+    expect(response.data.data.docs[0].lastName).toBe(player1.lastName);
+    expect(response.data.data.docs[1].lastName).toBe(player2.lastName);
+  });
+});
+
+describe('GET /api/v1/clubs/:clubId/players', () => {
+  it('should return all the players for a club if the user is an admin', async () => {
+    const club = buildClub();
+    const player1 = buildPlayer({ club: club._id });
+    const player2 = buildPlayer({ club: club._id });
+    const player3 = buildPlayer();
+
+    await Promise.all([insertClubs([club]), insertPlayers([player1, player2, player3])]);
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    const response = await api.get(`clubs/${club._id.toHexString()}/players`, {
+      headers: { Cookie: `token=${token}` },
+    });
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.totalDocs).toBe(2);
+    expect(response.data.data.docs[0].id).toBe(player1._id.toHexString());
+    expect(response.data.data.docs[1].id).toBe(player2._id.toHexString());
+    expect(response.data.data.docs[0].lastName).toBe(player1.lastName);
+    expect(response.data.data.docs[1].lastName).toBe(player2.lastName);
+  });
+
+  it('should return players for a club with users id in authorizedUsers array  if the user is not an admin', async () => {
+    const club = buildClub();
+    const player1 = buildPlayer({ club: club._id });
+    const player2 = buildPlayer({ club: club._id, authorizedUsers: [testUser._id] });
+    const player3 = buildPlayer();
+
+    await Promise.all([insertClubs([club]), insertPlayers([player1, player2, player3])]);
+
+    const response = await api.get(`clubs/${club._id.toHexString()}/players`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.totalDocs).toBe(1);
+    expect(response.data.data.docs[0].id).toBe(player2._id.toHexString());
+    expect(response.data.data.docs[0].club.name).toBe(club.name);
+    expect(response.data.data.docs[0].lastName).toBe(player2.lastName);
   });
 });

@@ -1,10 +1,12 @@
 const asyncHandler = require('express-async-handler');
+const httpStatus = require('http-status');
 const Player = require('../models/player.model');
 const Club = require('../models/club.model');
 const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 const playersService = require('../services/players.service');
+const isAdmin = require('../utils/isAdmin');
 
 // @desc Create new player
 // @route POST /api/v1/players
@@ -12,7 +14,7 @@ const playersService = require('../services/players.service');
 exports.createPlayer = asyncHandler(async (req, res) => {
   const player = await playersService.createPlayer({ playerData: req.body, userId: req.user._id });
 
-  res.status(201).json({
+  res.status(httpStatus.CREATED).json({
     success: true,
     message: 'Successfully created new player!',
     data: player,
@@ -23,41 +25,24 @@ exports.createPlayer = asyncHandler(async (req, res) => {
 // @route GET /api/v1/players
 // @route GET /api/v1/clubs/:clubId/players
 // @access Private (admin only)
-exports.getPlayers = asyncHandler(async (req, res, next) => {
+exports.getPlayers = asyncHandler(async (req, res) => {
   const { clubId } = req.params;
-
-  const reqQuery = prepareQuery(req.query);
-
-  const options = {
-    sort: req.query.sort || '_id',
-    limit: req.query.limit || 20,
-    page: req.query.page || 1,
-    populate: [{ path: 'club', select: 'name division' }],
-  };
-
-  const query = { ...reqQuery };
-
-  // If club ID is provided in query params, return only players assinged to this club
   if (clubId) {
-    query.club = clubId;
+    req.query.club = clubId;
   }
 
-  // If user is not an admin return only players to which this user has access to
-  if (req.user.role !== 'admin') {
-    const user = await User.findById(req.user._id);
+  let players;
 
-    if (!user) {
-      return next(new ApiError(`User not found with id of ${req.user._id}`, 404));
-    }
-
-    const { myPlayers } = user;
-
-    query._id = { $in: myPlayers };
+  if (isAdmin(req.user.role)) {
+    players = await playersService.getAllPlayers(req.query);
+  } else {
+    players = await playersService.getPlayersWithAuthorization({
+      reqQuery: req.query,
+      userId: req.user._id,
+    });
   }
 
-  const players = await Player.paginate(query, options);
-
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     data: players,
   });

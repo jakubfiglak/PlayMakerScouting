@@ -22,11 +22,8 @@ async function getAllClubs(reqQuery) {
 }
 
 async function getClubsWithAuthorization({ reqQuery, userId }) {
-  const options = getQueryOptions({
-    sort: reqQuery.sort,
-    limit: reqQuery.limit,
-    page: reqQuery.page,
-  });
+  const { sort, limit, page } = reqQuery;
+  const options = getQueryOptions({ sort, limit, page });
 
   const query = prepareQuery(reqQuery);
   query.authorizedUsers = userId;
