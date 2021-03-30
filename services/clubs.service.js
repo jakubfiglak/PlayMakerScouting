@@ -1,24 +1,18 @@
 const httpStatus = require('http-status');
-const { playersService, usersService } = require('.');
+const dbService = require('./db.service');
 const Club = require('../models/club.model');
 const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
+const getQueryOptions = require('../utils/getQueryOptions');
 
 async function createClub({ clubData, userId }) {
   const club = await Club.create({ ...clubData, authorizedUsers: [userId] });
   return club;
 }
 
-function getClubById(id) {
-  return Club.findById(id);
-}
-
 async function getAllClubs(reqQuery) {
-  const options = {
-    sort: reqQuery.sort || '_id',
-    limit: reqQuery.limit || 20,
-    page: reqQuery.page || 1,
-  };
+  const { sort, limit, page } = reqQuery;
+  const options = getQueryOptions({ sort, limit, page });
 
   const query = prepareQuery(reqQuery);
 
@@ -28,11 +22,11 @@ async function getAllClubs(reqQuery) {
 }
 
 async function getClubsWithAuthorization({ reqQuery, userId }) {
-  const options = {
-    sort: reqQuery.sort || '_id',
-    limit: reqQuery.limit || 20,
-    page: reqQuery.page || 1,
-  };
+  const options = getQueryOptions({
+    sort: reqQuery.sort,
+    limit: reqQuery.limit,
+    page: reqQuery.page,
+  });
 
   const query = prepareQuery(reqQuery);
   query.authorizedUsers = userId;
@@ -53,7 +47,7 @@ async function getClubsListWithAuthorization(userId) {
 }
 
 async function getClub({ clubId, userId, userRole }) {
-  const club = await getClubById(clubId);
+  const club = await dbService.getClubById(clubId);
 
   if (!club) {
     throw new ApiError(`Club not found with id of ${clubId}`, httpStatus.NOT_FOUND);
@@ -72,7 +66,7 @@ async function getClub({ clubId, userId, userRole }) {
 
 async function updateClub({ clubId, clubData, userId, userRole }) {
   const forbiddenKeys = ['authorizedUsers'];
-  let club = await getClubById(clubId);
+  let club = await dbService.getClubById(clubId);
 
   const isAuthorized = userRole === 'admin' || club.authorizedUsers.includes(userId);
 
@@ -95,13 +89,13 @@ async function updateClub({ clubId, clubData, userId, userRole }) {
 }
 
 async function deleteClub({ clubId, userId, userRole }) {
-  const players = await playersService.getPlayersForClub(clubId);
+  const players = await dbService.getPlayersForClub(clubId);
 
   if (players.length > 0) {
     throw new ApiError('You cannot delete a club with players linked', httpStatus.BAD_REQUEST);
   }
 
-  const club = await getClubById(clubId);
+  const club = await dbService.getClubById(clubId);
 
   if (!club) {
     throw new ApiError(`Club not found with id of ${clubId}`, httpStatus.NOT_FOUND);
@@ -120,13 +114,13 @@ async function deleteClub({ clubId, userId, userRole }) {
 }
 
 async function grantAccess({ clubId, userId }) {
-  const user = await usersService.getUserById(userId);
+  const user = await dbService.getUserById(userId);
 
   if (!user) {
     throw new ApiError(`User not found with the id of ${userId}`, httpStatus.NOT_FOUND);
   }
 
-  const club = await getClubById(clubId);
+  const club = await dbService.getClubById(clubId);
 
   if (!club) {
     throw new ApiError(`Club not found with the id of ${clubId}`, httpStatus.NOT_FOUND);
@@ -153,5 +147,4 @@ module.exports = {
   updateClub,
   deleteClub,
   grantAccess,
-  getClubById,
 };

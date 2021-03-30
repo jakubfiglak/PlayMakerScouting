@@ -6,7 +6,7 @@ const setupTestDB = require('../../test/setupTestDB');
 const { buildClub, buildPlayer, buildUser } = require('../../test/utils');
 const { insertClubs, insertTestUser, insertPlayers, insertUsers } = require('../../test/db-utils');
 const Club = require('../../models/club.model');
-const { clubsService } = require('../../services');
+const dbService = require('../../services/db.service');
 
 let api = axios.create();
 let server;
@@ -36,7 +36,7 @@ describe('POST api/v1/clubs', () => {
     expect(response.data.data.name).toBe(newClub.name);
 
     // Check if the authors id have been successfully put into authorizedUsers array
-    const createdClub = await clubsService.getClubById(newClub._id);
+    const createdClub = await dbService.getClubById(newClub._id);
     expect(createdClub.authorizedUsers).toContainEqual(testUser._id);
   });
 });
@@ -201,7 +201,7 @@ describe('PUT /api/v1/clubs/:id', () => {
     expect(response.data.data.name).toBe('NEW-NAME');
 
     // Check if the authorizedUsers array remained unchanged
-    const club = await clubsService.getClubById(newClub._id);
+    const club = await dbService.getClubById(newClub._id);
     expect(club.authorizedUsers).toContainEqual(testUser._id);
     expect(club.authorizedUsers).not.toContain('FAKE-USERID1');
     expect(club.authorizedUsers).not.toContain('FAKE-USERID2');
@@ -340,7 +340,7 @@ describe('POST /api/v1/clubs/grantaccess', () => {
     expect(response.data.message).toContain('Successfully granted the user with the id of');
 
     // Check if the authorizedUsers has been populated with user id
-    const DBclub = await clubsService.getClubById(club._id);
+    const DBclub = await dbService.getClubById(club._id);
     expect(DBclub.authorizedUsers).toContainEqual(user._id);
   });
 });

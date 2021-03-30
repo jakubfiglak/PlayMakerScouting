@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
-const { authService, usersService } = require('../services');
+const authService = require('../services/auth.service');
+const dbService = require('../services/db.service');
 
 const cookieOptions = {
   httpOnly: true,
@@ -63,7 +64,7 @@ exports.login = asyncHandler(async (req, res) => {
 // @route GET /api/v1/auth/account
 // @access Private
 exports.account = asyncHandler(async (req, res) => {
-  const user = await usersService.getUserById(req.user._id);
+  const user = await dbService.getUserById(req.user._id);
 
   res.status(200).json({
     success: true,

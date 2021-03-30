@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
-const { clubsService } = require('../services');
+const clubsService = require('../services/clubs.service');
 
 // @desc Create new club
 // @route POST /api/v1/clubs

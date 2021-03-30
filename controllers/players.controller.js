@@ -4,7 +4,7 @@ const Club = require('../models/club.model');
 const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
-const { playersService } = require('../services');
+const playersService = require('../services/players.service');
 
 // @desc Create new player
 // @route POST /api/v1/players

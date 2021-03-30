@@ -1,6 +1,8 @@
 const httpStatus = require('http-status');
 const jwt = require('jsonwebtoken');
-const { emailService, usersService } = require('.');
+const emailService = require('./email.service');
+const dbService = require('./db.service');
+const usersService = require('./users.service');
 const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
 
@@ -82,7 +84,7 @@ async function login({ email, password }) {
 }
 async function updatePassword({ userId, reqBody }) {
   const { oldPassword, newPassword, newPasswordConfirm } = reqBody;
-  const user = await usersService.getUserById(userId);
+  const user = await dbService.getUserById(userId);
   const match = await user.comparePasswords(oldPassword);
   if (!match) {
     throw new ApiError('Incorrect password', httpStatus.UNAUTHORIZED);

@@ -6,7 +6,7 @@ const setupTestDB = require('../../test/setupTestDB');
 const { buildClub, buildPlayer, buildUser } = require('../../test/utils');
 const { insertClubs, insertTestUser, insertPlayers, insertUsers } = require('../../test/db-utils');
 const Player = require('../../models/player.model');
-const { playersService } = require('../../services');
+const dbService = require('../../services/db.service');
 
 let api = axios.create();
 let server;
@@ -50,7 +50,7 @@ describe('POST /api/v1/players', () => {
     expect(response.data.data.club).toMatchObject({ name: club.name, division: club.division });
 
     // Check if the authors id have beeen successfully put into authorizedUsers array
-    const createdPlayer = await playersService.getPlayerById(player._id);
+    const createdPlayer = await dbService.getPlayerById(player._id);
     expect(createdPlayer.authorizedUsers).toContainEqual(testUser._id);
   });
 });
