@@ -8,15 +8,14 @@ const setupTestDB = () => {
       useFindAndModify: false,
       useUnifiedTopology: true,
     });
-    console.log(
-      `MongoDB Connected: ${connection.connection.host}`.cyan.underline.bold
-    );
+    console.log(`MongoDB Connected: ${connection.connection.host}`.cyan.underline.bold);
   });
 
   beforeEach(async () => {
     await Promise.all(
       Object.values(mongoose.connection.collections).map(async (collection) =>
-        collection.deleteMany())
+        collection.deleteMany()
+      )
     );
   });
 

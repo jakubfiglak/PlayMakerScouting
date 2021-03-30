@@ -13,6 +13,7 @@ const errorHandler = (err, req, res, next) => {
 
   // Mongoose duplicate key
   if (err.code === 11000) {
+    console.log(err);
     const message = 'Duplicate field value entered';
     error = new ApiError(message, 400);
   }

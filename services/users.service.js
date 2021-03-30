@@ -1,13 +1,20 @@
 const User = require('../models/user.model');
 
-const getUserById = (id) => User.findById(id);
+function getUserById(id) {
+  return User.findById(id);
+}
 
-const getUserByEmail = (email) => User.findOne({ email });
+function getUserByEmail(email) {
+  return User.findOne({ email });
+}
 
-const getUserByConfirmationCode = (confirmationCode) =>
-  User.findOne({ confirmationCode });
+function getUserByConfirmationCode(confirmationCode) {
+  return User.findOne({ confirmationCode });
+}
 
-const createUser = (reqBody) => User.create(reqBody);
+function createUser(reqBody) {
+  return User.create(reqBody);
+}
 
 module.exports = {
   getUserById,

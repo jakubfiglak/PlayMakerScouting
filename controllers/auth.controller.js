@@ -1,7 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
-const authService = require('../services/auth.service');
-const usersService = require('../services/users.service');
+const { authService, usersService } = require('../services');
 
 const cookieOptions = {
   httpOnly: true,

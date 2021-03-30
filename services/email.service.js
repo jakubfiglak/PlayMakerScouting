@@ -1,12 +1,13 @@
 const sgMail = require('../config/sendgrid');
 
-const sendEmail = async ({ to, subject, text, html }) =>
-  sgMail.send({
+async function sendEmail({ to, subject, text, html }) {
+  return sgMail.send({
     to,
     from: 'playmakerscoutingapp@gmail.com',
     subject,
     text,
     html,
   });
+}
 
 module.exports = { sendEmail };

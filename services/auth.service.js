@@ -1,11 +1,10 @@
 const httpStatus = require('http-status');
 const jwt = require('jsonwebtoken');
+const { emailService, usersService } = require('.');
 const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
-const emailService = require('./email.service');
-const usersService = require('./users.service');
 
-const registerUser = async ({ reqBody, host }) => {
+async function registerUser({ reqBody, host }) {
   const { email, password, passwordConfirm } = reqBody;
 
   let user = await usersService.getUserByEmail(email);
@@ -36,9 +35,9 @@ const registerUser = async ({ reqBody, host }) => {
   });
 
   return user;
-};
+}
 
-const verifyUser = async (confirmationCode) => {
+async function verifyUser(confirmationCode) {
   let user = await usersService.getUserByConfirmationCode(confirmationCode);
 
   if (!user) {
@@ -50,14 +49,11 @@ const verifyUser = async (confirmationCode) => {
 
   user = await user.save();
   return user;
-};
+}
 
-const login = async ({ email, password }) => {
+async function login({ email, password }) {
   if (!email || !password) {
-    throw new ApiError(
-      'Please provide an email and a password',
-      httpStatus.BAD_REQUEST
-    );
+    throw new ApiError('Please provide an email and a password', httpStatus.BAD_REQUEST);
   }
 
   const user = await usersService.getUserByEmail(email);
@@ -83,37 +79,8 @@ const login = async ({ email, password }) => {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
   return { user, token, expiresAt: decoded.exp };
-};
-
-const updateDetails = async ({ id, reqBody }) => {
-  // Keys which user cannot update manually
-  const forbiddenKeys = [
-    'email',
-    'password',
-    'role',
-    'status',
-    'confirmationCode',
-    'resetPasswordToken',
-    'resetPasswordExpires',
-    'createdAt',
-    'updatedAt',
-  ];
-
-  const updates = Object.fromEntries(
-    Object.entries(reqBody).filter(
-      ([key, value]) => !forbiddenKeys.includes(key) && value !== ''
-    )
-  );
-
-  const user = await User.findByIdAndUpdate(id, updates, {
-    new: true,
-    runValidators: true,
-  });
-
-  return user;
-};
-
-const updatePassword = async ({ userId, reqBody }) => {
+}
+async function updatePassword({ userId, reqBody }) {
   const { oldPassword, newPassword, newPasswordConfirm } = reqBody;
   const user = await usersService.getUserById(userId);
   const match = await user.comparePasswords(oldPassword);
@@ -132,7 +99,33 @@ const updatePassword = async ({ userId, reqBody }) => {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
   return { token, expiresAt: decoded.exp };
-};
+}
+
+async function updateDetails({ id, reqBody }) {
+  // Keys which user cannot update manually
+  const forbiddenKeys = [
+    'email',
+    'password',
+    'role',
+    'status',
+    'confirmationCode',
+    'resetPasswordToken',
+    'resetPasswordExpires',
+    'createdAt',
+    'updatedAt',
+  ];
+
+  const updates = Object.fromEntries(
+    Object.entries(reqBody).filter(([key, value]) => !forbiddenKeys.includes(key) && value !== '')
+  );
+
+  const user = await User.findByIdAndUpdate(id, updates, {
+    new: true,
+    runValidators: true,
+  });
+
+  return user;
+}
 
 module.exports = {
   registerUser,

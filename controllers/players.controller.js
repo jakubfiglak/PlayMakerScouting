@@ -4,38 +4,13 @@ const Club = require('../models/club.model');
 const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
+const { playersService } = require('../services');
 
 // @desc Create new player
 // @route POST /api/v1/players
 // @access Private
-exports.createPlayer = asyncHandler(async (req, res, next) => {
-  const clubId = req.body.club;
-
-  const club = await Club.findById(clubId);
-
-  if (!club) {
-    return next(new ApiError(`No club found with the id of ${clubId}`, 404));
-  }
-
-  let player = await Player.create(req.body);
-
-  player = await player
-    .populate({ path: 'club', select: 'name' })
-    .execPopulate();
-
-  // If the user creating the player is not an admin, push the players ID to users myPlayers array
-  if (req.user.role !== 'admin') {
-    const user = await User.findById(req.user._id);
-
-    if (!user) {
-      return next(
-        new ApiError(`User not found with id of ${req.user._id}`, 404)
-      );
-    }
-
-    user.myPlayers.push(player._id);
-    await user.save();
-  }
+exports.createPlayer = asyncHandler(async (req, res) => {
+  const player = await playersService.createPlayer({ playerData: req.body, userId: req.user._id });
 
   res.status(201).json({
     success: true,
@@ -72,9 +47,7 @@ exports.getPlayers = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      return next(
-        new ApiError(`User not found with id of ${req.user._id}`, 404)
-      );
+      return next(new ApiError(`User not found with id of ${req.user._id}`, 404));
     }
 
     const { myPlayers } = user;
@@ -100,9 +73,7 @@ exports.getPlayersList = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      return next(
-        new ApiError(`User not found with id of ${req.user._id}`, 404)
-      );
+      return next(new ApiError(`User not found with id of ${req.user._id}`, 404));
     }
 
     const { myPlayers } = user;
@@ -135,12 +106,7 @@ exports.getPlayer = asyncHandler(async (req, res, next) => {
   }
 
   if (user.role !== 'admin' && !user.myPlayers.includes(id)) {
-    return next(
-      new ApiError(
-        `You don't have access to the player with the if of ${id}`,
-        400
-      )
-    );
+    return next(new ApiError(`You don't have access to the player with the if of ${id}`, 400));
   }
 
   const player = await Player.findById(id)
@@ -174,12 +140,7 @@ exports.updatePlayer = asyncHandler(async (req, res, next) => {
   }
 
   if (!user.myPlayers.includes(id) && user.role !== 'admin') {
-    return next(
-      new ApiError(
-        `You don't have access to the player with the if of ${id}`,
-        400
-      )
-    );
+    return next(new ApiError(`You don't have access to the player with the if of ${id}`, 400));
   }
 
   let player = await Player.findByIdAndUpdate(req.params.id, req.body, {
@@ -187,9 +148,7 @@ exports.updatePlayer = asyncHandler(async (req, res, next) => {
     runValidators: true,
   });
 
-  player = await player
-    .populate({ path: 'club', select: 'name' })
-    .execPopulate();
+  player = await player.populate({ path: 'club', select: 'name' }).execPopulate();
 
   res.status(200).json({
     success: true,
@@ -233,9 +192,7 @@ exports.grantAccess = asyncHandler(async (req, res, next) => {
   }
 
   if (!player) {
-    return next(
-      new ApiError(`Player not found with the id of ${playerId}`, 404)
-    );
+    return next(new ApiError(`Player not found with the id of ${playerId}`, 404));
   }
 
   if (user.myPlayers.includes(playerId)) {
