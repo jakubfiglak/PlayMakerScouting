@@ -137,3 +137,46 @@ describe('GET /api/v1/clubs/:clubId/players', () => {
     expect(response.data.data.docs[0].lastName).toBe(player2.lastName);
   });
 });
+
+describe('GET /api/v1/players/list', () => {
+  it('should return all the players if the user is an admin', async () => {
+    const player1 = buildPlayer();
+    const player2 = buildPlayer();
+    const player3 = buildPlayer();
+
+    await insertPlayers([player1, player2, player3]);
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    const response = await api.get('players/list', { headers: { Cookie: `token=${token}` } });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.count).toBe(3);
+
+    const names = response.data.data.map((player) => player.lastName);
+
+    expect(names).toContain(player1.lastName);
+    expect(names).toContain(player2.lastName);
+    expect(names).toContain(player3.lastName);
+  });
+
+  it('should return only the players with users id in authorizedUsers array if user is not an admin', async () => {
+    const player1 = buildPlayer({ authorizedUsers: [testUser._id] });
+    const player2 = buildPlayer({ authorizedUsers: [testUser._id] });
+    const player3 = buildPlayer();
+
+    await insertPlayers([player1, player2, player3]);
+
+    const response = await api.get('players/list');
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.count).toBe(2);
+
+    const names = response.data.data.map((player) => player.lastName);
+
+    expect(names).toContain(player1.lastName);
+    expect(names).toContain(player2.lastName);
+    expect(names).not.toContain(player3.lastName);
+  });
+});

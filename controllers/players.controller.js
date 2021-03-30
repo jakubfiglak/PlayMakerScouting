@@ -51,26 +51,16 @@ exports.getPlayers = asyncHandler(async (req, res) => {
 // @desc Get players list
 // @route GET /api/v1/players/list
 // @access Private
-exports.getPlayersList = asyncHandler(async (req, res, next) => {
-  const query = {};
+exports.getPlayersList = asyncHandler(async (req, res) => {
+  let players;
 
-  if (req.user.role !== 'admin') {
-    const user = await User.findById(req.user._id);
-
-    if (!user) {
-      return next(new ApiError(`User not found with id of ${req.user._id}`, 404));
-    }
-
-    const { myPlayers } = user;
-
-    query._id = { $in: myPlayers };
+  if (isAdmin(req.user.role)) {
+    players = await playersService.getAllPlayersList();
+  } else {
+    players = await playersService.getPlayersListWithAuthorization(req.user._id);
   }
 
-  const players = await Player.find(query)
-    .select('firstName lastName position')
-    .populate({ path: 'club', select: 'name' });
-
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     count: players.length,
     data: players,
