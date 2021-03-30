@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const clubsService = require('../services/clubs.service');
+const isAdmin = require('../utils/isAdmin');
 
 // @desc Create new club
 // @route POST /api/v1/clubs
@@ -24,7 +25,7 @@ exports.createClub = asyncHandler(async (req, res) => {
 exports.getClubs = asyncHandler(async (req, res) => {
   let clubs;
 
-  if (req.user.role === 'admin') {
+  if (isAdmin(req.user.role)) {
     clubs = await clubsService.getAllClubs(req.query);
   } else {
     clubs = await clubsService.getClubsWithAuthorization({
@@ -45,7 +46,7 @@ exports.getClubs = asyncHandler(async (req, res) => {
 exports.getClubsList = asyncHandler(async (req, res) => {
   let clubs;
 
-  if (req.user.role === 'admin') {
+  if (isAdmin(req.user.role)) {
     clubs = await clubsService.getAllClubsList();
   } else {
     clubs = await clubsService.getClubsListWithAuthorization(req.user._id);

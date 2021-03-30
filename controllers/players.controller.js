@@ -70,32 +70,14 @@ exports.getPlayersList = asyncHandler(async (req, res) => {
 // @desc Get single player
 // @route GET /api/v1/players/:id
 // @access Private
-exports.getPlayer = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const userId = req.user._id;
+exports.getPlayer = asyncHandler(async (req, res) => {
+  const player = await playersService.getPlayer({
+    playerId: req.params.id,
+    userId: req.user._id,
+    userRole: req.user.role,
+  });
 
-  const user = await User.findById(userId);
-
-  if (!user) {
-    return next(new ApiError(`User not found with the id of ${userId}`, 404));
-  }
-
-  if (user.role !== 'admin' && !user.myPlayers.includes(id)) {
-    return next(new ApiError(`You don't have access to the player with the if of ${id}`, 400));
-  }
-
-  const player = await Player.findById(id)
-    .populate({
-      path: 'club',
-      select: 'name division',
-    })
-    .populate('reports');
-
-  if (!player) {
-    return next(new ApiError(`No player found with the id of ${id}`, 404));
-  }
-
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     data: player,
   });

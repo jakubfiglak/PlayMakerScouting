@@ -4,6 +4,7 @@ const Player = require('../models/player.model');
 const ApiError = require('../utils/ApiError');
 const getQueryOptions = require('../utils/getQueryOptions');
 const prepareQuery = require('../utils/prepareQuery');
+const checkAuthorization = require('../utils/checkAuthorization');
 
 const populate = { path: 'club', select: 'name division' };
 const listSelect = 'firstName lastName position';
@@ -57,10 +58,22 @@ async function getPlayersListWithAuthorization(userId) {
   return players;
 }
 
+async function getPlayer({ playerId, userId, userRole }) {
+  const player = await dbService.getPlayerById(playerId);
+
+  if (!player) {
+    throw new ApiError(`No player found with the id of ${playerId}`, httpStatus.NOT_FOUND);
+  }
+
+  checkAuthorization({ userRole, userId, asset: player });
+  return player;
+}
+
 module.exports = {
   createPlayer,
   getAllPlayers,
   getPlayersWithAuthorization,
   getAllPlayersList,
   getPlayersListWithAuthorization,
+  getPlayer,
 };

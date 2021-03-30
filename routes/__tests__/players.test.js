@@ -180,3 +180,47 @@ describe('GET /api/v1/players/list', () => {
     expect(names).not.toContain(player3.lastName);
   });
 });
+
+describe('GET /api/v1/players/:id', () => {
+  it('should return player data if user is an admin', async () => {
+    const player = buildPlayer();
+
+    await insertPlayers([player]);
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    const response = await api.get(`players/${player._id}`, {
+      headers: { Cookie: `token=${token}` },
+    });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.id).toBe(player._id.toHexString());
+    expect(response.data.data.lastName).toBe(player.lastName);
+  });
+
+  it('should return player data if user is authorized', async () => {
+    const player = buildPlayer({ authorizedUsers: [testUser._id] });
+
+    await insertPlayers([player]);
+
+    const response = await api.get(`players/${player._id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.id).toBe(player._id.toHexString());
+    expect(response.data.data.lastName).toBe(player.lastName);
+  });
+
+  it('should return a 401 error if user is not authorized to get club data', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+
+    const { response } = await api.get(`players/${player._id}`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"You don\'t have access to the asset you\'ve requested"'
+    );
+  });
+});
