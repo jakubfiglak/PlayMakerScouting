@@ -4,6 +4,7 @@ const Club = require('../models/club.model');
 const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 const getQueryOptions = require('../utils/getQueryOptions');
+const checkAuthorization = require('../utils/checkAuthorization');
 
 async function createClub({ clubData, userId }) {
   const club = await Club.create({ ...clubData, authorizedUsers: [userId] });
@@ -65,14 +66,7 @@ async function updateClub({ clubId, clubData, userId, userRole }) {
   const forbiddenKeys = ['authorizedUsers'];
   let club = await dbService.getClubById(clubId);
 
-  const isAuthorized = userRole === 'admin' || club.authorizedUsers.includes(userId);
-
-  if (!isAuthorized) {
-    throw new ApiError(
-      `You don't have access to the club with the id of ${clubId}`,
-      httpStatus.UNAUTHORIZED
-    );
-  }
+  checkAuthorization({ userRole, userId, club });
 
   const updates = Object.fromEntries(
     Object.entries(clubData).filter(([key, _]) => !forbiddenKeys.includes(key))
