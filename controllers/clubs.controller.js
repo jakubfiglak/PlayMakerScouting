@@ -79,8 +79,10 @@ exports.getClub = asyncHandler(async (req, res) => {
 // @route PUT /api/v1/clubs/:id
 // @access Private
 exports.updateClub = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
   const club = await clubsService.updateClub({
-    clubId: req.params.id,
+    clubId: id,
     clubData: req.body,
     userId: req.user._id,
     userRole: req.user.role,
@@ -88,7 +90,7 @@ exports.updateClub = asyncHandler(async (req, res) => {
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: `Club with the id of ${req.params.id} successfully updated!`,
+    message: `Club with the id of ${id} successfully updated!`,
     data: club,
   });
 });

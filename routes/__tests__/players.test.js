@@ -224,3 +224,53 @@ describe('GET /api/v1/players/:id', () => {
     );
   });
 });
+
+describe('PUT /api/v1/players/:id', () => {
+  it('should return 404 error if the player does not exist', async () => {
+    const { response } = await api.put('players/NON-EXISTING-ID', {}).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"Resource not found with id of NON-EXISTING-ID"'
+    );
+  });
+
+  it('should return 401 error if user is not authorized to edit player data', async () => {
+    const player = buildPlayer();
+
+    await insertPlayers([player]);
+
+    const { response } = await api.put(`players/${player._id}`, {}).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain("You don't have access");
+  });
+
+  it('should properly update player data if request is valid', async () => {
+    const club = buildClub();
+    await insertClubs([club]);
+    const player = buildPlayer({ authorizedUsers: [testUser._id], club: club._id });
+    await insertPlayers([player]);
+    const updates = {
+      firstName: 'NEW-FIRST-NAME',
+      lastName: 'NEW-LAST-NAME',
+      authorizedUsers: ['FAKE-USERID1', 'FAKE-USERID2'],
+    };
+
+    const response = await api.put(`players/${player._id}`, updates);
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.firstName).toBe('NEW-FIRST-NAME');
+    expect(response.data.data.lastName).toBe('NEW-LAST-NAME');
+    expect(response.data.data.club.name).toBe(club.name);
+    expect(response.data.data.club.division).toBe(club.division);
+
+    // Check if the authorizedUsers array remained unchanged
+    const dbPlayer = await dbService.getPlayerById(player._id);
+    expect(dbPlayer.authorizedUsers).toContainEqual(testUser._id);
+    expect(dbPlayer.authorizedUsers).not.toContain('FAKE-USERID1');
+    expect(dbPlayer.authorizedUsers).not.toContain('FAKE-USERID2');
+  });
+});

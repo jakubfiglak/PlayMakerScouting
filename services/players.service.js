@@ -6,6 +6,7 @@ const getQueryOptions = require('../utils/getQueryOptions');
 const prepareQuery = require('../utils/prepareQuery');
 const checkAuthorization = require('../utils/checkAuthorization');
 const checkIfAssetExists = require('../utils/checkIfAssetExists');
+const filterForbiddenUpdates = require('../utils/filterForbiddenUpdates');
 
 const populate = { path: 'club', select: 'name division' };
 const listSelect = 'firstName lastName position';
@@ -66,6 +67,21 @@ async function getPlayer({ playerId, userId, userRole }) {
   return player;
 }
 
+async function updatePlayer({ playerId, playerData, userId, userRole }) {
+  const forbiddenFields = ['authorizedUsers', 'createdAt', 'updatedAt'];
+  let player = await dbService.getPlayerById(playerId);
+  checkAuthorization({ userRole, userId, asset: player });
+
+  const allowedUpdates = filterForbiddenUpdates({ forbiddenFields, updates: playerData });
+
+  Object.keys(allowedUpdates).forEach((key) => (player[key] = allowedUpdates[key]));
+
+  player = await player.save();
+  player = await player.populate(populate).execPopulate();
+
+  return player;
+}
+
 module.exports = {
   createPlayer,
   getAllPlayers,
@@ -73,4 +89,5 @@ module.exports = {
   getAllPlayersList,
   getPlayersListWithAuthorization,
   getPlayer,
+  updatePlayer,
 };

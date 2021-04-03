@@ -86,28 +86,17 @@ exports.getPlayer = asyncHandler(async (req, res) => {
 // @desc Update player details
 // @route PUT /api/v1/players/:id
 // @access Private
-exports.updatePlayer = asyncHandler(async (req, res, next) => {
+exports.updatePlayer = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const userId = req.user._id;
 
-  const user = await User.findById(userId);
-
-  if (!user) {
-    return next(new ApiError(`User not found with the id of ${userId}`, 404));
-  }
-
-  if (!user.myPlayers.includes(id) && user.role !== 'admin') {
-    return next(new ApiError(`You don't have access to the player with the if of ${id}`, 400));
-  }
-
-  let player = await Player.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
+  const player = await playersService.updatePlayer({
+    playerId: id,
+    playerData: req.body,
+    userId: req.user._id,
+    userRole: req.user.role,
   });
 
-  player = await player.populate({ path: 'club', select: 'name' }).execPopulate();
-
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     data: player,
     message: `Player with the id of ${id} successfully updated!`,
