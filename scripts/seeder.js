@@ -8,8 +8,8 @@ dotenv.config({ path: './config/config.env' });
 const User = require('../models/user.model');
 const Club = require('../models/club.model');
 const Player = require('../models/player.model');
-const Order = require('../models/Order');
-const Report = require('../models/Report');
+const Order = require('../models/order.model');
+const Report = require('../models/report.model');
 
 mongoose.connect(process.env.DB_CONNECT, {
   useNewUrlParser: true,
@@ -18,25 +18,15 @@ mongoose.connect(process.env.DB_CONNECT, {
   useUnifiedTopology: true,
 });
 
-const users = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/users.json`, 'utf-8')
-);
+const users = JSON.parse(fs.readFileSync(`${__dirname}/_data/users.json`, 'utf-8'));
 
-const clubs = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/clubs.json`, 'utf-8')
-);
+const clubs = JSON.parse(fs.readFileSync(`${__dirname}/_data/clubs.json`, 'utf-8'));
 
-const players = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/players.json`, 'utf-8')
-);
+const players = JSON.parse(fs.readFileSync(`${__dirname}/_data/players.json`, 'utf-8'));
 
-const orders = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/orders.json`, 'utf-8')
-);
+const orders = JSON.parse(fs.readFileSync(`${__dirname}/_data/orders.json`, 'utf-8'));
 
-const reports = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/reports.json`, 'utf-8')
-);
+const reports = JSON.parse(fs.readFileSync(`${__dirname}/_data/reports.json`, 'utf-8'));
 
 const importData = async () => {
   try {

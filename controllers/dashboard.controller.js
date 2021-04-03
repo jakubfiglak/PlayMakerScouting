@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
-const Report = require('../models/Report');
+const Report = require('../models/report.model');
 const User = require('../models/user.model');
-const Order = require('../models/Order');
+const Order = require('../models/order.model');
 const Player = require('../models/player.model');
 const Club = require('../models/club.model');
 
@@ -26,19 +26,13 @@ const populateOrders = {
 const getHighestRatedReport = ({ userRole, userID }) => {
   const query = userRole === 'admin' ? {} : { scout: userID };
 
-  return Report.find(query)
-    .sort('-avgRating')
-    .limit(1)
-    .populate(populateReports);
+  return Report.find(query).sort('-avgRating').limit(1).populate(populateReports);
 };
 
 const getLatestReport = ({ userRole, userID }) => {
   const query = userRole === 'admin' ? {} : { scout: userID };
 
-  return Report.find(query)
-    .sort('-createdAt')
-    .limit(1)
-    .populate(populateReports);
+  return Report.find(query).sort('-createdAt').limit(1).populate(populateReports);
 };
 
 const getReportsCount = ({ userRole, userID }) => {
@@ -87,12 +81,7 @@ exports.getDashboardData = asyncHandler(async (req, res) => {
   ];
 
   if (userRole === 'scout') {
-    const [
-      user,
-      highestRatedReport,
-      latestReport,
-      reportsCount,
-    ] = await Promise.all(promiseArr);
+    const [user, highestRatedReport, latestReport, reportsCount] = await Promise.all(promiseArr);
 
     return res.status(200).json({
       success: true,

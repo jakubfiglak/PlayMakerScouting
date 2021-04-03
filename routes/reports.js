@@ -6,7 +6,7 @@ const {
   getReport,
   updateReport,
   deleteReport,
-} = require('../controllers/reportsController');
+} = require('../controllers/reports.controller');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router({ mergeParams: true });

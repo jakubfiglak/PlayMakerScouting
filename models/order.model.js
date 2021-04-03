@@ -20,10 +20,6 @@ const OrderSchema = new Schema(
       type: Schema.ObjectId,
       ref: 'User',
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
     acceptDate: {
       type: Date,
     },
@@ -35,6 +31,7 @@ const OrderSchema = new Schema(
     },
   },
   {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }

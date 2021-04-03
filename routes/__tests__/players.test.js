@@ -390,8 +390,6 @@ describe('POST /api/v1/players/grantaccess', () => {
     const player = buildPlayer({ authorizedUsers: [user._id.toHexString()] });
     await Promise.all([insertPlayers([player]), insertUsers([user])]);
 
-    const players = await dbService.getPlayerById(player._id);
-
     const requestBody = {
       user: user._id,
       player: player._id,

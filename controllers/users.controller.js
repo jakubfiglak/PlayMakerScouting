@@ -87,9 +87,7 @@ exports.assignPlaymakerRole = asyncHandler(async (req, res, next) => {
   }
 
   if (user.role === 'playmaker-scout') {
-    return next(
-      new ApiError(`User with the id of ${userId} is already a playmaker-scout`)
-    );
+    return next(new ApiError(`User with the id of ${userId} is already a playmaker-scout`));
   }
 
   if (user.role === 'admin') {

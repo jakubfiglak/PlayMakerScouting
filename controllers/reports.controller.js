@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
-const Report = require('../models/Report');
+const Report = require('../models/report.model');
 const Player = require('../models/player.model');
-const Order = require('../models/Order');
+const Order = require('../models/order.model');
 const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 const getIndividualSkillsProps = require('../utils/getIndividualSkillsProps');
@@ -47,9 +47,7 @@ exports.createReport = asyncHandler(async (req, res, next) => {
   const player = await Player.findById(playerId);
 
   if (!player) {
-    return next(
-      new ApiError(`No player found with the id of ${playerId}`, 404)
-    );
+    return next(new ApiError(`No player found with the id of ${playerId}`, 404));
   }
 
   if (orderId && !order) {
@@ -58,24 +56,17 @@ exports.createReport = asyncHandler(async (req, res, next) => {
 
   if (orderId && order.status === 'open') {
     return next(
-      new ApiError(
-        'You have to accept the order before creating a report attached to that order'
-      )
+      new ApiError('You have to accept the order before creating a report attached to that order')
     );
   }
 
   if (orderId && order.status === 'closed') {
     return next(
-      new ApiError(
-        'You cannot create a report attached to an order that has already been closed'
-      )
+      new ApiError('You cannot create a report attached to an order that has already been closed')
     );
   }
 
-  req.body.individualSkills = getIndividualSkillsProps(
-    req.body.individualSkills,
-    player.position
-  );
+  req.body.individualSkills = getIndividualSkillsProps(req.body.individualSkills, player.position);
 
   let report = await Report.create(req.body);
 
@@ -162,10 +153,7 @@ exports.getReport = asyncHandler(async (req, res, next) => {
     return next(new ApiError(`No report found with the id of ${id}`, 404));
   }
 
-  if (
-    report.scout._id.toString() !== req.user._id &&
-    req.user.role !== 'admin'
-  ) {
+  if (report.scout._id.toString() !== req.user._id && req.user.role !== 'admin') {
     return next(
       new ApiError(
         `User ${req.user._id} is not authorized to view report with the id of ${id}`,
@@ -204,15 +192,10 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
   const player = await Player.findById(report.player);
 
   if (!player) {
-    return next(
-      new ApiError(`No player found with the id of ${report.player}`, 404)
-    );
+    return next(new ApiError(`No player found with the id of ${report.player}`, 404));
   }
 
-  req.body.individualSkills = getIndividualSkillsProps(
-    req.body.individualSkills,
-    player.position
-  );
+  req.body.individualSkills = getIndividualSkillsProps(req.body.individualSkills, player.position);
 
   Object.keys(req.body).forEach((key) => (report[key] = req.body[key]));
 

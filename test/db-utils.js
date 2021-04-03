@@ -2,8 +2,8 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
 const Club = require('../models/club.model');
 const Player = require('../models/player.model');
-const Order = require('../models/Order');
-const Report = require('../models/Report');
+const Order = require('../models/order.model');
+const Report = require('../models/report.model');
 const { buildUser } = require('./utils');
 
 const salt = bcrypt.genSaltSync(10);

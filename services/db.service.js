@@ -1,8 +1,8 @@
 const Player = require('../models/player.model');
 const Club = require('../models/club.model');
 const User = require('../models/user.model');
-const Order = require('../models/Order');
-const Report = require('../models/Report');
+const Order = require('../models/order.model');
+const Report = require('../models/report.model');
 
 function getPlayerById(id) {
   return Player.findById(id);
