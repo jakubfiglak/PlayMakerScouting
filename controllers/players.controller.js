@@ -1,10 +1,5 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
-const Player = require('../models/player.model');
-const Club = require('../models/club.model');
-const User = require('../models/user.model');
-const ApiError = require('../utils/ApiError');
-const prepareQuery = require('../utils/prepareQuery');
 const playersService = require('../services/players.service');
 const isAdmin = require('../utils/isAdmin');
 
@@ -105,59 +100,33 @@ exports.updatePlayer = asyncHandler(async (req, res) => {
 
 // @desc Delete player
 // @route DELETE /api/v1/players/:id
-// @access Private (admin only)
-exports.deletePlayer = asyncHandler(async (req, res, next) => {
+// @access Private
+exports.deletePlayer = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const player = await Player.findById(id);
+  await playersService.deletePlayer({
+    playerId: id,
+    userId: req.user._id,
+    userRole: req.user.role,
+  });
 
-  if (!player) {
-    return next(new ApiError(`No player found with the id of ${id}`, 404));
-  }
-
-  await player.remove();
-
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     message: `Player with the id of ${id} successfully removed!`,
+    data: id,
   });
 });
 
 // @desc Grant user with an access to a specific player
 // @route POST /api/v1/players/grantaccess
 // @access Private (admin only)
-exports.grantAccess = asyncHandler(async (req, res, next) => {
+exports.grantAccess = asyncHandler(async (req, res) => {
   const userId = req.body.user;
   const playerId = req.body.player;
 
-  const user = await User.findById(userId);
-  const player = await Player.findById(playerId);
+  await playersService.grantAccess({ playerId, userId });
 
-  if (!user) {
-    return next(new ApiError(`User not found with the id of ${userId}`, 404));
-  }
-
-  if (!player) {
-    return next(new ApiError(`Player not found with the id of ${playerId}`, 404));
-  }
-
-  if (user.myPlayers.includes(playerId)) {
-    return next(
-      new ApiError(
-        `User with the id of ${userId} already has access to the player with the id of ${playerId}`
-      )
-    );
-  }
-
-  // If user doesn't have players club in myClubs array, add it
-  if (!user.myClubs.includes(player.club)) {
-    user.myClubs.push(player.club);
-  }
-
-  user.myPlayers.push(playerId);
-  await user.save();
-
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     message: `Successfully granted the user with the id of ${userId} with the access to the player with the id of ${playerId}`,
   });

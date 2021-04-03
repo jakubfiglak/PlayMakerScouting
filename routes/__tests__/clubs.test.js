@@ -5,7 +5,6 @@ const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
 const { buildClub, buildPlayer, buildUser } = require('../../test/utils');
 const { insertClubs, insertTestUser, insertPlayers, insertUsers } = require('../../test/db-utils');
-const Club = require('../../models/club.model');
 const dbService = require('../../services/db.service');
 
 let api = axios.create();
@@ -210,7 +209,7 @@ describe('PUT /api/v1/clubs/:id', () => {
 
 describe('DELETE /api/v1/clubs/:id', () => {
   it('should return 400 error if the club has at least one player assigned to it', async () => {
-    const newClub = buildClub();
+    const newClub = buildClub({ authorizedUsers: [testUser._id] });
     const newPlayer = buildPlayer({ club: newClub._id });
     await Promise.all([insertClubs([newClub]), insertPlayers([newPlayer])]);
 
@@ -219,7 +218,7 @@ describe('DELETE /api/v1/clubs/:id', () => {
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toMatchInlineSnapshot(
-      '"You cannot delete a club with players linked"'
+      '"You cannot delete a club with existing relations to player documents"'
     );
   });
 

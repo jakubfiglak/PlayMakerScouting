@@ -57,6 +57,17 @@ const buildPlayer = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildOrder = (overrides = {}) => ({
+  _id: new mongoose.Types.ObjectId(),
+  status: 'open',
+  ...overrides,
+});
+
+const buildReport = (overrides = {}) => ({
+  _id: new mongoose.Types.ObjectId(),
+  ...overrides,
+});
+
 const buildReq = (overrides = {}) => {
   const req = { body: {}, params: {}, ...overrides };
   return req;
@@ -80,6 +91,8 @@ module.exports = {
   buildUpdatePasswordForm,
   buildClub,
   buildPlayer,
+  buildOrder,
+  buildReport,
   buildReq,
   buildRes,
   buildNext,

@@ -1,13 +1,12 @@
-const httpStatus = require('http-status');
 const dbService = require('./db.service');
 const Club = require('../models/club.model');
-const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 const getQueryOptions = require('../utils/getQueryOptions');
 const checkAuthorization = require('../utils/checkAuthorization');
 const filterForbiddenUpdates = require('../utils/filterForbiddenUpdates');
 const checkIfAssetExists = require('../utils/checkIfAssetExists');
 const checkIfUserHasAccessToTheAsset = require('../utils/checkIfUserHasAccessToTheAsset');
+const checkDbRelations = require('../utils/checkDbRelations');
 
 async function createClub({ clubData, userId }) {
   const club = await Club.create({ ...clubData, authorizedUsers: [userId] });
@@ -72,17 +71,14 @@ async function updateClub({ clubId, clubData, userId, userRole }) {
 }
 
 async function deleteClub({ clubId, userId, userRole }) {
-  const players = await dbService.getPlayersForClub(clubId);
-
-  if (players.length > 0) {
-    throw new ApiError('You cannot delete a club with players linked', httpStatus.BAD_REQUEST);
-  }
-
   const club = await dbService.getClubById(clubId);
 
   checkIfAssetExists({ name: 'club', asset: club, assetId: clubId });
-
   checkAuthorization({ userRole, userId, asset: club });
+
+  const players = await dbService.getPlayersForClub(clubId);
+
+  checkDbRelations({ assetName: 'club', relatedAssetName: 'player', relatedDocuments: players });
 
   await club.remove();
 }

@@ -1,12 +1,12 @@
-const httpStatus = require('http-status');
 const dbService = require('./db.service');
 const Player = require('../models/player.model');
-const ApiError = require('../utils/ApiError');
 const getQueryOptions = require('../utils/getQueryOptions');
 const prepareQuery = require('../utils/prepareQuery');
 const checkAuthorization = require('../utils/checkAuthorization');
 const checkIfAssetExists = require('../utils/checkIfAssetExists');
 const filterForbiddenUpdates = require('../utils/filterForbiddenUpdates');
+const checkDbRelations = require('../utils/checkDbRelations');
+const checkIfUserHasAccessToTheAsset = require('../utils/checkIfUserHasAccessToTheAsset');
 
 const populate = { path: 'club', select: 'name division' };
 const listSelect = 'firstName lastName position';
@@ -82,6 +82,38 @@ async function updatePlayer({ playerId, playerData, userId, userRole }) {
   return player;
 }
 
+async function deletePlayer({ playerId, userId, userRole }) {
+  const player = await dbService.getPlayerById(playerId);
+
+  checkIfAssetExists({ name: 'player', asset: player, assetId: playerId });
+  checkAuthorization({ userRole, userId, asset: player });
+
+  const orders = await dbService.getOrdersForPlayer(playerId);
+
+  checkDbRelations({ assetName: 'player', relatedAssetName: 'order', relatedDocuments: orders });
+
+  const reports = await dbService.getReportsForPlayer(playerId);
+
+  checkDbRelations({ assetName: 'player', relatedAssetName: 'report', relatedDocuments: reports });
+
+  await player.remove();
+}
+
+async function grantAccess({ playerId, userId }) {
+  const user = await dbService.getUserById(userId);
+
+  checkIfAssetExists({ name: 'user', asset: user, assetId: userId });
+
+  const player = await dbService.getPlayerById(playerId);
+
+  checkIfAssetExists({ name: 'player', asset: player, assetId: playerId });
+
+  checkIfUserHasAccessToTheAsset({ assetName: 'player', asset: player, assetId: playerId, userId });
+
+  player.authorizedUsers.push(userId);
+  await player.save();
+}
+
 module.exports = {
   createPlayer,
   getAllPlayers,
@@ -90,4 +122,6 @@ module.exports = {
   getPlayersListWithAuthorization,
   getPlayer,
   updatePlayer,
+  deletePlayer,
+  grantAccess,
 };

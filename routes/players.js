@@ -24,6 +24,6 @@ router.get('/list', protect, getPlayersList);
 router.post('/grantaccess', [protect, authorize('admin')], grantAccess);
 router.get('/:id', protect, getPlayer);
 router.put('/:id', protect, updatePlayer);
-router.delete('/:id', [protect, authorize('admin')], deletePlayer);
+router.delete('/:id', protect, deletePlayer);
 
 module.exports = router;

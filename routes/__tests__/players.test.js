@@ -3,10 +3,15 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
-const { buildClub, buildPlayer, buildUser } = require('../../test/utils');
-const { insertClubs, insertTestUser, insertPlayers, insertUsers } = require('../../test/db-utils');
-const Player = require('../../models/player.model');
-const Club = require('../../models/club.model');
+const { buildClub, buildPlayer, buildUser, buildOrder, buildReport } = require('../../test/utils');
+const {
+  insertClubs,
+  insertTestUser,
+  insertPlayers,
+  insertUsers,
+  insertOrders,
+  insertReports,
+} = require('../../test/db-utils');
 const dbService = require('../../services/db.service');
 
 let api = axios.create();
@@ -272,5 +277,156 @@ describe('PUT /api/v1/players/:id', () => {
     expect(dbPlayer.authorizedUsers).toContainEqual(testUser._id);
     expect(dbPlayer.authorizedUsers).not.toContain('FAKE-USERID1');
     expect(dbPlayer.authorizedUsers).not.toContain('FAKE-USERID2');
+  });
+});
+
+describe('DELETE /api/v1/clubs/:id', () => {
+  it('should return 400 error if the player is related to at least one order document', async () => {
+    const player = buildPlayer({ authorizedUsers: [testUser._id] });
+    const order = buildOrder({ player: player._id });
+    await Promise.all([insertPlayers([player]), insertOrders([order])]);
+
+    const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"You cannot delete a player with existing relations to order documents"'
+    );
+  });
+
+  it('should return 400 error if the player is related to at least one report document', async () => {
+    const player = buildPlayer({ authorizedUsers: [testUser._id] });
+    const report = buildReport({ scout: testUser._id, player: player._id });
+    await Promise.all([insertPlayers([player]), insertReports([report])]);
+
+    const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"You cannot delete a player with existing relations to report documents"'
+    );
+  });
+
+  it('should return 404 error if the player does not exist', async () => {
+    const { response } = await api.delete('players/NON-EXISTING-ID').catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"Resource not found with id of NON-EXISTING-ID"'
+    );
+  });
+
+  it('should return 403 error if the user is not authorized to delete a club', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+
+    const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain("You don't have access");
+  });
+
+  it('should delete the player if the request is valid', async () => {
+    const player = buildPlayer({ authorizedUsers: [testUser._id] });
+    await insertPlayers([player]);
+
+    const response = await api.delete(`players/${player._id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('successfully removed');
+    expect(response.data.data).toBe(player._id.toHexString());
+  });
+});
+
+describe('POST /api/v1/players/grantaccess', () => {
+  it('should return 404 error if user does not exist', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+    const player = buildPlayer();
+    await insertPlayers([player]);
+
+    const requestBody = {
+      user: new mongoose.Types.ObjectId().toHexString(),
+      player: player._id,
+    };
+
+    const { response } = await api
+      .post('players/grantaccess', requestBody, {
+        headers: { Cookie: `token=${token}` },
+      })
+      .catch((e) => e);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('user not found');
+  });
+
+  it('should return 404 error if player does not exist', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+    const user = buildUser();
+    await insertUsers([user]);
+
+    const requestBody = {
+      user: user._id,
+      player: new mongoose.Types.ObjectId().toHexString(),
+    };
+
+    const { response } = await api
+      .post('players/grantaccess', requestBody, {
+        headers: { Cookie: `token=${token}` },
+      })
+      .catch((e) => e);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('player not found');
+  });
+
+  it('should return 400 error if user already has access to the player', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+    const user = buildUser();
+    const player = buildPlayer({ authorizedUsers: [user._id.toHexString()] });
+    await Promise.all([insertPlayers([player]), insertUsers([user])]);
+
+    const players = await dbService.getPlayerById(player._id);
+
+    const requestBody = {
+      user: user._id,
+      player: player._id,
+    };
+
+    const { response } = await api
+      .post('players/grantaccess', requestBody, {
+        headers: { Cookie: `token=${token}` },
+      })
+      .catch((e) => e);
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('already has access');
+  });
+
+  it('should add user id to players authorizedUsers array if the request is valid', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+    const user = buildUser();
+    const player = buildPlayer();
+    await Promise.all([insertPlayers([player]), insertUsers([user])]);
+
+    const requestBody = {
+      user: user._id,
+      player: player._id,
+    };
+
+    const response = await api.post('players/grantaccess', requestBody, {
+      headers: { Cookie: `token=${token}` },
+    });
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted the user with the id of');
+
+    // Check if the authorizedUsers has been populated with user id
+    const DBplayer = await dbService.getPlayerById(player._id);
+    expect(DBplayer.authorizedUsers).toContainEqual(user._id);
   });
 });

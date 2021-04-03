@@ -97,7 +97,7 @@ exports.updateClub = asyncHandler(async (req, res) => {
 
 // @desc Delete club
 // @route DELETE /api/v1/clubs/:id
-// @access Private (admin only)
+// @access Private
 exports.deleteClub = asyncHandler(async (req, res) => {
   const clubId = req.params.id;
 
