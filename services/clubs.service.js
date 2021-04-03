@@ -5,6 +5,9 @@ const ApiError = require('../utils/ApiError');
 const prepareQuery = require('../utils/prepareQuery');
 const getQueryOptions = require('../utils/getQueryOptions');
 const checkAuthorization = require('../utils/checkAuthorization');
+const filterForbiddenUpdates = require('../utils/filterForbiddenUpdates');
+const checkIfAssetExists = require('../utils/checkIfAssetExists');
+const checkIfUserHasAccessToTheAsset = require('../utils/checkIfUserHasAccessToTheAsset');
 
 async function createClub({ clubData, userId }) {
   const club = await Club.create({ ...clubData, authorizedUsers: [userId] });
@@ -47,32 +50,21 @@ async function getClubsListWithAuthorization(userId) {
 async function getClub({ clubId, userId, userRole }) {
   const club = await dbService.getClubById(clubId);
 
-  if (!club) {
-    throw new ApiError(`Club not found with id of ${clubId}`, httpStatus.NOT_FOUND);
-  }
+  checkIfAssetExists({ name: 'club', asset: club, assetId: clubId });
 
-  const isAuthorized = userRole === 'admin' || club.authorizedUsers.includes(userId);
-
-  if (!isAuthorized) {
-    throw new ApiError(
-      `You don't have access to the club with the id of ${clubId}`,
-      httpStatus.UNAUTHORIZED
-    );
-  }
+  checkAuthorization({ userRole, userId, asset: club });
   return club;
 }
 
 async function updateClub({ clubId, clubData, userId, userRole }) {
-  const forbiddenKeys = ['authorizedUsers'];
+  const forbiddenFields = ['authorizedUsers', 'createdAt', 'updatedAt'];
   let club = await dbService.getClubById(clubId);
 
-  checkAuthorization({ userRole, userId, club });
+  checkAuthorization({ userRole, userId, asset: club });
 
-  const updates = Object.fromEntries(
-    Object.entries(clubData).filter(([key, _]) => !forbiddenKeys.includes(key))
-  );
+  const allowedUpdates = filterForbiddenUpdates({ forbiddenFields, updates: clubData });
 
-  Object.keys(updates).forEach((key) => (club[key] = updates[key]));
+  Object.keys(allowedUpdates).forEach((key) => (club[key] = allowedUpdates[key]));
 
   club = await club.save();
 
@@ -88,18 +80,9 @@ async function deleteClub({ clubId, userId, userRole }) {
 
   const club = await dbService.getClubById(clubId);
 
-  if (!club) {
-    throw new ApiError(`Club not found with id of ${clubId}`, httpStatus.NOT_FOUND);
-  }
+  checkIfAssetExists({ name: 'club', asset: club, assetId: clubId });
 
-  const isAuthorized = userRole === 'admin' || club.authorizedUsers.includes(userId);
-
-  if (!isAuthorized) {
-    throw new ApiError(
-      `You don't have access to the club with the id of ${clubId}`,
-      httpStatus.UNAUTHORIZED
-    );
-  }
+  checkAuthorization({ userRole, userId, asset: club });
 
   await club.remove();
 }
@@ -107,22 +90,13 @@ async function deleteClub({ clubId, userId, userRole }) {
 async function grantAccess({ clubId, userId }) {
   const user = await dbService.getUserById(userId);
 
-  if (!user) {
-    throw new ApiError(`User not found with the id of ${userId}`, httpStatus.NOT_FOUND);
-  }
+  checkIfAssetExists({ name: 'user', asset: user, assetId: userId });
 
   const club = await dbService.getClubById(clubId);
 
-  if (!club) {
-    throw new ApiError(`Club not found with the id of ${clubId}`, httpStatus.NOT_FOUND);
-  }
+  checkIfAssetExists({ name: 'club', asset: club, assetId: clubId });
 
-  if (club.authorizedUsers.includes(userId)) {
-    throw new ApiError(
-      `User with the id of ${userId} already has access to the club with the id of ${clubId}`,
-      httpStatus.BAD_REQUEST
-    );
-  }
+  checkIfUserHasAccessToTheAsset({ assetName: 'club', asset: club, assetId: clubId, userId });
 
   club.authorizedUsers.push(userId);
   await club.save();

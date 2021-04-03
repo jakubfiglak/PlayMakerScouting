@@ -5,6 +5,7 @@ const dbService = require('./db.service');
 const usersService = require('./users.service');
 const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
+const filterForbiddenUpdates = require('../utils/filterForbiddenUpdates');
 
 async function registerUser({ reqBody, host }) {
   const { email, password, passwordConfirm } = reqBody;
@@ -105,7 +106,7 @@ async function updatePassword({ userId, reqBody }) {
 
 async function updateDetails({ id, reqBody }) {
   // Keys which user cannot update manually
-  const forbiddenKeys = [
+  const forbiddenFields = [
     'email',
     'password',
     'role',
@@ -117,9 +118,7 @@ async function updateDetails({ id, reqBody }) {
     'updatedAt',
   ];
 
-  const updates = Object.fromEntries(
-    Object.entries(reqBody).filter(([key, value]) => !forbiddenKeys.includes(key) && value !== '')
-  );
+  const updates = filterForbiddenUpdates({ forbiddenFields, updates: reqBody });
 
   const user = await User.findByIdAndUpdate(id, updates, {
     new: true,

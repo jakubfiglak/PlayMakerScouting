@@ -5,6 +5,7 @@ const ApiError = require('../utils/ApiError');
 const getQueryOptions = require('../utils/getQueryOptions');
 const prepareQuery = require('../utils/prepareQuery');
 const checkAuthorization = require('../utils/checkAuthorization');
+const checkIfAssetExists = require('../utils/checkIfAssetExists');
 
 const populate = { path: 'club', select: 'name division' };
 const listSelect = 'firstName lastName position';
@@ -15,9 +16,7 @@ async function createPlayer({ playerData, userId }) {
   if (clubId) {
     const club = await dbService.getClubById(clubId);
 
-    if (!club) {
-      throw new ApiError(`No club found with the id of ${clubId}`, httpStatus.NOT_FOUND);
-    }
+    checkIfAssetExists({ name: 'club', asset: club, assetId: clubId });
   }
 
   let player = await Player.create({ ...playerData, authorizedUsers: [userId] });
@@ -61,9 +60,7 @@ async function getPlayersListWithAuthorization(userId) {
 async function getPlayer({ playerId, userId, userRole }) {
   const player = await dbService.getPlayerById(playerId);
 
-  if (!player) {
-    throw new ApiError(`No player found with the id of ${playerId}`, httpStatus.NOT_FOUND);
-  }
+  checkIfAssetExists({ name: 'player', asset: player, assetId: playerId });
 
   checkAuthorization({ userRole, userId, asset: player });
   return player;

@@ -275,7 +275,7 @@ describe('POST /api/v1/clubs/grantaccess', () => {
       .catch((e) => e);
     expect(response.status).toBe(httpStatus.NOT_FOUND);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain('User not found');
+    expect(response.data.error).toContain('user not found');
   });
 
   it('should return 404 error if club does not exist', async () => {
@@ -296,7 +296,7 @@ describe('POST /api/v1/clubs/grantaccess', () => {
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain('Club not found');
+    expect(response.data.error).toContain('club not found');
   });
 
   it('should return 400 error if user already has access to the club', async () => {
