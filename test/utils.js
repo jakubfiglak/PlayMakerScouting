@@ -59,6 +59,7 @@ const buildPlayer = (overrides = {}) => ({
 
 const buildOrder = (overrides = {}) => ({
   _id: new mongoose.Types.ObjectId(),
+  player: new mongoose.Types.ObjectId(),
   status: 'open',
   ...overrides,
 });
