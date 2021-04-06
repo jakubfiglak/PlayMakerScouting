@@ -31,6 +31,10 @@ async function getReportsForPlayer(playerId) {
   return reports;
 }
 
+function getOrderById(id) {
+  return Order.findById(id);
+}
+
 module.exports = {
   getPlayerById,
   getPlayersForClub,
@@ -38,4 +42,5 @@ module.exports = {
   getUserById,
   getOrdersForPlayer,
   getReportsForPlayer,
+  getOrderById,
 };

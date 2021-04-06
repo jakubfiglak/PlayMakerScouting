@@ -5,6 +5,7 @@ const {
   getOrder,
   acceptOrder,
   closeOrder,
+  rejectOrder,
   deleteOrder,
   getMyOrders,
   getMyOrdersForPlayer,
@@ -21,6 +22,7 @@ router.get('/mylist', [protect, authorize('admin', 'playmaker-scout')], getMyLis
 router.get('/:id', [protect, authorize('admin', 'playmaker-scout')], getOrder);
 router.get('/my/:playerId', [protect, authorize('admin', 'playmaker-scout')], getMyOrdersForPlayer);
 router.post('/:id/accept', [protect, authorize('admin', 'playmaker-scout')], acceptOrder);
+router.post('/:id/reject', [protect, authorize('admin', 'playmaker-scout')], rejectOrder);
 router.post('/:id/close', [protect, authorize('admin')], closeOrder);
 router.delete('/:id', [protect, authorize('admin')], deleteOrder);
 
