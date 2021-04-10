@@ -24,7 +24,7 @@ async function createOrder(orderData) {
   checkIfAssetExists({ name: 'player', assetId: playerId, asset: player });
 
   let order = await Order.create(orderData);
-  order = await order.populate([populatePlayer, populateScout]).execPopulate();
+  order = await order.populate(populatePlayer).execPopulate();
 
   return order;
 }
@@ -35,10 +35,8 @@ async function getAllOrders(reqQuery) {
     ...getQueryOptions({ sort, limit, page }),
     populate: [populatePlayer, populateScout],
   };
-
   const query = prepareQuery(reqQuery);
   const orders = await Order.paginate(query, options);
-
   return orders;
 }
 

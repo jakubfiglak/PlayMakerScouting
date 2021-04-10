@@ -23,7 +23,6 @@ const errorHandler = (err, req, res, next) => {
     const message = Object.values(err.errors).map((val) => val.message);
     error = new ApiError(message, 400);
   }
-
   res.status(error.statusCode || 500).json({
     success: false,
     error: error.message || 'Server Error',

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+const toJson = require('@meanie/mongoose-to-json');
 
 const { Schema, model } = mongoose;
 
@@ -39,6 +40,7 @@ const OrderSchema = new Schema(
 
 OrderSchema.plugin(mongoosePaginate);
 OrderSchema.plugin(AutoIncrement, { inc_field: 'orderNo', start_seq: 50 });
+OrderSchema.plugin(toJson);
 
 OrderSchema.virtual('docNumber').get(function () {
   const date = new Date(this.createdAt);
