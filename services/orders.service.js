@@ -4,7 +4,6 @@ const dbService = require('./db.service');
 const Order = require('../models/order.model');
 const getQueryOptions = require('../utils/getQueryOptions');
 const prepareQuery = require('../utils/prepareQuery');
-const { checkOrderAuthorization } = require('../utils/checkAuthorization');
 const checkOrderStatus = require('../utils/checkOrderStatus');
 const isAdmin = require('../utils/isAdmin');
 const ApiError = require('../utils/ApiError');
@@ -19,38 +18,20 @@ const populateScout = { path: 'scout', select: ['firstName', 'lastName'] };
 const listSelect = 'player club orderNo createdAt docNumber';
 
 async function createOrder(orderData) {
-  const playerId = orderData.player;
-  const player = await dbService.getPlayerById(playerId);
-  checkIfAssetExists({ name: 'player', assetId: playerId, asset: player });
-
   let order = await Order.create(orderData);
   order = await order.populate(populatePlayer).execPopulate();
 
   return order;
 }
 
-async function getAllOrders(reqQuery) {
+async function getAllOrders({ reqQuery, accessFilters }) {
   const { sort, limit, page } = reqQuery;
   const options = {
     ...getQueryOptions({ sort, limit, page }),
     populate: [populatePlayer, populateScout],
   };
-  const query = prepareQuery(reqQuery);
+  const query = { ...prepareQuery(reqQuery), ...accessFilters };
   const orders = await Order.paginate(query, options);
-  return orders;
-}
-
-async function getOrdersWithAuthorization({ reqQuery, userId }) {
-  const { sort, limit, page } = reqQuery;
-  const options = {
-    ...getQueryOptions({ sort, limit, page }),
-    populate: [populatePlayer, populateScout],
-  };
-
-  const query = prepareQuery(reqQuery);
-  query.$or = [{ scout: userId }, { status: 'open' }];
-  const orders = await Order.paginate(query, options);
-
   return orders;
 }
 
@@ -61,8 +42,7 @@ async function getMyOrders({ reqQuery, userId }) {
     populate: [populatePlayer, populateScout],
   };
 
-  const query = prepareQuery(reqQuery);
-  query.scout = userId;
+  const query = { ...prepareQuery(reqQuery), scout: userId };
 
   const orders = await Order.paginate(query, options);
   return orders;
@@ -83,97 +63,52 @@ async function getMyOrdersForAPlayer({ userId, playerId }) {
 
   return orders;
 }
+async function acceptOrder({ order, userId }) {
+  let editedOrder = order;
 
-async function getOrder({ orderId, userId, userRole }) {
-  const order = await dbService.getOrderById(orderId);
-  checkIfAssetExists({ name: 'order', asset: order, assetId: orderId });
-  checkOrderAuthorization({ userId, userRole, order });
-  return order;
+  editedOrder.status = 'accepted';
+  editedOrder.scout = userId;
+  editedOrder.acceptDate = Date.now();
+
+  await editedOrder.save();
+  editedOrder = await editedOrder.populate([populatePlayer, populateScout]).execPopulate();
+  return editedOrder;
 }
 
-async function acceptOrder({ orderId, userId, userRole }) {
-  let order = await dbService.getOrderById(orderId);
-  checkIfAssetExists({ name: 'order', asset: order, assetId: orderId });
-  checkOrderStatus({ status: order.status, allowedStatuses: ['open'] });
+async function rejectAcceptedOrder(order) {
+  let editedOrder = order;
 
-  if (!isAdmin(userRole)) {
-    const player = await dbService.getPlayerById(order.player);
-    checkIfAssetExists({ name: 'player', asset: player, assetId: order.player });
-    if (!player.authorizedUsers.includes(userId)) {
-      player.authorizedUsers.push(userId);
-      await player.save();
-    }
+  editedOrder.status = 'open';
+  editedOrder.scout = undefined;
+  editedOrder.acceptDate = undefined;
 
-    if (player.club) {
-      const club = await dbService.getClubById(player.club);
-      checkIfAssetExists({ name: 'club', asset: club, assetId: player.club });
-      if (!club.authorizedUsers.includes(userId)) {
-        club.authorizedUsers.push(userId);
-        await club.save();
-      }
-    }
-  }
-
-  order.status = 'accepted';
-  order.scout = userId;
-  order.acceptDate = Date.now();
-
-  await order.save();
-  order = await order.populate([populatePlayer, populateScout]).execPopulate();
-  return order;
+  await editedOrder.save();
+  editedOrder = await editedOrder.populate([populatePlayer]).execPopulate();
+  return editedOrder;
 }
 
-async function rejectAcceptedOrder({ orderId, userId }) {
-  let order = await dbService.getOrderById(orderId);
-  checkIfAssetExists({ name: 'order', asset: order, assetId: orderId });
-  checkOrderStatus({ status: order.status, allowedStatuses: ['accepted'] });
+async function closeOrder(order) {
+  let editedOrder = order;
 
-  if (order.scout !== userId) {
-    throw new ApiError(
-      'You cannot reject an order you are not assigned to',
-      httpStatus.BAD_REQUEST
-    );
-  }
+  editedOrder.status = 'closed';
+  editedOrder.closeDate = Date.now();
 
-  order.status = 'open';
-  order.scout = undefined;
-  order.acceptDate = undefined;
+  await editedOrder.save();
 
-  await order.save();
-  order = await order.populate([populatePlayer]).execPopulate();
-  return order;
+  editedOrder = await editedOrder.populate([populatePlayer, populateScout]).execPopulate();
+  return editedOrder;
 }
 
-async function closeOrder(orderId) {
-  let order = await dbService.getOrderById(orderId);
-  checkIfAssetExists({ name: 'order', asset: order, assetId: orderId });
-  checkOrderStatus({ status: order.status, allowedStatuses: ['accepted'] });
-
-  order.status = 'closed';
-  order.closeDate = Date.now();
-
-  await order.save();
-
-  order = await order.populate([populatePlayer, populateScout]).execPopulate();
-  return order;
-}
-
-async function deleteOrder(orderId) {
-  const order = await dbService.getOrderById(orderId);
-  checkIfAssetExists({ name: 'order', asset: order, assetId: orderId });
-  checkOrderStatus({ status: order.status, allowedStatuses: ['open'] });
-
+async function deleteOrder(order) {
   await order.remove();
 }
 
 module.exports = {
   createOrder,
   getAllOrders,
-  getOrdersWithAuthorization,
   getMyOrders,
   getMyAcceptedOrdersList,
   getMyOrdersForAPlayer,
-  getOrder,
   acceptOrder,
   rejectAcceptedOrder,
   closeOrder,

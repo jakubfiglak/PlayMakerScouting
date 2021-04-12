@@ -12,7 +12,6 @@ const prepareQuery = (query) => {
     /\b(gt|gte|lt|lte|in|regex)\b/g,
     (match) => `$${match}`
   );
-
   const parsedQuery = JSON.parse(queryStr);
 
   // Add case insensitivity to regex pattern if regex provided in query string

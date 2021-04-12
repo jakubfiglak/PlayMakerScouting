@@ -17,8 +17,8 @@ const insertUsers = async (users) =>
   );
 
 const insertTestUser = async (overrides = {}) => {
-  const user = new User(buildUser(overrides));
-  await user.save();
+  const userData = buildUser(overrides);
+  const user = await User.create(userData);
   return { user, token: user.getJwt() };
 };
 

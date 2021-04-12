@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
-const isAdmin = require('../utils/isAdmin');
 const ordersService = require('../services/orders.service');
 
 // @desc Create new order
@@ -27,16 +26,10 @@ exports.getOrders = asyncHandler(async (req, res) => {
     req.query.player = playerId;
   }
 
-  let orders;
-
-  if (isAdmin(req.user.role)) {
-    orders = await ordersService.getAllOrders(req.query);
-  } else {
-    orders = await ordersService.getOrdersWithAuthorization({
-      reqQuery: req.query,
-      userId: req.user._id,
-    });
-  }
+  const orders = await ordersService.getAllOrders({
+    reqQuery: req.query,
+    accessFilters: req.accessFilters,
+  });
 
   return res.status(httpStatus.OK).json({
     success: true,
@@ -89,15 +82,9 @@ exports.getMyOrdersForPlayer = asyncHandler(async (req, res) => {
 // @route GET /api/v1/orders/:id
 // @access Private (admin and playmaker-scout only)
 exports.getOrder = asyncHandler(async (req, res) => {
-  const order = await ordersService.getOrder({
-    orderId: req.params.id,
-    userId: req.user._id,
-    userRole: req.user.role,
-  });
-
   res.status(httpStatus.OK).json({
     success: true,
-    data: order,
+    data: req.order,
   });
 });
 
@@ -108,9 +95,8 @@ exports.acceptOrder = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const order = await ordersService.acceptOrder({
-    orderId: id,
+    order: req.order,
     userId: req.user._id,
-    userRole: req.user.role,
   });
 
   res.status(httpStatus.OK).json({
@@ -126,10 +112,7 @@ exports.acceptOrder = asyncHandler(async (req, res) => {
 exports.rejectOrder = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const order = await ordersService.rejectAcceptedOrder({
-    orderId: id,
-    userId: req.user._id,
-  });
+  const order = await ordersService.rejectAcceptedOrder(req.order);
 
   res.status(httpStatus.OK).json({
     success: true,
@@ -144,7 +127,7 @@ exports.rejectOrder = asyncHandler(async (req, res) => {
 exports.closeOrder = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const order = await ordersService.closeOrder(id);
+  const order = await ordersService.closeOrder(req.order);
 
   res.status(httpStatus.OK).json({
     success: true,
@@ -159,7 +142,7 @@ exports.closeOrder = asyncHandler(async (req, res) => {
 exports.deleteOrder = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  await ordersService.deleteOrder(id);
+  await ordersService.deleteOrder(req.order);
 
   res.status(httpStatus.OK).json({
     success: true,

@@ -13,6 +13,8 @@ const {
   insertReports,
 } = require('../../test/db-utils');
 const dbService = require('../../services/db.service');
+const Order = require('../../models/order.model');
+const User = require('../../models/user.model');
 
 let api = axios.create();
 let server;
@@ -22,6 +24,9 @@ setupTestDB();
 
 beforeAll(async () => {
   server = await startServer();
+});
+
+beforeEach(async () => {
   const baseURL = `http://localhost:${server.address().port}/api/v1`;
   const { user, token } = await insertTestUser({ role: 'playmaker-scout' });
   testUser = user;
@@ -38,9 +43,10 @@ describe('POST /api/v1/orders', () => {
     const { response } = await api
       .post('orders', order, { headers: { Cookie: `token=${token}` } })
       .catch((e) => e);
+
     expect(response.status).toBe(httpStatus.NOT_FOUND);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain('player not found');
+    expect(response.data.error).toContain('not found');
   });
 
   it('should create a new order and return it with populated player data', async () => {
@@ -76,8 +82,272 @@ describe('GET /api/v1/orders', () => {
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
     expect(response.data.data.totalDocs).toBe(3);
-    expect(response.data.data.docs[0].id).toBe(order1._id.toHexString());
-    expect(response.data.data.docs[1].id).toBe(order2._id.toHexString());
-    expect(response.data.data.docs[2].id).toBe(order3._id.toHexString());
+
+    const orderIds = response.data.data.docs.map((el) => el.id);
+    expect(orderIds).toContain(order1._id.toHexString());
+    expect(orderIds).toContain(order2._id.toHexString());
+    expect(orderIds).toContain(order3._id.toHexString());
+  });
+
+  it('should return only orders with the status of open or assigned to the specific user if user is not an admin', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order1 = buildOrder({ player: player._id });
+    const order2 = buildOrder({ player: player._id, status: 'closed' });
+    const order3 = buildOrder({ player: player._id, status: 'accepted', scout: testUser._id });
+    await insertOrders([order1, order2, order3]);
+
+    const response = await api.get('orders');
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.totalDocs).toBe(2);
+
+    const orderIds = response.data.data.docs.map((el) => el.id);
+    expect(orderIds).toContain(order1._id.toHexString());
+    expect(orderIds).not.toContain(order2._id.toHexString());
+    expect(orderIds).toContain(order3._id.toHexString());
+  });
+});
+
+describe('GET /api/v1/orders/my', () => {
+  it('should return all orders assigned to the user sending the request', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order1 = buildOrder({ player: player._id, status: 'closed', scout: testUser._id });
+    const order2 = buildOrder({ player: player._id, status: 'closed' });
+    const order3 = buildOrder({ player: player._id, status: 'accepted', scout: testUser._id });
+    await insertOrders([order1, order2, order3]);
+
+    const response = await api.get('orders/my');
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.totalDocs).toBe(2);
+
+    const orderIds = response.data.data.docs.map((el) => el.id);
+    expect(orderIds).toContain(order1._id.toHexString());
+    expect(orderIds).not.toContain(order2._id.toHexString());
+    expect(orderIds).toContain(order3._id.toHexString());
+  });
+});
+
+describe('GET /api/v1/orders/mylist', () => {
+  it('should return a list of all orders with the status of "accepted" assigned to the user sending the request', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order1 = buildOrder({ player: player._id, status: 'closed', scout: testUser._id });
+    const order2 = buildOrder({ player: player._id, status: 'closed' });
+    const order3 = buildOrder({ player: player._id, status: 'accepted', scout: testUser._id });
+    await insertOrders([order1, order2, order3]);
+
+    const response = await api.get('orders/mylist');
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.count).toBe(1);
+
+    const orderIds = response.data.data.map((el) => el.id);
+    expect(orderIds).not.toContain(order1._id.toHexString());
+    expect(orderIds).not.toContain(order2._id.toHexString());
+    expect(orderIds).toContain(order3._id.toHexString());
+  });
+});
+
+describe('GET /api/v1/orders/my/:playerId', () => {
+  it('should return all orders related to a specific player, assigned to the user sending the request ', async () => {
+    const player1 = buildPlayer();
+    const player2 = buildPlayer();
+    await insertPlayers([player1, player2]);
+    const order1 = buildOrder({ player: player1._id, status: 'closed', scout: testUser._id });
+    const order2 = buildOrder({ player: player1._id, status: 'closed' });
+    const order3 = buildOrder({ player: player2._id, status: 'accepted', scout: testUser._id });
+    await insertOrders([order1, order2, order3]);
+
+    const response = await api.get(`orders/my/${player1._id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.count).toBe(1);
+
+    const orderIds = response.data.data.map((el) => el.id);
+    expect(orderIds).toContain(order1._id.toHexString());
+    expect(orderIds).not.toContain(order2._id.toHexString());
+    expect(orderIds).not.toContain(order3._id.toHexString());
+  });
+});
+
+describe('GET /api/v1/orders/:id', () => {
+  it('should return a 403 error if the user is not permitted to view the order', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order = buildOrder({ player: player._id, status: 'accepted' });
+    await insertOrders([order]);
+
+    const { response } = await api.get(`orders/${order._id}`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"You don\'t have access to the asset you\'ve requsted"'
+    );
+  });
+
+  it('should return a 404 error if the order does not exist', async () => {
+    const NON_EXISTING_ID = new mongoose.Types.ObjectId();
+
+    const { response } = await api.get(`orders/${NON_EXISTING_ID}`).catch((e) => e);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('order not found with the id of');
+  });
+
+  it('should return order data if request is valid', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order = buildOrder({ player: player._id });
+    await insertOrders([order]);
+
+    const response = await api.get(`orders/${order._id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.id).toBe(order._id.toHexString());
+  });
+});
+
+describe('POST /api/v1/orders/:id/accept', () => {
+  it('should return 400 error if the user is trying to accept an order with the status other than "open"', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order = buildOrder({ player: player._id, status: 'accepted' });
+    await insertOrders([order]);
+
+    const { response } = await api.post(`orders/${order._id}/accept`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"You cannot perform this operation on an order with the status of accepted"'
+    );
+  });
+
+  it('should properly accept the order if the request is valid', async () => {
+    const club = buildClub();
+    await insertClubs([club]);
+    const player = buildPlayer({ club: club._id });
+    await insertPlayers([player]);
+    const order = buildOrder({ player: player._id });
+    await insertOrders([order]);
+
+    const response = await api.post(`orders/${order._id}/accept`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('successfully accepted');
+    expect(response.data.data.id).toBe(order._id.toHexString());
+    expect(response.data.data.status).toBe('accepted');
+
+    // Check if users id has been added to players authorizedUsers array
+    const dbPlayer = await dbService.getPlayerById(player._id);
+    expect(dbPlayer.authorizedUsers).toContainEqual(testUser._id);
+
+    // Check if users id has been added to clubs authorizedUsers array
+    const dbClub = await dbService.getClubById(club._id);
+    expect(dbClub.authorizedUsers).toContainEqual(testUser._id);
+  });
+});
+
+describe('POST /api/v1/orders/:id/reject', () => {
+  it('should return 400 error if the user is trying to reject an order with the status other than "accepted"', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order = buildOrder({ player: player._id, status: 'open' });
+    await insertOrders([order]);
+
+    const { response } = await api.post(`orders/${order._id}/reject`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"You cannot perform this operation on an order with the status of open"'
+    );
+  });
+
+  it('should return 403 error if the user is trying to reject an order he is not assigned to', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order = buildOrder({
+      player: player._id,
+      status: 'accepted',
+      scout: new mongoose.Types.ObjectId(),
+    });
+    await insertOrders([order]);
+
+    const { response } = await api.post(`orders/${order._id}/reject`).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"You cannot reject an order you are not assigned to"'
+    );
+  });
+
+  it('should properly reject the order if the request is valid', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order = buildOrder({ player: player._id, status: 'accepted', scout: testUser._id });
+    await insertOrders([order]);
+
+    const response = await api.post(`orders/${order._id}/reject`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('successfully rejected');
+    expect(response.data.data.id).toBe(order._id.toHexString());
+    expect(response.data.data.status).toBe('open');
+    expect(response.data.data.scout).toBe(undefined);
+  });
+});
+
+describe('POST /api/v1/orders/:id/close', () => {
+  it('properly close the order if the request is valid', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order = buildOrder({ player: player._id, status: 'accepted' });
+    await insertOrders([order]);
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    const response = await api.post(
+      `orders/${order._id}/close`,
+      {},
+      { headers: { Cookie: `token=${token}` } }
+    );
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('successfully closed');
+    expect(response.data.data.id).toBe(order._id.toHexString());
+    expect(response.data.data.status).toBe('closed');
+    expect(response.data.data.scout).toBe(undefined);
+  });
+});
+
+describe('DELETE /api/v1/orders/:id', () => {
+  it('properly close the order if the request is valid', async () => {
+    const player = buildPlayer();
+    await insertPlayers([player]);
+    const order = buildOrder({ player: player._id });
+    await insertOrders([order]);
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    const response = await api.delete(`orders/${order._id}`, {
+      headers: { Cookie: `token=${token}` },
+    });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('successfully removed');
+    expect(response.data.data).toBe(order._id.toHexString());
   });
 });

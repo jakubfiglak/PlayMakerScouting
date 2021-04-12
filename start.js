@@ -46,17 +46,13 @@ const startServer = (port = process.env.PORT || 5000) => {
     app.use(express.static('client/build'));
 
     app.get('*', (req, res) =>
-      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-    );
+      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')));
   }
 
   app.use(errorHandler);
   const server = app.listen(
     port,
-    console.log(
-      `Server running in ${process.env.NODE_ENV} mode on port ${port}`.yellow
-        .bold
-    )
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`.yellow.bold)
   );
 
   return server;

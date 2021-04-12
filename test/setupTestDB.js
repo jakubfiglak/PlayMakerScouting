@@ -11,11 +11,10 @@ const setupTestDB = () => {
     console.log(`MongoDB Connected: ${connection.connection.host}`.cyan.underline.bold);
   });
 
-  beforeEach(async () => {
+  afterEach(async () => {
     await Promise.all(
       Object.values(mongoose.connection.collections).map(async (collection) =>
-        collection.deleteMany()
-      )
+        collection.deleteMany())
     );
   });
 
