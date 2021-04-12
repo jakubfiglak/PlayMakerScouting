@@ -1,5 +1,5 @@
 const Order = require('../order.model');
-const { buildOrder } = require('../../test/utils');
+const { buildOrder } = require('../../../test/utils');
 
 it('should correctly validate a valid order', async () => {
   const order = buildOrder();

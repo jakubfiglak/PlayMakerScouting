@@ -1,25 +1,11 @@
-const httpStatus = require('http-status');
-const checkIfAssetExists = require('../utils/checkIfAssetExists');
-const dbService = require('./db.service');
-const Order = require('../models/order.model');
-const getQueryOptions = require('../utils/getQueryOptions');
-const prepareQuery = require('../utils/prepareQuery');
-const checkOrderStatus = require('../utils/checkOrderStatus');
-const isAdmin = require('../utils/isAdmin');
-const ApiError = require('../utils/ApiError');
-
-const populatePlayer = {
-  path: 'player',
-  select: ['firstName', 'lastName', 'club'],
-  populate: { path: 'club', select: ['name', 'division'] },
-};
-
-const populateScout = { path: 'scout', select: ['firstName', 'lastName'] };
-const listSelect = 'player club orderNo createdAt docNumber';
+const Order = require('./order.model');
+const getQueryOptions = require('../../utils/getQueryOptions');
+const prepareQuery = require('../../utils/prepareQuery');
+const resultsOptions = require('./options');
 
 async function createOrder(orderData) {
   let order = await Order.create(orderData);
-  order = await order.populate(populatePlayer).execPopulate();
+  order = await order.populate(resultsOptions.populatePlayer).execPopulate();
 
   return order;
 }
@@ -28,7 +14,7 @@ async function getAllOrders({ reqQuery, accessFilters }) {
   const { sort, limit, page } = reqQuery;
   const options = {
     ...getQueryOptions({ sort, limit, page }),
-    populate: [populatePlayer, populateScout],
+    populate: [resultsOptions.populatePlayer, resultsOptions.populateScout],
   };
   const query = { ...prepareQuery(reqQuery), ...accessFilters };
   const orders = await Order.paginate(query, options);
@@ -39,7 +25,7 @@ async function getMyOrders({ reqQuery, userId }) {
   const { sort, limit, page } = reqQuery;
   const options = {
     ...getQueryOptions({ sort, limit, page }),
-    populate: [populatePlayer, populateScout],
+    populate: [resultsOptions.populatePlayer, resultsOptions.populateScout],
   };
 
   const query = { ...prepareQuery(reqQuery), scout: userId };
@@ -50,8 +36,8 @@ async function getMyOrders({ reqQuery, userId }) {
 
 async function getMyAcceptedOrdersList(userId) {
   const orders = await Order.find({ scout: userId, status: 'accepted' })
-    .select(listSelect)
-    .populate([populatePlayer]);
+    .select(resultsOptions.listSelect)
+    .populate([resultsOptions.populatePlayer]);
   return orders;
 }
 
@@ -71,7 +57,9 @@ async function acceptOrder({ order, userId }) {
   editedOrder.acceptDate = Date.now();
 
   await editedOrder.save();
-  editedOrder = await editedOrder.populate([populatePlayer, populateScout]).execPopulate();
+  editedOrder = await editedOrder
+    .populate([resultsOptions.populatePlayer, resultsOptions.populateScout])
+    .execPopulate();
   return editedOrder;
 }
 
@@ -83,7 +71,7 @@ async function rejectAcceptedOrder(order) {
   editedOrder.acceptDate = undefined;
 
   await editedOrder.save();
-  editedOrder = await editedOrder.populate([populatePlayer]).execPopulate();
+  editedOrder = await editedOrder.populate([resultsOptions.populatePlayer]).execPopulate();
   return editedOrder;
 }
 
@@ -95,7 +83,9 @@ async function closeOrder(order) {
 
   await editedOrder.save();
 
-  editedOrder = await editedOrder.populate([populatePlayer, populateScout]).execPopulate();
+  editedOrder = await editedOrder
+    .populate([resultsOptions.populatePlayer, resultsOptions.populateScout])
+    .execPopulate();
   return editedOrder;
 }
 

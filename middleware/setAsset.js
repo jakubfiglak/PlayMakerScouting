@@ -14,4 +14,4 @@ function setAsset({ name, model, populate }) {
   });
 }
 
-module.exports = { setAsset };
+module.exports = setAsset;

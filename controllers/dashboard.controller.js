@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Report = require('../models/report.model');
 const User = require('../models/user.model');
-const Order = require('../models/order.model');
+const Order = require('../modules/orders/order.model');
 const Player = require('../models/player.model');
 const Club = require('../models/club.model');
 

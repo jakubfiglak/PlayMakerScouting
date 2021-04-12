@@ -10,26 +10,13 @@ const {
   getMyOrders,
   getMyOrdersForPlayer,
   getMyList,
-} = require('../controllers/orders.controller');
+} = require('../modules/orders/orders.controller');
 const { protect, authorize } = require('../middleware/auth');
 const checkIfRelatedAssetsExist = require('../middleware/checkIfRelatedAssetsExist');
 const Player = require('../models/player.model');
-const Order = require('../models/order.model');
-const { setOrdersAccessFilters } = require('../middleware/setAccessFilters');
-const { canViewOrder, canRejectOrder } = require('../middleware/checkPermissions');
-const { setAsset } = require('../middleware/setAsset');
-const checkOrderStatus = require('../middleware/checkOrderStatus');
-const { grantAccessToAPlayer, grantAccessToAClub } = require('../middleware/grantAccess');
+const ordersMiddleware = require('../modules/orders/orders.middleware');
 
 const router = express.Router({ mergeParams: true });
-
-const populatePlayer = {
-  path: 'player',
-  select: ['firstName', 'lastName', 'club'],
-  populate: { path: 'club', select: ['name', 'division'] },
-};
-
-const populateScout = { path: 'scout', select: ['firstName', 'lastName'] };
 
 router.post(
   '/',
@@ -42,7 +29,7 @@ router.post(
 );
 router.get(
   '/',
-  [protect, authorize('admin', 'playmaker-scout'), setOrdersAccessFilters],
+  [protect, authorize('admin', 'playmaker-scout'), ordersMiddleware.setAccessFilters],
   getOrders
 );
 router.get('/my', [protect, authorize('admin', 'playmaker-scout')], getMyOrders);
@@ -52,8 +39,8 @@ router.get(
   [
     protect,
     authorize('admin', 'playmaker-scout'),
-    setAsset({ name: 'order', model: Order, populate: [populatePlayer, populateScout] }),
-    canViewOrder,
+    ordersMiddleware.setOrder,
+    ordersMiddleware.canView,
   ],
   getOrder
 );
@@ -63,10 +50,10 @@ router.post(
   [
     protect,
     authorize('admin', 'playmaker-scout'),
-    setAsset({ name: 'order', model: Order, populate: [populatePlayer, populateScout] }),
-    checkOrderStatus(['open']),
-    grantAccessToAPlayer,
-    grantAccessToAClub,
+    ordersMiddleware.setOrder,
+    ordersMiddleware.checkStatus(['open']),
+    ordersMiddleware.grantAccessToAPlayer,
+    ordersMiddleware.grantAccessToAClub,
   ],
   acceptOrder
 );
@@ -75,9 +62,9 @@ router.post(
   [
     protect,
     authorize('admin', 'playmaker-scout'),
-    setAsset({ name: 'order', model: Order, populate: [populatePlayer, populateScout] }),
-    checkOrderStatus(['accepted']),
-    canRejectOrder,
+    ordersMiddleware.setOrder,
+    ordersMiddleware.checkStatus(['accepted']),
+    ordersMiddleware.canReject,
   ],
   rejectOrder
 );
@@ -86,19 +73,14 @@ router.post(
   [
     protect,
     authorize('admin'),
-    setAsset({ name: 'order', model: Order, populate: [populatePlayer, populateScout] }),
-    checkOrderStatus(['accepted']),
+    ordersMiddleware.setOrder,
+    ordersMiddleware.checkStatus(['accepted']),
   ],
   closeOrder
 );
 router.delete(
   '/:id',
-  [
-    protect,
-    authorize('admin'),
-    setAsset({ name: 'order', model: Order, populate: [populatePlayer, populateScout] }),
-    checkOrderStatus(['open']),
-  ],
+  [protect, authorize('admin'), ordersMiddleware.setOrder, ordersMiddleware.checkStatus(['open'])],
   deleteOrder
 );
 
