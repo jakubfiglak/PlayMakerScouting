@@ -1,12 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
-const authService = require('../services/auth.service');
-const dbService = require('../services/db.service');
-
-const cookieOptions = {
-  httpOnly: true,
-  expires: new Date(Date.now() + 30 * 1000 * 60 * 60 * 24),
-};
+const authService = require('./auth.service');
+const dbService = require('../../services/db.service');
+const options = require('./options');
 
 // @desc Register user
 // @route POST /api/v1/auth/register
@@ -28,9 +24,7 @@ exports.register = asyncHandler(async (req, res) => {
 // @route GET /api/v1/auth/confirm/:confirmationCode
 // @access Public
 exports.verifyUser = asyncHandler(async (req, res) => {
-  const { confirmationCode } = req.params;
-
-  const user = await authService.verifyUser(confirmationCode);
+  const user = await authService.verifyUser(req.userData);
 
   res.status(httpStatus.OK).json({
     success: true,
@@ -43,14 +37,9 @@ exports.verifyUser = asyncHandler(async (req, res) => {
 // @route POST /api/v1/auth/login
 // @access Public
 exports.login = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { user, token, expiresAt } = await authService.login(req.userData);
 
-  const { user, token, expiresAt } = await authService.login({
-    email,
-    password,
-  });
-
-  res.status(httpStatus.OK).cookie('token', token, cookieOptions).json({
+  res.status(httpStatus.OK).cookie('token', token, options.cookies).json({
     success: true,
     message: 'Login success!',
     data: {
@@ -77,7 +66,7 @@ exports.account = asyncHandler(async (req, res) => {
 // @access Private
 exports.updateDetails = asyncHandler(async (req, res) => {
   const user = await authService.updateDetails({
-    id: req.user._id,
+    user: req.userData,
     reqBody: req.body,
   });
 
@@ -93,11 +82,11 @@ exports.updateDetails = asyncHandler(async (req, res) => {
 // @access Private
 exports.updatePassword = asyncHandler(async (req, res) => {
   const { token, expiresAt } = await authService.updatePassword({
-    userId: req.user._id,
-    reqBody: req.body,
+    user: req.userData,
+    newPassword: req.body.newPassword,
   });
 
-  res.status(200).cookie('token', token, cookieOptions).json({
+  res.status(200).cookie('token', token, options.cookies).json({
     success: true,
     message: 'Password updated successfully!',
     expiresAt,

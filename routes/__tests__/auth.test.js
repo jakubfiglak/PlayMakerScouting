@@ -239,6 +239,7 @@ describe('PUT api/v1/auth/updatedetails', () => {
     const response = await api.put('/auth/updatedetails', updates, {
       headers: { Cookie: `token=${token}` },
     });
+
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
     expect(response.data.message).toMatchInlineSnapshot('"Account details successfully updated!"');
@@ -277,7 +278,7 @@ describe('PUT api/v1/auth/updatepassword', () => {
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toMatchInlineSnapshot('"Incorrect password"');
+    expect(response.data.error).toMatchInlineSnapshot('"Invalid credentials"');
   });
 
   it('should return 401 error if newPassword and newPasswordConfirm are not equal', async () => {

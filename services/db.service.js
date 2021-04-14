@@ -21,6 +21,14 @@ function getUserById(id) {
   return User.findById(id);
 }
 
+function getUserByEmail(email) {
+  return User.findOne({ email });
+}
+
+function getUserByConfirmationCode(confirmationCode) {
+  return User.findOne({ confirmationCode });
+}
+
 async function getOrdersForPlayer(playerId) {
   const orders = await Order.find({ player: playerId });
   return orders;
@@ -40,6 +48,8 @@ module.exports = {
   getPlayersForClub,
   getClubById,
   getUserById,
+  getUserByEmail,
+  getUserByConfirmationCode,
   getOrdersForPlayer,
   getReportsForPlayer,
   getOrderById,
