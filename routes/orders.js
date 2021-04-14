@@ -12,6 +12,7 @@ const {
   getMyList,
 } = require('../modules/orders/orders.controller');
 const { protect, authorize } = require('../middleware/auth');
+const prepareQuery = require('../middleware/prepareQuery');
 const checkIfRelatedAssetsExist = require('../middleware/checkIfRelatedAssetsExist');
 const Player = require('../models/player.model');
 const ordersMiddleware = require('../modules/orders/orders.middleware');
@@ -29,10 +30,10 @@ router.post(
 );
 router.get(
   '/',
-  [protect, authorize('admin', 'playmaker-scout'), ordersMiddleware.setAccessFilters],
+  [protect, authorize('admin', 'playmaker-scout'), prepareQuery, ordersMiddleware.setAccessFilters],
   getOrders
 );
-router.get('/my', [protect, authorize('admin', 'playmaker-scout')], getMyOrders);
+router.get('/my', [protect, authorize('admin', 'playmaker-scout'), prepareQuery], getMyOrders);
 router.get('/mylist', [protect, authorize('admin', 'playmaker-scout')], getMyList);
 router.get(
   '/:id',

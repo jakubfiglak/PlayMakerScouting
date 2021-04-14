@@ -1,10 +1,5 @@
 const { protect, authorize } = require('../auth');
-const {
-  buildUser,
-  buildReq,
-  buildRes,
-  buildNext,
-} = require('../../test/utils');
+const { buildUser, buildReq, buildRes, buildNext } = require('../../test/utils');
 const User = require('../../models/user.model');
 
 describe('route protection middleware', () => {

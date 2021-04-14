@@ -7,11 +7,7 @@ it('should throw a 404 error if error name is CastError', () => {
   const res = buildRes();
   const next = buildNext();
 
-  const error = new Error.CastError(
-    'SOME-TYPE',
-    'SOME-RESOURCE-ID',
-    'SOME-PATH'
-  );
+  const error = new Error.CastError('SOME-TYPE', 'SOME-RESOURCE-ID', 'SOME-PATH');
 
   errorHandler(error, req, res, next);
   expect(res.status).toHaveBeenCalledWith(404);
@@ -37,9 +33,7 @@ it('should throw a 400 error if error code is 11000 (mongoose duplicate key)', (
   expect(res.status).toHaveBeenCalledWith(400);
   expect(res.status).toHaveBeenCalledTimes(1);
   expect(res.json.mock.calls[0][0].success).toBe(false);
-  expect(res.json.mock.calls[0][0].error).toMatchInlineSnapshot(
-    '"Duplicate field value entered"'
-  );
+  expect(res.json.mock.calls[0][0].error).toMatchInlineSnapshot('"Duplicate field value entered"');
   expect(res.json).toHaveBeenCalledTimes(1);
   expect(next).not.toHaveBeenCalled();
 });
@@ -61,9 +55,7 @@ it('should throw a 400 error if error name is ValidationError', () => {
   expect(res.status).toHaveBeenCalledWith(400);
   expect(res.status).toHaveBeenCalledTimes(1);
   expect(res.json.mock.calls[0][0].success).toBe(false);
-  expect(res.json.mock.calls[0][0].error).toMatchInlineSnapshot(
-    '"SOME-VALIDATION-MESSAGE"'
-  );
+  expect(res.json.mock.calls[0][0].error).toMatchInlineSnapshot('"SOME-VALIDATION-MESSAGE"');
   expect(res.json).toHaveBeenCalledTimes(1);
   expect(next).not.toHaveBeenCalled();
 });
@@ -80,9 +72,7 @@ it('should throw a 500 error if any other unrecognized error occurs', () => {
   expect(res.status).toHaveBeenCalledWith(500);
   expect(res.status).toHaveBeenCalledTimes(1);
   expect(res.json.mock.calls[0][0].success).toBe(false);
-  expect(res.json.mock.calls[0][0].error).toMatchInlineSnapshot(
-    '"Server Error"'
-  );
+  expect(res.json.mock.calls[0][0].error).toMatchInlineSnapshot('"Server Error"');
   expect(res.json).toHaveBeenCalledTimes(1);
   expect(next).not.toHaveBeenCalled();
 });

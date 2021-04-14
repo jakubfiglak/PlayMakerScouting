@@ -1,6 +1,4 @@
 const Order = require('./order.model');
-const getQueryOptions = require('../../utils/getQueryOptions');
-const prepareQuery = require('../../utils/prepareQuery');
 const resultsOptions = require('./options');
 
 async function createOrder(orderData) {
@@ -10,27 +8,25 @@ async function createOrder(orderData) {
   return order;
 }
 
-async function getAllOrders({ reqQuery, accessFilters }) {
-  const { sort, limit, page } = reqQuery;
+async function getAllOrders({ query, paginationOptions, accessFilters }) {
   const options = {
-    ...getQueryOptions({ sort, limit, page }),
+    ...paginationOptions,
     populate: [resultsOptions.populatePlayer, resultsOptions.populateScout],
   };
-  const query = { ...prepareQuery(reqQuery), ...accessFilters };
-  const orders = await Order.paginate(query, options);
+  const modifiedQuery = { ...query, ...accessFilters };
+  const orders = await Order.paginate(modifiedQuery, options);
   return orders;
 }
 
-async function getMyOrders({ reqQuery, userId }) {
-  const { sort, limit, page } = reqQuery;
+async function getMyOrders({ query, paginationOptions, userId }) {
   const options = {
-    ...getQueryOptions({ sort, limit, page }),
+    ...paginationOptions,
     populate: [resultsOptions.populatePlayer, resultsOptions.populateScout],
   };
 
-  const query = { ...prepareQuery(reqQuery), scout: userId };
+  const modifiedQuery = { ...query, scout: userId };
 
-  const orders = await Order.paginate(query, options);
+  const orders = await Order.paginate(modifiedQuery, options);
   return orders;
 }
 
@@ -49,6 +45,7 @@ async function getMyOrdersForAPlayer({ userId, playerId }) {
 
   return orders;
 }
+
 async function acceptOrder({ order, userId }) {
   let editedOrder = order;
 

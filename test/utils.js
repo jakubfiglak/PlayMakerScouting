@@ -72,7 +72,7 @@ const buildReport = (overrides = {}) => ({
 });
 
 const buildReq = (overrides = {}) => {
-  const req = { body: {}, params: {}, ...overrides };
+  const req = { body: {}, params: {}, query: {}, ...overrides };
   return req;
 };
 
