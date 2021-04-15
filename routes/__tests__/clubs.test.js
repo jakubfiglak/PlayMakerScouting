@@ -153,14 +153,14 @@ describe('GET api/v1/clubs/:id', () => {
     expect(response.data.data.name).toBe(newClub.name);
   });
 
-  it('should return a 401 error if user is not authorized to get club data', async () => {
+  it('should return a 403 error if user is not authorized to get club data', async () => {
     const newClub = buildClub();
 
     await insertClubs([newClub]);
 
     const { response } = await api.get(`clubs/${newClub._id}`).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toContain("You don't have access");
   });
@@ -177,14 +177,14 @@ describe('PUT /api/v1/clubs/:id', () => {
     );
   });
 
-  it('should return 401 error if user is not authorized to edit club data', async () => {
+  it('should return 403 error if user is not authorized to edit club data', async () => {
     const newClub = buildClub();
 
     await insertClubs([newClub]);
 
     const { response } = await api.put(`clubs/${newClub._id}`, {}).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toContain("You don't have access");
   });
@@ -208,14 +208,14 @@ describe('PUT /api/v1/clubs/:id', () => {
 });
 
 describe('DELETE /api/v1/clubs/:id', () => {
-  it('should return 400 error if the club has at least one player assigned to it', async () => {
+  it('should return 403 error if the club has at least one player assigned to it', async () => {
     const newClub = buildClub({ authorizedUsers: [testUser._id] });
     const newPlayer = buildPlayer({ club: newClub._id });
     await Promise.all([insertClubs([newClub]), insertPlayers([newPlayer])]);
 
     const { response } = await api.delete(`clubs/${newClub._id}`).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toMatchInlineSnapshot(
       '"You cannot delete a club with existing relations to player documents"'
@@ -238,7 +238,7 @@ describe('DELETE /api/v1/clubs/:id', () => {
 
     const { response } = await api.delete(`clubs/${newClub._id}`).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toContain("You don't have access");
   });
@@ -256,7 +256,7 @@ describe('DELETE /api/v1/clubs/:id', () => {
   });
 });
 
-describe('POST /api/v1/clubs/grantaccess', () => {
+describe('POST /api/v1/clubs/:id/grantaccess', () => {
   it('should return 404 error if user does not exist', async () => {
     const { token } = await insertTestUser({ role: 'admin' });
     const newClub = buildClub();
@@ -264,17 +264,16 @@ describe('POST /api/v1/clubs/grantaccess', () => {
 
     const requestBody = {
       user: new mongoose.Types.ObjectId().toHexString(),
-      club: newClub._id.toHexString(),
     };
 
     const { response } = await api
-      .post('clubs/grantaccess', requestBody, {
+      .post(`clubs/${newClub._id}/grantaccess`, requestBody, {
         headers: { Cookie: `token=${token}` },
       })
       .catch((e) => e);
     expect(response.status).toBe(httpStatus.NOT_FOUND);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain('user not found');
+    expect(response.data.error).toContain('not found');
   });
 
   it('should return 404 error if club does not exist', async () => {
@@ -282,13 +281,14 @@ describe('POST /api/v1/clubs/grantaccess', () => {
     const user = buildUser();
     await insertUsers([user]);
 
+    const id = new mongoose.Types.ObjectId().toHexString();
+
     const requestBody = {
       user: user._id.toHexString(),
-      club: new mongoose.Types.ObjectId().toHexString(),
     };
 
     const { response } = await api
-      .post('clubs/grantaccess', requestBody, {
+      .post(`clubs/${id}/grantaccess`, requestBody, {
         headers: { Cookie: `token=${token}` },
       })
       .catch((e) => e);
@@ -306,11 +306,10 @@ describe('POST /api/v1/clubs/grantaccess', () => {
 
     const requestBody = {
       user: user._id.toHexString(),
-      club: club._id.toHexString(),
     };
 
     const { response } = await api
-      .post('clubs/grantaccess', requestBody, {
+      .post(`clubs/${club._id}/grantaccess`, requestBody, {
         headers: { Cookie: `token=${token}` },
       })
       .catch((e) => e);
@@ -331,7 +330,7 @@ describe('POST /api/v1/clubs/grantaccess', () => {
       club: club._id.toHexString(),
     };
 
-    const response = await api.post('clubs/grantaccess', requestBody, {
+    const response = await api.post(`clubs/${club._id}/grantaccess`, requestBody, {
       headers: { Cookie: `token=${token}` },
     });
     expect(response.status).toBe(httpStatus.OK);

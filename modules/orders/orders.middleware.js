@@ -9,7 +9,7 @@ const setAsset = require('../../middleware/setAsset');
 
 function canView(req, res, next) {
   const { order, user } = req;
-  const isPermitted = user.role === 'admin' || order.scout === user._id || order.status === 'open';
+  const isPermitted = isAdmin(user.role) || order.scout === user._id || order.status === 'open';
 
   if (!isPermitted) {
     return next(

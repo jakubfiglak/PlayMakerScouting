@@ -1,5 +1,5 @@
 const Club = require('../club.model');
-const { buildClub } = require('../../test/utils');
+const { buildClub } = require('../../../test/utils');
 
 it('should correctly validate a valid club', async () => {
   const newClub = buildClub();

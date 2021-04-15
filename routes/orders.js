@@ -13,7 +13,7 @@ const {
 } = require('../modules/orders/orders.controller');
 const { protect, authorize } = require('../middleware/auth');
 const prepareQuery = require('../middleware/prepareQuery');
-const checkIfRelatedAssetsExist = require('../middleware/checkIfRelatedAssetsExist');
+const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist');
 const Player = require('../models/player.model');
 const ordersMiddleware = require('../modules/orders/orders.middleware');
 
@@ -21,11 +21,7 @@ const router = express.Router({ mergeParams: true });
 
 router.post(
   '/',
-  [
-    protect,
-    authorize('admin'),
-    checkIfRelatedAssetsExist([{ fieldName: 'player', model: Player }]),
-  ],
+  [protect, authorize('admin'), checkIfRelatedAssetExist({ fieldName: 'player', model: Player })],
   createOrder
 );
 router.get(

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const toJson = require('@meanie/mongoose-to-json');
-const voivodeships = require('../utils/voivodeships');
+const voivodeships = require('../../utils/voivodeships');
 
 const { Schema, model } = mongoose;
 

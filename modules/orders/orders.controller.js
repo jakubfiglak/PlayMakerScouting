@@ -26,10 +26,12 @@ exports.getOrders = asyncHandler(async (req, res) => {
     req.query.player = playerId;
   }
 
+  const { query, paginationOptions, accessFilters } = req;
+
   const orders = await ordersService.getAllOrders({
-    query: req.query,
-    paginationOptions: req.paginationOptions,
-    accessFilters: req.accessFilters,
+    query,
+    paginationOptions,
+    accessFilters,
   });
 
   return res.status(httpStatus.OK).json({
@@ -42,9 +44,11 @@ exports.getOrders = asyncHandler(async (req, res) => {
 // @route GET /api/v1/orders/my
 // @access Private (admin and playmaker-scout only)
 exports.getMyOrders = asyncHandler(async (req, res) => {
+  const { query, paginationOptions } = req;
+
   const orders = await ordersService.getMyOrders({
-    query: req.query,
-    paginationOptions: req.paginationOptions,
+    query,
+    paginationOptions,
     userId: req.user._id,
   });
 

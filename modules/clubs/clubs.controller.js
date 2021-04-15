@@ -1,16 +1,13 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
-const clubsService = require('../services/clubs.service');
-const isAdmin = require('../utils/isAdmin');
+const clubsService = require('./clubs.service');
+const isAdmin = require('../../utils/isAdmin');
 
 // @desc Create new club
 // @route POST /api/v1/clubs
 // @access Private (admin only)
 exports.createClub = asyncHandler(async (req, res) => {
-  const club = await clubsService.createClub({
-    clubData: req.body,
-    userId: req.user._id,
-  });
+  const club = await clubsService.createClub(req.body);
 
   res.status(httpStatus.CREATED).json({
     success: true,
@@ -23,16 +20,8 @@ exports.createClub = asyncHandler(async (req, res) => {
 // @route GET /api/v1/clubs
 // @access Private
 exports.getClubs = asyncHandler(async (req, res) => {
-  let clubs;
-
-  if (isAdmin(req.user.role)) {
-    clubs = await clubsService.getAllClubs(req.query);
-  } else {
-    clubs = await clubsService.getClubsWithAuthorization({
-      reqQuery: req.query,
-      userId: req.user._id,
-    });
-  }
+  const { query, paginationOptions, accessFilters } = req;
+  const clubs = await clubsService.getAllClubs({ query, paginationOptions, accessFilters });
 
   res.status(httpStatus.OK).json({
     success: true,
@@ -44,13 +33,7 @@ exports.getClubs = asyncHandler(async (req, res) => {
 // @route GET /api/v1/clubs/list
 // @access Private
 exports.getClubsList = asyncHandler(async (req, res) => {
-  let clubs;
-
-  if (isAdmin(req.user.role)) {
-    clubs = await clubsService.getAllClubsList();
-  } else {
-    clubs = await clubsService.getClubsListWithAuthorization(req.user._id);
-  }
+  const clubs = await clubsService.getAllClubsList(req.accessFilters);
 
   return res.status(httpStatus.OK).json({
     success: true,
@@ -63,15 +46,9 @@ exports.getClubsList = asyncHandler(async (req, res) => {
 // @route GET /api/v1/clubs/:id
 // @access Private
 exports.getClub = asyncHandler(async (req, res) => {
-  const club = await clubsService.getClub({
-    clubId: req.params.id,
-    userId: req.user._id,
-    userRole: req.user.role,
-  });
-
   res.status(httpStatus.OK).json({
     success: true,
-    data: club,
+    data: req.club,
   });
 });
 
@@ -82,10 +59,8 @@ exports.updateClub = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const club = await clubsService.updateClub({
-    clubId: id,
-    clubData: req.body,
-    userId: req.user._id,
-    userRole: req.user.role,
+    club: req.club,
+    reqBody: req.body,
   });
 
   res.status(httpStatus.OK).json({
@@ -99,25 +74,25 @@ exports.updateClub = asyncHandler(async (req, res) => {
 // @route DELETE /api/v1/clubs/:id
 // @access Private
 exports.deleteClub = asyncHandler(async (req, res) => {
-  const clubId = req.params.id;
+  const { id } = req.params;
 
-  await clubsService.deleteClub({ clubId, userId: req.user._id, userRole: req.user.role });
+  await clubsService.deleteClub(req.club);
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: `Club with the id of ${clubId} successfully removed!`,
-    data: clubId,
+    message: `Club with the id of ${id} successfully removed!`,
+    data: id,
   });
 });
 
 // @desc Grant user with an access to a specific club
-// @route POST /api/v1/clubs/grantaccess
+// @route POST /api/v1/clubs/:id/grantaccess
 // @access Private (admin only)
 exports.grantAccess = asyncHandler(async (req, res) => {
   const userId = req.body.user;
-  const clubId = req.body.club;
+  const clubId = req.params.id;
 
-  await clubsService.grantAccess({ clubId, userId });
+  await clubsService.grantAccess({ club: req.club, userId });
 
   res.status(httpStatus.OK).json({
     success: true,
