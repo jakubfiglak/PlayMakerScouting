@@ -1,10 +1,4 @@
-const dbService = require('../../services/db.service');
 const Club = require('./club.model');
-const { checkAuthorization } = require('../../utils/checkAuthorization');
-const filterForbiddenUpdates = require('../../utils/filterForbiddenUpdates');
-const checkIfAssetExists = require('../../utils/checkIfAssetExists');
-const checkIfUserHasAccessToTheAsset = require('../../utils/checkIfUserHasAccessToTheAsset');
-const checkDbRelations = require('../../utils/checkDbRelations');
 
 async function createClub(clubData) {
   const club = await Club.create(clubData);

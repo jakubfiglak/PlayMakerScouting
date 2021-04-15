@@ -1,5 +1,5 @@
 const Player = require('../player.model');
-const { buildPlayer } = require('../../test/utils');
+const { buildPlayer } = require('../../../test/utils');
 
 it('should correctly validate a valid player', async () => {
   const player = buildPlayer();

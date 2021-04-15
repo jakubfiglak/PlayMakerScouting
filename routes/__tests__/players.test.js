@@ -55,7 +55,7 @@ describe('POST /api/v1/players', () => {
     expect(response.data.data.id).toBe(player._id.toHexString());
     expect(response.data.data.club).toMatchObject({ name: club.name, division: club.division });
 
-    // Check if the authors id have beeen successfully put into authorizedUsers array
+    // Check if the authors id has beeen successfully put into authorizedUsers array
     const createdPlayer = await dbService.getPlayerById(player._id);
     expect(createdPlayer.authorizedUsers).toContainEqual(testUser._id);
   });
@@ -216,16 +216,16 @@ describe('GET /api/v1/players/:id', () => {
     expect(response.data.data.lastName).toBe(player.lastName);
   });
 
-  it('should return a 401 error if user is not authorized to get club data', async () => {
+  it('should return a 403 error if user is not authorized to get club data', async () => {
     const player = buildPlayer();
     await insertPlayers([player]);
 
     const { response } = await api.get(`players/${player._id}`).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toMatchInlineSnapshot(
-      '"You don\'t have access to the asset you\'ve requested"'
+      '"You don\'t have access to the player you\'ve requsted"'
     );
   });
 });
@@ -241,14 +241,14 @@ describe('PUT /api/v1/players/:id', () => {
     );
   });
 
-  it('should return 401 error if user is not authorized to edit player data', async () => {
+  it('should return 403 error if user is not authorized to edit player data', async () => {
     const player = buildPlayer();
 
     await insertPlayers([player]);
 
     const { response } = await api.put(`players/${player._id}`, {}).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toContain("You don't have access");
   });
@@ -281,28 +281,28 @@ describe('PUT /api/v1/players/:id', () => {
 });
 
 describe('DELETE /api/v1/clubs/:id', () => {
-  it('should return 400 error if the player is related to at least one order document', async () => {
+  it('should return 403 error if the player is related to at least one order document', async () => {
     const player = buildPlayer({ authorizedUsers: [testUser._id] });
     const order = buildOrder({ player: player._id });
     await Promise.all([insertPlayers([player]), insertOrders([order])]);
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toMatchInlineSnapshot(
       '"You cannot delete a player with existing relations to order documents"'
     );
   });
 
-  it('should return 400 error if the player is related to at least one report document', async () => {
+  it('should return 403 error if the player is related to at least one report document', async () => {
     const player = buildPlayer({ authorizedUsers: [testUser._id] });
     const report = buildReport({ scout: testUser._id, player: player._id });
     await Promise.all([insertPlayers([player]), insertReports([report])]);
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toMatchInlineSnapshot(
       '"You cannot delete a player with existing relations to report documents"'
@@ -325,7 +325,7 @@ describe('DELETE /api/v1/clubs/:id', () => {
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toContain("You don't have access");
   });
@@ -343,7 +343,7 @@ describe('DELETE /api/v1/clubs/:id', () => {
   });
 });
 
-describe('POST /api/v1/players/grantaccess', () => {
+describe('POST /api/v1/players/:id/grantaccess', () => {
   it('should return 404 error if user does not exist', async () => {
     const { token } = await insertTestUser({ role: 'admin' });
     const player = buildPlayer();
@@ -351,17 +351,16 @@ describe('POST /api/v1/players/grantaccess', () => {
 
     const requestBody = {
       user: new mongoose.Types.ObjectId().toHexString(),
-      player: player._id,
     };
 
     const { response } = await api
-      .post('players/grantaccess', requestBody, {
+      .post(`players/${player._id}/grantaccess`, requestBody, {
         headers: { Cookie: `token=${token}` },
       })
       .catch((e) => e);
     expect(response.status).toBe(httpStatus.NOT_FOUND);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain('user not found');
+    expect(response.data.error).toContain('not found');
   });
 
   it('should return 404 error if player does not exist', async () => {
@@ -369,13 +368,14 @@ describe('POST /api/v1/players/grantaccess', () => {
     const user = buildUser();
     await insertUsers([user]);
 
+    const id = new mongoose.Types.ObjectId().toHexString();
+
     const requestBody = {
       user: user._id,
-      player: new mongoose.Types.ObjectId().toHexString(),
     };
 
     const { response } = await api
-      .post('players/grantaccess', requestBody, {
+      .post(`players/${id}/grantaccess`, requestBody, {
         headers: { Cookie: `token=${token}` },
       })
       .catch((e) => e);
@@ -392,11 +392,10 @@ describe('POST /api/v1/players/grantaccess', () => {
 
     const requestBody = {
       user: user._id,
-      player: player._id,
     };
 
     const { response } = await api
-      .post('players/grantaccess', requestBody, {
+      .post(`players/${player._id}/grantaccess`, requestBody, {
         headers: { Cookie: `token=${token}` },
       })
       .catch((e) => e);
@@ -413,10 +412,9 @@ describe('POST /api/v1/players/grantaccess', () => {
 
     const requestBody = {
       user: user._id,
-      player: player._id,
     };
 
-    const response = await api.post('players/grantaccess', requestBody, {
+    const response = await api.post(`players/${player._id}/grantaccess`, requestBody, {
       headers: { Cookie: `token=${token}` },
     });
     expect(response.status).toBe(httpStatus.OK);

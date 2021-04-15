@@ -30,7 +30,7 @@ function canAccessBeGranted(req, res, next) {
   if (req.club.authorizedUsers.includes(userId)) {
     return next(
       new ApiError(
-        `User with the id of ${userId} already has access to the $club with the id of ${id}`,
+        `User with the id of ${userId} already has access to the club with the id of ${id}`,
         httpStatus.BAD_REQUEST
       )
     );

@@ -14,7 +14,7 @@ const {
 const { protect, authorize } = require('../middleware/auth');
 const prepareQuery = require('../middleware/prepareQuery');
 const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist');
-const Player = require('../models/player.model');
+const Player = require('../modules/players/player.model');
 const ordersMiddleware = require('../modules/orders/orders.middleware');
 
 const router = express.Router({ mergeParams: true });

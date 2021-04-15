@@ -1,4 +1,4 @@
-const Player = require('../models/player.model');
+const Player = require('../modules/players/player.model');
 const Club = require('../modules/clubs/club.model');
 const User = require('../models/user.model');
 const Order = require('../modules/orders/order.model');
