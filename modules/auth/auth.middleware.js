@@ -1,11 +1,11 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const jwt = require('jsonwebtoken');
-const dbService = require('../../services/db.service');
+const usersService = require('../users/users.service');
 const ApiError = require('../../utils/ApiError');
 
 const checkIfEmailIsTaken = asyncHandler(async (req, res, next) => {
-  const user = await dbService.getUserByEmail(req.body.email);
+  const user = await usersService.getUserByEmail(req.body.email);
   if (user) {
     return next(new ApiError('User already exists', httpStatus.BAD_REQUEST));
   }
@@ -31,7 +31,7 @@ function assignConfirmationCode(req, res, next) {
 }
 
 const checkIfUserWithConfirmationCodeExists = asyncHandler(async (req, res, next) => {
-  const user = await dbService.getUserByConfirmationCode(req.params.confirmationCode);
+  const user = await usersService.getUserByConfirmationCode(req.params.confirmationCode);
   if (!user) {
     return next(new ApiError('User not found', httpStatus.NOT_FOUND));
   }
@@ -50,7 +50,7 @@ function validateLoginData(req, res, next) {
 }
 
 const checkIfUserExists = asyncHandler(async (req, res, next) => {
-  const user = await dbService.getUserByEmail(req.body.email);
+  const user = await usersService.getUserByEmail(req.body.email);
   if (!user) {
     return next(new ApiError('Invalid credentials', httpStatus.UNAUTHORIZED));
   }
@@ -78,7 +78,7 @@ function comparePasswords(fieldName) {
 }
 
 const setUser = asyncHandler(async (req, res, next) => {
-  const user = await dbService.getUserById(req.user._id);
+  const user = await usersService.getUserById(req.user._id);
   if (!user) {
     return next(
       new ApiError(`User not found with the id of ${req.user._id}`, httpStatus.NOT_FOUND)

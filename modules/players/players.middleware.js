@@ -3,7 +3,8 @@ const httpStatus = require('http-status');
 const Player = require('./player.model');
 const options = require('./options');
 const setAsset = require('../../middleware/setAsset');
-const dbService = require('../../services/db.service');
+const ordersService = require('../orders/orders.service');
+const reportsService = require('../reports/reports.service');
 const ApiError = require('../../utils/ApiError');
 
 const setPlayer = setAsset({ name: 'player', model: Player, populate: options.populate });
@@ -11,8 +12,8 @@ const setPlayer = setAsset({ name: 'player', model: Player, populate: options.po
 const canBeDeleted = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  const ordersOperations = dbService.getOrdersForPlayer(id);
-  const reportsOperations = dbService.getReportsForPlayer(id);
+  const ordersOperations = ordersService.getOrdersForPlayer(id);
+  const reportsOperations = reportsService.getReportsForPlayer(id);
 
   const results = await Promise.all([ordersOperations, reportsOperations]);
 

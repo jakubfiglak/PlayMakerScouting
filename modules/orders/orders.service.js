@@ -1,6 +1,15 @@
 const Order = require('./order.model');
 const resultsOptions = require('./options');
 
+function getOrderById(id) {
+  return Order.findById(id);
+}
+
+async function getOrdersForPlayer(playerId) {
+  const orders = await Order.find({ player: playerId });
+  return orders;
+}
+
 async function createOrder(orderData) {
   let order = await Order.create(orderData);
   order = await order.populate(resultsOptions.populatePlayer).execPopulate();
@@ -100,4 +109,6 @@ module.exports = {
   rejectAcceptedOrder,
   closeOrder,
   deleteOrder,
+  getOrderById,
+  getOrdersForPlayer,
 };

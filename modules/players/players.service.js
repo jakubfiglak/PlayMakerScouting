@@ -1,6 +1,15 @@
 const Player = require('./player.model');
 const resultsOptions = require('./options');
 
+function getPlayerById(id) {
+  return Player.findById(id);
+}
+
+async function getPlayersForClub(clubId) {
+  const players = await Player.find({ club: clubId });
+  return players;
+}
+
 async function createPlayer(playerData) {
   let player = await Player.create(playerData);
   player = await player.populate(resultsOptions.populate).execPopulate();
@@ -53,4 +62,6 @@ module.exports = {
   updatePlayer,
   deletePlayer,
   grantAccess,
+  getPlayerById,
+  getPlayersForClub,
 };

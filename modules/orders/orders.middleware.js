@@ -4,7 +4,8 @@ const Order = require('./order.model');
 const options = require('./options');
 const ApiError = require('../../utils/ApiError');
 const isAdmin = require('../../utils/isAdmin');
-const dbService = require('../../services/db.service');
+const playersService = require('../players/players.service');
+const clubsService = require('../clubs/clubs.service');
 const setAsset = require('../../middleware/setAsset');
 
 function canView(req, res, next) {
@@ -51,7 +52,7 @@ const grantAccessToAPlayer = asyncHandler(async (req, res, next) => {
   if (isAdmin(req.user.role)) {
     return next();
   }
-  const player = await dbService.getPlayerById(req.order.player._id);
+  const player = await playersService.getPlayerById(req.order.player._id);
 
   if (player.authorizedUsers.includes(req.user._id)) {
     return next();
@@ -69,7 +70,7 @@ const grantAccessToAClub = asyncHandler(async (req, res, next) => {
     return next();
   }
 
-  const club = await dbService.getClubById(clubId);
+  const club = await clubsService.getClubById(clubId);
 
   if (club.authorizedUsers.includes(req.user._id)) {
     return next();

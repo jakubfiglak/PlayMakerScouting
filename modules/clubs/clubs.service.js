@@ -1,5 +1,9 @@
 const Club = require('./club.model');
 
+function getClubById(id) {
+  return Club.findById(id);
+}
+
 async function createClub(clubData) {
   const club = await Club.create(clubData);
   return club;
@@ -47,4 +51,5 @@ module.exports = {
   updateClub,
   deleteClub,
   grantAccess,
+  getClubById,
 };

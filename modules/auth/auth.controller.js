@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const authService = require('./auth.service');
-const dbService = require('../../services/db.service');
+const usersService = require('../users/users.service');
 const options = require('./options');
 
 // @desc Register user
@@ -53,7 +53,7 @@ exports.login = asyncHandler(async (req, res) => {
 // @route GET /api/v1/auth/account
 // @access Private
 exports.account = asyncHandler(async (req, res) => {
-  const user = await dbService.getUserById(req.user._id);
+  const user = await usersService.getUserById(req.user._id);
 
   res.status(200).json({
     success: true,
