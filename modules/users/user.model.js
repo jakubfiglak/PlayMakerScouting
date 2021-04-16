@@ -68,9 +68,9 @@ const UserSchema = new Schema(
       enum: ['pending', 'active', 'blocked'],
       default: 'pending',
     },
-    confirmationCode: String,
-    resetPasswordToken: String,
-    resetPasswordExpires: Date,
+    confirmationCode: { type: String, private: true },
+    resetPasswordToken: { type: String, private: true },
+    resetPasswordExpires: { type: Date, private: true },
   },
   { timestamps: true }
 );

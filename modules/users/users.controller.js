@@ -1,21 +1,12 @@
 const asyncHandler = require('express-async-handler');
-const User = require('./user.model');
-const ApiError = require('../../utils/ApiError');
-const prepareQuery = require('../../utils/prepareQuery');
+const usersService = require('./users.service');
 
 // @desc Get all users
 // @route GET /api/v1/users
 // @access Private (admin only)
 exports.getUsers = asyncHandler(async (req, res) => {
-  const reqQuery = prepareQuery(req.query);
-
-  const options = {
-    sort: req.query.sort || '_id',
-    limit: req.query.limit || 20,
-    page: req.query.page || 1,
-  };
-
-  const users = await User.paginate(reqQuery, options);
+  const { query, paginationOptions } = req;
+  const users = await usersService.getAllUsers({ query, paginationOptions });
 
   res.status(200).json({
     success: true,
@@ -27,7 +18,7 @@ exports.getUsers = asyncHandler(async (req, res) => {
 // @route GET /api/v1/users/list
 // @access Private (admin only)
 exports.getUsersList = asyncHandler(async (req, res) => {
-  const users = await User.find().select('firstName lastName email role');
+  const users = await usersService.getAllUsersList();
 
   res.status(200).json({
     success: true,
@@ -39,68 +30,23 @@ exports.getUsersList = asyncHandler(async (req, res) => {
 // @desc Get single user
 // @route GET /api/v1/users/:id
 // @access Private (admin only)
-exports.getUser = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-
-  const user = await User.findById(id);
-
-  if (!user) {
-    return next(new ApiError(`User not found with the id of ${id}`, 404));
-  }
-
+exports.getUser = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
-    data: user,
-  });
-});
-
-// @desc Delete user
-// @route DELETE /api/v1/users/:id
-// @access Private (admin only)
-exports.deleteUser = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-
-  const user = await User.findById(id);
-
-  if (!user) {
-    return next(new ApiError(`User not found with the id of ${id}`, 404));
-  }
-
-  await user.remove();
-
-  res.status(200).json({
-    success: true,
-    message: `User with the id of ${id} successfully removed!`,
+    data: req.userData,
   });
 });
 
 // @desc Make user a playmaker-scout
-// @route POST /api/v1/users/assignplaymaker
+// @route POST /api/v1/:id/users/assignplaymaker
 // @access Private (admin only)
-exports.assignPlaymakerRole = asyncHandler(async (req, res, next) => {
-  const userId = req.body.user;
-
-  const user = await User.findById(userId);
-
-  if (!user) {
-    return next(new ApiError(`User not found with the id of ${userId}`, 404));
-  }
-
-  if (user.role === 'playmaker-scout') {
-    return next(new ApiError(`User with the id of ${userId} is already a playmaker-scout`));
-  }
-
-  if (user.role === 'admin') {
-    return next(new ApiError(`User with the id of ${userId} is an admin`));
-  }
-
-  user.role = 'playmaker-scout';
-
-  await user.save();
+exports.assignPlaymakerRole = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const user = await usersService.assignPlaymakerRole(req.userData);
 
   res.status(200).json({
     success: true,
     data: user,
-    message: `Successfully assigned the role of 'playmaker-scout' to the user with the id of ${userId}`,
+    message: `Successfully assigned the role of 'playmaker-scout' to the user with the id of ${id}`,
   });
 });
