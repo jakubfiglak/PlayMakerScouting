@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const User = require('../models/user.model');
+const User = require('../modules/users/user.model');
 const Club = require('../modules/clubs/club.model');
 const Player = require('../modules/players/player.model');
 const Order = require('../modules/orders/order.model');

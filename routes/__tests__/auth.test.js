@@ -10,7 +10,7 @@ const {
 } = require('../../test/utils');
 const { insertUsers, insertTestUser } = require('../../test/db-utils');
 const emailService = require('../../modules/email/email.service');
-const User = require('../../models/user.model');
+const User = require('../../modules/users/user.model');
 
 jest.mock('../../services/email.service.js');
 

@@ -17,7 +17,7 @@ const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
 const { setClub, canBeDeleted, canAccessBeGranted } = require('../modules/clubs/clubs.middleware');
 const options = require('../modules/clubs/options');
-const User = require('../models/user.model');
+const User = require('../modules/users/user.model');
 
 const playersRouter = require('./players');
 

@@ -1,6 +1,6 @@
 const cases = require('jest-in-case');
 const User = require('../user.model');
-const { buildUser } = require('../../test/utils');
+const { buildUser } = require('../../../test/utils');
 
 it('should correctly validate a valid user', async () => {
   const newUser = buildUser();

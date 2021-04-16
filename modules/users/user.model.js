@@ -4,7 +4,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const toJson = require('@meanie/mongoose-to-json');
-const voivodeships = require('../utils/voivodeships');
+const voivodeships = require('../../utils/voivodeships');
 
 const { Schema, model } = mongoose;
 

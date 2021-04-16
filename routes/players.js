@@ -11,7 +11,7 @@ const {
   grantAccess,
 } = require('../modules/players/players.controller');
 const Club = require('../modules/clubs/club.model');
-const User = require('../models/user.model');
+const User = require('../modules/users/user.model');
 const options = require('../modules/players/options');
 const {
   setPlayer,

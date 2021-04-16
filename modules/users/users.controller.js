@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
-const User = require('../models/user.model');
-const ApiError = require('../utils/ApiError');
-const prepareQuery = require('../utils/prepareQuery');
+const User = require('./user.model');
+const ApiError = require('../../utils/ApiError');
+const prepareQuery = require('../../utils/prepareQuery');
 
 // @desc Get all users
 // @route GET /api/v1/users

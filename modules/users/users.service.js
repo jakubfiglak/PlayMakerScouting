@@ -1,4 +1,4 @@
-const User = require('../models/user.model');
+const User = require('./user.model');
 
 function createUser(reqBody) {
   return User.create(reqBody);

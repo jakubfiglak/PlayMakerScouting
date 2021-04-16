@@ -5,7 +5,7 @@ const {
   getUsersList,
   deleteUser,
   assignPlaymakerRole,
-} = require('../controllers/users.controller');
+} = require('../modules/users/users.controller');
 const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router();
