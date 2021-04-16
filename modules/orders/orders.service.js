@@ -1,5 +1,6 @@
 const Order = require('./order.model');
 const resultsOptions = require('./options');
+const { populatePlayer } = require('./options');
 
 function getOrderById(id) {
   return Order.findById(id);
@@ -99,6 +100,17 @@ async function deleteOrder(order) {
   await order.remove();
 }
 
+function getOrdersCountByStatus({ accessFilters, status }) {
+  return Order.countDocuments({ ...accessFilters, status });
+}
+
+function getLatestOrder() {
+  return Order.find({ status: 'open' })
+    .sort(resultsOptions.latestSort)
+    .limit(1)
+    .populate(populatePlayer);
+}
+
 module.exports = {
   createOrder,
   getAllOrders,
@@ -111,4 +123,6 @@ module.exports = {
   deleteOrder,
   getOrderById,
   getOrdersForPlayer,
+  getOrdersCountByStatus,
+  getLatestOrder,
 };

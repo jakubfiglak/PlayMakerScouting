@@ -44,6 +44,10 @@ async function grantAccess({ club, userId }) {
   await club.save();
 }
 
+function getClubsCount(accessFilters) {
+  return Club.countDocuments(accessFilters);
+}
+
 module.exports = {
   createClub,
   getAllClubs,
@@ -52,4 +56,5 @@ module.exports = {
   deleteClub,
   grantAccess,
   getClubById,
+  getClubsCount,
 };

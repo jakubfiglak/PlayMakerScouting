@@ -55,6 +55,10 @@ async function grantAccess({ player, userId }) {
   await player.save();
 }
 
+function getPlayersCount(accessFilters) {
+  return Player.countDocuments(accessFilters);
+}
+
 module.exports = {
   createPlayer,
   getAllPlayers,
@@ -64,4 +68,5 @@ module.exports = {
   grantAccess,
   getPlayerById,
   getPlayersForClub,
+  getPlayersCount,
 };

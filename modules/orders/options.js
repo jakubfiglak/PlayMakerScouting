@@ -6,6 +6,7 @@ const options = {
   },
   populateScout: { path: 'scout', select: ['firstName', 'lastName'] },
   listSelect: 'player club orderNo createdAt docNumber',
+  latestSort: '-createdAt',
 };
 
 module.exports = options;

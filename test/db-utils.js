@@ -3,7 +3,7 @@ const User = require('../modules/users/user.model');
 const Club = require('../modules/clubs/club.model');
 const Player = require('../modules/players/player.model');
 const Order = require('../modules/orders/order.model');
-const Report = require('../models/report.model');
+const Report = require('../modules/reports/report.model');
 const { buildUser } = require('./utils');
 
 const salt = bcrypt.genSaltSync(10);

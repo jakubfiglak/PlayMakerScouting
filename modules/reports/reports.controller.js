@@ -1,10 +1,10 @@
 const asyncHandler = require('express-async-handler');
-const Report = require('../models/report.model');
-const Player = require('../modules/players/player.model');
-const Order = require('../modules/orders/order.model');
-const ApiError = require('../utils/ApiError');
-const prepareQuery = require('../utils/prepareQuery');
-const getIndividualSkillsProps = require('../utils/getIndividualSkillsProps');
+const Report = require('./report.model');
+const Player = require('../players/player.model');
+const Order = require('../orders/order.model');
+const ApiError = require('../../utils/ApiError');
+const prepareQuery = require('../../utils/prepareQuery');
+const getIndividualSkillsProps = require('../../utils/getIndividualSkillsProps');
 
 const populate = [
   {

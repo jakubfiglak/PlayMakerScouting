@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
-const calculateReportAvg = require('../middleware/calculateReportAvg');
+const calculateReportAvg = require('../../middleware/calculateReportAvg');
 
 const { Schema, model } = mongoose;
 
