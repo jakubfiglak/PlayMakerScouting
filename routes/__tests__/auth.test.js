@@ -9,7 +9,7 @@ const {
   buildUpdatePasswordForm,
 } = require('../../test/utils');
 const { insertUsers, insertTestUser } = require('../../test/db-utils');
-const emailService = require('../../services/email.service');
+const emailService = require('../../modules/email/email.service');
 const User = require('../../models/user.model');
 
 jest.mock('../../services/email.service.js');

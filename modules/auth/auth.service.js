@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const emailService = require('../../services/email.service');
+const emailService = require('../email/email.service');
 const User = require('../../models/user.model');
 
 async function registerUser({ reqBody, host }) {
