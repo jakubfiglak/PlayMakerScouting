@@ -17,6 +17,6 @@ router.use(authorize('admin'));
 router.get('/', prepareQuery, getUsers);
 router.get('/list', getUsersList);
 router.get('/:id', setUser, getUser);
-router.post('/:id/assignplaymaker', [setUser, checkRole], assignPlaymakerRole);
+router.post('/:id/assignplaymaker', [setUser, checkRole(['scout'])], assignPlaymakerRole);
 
 module.exports = router;

@@ -5,7 +5,8 @@ const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
 const { buildClub, buildPlayer, buildOrder } = require('../../test/utils');
 const { insertClubs, insertTestUser, insertPlayers, insertOrders } = require('../../test/db-utils');
-const dbService = require('../../services/db.service');
+const playersService = require('../../modules/players/players.service');
+const clubsService = require('../../modules/clubs/clubs.service');
 
 let api = axios.create();
 let server;
@@ -240,11 +241,11 @@ describe('POST /api/v1/orders/:id/accept', () => {
     expect(response.data.data.status).toBe('accepted');
 
     // Check if users id has been added to players authorizedUsers array
-    const dbPlayer = await dbService.getPlayerById(player._id);
+    const dbPlayer = await playersService.getPlayerById(player._id);
     expect(dbPlayer.authorizedUsers).toContainEqual(testUser._id);
 
     // Check if users id has been added to clubs authorizedUsers array
-    const dbClub = await dbService.getClubById(club._id);
+    const dbClub = await clubsService.getClubById(club._id);
     expect(dbClub.authorizedUsers).toContainEqual(testUser._id);
   });
 });

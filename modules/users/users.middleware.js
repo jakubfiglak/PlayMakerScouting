@@ -8,7 +8,7 @@ const setUser = setAsset({ name: 'userData', model: User });
 function checkRole(allowedRoles) {
   return (req, res, next) => {
     const { role } = req.userData;
-    if (!allowedRoles.includes(req.order.status)) {
+    if (!allowedRoles.includes(role)) {
       return next(
         new ApiError(
           `You cannot perform this operation on a user with the role of ${role}`,
