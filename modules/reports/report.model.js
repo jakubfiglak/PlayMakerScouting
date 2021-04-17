@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+const toJson = require('@meanie/mongoose-to-json');
 const calculateReportAvg = require('../../middleware/calculateReportAvg');
 
 const { Schema, model } = mongoose;
@@ -115,6 +116,7 @@ const ReportSchema = new Schema(
 
 ReportSchema.plugin(mongoosePaginate);
 ReportSchema.plugin(AutoIncrement, { inc_field: 'reportNo', start_seq: 50 });
+ReportSchema.plugin(toJson);
 
 ReportSchema.virtual('docNumber').get(function () {
   const date = new Date(this.createdAt);

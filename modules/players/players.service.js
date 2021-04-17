@@ -41,7 +41,7 @@ async function updatePlayer({ player, reqBody }) {
   });
 
   let modifiedPlayer = await editedPlayer.save();
-  modifiedPlayer = await player.populate(resultsOptions.populate).execPopulate();
+  modifiedPlayer = await editedPlayer.populate(resultsOptions.populate).execPopulate();
 
   return modifiedPlayer;
 }

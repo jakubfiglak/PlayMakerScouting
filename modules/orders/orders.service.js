@@ -3,7 +3,7 @@ const resultsOptions = require('./options');
 const { populatePlayer } = require('./options');
 
 function getOrderById(id) {
-  return Order.findById(id);
+  return Order.findById(id).populate(resultsOptions.populatePlayer);
 }
 
 async function getOrdersForPlayer(playerId) {

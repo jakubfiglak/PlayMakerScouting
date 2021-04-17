@@ -3,9 +3,7 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
-const { buildUser } = require('../../test/utils');
-const { insertTestUser, insertUsers } = require('../../test/db-utils');
-const usersService = require('../../modules/users/users.service');
+const { insertTestUser } = require('../../test/db-utils');
 
 let api = axios.create();
 let server;
@@ -21,6 +19,8 @@ beforeEach(async () => {
   const { token } = await insertTestUser({ role: 'admin' });
   api = axios.create({ baseURL, headers: { Cookie: `token=${token}` } });
 });
+
+// TODO: test this route when reports are refactored
 
 describe('GET /api/v1/dashboard', () => {
   it('should work', async () => {
