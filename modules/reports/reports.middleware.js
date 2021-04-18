@@ -22,6 +22,8 @@ const setOrderData = asyncHandler(async (req, res, next) => {
       return next(new ApiError(`Order not found with the id of ${orderId}`, httpStatus.NOT_FOUND));
     }
     req.orderData = order;
+  } else {
+    req.body.order = undefined;
   }
   next();
 });
@@ -37,7 +39,7 @@ function checkOrderStatus(req, res, next) {
         )
       );
     }
-    if (scout !== req.user._id) {
+    if (scout.toHexString() !== req.user._id) {
       return next(
         new ApiError(
           "You cannot create a report linked to the order you haven't accepted",

@@ -12,6 +12,7 @@ function setAccessFilters(req, res, next) {
     playersAndClubs: { authorizedUsers: req.user._id },
     ordersAndReports: { scout: req.user._id },
   };
+  next();
 }
 
 module.exports = { setAccessFilters };

@@ -36,8 +36,8 @@ router.put(
     protect,
     setReport,
     checkAccessPermission,
-    filterForbiddenUpdates(options.forbiddenUpdates),
     setPlayerData,
+    filterForbiddenUpdates(options.forbiddenUpdates),
     setIndividualSkills,
   ],
   updateReport
