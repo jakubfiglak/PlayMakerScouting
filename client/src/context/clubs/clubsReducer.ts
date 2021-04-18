@@ -36,7 +36,7 @@ export default (state: State, action: Action): State => {
         },
         clubsList: [
           ...state.clubsList,
-          { _id: action.payload.club._id, name: action.payload.club.name },
+          { id: action.payload.club.id, name: action.payload.club.name },
         ],
       };
 
@@ -49,11 +49,11 @@ export default (state: State, action: Action): State => {
         clubsData: {
           ...state.clubsData,
           docs: state.clubsData.docs.map((club) =>
-            club._id === action.payload.club._id ? action.payload.club : club,
+            club.id === action.payload.club.id ? action.payload.club : club,
           ),
         },
         clubsList: state.clubsList.map((club) =>
-          club._id === action.payload.club._id
+          club.id === action.payload.club.id
             ? { ...club, name: action.payload.club.name }
             : club,
         ),

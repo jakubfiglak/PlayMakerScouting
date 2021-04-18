@@ -5,7 +5,7 @@ export type Position = 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
 export type Foot = 'L' | 'R' | 'both';
 
 export type Player = {
-  _id: string;
+  id: string;
   firstName: string;
   lastName: string;
   position: Position;
@@ -14,7 +14,7 @@ export type Player = {
   weight?: number;
   footed: Foot;
   club: {
-    _id: string;
+    id: string;
     name: string;
     division: Division;
   };
@@ -26,10 +26,10 @@ export type Player = {
 
 export type PlayerBasicInfo = Pick<
   Player,
-  '_id' | 'firstName' | 'lastName' | 'position' | 'club'
+  'id' | 'firstName' | 'lastName' | 'position' | 'club'
 >;
 
-export type PlayersFormData = Omit<Player, '_id' | 'club'> & {
+export type PlayersFormData = Omit<Player, 'id' | 'club'> & {
   club: string;
 };
 
@@ -43,6 +43,8 @@ export type GrantAccessFormData = {
   user: string;
   player: string;
 };
+
+export type GrantAccessArgs = { userId: string; playerId: string };
 
 export type GetPlayers = (
   page: number,
@@ -66,7 +68,7 @@ export type State = {
   getPlayer: (id: string) => void;
   addPlayer: (player: PlayersFormData) => void;
   editPlayer: (id: string, data: PlayersFormData) => void;
-  grantAccess: (data: GrantAccessFormData) => void;
+  grantAccess: ({ playerId, userId }: GrantAccessArgs) => void;
   setCurrent: (player: Player) => void;
   clearCurrent: () => void;
 };

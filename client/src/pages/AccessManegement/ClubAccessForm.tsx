@@ -8,13 +8,17 @@ import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
 import { FormContainer } from '../../components/FormContainer';
 // Types
-import { ClubBasicInfo, GrantAccessFormData } from '../../types/clubs';
+import {
+  ClubBasicInfo,
+  GrantAccessFormData,
+  GrantAccessArgs,
+} from '../../types/clubs';
 import { UserBasicInfo } from '../../types/users';
 
 type Props = {
   usersData: UserBasicInfo[];
   clubsData: ClubBasicInfo[];
-  onSubmit: (data: GrantAccessFormData) => void;
+  onSubmit: ({ clubId, userId }: GrantAccessArgs) => void;
 };
 
 export const ClubAccessForm = ({ usersData, clubsData, onSubmit }: Props) => {
@@ -29,7 +33,7 @@ export const ClubAccessForm = ({ usersData, clubsData, onSubmit }: Props) => {
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        onSubmit(data);
+        onSubmit({ clubId: data.club, userId: data.user });
         resetForm();
       }}
     >

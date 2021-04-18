@@ -1,13 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // MUI components
-import {
-  IconButton,
-  Tooltip,
-  Link,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
 // MUI icons
 import { Edit as EditIcon, Search as SearchIcon } from '@material-ui/icons/';
 // Custom components
@@ -26,7 +20,7 @@ type Props = {
 export const PlayersTableRow = ({ player, handleSetCurrent }: Props) => {
   const classes = useStyles();
   const {
-    _id,
+    id: _id,
     firstName,
     lastName,
     club,

@@ -1,0 +1,44 @@
+const User = require('./user.model');
+const options = require('./options');
+
+function getUserById(id) {
+  return User.findById(id);
+}
+function getUserByConfirmationCode(confirmationCode) {
+  return User.findOne({ confirmationCode });
+}
+
+function createUser(reqBody) {
+  return User.create(reqBody);
+}
+
+function getUserByEmail(email) {
+  return User.findOne({ email });
+}
+
+async function getAllUsers({ query, paginationOptions }) {
+  const users = await User.paginate(query, paginationOptions);
+  return users;
+}
+
+async function getAllUsersList() {
+  const users = await User.find().select(options.listSelect);
+  return users;
+}
+
+async function assignPlaymakerRole(user) {
+  const editedUser = user;
+  editedUser.role = 'playmaker-scout';
+  const modifiedUser = await editedUser.save();
+  return modifiedUser;
+}
+
+module.exports = {
+  createUser,
+  getUserByEmail,
+  getUserByConfirmationCode,
+  getUserById,
+  getAllUsers,
+  getAllUsersList,
+  assignPlaymakerRole,
+};

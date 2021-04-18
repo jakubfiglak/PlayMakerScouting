@@ -27,9 +27,9 @@ export const UsersCombo = ({ usersData, label, size }: Props) => {
         setValue(newValue);
       }}
       value={value}
-      options={['', ...usersData.map((user) => user._id)]}
+      options={['', ...usersData.map((user) => user.id)]}
       getOptionLabel={(option) => {
-        const user = usersData.find((p) => p._id === option);
+        const user = usersData.find((p) => p.id === option);
         if (user) {
           const { email, role } = user;
           return `${email} (${role})`;

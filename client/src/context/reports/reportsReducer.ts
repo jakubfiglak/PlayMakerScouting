@@ -45,7 +45,7 @@ export default (state: State, action: Action): State => {
         reportsData: {
           ...state.reportsData,
           docs: state.reportsData.docs.map((report) =>
-            report._id === action.payload.report._id
+            report.id === action.payload.report.id
               ? action.payload.report
               : report,
           ),
@@ -61,7 +61,7 @@ export default (state: State, action: Action): State => {
         reportsData: {
           ...state.reportsData,
           docs: state.reportsData.docs.filter(
-            (report) => report._id !== action.payload.id,
+            (report) => report.id !== action.payload.id,
           ),
         },
       };

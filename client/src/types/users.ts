@@ -2,7 +2,7 @@ import { User } from './auth';
 
 export type UserBasicInfo = Pick<
   User,
-  '_id' | 'firstName' | 'lastName' | 'email' | 'role'
+  'id' | 'firstName' | 'lastName' | 'email' | 'role'
 >;
 
 export type AssignPlaymakerRoleData = {
@@ -16,7 +16,7 @@ export type State = {
   message: string | null;
   getUsersList: () => void;
   setLoading: () => void;
-  assignPlaymakerRole: (data: AssignPlaymakerRoleData) => void;
+  assignPlaymakerRole: (id: string) => void;
 };
 
 export type Action =

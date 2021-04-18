@@ -5,39 +5,80 @@ const {
   getOrder,
   acceptOrder,
   closeOrder,
+  rejectOrder,
   deleteOrder,
   getMyOrders,
   getMyOrdersForPlayer,
   getMyList,
-} = require('../controllers/ordersController');
+} = require('../modules/orders/orders.controller');
 const { protect, authorize } = require('../middleware/auth');
+const prepareQuery = require('../middleware/prepareQuery');
+const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist');
+const Player = require('../modules/players/player.model');
+const ordersMiddleware = require('../modules/orders/orders.middleware');
 
 const router = express.Router({ mergeParams: true });
 
-router.post('/', [protect, authorize('admin')], createOrder);
-router.get('/', [protect, authorize('admin', 'playmaker-scout')], getOrders);
-router.get(
-  '/my',
-  [protect, authorize('admin', 'playmaker-scout')],
-  getMyOrders
+router.post(
+  '/',
+  [protect, authorize('admin'), checkIfRelatedAssetExist({ fieldName: 'player', model: Player })],
+  createOrder
 );
 router.get(
-  '/mylist',
-  [protect, authorize('admin', 'playmaker-scout')],
-  getMyList
+  '/',
+  [protect, authorize('admin', 'playmaker-scout'), prepareQuery, ordersMiddleware.setAccessFilters],
+  getOrders
 );
-router.get('/:id', [protect, authorize('admin', 'playmaker-scout')], getOrder);
+router.get('/my', [protect, authorize('admin', 'playmaker-scout'), prepareQuery], getMyOrders);
+router.get('/mylist', [protect, authorize('admin', 'playmaker-scout')], getMyList);
 router.get(
-  '/my/:playerId',
-  [protect, authorize('admin', 'playmaker-scout')],
-  getMyOrdersForPlayer
+  '/:id',
+  [
+    protect,
+    authorize('admin', 'playmaker-scout'),
+    ordersMiddleware.setOrder,
+    ordersMiddleware.canView,
+  ],
+  getOrder
 );
+router.get('/my/:playerId', [protect, authorize('admin', 'playmaker-scout')], getMyOrdersForPlayer);
 router.post(
   '/:id/accept',
-  [protect, authorize('admin', 'playmaker-scout')],
+  [
+    protect,
+    authorize('admin', 'playmaker-scout'),
+    ordersMiddleware.setOrder,
+    ordersMiddleware.checkStatus(['open']),
+    ordersMiddleware.grantAccessToAPlayer,
+    ordersMiddleware.grantAccessToAClub,
+  ],
   acceptOrder
 );
-router.post('/:id/close', [protect, authorize('admin')], closeOrder);
-router.delete('/:id', [protect, authorize('admin')], deleteOrder);
+router.post(
+  '/:id/reject',
+  [
+    protect,
+    authorize('admin', 'playmaker-scout'),
+    ordersMiddleware.setOrder,
+    ordersMiddleware.checkStatus(['accepted']),
+    ordersMiddleware.canReject,
+  ],
+  rejectOrder
+);
+router.post(
+  '/:id/close',
+  [
+    protect,
+    authorize('admin'),
+    ordersMiddleware.setOrder,
+    ordersMiddleware.checkStatus(['accepted']),
+  ],
+  closeOrder
+);
+router.delete(
+  '/:id',
+  [protect, authorize('admin'), ordersMiddleware.setOrder, ordersMiddleware.checkStatus(['open'])],
+  deleteOrder
+);
 
 module.exports = router;

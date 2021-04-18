@@ -1,17 +1,12 @@
 const jwt = require('jsonwebtoken');
-const ErrorResponse = require('../utils/errorResponse');
+const ApiError = require('../utils/ApiError');
 
 // Route protection
 exports.protect = (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return next(
-      new ErrorResponse(
-        'User not authorized to access this route. No token provided',
-        401
-      )
-    );
+    return next(new ApiError('User not authorized to access this route. No token provided', 401));
   }
 
   try {
@@ -19,12 +14,7 @@ exports.protect = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    return next(
-      new ErrorResponse(
-        'User not authorized to access this route. Invalid token.',
-        401
-      )
-    );
+    return next(new ApiError('User not authorized to access this route. Invalid token.', 401));
   }
 };
 
@@ -33,12 +23,7 @@ exports.authorize = (...roles) => (req, res, next) => {
   const { role } = req.user;
 
   if (!roles.includes(role)) {
-    return next(
-      new ErrorResponse(
-        `User role ${role} is not authorized to access this route`,
-        403
-      )
-    );
+    return next(new ApiError(`User role ${role} is not authorized to access this route`, 403));
   }
 
   next();

@@ -8,13 +8,17 @@ import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
 import { FormContainer } from '../../components/FormContainer';
 // Types
-import { GrantAccessFormData, PlayerBasicInfo } from '../../types/players';
+import {
+  GrantAccessFormData,
+  PlayerBasicInfo,
+  GrantAccessArgs,
+} from '../../types/players';
 import { UserBasicInfo } from '../../types/users';
 
 type Props = {
   usersData: UserBasicInfo[];
   playersData: PlayerBasicInfo[];
-  onSubmit: (data: GrantAccessFormData) => void;
+  onSubmit: ({ playerId, userId }: GrantAccessArgs) => void;
 };
 
 export const PlayerAccessForm = ({
@@ -33,7 +37,7 @@ export const PlayerAccessForm = ({
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        onSubmit(data);
+        onSubmit({ playerId: data.player, userId: data.user });
         resetForm();
       }}
     >

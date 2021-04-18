@@ -3,20 +3,20 @@ const {
   getUsers,
   getUser,
   getUsersList,
-  deleteUser,
   assignPlaymakerRole,
-} = require('../controllers/usersController');
+} = require('../modules/users/users.controller');
+const { setUser, checkRole } = require('../modules/users/users.middleware');
 const { protect, authorize } = require('../middleware/auth');
+const prepareQuery = require('../middleware/prepareQuery');
 
 const router = express.Router();
 
 router.use(protect);
 router.use(authorize('admin'));
 
-router.get('/', getUsers);
+router.get('/', prepareQuery, getUsers);
 router.get('/list', getUsersList);
-router.get('/:id', getUser);
-router.post('/assignplaymaker', assignPlaymakerRole);
-router.delete('/:id', deleteUser);
+router.get('/:id', setUser, getUser);
+router.post('/:id/assignplaymaker', [setUser, checkRole(['scout'])], assignPlaymakerRole);
 
 module.exports = router;

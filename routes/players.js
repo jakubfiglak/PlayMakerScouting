@@ -1,4 +1,6 @@
 const express = require('express');
+const ordersRouter = require('./orders');
+const reportsRouter = require('./reports');
 const {
   createPlayer,
   getPlayers,
@@ -7,25 +9,65 @@ const {
   updatePlayer,
   deletePlayer,
   grantAccess,
-} = require('../controllers/playersController');
+} = require('../modules/players/players.controller');
+const Club = require('../modules/clubs/club.model');
+const User = require('../modules/users/user.model');
+const options = require('../modules/players/options');
+const {
+  setPlayer,
+  canBeDeleted,
+  canAccessBeGranted,
+} = require('../modules/players/players.middleware');
 const { protect, authorize } = require('../middleware/auth');
-
-const ordersRouter = require('./orders');
-const reportsRouter = require('./reports');
-const matchesRouter = require('./matches');
+const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist');
+const addAuthorToAuthorizedUsers = require('../middleware/addAuthorToAuthorizedUsers');
+const prepareQuery = require('../middleware/prepareQuery');
+const setAccessFilters = require('../middleware/setAccessFilters');
+const checkAccessPermission = require('../middleware/checkAccessPermission');
+const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
 
 const router = express.Router({ mergeParams: true });
 
 router.use('/:playerId/orders', protect, ordersRouter);
 router.use('/:playerId/reports', protect, reportsRouter);
-router.use('/:playerId/matches', protect, matchesRouter);
 
-router.post('/', protect, createPlayer);
-router.get('/', protect, getPlayers);
-router.get('/list', protect, getPlayersList);
-router.post('/grantaccess', [protect, authorize('admin')], grantAccess);
-router.get('/:id', protect, getPlayer);
-router.put('/:id', protect, updatePlayer);
-router.delete('/:id', [protect, authorize('admin')], deletePlayer);
+router.post(
+  '/',
+  [
+    protect,
+    checkIfRelatedAssetExist({ fieldName: 'club', model: Club }),
+    addAuthorToAuthorizedUsers,
+  ],
+  createPlayer
+);
+router.get('/', [protect, prepareQuery, setAccessFilters], getPlayers);
+router.get('/list', [protect, setAccessFilters], getPlayersList);
+router.get('/:id', [protect, setPlayer, checkAccessPermission('player')], getPlayer);
+router.put(
+  '/:id',
+  [
+    protect,
+    setPlayer,
+    checkAccessPermission('player'),
+    filterForbiddenUpdates(options.forbiddenUpdates),
+  ],
+  updatePlayer
+);
+router.delete(
+  '/:id',
+  [protect, setPlayer, checkAccessPermission('player'), canBeDeleted],
+  deletePlayer
+);
+router.post(
+  '/:id/grantaccess',
+  [
+    protect,
+    authorize('admin'),
+    setPlayer,
+    checkIfRelatedAssetExist({ fieldName: 'user', model: User }),
+    canAccessBeGranted,
+  ],
+  grantAccess
+);
 
 module.exports = router;

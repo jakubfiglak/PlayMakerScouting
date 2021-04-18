@@ -12,16 +12,16 @@ export type Division =
   | 'Klasa C';
 
 export type Club = {
-  _id: string;
+  id: string;
   name: string;
   division: Division;
   voivodeship: Voivodeship | 'Zagranica';
   lnpID?: string;
 };
 
-export type ClubBasicInfo = Pick<Club, '_id' | 'name'>;
+export type ClubBasicInfo = Pick<Club, 'id' | 'name'>;
 
-export type ClubsFormData = Omit<Club, '_id' | 'division' | 'voivodeship'> & {
+export type ClubsFormData = Omit<Club, 'id' | 'division' | 'voivodeship'> & {
   voivodeship: Voivodeship | 'Zagranica' | '';
   division: Division | '';
 };
@@ -36,6 +36,8 @@ export type GrantAccessFormData = {
   user: string;
   club: string;
 };
+
+export type GrantAccessArgs = { clubId: string; userId: string };
 
 export type GetClubs = (
   page: number,
@@ -59,7 +61,7 @@ export type State = {
   getClub: (id: string) => void;
   addClub: (club: ClubsFormData) => void;
   editClub: (id: string, club: ClubsFormData) => void;
-  grantAccess: (data: GrantAccessFormData) => void;
+  grantAccess: ({ clubId, userId }: GrantAccessArgs) => void;
   setCurrent: (club: Club) => void;
   clearCurrent: () => void;
 };

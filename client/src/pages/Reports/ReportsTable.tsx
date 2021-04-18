@@ -62,7 +62,7 @@ export const ReportsTable = ({
     >
       {reports.map((report) => {
         const {
-          _id,
+          id: _id,
           player,
           scout,
           createdAt,
