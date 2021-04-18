@@ -7,11 +7,11 @@ import { FormControl, Button, makeStyles } from '@material-ui/core';
 import { UsersCombo } from '../../components/selects/UsersCombo';
 import { FormContainer } from '../../components/FormContainer';
 // Types
-import { AssignPlaymakerRoleData, UserBasicInfo } from '../../types/users';
+import { UserBasicInfo, AssignPlaymakerRoleData } from '../../types/users';
 
 type Props = {
   usersData: UserBasicInfo[];
-  onSubmit: (data: AssignPlaymakerRoleData) => void;
+  onSubmit: (id: string) => void;
 };
 
 export const AssignPlaymakerRoleForm = ({ usersData, onSubmit }: Props) => {
@@ -23,7 +23,7 @@ export const AssignPlaymakerRoleForm = ({ usersData, onSubmit }: Props) => {
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        onSubmit(data);
+        onSubmit(data.user);
         resetForm();
       }}
     >

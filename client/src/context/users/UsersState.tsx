@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { axiosJson } from '../../config/axios';
 import UsersContext from './usersContext';
 import usersReducer from './usersReducer';
-import { AssignPlaymakerRoleData, State } from '../../types/users';
+import { State } from '../../types/users';
 import { useAlertsState } from '../alerts/useAlertsState';
 
 export const UsersState: React.FC = ({ children }) => {
@@ -47,10 +47,10 @@ export const UsersState: React.FC = ({ children }) => {
   };
 
   // Assign playmaker-scout role
-  const assignPlaymakerRole = async (data: AssignPlaymakerRoleData) => {
+  const assignPlaymakerRole = async (id: string) => {
     setLoading();
     try {
-      const res = await axiosJson.post('/api/v1/users/assignplaymaker', data);
+      const res = await axiosJson.post(`/api/v1/users/${id}/assignplaymaker`);
       setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({

@@ -37,6 +37,8 @@ export type GrantAccessFormData = {
   club: string;
 };
 
+export type GrantAccessArgs = { clubId: string; userId: string };
+
 export type GetClubs = (
   page: number,
   limit: number,
@@ -59,7 +61,7 @@ export type State = {
   getClub: (id: string) => void;
   addClub: (club: ClubsFormData) => void;
   editClub: (id: string, club: ClubsFormData) => void;
-  grantAccess: (data: GrantAccessFormData) => void;
+  grantAccess: ({ clubId, userId }: GrantAccessArgs) => void;
   setCurrent: (club: Club) => void;
   clearCurrent: () => void;
 };

@@ -44,6 +44,8 @@ export type GrantAccessFormData = {
   player: string;
 };
 
+export type GrantAccessArgs = { userId: string; playerId: string };
+
 export type GetPlayers = (
   page: number,
   limit: number,
@@ -66,7 +68,7 @@ export type State = {
   getPlayer: (id: string) => void;
   addPlayer: (player: PlayersFormData) => void;
   editPlayer: (id: string, data: PlayersFormData) => void;
-  grantAccess: (data: GrantAccessFormData) => void;
+  grantAccess: ({ playerId, userId }: GrantAccessArgs) => void;
   setCurrent: (player: Player) => void;
   clearCurrent: () => void;
 };

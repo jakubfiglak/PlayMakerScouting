@@ -7,7 +7,7 @@ import {
   PlayersFilterData,
   PlayersFormData,
   Player,
-  GrantAccessFormData,
+  GrantAccessArgs,
 } from '../../types/players';
 import { SortingOrder } from '../../types/common';
 import { initialPaginatedData } from '../../data/initialPaginatedData';
@@ -146,11 +146,14 @@ export const PlayersState: React.FC = ({ children }) => {
   };
 
   // Grant user with an access to a specific player
-  const grantAccess = async (data: GrantAccessFormData) => {
+  const grantAccess = async ({ playerId, userId }: GrantAccessArgs) => {
     setLoading();
 
     try {
-      const res = await axiosJson.post('/api/v1/players/grantaccess', data);
+      const res = await axiosJson.post(
+        `/api/v1/players/${playerId}/grantaccess`,
+        { user: userId },
+      );
       setAlert({ msg: res.data.message, type: 'success' });
 
       dispatch({
