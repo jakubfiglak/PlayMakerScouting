@@ -73,7 +73,7 @@ export const OrdersTable = ({
       headCells={headCells}
     >
       {orders.map((orderData) => {
-        const { _id, player, status, scout, createdAt, notes } = orderData;
+        const { id: _id, player, status, scout, createdAt, notes } = orderData;
 
         return (
           <StyledTableRow key={_id}>

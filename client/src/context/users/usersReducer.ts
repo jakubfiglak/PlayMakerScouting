@@ -25,7 +25,7 @@ export default (state: State, action: Action): State => {
         loading: false,
         error: null,
         usersList: state.usersList.map((user) =>
-          user._id === action.payload.user._id ? action.payload.user : user,
+          user.id === action.payload.user.id ? action.payload.user : user,
         ),
         message: action.payload.message,
       };

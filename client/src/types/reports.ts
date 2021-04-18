@@ -40,12 +40,12 @@ export type MotorSkills = {
 };
 
 export type Report = {
-  _id: string;
+  id: string;
   docNumber: string;
   player: Player;
   match: MatchData;
-  scout: Pick<User, '_id' | 'firstName' | 'lastName'>;
-  order?: Pick<Order, '_id' | 'docNumber'>;
+  scout: Pick<User, 'id' | 'firstName' | 'lastName'>;
+  order?: Pick<Order, 'id' | 'docNumber'>;
   minutesPlayed: number;
   goals: number;
   assists: number;

@@ -81,7 +81,7 @@ export const PlayersPage = () => {
 
   const handlePlayersFormSubmit = (data: PlayersFormData) => {
     if (current) {
-      editPlayer(current._id, data);
+      editPlayer(current.id, data);
       setActiveTab(0);
     } else {
       addPlayer(data);

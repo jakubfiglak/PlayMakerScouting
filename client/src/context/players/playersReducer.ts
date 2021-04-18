@@ -45,7 +45,7 @@ export default (state: State, action: Action): State => {
         playersList: [
           ...state.playersList,
           {
-            _id: action.payload.player._id,
+            id: action.payload.player.id,
             firstName: action.payload.player.firstName,
             lastName: action.payload.player.lastName,
             position: action.payload.player.position,
@@ -63,13 +63,13 @@ export default (state: State, action: Action): State => {
         playersData: {
           ...state.playersData,
           docs: state.playersData.docs.map((player) =>
-            player._id === action.payload.player._id
+            player.id === action.payload.player.id
               ? action.payload.player
               : player,
           ),
         },
         playersList: state.playersList.map((player) =>
-          player._id === action.payload.player._id
+          player.id === action.payload.player.id
             ? {
                 ...player,
                 firstName: action.payload.player.firstName,

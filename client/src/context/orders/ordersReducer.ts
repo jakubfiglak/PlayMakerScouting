@@ -53,9 +53,7 @@ export default (state: State, action: Action): State => {
         ordersData: {
           ...state.ordersData,
           docs: state.ordersData.docs.map((order) =>
-            order._id === action.payload.order._id
-              ? action.payload.order
-              : order,
+            order.id === action.payload.order.id ? action.payload.order : order,
           ),
         },
         orderData: action.payload.order,
@@ -70,9 +68,7 @@ export default (state: State, action: Action): State => {
         ordersData: {
           ...state.ordersData,
           docs: state.ordersData.docs.map((order) =>
-            order._id === action.payload.order._id
-              ? action.payload.order
-              : order,
+            order.id === action.payload.order.id ? action.payload.order : order,
           ),
         },
         orderData: action.payload.order,
@@ -87,7 +83,7 @@ export default (state: State, action: Action): State => {
         ordersData: {
           ...state.ordersData,
           docs: state.ordersData.docs.filter(
-            (order) => order._id !== action.payload.id,
+            (order) => order.id !== action.payload.id,
           ),
         },
       };

@@ -42,7 +42,7 @@ export const ClubsTable = ({
       headCells={headCells}
     >
       {clubs.map((club) => {
-        const { _id } = club;
+        const { id: _id } = club;
 
         return (
           <ClubsTableRow

@@ -28,7 +28,7 @@ type Props = {
 export const OrderCard = ({ order, title }: Props) => {
   const classes = useStyles();
 
-  const { player, docNumber, _id, createdAt } = order;
+  const { player, docNumber, id: _id, createdAt } = order;
 
   return (
     <Card className={classes.container}>

@@ -2,7 +2,7 @@ import { User } from './auth';
 
 export type UserBasicInfo = Pick<
   User,
-  '_id' | 'firstName' | 'lastName' | 'email' | 'role'
+  'id' | 'firstName' | 'lastName' | 'email' | 'role'
 >;
 
 export type AssignPlaymakerRoleData = {

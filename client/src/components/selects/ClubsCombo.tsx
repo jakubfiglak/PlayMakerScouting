@@ -46,9 +46,9 @@ export const ClubsCombo = ({
         setValue(newValue);
       }}
       value={value}
-      options={['', ...clubsData.map((club) => club._id)]}
+      options={['', ...clubsData.map((club) => club.id)]}
       getOptionLabel={(option) => {
-        const club = clubsData.find((c) => c._id === option);
+        const club = clubsData.find((c) => c.id === option);
         if (club) {
           return club.name;
         }

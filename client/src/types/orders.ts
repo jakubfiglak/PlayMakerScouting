@@ -5,18 +5,18 @@ import { Player } from './players';
 export type OrderStatus = 'open' | 'accepted' | 'closed';
 
 export type Order = {
-  _id: string;
+  id: string;
   docNumber: string;
-  player: Pick<Player, '_id' | 'firstName' | 'lastName' | 'position' | 'club'>;
+  player: Pick<Player, 'id' | 'firstName' | 'lastName' | 'position' | 'club'>;
   status: 'open' | 'accepted' | 'closed';
-  scout?: Pick<User, '_id' | 'firstName' | 'lastName'>;
+  scout?: Pick<User, 'id' | 'firstName' | 'lastName'>;
   createdAt: string;
   acceptDate?: string;
   closeDate?: string;
   notes?: string;
 };
 
-export type OrderBasicInfo = Pick<Order, '_id' | 'player' | 'docNumber'>;
+export type OrderBasicInfo = Pick<Order, 'id' | 'player' | 'docNumber'>;
 
 export type OrderFormData = {
   player: string;

@@ -36,7 +36,7 @@ export const PlayersForm = ({
     ? {
         firstName: current.firstName,
         lastName: current.lastName,
-        club: current.club._id,
+        club: current.club.id,
         position: current.position,
         yearOfBirth: current.yearOfBirth,
         height: current.height,

@@ -57,13 +57,13 @@ export const NewReportForm = ({
 
   useEffect(() => {
     if (values.order) {
-      const order = ordersList.find((ord) => ord._id === values.order);
+      const order = ordersList.find((ord) => ord.id === values.order);
       if (order) {
         setPosition(order.player.position);
       }
     }
     if (values.player) {
-      const player = playersList.find((play) => play._id === values.player);
+      const player = playersList.find((play) => play.id === values.player);
       if (player) {
         setPosition(player.position);
       }

@@ -5,7 +5,7 @@ export type Position = 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
 export type Foot = 'L' | 'R' | 'both';
 
 export type Player = {
-  _id: string;
+  id: string;
   firstName: string;
   lastName: string;
   position: Position;
@@ -14,7 +14,7 @@ export type Player = {
   weight?: number;
   footed: Foot;
   club: {
-    _id: string;
+    id: string;
     name: string;
     division: Division;
   };
@@ -26,10 +26,10 @@ export type Player = {
 
 export type PlayerBasicInfo = Pick<
   Player,
-  '_id' | 'firstName' | 'lastName' | 'position' | 'club'
+  'id' | 'firstName' | 'lastName' | 'position' | 'club'
 >;
 
-export type PlayersFormData = Omit<Player, '_id' | 'club'> & {
+export type PlayersFormData = Omit<Player, 'id' | 'club'> & {
   club: string;
 };
 

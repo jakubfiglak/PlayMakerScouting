@@ -45,7 +45,7 @@ export const PlayersTable = ({
       headCells={headCells}
     >
       {players.map((player) => {
-        const { _id } = player;
+        const { id: _id } = player;
 
         return (
           <PlayersTableRow

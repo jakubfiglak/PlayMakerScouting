@@ -55,7 +55,7 @@ export const ClubsPage = () => {
 
   const handleSubmit = (data: ClubsFormData) => {
     if (current) {
-      editClub(current._id, data);
+      editClub(current.id, data);
       setActiveTab(0);
     } else {
       addClub(data);

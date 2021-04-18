@@ -12,16 +12,16 @@ export type Division =
   | 'Klasa C';
 
 export type Club = {
-  _id: string;
+  id: string;
   name: string;
   division: Division;
   voivodeship: Voivodeship | 'Zagranica';
   lnpID?: string;
 };
 
-export type ClubBasicInfo = Pick<Club, '_id' | 'name'>;
+export type ClubBasicInfo = Pick<Club, 'id' | 'name'>;
 
-export type ClubsFormData = Omit<Club, '_id' | 'division' | 'voivodeship'> & {
+export type ClubsFormData = Omit<Club, 'id' | 'division' | 'voivodeship'> & {
   voivodeship: Voivodeship | 'Zagranica' | '';
   division: Division | '';
 };

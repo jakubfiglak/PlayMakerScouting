@@ -31,7 +31,7 @@ export const OrdersSelect = ({ ordersData, name }: Props) => {
         error={touched && !!error}
       >
         {ordersData.map((orderData) => {
-          const { _id, player, docNumber } = orderData;
+          const { id: _id, player, docNumber } = orderData;
 
           return (
             <MenuItem key={_id} value={_id}>

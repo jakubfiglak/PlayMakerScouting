@@ -95,8 +95,8 @@ export const ReportsPage = () => {
 
   const initialValues: ReportFormData = current
     ? {
-        order: current.order?._id,
-        player: current.player._id,
+        order: current.order?.id,
+        player: current.player.id,
         match: current.match,
         minutesPlayed: current.minutesPlayed,
         goals: current.goals,
@@ -139,7 +139,7 @@ export const ReportsPage = () => {
 
   const handlePrint = useReactToPrint({
     content: () => ref.current,
-    documentTitle: `PlaymakerReport_${current?._id}`,
+    documentTitle: `PlaymakerReport_${current?.id}`,
     bodyClass: classes.pageBody,
     onAfterPrint: () => clearCurrent(),
   }) as () => void;
@@ -204,7 +204,7 @@ export const ReportsPage = () => {
         <PageHeading
           title={
             current
-              ? `Edycja raportu nr ${current._id}`
+              ? `Edycja raportu nr ${current.id}`
               : 'Tworzenie nowego raportu'
           }
         />
@@ -213,7 +213,7 @@ export const ReportsPage = () => {
           validationSchema={validationSchema}
           onSubmit={(data, { resetForm }) => {
             if (current) {
-              editReport(current._id, data);
+              editReport(current.id, data);
             } else {
               onAddReport(data);
               resetForm();

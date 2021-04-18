@@ -39,7 +39,7 @@ export const OrderDetails = ({
   const classes = useStyles();
 
   const {
-    _id,
+    id: _id,
     player,
     status,
     scout,
@@ -48,8 +48,6 @@ export const OrderDetails = ({
     closeDate,
     notes,
   } = order;
-
-  console.log(player);
 
   return (
     <Card className={classes.container}>

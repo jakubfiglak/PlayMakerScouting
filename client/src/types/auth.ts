@@ -3,7 +3,7 @@ import { Voivodeship } from './common';
 export type UserRole = 'admin' | 'playmaker-scout' | 'scout';
 
 export type User = {
-  _id: string;
+  id: string;
   role: UserRole;
   firstName: string;
   lastName: string;
@@ -13,8 +13,6 @@ export type User = {
   phone?: string;
   activeRadius?: number;
   createdAt: string;
-  myClubs: string[];
-  myPlayers: string[];
 };
 
 export type LoginFormData = {
