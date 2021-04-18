@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const toJson = require('@meanie/mongoose-to-json');
+const { positions } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -23,7 +24,7 @@ const PlayerSchema = new Schema(
     position: {
       type: String,
       required: 'Please choose a position',
-      enum: ['GK', 'FB', 'CB', 'CM', 'WM', 'F'],
+      enum: positions,
     },
     yearOfBirth: {
       type: Number,

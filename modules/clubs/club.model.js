@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const toJson = require('@meanie/mongoose-to-json');
-const voivodeships = require('../../utils/voivodeships');
+const { voivodeships, divisions } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -19,17 +19,7 @@ const ClubSchema = new Schema(
     },
     division: {
       type: String,
-      enum: [
-        'Ekstraklasa',
-        'I liga',
-        'II liga',
-        'III liga',
-        'IV liga',
-        'Klasa okręgowa',
-        'Klasa A',
-        'Klasa B',
-        'Klasa C',
-      ],
+      enum: divisions,
       required: 'please add clubs current division',
     },
     lnpID: {
