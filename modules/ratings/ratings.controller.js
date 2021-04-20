@@ -25,6 +25,7 @@ exports.getRatings = asyncHandler(async (req, res) => {
   res.status(httpStatus.OK).json({
     success: true,
     data: ratings,
+    count: ratings.length,
   });
 });
 

@@ -4,6 +4,7 @@ const Club = require('../modules/clubs/club.model');
 const Player = require('../modules/players/player.model');
 const Order = require('../modules/orders/order.model');
 const Report = require('../modules/reports/report.model');
+const Rating = require('../modules/ratings/rating.model');
 const { buildUser } = require('./utils');
 
 const salt = bcrypt.genSaltSync(10);
@@ -38,6 +39,10 @@ const insertReports = async (reports) => {
   Report.insertMany(reports);
 };
 
+const insertRatings = async (ratings) => {
+  Rating.insertMany(ratings);
+};
+
 module.exports = {
   insertUsers,
   insertTestUser,
@@ -45,4 +50,5 @@ module.exports = {
   insertPlayers,
   insertOrders,
   insertReports,
+  insertRatings,
 };

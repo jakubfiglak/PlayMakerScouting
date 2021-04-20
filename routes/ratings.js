@@ -27,3 +27,5 @@ router.put(
   updateRating
 );
 router.delete('/:id', [protect, setRating, canAccess], deleteRating);
+
+module.exports = router;

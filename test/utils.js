@@ -71,6 +71,15 @@ const buildReport = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildRating = (overrides = {}) => ({
+  _id: new mongoose.Types.ObjectId(),
+  author: new mongoose.Types.ObjectId(),
+  category: 'individual',
+  name: faker.random.word(),
+  shortName: 'ABC',
+  ...overrides,
+});
+
 const buildReq = (overrides = {}) => {
   const req = { body: {}, params: {}, query: {}, ...overrides };
   return req;
@@ -96,6 +105,7 @@ module.exports = {
   buildPlayer,
   buildOrder,
   buildReport,
+  buildRating,
   buildReq,
   buildRes,
   buildNext,
