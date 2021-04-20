@@ -3,4 +3,6 @@
 /config/test.config.env
 /coverage
 
+*.txt
+
 /client/build
