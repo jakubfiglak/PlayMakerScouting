@@ -5,6 +5,7 @@ const Player = require('../modules/players/player.model');
 const Order = require('../modules/orders/order.model');
 const Report = require('../modules/reports/report.model');
 const Rating = require('../modules/ratings/rating.model');
+const ReportTemplate = require('../modules/reportTemplates/reportTemplate.model');
 const { buildUser } = require('./utils');
 
 const salt = bcrypt.genSaltSync(10);
@@ -23,25 +24,12 @@ const insertTestUser = async (overrides = {}) => {
   return { user, token: user.getJwt() };
 };
 
-const insertClubs = async (clubs) => {
-  Club.insertMany(clubs);
-};
-
-const insertPlayers = async (players) => {
-  Player.insertMany(players);
-};
-
-const insertOrders = async (orders) => {
-  Order.insertMany(orders);
-};
-
-const insertReports = async (reports) => {
-  Report.insertMany(reports);
-};
-
-const insertRatings = async (ratings) => {
-  Rating.insertMany(ratings);
-};
+const insertClubs = (clubs) => Club.insertMany(clubs);
+const insertPlayers = (players) => Player.insertMany(players);
+const insertOrders = (orders) => Order.insertMany(orders);
+const insertReports = (reports) => Report.insertMany(reports);
+const insertRatings = (ratings) => Rating.insertMany(ratings);
+const insertReportTemplates = (reportTemplates) => ReportTemplate.insertMany(reportTemplates);
 
 module.exports = {
   insertUsers,
@@ -51,4 +39,5 @@ module.exports = {
   insertOrders,
   insertReports,
   insertRatings,
+  insertReportTemplates,
 };

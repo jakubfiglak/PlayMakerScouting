@@ -5,11 +5,13 @@ const getFirstName = faker.name.firstName;
 const getLastName = faker.name.lastName;
 const getEmail = faker.internet.email;
 const getPassword = faker.internet.password;
+const getRandomWord = faker.random.word;
+const ID = mongoose.Types.ObjectId;
 
 const password = `aB1${getPassword()}`;
 
 const buildUser = (overrides = {}) => ({
-  _id: new mongoose.Types.ObjectId(),
+  _id: new ID(),
   firstName: getFirstName(),
   lastName: getLastName(),
   email: getEmail().toLowerCase(),
@@ -42,7 +44,7 @@ const buildUpdatePasswordForm = (overrides = {}) => ({
 });
 
 const buildClub = (overrides = {}) => ({
-  _id: new mongoose.Types.ObjectId(),
+  _id: new ID(),
   name: faker.company.companyName(),
   voivodeship: 'Wielkopolskie',
   division: 'Ekstraklasa',
@@ -50,7 +52,7 @@ const buildClub = (overrides = {}) => ({
 });
 
 const buildPlayer = (overrides = {}) => ({
-  _id: new mongoose.Types.ObjectId(),
+  _id: new ID(),
   firstName: getFirstName(),
   lastName: getLastName(),
   position: 'CM',
@@ -58,25 +60,32 @@ const buildPlayer = (overrides = {}) => ({
 });
 
 const buildOrder = (overrides = {}) => ({
-  _id: new mongoose.Types.ObjectId(),
-  player: new mongoose.Types.ObjectId(),
+  _id: new ID(),
+  player: new ID(),
   status: 'open',
   orderNo: 1,
   ...overrides,
 });
 
 const buildReport = (overrides = {}) => ({
-  _id: new mongoose.Types.ObjectId(),
+  _id: new ID(),
   reportNo: 1,
   ...overrides,
 });
 
 const buildRating = (overrides = {}) => ({
-  _id: new mongoose.Types.ObjectId(),
-  author: new mongoose.Types.ObjectId(),
+  _id: new ID(),
+  author: new ID(),
   category: 'individual',
-  name: faker.random.word(),
+  name: getRandomWord(),
   shortName: 'ABC',
+  ...overrides,
+});
+
+const buildReportTemplate = (overrides = {}) => ({
+  _id: new ID(),
+  name: getRandomWord(),
+  author: new ID(),
   ...overrides,
 });
 
@@ -106,6 +115,7 @@ module.exports = {
   buildOrder,
   buildReport,
   buildRating,
+  buildReportTemplate,
   buildReq,
   buildRes,
   buildNext,

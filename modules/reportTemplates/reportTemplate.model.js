@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const toJson = require('@meanie/mongoose-to-json');
+const autoPopulate = require('mongoose-autopopulate');
+const options = require('./options');
 
 const { Schema, model } = mongoose;
 
@@ -20,6 +22,7 @@ const ReportTemplateSchema = new Schema(
       type: [Schema.Types.ObjectId],
       ref: 'Rating',
       default: [],
+      autopopulate: { select: options.select },
     },
     maxRatingScore: {
       type: Number,
@@ -34,5 +37,6 @@ const ReportTemplateSchema = new Schema(
 );
 
 ReportTemplateSchema.plugin(toJson);
+ReportTemplateSchema.plugin(autoPopulate);
 
 module.exports = model('ReportTemplate', ReportTemplateSchema);

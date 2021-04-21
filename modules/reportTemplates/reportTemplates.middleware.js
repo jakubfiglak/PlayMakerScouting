@@ -40,8 +40,12 @@ function setAuthor(req, res, next) {
 const validateRatings = asyncHandler(async (req, res, next) => {
   const promiseArr = req.body.ratings.map((rating) => ratingsService.getRatingById(rating));
 
-  if (promiseArr.includes(undefined)) {
-    return next(new ApiError('At least one of the ratings was not found', httpStatus.NOT_FOUND));
+  const ratings = await Promise.all(promiseArr);
+
+  if (ratings.includes(null)) {
+    return next(
+      new ApiError('At least one of the ratings has not been found', httpStatus.NOT_FOUND)
+    );
   }
   next();
 });
