@@ -1,18 +1,9 @@
 const axios = require('axios').default;
-const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
-const { buildClub, buildPlayer, buildOrder, buildRating } = require('../../test/utils');
-const {
-  insertClubs,
-  insertTestUser,
-  insertPlayers,
-  insertOrders,
-  insertRatings,
-} = require('../../test/db-utils');
-const playersService = require('../../modules/players/players.service');
-const clubsService = require('../../modules/clubs/clubs.service');
+const { buildRating } = require('../../test/utils');
+const { insertTestUser, insertRatings } = require('../../test/db-utils');
 
 let api = axios.create();
 let server;

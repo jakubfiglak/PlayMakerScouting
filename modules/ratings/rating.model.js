@@ -6,7 +6,7 @@ const { Schema, model } = mongoose;
 const RatingSchema = new Schema(
   {
     author: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: 'Please add an author',
     },

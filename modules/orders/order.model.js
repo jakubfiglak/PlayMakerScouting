@@ -8,7 +8,7 @@ const { Schema, model } = mongoose;
 const OrderSchema = new Schema(
   {
     player: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Player',
       required: 'Please add a player',
     },
@@ -18,7 +18,7 @@ const OrderSchema = new Schema(
       default: 'open',
     },
     scout: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
     },
     acceptDate: {

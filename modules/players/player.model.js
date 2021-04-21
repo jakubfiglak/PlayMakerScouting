@@ -18,7 +18,7 @@ const PlayerSchema = new Schema(
       trim: true,
     },
     club: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Club',
     },
     position: {

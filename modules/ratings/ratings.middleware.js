@@ -17,8 +17,10 @@ function setAccessFilters(req, res, next) {
 
 function canAccess(req, res, next) {
   const { rating, user } = req;
-  const isPermitted =
-    isAdmin(user.role) || rating.author.toString() === user._id || rating.private === false;
+  const isAuthor = rating.author.toString() === user._id;
+  const isRatingPrivate = rating.private === true;
+
+  const isPermitted = isAdmin(user.role) || isAuthor || !isRatingPrivate;
 
   if (!isPermitted) {
     return next(

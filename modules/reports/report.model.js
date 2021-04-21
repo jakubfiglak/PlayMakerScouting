@@ -21,17 +21,17 @@ const ratingType = {
 const ReportSchema = new Schema(
   {
     player: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Player',
       required: 'Please add a player',
     },
     scout: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: 'Please add a scout',
     },
     order: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Order',
     },
     match: {
