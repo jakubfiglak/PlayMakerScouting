@@ -19,33 +19,6 @@ const { Schema, model } = mongoose;
 //   },
 // };
 
-const RatingType = {
-  category: {
-    type: String,
-    enum: ratingCategories,
-    require: 'Please add rating category',
-  },
-  name: {
-    type: String,
-    maxlength: 30,
-    trim: true,
-    required: 'Please add rating name',
-  },
-  shortName: {
-    type: String,
-    maxlength: 6,
-    trim: true,
-    required: 'Please add rating short name',
-  },
-  score: {
-    type: Number,
-  },
-  description: {
-    type: String,
-    maxlength: 400,
-  },
-};
-
 // const ReportSchema = new Schema(
 //   {
 //     player: {
@@ -206,7 +179,39 @@ const ReportSchema = new Schema(
       enum: [0, 1],
     },
     skills: {
-      type: [RatingType],
+      type: [
+        {
+          _id: false,
+          category: {
+            type: String,
+            enum: ratingCategories,
+            require: 'Please add rating category',
+          },
+          name: {
+            type: String,
+            maxlength: 30,
+            trim: true,
+            required: 'Please add rating name',
+          },
+          shortName: {
+            type: String,
+            maxlength: 6,
+            trim: true,
+            required: 'Please add rating short name',
+          },
+          hasScore: {
+            type: Boolean,
+            default: true,
+          },
+          score: {
+            type: Number,
+          },
+          description: {
+            type: String,
+            maxlength: 400,
+          },
+        },
+      ],
       default: [],
     },
     finalRating: {
@@ -258,6 +263,6 @@ ReportSchema.virtual('docNumber').get(function () {
   return `${this.reportNo.toString().padStart(4, '0')}/${date.getFullYear()}`;
 });
 
-ReportSchema.pre('save', calculateReportAvg);
+// ReportSchema.pre('save', calculateReportAvg);
 
 module.exports = model('Report', ReportSchema);

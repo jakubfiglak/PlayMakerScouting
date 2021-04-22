@@ -23,11 +23,7 @@ const options = require('../modules/reports/options');
 
 const router = express.Router({ mergeParams: true });
 
-router.post(
-  '/',
-  [protect, setAuthor, setOrderData, checkOrderStatus, setPlayerData, setIndividualSkills],
-  createReport
-);
+router.post('/', [protect, setAuthor, setOrderData, checkOrderStatus, setPlayerData], createReport);
 router.get('/', [protect, prepareQuery, setAccessFilters], getReports);
 router.get('/:id', [protect, setReport, checkAccessPermission], getReport);
 router.put(
