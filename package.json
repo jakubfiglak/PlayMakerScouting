@@ -15,6 +15,10 @@
     "test": "jest --watch --verbose --runInBand --detectOpenHandles",
     "test-one": "jest --watch --detectOpenHandles",
     "seed-users": "node scripts/seed-users",
+    "seed-ratings": "node scripts/seed-ratings -create",
+    "destroy-ratings": "node scripts/seed-ratings -destroy",
+    "seed-reportTemplates": "node scripts/seed-reportTemplates -create",
+    "destroy-reportTemplates": "node scripts/seed-reportTemplates -destroy",
     "import-data": "node seeder -import",
     "destroy-data": "node seeder -destroy",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client & migrate-mongo up"
