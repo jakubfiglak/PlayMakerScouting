@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const toJson = require('@meanie/mongoose-to-json');
+const { ratingCategories } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -12,7 +13,7 @@ const RatingSchema = new Schema(
     },
     category: {
       type: String,
-      enum: ['individual', 'teamplay', 'offense', 'defense', 'physical', 'mental'],
+      enum: ratingCategories,
       required: 'Please add rating category',
     },
     name: {
@@ -23,7 +24,7 @@ const RatingSchema = new Schema(
     },
     shortName: {
       type: String,
-      maxlength: 4,
+      maxlength: 6,
       trim: true,
       required: 'Please add rating short name',
     },

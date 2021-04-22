@@ -129,8 +129,6 @@ describe('GET /api/v1/ratings/:id', () => {
 
     const response = await api.get(`report-templates/${reportTemplate._id}`);
 
-    console.log(response.data.data);
-
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
     expect(response.data.data.id).toBe(reportTemplate._id.toHexString());

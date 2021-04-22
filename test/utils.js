@@ -1,14 +1,21 @@
 const faker = require('faker');
 const mongoose = require('mongoose');
+const { ratingCategories, positions } = require('../utils/data');
 
 const getFirstName = faker.name.firstName;
 const getLastName = faker.name.lastName;
 const getEmail = faker.internet.email;
 const getPassword = faker.internet.password;
 const getRandomWord = faker.random.word;
+const getRandomText = faker.random.words;
+const getClubName = faker.company.companyName;
 const ID = mongoose.Types.ObjectId;
 
 const password = `aB1${getPassword()}`;
+
+function getRandomArrayMember(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
 
 const buildUser = (overrides = {}) => ({
   _id: new ID(),
@@ -45,7 +52,7 @@ const buildUpdatePasswordForm = (overrides = {}) => ({
 
 const buildClub = (overrides = {}) => ({
   _id: new ID(),
-  name: faker.company.companyName(),
+  name: getClubName(),
   voivodeship: 'Wielkopolskie',
   division: 'Ekstraklasa',
   ...overrides,
@@ -67,8 +74,88 @@ const buildOrder = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildOldReportRating = (overrides = {}) => ({
+  rating: 3,
+  note: getRandomText(10),
+  ...overrides,
+});
+
+const buildOldReport = (overrides = {}) => ({
+  _id: new ID(),
+  player: new ID(),
+  scout: new ID(),
+  match: {
+    location: 'home',
+    against: getClubName(),
+    competition: 'league',
+    date: new Date(),
+  },
+  minutesPlayed: 90,
+  goals: 0,
+  assists: 0,
+  yellowCards: 0,
+  redCards: 0,
+  individualSkills: {
+    ballReception: buildOldReportRating(),
+    passing: buildOldReportRating(),
+    defOneOnOne: buildOldReportRating(),
+    airPlay: buildOldReportRating(),
+    positioning: buildOldReportRating(),
+    attOneOnOne: buildOldReportRating(),
+    finishing: buildOldReportRating(),
+  },
+  teamplaySkills: {
+    attack: buildOldReportRating(),
+    defense: buildOldReportRating(),
+    transition: buildOldReportRating(),
+  },
+  motorSkills: {
+    leading: getRandomText(10),
+    neglected: getRandomText(10),
+  },
+  finalRating: 3,
+  summary: getRandomText(15),
+  reportNo: 1,
+  ...overrides,
+});
+
+const buildReportRating = (overrides = {}) => ({
+  category: getRandomArrayMember(ratingCategories),
+  name: getRandomWord(),
+  shortName: 'ABC',
+  score: 4,
+  description: getRandomText(10),
+  ...overrides,
+});
+
 const buildReport = (overrides = {}) => ({
   _id: new ID(),
+  player: new ID(),
+  scout: new ID(),
+  playerCurrentClub: new ID(),
+  positionPlayed: getRandomArrayMember(positions),
+  match: {
+    location: 'home',
+    against: getClubName(),
+    competition: 'league',
+    date: new Date(),
+  },
+  minutesPlayed: 90,
+  goals: 0,
+  assists: 0,
+  yellowCards: 0,
+  redCards: 0,
+  skills: [
+    buildReportRating(),
+    buildReportRating(),
+    buildReportRating(),
+    buildReportRating(),
+    buildReportRating(),
+    buildReportRating(),
+  ],
+  finalRating: 3,
+  summary: getRandomText(15),
+
   reportNo: 1,
   ...overrides,
 });
@@ -116,6 +203,7 @@ module.exports = {
   buildReport,
   buildRating,
   buildReportTemplate,
+  buildOldReport,
   buildReq,
   buildRes,
   buildNext,
