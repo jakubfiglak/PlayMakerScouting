@@ -1,7 +1,8 @@
 import { PaginatedData, SortingOrder } from './common';
 import { User } from './auth';
-import { Player } from './players';
+import { Player, Position } from './players';
 import { Order } from './orders';
+import { Club } from './clubs';
 
 export type RatingScore = 1 | 2 | 3 | 4;
 export type MatchLocation = 'home' | 'away';
@@ -39,13 +40,33 @@ export type MotorSkills = {
   neglected: string;
 };
 
+export type ReportStatus = 'in-prep' | 'closed';
+export type SkillsCategories =
+  | 'individual'
+  | 'teamplay'
+  | 'offense'
+  | 'defense'
+  | 'physical'
+  | 'mental';
+
+export type Skill = {
+  category: SkillsCategories;
+  name: string;
+  shortName: string;
+  hasScore: boolean;
+  score?: number;
+  description: string;
+};
+
 export type Report = {
   id: string;
   docNumber: string;
   player: Player;
-  match: MatchData;
   scout: Pick<User, 'id' | 'firstName' | 'lastName'>;
   order?: Pick<Order, 'id' | 'docNumber'>;
+  match: MatchData;
+  playerCurrentClub: Pick<Club, 'id' | 'name' | 'division'>;
+  positionPlayed: Position;
   minutesPlayed: number;
   goals: number;
   assists: number;
@@ -54,12 +75,12 @@ export type Report = {
   individualSkills: IndividualSkills;
   teamplaySkills: TeamplaySkills;
   motorSkills: MotorSkills;
+  skills: Skill[];
   finalRating: RatingScore;
   summary: string;
-  individualAvg: number;
-  teamplayAvg: number;
-  motorAvg: number;
   avgRating: number;
+  maxRatingScore: number;
+  status: ReportStatus;
   createdAt: string;
 };
 

@@ -9,14 +9,15 @@ import {
   Theme,
 } from '@material-ui/core';
 // Custom components
-import { ReportSkills } from './ReportSkills';
+import { SkillsPrintSection } from './SkillsPrintSection';
 import { SkillsChart } from './SkillsChart';
 import { FinalRatingChip } from '../Reports/FinalRatingChip';
 // Types
-import { Report } from '../../types/reports';
+import { Report, SkillsCategories } from '../../types/reports';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
 import { formatDate } from '../../utils/dates';
+import { transformReportSkills } from '../../utils/transformReportSkills';
 
 type Props = {
   report: Report;
@@ -38,12 +39,11 @@ export const PrinteableReport = ({ report }: Props) => {
     redCards,
     individualSkills,
     teamplaySkills,
-    motorSkills,
     summary,
     finalRating,
-    individualAvg,
-    teamplayAvg,
     avgRating,
+    skills,
+    maxRatingScore,
   } = report;
 
   return (
@@ -148,50 +148,21 @@ export const PrinteableReport = ({ report }: Props) => {
           </Typography>
         </div>
         <div>
-          <SkillsChart
-            individualSkills={individualSkills}
-            teamplaySkills={teamplaySkills}
-          />
+          <SkillsChart skills={skills.filter((skill) => skill.score)} />
         </div>
       </section>
       <Divider className={classes.divider} />
-      <section>
-        <Typography variant="h6" align="center" className={classes.heading}>
-          Umiejętności indywidualne
-        </Typography>
-        <Typography align="center" className={classes.text} gutterBottom>
-          Średnia ocen: {individualAvg.toFixed(2)}
-        </Typography>
-        <ReportSkills skills={individualSkills} printeable />
-        <Divider className={classes.divider} />
-        <Typography variant="h6" align="center" className={classes.heading}>
-          Współdziałanie z partnerami
-        </Typography>
-        <Typography align="center" className={classes.text} gutterBottom>
-          Średnia ocen: {teamplayAvg.toFixed(2)}
-        </Typography>
-        <ReportSkills skills={teamplaySkills} printeable />
-      </section>
-      <Divider className={classes.divider} />
-      <section>
-        <Typography
-          variant="h6"
-          align="center"
-          className={classes.heading}
-          gutterBottom
-        >
-          Cechy motoryczne
-        </Typography>
-        <Typography className={classes.text} gutterBottom>
-          <strong>Cechy wiodące: </strong>
-          {motorSkills.leading}
-        </Typography>
-        <Typography className={classes.text} gutterBottom>
-          <strong>Cechy zaniedbane: </strong>
-          {motorSkills.neglected}
-        </Typography>
-      </section>
-      <Divider className={classes.divider} />
+      {Object.entries(transformReportSkills(skills)).map(([key, value]) => (
+        <>
+          <SkillsPrintSection
+            category={key as SkillsCategories}
+            key={key}
+            maxRatingScore={maxRatingScore}
+            skills={value || []}
+          />
+          <Divider className={classes.divider} />
+        </>
+      ))}
       <section>
         <Typography variant="h6" align="center" className={classes.heading}>
           Podsumowanie

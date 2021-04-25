@@ -23,16 +23,18 @@ import {
 import background from '../../assets/report_background.png';
 // Custom components
 import { ReportMatchStats } from './ReportMatchStats';
-import { ReportMotorSkills } from './ReportMotorSkills';
 import { ReportBasicInfo } from './ReportBasicInfo';
 import { ReportSummary } from './ReportSummary';
-import { ReportSkills } from './ReportSkills';
 import { PrinteableReport } from './PrinteableReport';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
+// Utils & data
+import { transformReportSkills } from '../../utils/transformReportSkills';
+import { SkillsAccordion } from './SkillsAccordion';
+import { SkillsCategories } from '../../types/reports';
 
 type ParamTypes = {
   id: string;
@@ -125,39 +127,16 @@ export const ReportPage = () => {
               />
             </AccordionDetails>
           </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              id="individual-skills-header"
-            >
-              <Typography>Ocena umiejętności indywidualnych</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ReportSkills skills={reportData.individualSkills} />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              id="teamplay-skills-header"
-            >
-              <Typography>Ocena współdziałania z partnerami</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ReportSkills skills={reportData.teamplaySkills} />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              id="motor-skills-header"
-            >
-              <Typography>Ocena cech motorycznych</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ReportMotorSkills skills={reportData.motorSkills} />
-            </AccordionDetails>
-          </Accordion>
+          {Object.entries(transformReportSkills(reportData.skills)).map(
+            ([key, value]) => (
+              <SkillsAccordion
+                key={key}
+                category={key as SkillsCategories}
+                skills={value || []}
+                maxRatingScore={reportData.maxRatingScore}
+              />
+            ),
+          )}
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -170,11 +149,8 @@ export const ReportPage = () => {
               <ReportSummary
                 summary={reportData.summary}
                 finalRating={reportData.finalRating}
-                individualAvg={reportData.individualAvg}
-                teamplayAvg={reportData.teamplayAvg}
                 avgRating={reportData.avgRating}
-                individualSkills={reportData.individualSkills}
-                teamplaySkills={reportData.teamplaySkills}
+                skills={reportData.skills}
               />
             </AccordionDetails>
           </Accordion>

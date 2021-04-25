@@ -179,6 +179,30 @@ const labels = [
     value: 'neglected',
     label: 'Cechy zaniedbane',
   },
+  {
+    value: 'individual',
+    label: 'Cechy indywidualne',
+  },
+  {
+    value: 'teamplay',
+    label: 'Współdziałanie z partnerami',
+  },
+  {
+    value: 'offense',
+    label: 'Cechy ofensywne',
+  },
+  {
+    value: 'defense',
+    label: 'Cechy defensywne',
+  },
+  {
+    value: 'physical',
+    label: 'Cechy motoryczne',
+  },
+  {
+    value: 'mental',
+    label: 'Cechy mentalne',
+  },
 ];
 
 export const getLabel = (value: string | number | null) => {

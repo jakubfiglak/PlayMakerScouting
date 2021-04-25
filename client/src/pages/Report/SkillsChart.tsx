@@ -1,11 +1,12 @@
 import React from 'react';
 import { Radar } from 'react-chartjs-2';
-import { IndividualSkills, TeamplaySkills } from '../../types/reports';
+import { Skill } from '../../types/reports';
 import { yellow, yellowTransparent } from '../../theme/colors';
 
 type Props = {
-  individualSkills: IndividualSkills;
-  teamplaySkills: TeamplaySkills;
+  skills: Skill[];
+  width?: number;
+  height?: number;
 };
 
 const options = {
@@ -21,14 +22,12 @@ const options = {
   },
 };
 
-export const SkillsChart = ({ individualSkills, teamplaySkills }: Props) => {
-  const skills = { ...individualSkills, ...teamplaySkills };
-
+export const SkillsChart = ({ skills, width, height }: Props) => {
   const data = {
-    labels: Object.keys(skills),
+    labels: skills.map((skill) => skill.name.toUpperCase()),
     datasets: [
       {
-        data: Object.entries(skills).map(([_, value]) => value?.rating),
+        data: skills.map((skill) => skill.score),
         backgroundColor: yellowTransparent,
         borderColor: yellow,
         borderWidth: 1,
@@ -36,5 +35,5 @@ export const SkillsChart = ({ individualSkills, teamplaySkills }: Props) => {
     ],
   };
 
-  return <Radar data={data} options={options} />;
+  return <Radar data={data} options={options} width={width} height={height} />;
 };
