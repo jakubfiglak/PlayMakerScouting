@@ -1,17 +1,8 @@
 const calculateAvg = require('../utils/calculateAvg');
 
-const getAvg = (object) => {
-  const ratings = Object.entries(object)
-    .map(([_, value]) => value.rating)
-    .filter((el) => el !== undefined);
-
-  return calculateAvg(...ratings);
-};
-
 function calculateReportAvg(next) {
-  this.individualAvg = getAvg(this.individualSkills);
-  this.teamplayAvg = getAvg(this.teamplaySkills);
-  this.avgRating = calculateAvg(this.individualAvg, this.teamplayAvg);
+  const ratings = this.skills.filter((item) => item.score).map((skill) => skill.score);
+  this.avgRating = (calculateAvg(...ratings) / this.maxRatingScore) * 100;
   next();
 }
 
