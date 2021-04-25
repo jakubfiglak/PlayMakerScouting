@@ -249,9 +249,9 @@ const ReportSchema = new Schema(
 - change minutesPlayed max value to 120
 - remove individualSkills, teamplaySkills and motorSkills fields
 - add skills field instead - array of ratings
-- remove individualAvg and teamplayAvg fields
 - add maxRatingScore field,
 - add status field
+- recalculate avgRating
 */
 
 ReportSchema.plugin(mongoosePaginate);

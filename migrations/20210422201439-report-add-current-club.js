@@ -20,9 +20,7 @@ module.exports = {
         .updateOne(
           { _id: report._id },
           { $set: { playerCurrentClub: reports[idx].playerData[0].club } }
-        )
-    );
-    // console.log(operations);
+        ));
 
     await Promise.all(operations);
   },
