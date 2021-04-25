@@ -152,6 +152,7 @@ const buildReport = (overrides = {}) => ({
     buildReportRating(),
     buildReportRating(),
     buildReportRating(),
+    buildReportRating({ score: null }),
   ],
   finalRating: 3,
   summary: getRandomText(15),
