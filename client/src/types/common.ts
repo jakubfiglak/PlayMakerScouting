@@ -57,3 +57,9 @@ export interface ApiError extends Error {
     };
   };
 }
+
+export type ApiResponse<T> = {
+  success: boolean;
+  message: string;
+  data: T;
+};

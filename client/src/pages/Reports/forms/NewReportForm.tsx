@@ -22,10 +22,13 @@ import { BottomNav } from '../BottomNav';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Hooks
 import { useStepper } from '../../../hooks/useStepper';
+import { useReportTemplates } from '../../../operations/queries/useReportTemplates';
 // Types
 import { Position, PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';
 import { ReportFormData } from '../../../types/reports';
+import { ReportTemplate } from '../../../types/reportTemplates';
+import { ReportTemplateStep } from './ReportTemplateStep';
 
 type Props = {
   isOrderOptionDisabled: boolean;
@@ -52,8 +55,14 @@ export const NewReportForm = ({
 
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
   const [position, setPosition] = useState<Position | null>(null);
+  const [
+    selectedReportTemplateIdx,
+    setSelectedReportTemplateIdx,
+  ] = useState<number>(0);
 
   const { values, handleReset } = useFormikContext<ReportFormData>();
+
+  const { data: reportTemplates } = useReportTemplates();
 
   useEffect(() => {
     if (values.order) {
@@ -93,6 +102,16 @@ export const NewReportForm = ({
             onAddPlayerClick={onAddPlayerClick}
           />
         ),
+    },
+    {
+      title: 'Szablon raportu',
+      content: reportTemplates && (
+        <ReportTemplateStep
+          selectedIndex={selectedReportTemplateIdx}
+          reportTemplates={reportTemplates}
+          setSelectedIndex={setSelectedReportTemplateIdx}
+        />
+      ),
     },
     {
       title: 'Informacje o meczu',
