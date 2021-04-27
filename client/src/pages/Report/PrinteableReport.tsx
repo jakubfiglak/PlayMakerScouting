@@ -13,11 +13,12 @@ import { SkillsPrintSection } from './SkillsPrintSection';
 import { SkillsChart } from './SkillsChart';
 import { FinalRatingChip } from '../Reports/FinalRatingChip';
 // Types
-import { Report, SkillsCategories } from '../../types/reports';
+import { Report } from '../../types/reports';
+import { SkillsCategories } from '../../types/ratings';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
 import { formatDate } from '../../utils/dates';
-import { transformReportSkills } from '../../utils/transformReportSkills';
+import { groupSkillsByCategory } from '../../utils/groupSkillsByCategory';
 
 type Props = {
   report: Report;
@@ -152,7 +153,7 @@ export const PrinteableReport = ({ report }: Props) => {
         </div>
       </section>
       <Divider className={classes.divider} />
-      {Object.entries(transformReportSkills(skills)).map(([key, value]) => (
+      {Object.entries(groupSkillsByCategory(skills)).map(([key, value]) => (
         <>
           <SkillsPrintSection
             category={key as SkillsCategories}

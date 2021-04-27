@@ -3,6 +3,7 @@ import { User } from './auth';
 import { Player, Position } from './players';
 import { Order } from './orders';
 import { Club } from './clubs';
+import { SkillsCategories } from './ratings';
 
 export type RatingScore = 1 | 2 | 3 | 4;
 export type MatchLocation = 'home' | 'away';
@@ -41,13 +42,6 @@ export type MotorSkills = {
 };
 
 export type ReportStatus = 'in-prep' | 'closed';
-export type SkillsCategories =
-  | 'individual'
-  | 'teamplay'
-  | 'offense'
-  | 'defense'
-  | 'physical'
-  | 'mental';
 
 export type Skill = {
   category: SkillsCategories;

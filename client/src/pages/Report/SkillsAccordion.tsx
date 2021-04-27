@@ -7,7 +7,8 @@ import {
 } from '@material-ui/core';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { NewReportSkills } from './NewReportSkills';
-import { Skill, SkillsCategories } from '../../types/reports';
+import { Skill } from '../../types/reports';
+import { SkillsCategories } from '../../types/ratings';
 import { getLabel } from '../../utils/getLabel';
 
 type Props = {

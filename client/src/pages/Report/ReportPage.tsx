@@ -32,9 +32,9 @@ import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
 // Utils & data
-import { transformReportSkills } from '../../utils/transformReportSkills';
+import { groupSkillsByCategory } from '../../utils/groupSkillsByCategory';
 import { SkillsAccordion } from './SkillsAccordion';
-import { SkillsCategories } from '../../types/reports';
+import { SkillsCategories } from '../../types/ratings';
 
 type ParamTypes = {
   id: string;
@@ -127,7 +127,7 @@ export const ReportPage = () => {
               />
             </AccordionDetails>
           </Accordion>
-          {Object.entries(transformReportSkills(reportData.skills)).map(
+          {Object.entries(groupSkillsByCategory(reportData.skills)).map(
             ([key, value]) => (
               <SkillsAccordion
                 key={key}

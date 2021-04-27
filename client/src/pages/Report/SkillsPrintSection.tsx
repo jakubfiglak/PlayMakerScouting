@@ -4,7 +4,8 @@ import { Typography, makeStyles } from '@material-ui/core';
 // Custom components
 import { NewReportSkills } from './NewReportSkills';
 // Types
-import { SkillsCategories, Skill } from '../../types/reports';
+import { Skill } from '../../types/reports';
+import { SkillsCategories } from '../../types/ratings';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
 
