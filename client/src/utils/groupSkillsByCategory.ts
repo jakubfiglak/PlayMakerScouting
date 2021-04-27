@@ -1,12 +1,13 @@
-import { Skill } from '../types/reports';
 import { SkillsCategories } from '../types/ratings';
 
-type GroupedReportSkills = Partial<Record<SkillsCategories, Skill[]>>;
+type GroupedReportSkills<T> = Partial<Record<SkillsCategories, T[]>>;
 
 type InputType = { category: SkillsCategories };
 
-export function groupSkillsByCategory(skills?: Skill[]): GroupedReportSkills {
-  const groupedSkills: GroupedReportSkills = {};
+export function groupSkillsByCategory<T extends InputType>(
+  skills: T[],
+): GroupedReportSkills<T> {
+  const groupedSkills: GroupedReportSkills<T> = {};
 
   skills?.forEach((skill) => {
     if (groupedSkills[skill.category]) {

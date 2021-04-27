@@ -29,6 +29,7 @@ import { OrderBasicInfo } from '../../../types/orders';
 import { ReportFormData } from '../../../types/reports';
 import { ReportTemplate } from '../../../types/reportTemplates';
 import { ReportTemplateStep } from './ReportTemplateStep';
+import { NewRatingsStep } from './NewRatingsStep';
 
 type Props = {
   isOrderOptionDisabled: boolean;
@@ -110,6 +111,17 @@ export const NewReportForm = ({
           selectedIndex={selectedReportTemplateIdx}
           reportTemplates={reportTemplates}
           setSelectedIndex={setSelectedReportTemplateIdx}
+        />
+      ),
+    },
+    {
+      title: 'Nowe oceny',
+      content: reportTemplates && (
+        <NewRatingsStep
+          ratings={reportTemplates[selectedReportTemplateIdx].ratings}
+          maxRatingScore={
+            reportTemplates[selectedReportTemplateIdx].maxRatingScore
+          }
         />
       ),
     },
