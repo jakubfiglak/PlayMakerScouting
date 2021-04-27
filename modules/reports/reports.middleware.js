@@ -82,7 +82,7 @@ function setAccessFilters(req, res, next) {
 const setReport = setAsset({ name: 'report', model: Report, populate: options.populate });
 
 function checkAccessPermission(req, res, next) {
-  const isPermitted = isAdmin(req.user.role) || req.report.scout === req.user._id;
+  const isPermitted = isAdmin(req.user.role) || req.report.scout._id.toHexString() === req.user._id;
   if (!isPermitted) {
     return next(
       new ApiError("You don't have access to the report you've requsted", httpStatus.FORBIDDEN)
