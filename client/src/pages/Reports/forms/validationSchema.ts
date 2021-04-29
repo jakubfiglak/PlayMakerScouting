@@ -1,23 +1,17 @@
 import * as yup from 'yup';
+import { Position } from '../../../types/players';
 import {
   Competition,
   MatchLocation,
-  Rating,
   RatingScore,
   ReportFormData,
 } from '../../../types/reports';
-
-const ratingValidationSchema: yup.ObjectSchema<Rating> = yup
-  .object({
-    rating: yup.mixed<RatingScore>(),
-    note: yup.string(),
-  })
-  .defined();
 
 export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
   .object({
     order: yup.string(),
     player: yup.string(),
+    positionPlayed: yup.mixed<Position>().required('Podaj pozycję zawodnika'),
     match: yup
       .object({
         location: yup.mixed<MatchLocation>(),
@@ -49,30 +43,6 @@ export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
       .min(0, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
       .max(1, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
       .required(),
-    individualSkills: yup
-      .object({
-        ballReception: ratingValidationSchema,
-        passing: ratingValidationSchema,
-        defOneOnOne: ratingValidationSchema,
-        airPlay: ratingValidationSchema,
-        positioning: ratingValidationSchema,
-        attOneOnOne: ratingValidationSchema,
-        finishing: ratingValidationSchema,
-      })
-      .defined(),
-    teamplaySkills: yup
-      .object({
-        attack: ratingValidationSchema,
-        defense: ratingValidationSchema,
-        transition: ratingValidationSchema,
-      })
-      .defined(),
-    motorSkills: yup
-      .object({
-        leading: yup.string(),
-        neglected: yup.string(),
-      })
-      .defined(),
     summary: yup.string(),
     finalRating: yup.mixed<RatingScore>(),
     skills: yup.array<any>().defined(),

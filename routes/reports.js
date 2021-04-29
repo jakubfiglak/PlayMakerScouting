@@ -16,6 +16,7 @@ const {
   setAccessFilters,
   setReport,
   checkAccessPermission,
+  setCurrentClub,
 } = require('../modules/reports/reports.middleware');
 const prepareQuery = require('../middleware/prepareQuery');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
@@ -23,7 +24,11 @@ const options = require('../modules/reports/options');
 
 const router = express.Router({ mergeParams: true });
 
-router.post('/', [protect, setAuthor, setOrderData, checkOrderStatus, setPlayerData], createReport);
+router.post(
+  '/',
+  [protect, setAuthor, setOrderData, checkOrderStatus, setPlayerData, setCurrentClub],
+  createReport
+);
 router.get('/', [protect, prepareQuery, setAccessFilters], getReports);
 router.get('/:id', [protect, setReport, checkAccessPermission], getReport);
 router.put(

@@ -15,7 +15,6 @@ import { OrderStep } from './OrderStep';
 import { PlayerStep } from './PlayerStep';
 import { BasicDataStep } from './BasicDataStep';
 import { SummaryStep } from './SummaryStep';
-import { SkillsRatingStep } from './SkillsRatingStep';
 import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
 import { BottomNav } from '../BottomNav';
@@ -142,7 +141,7 @@ export const NewReportForm = ({
         validationSchema={validationSchema}
         enableReinitialize
         onSubmit={(data, { resetForm }) => {
-          // onSubmit(data);
+          onSubmit(data);
           // resetForm();
           console.log(data);
         }}
@@ -223,6 +222,7 @@ function getInitialSkills(ratings: Rating[]): Skill[] {
 const initialValues: Omit<ReportFormData, 'skills'> = {
   order: '',
   player: '',
+  positionPlayed: 'CM',
   match: {
     location: 'home',
     against: '',
@@ -234,54 +234,6 @@ const initialValues: Omit<ReportFormData, 'skills'> = {
   assists: 0,
   yellowCards: 0,
   redCards: 0,
-  individualSkills: {
-    ballReception: {
-      rating: 1,
-      note: '',
-    },
-    passing: {
-      rating: 1,
-      note: '',
-    },
-    defOneOnOne: {
-      rating: 1,
-      note: '',
-    },
-    airPlay: {
-      rating: 1,
-      note: '',
-    },
-    positioning: {
-      rating: 1,
-      note: '',
-    },
-    attOneOnOne: {
-      rating: 1,
-      note: '',
-    },
-    finishing: {
-      rating: 1,
-      note: '',
-    },
-  },
-  teamplaySkills: {
-    attack: {
-      rating: 1,
-      note: '',
-    },
-    defense: {
-      rating: 1,
-      note: '',
-    },
-    transition: {
-      rating: 1,
-      note: '',
-    },
-  },
-  motorSkills: {
-    leading: '',
-    neglected: '',
-  },
   summary: '',
   finalRating: 1,
 };

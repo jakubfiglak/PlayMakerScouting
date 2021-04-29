@@ -14,9 +14,6 @@ import {
 // MUI icons
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Custom components
-import { IndividualSkillsStep } from './IndividualSkillsStep';
-import { TeamplaySkillsStep } from './TeamplaySkillsStep';
-import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
 import { BasicDataStep } from './BasicDataStep';
 import { ReportBasicInfo } from '../../Report/ReportBasicInfo';
@@ -54,7 +51,7 @@ export const EditReportForm = ({
         </CardContent>
       </Card>
       <Form>
-        <Accordion>
+        {/* <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="individual-skills-content"
@@ -89,7 +86,7 @@ export const EditReportForm = ({
           <AccordionDetails>
             <MotorSkillsStep />
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}

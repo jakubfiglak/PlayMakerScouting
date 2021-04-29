@@ -9,7 +9,6 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { Rating } from '../../../types/ratings';
 import { groupSkillsByCategory } from '../../../utils/groupSkillsByCategory';
-import { IndividualSkillsStep } from './IndividualSkillsStep';
 import { getLabel } from '../../../utils/getLabel';
 import { NewRatingInput } from './NewRatingInput';
 import { FormContainer } from '../../../components/FormContainer';

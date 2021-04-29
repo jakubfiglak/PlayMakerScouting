@@ -15,32 +15,6 @@ export type MatchData = {
   date: string;
 };
 
-export type Rating = {
-  rating: RatingScore;
-  note: string;
-};
-
-export type IndividualSkills = {
-  ballReception: Rating;
-  passing: Rating;
-  defOneOnOne?: Rating;
-  airPlay?: Rating;
-  positioning?: Rating;
-  attOneOnOne?: Rating;
-  finishing?: Rating;
-};
-
-export type TeamplaySkills = {
-  attack: Rating;
-  defense: Rating;
-  transition: Rating;
-};
-
-export type MotorSkills = {
-  leading: string;
-  neglected: string;
-};
-
 export type ReportStatus = 'in-prep' | 'closed';
 
 export type Skill = {
@@ -66,9 +40,6 @@ export type Report = {
   assists: number;
   yellowCards: number;
   redCards: number;
-  individualSkills: IndividualSkills;
-  teamplaySkills: TeamplaySkills;
-  motorSkills: MotorSkills;
   skills: Skill[];
   finalRating: RatingScore;
   summary: string;
@@ -78,10 +49,11 @@ export type Report = {
   createdAt: string;
 };
 
-type CommonFormData = {
+export type ReportFormData = {
   order?: string;
   player: string;
   match: MatchData;
+  positionPlayed: Position;
   minutesPlayed: number;
   goals: number;
   assists: number;
@@ -91,12 +63,6 @@ type CommonFormData = {
   summary: string;
   skills: any[];
 };
-
-export type ReportFormData = {
-  individualSkills: IndividualSkills;
-  teamplaySkills: TeamplaySkills;
-  motorSkills: MotorSkills;
-} & CommonFormData;
 
 export type ReportsFilterData = {
   player: string;

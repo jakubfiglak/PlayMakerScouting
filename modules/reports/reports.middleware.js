@@ -62,6 +62,11 @@ const setPlayerData = asyncHandler(async (req, res, next) => {
   next();
 });
 
+function setCurrentClub(req, res, next) {
+  req.body.playerCurrentClub = req.playerData.club;
+  next();
+}
+
 function setIndividualSkills(req, res, next) {
   req.body.individualSkills = getIndividualSkillsProps(
     req.body.individualSkills,
@@ -100,4 +105,5 @@ module.exports = {
   setAccessFilters,
   setReport,
   checkAccessPermission,
+  setCurrentClub,
 };

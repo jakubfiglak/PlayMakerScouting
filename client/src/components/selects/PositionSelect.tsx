@@ -11,8 +11,14 @@ import {
 import { positions } from '../../utils/constants';
 import { getLabel } from '../../utils/getLabel';
 
-export const PositionSelect = () => {
-  const [field, fieldMeta] = useField('position');
+type Props = { name?: string; label?: string; helperText?: string };
+
+export const PositionSelect = ({
+  name = 'position',
+  label = 'Pozycja',
+  helperText,
+}: Props) => {
+  const [field, fieldMeta] = useField(name);
 
   const { error, touched } = fieldMeta;
 
@@ -23,7 +29,7 @@ export const PositionSelect = () => {
         {...field}
         labelId="position"
         id="position"
-        label="Pozycja"
+        label={label}
         error={touched && !!error}
       >
         {positions.map((position) => (
@@ -32,6 +38,7 @@ export const PositionSelect = () => {
           </MenuItem>
         ))}
       </Select>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
       {touched && error && <FormHelperText>{error}</FormHelperText>}
     </>
   );

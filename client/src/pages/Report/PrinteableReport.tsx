@@ -38,8 +38,6 @@ export const PrinteableReport = ({ report }: Props) => {
     goals,
     yellowCards,
     redCards,
-    individualSkills,
-    teamplaySkills,
     summary,
     finalRating,
     avgRating,
