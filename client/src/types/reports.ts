@@ -89,6 +89,7 @@ type CommonFormData = {
   redCards: number;
   finalRating: RatingScore;
   summary: string;
+  skills: any[];
 };
 
 export type ReportFormData = {

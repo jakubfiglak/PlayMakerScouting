@@ -36,12 +36,12 @@ export const NewRatingsStep = ({ ratings, maxRatingScore }: Props) => {
           <AccordionDetails>
             <FormContainer>
               {value &&
-                value.map((rating) => (
+                value.map((rating, index) => (
                   <NewRatingInput
                     key={rating.id}
                     title={rating.name}
                     hasScore={rating.score}
-                    namespace={rating.name}
+                    index={ratings.findIndex((el) => el.id === rating.id)}
                     maxRatingScore={maxRatingScore}
                   />
                 ))}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, useFormikContext } from 'formik';
+import { Formik, Form, useFormikContext } from 'formik';
 // MUI components
 import {
   Stepper,
@@ -26,16 +26,19 @@ import { useReportTemplates } from '../../../operations/queries/useReportTemplat
 // Types
 import { Position, PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';
-import { ReportFormData } from '../../../types/reports';
+import { ReportFormData, Skill } from '../../../types/reports';
 import { ReportTemplate } from '../../../types/reportTemplates';
 import { ReportTemplateStep } from './ReportTemplateStep';
 import { NewRatingsStep } from './NewRatingsStep';
+import { validationSchema } from './validationSchema';
+import { Rating } from '../../../types/ratings';
 
 type Props = {
   isOrderOptionDisabled: boolean;
   playersList: PlayerBasicInfo[];
   ordersList: OrderBasicInfo[];
   onAddPlayerClick: () => void;
+  onSubmit: (data: ReportFormData) => void;
 };
 
 export const NewReportForm = ({
@@ -43,6 +46,7 @@ export const NewReportForm = ({
   playersList,
   ordersList,
   onAddPlayerClick,
+  onSubmit,
 }: Props) => {
   const classes = useStyles();
 
@@ -55,31 +59,12 @@ export const NewReportForm = ({
   ] = useStepper();
 
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
-  const [position, setPosition] = useState<Position | null>(null);
   const [
     selectedReportTemplateIdx,
     setSelectedReportTemplateIdx,
   ] = useState<number>(0);
 
-  const { values, handleReset } = useFormikContext<ReportFormData>();
-
   const { data: reportTemplates } = useReportTemplates();
-
-  useEffect(() => {
-    if (values.order) {
-      const order = ordersList.find((ord) => ord.id === values.order);
-      if (order) {
-        setPosition(order.player.position);
-      }
-    }
-    if (values.player) {
-      const player = playersList.find((play) => play.id === values.player);
-      if (player) {
-        setPosition(player.position);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.order, values.player]);
 
   const steps = [
     {
@@ -89,6 +74,16 @@ export const NewReportForm = ({
           reportType={reportType}
           setReportType={setReportType}
           isOrderOptionDisabled={isOrderOptionDisabled}
+        />
+      ),
+    },
+    {
+      title: 'Szablon raportu',
+      content: reportTemplates && (
+        <ReportTemplateStep
+          selectedIndex={selectedReportTemplateIdx}
+          reportTemplates={reportTemplates}
+          setSelectedIndex={setSelectedReportTemplateIdx}
         />
       ),
     },
@@ -103,16 +98,6 @@ export const NewReportForm = ({
             onAddPlayerClick={onAddPlayerClick}
           />
         ),
-    },
-    {
-      title: 'Szablon raportu',
-      content: reportTemplates && (
-        <ReportTemplateStep
-          selectedIndex={selectedReportTemplateIdx}
-          reportTemplates={reportTemplates}
-          setSelectedIndex={setSelectedReportTemplateIdx}
-        />
-      ),
     },
     {
       title: 'Nowe oceny',
@@ -134,10 +119,6 @@ export const NewReportForm = ({
       content: <SummaryStep />,
     },
     {
-      title: 'Oceny',
-      content: <SkillsRatingStep position={position} />,
-    },
-    {
       title: 'Statystyki',
       content: <BasicDataStep />,
     },
@@ -149,45 +130,66 @@ export const NewReportForm = ({
 
   return (
     <>
-      <Form>
-        <Stepper
-          activeStep={activeStep}
-          orientation="vertical"
-          className={classes.root}
-        >
-          {steps.map(({ title, content }) => (
-            <Step key={title}>
-              <StepLabel>{title}</StepLabel>
-              <StepContent>
-                <div className={classes.content}>{content}</div>
-                <StepActions
-                  activeStep={activeStep}
-                  totalSteps={steps.length}
-                  handleBack={handleBack}
-                  handleNext={handleNext}
-                  isNextButtonDisabled={
-                    (activeStep === 1 && !values.player && !values.order) ||
-                    (activeStep === 2 && !values.match)
-                  }
-                />
-              </StepContent>
-            </Step>
-          ))}
-        </Stepper>
-        {activeStep === steps.length && (
-          <MainFormActions
-            label="raport"
-            isEditState={false}
-            onCancelClick={() => {
-              handleReset();
-              resetStepper();
-            }}
-            goBack={handleGoBack}
-            activeStep={activeStep}
-            totalSteps={steps.length}
-          />
+      <Formik
+        initialValues={{
+          ...initialValues,
+          skills: reportTemplates
+            ? getInitialSkills(
+                reportTemplates[selectedReportTemplateIdx].ratings,
+              )
+            : [],
+        }}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={(data, { resetForm }) => {
+          // onSubmit(data);
+          // resetForm();
+          console.log(data);
+        }}
+      >
+        {({ errors, touched, handleReset, values }) => (
+          <Form>
+            <Stepper
+              activeStep={activeStep}
+              orientation="vertical"
+              className={classes.root}
+            >
+              {steps.map(({ title, content }) => (
+                <Step key={title}>
+                  <StepLabel>{title}</StepLabel>
+                  <StepContent>
+                    <div className={classes.content}>{content}</div>
+                    <StepActions
+                      activeStep={activeStep}
+                      totalSteps={steps.length}
+                      handleBack={handleBack}
+                      handleNext={handleNext}
+                      isNextButtonDisabled={false}
+                      // isNextButtonDisabled={
+                      //   (activeStep === 1 && !values.player && !values.order) ||
+                      //   (activeStep === 2 && !values.match)
+                      // }
+                    />
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+            {activeStep === steps.length && (
+              <MainFormActions
+                label="raport"
+                isEditState={false}
+                onCancelClick={() => {
+                  handleReset();
+                  resetStepper();
+                }}
+                goBack={handleGoBack}
+                activeStep={activeStep}
+                totalSteps={steps.length}
+              />
+            )}
+          </Form>
         )}
-      </Form>
+      </Formik>
       <BottomNav activeStep={activeStep} setActiveStep={setActiveStep} />
     </>
   );
@@ -203,3 +205,83 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(1),
   },
 }));
+
+const date = new Date(Date.now());
+const dateString = date.toISOString().slice(0, 16);
+
+function getInitialSkills(ratings: Rating[]): Skill[] {
+  return ratings.map((rating) => ({
+    category: rating.category,
+    name: rating.name,
+    shortName: rating.shortName,
+    hasScore: rating.score,
+    score: rating.score ? 1 : undefined,
+    description: '',
+  }));
+}
+
+const initialValues: Omit<ReportFormData, 'skills'> = {
+  order: '',
+  player: '',
+  match: {
+    location: 'home',
+    against: '',
+    competition: 'league',
+    date: dateString,
+  },
+  minutesPlayed: 0,
+  goals: 0,
+  assists: 0,
+  yellowCards: 0,
+  redCards: 0,
+  individualSkills: {
+    ballReception: {
+      rating: 1,
+      note: '',
+    },
+    passing: {
+      rating: 1,
+      note: '',
+    },
+    defOneOnOne: {
+      rating: 1,
+      note: '',
+    },
+    airPlay: {
+      rating: 1,
+      note: '',
+    },
+    positioning: {
+      rating: 1,
+      note: '',
+    },
+    attOneOnOne: {
+      rating: 1,
+      note: '',
+    },
+    finishing: {
+      rating: 1,
+      note: '',
+    },
+  },
+  teamplaySkills: {
+    attack: {
+      rating: 1,
+      note: '',
+    },
+    defense: {
+      rating: 1,
+      note: '',
+    },
+    transition: {
+      rating: 1,
+      note: '',
+    },
+  },
+  motorSkills: {
+    leading: '',
+    neglected: '',
+  },
+  summary: '',
+  finalRating: 1,
+};

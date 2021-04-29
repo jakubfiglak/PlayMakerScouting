@@ -1,0 +1,80 @@
+import * as yup from 'yup';
+import {
+  Competition,
+  MatchLocation,
+  Rating,
+  RatingScore,
+  ReportFormData,
+} from '../../../types/reports';
+
+const ratingValidationSchema: yup.ObjectSchema<Rating> = yup
+  .object({
+    rating: yup.mixed<RatingScore>(),
+    note: yup.string(),
+  })
+  .defined();
+
+export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
+  .object({
+    order: yup.string(),
+    player: yup.string(),
+    match: yup
+      .object({
+        location: yup.mixed<MatchLocation>(),
+        against: yup.string(),
+        competition: yup.mixed<Competition>(),
+        date: yup.string(),
+      })
+      .defined(),
+    minutesPlayed: yup
+      .number()
+      .min(0, 'Liczba rozegranych minut musi być wartością pomiędzy 0 a 90')
+      .max(90, 'Liczba rozegranych minut musi mieć wartość pomiędzy 0 a 90')
+      .required(),
+    goals: yup
+      .number()
+      .min(0, 'Liczba goli nie może być mniejsza od 0')
+      .required(),
+    assists: yup
+      .number()
+      .min(0, 'Liczba asyst nie może być mniejsza od 0')
+      .required(),
+    yellowCards: yup
+      .number()
+      .min(0, 'Liczba żółtych kartek musi mieć wartość 0, 1 lub 2')
+      .max(2, 'Liczba żółtych kartek musi mieć wartość 0, 1 lub 2')
+      .required(),
+    redCards: yup
+      .number()
+      .min(0, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
+      .max(1, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
+      .required(),
+    individualSkills: yup
+      .object({
+        ballReception: ratingValidationSchema,
+        passing: ratingValidationSchema,
+        defOneOnOne: ratingValidationSchema,
+        airPlay: ratingValidationSchema,
+        positioning: ratingValidationSchema,
+        attOneOnOne: ratingValidationSchema,
+        finishing: ratingValidationSchema,
+      })
+      .defined(),
+    teamplaySkills: yup
+      .object({
+        attack: ratingValidationSchema,
+        defense: ratingValidationSchema,
+        transition: ratingValidationSchema,
+      })
+      .defined(),
+    motorSkills: yup
+      .object({
+        leading: yup.string(),
+        neglected: yup.string(),
+      })
+      .defined(),
+    summary: yup.string(),
+    finalRating: yup.mixed<RatingScore>(),
+    skills: yup.array<any>().defined(),
+  })
+  .defined();
