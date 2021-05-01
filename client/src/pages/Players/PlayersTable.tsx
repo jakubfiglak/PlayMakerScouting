@@ -45,11 +45,11 @@ export const PlayersTable = ({
       headCells={headCells}
     >
       {players.map((player) => {
-        const { id: _id } = player;
+        const { id } = player;
 
         return (
           <PlayersTableRow
-            key={_id}
+            key={id}
             player={player}
             handleSetCurrent={handleSetCurrent}
           />

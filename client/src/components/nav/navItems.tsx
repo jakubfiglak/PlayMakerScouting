@@ -7,6 +7,7 @@ import {
   Assessment as ReportsIcon,
   Settings as AccessManagementIcon,
   Home as HomeIcon,
+  HomeWork as ReportTemplatesIcon,
 } from '@material-ui/icons';
 import { NavItem } from './types';
 
@@ -40,6 +41,12 @@ export const navItems: NavItem[] = [
     text: 'Zlecenia',
     to: '/orders',
     allowedRoles: ['admin', 'playmaker-scout'],
+  },
+  {
+    icon: <ReportTemplatesIcon color="error" />,
+    text: 'Kreator szablonów',
+    to: '/reporttemplates',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
   },
   {
     icon: <ReportsIcon color="error" />,

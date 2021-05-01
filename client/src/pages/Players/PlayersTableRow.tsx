@@ -20,7 +20,7 @@ type Props = {
 export const PlayersTableRow = ({ player, handleSetCurrent }: Props) => {
   const classes = useStyles();
   const {
-    id: _id,
+    id,
     firstName,
     lastName,
     club,
@@ -34,7 +34,7 @@ export const PlayersTableRow = ({ player, handleSetCurrent }: Props) => {
       <StyledTableCell padding="checkbox">
         <div className={classes.buttonsContainer}>
           <Tooltip title="Zobacz profil">
-            <Link component={RouterLink} to={`/players/${_id}`}>
+            <Link component={RouterLink} to={`/players/${id}`}>
               <IconButton aria-label="go to players profile">
                 <SearchIcon />
               </IconButton>
