@@ -25,9 +25,13 @@ import { usePlayersState } from '../../context/players/usePlayersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useRatings } from '../../operations/queries/useRatings';
 import { ReportTemplatesTable } from './ReportTemplatesTable';
+import { RatingsForm } from './RatingsForm';
+import { Rating } from '../../types/ratings';
 
 export const ReportTemplatesPage = () => {
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
+
+  const [currentRating, setCurrentRating] = useState<Rating | null>(null);
 
   return (
     <MainTemplate>
@@ -43,6 +47,7 @@ export const ReportTemplatesPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="ratings">
         <PageHeading title="Definicje umiejętności" />
+        <RatingsForm current={currentRating} />
         <RatingsTable />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
