@@ -61,7 +61,7 @@ export type ReportFormData = {
   redCards: number;
   finalRating: RatingScore;
   summary: string;
-  skills: any[];
+  skills: Skill[];
 };
 
 export type ReportsFilterData = {

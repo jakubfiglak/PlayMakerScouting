@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Formik } from 'formik';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
 import { AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
@@ -28,8 +27,6 @@ import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
-
-import { validationSchema } from './forms/validationSchema';
 
 type LocationState = { setActiveTab: number };
 
@@ -85,25 +82,6 @@ export const ReportsPage = () => {
   const [filters, setFilters] = useState<ReportsFilterData>({
     player: '',
   });
-
-  // const initialValues: ReportFormData = current
-  //   ? {
-  //       order: current.order?.id,
-  //       player: current.player.id,
-  //       match: current.match,
-  //       minutesPlayed: current.minutesPlayed,
-  //       goals: current.goals,
-  //       assists: current.assists,
-  //       yellowCards: current.yellowCards,
-  //       redCards: current.redCards,
-  //       finalRating: current.finalRating,
-  //       summary: current.summary,
-  //       individualSkills: current.individualSkills,
-  //       teamplaySkills: current.teamplaySkills,
-  //       motorSkills: current.motorSkills,
-  //       skills: current.skills,
-  //     }
-  //   : reportsFormInitialValues;
 
   useEffect(() => {
     getPlayersList();
@@ -207,6 +185,7 @@ export const ReportsPage = () => {
             report={current}
             onReset={handleEditFormReset}
             onEditCancelClick={handleEditCancelClick}
+            onSubmit={editReport}
           />
         ) : (
           <NewReportForm

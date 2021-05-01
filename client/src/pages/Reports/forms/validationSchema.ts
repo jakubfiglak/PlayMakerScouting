@@ -5,6 +5,7 @@ import {
   MatchLocation,
   RatingScore,
   ReportFormData,
+  Skill,
 } from '../../../types/reports';
 
 export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
@@ -22,8 +23,8 @@ export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
       .defined(),
     minutesPlayed: yup
       .number()
-      .min(0, 'Liczba rozegranych minut musi być wartością pomiędzy 0 a 90')
-      .max(90, 'Liczba rozegranych minut musi mieć wartość pomiędzy 0 a 90')
+      .min(0, 'Liczba rozegranych minut musi być wartością pomiędzy 0 a 120')
+      .max(120, 'Liczba rozegranych minut musi mieć wartość pomiędzy 0 a 120')
       .required(),
     goals: yup
       .number()
@@ -43,8 +44,8 @@ export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
       .min(0, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
       .max(1, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
       .required(),
-    summary: yup.string(),
+    summary: yup.string().required('Opisz występ'),
     finalRating: yup.mixed<RatingScore>(),
-    skills: yup.array<any>().defined(),
+    skills: yup.array<Skill>().defined(),
   })
   .defined();

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Formik, Form, useFormikContext } from 'formik';
+import React, { useState } from 'react';
+import { Formik, Form } from 'formik';
 // MUI components
 import {
   Stepper,
@@ -17,20 +17,20 @@ import { BasicDataStep } from './BasicDataStep';
 import { SummaryStep } from './SummaryStep';
 import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
+import { ReportTemplateStep } from './ReportTemplateStep';
+import { RatingsStep } from './RatingsStep';
 import { BottomNav } from '../BottomNav';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Hooks
 import { useStepper } from '../../../hooks/useStepper';
 import { useReportTemplates } from '../../../operations/queries/useReportTemplates';
 // Types
-import { Position, PlayerBasicInfo } from '../../../types/players';
+import { PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';
 import { ReportFormData, Skill } from '../../../types/reports';
-import { ReportTemplate } from '../../../types/reportTemplates';
-import { ReportTemplateStep } from './ReportTemplateStep';
-import { NewRatingsStep } from './NewRatingsStep';
-import { validationSchema } from './validationSchema';
 import { Rating } from '../../../types/ratings';
+// Utils & data
+import { validationSchema } from './validationSchema';
 
 type Props = {
   isOrderOptionDisabled: boolean;
@@ -67,22 +67,24 @@ export const NewReportForm = ({
 
   const steps = [
     {
+      title: 'Szablon raportu',
+      content: reportTemplates ? (
+        <ReportTemplateStep
+          selectedIndex={selectedReportTemplateIdx}
+          reportTemplates={reportTemplates}
+          setSelectedIndex={setSelectedReportTemplateIdx}
+        />
+      ) : (
+        <p>Wybierz szablon raportu</p>
+      ),
+    },
+    {
       title: 'Rodzaj raportu',
       content: (
         <ReportTypeStep
           reportType={reportType}
           setReportType={setReportType}
           isOrderOptionDisabled={isOrderOptionDisabled}
-        />
-      ),
-    },
-    {
-      title: 'Szablon raportu',
-      content: reportTemplates && (
-        <ReportTemplateStep
-          selectedIndex={selectedReportTemplateIdx}
-          reportTemplates={reportTemplates}
-          setSelectedIndex={setSelectedReportTemplateIdx}
         />
       ),
     },
@@ -99,23 +101,25 @@ export const NewReportForm = ({
         ),
     },
     {
-      title: 'Nowe oceny',
-      content: reportTemplates && (
-        <NewRatingsStep
-          ratings={reportTemplates[selectedReportTemplateIdx].ratings}
-          maxRatingScore={
-            reportTemplates[selectedReportTemplateIdx].maxRatingScore
-          }
-        />
-      ),
-    },
-    {
       title: 'Informacje o meczu',
       content: <MatchStep />,
     },
     {
       title: 'Notatki/podsumowanie',
       content: <SummaryStep />,
+    },
+    {
+      title: 'Oceny',
+      content: reportTemplates && (
+        <RatingsStep
+          ratings={mapRatingsToRatingType(
+            reportTemplates[selectedReportTemplateIdx].ratings,
+          )}
+          maxRatingScore={
+            reportTemplates[selectedReportTemplateIdx].maxRatingScore
+          }
+        />
+      ),
     },
     {
       title: 'Statystyki',
@@ -142,11 +146,10 @@ export const NewReportForm = ({
         enableReinitialize
         onSubmit={(data, { resetForm }) => {
           onSubmit(data);
-          // resetForm();
-          console.log(data);
+          resetForm();
         }}
       >
-        {({ errors, touched, handleReset, values }) => (
+        {({ handleReset, values }) => (
           <Form>
             <Stepper
               activeStep={activeStep}
@@ -163,11 +166,10 @@ export const NewReportForm = ({
                       totalSteps={steps.length}
                       handleBack={handleBack}
                       handleNext={handleNext}
-                      isNextButtonDisabled={false}
-                      // isNextButtonDisabled={
-                      //   (activeStep === 1 && !values.player && !values.order) ||
-                      //   (activeStep === 2 && !values.match)
-                      // }
+                      isNextButtonDisabled={
+                        (activeStep === 2 && !values.player && !values.order) ||
+                        (activeStep === 4 && !values.summary)
+                      }
                     />
                   </StepContent>
                 </Step>
@@ -217,6 +219,13 @@ function getInitialSkills(ratings: Rating[]): Skill[] {
     score: rating.score ? 1 : undefined,
     description: '',
   }));
+}
+
+function mapRatingsToRatingType(ratings: Rating[]) {
+  return ratings.map((rating) => {
+    const { name, category, score } = rating;
+    return { name, category, hasScore: score };
+  });
 }
 
 const initialValues: Omit<ReportFormData, 'skills'> = {

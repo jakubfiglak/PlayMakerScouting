@@ -7,19 +7,24 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
-import { Rating } from '../../../types/ratings';
+import { SkillsCategories } from '../../../types/ratings';
 import { groupSkillsByCategory } from '../../../utils/groupSkillsByCategory';
 import { getLabel } from '../../../utils/getLabel';
-import { NewRatingInput } from './NewRatingInput';
+import { RatingInput } from './RatingInput';
 import { FormContainer } from '../../../components/FormContainer';
 
-type Props = { ratings: Rating[]; maxRatingScore: number };
+type RatingType = {
+  name: string;
+  category: SkillsCategories;
+  hasScore: boolean;
+};
 
-export const NewRatingsStep = ({ ratings, maxRatingScore }: Props) => {
+type Props = { ratings: RatingType[]; maxRatingScore: number };
+
+export const RatingsStep = ({ ratings, maxRatingScore }: Props) => {
   const classes = useStyles();
 
   const groupedRatings = groupSkillsByCategory(ratings);
-  console.log(groupedRatings);
 
   return (
     <>
@@ -35,12 +40,12 @@ export const NewRatingsStep = ({ ratings, maxRatingScore }: Props) => {
           <AccordionDetails>
             <FormContainer>
               {value &&
-                value.map((rating, index) => (
-                  <NewRatingInput
-                    key={rating.id}
+                value.map((rating) => (
+                  <RatingInput
+                    key={rating.name}
                     title={rating.name}
-                    hasScore={rating.score}
-                    index={ratings.findIndex((el) => el.id === rating.id)}
+                    hasScore={rating.hasScore}
+                    index={ratings.findIndex((el) => el.name === rating.name)}
                     maxRatingScore={maxRatingScore}
                   />
                 ))}
