@@ -1,52 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
-// import { PlayersForm } from './PlayersForm';
-// import { PlayersTable } from './PlayersTable';
-// import { PlayersFilterForm } from './PlayersFilterForm';
-// import { AddClubModal } from './AddClubModal';
-import { TabPanel } from '../../components/TabPanel';
-import { Loader } from '../../components/Loader';
-import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { RatingsTable } from './RatingsTable';
-// Types
-import {
-  PlayersFilterData,
-  Player,
-  PlayersFormData,
-} from '../../types/players';
-import { Rating } from '../../types/ratings';
-import { ReportTemplate } from '../../types/reportTemplates';
-// Hooks
-import { useTabs } from '../../hooks/useTabs';
-import { useTable } from '../../hooks/useTable';
-import { useClubsState } from '../../context/clubs/useClubsState';
-import { usePlayersState } from '../../context/players/usePlayersState';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
-import { useRatings } from '../../operations/queries/useRatings';
 import { ReportTemplatesTable } from './ReportTemplatesTable';
 import { RatingsForm } from './RatingsForm';
 import { ReportTemplatesForm } from './ReportTemplatesForm';
 import { RatingDeleteConfirmationModal } from './RatingDeleteConfirmationModal';
+import { TemplateDeleteConfirmationModal } from './TemplateDeleteConfirmationModal';
+import { TabPanel } from '../../components/TabPanel';
+import { PageHeading } from '../../components/PageHeading';
+import { MainTemplate } from '../../templates/MainTemplate';
+// Types
+import { Rating } from '../../types/ratings';
+import { ReportTemplate } from '../../types/reportTemplates';
+// Hooks
+import { useTabs } from '../../hooks/useTabs';
 
 export const ReportTemplatesPage = () => {
-  const [activeTab, handleTabChange, setActiveTab] = useTabs();
+  const [activeTab, handleTabChange] = useTabs();
 
   const [currentRating, setCurrentRating] = useState<Rating | null>(null);
+  const [
+    currentReportTemplate,
+    setCurrentReportTemplate,
+  ] = useState<ReportTemplate | null>(null);
   const [
     isRatingDeleteConfirmationModalOpen,
     setRatingDeleteConfirmationModalOpen,
   ] = useState(false);
   const [
-    currentReportTemplate,
-    setCurrentReportTemplate,
-  ] = useState<ReportTemplate | null>(null);
+    isTemplateDeleteConfimationModalOpen,
+    setTemplateDeleteConfirmationModalOpen,
+  ] = useState(false);
 
   function handleDeleteRatingClick(rating: Rating) {
     setCurrentRating(rating);
     setRatingDeleteConfirmationModalOpen(true);
+  }
+
+  function handleDeleteTemplateClick(template: ReportTemplate) {
+    setCurrentReportTemplate(template);
+    setTemplateDeleteConfirmationModalOpen(true);
   }
 
   return (
@@ -74,8 +69,14 @@ export const ReportTemplatesPage = () => {
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PageHeading title="Szablony raportów" />
-        <ReportTemplatesForm current={currentReportTemplate} />
-        <ReportTemplatesTable onEditClick={setCurrentReportTemplate} />
+        <ReportTemplatesForm
+          current={currentReportTemplate}
+          clearCurrent={() => setCurrentReportTemplate(null)}
+        />
+        <ReportTemplatesTable
+          onEditClick={setCurrentReportTemplate}
+          onDeleteClick={handleDeleteTemplateClick}
+        />
       </TabPanel>
       <RatingDeleteConfirmationModal
         rating={currentRating}
@@ -83,6 +84,14 @@ export const ReportTemplatesPage = () => {
         handleClose={() => {
           setRatingDeleteConfirmationModalOpen(false);
           setCurrentRating(null);
+        }}
+      />
+      <TemplateDeleteConfirmationModal
+        template={currentReportTemplate}
+        open={isTemplateDeleteConfimationModalOpen}
+        handleClose={() => {
+          setTemplateDeleteConfirmationModalOpen(false);
+          setCurrentReportTemplate(null);
         }}
       />
     </MainTemplate>

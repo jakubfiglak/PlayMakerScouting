@@ -1,8 +1,8 @@
 import React from 'react';
 // MUI components
-import { Tooltip, IconButton } from '@material-ui/core';
+import { Tooltip, IconButton, makeStyles } from '@material-ui/core';
 // MUI icons
-import { Edit as EditIcon } from '@material-ui/icons';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@material-ui/icons';
 // Custom components
 import { SimpleTable } from '../../components/table/SimpleTable';
 import { StyledTableCell } from '../../components/table/TableCell';
@@ -17,9 +17,13 @@ const headCells = [
   { id: 'maxRatingScore', label: 'Skala ocen' },
 ];
 
-type Props = { onEditClick: (template: ReportTemplate) => void };
+type Props = {
+  onEditClick: (template: ReportTemplate) => void;
+  onDeleteClick: (template: ReportTemplate) => void;
+};
 
-export const ReportTemplatesTable = ({ onEditClick }: Props) => {
+export const ReportTemplatesTable = ({ onEditClick, onDeleteClick }: Props) => {
+  const classes = useStyles();
   const { data } = useReportTemplates();
 
   return (
@@ -28,14 +32,24 @@ export const ReportTemplatesTable = ({ onEditClick }: Props) => {
         ? data.map((template) => (
             <StyledTableRow key={template.id}>
               <StyledTableCell padding="checkbox">
-                <Tooltip title="Edytuj">
-                  <IconButton
-                    aria-label="edit"
-                    onClick={() => onEditClick(template)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
+                <div className={classes.buttonsContainer}>
+                  <Tooltip title="Edytuj">
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => onEditClick(template)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Usuń">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => onDeleteClick(template)}
+                    >
+                      <DeleteIcon color="error" />
+                    </IconButton>
+                  </Tooltip>
+                </div>
               </StyledTableCell>
               <StyledTableCell>{template.name}</StyledTableCell>
               <StyledTableCell>{template.maxRatingScore}</StyledTableCell>
@@ -45,3 +59,9 @@ export const ReportTemplatesTable = ({ onEditClick }: Props) => {
     </SimpleTable>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  buttonsContainer: {
+    display: 'flex',
+  },
+}));

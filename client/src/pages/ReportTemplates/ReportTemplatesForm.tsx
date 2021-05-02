@@ -14,91 +14,113 @@ import {
 // Custom components
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
+import { Loader } from '../../components/Loader';
 // Types
 import { ReportTemplate, ReportTemplateDTO } from '../../types/reportTemplates';
+// Hooks
 import { useRatings } from '../../operations/queries/useRatings';
+import { useCreateReportTemplate } from '../../operations/mutations/useCreateReportTemplate';
+import { useUpdateReportTemplate } from '../../operations/mutations/useUpdateReportTemplate';
 
 type Props = {
   current: ReportTemplate | null;
+  clearCurrent: () => void;
   // onSubmit: (data: ClubsFormData) => void;
   // onCancelClick: () => void;
   // onEditCancelClick: () => void;
 };
 
-export const ReportTemplatesForm = ({ current }: Props) => {
+export const ReportTemplatesForm = ({ current, clearCurrent }: Props) => {
   const { data: ratings } = useRatings();
+  const {
+    mutate: createTemplate,
+    isLoading: createLoading,
+  } = useCreateReportTemplate();
+  const {
+    mutate: updateTemplate,
+    isLoading: updateLoading,
+  } = useUpdateReportTemplate();
 
   const initialValues: ReportTemplateDTO = current
     ? getInitialStateFromCurrent(current)
     : ratingsFormInitialValues;
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      enableReinitialize
-      onSubmit={(data) => {
-        console.log(data);
-      }}
-    >
-      {({ errors, touched, handleReset, values }) => (
-        <Form>
-          <FormContainer>
-            <Field
-              name="name"
-              as={TextField}
-              variant="outlined"
-              fullWidth
-              label="Nazwa"
-              autoFocus
-              error={touched.name && !!errors.name}
-              helperText={touched.name && errors.name}
-            />
-            <Field
-              name="maxRatingScore"
-              as={TextField}
-              variant="outlined"
-              type="number"
-              fullWidth
-              label="Ocena maksymalna"
-              error={touched.maxRatingScore && !!errors.maxRatingScore}
-              helperText={touched.maxRatingScore && errors.maxRatingScore}
-            />
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Oceniane umiejętności</FormLabel>
-              <FormGroup>
-                {ratings
-                  ? ratings.map((rating) => (
-                      <FormControlLabel
-                        key={rating.id}
-                        control={
-                          <Field
-                            as={MUICheckbox}
-                            name="ratings"
-                            value={rating.id}
-                            checked={values.ratings.includes(rating.id)}
-                            color="primary"
-                          />
-                        }
-                        label={`${rating.name} (${rating.category})`}
-                      />
-                    ))
-                  : null}
-              </FormGroup>
-              {errors.ratings && touched.ratings ? (
-                <FormHelperText>{errors.ratings}</FormHelperText>
-              ) : null}
-            </FormControl>
-            <MainFormActions
-              label="szablon"
-              isEditState={!!current}
-              onCancelClick={() => console.log('cancel')}
-              onEditCancelClick={() => console.log('cancel')}
-            />
-          </FormContainer>
-        </Form>
-      )}
-    </Formik>
+    <>
+      {(createLoading || updateLoading) && <Loader />}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={(data, { resetForm }) => {
+          if (current) {
+            updateTemplate({ id: current.id, templateData: data });
+            clearCurrent();
+          } else {
+            createTemplate(data);
+          }
+          resetForm();
+        }}
+      >
+        {({ errors, touched, handleReset, values }) => (
+          <Form>
+            <FormContainer>
+              <Field
+                name="name"
+                as={TextField}
+                variant="outlined"
+                fullWidth
+                label="Nazwa"
+                autoFocus
+                error={touched.name && !!errors.name}
+                helperText={touched.name && errors.name}
+              />
+              <Field
+                name="maxRatingScore"
+                as={TextField}
+                variant="outlined"
+                type="number"
+                fullWidth
+                label="Ocena maksymalna"
+                error={touched.maxRatingScore && !!errors.maxRatingScore}
+                helperText={touched.maxRatingScore && errors.maxRatingScore}
+              />
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Oceniane umiejętności</FormLabel>
+                <FormGroup>
+                  {ratings
+                    ? ratings.map((rating) => (
+                        <FormControlLabel
+                          key={rating.id}
+                          control={
+                            <Field
+                              as={MUICheckbox}
+                              name="ratings"
+                              value={rating.id}
+                              checked={values.ratings.includes(rating.id)}
+                              color="primary"
+                            />
+                          }
+                          label={`${rating.name} (${rating.category})`}
+                        />
+                      ))
+                    : null}
+                </FormGroup>
+                {errors.ratings && touched.ratings ? (
+                  <FormHelperText>{errors.ratings}</FormHelperText>
+                ) : null}
+              </FormControl>
+              <MainFormActions
+                label="szablon"
+                isEditState={!!current}
+                onCancelClick={() => console.log('cancel')}
+                onEditCancelClick={() => console.log('cancel')}
+              />
+            </FormContainer>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 };
 

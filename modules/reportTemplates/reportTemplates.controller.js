@@ -63,7 +63,7 @@ exports.updateReportTemplate = asyncHandler(async (req, res) => {
 exports.deleteReportTemplate = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  await reportTemplatesService.deleteReportTemplate(req.rating);
+  await reportTemplatesService.deleteReportTemplate(req.reportTemplate);
 
   res.status(httpStatus.OK).json({
     success: true,
