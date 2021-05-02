@@ -10,11 +10,12 @@ import {
   FormLabel,
   TextField,
   Checkbox as MUICheckbox,
+  makeStyles,
+  Theme,
 } from '@material-ui/core';
 // Custom components
-import { MainFormActions } from '../../components/formActions/MainFormActions';
-import { FormContainer } from '../../components/FormContainer';
 import { Loader } from '../../components/Loader';
+import { FormModal } from '../../components/FormModal';
 // Types
 import { ReportTemplate, ReportTemplateDTO } from '../../types/reportTemplates';
 // Hooks
@@ -24,13 +25,12 @@ import { useUpdateReportTemplate } from '../../operations/mutations/useUpdateRep
 
 type Props = {
   current: ReportTemplate | null;
-  clearCurrent: () => void;
-  // onSubmit: (data: ClubsFormData) => void;
-  // onCancelClick: () => void;
-  // onEditCancelClick: () => void;
+  onClose: () => void;
+  open: boolean;
 };
 
-export const ReportTemplatesForm = ({ current, clearCurrent }: Props) => {
+export const ReportTemplatesFormModal = ({ current, onClose, open }: Props) => {
+  const classes = useStyles();
   const { data: ratings } = useRatings();
   const {
     mutate: createTemplate,
@@ -55,16 +55,24 @@ export const ReportTemplatesForm = ({ current, clearCurrent }: Props) => {
         onSubmit={(data, { resetForm }) => {
           if (current) {
             updateTemplate({ id: current.id, templateData: data });
-            clearCurrent();
           } else {
             createTemplate(data);
           }
           resetForm();
+          onClose();
         }}
       >
-        {({ errors, touched, handleReset, values }) => (
-          <Form>
-            <FormContainer>
+        {({ errors, touched, handleSubmit, values }) => (
+          <FormModal
+            open={open}
+            onClose={onClose}
+            onSubmit={handleSubmit}
+            title={
+              current ? `Edytuj szablon ${current.name}` : 'Dodaj nowy szablon'
+            }
+            acceptLabel={current ? 'Zapisz zmiany' : 'Dodaj'}
+          >
+            <Form className={classes.container}>
               <Field
                 name="name"
                 as={TextField}
@@ -110,19 +118,21 @@ export const ReportTemplatesForm = ({ current, clearCurrent }: Props) => {
                   <FormHelperText>{errors.ratings}</FormHelperText>
                 ) : null}
               </FormControl>
-              <MainFormActions
-                label="szablon"
-                isEditState={!!current}
-                onCancelClick={() => console.log('cancel')}
-                onEditCancelClick={() => console.log('cancel')}
-              />
-            </FormContainer>
-          </Form>
+            </Form>
+          </FormModal>
         )}
       </Formik>
     </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: `${theme.spacing(2)}px`,
+  },
+}));
 
 function getInitialStateFromCurrent(
   current: ReportTemplate,

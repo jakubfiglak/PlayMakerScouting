@@ -2,13 +2,12 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
 // MUI components
-import { TextField } from '@material-ui/core';
+import { TextField, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { SkillsCategorySelect } from '../../components/selects/SkillsCategorySelect';
-import { MainFormActions } from '../../components/formActions/MainFormActions';
-import { FormContainer } from '../../components/FormContainer';
 import { Checkbox } from '../../components/Checkbox';
 import { Loader } from '../../components/Loader';
+import { FormModal } from '../../components/FormModal';
 // Types
 import { Rating, RatingDTO, SkillsCategories } from '../../types/ratings';
 // Hooks
@@ -17,13 +16,12 @@ import { useUpdateRating } from '../../operations/mutations/useUpdateRating';
 
 type Props = {
   current: Rating | null;
-  clearCurrent: () => void;
-  // onSubmit: (data: ClubsFormData) => void;
-  // onCancelClick: () => void;
-  // onEditCancelClick: () => void;
+  onClose: () => void;
+  open: boolean;
 };
 
-export const RatingsForm = ({ current, clearCurrent }: Props) => {
+export const RatingsFormModal = ({ current, onClose, open }: Props) => {
+  const classes = useStyles();
   const initialValues: RatingDTO = current
     ? getInitialStateFromCurrent(current)
     : ratingsFormInitialValues;
@@ -41,16 +39,24 @@ export const RatingsForm = ({ current, clearCurrent }: Props) => {
         onSubmit={(data, { resetForm }) => {
           if (current) {
             updateRating({ id: current.id, ratingData: data });
-            clearCurrent();
           } else {
             createRating(data);
           }
           resetForm();
+          onClose();
         }}
       >
-        {({ errors, touched, handleReset }) => (
-          <Form>
-            <FormContainer>
+        {({ errors, touched, handleSubmit }) => (
+          <FormModal
+            open={open}
+            onClose={onClose}
+            onSubmit={handleSubmit}
+            title={
+              current ? `Edytuj cechę ${current.name}` : 'Dodaj nową cechę'
+            }
+            acceptLabel={current ? 'Zapisz zmiany' : 'Dodaj'}
+          >
+            <Form className={classes.container}>
               <SkillsCategorySelect />
               <Field
                 name="name"
@@ -71,19 +77,21 @@ export const RatingsForm = ({ current, clearCurrent }: Props) => {
                 helperText={touched.shortName && errors.shortName}
               />
               <Checkbox name="score" label="Cecha oceniana punktowo" />
-              <MainFormActions
-                label="cechę"
-                isEditState={!!current}
-                onCancelClick={clearCurrent}
-                onEditCancelClick={clearCurrent}
-              />
-            </FormContainer>
-          </Form>
+            </Form>
+          </FormModal>
         )}
       </Formik>
     </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: `${theme.spacing(2)}px`,
+  },
+}));
 
 function getInitialStateFromCurrent(current: Rating): RatingDTO {
   const {

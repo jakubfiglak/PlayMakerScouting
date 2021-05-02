@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 // MUI components
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import { AppBar, Tabs, Tab, Fab, makeStyles } from '@material-ui/core';
+// MUI icons
+import { Add as AddIcon } from '@material-ui/icons';
 // Custom components
 import { RatingsTable } from './RatingsTable';
 import { ReportTemplatesTable } from './ReportTemplatesTable';
-import { RatingsForm } from './RatingsForm';
-import { ReportTemplatesForm } from './ReportTemplatesForm';
+import { RatingsFormModal } from './RatingsFormModal';
+import { ReportTemplatesFormModal } from './ReportTemplatesFormModal';
 import { RatingDeleteConfirmationModal } from './RatingDeleteConfirmationModal';
 import { TemplateDeleteConfirmationModal } from './TemplateDeleteConfirmationModal';
 import { TabPanel } from '../../components/TabPanel';
@@ -18,6 +20,7 @@ import { ReportTemplate } from '../../types/reportTemplates';
 import { useTabs } from '../../hooks/useTabs';
 
 export const ReportTemplatesPage = () => {
+  const classes = useStyles();
   const [activeTab, handleTabChange] = useTabs();
 
   const [currentRating, setCurrentRating] = useState<Rating | null>(null);
@@ -25,10 +28,12 @@ export const ReportTemplatesPage = () => {
     currentReportTemplate,
     setCurrentReportTemplate,
   ] = useState<ReportTemplate | null>(null);
+  const [isRatingsModalOpen, setRatingsModalOpen] = useState(false);
   const [
     isRatingDeleteConfirmationModalOpen,
     setRatingDeleteConfirmationModalOpen,
   ] = useState(false);
+  const [isTemplateModalOpen, setTemplateModalOpen] = useState(false);
   const [
     isTemplateDeleteConfimationModalOpen,
     setTemplateDeleteConfirmationModalOpen,
@@ -39,9 +44,19 @@ export const ReportTemplatesPage = () => {
     setRatingDeleteConfirmationModalOpen(true);
   }
 
+  function handleEditRatingClick(rating: Rating) {
+    setCurrentRating(rating);
+    setRatingsModalOpen(true);
+  }
+
   function handleDeleteTemplateClick(template: ReportTemplate) {
     setCurrentReportTemplate(template);
     setTemplateDeleteConfirmationModalOpen(true);
+  }
+
+  function handleEditTemplateClick(template: ReportTemplate) {
+    setCurrentReportTemplate(template);
+    setTemplateModalOpen(true);
   }
 
   return (
@@ -58,25 +73,49 @@ export const ReportTemplatesPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="ratings">
         <PageHeading title="Definicje ocenianych cech" />
-        <RatingsForm
+        <RatingsFormModal
           current={currentRating}
-          clearCurrent={() => setCurrentRating(null)}
+          onClose={() => {
+            setCurrentRating(null);
+            setRatingsModalOpen(false);
+          }}
+          open={isRatingsModalOpen}
         />
         <RatingsTable
-          onEditClick={setCurrentRating}
+          onEditClick={handleEditRatingClick}
           onDeleteClick={handleDeleteRatingClick}
         />
+        <Fab
+          color="secondary"
+          aria-label="add"
+          className={classes.fab}
+          onClick={() => setRatingsModalOpen(true)}
+        >
+          <AddIcon />
+        </Fab>
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PageHeading title="Szablony raportów" />
-        <ReportTemplatesForm
+        <ReportTemplatesFormModal
           current={currentReportTemplate}
-          clearCurrent={() => setCurrentReportTemplate(null)}
+          onClose={() => {
+            setCurrentReportTemplate(null);
+            setTemplateModalOpen(false);
+          }}
+          open={isTemplateModalOpen}
         />
         <ReportTemplatesTable
-          onEditClick={setCurrentReportTemplate}
+          onEditClick={handleEditTemplateClick}
           onDeleteClick={handleDeleteTemplateClick}
         />
+        <Fab
+          color="secondary"
+          aria-label="add"
+          className={classes.fab}
+          onClick={() => setTemplateModalOpen(true)}
+        >
+          <AddIcon />
+        </Fab>
       </TabPanel>
       <RatingDeleteConfirmationModal
         rating={currentRating}
@@ -97,3 +136,11 @@ export const ReportTemplatesPage = () => {
     </MainTemplate>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  fab: {
+    position: 'fixed',
+    right: 20,
+    bottom: 20,
+  },
+}));
