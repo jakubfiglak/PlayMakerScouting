@@ -2,13 +2,14 @@ import React from 'react';
 // MUI components
 import { Tooltip, IconButton } from '@material-ui/core';
 // MUI icons
-import { Edit as EditIcon, Check as CheckIcon } from '@material-ui/icons';
+import { Edit as EditIcon } from '@material-ui/icons';
 // Custom components
 import { SimpleTable } from '../../components/table/SimpleTable';
-// Types
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
-import { getLabel } from '../../utils/getLabel';
+// Types
+import { ReportTemplate } from '../../types/reportTemplates';
+// Hooks
 import { useReportTemplates } from '../../operations/queries/useReportTemplates';
 
 const headCells = [
@@ -16,7 +17,9 @@ const headCells = [
   { id: 'maxRatingScore', label: 'Skala ocen' },
 ];
 
-export const ReportTemplatesTable = () => {
+type Props = { onEditClick: (template: ReportTemplate) => void };
+
+export const ReportTemplatesTable = ({ onEditClick }: Props) => {
   const { data } = useReportTemplates();
 
   return (
@@ -28,7 +31,7 @@ export const ReportTemplatesTable = () => {
                 <Tooltip title="Edytuj">
                   <IconButton
                     aria-label="edit"
-                    onClick={() => console.log(template.id)}
+                    onClick={() => onEditClick(template)}
                   >
                     <EditIcon />
                   </IconButton>

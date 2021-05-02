@@ -45,7 +45,7 @@ module.exports = {
     }],
     "react/prop-types": "off",
     "react/require-default-props": "off",
-    "react/jsx-indent": "warn",
+    "react/jsx-indent": "off",
     "react/jsx-curly-newline": "warn",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/explicit-function-return-type": "off",

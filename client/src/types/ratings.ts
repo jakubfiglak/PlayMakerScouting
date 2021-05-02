@@ -14,6 +14,11 @@ export type Rating = {
   shortName: string;
   score: boolean;
   private: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
-export type RatingDTO = Omit<Rating, 'id' | 'author'>;
+export type RatingDTO = Omit<
+  Rating,
+  'id' | 'author' | 'private' | 'createdAt' | 'updatedAt'
+>;

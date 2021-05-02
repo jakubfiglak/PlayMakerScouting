@@ -5,20 +5,25 @@ import { Tooltip, IconButton } from '@material-ui/core';
 import { Edit as EditIcon, Check as CheckIcon } from '@material-ui/icons';
 // Custom components
 import { SimpleTable } from '../../components/table/SimpleTable';
-// Types
-import { useRatings } from '../../operations/queries/useRatings';
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
+// Types
+import { Rating } from '../../types/ratings';
+// Hooks
+import { useRatings } from '../../operations/queries/useRatings';
+// Utils & data
 import { getLabel } from '../../utils/getLabel';
 
 const headCells = [
   { id: 'category', label: 'Kategoria' },
   { id: 'name', label: 'Nazwa' },
   { id: 'shortName', label: 'Nazwa skrócona' },
-  { id: 'score', label: 'Opisowa' },
+  { id: 'score', label: 'Ocena punktowa' },
 ];
 
-export const RatingsTable = () => {
+type Props = { onEditClick: (rating: Rating) => void };
+
+export const RatingsTable = ({ onEditClick }: Props) => {
   const { data } = useRatings();
 
   return (
@@ -30,7 +35,7 @@ export const RatingsTable = () => {
                 <Tooltip title="Edytuj">
                   <IconButton
                     aria-label="edit"
-                    onClick={() => console.log(rating.id)}
+                    onClick={() => onEditClick(rating)}
                   >
                     <EditIcon />
                   </IconButton>
@@ -40,7 +45,7 @@ export const RatingsTable = () => {
               <StyledTableCell>{rating.name}</StyledTableCell>
               <StyledTableCell>{rating.shortName}</StyledTableCell>
               <StyledTableCell>
-                {rating.score ? null : <CheckIcon />}
+                {rating.score ? <CheckIcon /> : null}
               </StyledTableCell>
             </StyledTableRow>
           ))

@@ -17,6 +17,8 @@ import {
   Player,
   PlayersFormData,
 } from '../../types/players';
+import { Rating } from '../../types/ratings';
+import { ReportTemplate } from '../../types/reportTemplates';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
@@ -26,18 +28,22 @@ import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useRatings } from '../../operations/queries/useRatings';
 import { ReportTemplatesTable } from './ReportTemplatesTable';
 import { RatingsForm } from './RatingsForm';
-import { Rating } from '../../types/ratings';
+import { ReportTemplatesForm } from './ReportTemplatesForm';
 
 export const ReportTemplatesPage = () => {
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
   const [currentRating, setCurrentRating] = useState<Rating | null>(null);
+  const [
+    currentReportTemplate,
+    setCurrentReportTemplate,
+  ] = useState<ReportTemplate | null>(null);
 
   return (
     <MainTemplate>
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
-          <Tab label="Umiejętności" id="Ratings" aria-controls="ratings" />
+          <Tab label="Cechy" id="Ratings" aria-controls="ratings" />
           <Tab
             label="Szablony raportów"
             id="report-templates"
@@ -46,13 +52,14 @@ export const ReportTemplatesPage = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="ratings">
-        <PageHeading title="Definicje umiejętności" />
+        <PageHeading title="Definicje ocenianych cech" />
         <RatingsForm current={currentRating} />
-        <RatingsTable />
+        <RatingsTable onEditClick={setCurrentRating} />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PageHeading title="Szablony raportów" />
-        <ReportTemplatesTable />
+        <ReportTemplatesForm current={currentReportTemplate} />
+        <ReportTemplatesTable onEditClick={setCurrentReportTemplate} />
       </TabPanel>
     </MainTemplate>
   );
