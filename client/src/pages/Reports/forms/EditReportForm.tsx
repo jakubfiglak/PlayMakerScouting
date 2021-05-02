@@ -114,7 +114,6 @@ function getInitialStateFromCurrent(report: Report): ReportFormData {
     docNumber,
     playerCurrentClub,
     avgRating,
-    maxRatingScore,
     status,
     createdAt,
     scout,

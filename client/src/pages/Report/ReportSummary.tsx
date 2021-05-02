@@ -8,13 +8,17 @@ import { Report } from '../../types/reports';
 // Styles
 import { SkillsChart } from './SkillsChart';
 
-type Props = Pick<Report, 'summary' | 'finalRating' | 'avgRating' | 'skills'>;
+type Props = Pick<
+  Report,
+  'summary' | 'finalRating' | 'avgRating' | 'skills' | 'maxRatingScore'
+>;
 
 export const ReportSummary = ({
   summary,
   finalRating,
   avgRating,
   skills,
+  maxRatingScore,
 }: Props) => {
   const classes = useStyles();
 
@@ -43,6 +47,7 @@ export const ReportSummary = ({
           skills={skills.filter((skill) => skill.score)}
           width={250}
           height={250}
+          maxRatingScore={maxRatingScore}
         />
       </div>
     </>

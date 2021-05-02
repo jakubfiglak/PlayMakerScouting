@@ -147,7 +147,10 @@ export const PrinteableReport = ({ report }: Props) => {
           </Typography>
         </div>
         <div>
-          <SkillsChart skills={skills.filter((skill) => skill.score)} />
+          <SkillsChart
+            skills={skills.filter((skill) => skill.score)}
+            maxRatingScore={report.maxRatingScore}
+          />
         </div>
       </section>
       <Divider className={classes.divider} />

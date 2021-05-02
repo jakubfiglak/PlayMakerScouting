@@ -60,6 +60,7 @@ export type ReportFormData = {
   yellowCards: number;
   redCards: number;
   finalRating: RatingScore;
+  maxRatingScore: number;
   summary: string;
   skills: Skill[];
 };

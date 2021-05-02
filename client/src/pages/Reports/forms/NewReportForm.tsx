@@ -136,6 +136,9 @@ export const NewReportForm = ({
       <Formik
         initialValues={{
           ...initialValues,
+          maxRatingScore: reportTemplates
+            ? reportTemplates[selectedReportTemplateIdx].maxRatingScore
+            : 4,
           skills: reportTemplates
             ? getInitialSkills(
                 reportTemplates[selectedReportTemplateIdx].ratings,
@@ -245,4 +248,5 @@ const initialValues: Omit<ReportFormData, 'skills'> = {
   redCards: 0,
   summary: '',
   finalRating: 1,
+  maxRatingScore: 4,
 };

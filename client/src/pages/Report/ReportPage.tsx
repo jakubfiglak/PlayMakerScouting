@@ -151,6 +151,7 @@ export const ReportPage = () => {
                 finalRating={reportData.finalRating}
                 avgRating={reportData.avgRating}
                 skills={reportData.skills}
+                maxRatingScore={reportData.maxRatingScore}
               />
             </AccordionDetails>
           </Accordion>

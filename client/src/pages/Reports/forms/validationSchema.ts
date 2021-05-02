@@ -47,5 +47,6 @@ export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
     summary: yup.string().required('Opisz występ'),
     finalRating: yup.mixed<RatingScore>(),
     skills: yup.array<Skill>().defined(),
+    maxRatingScore: yup.number().min(2).max(10).required(),
   })
   .defined();

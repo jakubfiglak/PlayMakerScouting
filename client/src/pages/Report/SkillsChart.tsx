@@ -7,22 +7,28 @@ type Props = {
   skills: Skill[];
   width?: number;
   height?: number;
+  maxRatingScore: number;
 };
 
-const options = {
-  maintainAspectRatio: false,
-  legend: { display: false },
-  scale: {
-    ticks: { beginAtZero: true, min: 0, max: 4, stepSize: 1 },
-  },
-  max: 1,
-  stepSize: 1,
-  animation: {
-    duration: 0,
-  },
-};
+export const SkillsChart = ({
+  skills,
+  width,
+  height,
+  maxRatingScore,
+}: Props) => {
+  const options = {
+    maintainAspectRatio: false,
+    legend: { display: false },
+    scale: {
+      ticks: { beginAtZero: true, min: 0, max: maxRatingScore, stepSize: 1 },
+    },
+    max: 1,
+    stepSize: 1,
+    animation: {
+      duration: 0,
+    },
+  };
 
-export const SkillsChart = ({ skills, width, height }: Props) => {
   const data = {
     labels: skills.map((skill) => skill.name.toUpperCase()),
     datasets: [
