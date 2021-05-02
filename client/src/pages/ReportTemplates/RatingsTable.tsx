@@ -1,8 +1,12 @@
 import React from 'react';
 // MUI components
-import { Tooltip, IconButton } from '@material-ui/core';
+import { Tooltip, IconButton, makeStyles } from '@material-ui/core';
 // MUI icons
-import { Edit as EditIcon, Check as CheckIcon } from '@material-ui/icons';
+import {
+  Edit as EditIcon,
+  Check as CheckIcon,
+  Delete as DeleteIcon,
+} from '@material-ui/icons';
 // Custom components
 import { SimpleTable } from '../../components/table/SimpleTable';
 import { StyledTableCell } from '../../components/table/TableCell';
@@ -21,9 +25,13 @@ const headCells = [
   { id: 'score', label: 'Ocena punktowa' },
 ];
 
-type Props = { onEditClick: (rating: Rating) => void };
+type Props = {
+  onEditClick: (rating: Rating) => void;
+  onDeleteClick: (rating: Rating) => void;
+};
 
-export const RatingsTable = ({ onEditClick }: Props) => {
+export const RatingsTable = ({ onEditClick, onDeleteClick }: Props) => {
+  const classes = useStyles();
   const { data } = useRatings();
 
   return (
@@ -32,14 +40,24 @@ export const RatingsTable = ({ onEditClick }: Props) => {
         ? data.map((rating) => (
             <StyledTableRow key={rating.id}>
               <StyledTableCell padding="checkbox">
-                <Tooltip title="Edytuj">
-                  <IconButton
-                    aria-label="edit"
-                    onClick={() => onEditClick(rating)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
+                <div className={classes.buttonsContainer}>
+                  <Tooltip title="Edytuj">
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => onEditClick(rating)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Usuń">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => onDeleteClick(rating)}
+                    >
+                      <DeleteIcon color="error" />
+                    </IconButton>
+                  </Tooltip>
+                </div>
               </StyledTableCell>
               <StyledTableCell>{getLabel(rating.category)}</StyledTableCell>
               <StyledTableCell>{rating.name}</StyledTableCell>
@@ -53,3 +71,9 @@ export const RatingsTable = ({ onEditClick }: Props) => {
     </SimpleTable>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  buttonsContainer: {
+    display: 'flex',
+  },
+}));

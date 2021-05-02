@@ -29,15 +29,25 @@ import { useRatings } from '../../operations/queries/useRatings';
 import { ReportTemplatesTable } from './ReportTemplatesTable';
 import { RatingsForm } from './RatingsForm';
 import { ReportTemplatesForm } from './ReportTemplatesForm';
+import { RatingDeleteConfirmationModal } from './RatingDeleteConfirmationModal';
 
 export const ReportTemplatesPage = () => {
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
   const [currentRating, setCurrentRating] = useState<Rating | null>(null);
   const [
+    isRatingDeleteConfirmationModalOpen,
+    setRatingDeleteConfirmationModalOpen,
+  ] = useState(false);
+  const [
     currentReportTemplate,
     setCurrentReportTemplate,
   ] = useState<ReportTemplate | null>(null);
+
+  function handleDeleteRatingClick(rating: Rating) {
+    setCurrentRating(rating);
+    setRatingDeleteConfirmationModalOpen(true);
+  }
 
   return (
     <MainTemplate>
@@ -53,14 +63,28 @@ export const ReportTemplatesPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="ratings">
         <PageHeading title="Definicje ocenianych cech" />
-        <RatingsForm current={currentRating} />
-        <RatingsTable onEditClick={setCurrentRating} />
+        <RatingsForm
+          current={currentRating}
+          clearCurrent={() => setCurrentRating(null)}
+        />
+        <RatingsTable
+          onEditClick={setCurrentRating}
+          onDeleteClick={handleDeleteRatingClick}
+        />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PageHeading title="Szablony raportów" />
         <ReportTemplatesForm current={currentReportTemplate} />
         <ReportTemplatesTable onEditClick={setCurrentReportTemplate} />
       </TabPanel>
+      <RatingDeleteConfirmationModal
+        rating={currentRating}
+        open={isRatingDeleteConfirmationModalOpen}
+        handleClose={() => {
+          setRatingDeleteConfirmationModalOpen(false);
+          setCurrentRating(null);
+        }}
+      />
     </MainTemplate>
   );
 };
