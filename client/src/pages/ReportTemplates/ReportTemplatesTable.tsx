@@ -11,6 +11,7 @@ import { StyledTableRow } from '../../components/table/TableRow';
 import { ReportTemplate } from '../../types/reportTemplates';
 // Hooks
 import { useReportTemplates } from '../../operations/queries/useReportTemplates';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
 const headCells = [
   { id: 'name', label: 'Nazwa' },
@@ -25,6 +26,7 @@ type Props = {
 export const ReportTemplatesTable = ({ onEditClick, onDeleteClick }: Props) => {
   const classes = useStyles();
   const { data } = useReportTemplates();
+  const user = useAuthenticatedUser();
 
   return (
     <SimpleTable actions headCells={headCells}>
@@ -37,6 +39,9 @@ export const ReportTemplatesTable = ({ onEditClick, onDeleteClick }: Props) => {
                     <IconButton
                       aria-label="edit"
                       onClick={() => onEditClick(template)}
+                      disabled={
+                        user.role !== 'admin' && template.author !== user.id
+                      }
                     >
                       <EditIcon />
                     </IconButton>
@@ -45,6 +50,9 @@ export const ReportTemplatesTable = ({ onEditClick, onDeleteClick }: Props) => {
                     <IconButton
                       aria-label="delete"
                       onClick={() => onDeleteClick(template)}
+                      disabled={
+                        user.role !== 'admin' && template.author !== user.id
+                      }
                     >
                       <DeleteIcon color="error" />
                     </IconButton>

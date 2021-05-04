@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const colors = require('colors');
 const connectDB = require('../config/db');
+const Rating = require('../modules/ratings/rating.model');
 const ReportTemplate = require('../modules/reportTemplates/reportTemplate.model');
 
 dotenv.config({ path: './config/config.env' });
@@ -19,6 +20,17 @@ const defenseId = '6081d38bcf0936260415426c';
 const transitionId = '6081d38bcf0936260415426d';
 const leadingMotorId = '6081d38bcf0936260415426e';
 const neglectedMotorId = '6081d38bcf0936260415426f';
+const noBallId = '609198d57f0a8063a06149e0';
+const openingId = '609198d57f0a8063a06149e1';
+const creationId = '609198d57f0a8063a06149e2';
+const finalizationId = '609198d57f0a8063a06149e3';
+const aoTransitionId = '609198d57f0a8063a06149e4';
+const onevonetwoId = '609198d57f0a8063a06149e5';
+const spaceDefId = '609198d57f0a8063a06149e6';
+const pressId = '609198d57f0a8063a06149e7';
+const oaTransitionId = '609198d57f0a8063a06149e8';
+const motorCharId = '609198d57f0a8063a06149e9';
+const mentalCharId = '609198d57f0a8063a06149ea';
 
 const oldReportCommonFields = [
   leadingMotorId,
@@ -34,6 +46,19 @@ const CBfields = [...oldReportCommonFields, defOneOnOneId, airPlayId, positionin
 const FBfields = [...oldReportCommonFields, defOneOnOneId, attOneOnOneId, airPlayId];
 const midfielderFields = [...oldReportCommonFields, finishingId, attOneOnOneId, defOneOnOneId];
 const forwardFields = [...oldReportCommonFields, finishingId, airPlayId, attOneOnOneId];
+const OOtemplateFields = [
+  noBallId,
+  openingId,
+  creationId,
+  finalizationId,
+  aoTransitionId,
+  onevonetwoId,
+  spaceDefId,
+  pressId,
+  oaTransitionId,
+  motorCharId,
+  mentalCharId,
+];
 
 const CBreportTemplate = {
   name: 'PM - Srodkowy obronca',
@@ -67,11 +92,20 @@ const forwardReportTemplate = {
   private: false,
 };
 
+const OOTemplate = {
+  name: 'Odra Opole',
+  author,
+  ratings: OOtemplateFields,
+  maxRatingScore: 4,
+  private: false,
+};
+
 const reportTemplates = [
-  CBreportTemplate,
-  FBreportTemplate,
-  midfielderReportTemplate,
-  forwardReportTemplate,
+  // CBreportTemplate,
+  // FBreportTemplate,
+  // midfielderReportTemplate,
+  // forwardReportTemplate,
+  OOTemplate,
 ];
 
 async function seedReportTemplates() {

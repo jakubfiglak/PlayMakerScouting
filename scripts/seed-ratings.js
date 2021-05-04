@@ -115,19 +115,129 @@ const neglectedMotor = {
   score: false,
 };
 
+const noBall = {
+  author,
+  category: 'offense',
+  name: 'gra bez pilki',
+  shortName: 'BEZPIL',
+  private: false,
+  score: true,
+};
+
+const opening = {
+  author,
+  category: 'offense',
+  name: 'otwarcie',
+  shortName: 'OTW',
+  private: false,
+  score: true,
+};
+
+const creation = {
+  author,
+  category: 'offense',
+  name: 'kreowanie',
+  shortName: 'KREOW',
+  private: false,
+  score: true,
+};
+
+const finalization = {
+  author,
+  category: 'offense',
+  name: 'finalizacja',
+  shortName: 'FIN',
+  private: false,
+  score: true,
+};
+
+const daTransition = {
+  author,
+  category: 'offense',
+  name: 'przejscie AO',
+  shortName: 'AOPRZE',
+  private: false,
+  score: true,
+};
+
+const onevonetwo = {
+  author,
+  category: 'defense',
+  name: 'gra 1v1, 1v2',
+  shortName: '1v11v2',
+  private: false,
+  score: true,
+};
+
+const spaceDefense = {
+  author,
+  category: 'defense',
+  name: 'obrona przestrzeni',
+  shortName: 'OPRZES',
+  private: false,
+  score: true,
+};
+
+const pressing = {
+  author,
+  category: 'defense',
+  name: 'dzialania pressingowe',
+  shortName: 'PRESS',
+  private: false,
+  score: true,
+};
+
+const adTransition = {
+  author,
+  category: 'defense',
+  name: 'przejscie OA',
+  shortName: 'OAPRZE',
+  private: false,
+  score: true,
+};
+
+const physicalChar = {
+  author,
+  category: 'physical',
+  name: 'charakterystyka motoryczna',
+  shortName: 'MOTCHA',
+  private: false,
+  score: false,
+};
+
+const mentalChar = {
+  author,
+  category: 'mental',
+  name: 'charakterystyka mentalna',
+  shortName: 'MENCHA',
+  private: false,
+  score: false,
+};
+
 const ratings = [
-  ballReception,
-  passing,
-  defOneOnOne,
-  airPlay,
-  positioning,
-  attOneOnOne,
-  finishing,
-  attack,
-  defense,
-  transition,
-  leadingMotor,
-  neglectedMotor,
+  // ballReception,
+  // passing,
+  // defOneOnOne,
+  // airPlay,
+  // positioning,
+  // attOneOnOne,
+  // finishing,
+  // attack,
+  // defense,
+  // transition,
+  // leadingMotor,
+  // neglectedMotor,
+  noBall,
+  opening,
+  creation,
+  finalization,
+  daTransition,
+  onevonetwo,
+  spaceDefense,
+  pressing,
+  adTransition,
+  physicalChar,
+  mentalChar,
 ];
 
 async function seedRatings() {

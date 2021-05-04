@@ -15,6 +15,7 @@ import { StyledTableRow } from '../../components/table/TableRow';
 import { Rating } from '../../types/ratings';
 // Hooks
 import { useRatings } from '../../operations/queries/useRatings';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
 
@@ -33,6 +34,7 @@ type Props = {
 export const RatingsTable = ({ onEditClick, onDeleteClick }: Props) => {
   const classes = useStyles();
   const { data } = useRatings();
+  const user = useAuthenticatedUser();
 
   return (
     <SimpleTable actions headCells={headCells}>
@@ -45,6 +47,9 @@ export const RatingsTable = ({ onEditClick, onDeleteClick }: Props) => {
                     <IconButton
                       aria-label="edit"
                       onClick={() => onEditClick(rating)}
+                      disabled={
+                        user.role !== 'admin' && rating.author !== user.id
+                      }
                     >
                       <EditIcon />
                     </IconButton>
@@ -53,6 +58,9 @@ export const RatingsTable = ({ onEditClick, onDeleteClick }: Props) => {
                     <IconButton
                       aria-label="delete"
                       onClick={() => onDeleteClick(rating)}
+                      disabled={
+                        user.role !== 'admin' && rating.author !== user.id
+                      }
                     >
                       <DeleteIcon color="error" />
                     </IconButton>
