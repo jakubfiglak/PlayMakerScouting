@@ -105,7 +105,7 @@ export const ReportsTable = ({
             </StyledTableCell>
             <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
             <StyledTableCell align="right">
-              {avgRating.toFixed(2)}
+              {`${avgRating.toFixed(1)}%`}
             </StyledTableCell>
             <StyledTableCell>
               <FinalRatingChip finalRating={finalRating} />

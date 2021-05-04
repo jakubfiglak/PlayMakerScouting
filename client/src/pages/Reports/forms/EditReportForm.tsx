@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, useFormikContext } from 'formik';
+import { Formik, Form } from 'formik';
 // MUI components
 import {
   Accordion,
@@ -14,31 +14,38 @@ import {
 // MUI icons
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Custom components
-import { IndividualSkillsStep } from './IndividualSkillsStep';
-import { TeamplaySkillsStep } from './TeamplaySkillsStep';
-import { MotorSkillsStep } from './MotorSkillsStep';
 import { SummaryStep } from './SummaryStep';
 import { BasicDataStep } from './BasicDataStep';
+import { RatingsStep } from './RatingsStep';
 import { ReportBasicInfo } from '../../Report/ReportBasicInfo';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Types
-import { Report } from '../../../types/reports';
+import { Report, ReportFormData, Skill } from '../../../types/reports';
+import { validationSchema } from './validationSchema';
 
 type Props = {
   report: Report;
   onReset: () => void;
   onEditCancelClick: () => void;
+  onSubmit: (id: string, data: ReportFormData) => void;
 };
 
 export const EditReportForm = ({
   report,
   onReset,
   onEditCancelClick,
+  onSubmit,
 }: Props) => {
   const classes = useStyles();
-  const { player, match, order, scout, createdAt } = report;
-
-  const { handleReset } = useFormikContext();
+  const {
+    player,
+    match,
+    order,
+    scout,
+    createdAt,
+    positionPlayed,
+    playerCurrentClub,
+  } = report;
 
   return (
     <>
@@ -49,86 +56,93 @@ export const EditReportForm = ({
             match={match}
             order={order}
             scout={scout}
+            positionPlayed={positionPlayed}
+            playerCurrentClub={playerCurrentClub}
             createdAt={createdAt}
           />
         </CardContent>
       </Card>
-      <Form>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="individual-skills-content"
-            id="individual-skills"
-          >
-            <Typography>Ocena umiejętności indywidualnych</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <IndividualSkillsStep position={player.position} />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="teamplay-skills-content"
-            id="teamplay-skills"
-          >
-            <Typography>Ocena współdziałania z partnerami</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <TeamplaySkillsStep />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="motor-skills-content"
-            id="motor-skills"
-          >
-            <Typography>Ocena potencjału motorycznego</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <MotorSkillsStep />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="summary-content"
-            id="summary"
-          >
-            <Typography>Podsumowanie występu</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <SummaryStep />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="stats-content"
-            id="stats"
-          >
-            <Typography>Statystyki</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <BasicDataStep />
-          </AccordionDetails>
-        </Accordion>
-        <div className={classes.container}>
-          <MainFormActions
-            label="raport"
-            isEditState
-            onCancelClick={() => {
-              handleReset();
-              onReset();
-            }}
-            onEditCancelClick={onEditCancelClick}
-          />
-        </div>
-      </Form>
+      <Formik
+        initialValues={getInitialStateFromCurrent(report)}
+        validationSchema={validationSchema}
+        onSubmit={(data, { resetForm }) => {
+          onSubmit(report.id, data);
+          console.log(data);
+        }}
+      >
+        {({ errors, touched, handleReset, values }) => (
+          <Form>
+            <RatingsStep
+              ratings={mapSkillsToRatingType(report.skills)}
+              maxRatingScore={report.maxRatingScore}
+            />
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="summary-content"
+                id="summary"
+              >
+                <Typography>Podsumowanie występu</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <SummaryStep />
+              </AccordionDetails>
+            </Accordion>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="stats-content"
+                id="stats"
+              >
+                <Typography>Statystyki</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <BasicDataStep />
+              </AccordionDetails>
+            </Accordion>
+            <div className={classes.container}>
+              <MainFormActions
+                label="raport"
+                isEditState
+                onCancelClick={() => {
+                  handleReset();
+                  onReset();
+                }}
+                onEditCancelClick={onEditCancelClick}
+              />
+            </div>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };
+
+function getInitialStateFromCurrent(report: Report): ReportFormData {
+  const {
+    id,
+    docNumber,
+    playerCurrentClub,
+    avgRating,
+    status,
+    createdAt,
+    scout,
+    ...rest
+  } = report;
+
+  return {
+    ...rest,
+    player: rest.player.id,
+    order: rest.order?.id,
+  };
+}
+
+function mapSkillsToRatingType(skills: Skill[]) {
+  return skills.map((skill) => {
+    const { name, category, score } = skill;
+    return { name, category, hasScore: !!score };
+  });
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {

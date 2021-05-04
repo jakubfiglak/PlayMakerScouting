@@ -64,10 +64,16 @@ export const getIndSkillsFields = (position: Position) => {
   switch (position) {
     case 'CB':
       return cbIndSkillsFields;
-    case 'FB':
+    case 'RB':
+    case 'LB':
+    case 'RWB':
+    case 'LWB':
       return fbIndSkillsFields;
     case 'CM':
-    case 'WM':
+    case 'DM':
+    case 'CAM':
+    case 'RW':
+    case 'LW':
       return mIndSkillsFields;
     case 'F':
       return fIndSkillsFields;

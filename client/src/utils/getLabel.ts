@@ -4,20 +4,44 @@ const labels = [
     label: 'bramkarz',
   },
   {
+    value: 'LB',
+    label: 'lewy obrońca',
+  },
+  {
+    value: 'RB',
+    label: 'prawy obrońca',
+  },
+  {
     value: 'CB',
     label: 'środkowy obrońca',
   },
   {
-    value: 'FB',
-    label: 'boczny obrońca',
+    value: 'LW',
+    label: 'lewy skrzydłowy',
+  },
+  {
+    value: 'LWB',
+    label: 'lewy wahadłowy',
+  },
+  {
+    value: 'RW',
+    label: 'prawy skrzydłowy',
+  },
+  {
+    value: 'RWB',
+    label: 'prawy wahadłowy',
+  },
+  {
+    value: 'DM',
+    label: 'defensywny pomocnik',
   },
   {
     value: 'CM',
     label: 'środkowy pomocnik',
   },
   {
-    value: 'WM',
-    label: 'boczny pomocnik',
+    value: 'CAM',
+    label: 'ofensywny pomocnik',
   },
   {
     value: 'F',
@@ -154,6 +178,30 @@ const labels = [
   {
     value: 'neglected',
     label: 'Cechy zaniedbane',
+  },
+  {
+    value: 'individual',
+    label: 'Cechy indywidualne',
+  },
+  {
+    value: 'teamplay',
+    label: 'Współdziałanie z partnerami',
+  },
+  {
+    value: 'offense',
+    label: 'Cechy ofensywne',
+  },
+  {
+    value: 'defense',
+    label: 'Cechy defensywne',
+  },
+  {
+    value: 'physical',
+    label: 'Cechy motoryczne',
+  },
+  {
+    value: 'mental',
+    label: 'Cechy mentalne',
   },
 ];
 

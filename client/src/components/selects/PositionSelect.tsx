@@ -7,9 +7,18 @@ import {
   MenuItem,
   FormHelperText,
 } from '@material-ui/core';
+// Utils & data
+import { positions } from '../../utils/constants';
+import { getLabel } from '../../utils/getLabel';
 
-export const PositionSelect = () => {
-  const [field, fieldMeta] = useField('position');
+type Props = { name?: string; label?: string; helperText?: string };
+
+export const PositionSelect = ({
+  name = 'position',
+  label = 'Pozycja',
+  helperText,
+}: Props) => {
+  const [field, fieldMeta] = useField(name);
 
   const { error, touched } = fieldMeta;
 
@@ -20,16 +29,16 @@ export const PositionSelect = () => {
         {...field}
         labelId="position"
         id="position"
-        label="Pozycja"
+        label={label}
         error={touched && !!error}
       >
-        <MenuItem value="GK">Bramkarz</MenuItem>
-        <MenuItem value="CB">Środkowy obrońca</MenuItem>
-        <MenuItem value="FB">Boczny obrońca</MenuItem>
-        <MenuItem value="CM">Środkowy pomocnik</MenuItem>
-        <MenuItem value="WM">Boczny pomocnik</MenuItem>
-        <MenuItem value="F">Napastnik</MenuItem>
+        {positions.map((position) => (
+          <MenuItem value={position} key={position}>
+            {getLabel(position)}
+          </MenuItem>
+        ))}
       </Select>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
       {touched && error && <FormHelperText>{error}</FormHelperText>}
     </>
   );

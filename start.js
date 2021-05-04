@@ -13,6 +13,8 @@ const players = require('./routes/players');
 const orders = require('./routes/orders');
 const reports = require('./routes/reports');
 const dashboard = require('./routes/dashboard');
+const ratings = require('./routes/ratings');
+const reportTemplates = require('./routes/reportTemplates');
 
 const startServer = (port = process.env.PORT || 5000) => {
   const app = express();
@@ -39,6 +41,8 @@ const startServer = (port = process.env.PORT || 5000) => {
   app.use('/api/v1/orders', orders);
   app.use('/api/v1/reports', reports);
   app.use('/api/v1/dashboard', dashboard);
+  app.use('/api/v1/ratings', ratings);
+  app.use('/api/v1/report-templates', reportTemplates);
 
   // Serve static assets in production
   if (process.env.NODE_ENV === 'production') {

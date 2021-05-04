@@ -1,7 +1,9 @@
 import { PaginatedData, SortingOrder } from './common';
 import { User } from './auth';
-import { Player } from './players';
+import { Player, Position } from './players';
 import { Order } from './orders';
+import { Club } from './clubs';
+import { SkillsCategories } from './ratings';
 
 export type RatingScore = 1 | 2 | 3 | 4;
 export type MatchLocation = 'home' | 'away';
@@ -13,74 +15,55 @@ export type MatchData = {
   date: string;
 };
 
-export type Rating = {
-  rating: RatingScore;
-  note: string;
-};
+export type ReportStatus = 'in-prep' | 'closed';
 
-export type IndividualSkills = {
-  ballReception: Rating;
-  passing: Rating;
-  defOneOnOne?: Rating;
-  airPlay?: Rating;
-  positioning?: Rating;
-  attOneOnOne?: Rating;
-  finishing?: Rating;
-};
-
-export type TeamplaySkills = {
-  attack: Rating;
-  defense: Rating;
-  transition: Rating;
-};
-
-export type MotorSkills = {
-  leading: string;
-  neglected: string;
+export type Skill = {
+  category: SkillsCategories;
+  name: string;
+  shortName: string;
+  hasScore: boolean;
+  score?: number;
+  description: string;
 };
 
 export type Report = {
   id: string;
   docNumber: string;
-  player: Player;
-  match: MatchData;
+  player: Omit<Player, 'club'>;
   scout: Pick<User, 'id' | 'firstName' | 'lastName'>;
   order?: Pick<Order, 'id' | 'docNumber'>;
+  match: MatchData;
+  playerCurrentClub: Club;
+  positionPlayed: Position;
   minutesPlayed: number;
   goals: number;
   assists: number;
   yellowCards: number;
   redCards: number;
-  individualSkills: IndividualSkills;
-  teamplaySkills: TeamplaySkills;
-  motorSkills: MotorSkills;
+  skills: Skill[];
   finalRating: RatingScore;
   summary: string;
-  individualAvg: number;
-  teamplayAvg: number;
-  motorAvg: number;
   avgRating: number;
+  maxRatingScore: number;
+  status: ReportStatus;
   createdAt: string;
 };
 
-type CommonFormData = {
+export type ReportFormData = {
   order?: string;
   player: string;
   match: MatchData;
+  positionPlayed: Position;
   minutesPlayed: number;
   goals: number;
   assists: number;
   yellowCards: number;
   redCards: number;
   finalRating: RatingScore;
+  maxRatingScore: number;
   summary: string;
+  skills: Skill[];
 };
-
-export type ReportFormData = {
-  individualSkills: IndividualSkills;
-  teamplaySkills: TeamplaySkills;
-  motorSkills: MotorSkills;
-} & CommonFormData;
 
 export type ReportsFilterData = {
   player: string;

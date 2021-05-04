@@ -13,6 +13,7 @@ type Props = {
   onClose: () => void;
   onSubmit: (data: any) => void;
   open: boolean;
+  acceptLabel?: string;
 };
 
 export const FormModal: FC<Props> = ({
@@ -21,6 +22,7 @@ export const FormModal: FC<Props> = ({
   onClose,
   onSubmit,
   open,
+  acceptLabel = 'Dodaj',
 }) => {
   const classes = useStyles();
 
@@ -38,7 +40,7 @@ export const FormModal: FC<Props> = ({
           Anuluj
         </Button>
         <Button onClick={onSubmit} variant="contained" color="primary">
-          Dodaj
+          {acceptLabel}
         </Button>
       </DialogActions>
     </Dialog>

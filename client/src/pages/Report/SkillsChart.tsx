@@ -1,34 +1,39 @@
 import React from 'react';
 import { Radar } from 'react-chartjs-2';
-import { IndividualSkills, TeamplaySkills } from '../../types/reports';
+import { Skill } from '../../types/reports';
 import { yellow, yellowTransparent } from '../../theme/colors';
 
 type Props = {
-  individualSkills: IndividualSkills;
-  teamplaySkills: TeamplaySkills;
+  skills: Skill[];
+  width?: number;
+  height?: number;
+  maxRatingScore: number;
 };
 
-const options = {
-  maintainAspectRatio: false,
-  legend: { display: false },
-  scale: {
-    ticks: { beginAtZero: true, min: 0, max: 4, stepSize: 1 },
-  },
-  max: 1,
-  stepSize: 1,
-  animation: {
-    duration: 0,
-  },
-};
-
-export const SkillsChart = ({ individualSkills, teamplaySkills }: Props) => {
-  const skills = { ...individualSkills, ...teamplaySkills };
+export const SkillsChart = ({
+  skills,
+  width,
+  height,
+  maxRatingScore,
+}: Props) => {
+  const options = {
+    maintainAspectRatio: false,
+    legend: { display: false },
+    scale: {
+      ticks: { beginAtZero: true, min: 0, max: maxRatingScore, stepSize: 1 },
+    },
+    max: 1,
+    stepSize: 1,
+    animation: {
+      duration: 0,
+    },
+  };
 
   const data = {
-    labels: Object.keys(skills),
+    labels: skills.map((skill) => skill.name.toUpperCase()),
     datasets: [
       {
-        data: Object.entries(skills).map(([_, value]) => value?.rating),
+        data: skills.map((skill) => skill.score),
         backgroundColor: yellowTransparent,
         borderColor: yellow,
         borderWidth: 1,
@@ -36,5 +41,5 @@ export const SkillsChart = ({ individualSkills, teamplaySkills }: Props) => {
     ],
   };
 
-  return <Radar data={data} options={options} />;
+  return <Radar data={data} options={options} width={width} height={height} />;
 };

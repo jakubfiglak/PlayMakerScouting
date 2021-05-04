@@ -15,6 +15,7 @@ import { RegisterPage } from '../pages/Register/RegisterPage';
 import { ReportPage } from '../pages/Report/ReportPage';
 import { ReportsPage } from '../pages/Reports/ReportsPage';
 import { WelcomePage } from '../pages/Welcome/WelcomePage';
+import { ReportTemplatesPage } from '../pages/ReportTemplates/ReportTemplatesPage';
 import { FourOFourPage } from '../pages/404/FourOFour';
 
 export const AppRoutes = () => {
@@ -84,6 +85,12 @@ export const AppRoutes = () => {
         </ProtectedRoute>
         <ProtectedRoute path="/accessmanagement" allowedRoles={['admin']}>
           <AccessManagementPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/reporttemplates"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <ReportTemplatesPage />
         </ProtectedRoute>
         <Route path="*" component={FourOFourPage} />
       </Switch>

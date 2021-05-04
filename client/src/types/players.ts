@@ -1,7 +1,20 @@
 import { Division } from './clubs';
 import { SortingOrder, PaginatedData } from './common';
 
-export type Position = 'GK' | 'CB' | 'FB' | 'CM' | 'WM' | 'F';
+export type Position =
+  | 'GK'
+  | 'LB'
+  | 'RB'
+  | 'CB'
+  | 'LW'
+  | 'LWB'
+  | 'RW'
+  | 'RWB'
+  | 'DM'
+  | 'CM'
+  | 'CAM'
+  | 'F';
+
 export type Foot = 'L' | 'R' | 'both';
 
 export type Player = {

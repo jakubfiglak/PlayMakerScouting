@@ -4,7 +4,7 @@ const clubsService = require('./clubs.service');
 
 // @desc Create new club
 // @route POST /api/v1/clubs
-// @access Private (admin only)
+// @access Private
 exports.createClub = asyncHandler(async (req, res) => {
   const club = await clubsService.createClub(req.body);
 

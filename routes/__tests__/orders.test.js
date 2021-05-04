@@ -326,7 +326,7 @@ describe('POST /api/v1/orders/:id/close', () => {
 });
 
 describe('DELETE /api/v1/orders/:id', () => {
-  it('properly close the order if the request is valid', async () => {
+  it('properly delete the order if the request is valid', async () => {
     const player = buildPlayer();
     await insertPlayers([player]);
     const order = buildOrder({ player: player._id });

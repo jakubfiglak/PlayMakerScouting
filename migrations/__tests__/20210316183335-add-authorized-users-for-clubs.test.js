@@ -1,10 +1,7 @@
 const { config, database } = require('migrate-mongo');
 const testConfig = require('../config/testConfig');
 const { buildClub, buildUser } = require('../../test/utils');
-const {
-  up,
-  down,
-} = require('../20210316183335-add-authorized-users-for-clubs');
+const { up, down } = require('../20210316183335-add-authorized-users-for-clubs');
 
 let testDB;
 
@@ -28,9 +25,7 @@ test('up function should remove myClubs prop from users models and add authorize
 
   await up(testDB);
 
-  const updatedClub = await testDB
-    .collection('clubs')
-    .findOne({ _id: club._id });
+  const updatedClub = await testDB.collection('clubs').findOne({ _id: club._id });
 
   expect(updatedClub).toHaveProperty('authorizedUsers');
   expect(updatedClub.authorizedUsers).toContain(user1._id);
@@ -53,9 +48,7 @@ test('down function should remove authorizedUsers prop from clubs models and add
 
   await down(testDB);
 
-  const updatedClub = await testDB
-    .collection('clubs')
-    .findOne({ _id: club._id });
+  const updatedClub = await testDB.collection('clubs').findOne({ _id: club._id });
   expect(updatedClub).not.toHaveProperty('authorizedUsers');
 
   const updatedUsers = await testDB.collection('users').find().toArray();

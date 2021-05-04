@@ -7,24 +7,45 @@ import { Report } from '../../types/reports';
 import { formatDate } from '../../utils/dates';
 import { getLabel } from '../../utils/getLabel';
 
-type Props = Pick<Report, 'player' | 'match' | 'order' | 'scout' | 'createdAt'>;
+type Props = Pick<
+  Report,
+  | 'player'
+  | 'match'
+  | 'order'
+  | 'scout'
+  | 'createdAt'
+  | 'playerCurrentClub'
+  | 'positionPlayed'
+>;
 
 export const ReportBasicInfo = ({
   player,
   match,
   order,
   scout,
+  playerCurrentClub,
+  positionPlayed,
   createdAt,
 }: Props) => {
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         <Grid item xs={12}>
           <Typography>
             <strong>Zawodnik: </strong>
-            {`${player.firstName} ${player.lastName}, ${getLabel(
-              player.position,
-            )} (${player.club.name})`}
+            {`${player.firstName} ${player.lastName} (ur. ${player.yearOfBirth})`}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            <strong>Klub: </strong>
+            {`${playerCurrentClub.name} (${playerCurrentClub.division})`}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            <strong>Pozycja / pozycja w meczu: </strong>
+            {`${getLabel(player.position)} / ${getLabel(positionPlayed)}`}
           </Typography>
         </Grid>
         <Grid item xs={12}>

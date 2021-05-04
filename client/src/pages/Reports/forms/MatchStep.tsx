@@ -1,10 +1,11 @@
 import React from 'react';
 import { useField } from 'formik';
 // MUI components
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, TextField, FormControl } from '@material-ui/core';
 // Custom components
 import { CompetitionSelect } from '../../../components/selects/CompetitionSelect';
 import { MatchLocationSelect } from '../../../components/selects/MatchLocationSelect';
+import { PositionSelect } from '../../../components/selects/PositionSelect';
 
 export const MatchStep = () => {
   const [againstField, againstMeta] = useField('match.against');
@@ -43,6 +44,14 @@ export const MatchStep = () => {
           error={dateTouched && !!dateError}
           helperText={dateTouched && dateError}
         />
+      </Grid>
+      <Grid item xs={6}>
+        <FormControl variant="outlined" fullWidth>
+          <PositionSelect
+            name="positionPlayed"
+            helperText="Podaj pozycję, na której zawodnik zagrał w danym meczu"
+          />
+        </FormControl>
       </Grid>
     </Grid>
   );

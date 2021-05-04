@@ -9,14 +9,16 @@ import {
   Theme,
 } from '@material-ui/core';
 // Custom components
-import { ReportSkills } from './ReportSkills';
+import { SkillsPrintSection } from './SkillsPrintSection';
 import { SkillsChart } from './SkillsChart';
 import { FinalRatingChip } from '../Reports/FinalRatingChip';
 // Types
 import { Report } from '../../types/reports';
+import { SkillsCategories } from '../../types/ratings';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
 import { formatDate } from '../../utils/dates';
+import { groupSkillsByCategory } from '../../utils/groupSkillsByCategory';
 
 type Props = {
   report: Report;
@@ -36,14 +38,13 @@ export const PrinteableReport = ({ report }: Props) => {
     goals,
     yellowCards,
     redCards,
-    individualSkills,
-    teamplaySkills,
-    motorSkills,
     summary,
     finalRating,
-    individualAvg,
-    teamplayAvg,
     avgRating,
+    skills,
+    maxRatingScore,
+    playerCurrentClub,
+    positionPlayed,
   } = report;
 
   return (
@@ -57,8 +58,15 @@ export const PrinteableReport = ({ report }: Props) => {
         <div>
           <Typography className={classes.text} gutterBottom>
             <strong>Zawodnik: </strong>
-            {player.firstName} {player.lastName}, {getLabel(player.position)} (
-            {player.club.name}, {player.club.division})
+            {player.firstName} {player.lastName}, {`ur. ${player.yearOfBirth}`}
+          </Typography>
+          <Typography className={classes.text} gutterBottom>
+            <strong>Klub: </strong>
+            {`${playerCurrentClub.name} (${playerCurrentClub.division})`}
+          </Typography>
+          <Typography className={classes.text} gutterBottom>
+            <strong>Pozycja nominalna/pozycja w meczu: </strong>
+            {`${player.position} / ${positionPlayed}`}
           </Typography>
           <div className={classes.flex}>
             <Typography className={classes.text} gutterBottom>
@@ -149,55 +157,29 @@ export const PrinteableReport = ({ report }: Props) => {
         </div>
         <div>
           <SkillsChart
-            individualSkills={individualSkills}
-            teamplaySkills={teamplaySkills}
+            skills={skills.filter((skill) => skill.score)}
+            maxRatingScore={report.maxRatingScore}
           />
         </div>
       </section>
       <Divider className={classes.divider} />
-      <section>
-        <Typography variant="h6" align="center" className={classes.heading}>
-          Umiejętności indywidualne
-        </Typography>
-        <Typography align="center" className={classes.text} gutterBottom>
-          Średnia ocen: {individualAvg.toFixed(2)}
-        </Typography>
-        <ReportSkills skills={individualSkills} printeable />
-        <Divider className={classes.divider} />
-        <Typography variant="h6" align="center" className={classes.heading}>
-          Współdziałanie z partnerami
-        </Typography>
-        <Typography align="center" className={classes.text} gutterBottom>
-          Średnia ocen: {teamplayAvg.toFixed(2)}
-        </Typography>
-        <ReportSkills skills={teamplaySkills} printeable />
-      </section>
-      <Divider className={classes.divider} />
-      <section>
-        <Typography
-          variant="h6"
-          align="center"
-          className={classes.heading}
-          gutterBottom
-        >
-          Cechy motoryczne
-        </Typography>
-        <Typography className={classes.text} gutterBottom>
-          <strong>Cechy wiodące: </strong>
-          {motorSkills.leading}
-        </Typography>
-        <Typography className={classes.text} gutterBottom>
-          <strong>Cechy zaniedbane: </strong>
-          {motorSkills.neglected}
-        </Typography>
-      </section>
-      <Divider className={classes.divider} />
+      {Object.entries(groupSkillsByCategory(skills)).map(([key, value]) => (
+        <>
+          <SkillsPrintSection
+            category={key as SkillsCategories}
+            key={key}
+            maxRatingScore={maxRatingScore}
+            skills={value || []}
+          />
+          <Divider className={classes.divider} />
+        </>
+      ))}
       <section>
         <Typography variant="h6" align="center" className={classes.heading}>
           Podsumowanie
         </Typography>
         <Typography align="center" className={classes.text} gutterBottom>
-          Średnia ocen: {avgRating.toFixed(2)}
+          Średnia ocen: {avgRating.toFixed(1)}%
         </Typography>
         <Typography className={classes.text} gutterBottom>
           {summary}

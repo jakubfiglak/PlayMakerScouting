@@ -3,36 +3,35 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const toJson = require('@meanie/mongoose-to-json');
 const calculateReportAvg = require('../../middleware/calculateReportAvg');
+const { ratingCategories, positions } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
-
-const ratingType = {
-  rating: {
-    type: Number,
-    enum: [1, 2, 3, 4],
-  },
-  note: {
-    type: String,
-    trim: true,
-    maxlength: 400,
-  },
-};
 
 const ReportSchema = new Schema(
   {
     player: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Player',
       required: 'Please add a player',
     },
     scout: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: 'Please add a scout',
     },
     order: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Order',
+    },
+    playerCurrentClub: {
+      type: Schema.Types.ObjectId,
+      ref: 'Club',
+      required: 'Please add players current club',
+    },
+    positionPlayed: {
+      type: String,
+      enum: positions,
+      required: 'Please add a position player actually played at',
     },
     match: {
       location: {
@@ -53,7 +52,7 @@ const ReportSchema = new Schema(
     minutesPlayed: {
       type: Number,
       min: 0,
-      max: 90,
+      max: 120,
     },
     goals: {
       type: Number,
@@ -71,40 +70,62 @@ const ReportSchema = new Schema(
       type: Number,
       enum: [0, 1],
     },
-    individualSkills: {
-      ballReception: ratingType,
-      passing: ratingType,
-      defOneOnOne: ratingType,
-      airPlay: ratingType,
-      positioning: ratingType,
-      attOneOnOne: ratingType,
-      finishing: ratingType,
-    },
-    teamplaySkills: {
-      attack: ratingType,
-      defense: ratingType,
-      transition: ratingType,
-    },
-    motorSkills: {
-      leading: String,
-      neglected: String,
+    skills: {
+      type: [
+        {
+          _id: false,
+          category: {
+            type: String,
+            enum: ratingCategories,
+            require: 'Please add rating category',
+          },
+          name: {
+            type: String,
+            maxlength: 30,
+            trim: true,
+            required: 'Please add rating name',
+          },
+          shortName: {
+            type: String,
+            maxlength: 6,
+            trim: true,
+            required: 'Please add rating short name',
+          },
+          hasScore: {
+            type: Boolean,
+            default: true,
+          },
+          score: {
+            type: Number,
+          },
+          description: {
+            type: String,
+            maxlength: 400,
+          },
+        },
+      ],
+      default: [],
     },
     finalRating: {
       type: Number,
-      enum: [1, 2, 3, 4],
+      required: 'Please add final rating',
     },
     summary: {
       type: String,
       trim: true,
-    },
-    individualAvg: {
-      type: Number,
-    },
-    teamplayAvg: {
-      type: Number,
+      required: 'Please add report summary',
     },
     avgRating: {
       type: Number,
+    },
+    maxRatingScore: {
+      type: Number,
+      default: 4,
+    },
+    status: {
+      type: String,
+      enum: ['in-prep', 'closed'],
+      default: 'in-prep',
     },
   },
   {
