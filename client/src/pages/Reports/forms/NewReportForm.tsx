@@ -58,10 +58,7 @@ export const NewReportForm = ({
   ] = useStepper();
 
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
-  const [
-    selectedReportTemplateIdx,
-    setSelectedReportTemplateIdx,
-  ] = useState<number>(0);
+  const [selectedReportTemplateIdx, setSelectedReportTemplateIdx] = useState(0);
 
   const { data: reportTemplates } = useReportTemplates();
 
