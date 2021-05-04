@@ -47,7 +47,9 @@ export const NewReportSkills = ({
             )}
             {skill.score && printeable && (
               <Typography className={classes.text}>
-                <strong>{skill.score}/4</strong>
+                <strong>
+                  {skill.score}/{maxRatingScore}
+                </strong>
               </Typography>
             )}
           </div>

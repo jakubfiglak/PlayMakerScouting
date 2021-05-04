@@ -29,11 +29,11 @@ export type Skill = {
 export type Report = {
   id: string;
   docNumber: string;
-  player: Player;
+  player: Omit<Player, 'club'>;
   scout: Pick<User, 'id' | 'firstName' | 'lastName'>;
   order?: Pick<Order, 'id' | 'docNumber'>;
   match: MatchData;
-  playerCurrentClub: Pick<Club, 'id' | 'name' | 'division'>;
+  playerCurrentClub: Club;
   positionPlayed: Position;
   minutesPlayed: number;
   goals: number;

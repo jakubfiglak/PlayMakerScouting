@@ -2,8 +2,6 @@ const options = {
   populate: [
     {
       path: 'player',
-      select: 'firstName lastName position',
-      populate: { path: 'club', select: 'name division' },
     },
     {
       path: 'scout',
@@ -12,6 +10,9 @@ const options = {
     {
       path: 'order',
       select: 'createdAt orderNo docNumber',
+    },
+    {
+      path: 'playerCurrentClub',
     },
   ],
   highestRatedSort: '-avgRating',

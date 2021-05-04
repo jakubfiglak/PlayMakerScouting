@@ -17,7 +17,7 @@ export const ReportMatchStats = ({
   redCards,
 }: Props) => {
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={1}>
       <Grid item xs={12}>
         <Typography>
           <strong>Minuty rozegrane: </strong>

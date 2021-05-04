@@ -37,7 +37,15 @@ export const EditReportForm = ({
   onSubmit,
 }: Props) => {
   const classes = useStyles();
-  const { player, match, order, scout, createdAt } = report;
+  const {
+    player,
+    match,
+    order,
+    scout,
+    createdAt,
+    positionPlayed,
+    playerCurrentClub,
+  } = report;
 
   return (
     <>
@@ -48,6 +56,8 @@ export const EditReportForm = ({
             match={match}
             order={order}
             scout={scout}
+            positionPlayed={positionPlayed}
+            playerCurrentClub={playerCurrentClub}
             createdAt={createdAt}
           />
         </CardContent>

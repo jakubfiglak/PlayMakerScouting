@@ -43,6 +43,8 @@ export const PrinteableReport = ({ report }: Props) => {
     avgRating,
     skills,
     maxRatingScore,
+    playerCurrentClub,
+    positionPlayed,
   } = report;
 
   return (
@@ -56,8 +58,15 @@ export const PrinteableReport = ({ report }: Props) => {
         <div>
           <Typography className={classes.text} gutterBottom>
             <strong>Zawodnik: </strong>
-            {player.firstName} {player.lastName}, {getLabel(player.position)} (
-            {player.club.name}, {player.club.division})
+            {player.firstName} {player.lastName}, {`ur. ${player.yearOfBirth}`}
+          </Typography>
+          <Typography className={classes.text} gutterBottom>
+            <strong>Klub: </strong>
+            {`${playerCurrentClub.name} (${playerCurrentClub.division})`}
+          </Typography>
+          <Typography className={classes.text} gutterBottom>
+            <strong>Pozycja nominalna/pozycja w meczu: </strong>
+            {`${player.position} / ${positionPlayed}`}
           </Typography>
           <div className={classes.flex}>
             <Typography className={classes.text} gutterBottom>
@@ -170,7 +179,7 @@ export const PrinteableReport = ({ report }: Props) => {
           Podsumowanie
         </Typography>
         <Typography align="center" className={classes.text} gutterBottom>
-          Średnia ocen: {avgRating.toFixed(2)}
+          Średnia ocen: {avgRating.toFixed(1)}%
         </Typography>
         <Typography className={classes.text} gutterBottom>
           {summary}

@@ -21,6 +21,7 @@ const RatingSchema = new Schema(
       maxlength: 30,
       trim: true,
       required: 'Please add rating name',
+      unqiue: true,
     },
     shortName: {
       type: String,

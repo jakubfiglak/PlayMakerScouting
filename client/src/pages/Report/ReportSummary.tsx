@@ -39,7 +39,7 @@ export const ReportSummary = ({
         </div>
         <Typography>
           <strong>Średnia ocena: </strong>
-          {avgRating.toFixed(2)}
+          {`${avgRating.toFixed(1)}%`}
         </Typography>
       </div>
       <div>

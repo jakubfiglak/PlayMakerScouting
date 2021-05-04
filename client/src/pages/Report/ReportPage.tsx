@@ -105,6 +105,8 @@ export const ReportPage = () => {
                 match={reportData.match}
                 scout={reportData.scout}
                 order={reportData.order}
+                playerCurrentClub={reportData.playerCurrentClub}
+                positionPlayed={reportData.positionPlayed}
                 createdAt={reportData.createdAt}
               />
             </CardContent>
@@ -115,7 +117,7 @@ export const ReportPage = () => {
               aria-controls="basic-data-content"
               id="basic-data-header"
             >
-              <Typography>Dane podstawowe</Typography>
+              <Typography>Statystyki</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ReportMatchStats
