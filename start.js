@@ -15,6 +15,7 @@ const reports = require('./routes/reports');
 const dashboard = require('./routes/dashboard');
 const ratings = require('./routes/ratings');
 const reportTemplates = require('./routes/reportTemplates');
+const teams = require('./routes/teams');
 
 const startServer = (port = process.env.PORT || 5000) => {
   const app = express();
@@ -43,6 +44,7 @@ const startServer = (port = process.env.PORT || 5000) => {
   app.use('/api/v1/dashboard', dashboard);
   app.use('/api/v1/ratings', ratings);
   app.use('/api/v1/report-templates', reportTemplates);
+  app.use('/api/v1/teams', teams);
 
   // Serve static assets in production
   if (process.env.NODE_ENV === 'production') {
@@ -50,7 +52,8 @@ const startServer = (port = process.env.PORT || 5000) => {
     app.use(express.static('client/build'));
 
     app.get('*', (req, res) =>
-      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')));
+      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    );
   }
 
   app.use(errorHandler);
