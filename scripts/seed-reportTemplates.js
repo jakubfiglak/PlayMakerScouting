@@ -6,31 +6,31 @@ const ReportTemplate = require('../modules/reportTemplates/reportTemplate.model'
 
 dotenv.config({ path: './config/config.env' });
 
-const author = '5d7a514b5d2c12c7449be042';
+const author = '6047f176c5d45231a400ef8a';
 
-const ballReceptionId = '6081d38bcf09362604154264';
-const passingId = '6081d38bcf09362604154265';
-const defOneOnOneId = '6081d38bcf09362604154266';
-const airPlayId = '6081d38bcf09362604154267';
-const positioningId = '6081d38bcf09362604154268';
-const attOneOnOneId = '6081d38bcf09362604154269';
-const finishingId = '6081d38bcf0936260415426a';
-const attackId = '6081d38bcf0936260415426b';
-const defenseId = '6081d38bcf0936260415426c';
-const transitionId = '6081d38bcf0936260415426d';
-const leadingMotorId = '6081d38bcf0936260415426e';
-const neglectedMotorId = '6081d38bcf0936260415426f';
-const noBallId = '609198d57f0a8063a06149e0';
-const openingId = '609198d57f0a8063a06149e1';
-const creationId = '609198d57f0a8063a06149e2';
-const finalizationId = '609198d57f0a8063a06149e3';
-const aoTransitionId = '609198d57f0a8063a06149e4';
-const onevonetwoId = '609198d57f0a8063a06149e5';
-const spaceDefId = '609198d57f0a8063a06149e6';
-const pressId = '609198d57f0a8063a06149e7';
-const oaTransitionId = '609198d57f0a8063a06149e8';
-const motorCharId = '609198d57f0a8063a06149e9';
-const mentalCharId = '609198d57f0a8063a06149ea';
+const ballReceptionId = '6091a737f353fb3e78f2c765';
+const passingId = '6091a737f353fb3e78f2c766';
+const defOneOnOneId = '6091a737f353fb3e78f2c767';
+const airPlayId = '6091a737f353fb3e78f2c768';
+const positioningId = '6091a737f353fb3e78f2c769';
+const attOneOnOneId = '6091a737f353fb3e78f2c76a';
+const finishingId = '6091a737f353fb3e78f2c76b';
+const attackId = '6091a737f353fb3e78f2c76a';
+const defenseId = '6091a737f353fb3e78f2c76d';
+const transitionId = '6091a737f353fb3e78f2c76e';
+const leadingMotorId = '6091a737f353fb3e78f2c76f';
+const neglectedMotorId = '6091a737f353fb3e78f2c770';
+const noBallId = '6091a737f353fb3e78f2c771';
+const openingId = '6091a737f353fb3e78f2c772';
+const creationId = '6091a737f353fb3e78f2c773';
+const finalizationId = '6091a737f353fb3e78f2c774';
+const aoTransitionId = '6091a737f353fb3e78f2c775';
+const onevonetwoId = '6091a737f353fb3e78f2c776';
+const spaceDefId = '6091a737f353fb3e78f2c777';
+const pressId = '6091a737f353fb3e78f2c778';
+const oaTransitionId = '6091a737f353fb3e78f2c779';
+const motorCharId = '6091a737f353fb3e78f2c77a';
+const mentalCharId = '6091a737f353fb3e78f2c77b';
 
 const oldReportCommonFields = [
   leadingMotorId,
@@ -101,15 +101,15 @@ const OOTemplate = {
 };
 
 const reportTemplates = [
-  // CBreportTemplate,
-  // FBreportTemplate,
-  // midfielderReportTemplate,
-  // forwardReportTemplate,
+  CBreportTemplate,
+  FBreportTemplate,
+  midfielderReportTemplate,
+  forwardReportTemplate,
   OOTemplate,
 ];
 
 async function seedReportTemplates() {
-  await connectDB(process.env.DB_CONNECT);
+  await connectDB(process.env.PRODUCTION_DB_CONNECT);
   try {
     const created = await ReportTemplate.create(reportTemplates);
     console.log(created);
@@ -121,7 +121,7 @@ async function seedReportTemplates() {
 }
 
 async function deleteReportTemplates() {
-  await connectDB(process.env.DB_CONNECT);
+  await connectDB(process.env.PRODUCTION_DB_CONNECT);
   try {
     await ReportTemplate.deleteMany();
     console.log('Ratings destroyed...'.red.inverse);

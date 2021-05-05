@@ -5,7 +5,7 @@ const Rating = require('../modules/ratings/rating.model');
 
 dotenv.config({ path: './config/config.env' });
 
-const author = '5d7a514b5d2c12c7449be042';
+const author = '6047f176c5d45231a400ef8a';
 
 const ballReception = {
   author,
@@ -215,18 +215,18 @@ const mentalChar = {
 };
 
 const ratings = [
-  // ballReception,
-  // passing,
-  // defOneOnOne,
-  // airPlay,
-  // positioning,
-  // attOneOnOne,
-  // finishing,
-  // attack,
-  // defense,
-  // transition,
-  // leadingMotor,
-  // neglectedMotor,
+  ballReception,
+  passing,
+  defOneOnOne,
+  airPlay,
+  positioning,
+  attOneOnOne,
+  finishing,
+  attack,
+  defense,
+  transition,
+  leadingMotor,
+  neglectedMotor,
   noBall,
   opening,
   creation,
@@ -241,7 +241,7 @@ const ratings = [
 ];
 
 async function seedRatings() {
-  await connectDB(process.env.DB_CONNECT);
+  await connectDB(process.env.PRODUCTION_DB_CONNECT);
   try {
     const created = await Rating.create(ratings);
     console.log(created);
@@ -253,7 +253,7 @@ async function seedRatings() {
 }
 
 async function deleteRatings() {
-  await connectDB(process.env.DB_CONNECT);
+  await connectDB(process.env.PRODUCTION_DB_CONNECT);
   try {
     await Rating.deleteMany();
     console.log('Ratings destroyed...'.red.inverse);
