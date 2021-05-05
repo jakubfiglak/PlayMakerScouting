@@ -8,7 +8,7 @@ const getEmail = faker.internet.email;
 const getPassword = faker.internet.password;
 const getRandomWord = faker.random.word;
 const getRandomText = faker.random.words;
-const getClubName = faker.company.companyName;
+const getRandomName = faker.company.companyName;
 const ID = mongoose.Types.ObjectId;
 
 const password = `aB1${getPassword()}`;
@@ -52,7 +52,7 @@ const buildUpdatePasswordForm = (overrides = {}) => ({
 
 const buildClub = (overrides = {}) => ({
   _id: new ID(),
-  name: getClubName(),
+  name: getRandomName(),
   voivodeship: 'Wielkopolskie',
   division: 'Ekstraklasa',
   ...overrides,
@@ -86,7 +86,7 @@ const buildOldReport = (overrides = {}) => ({
   scout: new ID(),
   match: {
     location: 'home',
-    against: getClubName(),
+    against: getRandomName(),
     competition: 'league',
     date: new Date(),
   },
@@ -136,7 +136,7 @@ const buildReport = (overrides = {}) => ({
   positionPlayed: getRandomArrayMember(positions),
   match: {
     location: 'home',
-    against: getClubName(),
+    against: getRandomName(),
     competition: 'league',
     date: new Date(),
   },
@@ -177,6 +177,12 @@ const buildReportTemplate = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildTeam = (overrides = {}) => ({
+  _id: new ID(),
+  name: getRandomName(),
+  ...overrides,
+});
+
 const buildReq = (overrides = {}) => {
   const req = { body: {}, params: {}, query: {}, ...overrides };
   return req;
@@ -205,6 +211,7 @@ module.exports = {
   buildRating,
   buildReportTemplate,
   buildOldReport,
+  buildTeam,
   buildReq,
   buildRes,
   buildNext,

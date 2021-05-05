@@ -6,6 +6,7 @@ const Order = require('../modules/orders/order.model');
 const Report = require('../modules/reports/report.model');
 const Rating = require('../modules/ratings/rating.model');
 const ReportTemplate = require('../modules/reportTemplates/reportTemplate.model');
+const Team = require('../modules/teams/team.model');
 const { buildUser } = require('./utils');
 
 const salt = bcrypt.genSaltSync(10);
@@ -30,6 +31,7 @@ const insertOrders = (orders) => Order.insertMany(orders);
 const insertReports = (reports) => Report.insertMany(reports);
 const insertRatings = (ratings) => Rating.insertMany(ratings);
 const insertReportTemplates = (reportTemplates) => ReportTemplate.insertMany(reportTemplates);
+const insertTeams = (teams) => Team.insertMany(teams);
 
 module.exports = {
   insertUsers,
@@ -40,4 +42,5 @@ module.exports = {
   insertReports,
   insertRatings,
   insertReportTemplates,
+  insertTeams,
 };

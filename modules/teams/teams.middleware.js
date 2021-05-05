@@ -17,6 +17,7 @@ const validateMembers = asyncHandler(async (req, res, next) => {
       new ApiError('At least one of the members has not been found', httpStatus.NOT_FOUND)
     );
   }
+  next();
 });
 
 module.exports = { setTeam, validateMembers };
