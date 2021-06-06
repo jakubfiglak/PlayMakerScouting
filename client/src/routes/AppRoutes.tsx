@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
-import { AccessManagementPage } from '../pages/AccessManegement/AccessManagementPage';
+import { AdminPage } from '../pages/Admin/AdminPage';
 import { ClubsPage } from '../pages/Clubs/ClubsPage';
 import { DashboardPage } from '../pages/Dashboard/DashboardPage';
 import { HomePage } from '../pages/Home/HomePage';
@@ -83,8 +83,8 @@ export const AppRoutes = () => {
         >
           <ReportPage />
         </ProtectedRoute>
-        <ProtectedRoute path="/accessmanagement" allowedRoles={['admin']}>
-          <AccessManagementPage />
+        <ProtectedRoute path="/admin" allowedRoles={['admin']}>
+          <AdminPage />
         </ProtectedRoute>
         <ProtectedRoute
           path="/reporttemplates"

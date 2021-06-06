@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const toJson = require('@meanie/mongoose-to-json');
+const autoPopulate = require('mongoose-autopopulate');
 
 const { Schema, model } = mongoose;
 
@@ -15,11 +16,13 @@ const TeamSchema = new Schema(
       type: [Schema.Types.ObjectId],
       ref: 'User',
       default: [],
+      autopopulate: true,
     },
   },
   { timestamps: true }
 );
 
 TeamSchema.plugin(toJson);
+TeamSchema.plugin(autoPopulate);
 
 module.exports = model('Team', TeamSchema);

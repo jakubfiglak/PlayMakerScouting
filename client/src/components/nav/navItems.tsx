@@ -56,8 +56,8 @@ export const navItems: NavItem[] = [
   },
   {
     icon: <AccessManagementIcon color="error" />,
-    text: 'Zarządzanie dostępami',
-    to: '/accessmanagement',
+    text: 'Panel administratora',
+    to: '/admin',
     allowedRoles: ['admin'],
   },
 ];
