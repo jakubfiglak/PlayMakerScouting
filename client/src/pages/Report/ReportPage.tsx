@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
@@ -29,8 +29,10 @@ import { PrinteableReport } from './PrinteableReport';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
+import { ReportBackgroundImageSelect } from '../../components/selects/ReportBackgroundImageSelect';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
+import { useReportBackgroundImages } from '../../operations/queries/useReportBackgroundImages';
 // Utils & data
 import { groupSkillsByCategory } from '../../utils/groupSkillsByCategory';
 import { SkillsAccordion } from './SkillsAccordion';
@@ -43,10 +45,15 @@ type ParamTypes = {
 export const ReportPage = () => {
   const params = useParams<ParamTypes>();
   const ref = useRef<HTMLDivElement | null>(null);
+  const [reportBackground, setReportBackground] = useState('');
 
-  const classes = useStyles();
+  const classes = useStyles({ background: reportBackground });
 
   const { loading, getReport, reportData, setCurrent } = useReportsState();
+  const {
+    data: backgroundImages,
+    isLoading: backgroundImagesLoading,
+  } = useReportBackgroundImages();
 
   const { id } = params;
 
@@ -97,6 +104,11 @@ export const ReportPage = () => {
                 Edytuj
               </Button>
             </div>
+            <ReportBackgroundImageSelect
+              reportBackgroundImages={backgroundImages || []}
+              value={reportBackground}
+              onChange={setReportBackground}
+            />
           </div>
           <Card className={classes.card}>
             <CardContent>
@@ -168,7 +180,11 @@ export const ReportPage = () => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+type StyleProps = {
+  background: string;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
   headerContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -194,9 +210,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   accordionDetails: {
     flexDirection: 'column',
   },
-  pageBody: {
-    backgroundImage: `url(${background})`,
+  pageBody: (props) => ({
+    backgroundImage: `url(${props.background})`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
-  },
+  }),
 }));
