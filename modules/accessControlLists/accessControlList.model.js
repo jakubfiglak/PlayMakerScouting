@@ -40,6 +40,11 @@ const AccessControlListSchema = new Schema(
       ref: 'Report',
       default: [],
     },
+    reportBackgroundImages: {
+      type: [Schema.Types.ObjectId],
+      ref: 'ReportBackgroundImage',
+      default: [],
+    },
   },
   { timestamps: true }
 );
