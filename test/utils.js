@@ -183,6 +183,16 @@ const buildTeam = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildAccessControlList = (overrides = {}) => ({
+  _id: new ID(),
+  user: null,
+  team: null,
+  players: [new ID(), new ID(), new ID()],
+  clubs: [new ID(), new ID(), new ID()],
+  reports: [new ID(), new ID(), new ID()],
+  ...overrides,
+});
+
 const buildReq = (overrides = {}) => {
   const req = { body: {}, params: {}, query: {}, ...overrides };
   return req;
@@ -212,6 +222,7 @@ module.exports = {
   buildReportTemplate,
   buildOldReport,
   buildTeam,
+  buildAccessControlList,
   buildReq,
   buildRes,
   buildNext,

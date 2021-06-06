@@ -9,15 +9,21 @@ const AccessControlListSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      unique: true,
+      index: {
+        unique: true,
+        partialFilterExpression: { user: { $type: 'objectId' } },
+      },
       ref: 'User',
-      autopopulate: options.select.user,
+      autopopulate: { select: options.select.user },
     },
     team: {
       type: Schema.Types.ObjectId,
-      unique: true,
+      index: {
+        unique: true,
+        partialFilterExpression: { team: { $type: 'objectId' } },
+      },
       ref: 'Team',
-      autopopulate: options.select.team,
+      autopopulate: { select: options.select.team },
     },
     players: {
       type: [Schema.Types.ObjectId],
