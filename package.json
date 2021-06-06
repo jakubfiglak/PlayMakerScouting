@@ -19,6 +19,8 @@
     "destroy-ratings": "node scripts/seed-ratings -destroy",
     "seed-reportTemplates": "node scripts/seed-reportTemplates -create",
     "destroy-reportTemplates": "node scripts/seed-reportTemplates -destroy",
+    "seed-reportBackgroundImages": "node scripts/seed-reportBackgroundImages -create",
+    "destroy-reportBackgroundImages": "node scripts/seed-reportBackgroundImages -destroy",
     "import-data": "node seeder -import",
     "destroy-data": "node seeder -destroy",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client & migrate-mongo up"
