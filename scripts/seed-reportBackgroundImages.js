@@ -15,7 +15,7 @@ const reportBackgroundImages = [
   {
     name: 'Odra Opole',
     url:
-      'https://res.cloudinary.com/dqlzeo8jx/image/upload/v1622985965/PlaymakerScouting/odra_vrgexj.jpg',
+      'https://res.cloudinary.com/dqlzeo8jx/image/upload/v1623350864/PlaymakerScouting/odra_jmuxmh.jpg',
     isPublic: false,
   },
 ];
