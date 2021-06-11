@@ -5,6 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 import { AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
 // Assets
 import background from '../../assets/report_background.png';
+import odra_background from '../../assets/odra_background.jpg';
 // Custom components
 import { ReportsTable } from './ReportsTable';
 import { ReportsFilterForm } from './ReportsFilterForm';
@@ -111,7 +112,7 @@ export const ReportsPage = () => {
 
   const handlePrint = useReactToPrint({
     content: () => ref.current,
-    documentTitle: `PlaymakerReport_${current?.id}`,
+    documentTitle: 'Playmaker-Report',
     bodyClass: classes.pageBody,
     onAfterPrint: () => clearCurrent(),
   }) as () => void;
@@ -213,7 +214,7 @@ const useStyles = makeStyles(() => ({
     height: 0,
   },
   pageBody: {
-    backgroundImage: `url(${background})`,
+    backgroundImage: `url(${odra_background})`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
   },

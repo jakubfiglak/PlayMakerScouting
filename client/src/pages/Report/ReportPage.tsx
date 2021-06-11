@@ -21,6 +21,7 @@ import {
 } from '@material-ui/icons';
 // Assets
 import background from '../../assets/report_background.png';
+import odra_background from '../../assets/odra_background.jpg';
 // Custom components
 import { ReportMatchStats } from './ReportMatchStats';
 import { ReportBasicInfo } from './ReportBasicInfo';
@@ -195,7 +196,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
   },
   pageBody: {
-    backgroundImage: `url(${background})`,
+    backgroundImage: `url(${odra_background})`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
   },
