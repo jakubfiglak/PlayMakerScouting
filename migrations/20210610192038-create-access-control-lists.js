@@ -3,25 +3,31 @@
 // author from report
 
 module.exports = {
-  async up(db, client) {
+  async up(db) {
     const users = await db
       .collection('users')
       .find({ role: { $ne: 'admin' } })
       .toArray();
+
     const operations = users.map(async (user) => {
       const clubs = await db.collection('clubs').find({ authorizedUsers: user._id }).toArray();
       const players = await db.collection('players').find({ authorizedUsers: user._id }).toArray();
       const reports = await db.collection('reports').find({ scout: user._id }).toArray();
-      console.log('--------USER DATA---------');
-      console.dir({ user, clubs, players, reports }, { depth: null });
+
+      return {
+        user: user._id,
+        clubs: clubs.map((club) => club._id),
+        players: players.map((player) => player._id),
+        reports: reports.map((report) => report._id),
+        reportBackgroundImages: [],
+      };
     });
 
-    await Promise.all(operations);
+    const accessControlLists = await Promise.all(operations);
+    await db.collection('accesscontrollists').insertMany(accessControlLists);
   },
 
-  async down(db, client) {
-    // TODO write the statements to rollback your migration (if possible)
-    // Example:
-    // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
+  async down(db) {
+    await db.collection('accesscontrollists').deleteMany();
   },
 };
