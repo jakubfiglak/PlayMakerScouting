@@ -32,7 +32,7 @@
     "implicit-arrow-linebreak": "off",
     "no-underscore-dangle": "off",
     "object-curly-newline": [
-      "error",
+      "off",
       {
         "ObjectExpression": {
           "consistent": true

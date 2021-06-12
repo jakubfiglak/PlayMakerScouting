@@ -7,17 +7,18 @@ const options = require('./options');
 // @desc Register user
 // @route POST /api/v1/auth/register
 // @access Public
-exports.register = asyncHandler(async (req, res) => {
-  const user = await authService.registerUser({
-    reqBody: req.body,
-    host: req.headers.host,
-  });
+exports.register = asyncHandler(async (req, res, next) => {
+  const createdUser = await authService.registerUser(req.body);
+
+  req.createdUser = createdUser;
 
   res.status(httpStatus.CREATED).json({
     success: true,
     message: 'Successfully created new user!',
-    data: user,
+    data: createdUser,
   });
+
+  next();
 });
 
 // @desc Verify user

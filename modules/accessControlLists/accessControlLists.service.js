@@ -1,8 +1,7 @@
 const AccessControlList = require('./accessControlList.model');
 
-async function createAccessControlList(accessControlListData) {
-  const accessControlList = await AccessControlList.create(accessControlListData);
-  return accessControlList;
+function createAccessControlList(accessControlListData) {
+  return AccessControlList.create(accessControlListData);
 }
 
 function getAllAccessControlLists() {
@@ -10,7 +9,7 @@ function getAllAccessControlLists() {
 }
 
 function getAccessControlListForAnAsset({ assetType, assetId }) {
-  return AccessControlList.find({ [assetType]: assetId });
+  return AccessControlList.findOne({ [assetType]: assetId });
 }
 
 module.exports = {
