@@ -33,9 +33,15 @@ router.post('/register', [
   checkIfPasswordsMatch({ fieldNameOne: 'password', fieldNameTwo: 'passwordConfirm' }),
   assignConfirmationCode,
   register,
-  sendConfirmationEmail,
   createAclOnUserRegister,
-  (req, res) => res.end(),
+  sendConfirmationEmail,
+  (req, res) => {
+    res.status(201).json({
+      success: true,
+      message: 'Successfully created new user!',
+      data: req.createdUser,
+    });
+  },
 ]);
 router.get('/confirm/:confirmationCode', checkIfUserWithConfirmationCodeExists, verifyUser);
 router.post(

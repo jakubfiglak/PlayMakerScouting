@@ -12,12 +12,6 @@ exports.register = asyncHandler(async (req, res, next) => {
 
   req.createdUser = createdUser;
 
-  res.status(httpStatus.CREATED).json({
-    success: true,
-    message: 'Successfully created new user!',
-    data: createdUser,
-  });
-
   next();
 });
 

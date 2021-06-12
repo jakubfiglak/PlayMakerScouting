@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const emailService = require('./email.service');
 
 const sendConfirmationEmail = asyncHandler(async (req, res, next) => {
-  const confirmationURL = `http://${req.headers.host}/confirm/${req.body.confirmationCode}`;
+  const confirmationURL = `http://${req.headers.host}/api/v1/auth/confirm/${req.body.confirmationCode}`;
 
   await emailService.sendEmail({
     to: req.createdUser.email,

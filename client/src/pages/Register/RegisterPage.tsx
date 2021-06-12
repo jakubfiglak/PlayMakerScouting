@@ -1,7 +1,4 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-// MUI components
-import { Typography, Link } from '@material-ui/core';
 // Custom components
 import { RegisterForm } from './RegisterForm';
 import { AuthTemplate } from '../../templates/AuthTemplate';
@@ -15,14 +12,7 @@ export const RegisterPage = () => {
   return (
     <AuthTemplate title="Rejestracja">
       {loading && <Loader />}
-      <Typography align="center" gutterBottom>
-        Przepraszamy, rejestracja nowych użytkowników w wersji testowej
-        aplikacji jest zablokowana
-      </Typography>
-      <Link component={RouterLink} to="/login">
-        Wróć do strony logowania
-      </Link>
-      {/* <RegisterForm onSubmit={register} /> */}
+      <RegisterForm onSubmit={register} />
     </AuthTemplate>
   );
 };
