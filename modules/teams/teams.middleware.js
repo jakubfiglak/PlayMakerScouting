@@ -22,6 +22,22 @@ const checkIfAllMembersExist = asyncHandler(async (req, res, next) => {
   next();
 });
 
+const checkMembersRoles = asyncHandler(async (req, res, next) => {
+  const promiseArr = req.body.members.map((member) => usersService.getUserById(member));
+
+  const members = await Promise.all(promiseArr);
+  const roles = members.map((member) => member.role);
+  if (roles.some((role) => role !== 'scout')) {
+    return next(
+      new ApiError(
+        'At least one of the members is not of the role of scout',
+        httpStatus.BAD_REQUEST
+      )
+    );
+  }
+  next();
+});
+
 const checkIfMembersBelongToAnotherTeam = asyncHandler(async (req, res, next) => {
   const promiseArr = req.body.members.map((member) => teamsService.getTeamByMemberId(member));
 
@@ -46,6 +62,19 @@ const checkIfMemberExists = asyncHandler(async (req, res, next) => {
   next();
 });
 
+const checkMemberRole = asyncHandler(async (req, res, next) => {
+  const member = await usersService.getUserById(req.body.memberId);
+  if (member.role !== 'scout') {
+    return next(
+      new ApiError(
+        `User with the id of ${req.body.memberId} is not of the role of scout`,
+        httpStatus.BAD_REQUEST
+      )
+    );
+  }
+  next();
+});
+
 const checkIfMemberBelongsToAnotherTeam = asyncHandler(async (req, res, next) => {
   const team = await teamsService.getTeamByMemberId(req.body.memberId);
   if (team) {
@@ -65,4 +94,6 @@ module.exports = {
   checkIfMemberExists,
   checkIfMembersBelongToAnotherTeam,
   checkIfMemberBelongsToAnotherTeam,
+  checkMembersRoles,
+  checkMemberRole,
 };

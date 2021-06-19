@@ -11,6 +11,8 @@ const {
   checkIfMemberExists,
   checkIfMembersBelongToAnotherTeam,
   checkIfMemberBelongsToAnotherTeam,
+  checkMembersRoles,
+  checkMemberRole,
 } = require('../modules/teams/teams.middleware');
 const {
   createAclOnTeamCreation,
@@ -26,6 +28,7 @@ router.post(
     authorize('admin'),
     checkIfAllMembersExist,
     checkIfMembersBelongToAnotherTeam,
+    checkMembersRoles,
     createTeam,
     createAclOnTeamCreation,
   ],
@@ -34,7 +37,14 @@ router.post(
 router.get('/', [protect, authorize('admin')], getTeams);
 router.patch(
   '/:id/add-member',
-  [protect, authorize('admin'), checkIfMemberExists, checkIfMemberBelongsToAnotherTeam, setTeam],
+  [
+    protect,
+    authorize('admin'),
+    checkIfMemberExists,
+    checkIfMemberBelongsToAnotherTeam,
+    checkMemberRole,
+    setTeam,
+  ],
   addMember
 );
 router.patch('/:id/remove-member', [protect, authorize('admin'), setTeam], removeMember);

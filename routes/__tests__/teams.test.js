@@ -78,6 +78,22 @@ describe('POST /api/v1/teams', () => {
     );
   });
 
+  it('should return 400 error if at least one of the provided members is not of the role of scout', async () => {
+    const user1 = buildUser({ role: 'playmaker-scout' });
+    const user2 = buildUser();
+    const user3 = buildUser();
+    await insertUsers([user1, user2, user3]);
+    const team = buildTeam({ members: [user1._id, user2._id, user3._id] });
+
+    const { response } = await api.post('teams', team).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"At least one of the members is not of the role of scout"'
+    );
+  });
+
   it('should return 201 status and the team object, successfully save the team to the database and create access control list for the team if request data is valid', async () => {
     const user1 = buildUser();
     const user2 = buildUser();
@@ -184,6 +200,19 @@ describe('PATCH /api/v1/teams/:id/add-member', () => {
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toContain('belongs to another team');
+  });
+
+  it('should return 200 error if the user with the provided memberId is not of the role of scout', async () => {
+    const user = buildUser({ role: 'admin' });
+    await insertUsers([user]);
+    const team = buildTeam();
+    const { response } = await api
+      .patch(`teams/${team._id}/add-member`, { memberId: user._id })
+      .catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('is not of the role of scout');
   });
 
   it('should add new member to the team', async () => {
