@@ -157,3 +157,47 @@ describe('PUT /api/v1/teams/:id', () => {
     // expect(response.data.data.members).toEqual(editData.members.map((id) => id.toHexString()));
   });
 });
+
+describe('PATCH /api/v1/teams/:id/add-member', () => {
+  it('should add new member to the team', async () => {
+    const user1 = buildUser();
+    const user2 = buildUser();
+    const user3 = buildUser();
+    await insertUsers([user1, user2, user3]);
+
+    const team = buildTeam({ members: [user1._id, user2._id] });
+
+    await insertTeams([team]);
+
+    const response = await api.patch(`teams/${team._id}/add-member`, { memberId: user3._id });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.members.length).toBe(3);
+
+    const memberIds = response.data.data.members.map((member) => member.id);
+    expect(memberIds).toContainEqual(user3._id.toHexString());
+  });
+});
+
+describe('PATCH /api/v1/teams/:id/remove-member', () => {
+  it('should remove a member from the team', async () => {
+    const user1 = buildUser();
+    const user2 = buildUser();
+    const user3 = buildUser();
+    await insertUsers([user1, user2, user3]);
+
+    const team = buildTeam({ members: [user1._id, user2._id, user3._id] });
+
+    await insertTeams([team]);
+
+    const response = await api.patch(`teams/${team._id}/remove-member`, { memberId: user3._id });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.members.length).toBe(2);
+
+    const memberIds = response.data.data.members.map((member) => member.id);
+    expect(memberIds).not.toContainEqual(user3._id.toHexString());
+  });
+});

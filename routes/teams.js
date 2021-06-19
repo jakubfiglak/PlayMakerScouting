@@ -1,5 +1,11 @@
 const express = require('express');
-const { createTeam, getTeams, updateTeam } = require('../modules/teams/teams.controller');
+const {
+  createTeam,
+  getTeams,
+  updateTeam,
+  addMember,
+  removeMember,
+} = require('../modules/teams/teams.controller');
 const { setTeam, validateMembers } = require('../modules/teams/teams.middleware');
 const {
   createAclOnTeamCreation,
@@ -15,5 +21,7 @@ router.post(
 );
 router.get('/', [protect, authorize('admin')], getTeams);
 router.put('/:id', [protect, authorize('admin'), validateMembers, setTeam], updateTeam);
+router.patch('/:id/add-member', [protect, authorize('admin'), setTeam], addMember);
+router.patch('/:id/remove-member', [protect, authorize('admin'), setTeam], removeMember);
 
 module.exports = router;

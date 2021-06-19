@@ -46,3 +46,29 @@ exports.updateTeam = asyncHandler(async (req, res) => {
     data: team,
   });
 });
+
+// @desc Add member
+// @route PATCH /api/v1/teams/:id/add-member
+// @access Private (admin only)
+exports.addMember = asyncHandler(async (req, res) => {
+  const team = await teamsService.addMember({ team: req.team, memberId: req.body.memberId });
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: `Member with the id of ${req.body.memberId} successfully added to the ${req.team.name} team`,
+    data: team,
+  });
+});
+
+// @desc Remove member
+// @route PATCH /api/v1/teams/:id/add-member
+// @access Private (admin only)
+exports.removeMember = asyncHandler(async (req, res) => {
+  const team = await teamsService.removeMember({ team: req.team, memberId: req.body.memberId });
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: `Member with the id of ${req.body.memberId} successfully removed from the ${req.team.name} team`,
+    data: team,
+  });
+});

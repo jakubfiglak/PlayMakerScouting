@@ -179,7 +179,7 @@ const buildReportTemplate = (overrides = {}) => ({
 
 const buildTeam = (overrides = {}) => ({
   _id: new ID(),
-  name: getRandomName(),
+  name: getRandomName().slice(0, 30),
   ...overrides,
 });
 
