@@ -8,7 +8,7 @@ const teamsService = require('./teams.service');
 
 const setTeam = setAsset({ name: 'team', model: Team });
 
-const validateMembers = asyncHandler(async (req, res, next) => {
+const checkIfAllMembersExist = asyncHandler(async (req, res, next) => {
   // Check if members with provided ids exist in the database
   const promiseArr = req.body.members.map((member) => usersService.getUserById(member));
 
@@ -23,4 +23,14 @@ const validateMembers = asyncHandler(async (req, res, next) => {
   next();
 });
 
-module.exports = { setTeam, validateMembers };
+const checkIfMemberExists = asyncHandler(async (req, res, next) => {
+  const member = await usersService.getUserById(req.body.memberId);
+  if (!member) {
+    return next(
+      new ApiError(`User with the id of ${req.body.memberId} doesn't exist`, httpStatus.NOT_FOUND)
+    );
+  }
+  next();
+});
+
+module.exports = { setTeam, checkIfAllMembersExist, checkIfMemberExists };

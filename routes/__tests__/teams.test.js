@@ -10,6 +10,7 @@ const {
   buildAccessControlList,
   buildClub,
   buildPlayer,
+  ID,
 } = require('../../test/utils');
 const {
   insertTestUser,
@@ -136,29 +137,21 @@ describe('GET /api/v1/teams', () => {
   });
 });
 
-describe('PUT /api/v1/teams/:id', () => {
-  it('should update a team and return new data if request is valid', async () => {
-    const user1 = buildUser();
-    const user2 = buildUser();
-    const user3 = buildUser();
-    await insertUsers([user1, user2, user3]);
-
-    const team = buildTeam({ members: [user1._id, user2._id] });
+describe('PATCH /api/v1/teams/:id/add-member', () => {
+  it('should return 404 error if there is no user in the database with the provided memberId', async () => {
+    const team = buildTeam();
 
     await insertTeams([team]);
 
-    const editData = { members: [user1._id, user2._id, user3._id] };
+    const { response } = await api
+      .patch(`teams/${team._id}/add-member`, { memberId: new ID() })
+      .catch((e) => e);
 
-    const response = await api.put(`teams/${team._id}`, editData);
-
-    expect(response.status).toBe(httpStatus.OK);
-    expect(response.data.success).toBe(true);
-    expect(response.data.data.name).toBe(team.name);
-    // expect(response.data.data.members).toEqual(editData.members.map((id) => id.toHexString()));
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain("doesn't exist");
   });
-});
 
-describe('PATCH /api/v1/teams/:id/add-member', () => {
   it('should add new member to the team', async () => {
     const user1 = buildUser();
     const user2 = buildUser();

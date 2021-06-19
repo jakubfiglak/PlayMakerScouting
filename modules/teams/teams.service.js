@@ -13,19 +13,6 @@ async function createTeam(teamData) {
   return team;
 }
 
-async function updateTeam({ team, reqBody }) {
-  const editedTeam = team;
-
-  Object.keys(reqBody).forEach((key) => {
-    if (reqBody[key]) {
-      editedTeam[key] = reqBody[key];
-    }
-  });
-
-  const modifiedTeam = await editedTeam.save();
-  return modifiedTeam;
-}
-
 async function addMember({ team, memberId }) {
   const editedTeam = team;
 
@@ -46,7 +33,6 @@ module.exports = {
   getAllTeams,
   getTeamByMemberId,
   createTeam,
-  updateTeam,
   addMember,
   removeMember,
 };
