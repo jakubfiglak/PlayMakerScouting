@@ -13,6 +13,7 @@ const {
   checkIfMemberBelongsToAnotherTeam,
   checkMembersRoles,
   checkMemberRole,
+  mergeAclsOnMemberAddition,
 } = require('../modules/teams/teams.middleware');
 const {
   createAclOnTeamCreation,
@@ -44,6 +45,7 @@ router.patch(
     checkIfMemberBelongsToAnotherTeam,
     checkMemberRole,
     setTeam,
+    mergeAclsOnMemberAddition,
   ],
   addMember
 );

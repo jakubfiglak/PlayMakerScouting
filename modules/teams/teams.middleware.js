@@ -5,6 +5,7 @@ const ApiError = require('../../utils/ApiError');
 const setAsset = require('../../middleware/setAsset');
 const usersService = require('../users/users.service');
 const teamsService = require('./teams.service');
+const accessControlListsService = require('../accessControlLists/accessControlLists.service');
 
 const setTeam = setAsset({ name: 'team', model: Team });
 
@@ -88,6 +89,16 @@ const checkIfMemberBelongsToAnotherTeam = asyncHandler(async (req, res, next) =>
   next();
 });
 
+const mergeAclsOnMemberAddition = asyncHandler(async (req, res, next) => {
+  const memberAcl = await accessControlListsService.getAccessControlListForAnAsset({
+    assetType: 'user',
+    assetId: req.body.memberId,
+  });
+
+  await accessControlListsService.mergeMembersAclIntoTeamsAcl({ teamId: req.params.id, memberAcl });
+  next();
+});
+
 module.exports = {
   setTeam,
   checkIfAllMembersExist,
@@ -96,4 +107,5 @@ module.exports = {
   checkIfMemberBelongsToAnotherTeam,
   checkMembersRoles,
   checkMemberRole,
+  mergeAclsOnMemberAddition,
 };

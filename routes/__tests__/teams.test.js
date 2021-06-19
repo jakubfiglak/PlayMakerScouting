@@ -215,24 +215,60 @@ describe('PATCH /api/v1/teams/:id/add-member', () => {
     expect(response.data.error).toContain('is not of the role of scout');
   });
 
-  it('should add new member to the team', async () => {
+  it('should add new member to the team, return the team object and populate teams ACL with data from new members ACL', async () => {
+    const club1 = buildClub();
+    const club2 = buildClub();
+    const club3 = buildClub();
+    const player1 = buildPlayer();
+    const player2 = buildPlayer();
+    const player3 = buildPlayer();
     const user1 = buildUser();
     const user2 = buildUser();
-    const user3 = buildUser();
-    await insertUsers([user1, user2, user3]);
+    await Promise.all([
+      insertUsers([user1, user2]),
+      insertClubs([club1, club2, club3]),
+      insertPlayers([player1, player2, player3]),
+    ]);
 
-    const team = buildTeam({ members: [user1._id, user2._id] });
+    const team = buildTeam({ members: [user1._id] });
 
     await insertTeams([team]);
 
-    const response = await api.patch(`teams/${team._id}/add-member`, { memberId: user3._id });
+    const teamAcl = buildAccessControlList({
+      team: team._id,
+      clubs: [club1._id],
+      players: [player1._id],
+    });
+    const user2Acl = buildAccessControlList({
+      user: user2._id,
+      clubs: [club1._id, club2._id, club3._id],
+      players: [player1._id, player2._id, player3._id],
+    });
+    await insertAccessControlLists([teamAcl, user2Acl]);
+
+    const response = await api.patch(`teams/${team._id}/add-member`, { memberId: user2._id });
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
-    expect(response.data.data.members.length).toBe(3);
+    expect(response.data.data.members.length).toBe(2);
 
     const memberIds = response.data.data.members.map((member) => member.id);
-    expect(memberIds).toContainEqual(user3._id.toHexString());
+    expect(memberIds).toContainEqual(user2._id.toHexString());
+
+    // Check the created ACL
+    const dbTeamAcl = await accessControlListsService.getAccessControlListForAnAsset({
+      assetType: 'team',
+      assetId: team._id,
+    });
+
+    expect(dbTeamAcl.players.length).toBe(3);
+    expect(dbTeamAcl.clubs.length).toBe(3);
+    expect(dbTeamAcl.clubs).toContainEqual(club1._id);
+    expect(dbTeamAcl.clubs).toContainEqual(club2._id);
+    expect(dbTeamAcl.clubs).toContainEqual(club3._id);
+    expect(dbTeamAcl.players).toContainEqual(player1._id);
+    expect(dbTeamAcl.players).toContainEqual(player2._id);
+    expect(dbTeamAcl.players).toContainEqual(player3._id);
   });
 });
 
