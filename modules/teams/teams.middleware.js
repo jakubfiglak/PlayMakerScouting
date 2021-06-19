@@ -9,7 +9,6 @@ const teamsService = require('./teams.service');
 const setTeam = setAsset({ name: 'team', model: Team });
 
 const checkIfAllMembersExist = asyncHandler(async (req, res, next) => {
-  // Check if members with provided ids exist in the database
   const promiseArr = req.body.members.map((member) => usersService.getUserById(member));
 
   const members = await Promise.all(promiseArr);
@@ -17,6 +16,20 @@ const checkIfAllMembersExist = asyncHandler(async (req, res, next) => {
   if (members.includes(null)) {
     return next(
       new ApiError('At least one of the members has not been found', httpStatus.NOT_FOUND)
+    );
+  }
+
+  next();
+});
+
+const checkIfMembersBelongToAnotherTeam = asyncHandler(async (req, res, next) => {
+  const promiseArr = req.body.members.map((member) => teamsService.getTeamByMemberId(member));
+
+  const teams = await Promise.all(promiseArr);
+
+  if (teams.some((team) => team !== null)) {
+    return next(
+      new ApiError('At least one of the members belongs to another team', httpStatus.BAD_REQUEST)
     );
   }
 
@@ -33,4 +46,23 @@ const checkIfMemberExists = asyncHandler(async (req, res, next) => {
   next();
 });
 
-module.exports = { setTeam, checkIfAllMembersExist, checkIfMemberExists };
+const checkIfMemberBelongsToAnotherTeam = asyncHandler(async (req, res, next) => {
+  const team = await teamsService.getTeamByMemberId(req.body.memberId);
+  if (team) {
+    return next(
+      new ApiError(
+        `User with the id of ${req.body.memberId} belongs to another team`,
+        httpStatus.BAD_REQUEST
+      )
+    );
+  }
+  next();
+});
+
+module.exports = {
+  setTeam,
+  checkIfAllMembersExist,
+  checkIfMemberExists,
+  checkIfMembersBelongToAnotherTeam,
+  checkIfMemberBelongsToAnotherTeam,
+};

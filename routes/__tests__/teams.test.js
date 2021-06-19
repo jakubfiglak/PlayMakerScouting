@@ -1,5 +1,4 @@
 const axios = require('axios').default;
-const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
@@ -48,7 +47,7 @@ describe('POST /api/v1/teams', () => {
     const user2 = buildUser();
     await insertUsers([user1, user2]);
 
-    const fakeUserId = new mongoose.Types.ObjectId();
+    const fakeUserId = new ID();
 
     const team = buildTeam({ members: [user1._id, user2._id, fakeUserId] });
 
@@ -58,6 +57,24 @@ describe('POST /api/v1/teams', () => {
     expect(response.data.success).toBe(false);
     expect(response.data.error).toMatchInlineSnapshot(
       '"At least one of the members has not been found"'
+    );
+  });
+
+  it('should return 400 error if at least one of the provided members belongs to another team', async () => {
+    const user1 = buildUser();
+    const user2 = buildUser();
+    const user3 = buildUser();
+    await insertUsers([user1, user2, user3]);
+    const team1 = buildTeam({ members: [user1._id, user2._id] });
+    await insertTeams([team1]);
+
+    const team2 = buildTeam({ members: [user2._id, user3._id] });
+    const { response } = await api.post('teams', team2).catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(
+      '"At least one of the members belongs to another team"'
     );
   });
 
@@ -150,6 +167,23 @@ describe('PATCH /api/v1/teams/:id/add-member', () => {
     expect(response.status).toBe(httpStatus.NOT_FOUND);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toContain("doesn't exist");
+  });
+
+  it('should return 200 error if the user with the provided memberId already belongs to another team', async () => {
+    const user = buildUser();
+    await insertUsers([user]);
+    const team1 = buildTeam({ members: [user._id] });
+    const team2 = buildTeam();
+
+    await insertTeams([team1, team2]);
+
+    const { response } = await api
+      .patch(`teams/${team2._id}/add-member`, { memberId: user._id })
+      .catch((e) => e);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toContain('belongs to another team');
   });
 
   it('should add new member to the team', async () => {

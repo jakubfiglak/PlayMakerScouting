@@ -9,6 +9,8 @@ const {
   setTeam,
   checkIfAllMembersExist,
   checkIfMemberExists,
+  checkIfMembersBelongToAnotherTeam,
+  checkIfMemberBelongsToAnotherTeam,
 } = require('../modules/teams/teams.middleware');
 const {
   createAclOnTeamCreation,
@@ -19,13 +21,20 @@ const router = express.Router();
 
 router.post(
   '/',
-  [protect, authorize('admin'), checkIfAllMembersExist, createTeam, createAclOnTeamCreation],
+  [
+    protect,
+    authorize('admin'),
+    checkIfAllMembersExist,
+    checkIfMembersBelongToAnotherTeam,
+    createTeam,
+    createAclOnTeamCreation,
+  ],
   (req, res) => res.end()
 );
 router.get('/', [protect, authorize('admin')], getTeams);
 router.patch(
   '/:id/add-member',
-  [protect, authorize('admin'), checkIfMemberExists, setTeam],
+  [protect, authorize('admin'), checkIfMemberExists, checkIfMemberBelongsToAnotherTeam, setTeam],
   addMember
 );
 router.patch('/:id/remove-member', [protect, authorize('admin'), setTeam], removeMember);
