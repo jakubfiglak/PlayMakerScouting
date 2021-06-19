@@ -210,6 +210,7 @@ const buildRes = (overrides = {}) => {
 const buildNext = (impl) => jest.fn(impl).mockName('next');
 
 module.exports = {
+  ID,
   buildUser,
   buildRegisterForm,
   buildLoginForm,

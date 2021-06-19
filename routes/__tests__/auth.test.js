@@ -95,6 +95,8 @@ describe('POST api/v1/auth/register', () => {
       assetId: response.data.data.id,
     });
 
+    console.log(createdAcl);
+
     expect(createdAcl).toBeDefined();
   });
 });

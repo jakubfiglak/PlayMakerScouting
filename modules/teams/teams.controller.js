@@ -5,14 +5,18 @@ const teamsService = require('./teams.service');
 // @desc Create new team
 // @route POST /api/v1/teams
 // @access Private (admin only)
-exports.createTeam = asyncHandler(async (req, res) => {
+exports.createTeam = asyncHandler(async (req, res, next) => {
   const team = await teamsService.createTeam(req.body);
+
+  req.createdTeam = team;
 
   res.status(httpStatus.CREATED).json({
     success: true,
     message: 'Successfully created new team',
     data: team,
   });
+
+  next();
 });
 
 // @desc Get all teams
