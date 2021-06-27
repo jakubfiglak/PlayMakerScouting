@@ -1,12 +1,21 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const playersService = require('./players.service');
+const accessControlListsService = require('../accessControlLists/accessControlLists.service');
 
 // @desc Create new player
 // @route POST /api/v1/players
 // @access Private
 exports.createPlayer = asyncHandler(async (req, res) => {
   const player = await playersService.createPlayer(req.body);
+
+  await accessControlListsService.grantAccessOnAssetCreation({
+    userRole: req.user.role,
+    userAcl: req.userAcl,
+    teamAcl: req.teamAcl,
+    assetType: 'player',
+    assetId: player._id,
+  });
 
   res.status(httpStatus.CREATED).json({
     success: true,
@@ -87,20 +96,5 @@ exports.deletePlayer = asyncHandler(async (req, res) => {
     success: true,
     message: `Player with the id of ${id} successfully removed!`,
     data: id,
-  });
-});
-
-// @desc Grant user with an access to a specific player
-// @route POST /api/v1/players/:id/grantaccess
-// @access Private (admin only)
-exports.grantAccess = asyncHandler(async (req, res) => {
-  const userId = req.body.user;
-  const playerId = req.params.id;
-
-  await playersService.grantAccess({ player: req.player, userId });
-
-  res.status(httpStatus.OK).json({
-    success: true,
-    message: `Successfully granted the user with the id of ${userId} with the access to the player with the id of ${playerId}`,
   });
 });

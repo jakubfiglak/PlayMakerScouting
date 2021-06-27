@@ -32,7 +32,7 @@ beforeEach(async () => {
 afterAll(() => server.close());
 
 describe('POST api/v1/clubs', () => {
-  it("should create a club and add created club id to author's ACL and if the user belongs to a team, this teams ACL should also be populated with created club id", async () => {
+  it('should create a club and add created club id to authors ACL and if the user belongs to a team, this teams ACL should also be populated with created club id', async () => {
     const userAcl = buildAccessControlList({ user: testUser._id });
     await insertAccessControlLists([userAcl]);
     const team = buildTeam({ members: [testUser._id] });
