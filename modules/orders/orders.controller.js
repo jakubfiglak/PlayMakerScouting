@@ -113,7 +113,7 @@ exports.acceptOrder = asyncHandler(async (req, res) => {
     userRole: req.user.role,
     userAcl: req.userAcl,
     playerId: req.order.player._id,
-    clubId: req.order.player.club && req.order.player.club._id,
+    clubId: req.order.player?.club,
   });
 
   res.status(httpStatus.OK).json({

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "PlaymakerPro Scouting App",
   "engines": {
-    "node": "12.x",
-    "npm": "6.x"
+    "node": ">=12.x",
+    "npm": ">=6.x"
   },
   "main": "server.js",
   "scripts": {
@@ -55,7 +55,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.20",
     "concurrently": "^5.3.0",
-    "eslint": "7.21.0",
+    "eslint": "^7.29.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
