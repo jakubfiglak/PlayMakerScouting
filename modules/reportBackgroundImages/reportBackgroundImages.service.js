@@ -1,7 +1,7 @@
 const ReportBackgroundImage = require('./reportBackgroundImage.model');
 
-function getAllReportBackgroundImages() {
-  return ReportBackgroundImage.find({});
+function getAllReportBackgroundImages(accessFilters) {
+  return ReportBackgroundImage.find(accessFilters);
 }
 
 module.exports = {

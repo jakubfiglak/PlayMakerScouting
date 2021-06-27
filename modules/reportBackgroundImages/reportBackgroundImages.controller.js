@@ -6,7 +6,9 @@ const reportBackgroundImagesService = require('./reportBackgroundImages.service'
 // @route GET /api/v1/report-background-images
 // @access Private
 exports.getReportBackgroundImages = asyncHandler(async (req, res) => {
-  const reportTemplates = await reportBackgroundImagesService.getAllReportBackgroundImages();
+  const reportTemplates = await reportBackgroundImagesService.getAllReportBackgroundImages(
+    req.accessFilters
+  );
 
   res.status(httpStatus.OK).json({
     success: true,

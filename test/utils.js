@@ -9,6 +9,7 @@ const getPassword = faker.internet.password;
 const getRandomWord = faker.random.word;
 const getRandomText = faker.random.words;
 const getRandomName = faker.company.companyName;
+const getRandomUrl = faker.internet.url;
 const ID = mongoose.Types.ObjectId;
 
 const password = `aB1${getPassword()}`;
@@ -193,6 +194,13 @@ const buildAccessControlList = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildReportBackgroundImage = (overrides = {}) => ({
+  _id: new ID(),
+  name: getRandomName(),
+  url: getRandomUrl(),
+  ...overrides,
+});
+
 const buildReq = (overrides = {}) => {
   const req = { body: {}, params: {}, query: {}, ...overrides };
   return req;
@@ -224,6 +232,7 @@ module.exports = {
   buildOldReport,
   buildTeam,
   buildAccessControlList,
+  buildReportBackgroundImage,
   buildReq,
   buildRes,
   buildNext,
