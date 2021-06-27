@@ -2,12 +2,19 @@ const axios = require('axios').default;
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
-const { buildAccessControlList, buildUser, buildTeam } = require('../../test/utils');
+const {
+  buildAccessControlList,
+  buildUser,
+  buildTeam,
+  buildClub,
+  buildGrantAccessForm,
+} = require('../../test/utils');
 const {
   insertTestUser,
   insertAccessControlLists,
   insertUsers,
   insertTeams,
+  insertClubs,
 } = require('../../test/db-utils');
 
 let api = axios.create();
@@ -82,6 +89,77 @@ describe('GET /api/v1/access-control-lists/:assetType/:assetId', () => {
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
-    expect(response.data.data.length).toEqual(0);
+    expect(response.data.data).toBeNull();
+  });
+});
+
+describe('PATCH /api/v1/access-control-lists/grant-access', () => {
+  it('should throw 404 error if ACL with provided params cannot be found', async () => {
+    const user = buildUser();
+    const club = buildClub();
+
+    await Promise.all([insertUsers([user]), insertClubs([club])]);
+
+    const data = buildGrantAccessForm({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      assetToAddType: 'club',
+      assetToAddId: club._id,
+    });
+
+    const { response } = await api.patch('access-control-lists/grant-access', data).catch((e) => e);
+
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toMatchInlineSnapshot(`"No ACL found with provided params"`);
+  });
+
+  it('should grant user with the access to the requested asset', async () => {
+    const user = buildUser();
+    const userAcl = buildAccessControlList({ user: user._id });
+    const club = buildClub();
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertClubs([club]),
+    ]);
+
+    const data = buildGrantAccessForm({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      assetToAddType: 'club',
+      assetToAddId: club._id,
+    });
+
+    const response = await api.patch('access-control-lists/grant-access', data);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
+  });
+
+  it('should grant team with the access to the requested asset', async () => {
+    const team = buildTeam();
+    const teamAcl = buildAccessControlList({ team: team._id });
+    const club = buildClub();
+
+    await Promise.all([
+      insertTeams([team]),
+      insertAccessControlLists([teamAcl]),
+      insertClubs([club]),
+    ]);
+
+    const data = buildGrantAccessForm({
+      targetAssetType: 'team',
+      targetAssetId: team._id,
+      assetToAddType: 'club',
+      assetToAddId: club._id,
+    });
+
+    const response = await api.patch('access-control-lists/grant-access', data);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
   });
 });

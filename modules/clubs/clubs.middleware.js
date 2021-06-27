@@ -23,20 +23,4 @@ const canBeDeleted = asyncHandler(async (req, res, next) => {
   next();
 });
 
-function canAccessBeGranted(req, res, next) {
-  const userId = req.body.user;
-  const { id } = req.params;
-
-  if (req.club.authorizedUsers.includes(userId)) {
-    return next(
-      new ApiError(
-        `User with the id of ${userId} already has access to the club with the id of ${id}`,
-        httpStatus.BAD_REQUEST
-      )
-    );
-  }
-
-  next();
-}
-
-module.exports = { setClub, canBeDeleted, canAccessBeGranted };
+module.exports = { setClub, canBeDeleted };
