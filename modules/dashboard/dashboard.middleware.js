@@ -3,14 +3,18 @@ const isAdmin = require('../../utils/isAdmin');
 function setAccessFilters(req, res, next) {
   if (isAdmin(req.user.role)) {
     req.accessFilters = {
-      playersAndClubs: {},
-      ordersAndReports: {},
+      players: {},
+      clubs: {},
+      orders: {},
+      reports: {},
     };
     return next();
   }
   req.accessFilters = {
-    playersAndClubs: { authorizedUsers: req.user._id },
-    ordersAndReports: { scout: req.user._id },
+    players: { _id: { $in: req.acl.players } },
+    clubs: { _id: { $in: req.acl.clubs } },
+    reports: { _id: { $in: req.acl.reports } },
+    orders: { scout: req.user._id },
   };
   next();
 }
