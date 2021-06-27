@@ -110,7 +110,7 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     const { response } = await api.patch('access-control-lists/grant-access', data).catch((e) => e);
 
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toMatchInlineSnapshot(`"No ACL found with provided params"`);
+    expect(response.data.error).toMatchInlineSnapshot('"No ACL found with provided params"');
   });
 
   it('should grant user with the access to the requested asset', async () => {

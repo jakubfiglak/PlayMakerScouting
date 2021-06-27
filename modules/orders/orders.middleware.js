@@ -1,11 +1,8 @@
-const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const Order = require('./order.model');
 const options = require('./options');
 const ApiError = require('../../utils/ApiError');
 const isAdmin = require('../../utils/isAdmin');
-const playersService = require('../players/players.service');
-const clubsService = require('../clubs/clubs.service');
 const setAsset = require('../../middleware/setAsset');
 
 function canView(req, res, next) {
@@ -48,39 +45,6 @@ function checkStatus(allowedStatuses) {
   };
 }
 
-const grantAccessToAPlayer = asyncHandler(async (req, res, next) => {
-  if (isAdmin(req.user.role)) {
-    return next();
-  }
-  const player = await playersService.getPlayerById(req.order.player._id);
-
-  if (player.authorizedUsers.includes(req.user._id)) {
-    return next();
-  }
-
-  player.authorizedUsers.push(req.user._id);
-  await player.save();
-  next();
-});
-
-const grantAccessToAClub = asyncHandler(async (req, res, next) => {
-  const clubId = req.order.player.club && req.order.player.club._id;
-
-  if (isAdmin(req.user.role) || !clubId) {
-    return next();
-  }
-
-  const club = await clubsService.getClubById(clubId);
-
-  if (club.authorizedUsers.includes(req.user._id)) {
-    return next();
-  }
-
-  club.authorizedUsers.push(req.user._id);
-  await club.save();
-  next();
-});
-
 function setAccessFilters(req, res, next) {
   if (isAdmin(req.user.role)) {
     req.accessFilters = {};
@@ -100,8 +64,6 @@ module.exports = {
   canView,
   canReject,
   checkStatus,
-  grantAccessToAPlayer,
-  grantAccessToAClub,
   setAccessFilters,
   setOrder,
 };

@@ -63,6 +63,26 @@ async function grantAccessOnAssetCreation({ userRole, userAcl, teamAcl, assetTyp
   });
 }
 
+async function grantAccessOnOrderAcceptance({ userRole, userAcl, playerId, clubId }) {
+  if (isAdmin(userRole)) {
+    return;
+  }
+
+  if (clubId) {
+    await grantAccessToTheAsset({
+      acl: userAcl,
+      assetType: 'club',
+      assetId: clubId,
+    });
+  }
+
+  await grantAccessToTheAsset({
+    acl: userAcl,
+    assetType: 'player',
+    assetId: playerId,
+  });
+}
+
 async function createAclOnTeamCreation({ teamId, members }) {
   const acls = await getAccessControlListsForUsers(members);
 
@@ -93,4 +113,5 @@ module.exports = {
   grantAccessToTheAsset,
   grantAccessOnAssetCreation,
   createAclOnTeamCreation,
+  grantAccessOnOrderAcceptance,
 };

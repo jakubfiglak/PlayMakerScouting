@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const ordersService = require('./orders.service');
+const accessControlListsService = require('../accessControlLists/accessControlLists.service');
 
 // @desc Create new order
 // @route POST /api/v1/orders
@@ -106,6 +107,13 @@ exports.acceptOrder = asyncHandler(async (req, res) => {
   const order = await ordersService.acceptOrder({
     order: req.order,
     userId: req.user._id,
+  });
+
+  await accessControlListsService.grantAccessOnOrderAcceptance({
+    userRole: req.user.role,
+    userAcl: req.userAcl,
+    playerId: req.order.player._id,
+    clubId: req.order.player.club && req.order.player.club._id,
   });
 
   res.status(httpStatus.OK).json({
