@@ -48,7 +48,7 @@ async function grantAccessOnAssetCreation({ userRole, userAcl, teamAcl, assetTyp
     return;
   }
 
-  if (teamAcl) {
+  if (teamAcl[`${assetType}s`]) {
     await grantAccessToTheAsset({
       acl: teamAcl,
       assetType,
