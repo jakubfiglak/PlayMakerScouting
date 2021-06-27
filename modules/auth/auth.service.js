@@ -1,11 +1,4 @@
 const jwt = require('jsonwebtoken');
-const User = require('../users/user.model');
-
-async function registerUser(reqBody) {
-  const user = await User.create(reqBody);
-
-  return user;
-}
 
 async function verifyUser(user) {
   let editedUser = user;
@@ -50,7 +43,6 @@ async function updateDetails({ user, reqBody }) {
 }
 
 module.exports = {
-  registerUser,
   verifyUser,
   login,
   updateDetails,

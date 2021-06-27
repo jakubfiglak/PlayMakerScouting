@@ -15,7 +15,7 @@ const User = require('../../modules/users/user.model');
 
 jest.mock('../../modules/email/email.service.js');
 
-emailService.sendEmail.mockImplementation((data) => data);
+emailService.sendConfirmationEmail.mockImplementation((data) => data);
 
 let api = axios.create();
 let server;
@@ -64,13 +64,13 @@ describe('POST api/v1/auth/register', () => {
 
     const response = await api.post('auth/register', registerData);
 
-    expect(emailService.sendEmail).toHaveBeenCalledTimes(1);
-    expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty('to', registerData.email);
-    expect(emailService.sendEmail.mock.calls[0][0].subject).toMatchInlineSnapshot(
-      '"Aktywuj swoje konto w aplikacji PlaymakerPro Scouting"'
+    expect(emailService.sendConfirmationEmail).toHaveBeenCalledTimes(1);
+    expect(emailService.sendConfirmationEmail.mock.calls[0][0]).toHaveProperty(
+      'email',
+      registerData.email
     );
-    expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty('text');
-    expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty('html');
+    expect(emailService.sendConfirmationEmail.mock.calls[0][0]).toHaveProperty('username');
+    expect(emailService.sendConfirmationEmail.mock.calls[0][0]).toHaveProperty('confirmationURL');
     expect(response.status).toBe(httpStatus.CREATED);
     expect(response.data.success).toBe(true);
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new user!"');
@@ -94,8 +94,6 @@ describe('POST api/v1/auth/register', () => {
       assetType: 'user',
       assetId: response.data.data.id,
     });
-
-    console.log(createdAcl);
 
     expect(createdAcl).toBeDefined();
   });

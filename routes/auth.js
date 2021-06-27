@@ -20,29 +20,20 @@ const {
   comparePasswords,
   setUser,
 } = require('../modules/auth/auth.middleware');
-const { sendConfirmationEmail } = require('../modules/email/email.middleware');
-const {
-  createAclOnUserRegister,
-} = require('../modules/accessControlLists/accessControlList.middleware');
+
 const options = require('../modules/auth/options');
 
 const router = express.Router();
 
-router.post('/register', [
-  checkIfEmailIsTaken,
-  checkIfPasswordsMatch({ fieldNameOne: 'password', fieldNameTwo: 'passwordConfirm' }),
-  assignConfirmationCode,
-  register,
-  createAclOnUserRegister,
-  sendConfirmationEmail,
-  (req, res) => {
-    res.status(201).json({
-      success: true,
-      message: 'Successfully created new user!',
-      data: req.createdUser,
-    });
-  },
-]);
+router.post(
+  '/register',
+  [
+    checkIfEmailIsTaken,
+    checkIfPasswordsMatch({ fieldNameOne: 'password', fieldNameTwo: 'passwordConfirm' }),
+    assignConfirmationCode,
+  ],
+  register
+);
 router.get('/confirm/:confirmationCode', checkIfUserWithConfirmationCodeExists, verifyUser);
 router.post(
   '/login',
