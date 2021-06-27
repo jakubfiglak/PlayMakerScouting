@@ -36,7 +36,10 @@ async function mergeMembersAclIntoTeamsAcl({ memberId, teamId }) {
 }
 
 function grantAccessToTheAsset({ acl, assetType, assetId }) {
-  acl[`${assetType}s`].push(assetId);
+  if (!acl[`${assetType}s`].includes(assetId)) {
+    acl[`${assetType}s`].push(assetId);
+  }
+
   return acl.save();
 }
 

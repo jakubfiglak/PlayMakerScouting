@@ -1,12 +1,21 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const reportsService = require('./reports.service');
+const accessControlListsService = require('../accessControlLists/accessControlLists.service');
 
 // @desc Create new report
 // @route POST /api/v1/reports
 // @access Private
 exports.createReport = asyncHandler(async (req, res) => {
   const report = await reportsService.createReport(req.body);
+
+  await accessControlListsService.grantAccessOnAssetCreation({
+    userRole: req.user.role,
+    userAcl: req.userAcl,
+    teamAcl: req.teamAcl,
+    assetType: 'report',
+    assetId: report._id,
+  });
 
   res.status(httpStatus.CREATED).json({
     success: true,
@@ -56,9 +65,9 @@ exports.getReport = asyncHandler(async (req, res) => {
 exports.updateReport = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const report = reportsService.updateReport({ report: req.report, reqBody: req.body });
+  const report = await reportsService.updateReport({ report: req.report, reqBody: req.body });
 
-  res.status(200).json({
+  res.status(httpStatus.OK).json({
     success: true,
     data: report,
     message: `Report with the id of ${id} successfully updated!`,

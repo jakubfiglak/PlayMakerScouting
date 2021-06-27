@@ -46,8 +46,7 @@ async function updateReport({ report, reqBody }) {
     }
   });
 
-  let modifiedReport = await editedReport.save();
-  modifiedReport = await editedReport.populate(resultsOptions.populate).execPopulate();
+  const modifiedReport = await editedReport.save();
 
   return modifiedReport;
 }
