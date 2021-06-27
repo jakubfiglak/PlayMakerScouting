@@ -13,11 +13,7 @@ const {
   checkIfMemberBelongsToAnotherTeam,
   checkMembersRoles,
   checkMemberRole,
-  mergeAclsOnMemberAddition,
 } = require('../modules/teams/teams.middleware');
-const {
-  createAclOnTeamCreation,
-} = require('../modules/accessControlLists/accessControlList.middleware');
 const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router();
@@ -30,10 +26,8 @@ router.post(
     checkIfAllMembersExist,
     checkIfMembersBelongToAnotherTeam,
     checkMembersRoles,
-    createTeam,
-    createAclOnTeamCreation,
   ],
-  (req, res) => res.end()
+  createTeam
 );
 router.get('/', [protect, authorize('admin')], getTeams);
 router.patch(
@@ -45,7 +39,6 @@ router.patch(
     checkIfMemberBelongsToAnotherTeam,
     checkMemberRole,
     setTeam,
-    mergeAclsOnMemberAddition,
   ],
   addMember
 );

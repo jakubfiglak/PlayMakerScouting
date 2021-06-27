@@ -1,22 +1,24 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const teamsService = require('./teams.service');
+const accessControlListsService = require('../accessControlLists/accessControlLists.service');
 
 // @desc Create new team
 // @route POST /api/v1/teams
 // @access Private (admin only)
-exports.createTeam = asyncHandler(async (req, res, next) => {
+exports.createTeam = asyncHandler(async (req, res) => {
   const team = await teamsService.createTeam(req.body);
 
-  req.createdTeam = team;
+  await accessControlListsService.createAclOnTeamCreation({
+    teamId: team._id,
+    members: req.body.members,
+  });
 
   res.status(httpStatus.CREATED).json({
     success: true,
     message: 'Successfully created new team',
     data: team,
   });
-
-  next();
 });
 
 // @desc Get all teams
@@ -35,11 +37,15 @@ exports.getTeams = asyncHandler(async (req, res) => {
 // @route PATCH /api/v1/teams/:id/add-member
 // @access Private (admin only)
 exports.addMember = asyncHandler(async (req, res) => {
-  const team = await teamsService.addMember({ team: req.team, memberId: req.body.memberId });
+  const { memberId } = req.body;
+
+  const team = await teamsService.addMember({ team: req.team, memberId });
+
+  await accessControlListsService.mergeMembersAclIntoTeamsAcl({ memberId, teamId: req.params.id });
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: `Member with the id of ${req.body.memberId} successfully added to the ${req.team.name} team`,
+    message: `Member with the id of ${memberId} successfully added to the ${req.team.name} team`,
     data: team,
   });
 });

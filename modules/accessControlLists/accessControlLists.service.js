@@ -17,17 +17,22 @@ function getAccessControlListForAnAsset({ assetType, assetId }) {
   return AccessControlList.findOne({ [assetType]: assetId });
 }
 
-async function mergeMembersAclIntoTeamsAcl({ teamId, memberAcl }) {
-  const teamAcl = await getAccessControlListForAnAsset({ assetType: 'team', assetId: teamId });
+async function mergeMembersAclIntoTeamsAcl({ memberId, teamId }) {
+  const [memberAcl, teamAcl] = await Promise.all([
+    getAccessControlListForAnAsset({ assetType: 'user', assetId: memberId }),
+    getAccessControlListForAnAsset({ assetType: 'team', assetId: teamId }),
+  ]);
+
   function getUniqueIdsFromAclProps(prop) {
     return [...new Set([...teamAcl[prop], ...memberAcl[prop]].map((id) => id.toHexString()))];
   }
+
   teamAcl.players = getUniqueIdsFromAclProps('players');
   teamAcl.clubs = getUniqueIdsFromAclProps('clubs');
   teamAcl.reports = getUniqueIdsFromAclProps('reports');
   teamAcl.reportBackgroundImages = getUniqueIdsFromAclProps('reportBackgroundImages');
-  const editedAcl = await teamAcl.save();
-  return editedAcl;
+
+  return teamAcl.save();
 }
 
 function grantAccessToTheAsset({ acl, assetType, assetId }) {
@@ -55,6 +60,27 @@ async function grantAccessOnAssetCreation({ userRole, userAcl, teamAcl, assetTyp
   });
 }
 
+async function createAclOnTeamCreation({ teamId, members }) {
+  const acls = await getAccessControlListsForUsers(members);
+
+  function getUniqueIdsFromAclProps(prop) {
+    return [...new Set(acls.flatMap((acl) => acl[prop]).map((id) => id.toHexString()))];
+  }
+
+  const playerIds = getUniqueIdsFromAclProps('players');
+  const clubIds = getUniqueIdsFromAclProps('clubs');
+  const reportIds = getUniqueIdsFromAclProps('reports');
+  const reportBackgroundImagesIds = getUniqueIdsFromAclProps('reportBackgroundImages');
+
+  await createAccessControlList({
+    team: teamId,
+    clubs: clubIds,
+    players: playerIds,
+    reports: reportIds,
+    reportBackgroundImages: reportBackgroundImagesIds,
+  });
+}
+
 module.exports = {
   createAccessControlList,
   getAllAccessControlLists,
@@ -63,4 +89,5 @@ module.exports = {
   mergeMembersAclIntoTeamsAcl,
   grantAccessToTheAsset,
   grantAccessOnAssetCreation,
+  createAclOnTeamCreation,
 };

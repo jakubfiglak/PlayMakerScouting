@@ -37,10 +37,6 @@ beforeEach(async () => {
 
 afterAll(() => server.close());
 
-function wait(amount = 0) {
-  return new Promise((resolve) => setTimeout(resolve, amount));
-}
-
 describe('POST /api/v1/teams', () => {
   it('should return 404 error if at least one of the provided members does not exist', async () => {
     const user1 = buildUser();
@@ -125,9 +121,6 @@ describe('POST /api/v1/teams', () => {
     expect(response.data.success).toBe(true);
     expect(response.data.data.name).toBe(team.name);
     expect(response.data.data.id).toBe(team._id.toHexString());
-
-    // Wait a bit for the ACL to be created after the response is sent
-    await wait(100);
 
     // Check the created ACL
     const createdAcl = await accessControlListsService.getAccessControlListForAnAsset({
