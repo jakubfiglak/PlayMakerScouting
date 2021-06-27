@@ -187,9 +187,9 @@ const buildAccessControlList = (overrides = {}) => ({
   _id: new ID(),
   user: null,
   team: null,
-  players: [new ID(), new ID(), new ID()],
-  clubs: [new ID(), new ID(), new ID()],
-  reports: [new ID(), new ID(), new ID()],
+  players: [],
+  clubs: [],
+  reports: [],
   ...overrides,
 });
 

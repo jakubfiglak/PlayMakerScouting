@@ -1,12 +1,21 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const clubsService = require('./clubs.service');
+const accessControlListsService = require('../accessControlLists/accessControlLists.service');
 
 // @desc Create new club
 // @route POST /api/v1/clubs
 // @access Private
 exports.createClub = asyncHandler(async (req, res) => {
   const club = await clubsService.createClub(req.body);
+
+  await accessControlListsService.grantAccessOnAssetCreation({
+    userRole: req.user.role,
+    userAcl: req.userAcl,
+    teamAcl: req.teamAcl,
+    assetType: 'club',
+    assetId: club._id,
+  });
 
   res.status(httpStatus.CREATED).json({
     success: true,

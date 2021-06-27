@@ -1,4 +1,5 @@
 const AccessControlList = require('./accessControlList.model');
+const isAdmin = require('../../utils/isAdmin');
 
 function createAccessControlList(accessControlListData) {
   return AccessControlList.create(accessControlListData);
@@ -29,10 +30,37 @@ async function mergeMembersAclIntoTeamsAcl({ teamId, memberAcl }) {
   return editedAcl;
 }
 
+function grantAccessToTheAsset({ acl, assetType, assetId }) {
+  acl[`${assetType}s`].push(assetId);
+  return acl.save();
+}
+
+async function grantAccessOnAssetCreation({ userRole, userAcl, teamAcl, assetType, assetId }) {
+  if (isAdmin(userRole)) {
+    return;
+  }
+
+  if (teamAcl) {
+    await grantAccessToTheAsset({
+      acl: teamAcl,
+      assetType,
+      assetId,
+    });
+  }
+
+  await grantAccessToTheAsset({
+    acl: userAcl,
+    assetType,
+    assetId,
+  });
+}
+
 module.exports = {
   createAccessControlList,
   getAllAccessControlLists,
   getAccessControlListsForUsers,
   getAccessControlListForAnAsset,
   mergeMembersAclIntoTeamsAcl,
+  grantAccessToTheAsset,
+  grantAccessOnAssetCreation,
 };
