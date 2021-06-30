@@ -7,7 +7,6 @@ import { FormModal } from '../../components/FormModal';
 import { UsersCombo } from '../../components/selects/UsersCombo';
 // Types
 import { AddMemberDTO } from '../../types/teams';
-import { UserBasicInfo } from '../../types/users';
 // Hooks
 import { useUsersList } from '../../hooks/users';
 import { useAddMember } from '../../hooks/teams';

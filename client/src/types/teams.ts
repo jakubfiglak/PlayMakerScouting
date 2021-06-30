@@ -11,3 +11,4 @@ export type Team = {
 export type TeamDTO = Pick<Team, 'name'> & { members: string[] };
 
 export type AddMemberDTO = { memberId: string };
+export type DeleteMemberDTO = { memberId: string };

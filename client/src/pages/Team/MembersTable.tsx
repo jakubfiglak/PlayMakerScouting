@@ -1,20 +1,18 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 // MUI components
-import { Tooltip, IconButton, Link, makeStyles } from '@material-ui/core';
+import { Tooltip, IconButton } from '@material-ui/core';
 // MUI icons
-import { Delete as DeleteIcon, Search as SearchIcon } from '@material-ui/icons';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 // Custom components
 import { SimpleTable } from '../../components/table/SimpleTable';
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
-import { Loader } from '../../components/Loader';
 // Types
-import { Team } from '../../types/teams';
 import { User } from '../../types/auth';
 
 type Props = {
   users: User[];
+  onDeleteClick: (member: User) => void;
 };
 
 const headCells = [
@@ -24,7 +22,7 @@ const headCells = [
   { id: 'voivodeship', label: 'Województwo' },
 ];
 
-export const MembersTable = ({ users }: Props) => {
+export const MembersTable = ({ users, onDeleteClick }: Props) => {
   return (
     <SimpleTable actions headCells={headCells}>
       {users.map((user) => (
@@ -33,7 +31,7 @@ export const MembersTable = ({ users }: Props) => {
             <Tooltip title="Usuń członka">
               <IconButton
                 aria-label="delete"
-                onClick={() => console.log('hello')}
+                onClick={() => onDeleteClick(user)}
               >
                 <DeleteIcon color="error" />
               </IconButton>
