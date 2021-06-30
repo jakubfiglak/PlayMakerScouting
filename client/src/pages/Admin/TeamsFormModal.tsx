@@ -2,50 +2,48 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
 // MUI components
-import { TextField, Checkbox, makeStyles, Theme } from '@material-ui/core';
+import {
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
 import { Autocomplete } from 'formik-material-ui-lab';
 // Custom components
-import { UsersMultipleSelect } from '../../components/selects/UsersMultipleSelect';
 import { Loader } from '../../components/Loader';
 import { FormModal } from '../../components/FormModal';
 // Types
-import { Team, TeamDTO } from '../../types/teams';
-import { User } from '../../types/auth';
+import { TeamDTO } from '../../types/teams';
 import { UserBasicInfo } from '../../types/users';
 // Hooks
-import { useCreateRating } from '../../operations/mutations/useCreateRating';
-import { useUpdateRating } from '../../operations/mutations/useUpdateRating';
+import { useUsersList } from '../../operations/queries/useUsersList';
+import { useCreateTeam } from '../../hooks/teams';
 
 type Props = {
-  current: Team | null;
   onClose: () => void;
   open: boolean;
-  users: UserBasicInfo[];
 };
 
-export const TeamsFormModal = ({ current, onClose, open, users }: Props) => {
+export const TeamsFormModal = ({ onClose, open }: Props) => {
   const classes = useStyles();
-  const initialValues: TeamDTO = current
-    ? getInitialStateFromCurrent(current)
-    : ratingsFormInitialValues;
 
-  const { mutate: createRating, isLoading: createLoading } = useCreateRating();
-  const { mutate: updateRating, isLoading: updateLoading } = useUpdateRating();
+  const { mutate: createTeam, isLoading: createTeamLoading } = useCreateTeam();
+  const { data: users, isLoading: usersLoading } = useUsersList();
+
+  const availableUsers = users
+    ? users.filter((user) => user.role === 'scout' && !user.team)
+    : [];
 
   return (
     <>
-      {(createLoading || updateLoading) && <Loader />}
+      {(usersLoading || createTeamLoading) && <Loader />}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         enableReinitialize
         onSubmit={(data, { resetForm }) => {
-          // if (current) {
-          //   updateRating({ id: current.id, ratingData: data });
-          // } else {
-          //   createRating(data);
-          // }
-          console.log(data);
+          createTeam(data);
           resetForm();
           onClose();
         }}
@@ -55,10 +53,8 @@ export const TeamsFormModal = ({ current, onClose, open, users }: Props) => {
             open={open}
             onClose={onClose}
             onSubmit={handleSubmit}
-            title={
-              current ? `Edytuj cechę ${current.name}` : 'Dodaj nową cechę'
-            }
-            acceptLabel={current ? 'Zapisz zmiany' : 'Dodaj'}
+            title="Dodaj nowy zespół"
+            acceptLabel="Dodaj"
           >
             <Form className={classes.container}>
               <Field
@@ -74,33 +70,27 @@ export const TeamsFormModal = ({ current, onClose, open, users }: Props) => {
                 name="members"
                 component={Autocomplete}
                 multiple
-                options={users.map((user) => user.id)}
+                options={availableUsers.map((user) => user.id)}
                 disableCloseOnSelect
-                getOptionLabel={(selectedId: string) => {
-                  const user = users.find((el) => el.id === selectedId);
-                  if (user) {
-                    const { firstName, lastName, email } = user;
-                    return `${firstName} ${lastName} (${email})`;
-                  }
-                  return 'user not found';
-                }}
-                // getOptionLabel={(option) => option.email}
+                getOptionLabel={(selectedId: string) =>
+                  getUsernameById(selectedId, availableUsers)
+                }
                 renderOption={(
                   user: string,
                   { selected }: { selected: boolean },
                 ) => (
-                  <>
-                    <Field
-                      as={Checkbox}
-                      // icon={icon}
-                      // checkedIcon={checkedIcon}
-                      value={user}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                      name="members"
-                    />
-                    {user}
-                  </>
+                  <FormControlLabel
+                    control={
+                      <Field
+                        as={Checkbox}
+                        value={user}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                        name="members"
+                      />
+                    }
+                    label={getUsernameById(user, availableUsers)}
+                  />
                 )}
                 renderInput={(params: any) => (
                   <TextField
@@ -112,7 +102,6 @@ export const TeamsFormModal = ({ current, onClose, open, users }: Props) => {
                 )}
               />
             </Form>
-            <p>{errors ? `${errors.members} ${errors.name}` : ''}</p>
           </FormModal>
         )}
       </Formik>
@@ -128,15 +117,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-function getInitialStateFromCurrent(current: Team): TeamDTO {
-  const { id, members, createdAt, updatedAt, ...rest } = current;
-  return { ...rest, members: members.map((user) => user.id) };
-}
+const initialValues: TeamDTO = { name: '', members: [] };
 
-const ratingsFormInitialValues: TeamDTO = {
-  name: '',
-  members: [],
-};
+function getUsernameById(id: string, users: UserBasicInfo[]) {
+  const user = users.find((el) => el.id === id);
+  if (user) {
+    const { firstName, lastName, email } = user;
+    return `${firstName} ${lastName} (${email})`;
+  }
+  return 'user not found';
+}
 
 const validationSchema: yup.ObjectSchema<TeamDTO> = yup
   .object({

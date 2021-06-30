@@ -29,10 +29,15 @@ async function removeMember({ team, memberId }) {
   return modifiedTeam;
 }
 
+function deleteTeam(team) {
+  return team.remove();
+}
+
 module.exports = {
   getAllTeams,
   getTeamByMemberId,
   createTeam,
   addMember,
   removeMember,
+  deleteTeam,
 };

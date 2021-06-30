@@ -4,6 +4,7 @@ const {
   getTeams,
   addMember,
   removeMember,
+  deleteTeam,
 } = require('../modules/teams/teams.controller');
 const {
   setTeam,
@@ -43,5 +44,6 @@ router.patch(
   addMember
 );
 router.patch('/:id/remove-member', [protect, authorize('admin'), setTeam], removeMember);
+router.delete('/:id', [protect, authorize('admin'), setTeam], deleteTeam);
 
 module.exports = router;

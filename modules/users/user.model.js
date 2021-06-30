@@ -72,7 +72,7 @@ const UserSchema = new Schema(
     resetPasswordToken: { type: String, private: true },
     resetPasswordExpires: { type: Date, private: true },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 UserSchema.plugin(mongoosePaginate);
@@ -107,5 +107,12 @@ UserSchema.methods.comparePasswords = async function (password) {
   const match = await bcrypt.compare(password, this.password);
   return match;
 };
+
+UserSchema.virtual('team', {
+  ref: 'Team',
+  localField: '_id',
+  foreignField: 'members',
+  justOne: true,
+});
 
 module.exports = model('User', UserSchema);

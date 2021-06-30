@@ -62,3 +62,18 @@ exports.removeMember = asyncHandler(async (req, res) => {
     data: team,
   });
 });
+
+// @desc Delete team
+// @route DELETE /api/v1/teams/:id
+// @access Private (admin only)
+exports.deleteTeam = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  await teamsService.deleteTeam(req.team);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: `Team with the id of ${id} successfully removed!`,
+    data: id,
+  });
+});

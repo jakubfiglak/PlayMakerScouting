@@ -21,22 +21,35 @@ import {
 import { AssignPlaymakerRoleForm } from './AssignPlaymakerRoleForm';
 import { PlayerAccessForm } from './PlayerAccessForm';
 import { ClubAccessForm } from './ClubAccessForm';
+import { TeamsTable } from './TeamsTable';
+import { TeamDeleteConfirmationModal } from './TeamDeleteConfirmationModal';
+import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { TabPanel } from '../../components/TabPanel';
-import { MainTemplate } from '../../templates/MainTemplate';
-import { UsersMultipleSelect } from '../../components/selects/UsersMultipleSelect';
 // Hooks
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { useUsersState } from '../../context/users/useUsersState';
 import { useTabs } from '../../hooks/useTabs';
 import { TeamsFormModal } from './TeamsFormModal';
+// Types
+import { Team } from '../../types/teams';
 
 export const AdminPage = () => {
   const classes = useStyles();
   const [activeTab, handleTabChange] = useTabs();
   const [isTeamsModalOpen, setTeamsModalOpen] = useState(false);
+  const [
+    isTeamDeleteConfirmationModalOpen,
+    setTeamDeleteConfirmationModalOpen,
+  ] = useState(false);
+  const [currentTeam, setCurrentTeam] = useState<Team | null>(null);
+
+  function handleDeleteTeamClick(team: Team) {
+    setCurrentTeam(team);
+    setTeamDeleteConfirmationModalOpen(true);
+  }
 
   const {
     loading,
@@ -146,15 +159,13 @@ export const AdminPage = () => {
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="teams">
         <PageHeading title="Zespoły scoutów" />
+        <TeamsTable onDeleteClick={handleDeleteTeamClick} />
         <TeamsFormModal
-          current={null}
           onClose={() => {
             setTeamsModalOpen(false);
           }}
           open={isTeamsModalOpen}
-          users={usersList}
         />
-        {/* <UsersMultipleSelect users={usersList} /> */}
         <Fab
           color="secondary"
           aria-label="add"
@@ -164,6 +175,14 @@ export const AdminPage = () => {
           <AddIcon />
         </Fab>
       </TabPanel>
+      <TeamDeleteConfirmationModal
+        team={currentTeam}
+        open={isTeamDeleteConfirmationModalOpen}
+        handleClose={() => {
+          setTeamDeleteConfirmationModalOpen(false);
+          setCurrentTeam(null);
+        }}
+      />
     </MainTemplate>
   );
 };
