@@ -17,7 +17,7 @@ import { FormModal } from '../../components/FormModal';
 import { TeamDTO } from '../../types/teams';
 import { UserBasicInfo } from '../../types/users';
 // Hooks
-import { useUsersList } from '../../operations/queries/useUsersList';
+import { useUsersList } from '../../hooks/users';
 import { useCreateTeam } from '../../hooks/teams';
 
 type Props = {

@@ -7,13 +7,14 @@ import { Autocomplete } from '@material-ui/lab';
 import { UserBasicInfo } from '../../types/users';
 
 type Props = {
+  id?: string;
   usersData: UserBasicInfo[];
   label: string;
   size?: 'medium' | 'small';
 };
 
-export const UsersCombo = ({ usersData, label, size }: Props) => {
-  const [field, fieldMeta, fieldHelpers] = useField('user');
+export const UsersCombo = ({ usersData, label, size, id = 'user' }: Props) => {
+  const [field, fieldMeta, fieldHelpers] = useField(id);
 
   const { value } = field;
   const { error, touched } = fieldMeta;
@@ -21,7 +22,7 @@ export const UsersCombo = ({ usersData, label, size }: Props) => {
 
   return (
     <Autocomplete
-      id="user"
+      id={id}
       {...field}
       onChange={(_, newValue: string | null) => {
         setValue(newValue);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Team, TeamDTO } from '../types/teams';
+import { AddMemberDTO, Team, TeamDTO } from '../types/teams';
 import { ApiError, ApiResponse } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 
@@ -82,4 +82,35 @@ export function useDeleteTeam() {
     onError: (err: ApiError) =>
       setAlert({ msg: err.response.data.error, type: 'error' }),
   });
+}
+
+// Add new member to a team
+type AddMemberArgs = { addMemberData: AddMemberDTO; teamId: string };
+
+async function addMember({
+  addMemberData,
+  teamId,
+}: AddMemberArgs): Promise<ApiResponse<Team>> {
+  const { data } = await axios.patch<ApiResponse<Team>>(
+    `/api/v1/teams/${teamId}/add-member`,
+    addMemberData,
+  );
+  return data;
+}
+
+export function useAddMember(teamId: string) {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(
+    (values: AddMemberDTO) => addMember({ addMemberData: values, teamId }),
+    {
+      onSuccess: (data: ApiResponse<Team>) => {
+        setAlert({ msg: data.message, type: 'success' });
+        queryClient.invalidateQueries(['team', teamId]);
+      },
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
 }

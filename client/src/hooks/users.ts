@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { UserBasicInfo } from '../../types/users';
-import { ApiError, ApiResponse } from '../../types/common';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { UserBasicInfo } from '../types/users';
+import { ApiError, ApiResponse } from '../types/common';
+import { useAlertsState } from '../context/alerts/useAlertsState';
 
+// Get users list
 async function getUsersList(): Promise<UserBasicInfo[]> {
   const { data } = await axios.get<ApiResponse<UserBasicInfo[]>>(
     '/api/v1/users/list',
