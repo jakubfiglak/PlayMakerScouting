@@ -19,6 +19,26 @@ export function useTeams() {
   });
 }
 
+// Get single team
+async function getTeam(id: string): Promise<Team> {
+  const { data } = await axios.get<ApiResponse<Team>>(`/api/v1/teams/${id}`);
+  return data.data;
+}
+
+export function useTeam(id: string) {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useQuery<Team, ApiError>(['team', id], () => getTeam(id), {
+    initialData: () => {
+      const cacheTeams: Team[] = queryClient.getQueryData('teams') || [];
+      return cacheTeams.find((team) => team.id === id);
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
 // Create team
 async function createTeam(teamData: TeamDTO): Promise<ApiResponse<Team>> {
   const { data } = await axios.post<ApiResponse<Team>>(

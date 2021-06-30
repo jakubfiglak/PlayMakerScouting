@@ -33,6 +33,21 @@ exports.getTeams = asyncHandler(async (req, res) => {
     count: teams.length,
   });
 });
+
+// @desc Get team
+// @route GET /api/v1/teams/:id
+// @access Private (admin only)
+exports.getTeam = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const teams = await teamsService.getTeamById(id);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: teams,
+  });
+});
+
 // @desc Add member
 // @route PATCH /api/v1/teams/:id/add-member
 // @access Private (admin only)

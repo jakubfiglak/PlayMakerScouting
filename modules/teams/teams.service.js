@@ -4,6 +4,10 @@ function getAllTeams() {
   return Team.find();
 }
 
+function getTeamById(id) {
+  return Team.findById(id);
+}
+
 function getTeamByMemberId(id) {
   return Team.findOne({ members: id });
 }
@@ -35,6 +39,7 @@ function deleteTeam(team) {
 
 module.exports = {
   getAllTeams,
+  getTeamById,
   getTeamByMemberId,
   createTeam,
   addMember,

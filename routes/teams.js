@@ -2,6 +2,7 @@ const express = require('express');
 const {
   createTeam,
   getTeams,
+  getTeam,
   addMember,
   removeMember,
   deleteTeam,
@@ -31,6 +32,7 @@ router.post(
   createTeam
 );
 router.get('/', [protect, authorize('admin')], getTeams);
+router.get('/:id', [protect, authorize('admin')], getTeam);
 router.patch(
   '/:id/add-member',
   [
