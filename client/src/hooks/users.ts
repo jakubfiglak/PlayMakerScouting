@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { UserBasicInfo } from '../types/users';
+import { UserBasicInfo, UserFilterData } from '../types/users';
 import { User } from '../types/auth';
 import {
   ApiError,
@@ -18,6 +18,7 @@ type GetUsersArgs = {
   limit?: number;
   sort?: string;
   order: SortingOrder;
+  filters: UserFilterData;
 };
 
 async function getUsers({
@@ -25,12 +26,24 @@ async function getUsers({
   limit = 20,
   sort = '_id',
   order,
+  filters,
 }: GetUsersArgs): Promise<PaginatedUsers> {
   const orderSign = order === 'desc' ? '-' : '';
 
-  const { data } = await axios.get<GetUsersResponse>(
-    `/api/v1/users?page=${page}&limit=${limit}&sort=${orderSign}${sort}`,
-  );
+  // Generate query url
+  let usersURI = `/api/v1/users?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+  // Add filters to query url
+  Object.entries(filters).forEach(([key, value]) => {
+    const regex = key === 'lastName' || key === 'city' ? '[regex]' : '';
+
+    const filter = `&${key}${regex}=${value}`;
+    if (value.length) {
+      usersURI = usersURI.concat(filter);
+    }
+  });
+
+  const { data } = await axios.get<GetUsersResponse>(usersURI);
   return data.data;
 }
 
@@ -39,12 +52,13 @@ export function useUsers({
   limit = 20,
   sort = '_id',
   order,
+  filters,
 }: GetUsersArgs) {
   const { setAlert } = useAlertsState();
 
   return useQuery<PaginatedUsers, ApiError>(
-    ['users', { page, limit, sort, order }],
-    () => getUsers({ page, limit, sort, order }),
+    ['users', { page, limit, sort, order, filters }],
+    () => getUsers({ page, limit, sort, order, filters }),
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>

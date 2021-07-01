@@ -15,13 +15,11 @@ import { useTable } from '../../hooks/useTable';
 // Types
 import { Player } from '../../types/players';
 import { CommonTableProps } from '../../types/common';
+import { UserFilterData } from '../../types/users';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
 
-type TableProps = {
-  players: Player[];
-  handleSetCurrent: (player: Player) => void;
-} & CommonTableProps;
+type Props = { filters: UserFilterData };
 
 const headCells = [
   { id: 'lastName', label: 'Nazwisko' },
@@ -32,7 +30,7 @@ const headCells = [
   { id: 'city', label: 'Miasto' },
 ];
 
-export const UsersTable = () => {
+export const UsersTable = ({ filters }: Props) => {
   const classes = useStyles();
 
   const [
@@ -49,6 +47,7 @@ export const UsersTable = () => {
     limit: rowsPerPage,
     sort: sortBy,
     order,
+    filters,
   });
 
   return (

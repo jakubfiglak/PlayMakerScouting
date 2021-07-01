@@ -1,4 +1,5 @@
-import { User } from './auth';
+import { User, UserRole } from './auth';
+import { Voivodeship } from './common';
 
 export type UserBasicInfo = Pick<
   User,
@@ -7,6 +8,13 @@ export type UserBasicInfo = Pick<
 
 export type AssignPlaymakerRoleData = {
   user: string;
+};
+
+export type UserFilterData = {
+  lastName: string;
+  voivodeship: Voivodeship | '';
+  city: string;
+  role: UserRole | '';
 };
 
 export type State = {

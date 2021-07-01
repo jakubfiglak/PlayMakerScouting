@@ -23,6 +23,7 @@ import { PlayerAccessForm } from './PlayerAccessForm';
 import { ClubAccessForm } from './ClubAccessForm';
 import { TeamsTable } from './TeamsTable';
 import { UsersTable } from './UsersTable';
+import { UsersFilterForm } from './UsersFilterForm';
 import { TeamDeleteConfirmationModal } from './TeamDeleteConfirmationModal';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
@@ -36,6 +37,7 @@ import { useTabs } from '../../hooks/useTabs';
 import { TeamsFormModal } from './TeamsFormModal';
 // Types
 import { Team } from '../../types/teams';
+import { UserFilterData } from '../../types/users';
 
 export const AdminPage = () => {
   const classes = useStyles();
@@ -46,6 +48,13 @@ export const AdminPage = () => {
     setTeamDeleteConfirmationModalOpen,
   ] = useState(false);
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null);
+
+  const [filters, setFilters] = useState<UserFilterData>({
+    lastName: '',
+    voivodeship: '',
+    city: '',
+    role: '',
+  });
 
   function handleDeleteTeamClick(team: Team) {
     setCurrentTeam(team);
@@ -105,7 +114,8 @@ export const AdminPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="users">
         <PageHeading title="Użytkownicy" />
-        <UsersTable />
+        <UsersFilterForm setFilters={setFilters} />
+        <UsersTable filters={filters} />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="teams">
         <PageHeading title="Zespoły scoutów" />
