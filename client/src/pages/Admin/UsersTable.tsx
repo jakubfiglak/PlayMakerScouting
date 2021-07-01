@@ -3,7 +3,10 @@ import { Link as RouterLink } from 'react-router-dom';
 // MUI components
 import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
 // MUI icons
-import { Edit as EditIcon, Search as SearchIcon } from '@material-ui/icons/';
+import {
+  ArrowUpward as UpIcon,
+  Search as SearchIcon,
+} from '@material-ui/icons/';
 // Custom components
 import { Table } from '../../components/table/Table';
 import { StyledTableCell } from '../../components/table/TableCell';
@@ -13,13 +16,15 @@ import { Loader } from '../../components/Loader';
 import { useUsers } from '../../hooks/users';
 import { useTable } from '../../hooks/useTable';
 // Types
-import { Player } from '../../types/players';
-import { CommonTableProps } from '../../types/common';
 import { UserFilterData } from '../../types/users';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
+import { User } from '../../types/auth';
 
-type Props = { filters: UserFilterData };
+type Props = {
+  filters: UserFilterData;
+  onAssignRoleClick: (user: User) => void;
+};
 
 const headCells = [
   { id: 'lastName', label: 'Nazwisko' },
@@ -30,7 +35,7 @@ const headCells = [
   { id: 'city', label: 'Miasto' },
 ];
 
-export const UsersTable = ({ filters }: Props) => {
+export const UsersTable = ({ filters, onAssignRoleClick }: Props) => {
   const classes = useStyles();
 
   const [
@@ -65,39 +70,38 @@ export const UsersTable = ({ filters }: Props) => {
           total={data.totalDocs}
           headCells={headCells}
         >
-          {data.docs.map(
-            ({ id, lastName, firstName, voivodeship, city, role, email }) => (
-              <StyledTableRow key={id}>
-                <StyledTableCell padding="checkbox">
-                  <div className={classes.buttonsContainer}>
-                    <Tooltip title="Zobacz profil">
-                      <Link component={RouterLink} to={`/users/${id}`}>
-                        <IconButton aria-label="go to users profile">
-                          <SearchIcon />
-                        </IconButton>
-                      </Link>
-                    </Tooltip>
-                    <Tooltip title="Edytuj">
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => console.log('hello')}
-                      >
-                        <EditIcon />
+          {data.docs.map((user) => (
+            <StyledTableRow key={user.id}>
+              <StyledTableCell padding="checkbox">
+                <div className={classes.buttonsContainer}>
+                  <Tooltip title="Zobacz profil">
+                    <Link component={RouterLink} to={`/users/${user.id}`}>
+                      <IconButton aria-label="go to users profile">
+                        <SearchIcon />
                       </IconButton>
-                    </Tooltip>
-                  </div>
-                </StyledTableCell>
-                <StyledTableCell>{lastName}</StyledTableCell>
-                <StyledTableCell>{firstName}</StyledTableCell>
-                <StyledTableCell>{email}</StyledTableCell>
-                <StyledTableCell>{role}</StyledTableCell>
-                <StyledTableCell>
-                  {voivodeship ? getLabel(voivodeship) : '-'}
-                </StyledTableCell>
-                <StyledTableCell>{city || '-'}</StyledTableCell>
-              </StyledTableRow>
-            ),
-          )}
+                    </Link>
+                  </Tooltip>
+                  <Tooltip title="Nadaj rolę playmaker-scout">
+                    <IconButton
+                      aria-label="assign-playmaker-role"
+                      onClick={() => onAssignRoleClick(user)}
+                      disabled={user.role !== 'scout'}
+                    >
+                      <UpIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              </StyledTableCell>
+              <StyledTableCell>{user.lastName}</StyledTableCell>
+              <StyledTableCell>{user.firstName}</StyledTableCell>
+              <StyledTableCell>{user.email}</StyledTableCell>
+              <StyledTableCell>{user.role}</StyledTableCell>
+              <StyledTableCell>
+                {user.voivodeship ? getLabel(user.voivodeship) : '-'}
+              </StyledTableCell>
+              <StyledTableCell>{user.city || '-'}</StyledTableCell>
+            </StyledTableRow>
+          ))}
         </Table>
       ) : null}
     </>

@@ -18,13 +18,13 @@ import {
   Add as AddIcon,
 } from '@material-ui/icons';
 // Custom components
-import { AssignPlaymakerRoleForm } from './AssignPlaymakerRoleForm';
 import { PlayerAccessForm } from './PlayerAccessForm';
 import { ClubAccessForm } from './ClubAccessForm';
 import { TeamsTable } from './TeamsTable';
 import { UsersTable } from './UsersTable';
 import { UsersFilterForm } from './UsersFilterForm';
 import { TeamDeleteConfirmationModal } from './TeamDeleteConfirmationModal';
+import { AssignPlaymakerRoleConfirmationModal } from './AssignPlaymakerRoleConfirmationModal';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
@@ -38,6 +38,7 @@ import { TeamsFormModal } from './TeamsFormModal';
 // Types
 import { Team } from '../../types/teams';
 import { UserFilterData } from '../../types/users';
+import { User } from '../../types/auth';
 
 export const AdminPage = () => {
   const classes = useStyles();
@@ -47,7 +48,12 @@ export const AdminPage = () => {
     isTeamDeleteConfirmationModalOpen,
     setTeamDeleteConfirmationModalOpen,
   ] = useState(false);
+  const [
+    isAssignPlaymakerRoleConfirmationModalOpen,
+    setAssignPlaymakerRoleConfirmationModalOpen,
+  ] = useState(false);
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const [filters, setFilters] = useState<UserFilterData>({
     lastName: '',
@@ -59,6 +65,11 @@ export const AdminPage = () => {
   function handleDeleteTeamClick(team: Team) {
     setCurrentTeam(team);
     setTeamDeleteConfirmationModalOpen(true);
+  }
+
+  function handleAssignPlaymakerRoleClick(user: User) {
+    setCurrentUser(user);
+    setAssignPlaymakerRoleConfirmationModalOpen(true);
   }
 
   const {
@@ -115,7 +126,10 @@ export const AdminPage = () => {
       <TabPanel value={activeTab} index={0} title="users">
         <PageHeading title="Użytkownicy" />
         <UsersFilterForm setFilters={setFilters} />
-        <UsersTable filters={filters} />
+        <UsersTable
+          filters={filters}
+          onAssignRoleClick={handleAssignPlaymakerRoleClick}
+        />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="teams">
         <PageHeading title="Zespoły scoutów" />
@@ -137,23 +151,6 @@ export const AdminPage = () => {
       </TabPanel>
       <TabPanel value={activeTab} index={2} title="accessmanagement">
         <PageHeading title="Zarządzanie dostępami" />
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<AccordionIcon />}
-            aria-controls="assign-role-content"
-            id="assign-role-header"
-          >
-            <Typography className={classes.accordionTitle}>
-              Nadaj rolę playmaker-scout
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <AssignPlaymakerRoleForm
-              usersData={regularScoutUsers}
-              onSubmit={assignPlaymakerRole}
-            />
-          </AccordionDetails>
-        </Accordion>
         <Accordion>
           <AccordionSummary
             expandIcon={<AccordionIcon />}
@@ -198,6 +195,13 @@ export const AdminPage = () => {
         handleClose={() => {
           setTeamDeleteConfirmationModalOpen(false);
           setCurrentTeam(null);
+        }}
+      />
+      <AssignPlaymakerRoleConfirmationModal
+        user={currentUser}
+        open={isAssignPlaymakerRoleConfirmationModalOpen}
+        handleClose={() => {
+          setAssignPlaymakerRoleConfirmationModalOpen(false);
         }}
       />
     </MainTemplate>

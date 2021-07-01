@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient, useMutation } from 'react-query';
 import { UserBasicInfo, UserFilterData } from '../types/users';
 import { User } from '../types/auth';
 import {
@@ -79,6 +79,28 @@ export function useUsersList() {
   const { setAlert } = useAlertsState();
 
   return useQuery<UserBasicInfo[], ApiError>('usersList', getUsersList, {
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
+// Assign playmaker-scout role
+async function assignPlaymakerRole(id: string): Promise<ApiResponse<User>> {
+  const { data } = await axios.post<ApiResponse<User>>(
+    `/api/v1/users/${id}/assignplaymaker`,
+  );
+  return data;
+}
+
+export function useAssignPlaymakerRole() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation((id: string) => assignPlaymakerRole(id), {
+    onSuccess: (data: ApiResponse<User>) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('users');
+    },
     onError: (err: ApiError) =>
       setAlert({ msg: err.response.data.error, type: 'error' }),
   });
