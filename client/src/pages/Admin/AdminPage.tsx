@@ -22,6 +22,7 @@ import { AssignPlaymakerRoleForm } from './AssignPlaymakerRoleForm';
 import { PlayerAccessForm } from './PlayerAccessForm';
 import { ClubAccessForm } from './ClubAccessForm';
 import { TeamsTable } from './TeamsTable';
+import { UsersTable } from './UsersTable';
 import { TeamDeleteConfirmationModal } from './TeamDeleteConfirmationModal';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
@@ -91,17 +92,40 @@ export const AdminPage = () => {
         <Tabs
           value={activeTab}
           onChange={handleTabChange}
-          aria-label="accessmanagement"
+          aria-label="admin-panel"
         >
+          <Tab label="Użytkownicy" id="users" aria-controls="users" />
+          <Tab label="Zespoły" id="teams" aria-controls="teams" />
           <Tab
             label="Dostępy"
             id="accessmanagement"
             aria-controls="accessmanagement"
           />
-          <Tab label="Zespoły" id="teams" aria-controls="teams" />
         </Tabs>
       </AppBar>
-      <TabPanel value={activeTab} index={0} title="accessmanagement">
+      <TabPanel value={activeTab} index={0} title="users">
+        <PageHeading title="Użytkownicy" />
+        <UsersTable />
+      </TabPanel>
+      <TabPanel value={activeTab} index={1} title="teams">
+        <PageHeading title="Zespoły scoutów" />
+        <TeamsTable onDeleteClick={handleDeleteTeamClick} />
+        <TeamsFormModal
+          onClose={() => {
+            setTeamsModalOpen(false);
+          }}
+          open={isTeamsModalOpen}
+        />
+        <Fab
+          color="secondary"
+          aria-label="add"
+          className={classes.fab}
+          onClick={() => setTeamsModalOpen(true)}
+        >
+          <AddIcon />
+        </Fab>
+      </TabPanel>
+      <TabPanel value={activeTab} index={2} title="accessmanagement">
         <PageHeading title="Zarządzanie dostępami" />
         <Accordion>
           <AccordionSummary
@@ -157,24 +181,7 @@ export const AdminPage = () => {
           </AccordionDetails>
         </Accordion>
       </TabPanel>
-      <TabPanel value={activeTab} index={1} title="teams">
-        <PageHeading title="Zespoły scoutów" />
-        <TeamsTable onDeleteClick={handleDeleteTeamClick} />
-        <TeamsFormModal
-          onClose={() => {
-            setTeamsModalOpen(false);
-          }}
-          open={isTeamsModalOpen}
-        />
-        <Fab
-          color="secondary"
-          aria-label="add"
-          className={classes.fab}
-          onClick={() => setTeamsModalOpen(true)}
-        >
-          <AddIcon />
-        </Fab>
-      </TabPanel>
+
       <TeamDeleteConfirmationModal
         team={currentTeam}
         open={isTeamDeleteConfirmationModalOpen}
