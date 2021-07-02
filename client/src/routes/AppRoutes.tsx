@@ -17,6 +17,7 @@ import { ReportsPage } from '../pages/Reports/ReportsPage';
 import { WelcomePage } from '../pages/Welcome/WelcomePage';
 import { ReportTemplatesPage } from '../pages/ReportTemplates/ReportTemplatesPage';
 import { TeamPage } from '../pages/Team/TeamPage';
+import { UserPage } from '../pages/User/UserPage';
 import { FourOFourPage } from '../pages/404/FourOFour';
 
 export const AppRoutes = () => {
@@ -89,6 +90,9 @@ export const AppRoutes = () => {
         </ProtectedRoute>
         <ProtectedRoute path="/teams/:id" allowedRoles={['admin']}>
           <TeamPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/users/:id" allowedRoles={['admin']}>
+          <UserPage />
         </ProtectedRoute>
         <ProtectedRoute
           path="/reporttemplates"

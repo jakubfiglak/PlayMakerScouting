@@ -84,6 +84,21 @@ export function useUsersList() {
   });
 }
 
+// Get single user
+async function getUser(id: string): Promise<User> {
+  const { data } = await axios.get<ApiResponse<User>>(`/api/v1/users/${id}`);
+  return data.data;
+}
+
+export function useUser(id: string) {
+  const { setAlert } = useAlertsState();
+
+  return useQuery<User, ApiError>(['user', id], () => getUser(id), {
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
 // Assign playmaker-scout role
 async function assignPlaymakerRole(id: string): Promise<ApiResponse<User>> {
   const { data } = await axios.post<ApiResponse<User>>(
