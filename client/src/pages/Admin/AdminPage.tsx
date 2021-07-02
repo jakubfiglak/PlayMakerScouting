@@ -1,38 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 // MUI components
-import {
-  Typography,
-  makeStyles,
-  Theme,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  AppBar,
-  Tabs,
-  Tab,
-  Fab,
-} from '@material-ui/core';
+import { makeStyles, Theme, AppBar, Tabs, Tab, Fab } from '@material-ui/core';
 // MUI icons
-import {
-  ExpandMore as AccordionIcon,
-  Add as AddIcon,
-} from '@material-ui/icons';
+import { Add as AddIcon } from '@material-ui/icons';
 // Custom components
-import { PlayerAccessForm } from './PlayerAccessForm';
-import { ClubAccessForm } from './ClubAccessForm';
+import { AccessManagementTab } from './AccessManagementTab';
 import { TeamsTable } from './TeamsTable';
 import { UsersTable } from './UsersTable';
 import { UsersFilterForm } from './UsersFilterForm';
 import { TeamDeleteConfirmationModal } from './TeamDeleteConfirmationModal';
 import { AssignPlaymakerRoleConfirmationModal } from './AssignPlaymakerRoleConfirmationModal';
 import { MainTemplate } from '../../templates/MainTemplate';
-import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { TabPanel } from '../../components/TabPanel';
 // Hooks
-import { usePlayersState } from '../../context/players/usePlayersState';
-import { useClubsState } from '../../context/clubs/useClubsState';
-import { useUsersState } from '../../context/users/useUsersState';
 import { useTabs } from '../../hooks/useTabs';
 import { TeamsFormModal } from './TeamsFormModal';
 // Types
@@ -72,42 +53,8 @@ export const AdminPage = () => {
     setAssignPlaymakerRoleConfirmationModalOpen(true);
   }
 
-  const {
-    loading,
-    usersList,
-    getUsersList,
-    assignPlaymakerRole,
-  } = useUsersState();
-
-  const {
-    playersList,
-    getPlayersList,
-    loading: playersLoading,
-
-    grantAccess,
-  } = usePlayersState();
-
-  const {
-    clubsList,
-    getClubsList,
-    loading: clubsLoading,
-
-    grantAccess: grantClubAccess,
-  } = useClubsState();
-
-  useEffect(() => {
-    getPlayersList();
-    getClubsList();
-    getUsersList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const nonAdminUsers = usersList.filter((user) => user.role !== 'admin');
-  const regularScoutUsers = usersList.filter((user) => user.role === 'scout');
-
   return (
     <MainTemplate>
-      {(loading || playersLoading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs
           value={activeTab}
@@ -150,43 +97,7 @@ export const AdminPage = () => {
         </Fab>
       </TabPanel>
       <TabPanel value={activeTab} index={2} title="accessmanagement">
-        <PageHeading title="Zarządzanie dostępami" />
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<AccordionIcon />}
-            aria-controls="grant-player-access-content"
-            id="grant-player-access-header"
-          >
-            <Typography className={classes.accordionTitle}>
-              Przyznaj dostęp do zawodnika
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <PlayerAccessForm
-              playersData={playersList}
-              usersData={nonAdminUsers}
-              onSubmit={grantAccess}
-            />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<AccordionIcon />}
-            aria-controls="grant-club-access-content"
-            id="grant-club-access-header"
-          >
-            <Typography className={classes.accordionTitle}>
-              Przyznaj dostęp do klubu
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <ClubAccessForm
-              clubsData={clubsList}
-              usersData={nonAdminUsers}
-              onSubmit={grantClubAccess}
-            />
-          </AccordionDetails>
-        </Accordion>
+        <AccessManagementTab />
       </TabPanel>
 
       <TeamDeleteConfirmationModal

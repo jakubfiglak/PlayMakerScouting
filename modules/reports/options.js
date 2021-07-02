@@ -28,6 +28,8 @@ const options = {
     'createdAt',
     'updatedAt',
   ],
+  listSelect: 'player reportNo docNumber createdAt',
+  listPopulate: 'player',
 };
 
 module.exports = options;

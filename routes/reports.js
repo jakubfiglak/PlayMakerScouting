@@ -2,11 +2,12 @@ const express = require('express');
 const {
   createReport,
   getReports,
+  getReportsList,
   getReport,
   updateReport,
   deleteReport,
 } = require('../modules/reports/reports.controller');
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const {
   setAuthor,
   setOrderData,
@@ -31,6 +32,7 @@ router.post(
   createReport
 );
 router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('report')], getReports);
+router.get('/list', [protect, authorize('admin')], getReportsList);
 router.get('/:id', [protect, setAcls, setReport, checkAccessPermission('report')], getReport);
 router.put(
   '/:id',

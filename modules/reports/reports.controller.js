@@ -49,6 +49,18 @@ exports.getReports = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Get all reports list
+// @route GET /api/v1/reports/list
+// @access Private (admin only)
+exports.getReportsList = asyncHandler(async (req, res) => {
+  const reports = await reportsService.getAllReportsList();
+
+  return res.status(httpStatus.OK).json({
+    success: true,
+    data: reports,
+  });
+});
+
 // @desc Get single report
 // @route GET /api/v1/reports/:id
 // @access Private (author or admin only)

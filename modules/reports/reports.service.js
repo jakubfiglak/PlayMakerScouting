@@ -37,6 +37,14 @@ async function getAllReports({ query, paginationOptions, accessFilters }) {
   return reports;
 }
 
+async function getAllReportsList() {
+  const reports = await Report.find()
+    .select(resultsOptions.listSelect)
+    .populate(resultsOptions.listPopulate);
+
+  return reports;
+}
+
 async function updateReport({ report, reqBody }) {
   const editedReport = report;
 
@@ -62,6 +70,7 @@ module.exports = {
   getReportsCount,
   createReport,
   getAllReports,
+  getAllReportsList,
   updateReport,
   deleteReport,
 };

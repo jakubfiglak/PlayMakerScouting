@@ -19,6 +19,7 @@ import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   playersData: PlayerBasicInfo[];
+  name?: string;
   label: string;
   size?: 'medium' | 'small';
   addPlayerOption?: boolean;
@@ -27,12 +28,13 @@ type Props = {
 
 export const PlayersCombo = ({
   playersData,
+  name = 'player',
   label,
   size,
   addPlayerOption,
   onAddPlayerClick,
 }: Props) => {
-  const [field, fieldMeta, fieldHelpers] = useField('player');
+  const [field, fieldMeta, fieldHelpers] = useField(name);
 
   const { value } = field;
   const { error, touched } = fieldMeta;
@@ -40,7 +42,7 @@ export const PlayersCombo = ({
 
   return (
     <Autocomplete
-      id="player"
+      id={name}
       {...field}
       onChange={(_, newValue: string | null) => {
         setValue(newValue);

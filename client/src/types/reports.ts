@@ -49,6 +49,11 @@ export type Report = {
   createdAt: string;
 };
 
+export type ReportBasicInfo = Pick<
+  Report,
+  'id' | 'docNumber' | 'player' | 'createdAt'
+>;
+
 export type ReportFormData = {
   order?: string;
   player: string;

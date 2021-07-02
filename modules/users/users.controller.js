@@ -38,7 +38,7 @@ exports.getUser = asyncHandler(async (req, res) => {
 });
 
 // @desc Make user a playmaker-scout
-// @route POST /api/v1/:id/users/assignplaymaker
+// @route POST /api/v1/users/:id/assignplaymaker
 // @access Private (admin only)
 exports.assignPlaymakerRole = asyncHandler(async (req, res) => {
   const { id } = req.params;
