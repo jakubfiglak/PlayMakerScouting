@@ -23,7 +23,7 @@ import { BottomNav } from '../BottomNav';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Hooks
 import { useStepper } from '../../../hooks/useStepper';
-import { useReportTemplates } from '../../../operations/queries/useReportTemplates';
+import { useReportTemplates } from '../../../hooks/reportTemplates';
 // Types
 import { PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';

@@ -1,16 +1,16 @@
 import React from 'react';
 // MUI components
 import { makeStyles, Theme, Typography } from '@material-ui/core';
-// MUI icons
-import { ExpandMore as AccordionIcon } from '@material-ui/icons';
 // Custom components
-import { Loader } from '../../components/Loader';
-import { ReportBackgroundImageSelect } from '../../components/selects/ReportBackgroundImageSelect';
-import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
+import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
+import { ReportBackgroundImageSelect } from '../../components/selects/ReportBackgroundImageSelect';
+import { ReportTemplatesSelect } from '../../components/selects/ReportTemplatesSelect';
 // Hooks
 import { useSettingsState } from '../../context/settings/useSettingsState';
 import { useReportBackgroundImages } from '../../hooks/reportBackgroundImages';
+import { useReportTemplates } from '../../hooks/reportTemplates';
 
 export const SettingsPage = () => {
   const classes = useStyles();
@@ -25,10 +25,14 @@ export const SettingsPage = () => {
     data: reportBackgroundImages,
     isLoading: backgroundImagesLoading,
   } = useReportBackgroundImages();
+  const {
+    data: reportTemplates,
+    isLoading: reportTemplatesLoading,
+  } = useReportTemplates();
 
   return (
     <MainTemplate>
-      {backgroundImagesLoading && <Loader />}
+      {(backgroundImagesLoading || reportTemplatesLoading) && <Loader />}
       <PageHeading title="Ustawienia" />
       <Typography variant="h6" component="h3" className={classes.title}>
         Domyślne tło wydruku raportu
@@ -37,6 +41,14 @@ export const SettingsPage = () => {
         reportBackgroundImages={reportBackgroundImages || []}
         value={defaultReportBackgroundImageUrl}
         onChange={setDefaultReportBackgroundImageUrl}
+      />
+      <Typography variant="h6" component="h3" className={classes.title}>
+        Domyślny szablon raportu
+      </Typography>
+      <ReportTemplatesSelect
+        reportTemplates={reportTemplates || []}
+        value={defaultReportTemplateId}
+        onChange={setDefaultReportTemplateId}
       />
     </MainTemplate>
   );
@@ -51,6 +63,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   title: {
     fontSize: '1rem',
-    marginBottom: theme.spacing(2),
+    margin: theme.spacing(2, 0),
   },
 }));

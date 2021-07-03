@@ -11,7 +11,7 @@ import { Loader } from '../../components/Loader';
 // Types
 import { ReportTemplate } from '../../types/reportTemplates';
 // Hooks
-import { useReportTemplates } from '../../operations/queries/useReportTemplates';
+import { useReportTemplates } from '../../hooks/reportTemplates';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
 const headCells = [

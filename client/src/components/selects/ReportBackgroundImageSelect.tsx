@@ -17,15 +17,12 @@ export const ReportBackgroundImageSelect = ({
 }: Props) => {
   return (
     <FormControl variant="outlined" fullWidth>
-      <InputLabel shrink id="reportBackgroundImage">
-        Tło wydruku
-      </InputLabel>
+      <InputLabel id="reportBackgroundImage">Tło wydruku</InputLabel>
       <Select
         labelId="reportBackgroundImage"
         label="Tło wydruku"
         value={value}
         onChange={(e) => onChange(e.target.value as string)}
-        displayEmpty
       >
         <MenuItem value="">Brak</MenuItem>
         {reportBackgroundImages.map(({ id, name, url }) => (
