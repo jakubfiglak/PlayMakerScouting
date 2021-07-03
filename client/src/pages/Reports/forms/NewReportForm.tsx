@@ -17,9 +17,9 @@ import { BasicDataStep } from './BasicDataStep';
 import { SummaryStep } from './SummaryStep';
 import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
-import { ReportTemplateStep } from './ReportTemplateStep';
 import { RatingsStep } from './RatingsStep';
 import { BottomNav } from '../BottomNav';
+import { ReportTemplatesSelect } from '../../../components/selects/ReportTemplatesSelect';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Hooks
 import { useStepper } from '../../../hooks/useStepper';
@@ -31,6 +31,7 @@ import { ReportFormData, Skill } from '../../../types/reports';
 import { Rating } from '../../../types/ratings';
 // Utils & data
 import { validationSchema } from './validationSchema';
+import { useSettingsState } from '../../../context/settings/useSettingsState';
 
 type Props = {
   isOrderOptionDisabled: boolean;
@@ -57,19 +58,27 @@ export const NewReportForm = ({
     setActiveStep,
   ] = useStepper();
 
+  const { defaultReportTemplateId } = useSettingsState();
+
   const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
-  const [selectedReportTemplateIdx, setSelectedReportTemplateIdx] = useState(0);
+  const [selectedReportTemplateId, setSelectedReportTemplateId] = useState(
+    defaultReportTemplateId,
+  );
 
   const { data: reportTemplates } = useReportTemplates();
+
+  const selectedReportTemplate = reportTemplates?.find(
+    (template) => template.id === selectedReportTemplateId,
+  );
 
   const steps = [
     {
       title: 'Szablon raportu',
       content: reportTemplates ? (
-        <ReportTemplateStep
-          selectedIndex={selectedReportTemplateIdx}
+        <ReportTemplatesSelect
           reportTemplates={reportTemplates}
-          setSelectedIndex={setSelectedReportTemplateIdx}
+          value={selectedReportTemplateId}
+          onChange={setSelectedReportTemplateId}
         />
       ) : (
         <p>Wybierz szablon raportu</p>
@@ -107,14 +116,10 @@ export const NewReportForm = ({
     },
     {
       title: 'Oceny',
-      content: reportTemplates && (
+      content: selectedReportTemplate && (
         <RatingsStep
-          ratings={mapRatingsToRatingType(
-            reportTemplates[selectedReportTemplateIdx].ratings,
-          )}
-          maxRatingScore={
-            reportTemplates[selectedReportTemplateIdx].maxRatingScore
-          }
+          ratings={mapRatingsToRatingType(selectedReportTemplate.ratings)}
+          maxRatingScore={selectedReportTemplate.maxRatingScore}
         />
       ),
     },
@@ -133,13 +138,11 @@ export const NewReportForm = ({
       <Formik
         initialValues={{
           ...initialValues,
-          maxRatingScore: reportTemplates
-            ? reportTemplates[selectedReportTemplateIdx].maxRatingScore
+          maxRatingScore: selectedReportTemplate
+            ? selectedReportTemplate.maxRatingScore
             : 4,
-          skills: reportTemplates
-            ? getInitialSkills(
-                reportTemplates[selectedReportTemplateIdx].ratings,
-              )
+          skills: selectedReportTemplate
+            ? getInitialSkills(selectedReportTemplate.ratings)
             : [],
         }}
         validationSchema={validationSchema}
