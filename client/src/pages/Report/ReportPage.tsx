@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
@@ -19,9 +19,6 @@ import {
   Print as PrintIcon,
   Edit as EditIcon,
 } from '@material-ui/icons';
-// Assets
-import background from '../../assets/report_background.png';
-import odra_background from '../../assets/odra_background.jpg';
 // Custom components
 import { ReportMatchStats } from './ReportMatchStats';
 import { ReportBasicInfo } from './ReportBasicInfo';
@@ -30,10 +27,9 @@ import { PrinteableReport } from './PrinteableReport';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
-import { ReportBackgroundImageSelect } from '../../components/selects/ReportBackgroundImageSelect';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
-import { useReportBackgroundImages } from '../../operations/queries/useReportBackgroundImages';
+import { useSettingsState } from '../../context/settings/useSettingsState';
 // Utils & data
 import { groupSkillsByCategory } from '../../utils/groupSkillsByCategory';
 import { SkillsAccordion } from './SkillsAccordion';
@@ -46,15 +42,11 @@ type ParamTypes = {
 export const ReportPage = () => {
   const params = useParams<ParamTypes>();
   const ref = useRef<HTMLDivElement | null>(null);
-  const [reportBackground, setReportBackground] = useState('');
+  const { defaultReportBackgroundImageUrl } = useSettingsState();
 
-  const classes = useStyles({ background: reportBackground });
+  const classes = useStyles({ background: defaultReportBackgroundImageUrl });
 
   const { loading, getReport, reportData, setCurrent } = useReportsState();
-  const {
-    data: backgroundImages,
-    isLoading: backgroundImagesLoading,
-  } = useReportBackgroundImages();
 
   const { id } = params;
 
@@ -105,11 +97,6 @@ export const ReportPage = () => {
                 Edytuj
               </Button>
             </div>
-            <ReportBackgroundImageSelect
-              reportBackgroundImages={backgroundImages || []}
-              value={reportBackground}
-              onChange={setReportBackground}
-            />
           </div>
           <Card className={classes.card}>
             <CardContent>

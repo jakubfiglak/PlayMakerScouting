@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 // MUI components
 import { Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
 // Types
@@ -7,7 +7,7 @@ import { ReportBackgroundImage } from '../../types/reportBackgroundImages';
 type Props = {
   reportBackgroundImages: ReportBackgroundImage[];
   value: string;
-  onChange: Dispatch<SetStateAction<string>>;
+  onChange: (url: string) => void;
 };
 
 export const ReportBackgroundImageSelect = ({

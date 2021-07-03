@@ -5,9 +5,10 @@ import {
   Security as ClubsIcon,
   Assignment as OrdersIcon,
   Assessment as ReportsIcon,
-  Settings as AccessManagementIcon,
+  Settings as SettingsIcon,
   Home as HomeIcon,
-  HomeWork as ReportTemplatesIcon,
+  Create as ReportTemplatesIcon,
+  PermContactCalendar as AdminIcon,
 } from '@material-ui/icons';
 import { NavItem } from './types';
 
@@ -55,9 +56,15 @@ export const navItems: NavItem[] = [
     allowedRoles: ['admin', 'playmaker-scout', 'scout'],
   },
   {
-    icon: <AccessManagementIcon color="error" />,
+    icon: <AdminIcon color="error" />,
     text: 'Panel administratora',
     to: '/admin',
     allowedRoles: ['admin'],
+  },
+  {
+    icon: <SettingsIcon color="error" />,
+    text: 'Ustawienia',
+    to: '/settings',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
   },
 ];

@@ -2,10 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
-import { AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
-// Assets
-import background from '../../assets/report_background.png';
-import odra_background from '../../assets/odra_background.jpg';
+import { AppBar, Tabs, Tab, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { ReportsTable } from './ReportsTable';
 import { ReportsFilterForm } from './ReportsFilterForm';
@@ -28,11 +25,13 @@ import { usePlayersState } from '../../context/players/usePlayersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { useSettingsState } from '../../context/settings/useSettingsState';
 
 type LocationState = { setActiveTab: number };
 
 export const ReportsPage = () => {
-  const classes = useStyles();
+  const { defaultReportBackgroundImageUrl } = useSettingsState();
+  const classes = useStyles({ background: defaultReportBackgroundImageUrl });
   const ref = useRef<HTMLDivElement | null>(null);
   const { state } = useLocation<LocationState | null>();
 
@@ -208,14 +207,18 @@ export const ReportsPage = () => {
   );
 };
 
-const useStyles = makeStyles(() => ({
+type StyleProps = {
+  background: string;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>(() => ({
   print: {
     overflow: 'hidden',
     height: 0,
   },
-  pageBody: {
-    backgroundImage: `url(${odra_background})`,
+  pageBody: (props) => ({
+    backgroundImage: `url(${props.background})`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
-  },
+  }),
 }));

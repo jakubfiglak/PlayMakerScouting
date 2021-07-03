@@ -18,6 +18,7 @@ import { WelcomePage } from '../pages/Welcome/WelcomePage';
 import { ReportTemplatesPage } from '../pages/ReportTemplates/ReportTemplatesPage';
 import { TeamPage } from '../pages/Team/TeamPage';
 import { UserPage } from '../pages/User/UserPage';
+import { SettingsPage } from '../pages/Settings/SettingsPage';
 import { FourOFourPage } from '../pages/404/FourOFour';
 
 export const AppRoutes = () => {
@@ -99,6 +100,12 @@ export const AppRoutes = () => {
           allowedRoles={['admin', 'playmaker-scout', 'scout']}
         >
           <ReportTemplatesPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/settings"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <SettingsPage />
         </ProtectedRoute>
         <Route path="*" component={FourOFourPage} />
       </Switch>

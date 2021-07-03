@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { ReportBackgroundImage } from '../../types/reportBackgroundImages';
-import { ApiError, ApiResponse } from '../../types/common';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { ReportBackgroundImage } from '../types/reportBackgroundImages';
+import { ApiError, ApiResponse } from '../types/common';
+import { useAlertsState } from '../context/alerts/useAlertsState';
 
+// Get all report background images
 async function getReportBackgroundImages(): Promise<ReportBackgroundImage[]> {
   const { data } = await axios.get<ApiResponse<ReportBackgroundImage[]>>(
     '/api/v1/report-background-images',
