@@ -19,9 +19,11 @@ import { FormModal } from '../../components/FormModal';
 // Types
 import { ReportTemplate, ReportTemplateDTO } from '../../types/reportTemplates';
 // Hooks
-import { useRatings } from '../../operations/queries/useRatings';
-import { useCreateReportTemplate } from '../../operations/mutations/useCreateReportTemplate';
-import { useUpdateReportTemplate } from '../../operations/mutations/useUpdateReportTemplate';
+import { useRatings } from '../../hooks/ratings';
+import {
+  useCreateReportTemplate,
+  useUpdateReportTemplate,
+} from '../../hooks/reportTemplates';
 
 type Props = {
   current: ReportTemplate | null;

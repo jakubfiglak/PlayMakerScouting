@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { DashboardData } from '../../types/dashboard';
-import { ApiError, ApiResponse } from '../../types/common';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { DashboardData } from '../types/dashboard';
+import { ApiError, ApiResponse } from '../types/common';
+import { useAlertsState } from '../context/alerts/useAlertsState';
 
 const getDashboardData = async (): Promise<DashboardData> => {
   const { data } = await axios.get<ApiResponse<DashboardData>>(

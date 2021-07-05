@@ -15,7 +15,7 @@ import { Loader } from '../../components/Loader';
 // Types
 import { Rating } from '../../types/ratings';
 // Hooks
-import { useRatings } from '../../operations/queries/useRatings';
+import { useRatings } from '../../hooks/ratings';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';

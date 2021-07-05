@@ -15,7 +15,7 @@ import { OrderCard } from './OrderCard';
 import { PageHeading } from '../../components/PageHeading';
 // Hooks
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
-import { useDashboardData } from '../../operations/queries/useDashboardData';
+import { useDashboardData } from '../../hooks/dashboard';
 // Utils & data
 import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
