@@ -28,7 +28,6 @@ export const PlayersPage = () => {
   const { setAlert } = useAlertsState();
 
   const {
-    getPlayers,
     addPlayer,
     editPlayer,
     current,
@@ -80,11 +79,6 @@ export const PlayersPage = () => {
     getClubsList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
 
   const handlePlayersFormSubmit = (data: PlayersFormData) => {
     if (current) {

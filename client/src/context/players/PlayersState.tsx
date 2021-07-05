@@ -61,7 +61,7 @@ export const PlayersState: React.FC = ({ children }) => {
     // Add filters to query url
     Object.entries(filters).forEach(([key, value]) => {
       const filter = `&${key}=${value}`;
-      if (value.length) {
+      if (value && value.toString().length) {
         playersURI = playersURI.concat(filter);
       }
     });

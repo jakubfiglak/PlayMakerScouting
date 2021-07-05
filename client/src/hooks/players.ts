@@ -32,13 +32,19 @@ async function getPlayers({
   // Generate query url
   let playersURI = `/api/v1/players?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
 
-  // Add filters to query url
   Object.entries(filters).forEach(([key, value]) => {
-    const regex = key === 'lastName' ? '[regex]' : '';
+    if (key === 'bornBefore' || key === 'bornAfter') {
+      const matcher = key === 'bornBefore' ? '[lte]' : '[gte]';
+      if (value) {
+        playersURI = playersURI.concat(`&yearOfBirth${matcher}=${value}`);
+      }
+    } else {
+      const regex = key === 'lastName' ? '[regex]' : '';
 
-    const filter = `&${key}${regex}=${value}`;
-    if (value.length) {
-      playersURI = playersURI.concat(filter);
+      const filter = `&${key}${regex}=${value}`;
+      if (value && value.toString().length) {
+        playersURI = playersURI.concat(filter);
+      }
     }
   });
 

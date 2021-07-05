@@ -1,10 +1,17 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
-import { TextField, FormControl } from '@material-ui/core';
+import {
+  TextField,
+  FormControl,
+  makeStyles,
+  Theme,
+  createStyles,
+} from '@material-ui/core';
 // Custom components
 import { PositionSelect } from '../../components/selects/PositionSelect';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
+import { YearOfBirthSelect } from '../../components/selects/YearOfBirthSelect';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Types
@@ -17,9 +24,15 @@ type Props = {
 };
 
 export const PlayersFilterForm = ({ clubsData, setFilters }: Props) => {
+  const classes = useStyles();
+
   return (
     <Formik
-      initialValues={{ lastName: '', club: '', position: '' }}
+      initialValues={{
+        lastName: '',
+        club: '',
+        position: '',
+      }}
       onSubmit={(data) => setFilters(data)}
     >
       {({ handleReset, initialValues }) => (
@@ -44,6 +57,18 @@ export const PlayersFilterForm = ({ clubsData, setFilters }: Props) => {
             <FormControl variant="outlined" size="small" fullWidth>
               <PositionSelect />
             </FormControl>
+            <div className={classes.container}>
+              <YearOfBirthSelect
+                name="bornAfter"
+                label="Urodzeni po"
+                size="small"
+              />
+              <YearOfBirthSelect
+                name="bornBefore"
+                label="Urodzeni przed"
+                size="small"
+              />
+            </div>
             <FilterFormActions
               handleClearFilter={() => {
                 handleReset();
@@ -56,3 +81,12 @@ export const PlayersFilterForm = ({ clubsData, setFilters }: Props) => {
     </Formik>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: 'flex',
+      gap: theme.spacing(1),
+    },
+  }),
+);
