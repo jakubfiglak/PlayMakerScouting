@@ -22,14 +22,13 @@ import { useTable } from '../../hooks/useTable';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { usePlayers } from '../../hooks/players';
 
 export const PlayersPage = () => {
   const { setAlert } = useAlertsState();
 
   const {
-    loading,
     getPlayers,
-    playersData: { docs, totalDocs },
     addPlayer,
     editPlayer,
     current,
@@ -60,6 +59,14 @@ export const PlayersPage = () => {
     lastName: '',
     club: '',
     position: '',
+  });
+
+  const { data: players, isLoading: playersLoading } = usePlayers({
+    page: page + 1,
+    limit: rowsPerPage,
+    order,
+    sort: sortBy,
+    filters,
   });
 
   const [isAddClubModalOpen, setIsAddClubModalOpen] = useState(false);
@@ -102,7 +109,7 @@ export const PlayersPage = () => {
 
   return (
     <MainTemplate>
-      {(loading || clubsLoading) && <Loader />}
+      {(playersLoading || clubsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
           <Tab label="Zawodnicy" id="players-0" aria-controls="players-0" />
@@ -120,8 +127,8 @@ export const PlayersPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          players={docs}
-          total={totalDocs}
+          players={players?.docs || []}
+          total={players?.totalDocs || 0}
           handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>
