@@ -66,7 +66,7 @@ export const PrinteableReport = ({ report }: Props) => {
           </Typography>
           <Typography className={classes.text} gutterBottom>
             <strong>Pozycja nominalna/pozycja w meczu: </strong>
-            {`${player.position} / ${positionPlayed}`}
+            {`${getLabel(player.position)} / ${getLabel(positionPlayed)}`}
           </Typography>
           <div className={classes.flex}>
             <Typography className={classes.text} gutterBottom>
