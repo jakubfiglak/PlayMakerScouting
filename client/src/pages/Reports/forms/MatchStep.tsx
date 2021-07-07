@@ -1,20 +1,19 @@
 import React from 'react';
 import { useField } from 'formik';
 // MUI components
-import { Grid, TextField, FormControl } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 // Custom components
 import { CompetitionSelect } from '../../../components/selects/CompetitionSelect';
 import { MatchLocationSelect } from '../../../components/selects/MatchLocationSelect';
-import { PositionSelect } from '../../../components/selects/PositionSelect';
 
 export const MatchStep = () => {
   const [againstField, againstMeta] = useField('match.against');
   const [dateField, dateMeta] = useField('match.date');
-  const [shirtNoField, shirtNoMeta] = useField('shirtNo');
+  const [resultField, resultMeta] = useField('match.result');
 
   const { error: againstError, touched: againstTouched } = againstMeta;
   const { error: dateError, touched: dateTouched } = dateMeta;
-  const { error: shirtNoError, touched: shirtNoTouched } = shirtNoMeta;
+  const { error: resultError, touched: resultTouched } = resultMeta;
 
   return (
     <Grid container spacing={2}>
@@ -24,7 +23,7 @@ export const MatchStep = () => {
       <Grid item xs={6}>
         <MatchLocationSelect name="match.location" />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <TextField
           {...againstField}
           id="against"
@@ -48,24 +47,14 @@ export const MatchStep = () => {
         />
       </Grid>
       <Grid item xs={6}>
-        <FormControl variant="outlined" fullWidth>
-          <PositionSelect
-            name="positionPlayed"
-            helperText="Podaj pozycję, na której zawodnik zagrał w danym meczu"
-          />
-        </FormControl>
-      </Grid>
-      <Grid item xs={6}>
         <TextField
-          {...shirtNoField}
-          type="number"
-          id="shirtNo"
+          {...resultField}
+          id="result"
           fullWidth
-          label="Numer na koszulce"
+          label="Wynik"
           variant="outlined"
-          error={shirtNoTouched && !!shirtNoError}
-          helperText={shirtNoTouched && shirtNoError}
-          InputProps={{ inputProps: { min: 1, max: 99 } }}
+          error={resultTouched && !!resultError}
+          helperText={resultTouched && resultError}
         />
       </Grid>
     </Grid>

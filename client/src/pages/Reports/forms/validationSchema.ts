@@ -23,6 +23,7 @@ export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
         against: yup.string(),
         competition: yup.mixed<Competition>(),
         date: yup.string(),
+        result: yup.string(),
       })
       .defined(),
     minutesPlayed: yup

@@ -90,7 +90,7 @@ export const PrinteableReport = ({ report }: Props) => {
             <Typography className={classes.text} gutterBottom>
               <strong>Mecz: </strong>
               vs. {match.against} ({getLabel(match.location)}),{' '}
-              {getLabel(match.competition)}
+              {getLabel(match.competition)}, {match.result}
             </Typography>
             <Typography
               className={clsx(classes.text, classes.marginLeft)}

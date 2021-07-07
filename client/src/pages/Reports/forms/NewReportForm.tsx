@@ -240,6 +240,7 @@ const initialValues: Omit<ReportFormData, 'skills'> = {
     against: '',
     competition: 'league',
     date: dateString,
+    result: '',
   },
   minutesPlayed: 0,
   goals: 0,

@@ -51,6 +51,9 @@ const ReportSchema = new Schema(
       date: {
         type: Date,
       },
+      result: {
+        type: String,
+      },
     },
     minutesPlayed: {
       type: Number,

@@ -13,6 +13,7 @@ export type MatchData = {
   against: string;
   competition: Competition;
   date: string;
+  result: string;
 };
 
 export type ReportStatus = 'in-prep' | 'closed';
