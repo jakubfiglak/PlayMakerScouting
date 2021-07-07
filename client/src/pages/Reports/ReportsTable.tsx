@@ -29,7 +29,9 @@ const headCells = [
   { id: 'player', label: 'Zawodnik' },
   { id: 'scout', label: 'Scout' },
   { id: 'createdAt', label: 'Data utworzenia' },
-  { id: 'avgRating', label: 'Średnia ocena' },
+  { id: 'avgRating', label: 'Śr. ocena' },
+  { id: 'maxRatingScore', label: 'Zakres' },
+  { id: 'percentageRating', label: 'Ocena %' },
   { id: 'finalRating', label: 'Ocena ostateczna' },
 ];
 
@@ -62,21 +64,23 @@ export const ReportsTable = ({
     >
       {reports.map((report) => {
         const {
-          id: _id,
+          id,
           player,
           scout,
           createdAt,
           avgRating,
+          maxRatingScore,
+          percentageRating,
           finalRating,
         } = report;
 
         return (
-          <StyledTableRow key={_id}>
+          <StyledTableRow key={id}>
             <StyledTableCell padding="checkbox">
               <div className={classes.buttonsContainer}>
                 <Tooltip title="Zobacz szczegóły">
-                  <Link component={RouterLink} to={`/reports/${_id}`}>
-                    <IconButton aria-label="go to order">
+                  <Link component={RouterLink} to={`/reports/${id}`}>
+                    <IconButton aria-label="go to report">
                       <SearchIcon />
                     </IconButton>
                   </Link>
@@ -104,8 +108,10 @@ export const ReportsTable = ({
               {`${scout.firstName} ${scout.lastName}`}
             </StyledTableCell>
             <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
-            <StyledTableCell align="right">
-              {`${avgRating.toFixed(1)}%`}
+            <StyledTableCell>{avgRating.toFixed(2)}</StyledTableCell>
+            <StyledTableCell>{maxRatingScore}</StyledTableCell>
+            <StyledTableCell>
+              {`${percentageRating.toFixed(1)}%`}
             </StyledTableCell>
             <StyledTableCell>
               <FinalRatingChip finalRating={finalRating} />

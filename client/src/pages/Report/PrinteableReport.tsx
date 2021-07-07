@@ -46,6 +46,7 @@ export const PrinteableReport = ({ report }: Props) => {
     playerCurrentClub,
     positionPlayed,
     shirtNo,
+    percentageRating,
   } = report;
 
   return (
@@ -184,7 +185,7 @@ export const PrinteableReport = ({ report }: Props) => {
           Podsumowanie
         </Typography>
         <Typography align="center" className={classes.text} gutterBottom>
-          Średnia ocen: {avgRating.toFixed(1)}%
+          Średnia ocen: {avgRating.toFixed(2)} (${percentageRating.toFixed(1)}%)
         </Typography>
         <Typography className={classes.text} gutterBottom>
           {summary}

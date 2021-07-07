@@ -46,6 +46,7 @@ export type Report = {
   finalRating: RatingScore;
   summary: string;
   avgRating: number;
+  percentageRating: number;
   maxRatingScore: number;
   status: ReportStatus;
   createdAt: string;
