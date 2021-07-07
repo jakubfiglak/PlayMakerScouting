@@ -45,6 +45,7 @@ export const PrinteableReport = ({ report }: Props) => {
     maxRatingScore,
     playerCurrentClub,
     positionPlayed,
+    shirtNo,
   } = report;
 
   return (
@@ -67,6 +68,10 @@ export const PrinteableReport = ({ report }: Props) => {
           <Typography className={classes.text} gutterBottom>
             <strong>Pozycja nominalna/pozycja w meczu: </strong>
             {`${getLabel(player.position)} / ${getLabel(positionPlayed)}`}
+          </Typography>
+          <Typography className={classes.text} gutterBottom>
+            <strong>Nr na koszulce w meczu: </strong>
+            {shirtNo || 'N/A'}
           </Typography>
           <div className={classes.flex}>
             <Typography className={classes.text} gutterBottom>

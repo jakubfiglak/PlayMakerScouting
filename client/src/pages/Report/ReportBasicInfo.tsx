@@ -16,6 +16,7 @@ type Props = Pick<
   | 'createdAt'
   | 'playerCurrentClub'
   | 'positionPlayed'
+  | 'shirtNo'
 >;
 
 export const ReportBasicInfo = ({
@@ -25,6 +26,7 @@ export const ReportBasicInfo = ({
   scout,
   playerCurrentClub,
   positionPlayed,
+  shirtNo,
   createdAt,
 }: Props) => {
   return (
@@ -46,6 +48,12 @@ export const ReportBasicInfo = ({
           <Typography>
             <strong>Pozycja / pozycja w meczu: </strong>
             {`${getLabel(player.position)} / ${getLabel(positionPlayed)}`}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            <strong>Numer na koszulce: </strong>
+            {shirtNo || 'N/A'}
           </Typography>
         </Grid>
         <Grid item xs={12}>

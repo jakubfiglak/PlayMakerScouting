@@ -13,6 +13,10 @@ export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
     order: yup.string(),
     player: yup.string(),
     positionPlayed: yup.mixed<Position>().required('Podaj pozycję zawodnika'),
+    shirtNo: yup
+      .number()
+      .min(1, 'Numer na koszulce musi być większy lub równy 1')
+      .max(99, 'Numer na koszulce musi być mniejszy lub równy 99'),
     match: yup
       .object({
         location: yup.mixed<MatchLocation>(),

@@ -10,9 +10,11 @@ import { PositionSelect } from '../../../components/selects/PositionSelect';
 export const MatchStep = () => {
   const [againstField, againstMeta] = useField('match.against');
   const [dateField, dateMeta] = useField('match.date');
+  const [shirtNoField, shirtNoMeta] = useField('shirtNo');
 
   const { error: againstError, touched: againstTouched } = againstMeta;
   const { error: dateError, touched: dateTouched } = dateMeta;
+  const { error: shirtNoError, touched: shirtNoTouched } = shirtNoMeta;
 
   return (
     <Grid container spacing={2}>
@@ -52,6 +54,19 @@ export const MatchStep = () => {
             helperText="Podaj pozycję, na której zawodnik zagrał w danym meczu"
           />
         </FormControl>
+      </Grid>
+      <Grid item xs={6}>
+        <TextField
+          {...shirtNoField}
+          type="number"
+          id="shirtNo"
+          fullWidth
+          label="Numer na koszulce"
+          variant="outlined"
+          error={shirtNoTouched && !!shirtNoError}
+          helperText={shirtNoTouched && shirtNoError}
+          InputProps={{ inputProps: { min: 1, max: 99 } }}
+        />
       </Grid>
     </Grid>
   );

@@ -34,6 +34,7 @@ export type Report = {
   order?: Pick<Order, 'id' | 'docNumber'>;
   match: MatchData;
   playerCurrentClub: Club;
+  shirtNo?: number;
   positionPlayed: Position;
   minutesPlayed: number;
   goals: number;
@@ -62,6 +63,7 @@ export type ReportFormData = {
   minutesPlayed: number;
   goals: number;
   assists: number;
+  shirtNo?: number;
   yellowCards: number;
   redCards: number;
   finalRating: RatingScore;

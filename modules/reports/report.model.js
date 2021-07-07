@@ -33,6 +33,9 @@ const ReportSchema = new Schema(
       enum: positions,
       required: 'Please add a position player actually played at',
     },
+    shirtNo: {
+      type: Number,
+    },
     match: {
       location: {
         type: String,

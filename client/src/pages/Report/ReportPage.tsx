@@ -107,6 +107,7 @@ export const ReportPage = () => {
                 order={reportData.order}
                 playerCurrentClub={reportData.playerCurrentClub}
                 positionPlayed={reportData.positionPlayed}
+                shirtNo={reportData.shirtNo}
                 createdAt={reportData.createdAt}
               />
             </CardContent>
