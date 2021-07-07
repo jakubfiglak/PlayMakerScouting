@@ -124,6 +124,9 @@ const ReportSchema = new Schema(
     avgRating: {
       type: Number,
     },
+    percentageRating: {
+      type: Number,
+    },
     maxRatingScore: {
       type: Number,
       default: 4,
