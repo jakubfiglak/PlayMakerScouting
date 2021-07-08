@@ -69,11 +69,6 @@ export const ClubsPage = () => {
     clearCurrent();
   };
 
-  const handleEditCancelClick = () => {
-    clearCurrent();
-    setAlert({ msg: 'Anulowano edycję', type: 'warning' });
-  };
-
   useEffect(
     () => {
       getClubs(page + 1, rowsPerPage, sortBy, order, filters);
@@ -116,7 +111,6 @@ export const ClubsPage = () => {
           current={current}
           onSubmit={handleSubmit}
           onCancelClick={handleFormReset}
-          onEditCancelClick={handleEditCancelClick}
         />
       </TabPanel>
     </MainTemplate>

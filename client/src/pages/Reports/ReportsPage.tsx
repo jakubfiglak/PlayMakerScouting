@@ -140,11 +140,6 @@ export const ReportsPage = () => {
     clearCurrent();
   };
 
-  const handleEditCancelClick = () => {
-    clearCurrent();
-    setAlert({ msg: 'Anulowano edycję', type: 'warning' });
-  };
-
   return (
     <MainTemplate>
       {(loading ||
@@ -196,7 +191,6 @@ export const ReportsPage = () => {
           <EditReportForm
             report={current}
             onReset={handleEditFormReset}
-            onEditCancelClick={handleEditCancelClick}
             onSubmit={editReport}
           />
         ) : (

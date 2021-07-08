@@ -6,7 +6,6 @@ type Props = {
   label: string;
   isEditState: boolean;
   onCancelClick: () => void;
-  onEditCancelClick?: () => void;
   goBack?: () => void;
   activeStep?: number;
   totalSteps?: number;
@@ -16,7 +15,6 @@ export const MainFormActions = ({
   label,
   isEditState,
   onCancelClick,
-  onEditCancelClick,
   goBack,
   activeStep,
   totalSteps,
@@ -26,7 +24,7 @@ export const MainFormActions = ({
   return (
     <div className={classes.container}>
       <Button type="submit" fullWidth variant="contained" color="primary">
-        {isEditState ? `Edytuj ${label}` : `Dodaj ${label}`}
+        {isEditState ? 'Zapisz zmiany' : `Dodaj ${label}`}
       </Button>
       {goBack && totalSteps && (
         <Button
@@ -45,18 +43,8 @@ export const MainFormActions = ({
         color="secondary"
         onClick={onCancelClick}
       >
-        Anuluj zmiany
+        Anuluj
       </Button>
-      {isEditState && (
-        <Button
-          fullWidth
-          variant="contained"
-          color="default"
-          onClick={onEditCancelClick}
-        >
-          Anuluj edycję
-        </Button>
-      )}
     </div>
   );
 };
