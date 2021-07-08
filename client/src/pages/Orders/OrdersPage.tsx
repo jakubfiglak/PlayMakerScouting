@@ -16,6 +16,7 @@ import { OrderFormData, OrdersFilterData } from '../../types/orders';
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+import { useOrders, useRejectOrder } from '../../hooks/orders';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useClubsState } from '../../context/clubs/useClubsState';
@@ -65,10 +66,15 @@ export const OrdersPage = () => {
     createdBefore: formatDateObject(tomorrow),
   });
 
-  useEffect(() => {
-    getOrders(page + 1, rowsPerPage, sortBy, order, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
+  const { data: orders, isLoading: ordersLoading } = useOrders({
+    page: page + 1,
+    limit: rowsPerPage,
+    order,
+    sort: sortBy,
+    filters,
+  });
+
+  const { mutate: rejectOrder } = useRejectOrder();
 
   useEffect(() => {
     getPlayersList();
@@ -109,11 +115,12 @@ export const OrdersPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          total={ordersData.totalDocs}
-          orders={ordersData.docs}
+          total={orders?.totalDocs || 0}
+          orders={orders?.docs || []}
           onAcceptOrderClick={acceptOrder}
           onCloseOrderClick={closeOrder}
           onDeleteOrderClick={deleteOrder}
+          onRejectOrderClick={rejectOrder}
           areAdminOptionsEnabled={isAdmin}
         />
       </TabPanel>
