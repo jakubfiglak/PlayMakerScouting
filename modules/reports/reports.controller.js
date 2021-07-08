@@ -63,7 +63,7 @@ exports.getReportsList = asyncHandler(async (req, res) => {
 
 // @desc Get single report
 // @route GET /api/v1/reports/:id
-// @access Private (author or admin only)
+// @access Private
 exports.getReport = asyncHandler(async (req, res) => {
   res.status(httpStatus.OK).json({
     success: true,
@@ -73,7 +73,7 @@ exports.getReport = asyncHandler(async (req, res) => {
 
 // @desc Update report
 // @route PUT /api/v1/report/:id
-// @access Private (author or admin only)
+// @access Private
 exports.updateReport = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -86,9 +86,25 @@ exports.updateReport = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Set report status
+// @route PUT /api/v1/report/:id/set-status
+// @access Private
+exports.setReportStatus = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const report = await reportsService.setReportStatus({ report: req.report, status });
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: report,
+    message: `Report with the id of ${id} status changed to ${status}`,
+  });
+});
+
 // @desc Delete report
 // @route DELETE /api/v1/clubs/:id
-// @access Private (author or admin only)
+// @access Private
 exports.deleteReport = asyncHandler(async (req, res) => {
   const { id } = req.params;
 

@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
-import { ReportBasicInfo } from '../types/reports';
+import {
+  Report,
+  ReportBasicInfo,
+  ReportsFilterData,
+  ReportStatus,
+} from '../types/reports';
 import {
   ApiError,
   ApiResponse,
@@ -8,6 +13,57 @@ import {
   SortingOrder,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+
+// Get all reports with pagination
+type PaginatedReports = PaginatedData<Report>;
+type GetReportsResponse = ApiResponse<PaginatedReports>;
+type GetReportsArgs = {
+  page?: number;
+  limit?: number;
+  sort?: string;
+  order: SortingOrder;
+  filters: ReportsFilterData;
+};
+
+async function getReports({
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+  filters,
+}: GetReportsArgs): Promise<PaginatedReports> {
+  const orderSign = order === 'desc' ? '-' : '';
+
+  // Generate query url
+  let reportsURI = `/api/v1/reports?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+  if (filters.player) {
+    reportsURI = reportsURI.concat(`&player=${filters.player}`);
+  }
+
+  const { data } = await axios.get<GetReportsResponse>(reportsURI);
+  return data.data;
+}
+
+export function useReports({
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+  filters,
+}: GetReportsArgs) {
+  const { setAlert } = useAlertsState();
+
+  return useQuery<PaginatedReports, ApiError>(
+    ['reports', { page, limit, sort, order, filters }],
+    () => getReports({ page, limit, sort, order, filters }),
+    {
+      keepPreviousData: true,
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
+}
 
 // Get reports list
 async function getReportsList(): Promise<ReportBasicInfo[]> {
@@ -24,4 +80,35 @@ export function useReportsList() {
     onError: (err: ApiError) =>
       setAlert({ msg: err.response.data.error, type: 'error' }),
   });
+}
+
+// Set report status
+export type SetReportStatusArgs = { id: string; status: ReportStatus };
+
+async function setReportStatus({
+  id,
+  status,
+}: SetReportStatusArgs): Promise<ApiResponse<Report>> {
+  const { data } = await axios.patch<ApiResponse<Report>>(
+    `/api/v1/reports/${id}/set-status`,
+    { status },
+  );
+  return data;
+}
+
+export function useSetReportStatus() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(
+    ({ id, status }: SetReportStatusArgs) => setReportStatus({ id, status }),
+    {
+      onSuccess: (data: ApiResponse<Report>) => {
+        setAlert({ msg: data.message, type: 'success' });
+        queryClient.invalidateQueries('reports');
+      },
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
 }

@@ -7,15 +7,19 @@ import {
   Search as SearchIcon,
   Edit as EditIcon,
   Print as PrintIcon,
+  Lock as CloseIcon,
+  LockOpen as OpenIcon,
 } from '@material-ui/icons';
 // Custom components
 import { FinalRatingChip } from './FinalRatingChip';
+import { StatusChip } from './StatusChip';
 import { Table } from '../../components/table/Table';
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
 // Types
 import { Report } from '../../types/reports';
 import { CommonTableProps } from '../../types/common';
+import { SetReportStatusArgs } from '../../hooks/reports';
 // Utils & data
 import { formatDate } from '../../utils/dates';
 
@@ -23,14 +27,16 @@ type Props = {
   reports: Report[];
   handleEditClick: (report: Report) => void;
   handlePrintClick: (report: Report) => void;
+  handleSetStatusClick: ({ id, status }: SetReportStatusArgs) => void;
 } & CommonTableProps;
 
 const headCells = [
   { id: 'player', label: 'Zawodnik' },
   { id: 'scout', label: 'Scout' },
   { id: 'createdAt', label: 'Data utworzenia' },
+  { id: 'status', label: 'Status' },
   { id: 'avgRating', label: 'Śr. ocena' },
-  { id: 'maxRatingScore', label: 'Zakres' },
+  { id: 'maxRatingScore', label: 'Skala ocen' },
   { id: 'percentageRating', label: 'Ocena %' },
   { id: 'finalRating', label: 'Ocena ostateczna' },
 ];
@@ -47,6 +53,7 @@ export const ReportsTable = ({
   reports,
   handleEditClick,
   handlePrintClick,
+  handleSetStatusClick,
 }: Props) => {
   const classes = useStyles();
 
@@ -72,6 +79,7 @@ export const ReportsTable = ({
           maxRatingScore,
           percentageRating,
           finalRating,
+          status,
         } = report;
 
         return (
@@ -89,6 +97,7 @@ export const ReportsTable = ({
                   <IconButton
                     aria-label="edit report"
                     onClick={() => handleEditClick(report)}
+                    disabled={status === 'closed'}
                   >
                     <EditIcon />
                   </IconButton>
@@ -101,6 +110,29 @@ export const ReportsTable = ({
                     <PrintIcon />
                   </IconButton>
                 </Tooltip>
+                {status === 'in-prep' ? (
+                  <Tooltip title="Zamknij raport">
+                    <IconButton
+                      aria-label="close report"
+                      onClick={() =>
+                        handleSetStatusClick({ id, status: 'closed' })
+                      }
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Otwórz raport">
+                    <IconButton
+                      aria-label="open report"
+                      onClick={() =>
+                        handleSetStatusClick({ id, status: 'in-prep' })
+                      }
+                    >
+                      <OpenIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </div>
             </StyledTableCell>
             <StyledTableCell>{`${player.firstName} ${player.lastName}`}</StyledTableCell>
@@ -108,6 +140,9 @@ export const ReportsTable = ({
               {`${scout.firstName} ${scout.lastName}`}
             </StyledTableCell>
             <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
+            <StyledTableCell>
+              <StatusChip status={status} />
+            </StyledTableCell>
             <StyledTableCell>{avgRating.toFixed(2)}</StyledTableCell>
             <StyledTableCell>{maxRatingScore}</StyledTableCell>
             <StyledTableCell>

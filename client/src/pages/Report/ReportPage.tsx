@@ -24,6 +24,7 @@ import { ReportMatchStats } from './ReportMatchStats';
 import { ReportBasicInfo } from './ReportBasicInfo';
 import { ReportSummary } from './ReportSummary';
 import { PrinteableReport } from './PrinteableReport';
+import { StatusChip } from '../Reports/StatusChip';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
@@ -77,6 +78,9 @@ export const ReportPage = () => {
               Wróć do listy raportów
             </Button>
             <PageHeading title={`Raport nr ${reportData.docNumber}`} />
+            <div>
+              Status: <StatusChip status={reportData.status} />
+            </div>
             <div className={classes.buttonsContainer}>
               <Button
                 variant="contained"
@@ -93,6 +97,7 @@ export const ReportPage = () => {
                 color="primary"
                 onClick={() => setCurrent(reportData)}
                 startIcon={<EditIcon />}
+                disabled={reportData.status === 'closed'}
               >
                 Edytuj
               </Button>
@@ -186,6 +191,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     gap: `${theme.spacing(1)}px`,
+    marginTop: theme.spacing(2),
   },
   link: {
     marginBottom: theme.spacing(1),

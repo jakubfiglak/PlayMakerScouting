@@ -6,6 +6,7 @@ const {
   getReport,
   updateReport,
   deleteReport,
+  setReportStatus,
 } = require('../modules/reports/reports.controller');
 const { protect, authorize } = require('../middleware/auth');
 const {
@@ -45,6 +46,11 @@ router.put(
     filterForbiddenUpdates(options.forbiddenUpdates),
   ],
   updateReport
+);
+router.patch(
+  '/:id/set-status',
+  [protect, setAcls, setReport, checkAccessPermission('report')],
+  setReportStatus
 );
 router.delete('/:id', [protect, setAcls, setReport, checkAccessPermission('report')], deleteReport);
 

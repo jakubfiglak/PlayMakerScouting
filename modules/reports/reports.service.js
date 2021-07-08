@@ -59,6 +59,13 @@ async function updateReport({ report, reqBody }) {
   return modifiedReport;
 }
 
+async function setReportStatus({ report, status }) {
+  const editedReport = report;
+  editedReport.status = status;
+  const modifiedReport = await editedReport.save();
+  return modifiedReport;
+}
+
 async function deleteReport(report) {
   await report.remove();
 }
@@ -72,5 +79,6 @@ module.exports = {
   getAllReports,
   getAllReportsList,
   updateReport,
+  setReportStatus,
   deleteReport,
 };

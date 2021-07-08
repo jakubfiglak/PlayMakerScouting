@@ -19,6 +19,7 @@ import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
+import { useReports, useSetReportStatus } from '../../hooks/reports';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
@@ -83,6 +84,18 @@ export const ReportsPage = () => {
     player: '',
   });
 
+  const { data: reports, isLoading: reportsLoading } = useReports({
+    page: page + 1,
+    limit: rowsPerPage,
+    sort: sortBy,
+    order,
+    filters,
+  });
+  const {
+    mutate: setReportStatus,
+    isLoading: setStatusLoading,
+  } = useSetReportStatus();
+
   useEffect(() => {
     getPlayersList();
     getClubsList();
@@ -91,11 +104,6 @@ export const ReportsPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    getReports(page + 1, rowsPerPage, sortBy, order, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
 
   useEffect(() => {
     if (state?.setActiveTab) {
@@ -139,9 +147,12 @@ export const ReportsPage = () => {
 
   return (
     <MainTemplate>
-      {(loading || playersLoading || clubsLoading || ordersLoading) && (
-        <Loader />
-      )}
+      {(loading ||
+        playersLoading ||
+        clubsLoading ||
+        ordersLoading ||
+        reportsLoading ||
+        setStatusLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
           <Tab label="Raporty" id="reports-0" aria-controls="reports-0" />
@@ -159,10 +170,11 @@ export const ReportsPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          total={reportsData.totalDocs}
-          reports={reportsData.docs}
+          total={reports?.totalDocs || 0}
+          reports={reports?.docs || []}
           handleEditClick={handleSetCurrent}
           handlePrintClick={handlePrintClick}
+          handleSetStatusClick={setReportStatus}
         />
         {current && (
           <div className={classes.print}>

@@ -329,3 +329,24 @@ describe('PUT /api/v1/reports/:id', () => {
     expect(reports.totalDocs).toBe(1);
   });
 });
+
+describe('PATCH /api/v1/reports/:id/set-status', () => {
+  it('should correctly set requested report status', async () => {
+    const player = buildPlayer();
+    const report = buildReport({ player: player._id, status: 'in-prep' });
+    const userAcl = buildAccessControlList({ user: testUser._id, reports: [report._id] });
+
+    await Promise.all([
+      insertPlayers([player]),
+      insertReports([report]),
+      insertAccessControlLists([userAcl]),
+    ]);
+
+    const response = await api.patch(`reports/${report._id}/set-status`, { status: 'closed' });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('status changed to');
+    expect(response.data.data.status).toBe('closed');
+  });
+});
