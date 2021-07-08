@@ -28,12 +28,12 @@ type Props = {
 export const ReportCard = ({ report, title }: Props) => {
   const classes = useStyles();
 
-  const { player, docNumber, id: _id, scout, createdAt, avgRating } = report;
+  const { player, docNumber, id, scout, createdAt, avgRating } = report;
 
   return (
     <Card className={classes.container}>
       <CardActionArea>
-        <Link to={`/reports/${_id}`} className={classes.link}>
+        <Link to={`/reports/${id}`} className={classes.link}>
           <CardHeader
             avatar={
               <Avatar aria-label="report icon" className={classes.avatar}>

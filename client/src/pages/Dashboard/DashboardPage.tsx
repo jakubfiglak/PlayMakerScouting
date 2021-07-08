@@ -12,6 +12,7 @@ import {
 import { CountCard } from './CountCard';
 import { ReportCard } from './ReportCard';
 import { OrderCard } from './OrderCard';
+import { CreateReportCard } from './CreateReportCard';
 import { PageHeading } from '../../components/PageHeading';
 // Hooks
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
@@ -33,6 +34,7 @@ export const DashboardPage = () => {
       {isLoading && <Loader />}
       <PageHeading title="Twoja aktywność" />
       <div className={classes.container}>
+        <CreateReportCard />
         <CountCard
           title="Zawodników w bazie"
           count={data?.playersCount}
@@ -85,7 +87,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'grid',
     justifyContent: 'center',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
     gap: `${theme.spacing(2)}px`,
     marginTop: theme.spacing(2),
   },
