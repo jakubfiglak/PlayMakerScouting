@@ -1,6 +1,10 @@
 const Report = require('./report.model');
 const resultsOptions = require('./options');
 
+function getReportById(id) {
+  return Report.findById(id);
+}
+
 async function getReportsForPlayer(playerId) {
   const reports = await Report.find({ player: playerId });
   return reports;
@@ -71,6 +75,7 @@ async function deleteReport(report) {
 }
 
 module.exports = {
+  getReportById,
   getReportsForPlayer,
   getHighestRatedReport,
   getLatestReport,

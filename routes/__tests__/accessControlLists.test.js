@@ -7,7 +7,9 @@ const {
   buildUser,
   buildTeam,
   buildClub,
+  buildPlayer,
   buildGrantAccessForm,
+  buildReport,
 } = require('../../test/utils');
 const {
   insertTestUser,
@@ -15,6 +17,8 @@ const {
   insertUsers,
   insertTeams,
   insertClubs,
+  insertPlayers,
+  insertReports,
 } = require('../../test/db-utils');
 
 let api = axios.create();
@@ -160,6 +164,65 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
 
     expect(response.data.success).toBe(true);
     expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
+  });
+
+  it('should grant access to players club if assetToAddType is "player"', async () => {
+    const user = buildUser();
+    const userAcl = buildAccessControlList({ user: user._id });
+    const club = buildClub();
+    const player = buildPlayer({ club: club._id });
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertClubs([club]),
+      insertPlayers([player]),
+    ]);
+
+    const data = buildGrantAccessForm({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      assetToAddType: 'player',
+      assetToAddId: player._id,
+    });
+
+    const response = await api.patch('access-control-lists/grant-access', data);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.players).toContainEqual(player._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
+  });
+
+  it('should grant access to the player and players club if assetToAddType is "report"', async () => {
+    const user = buildUser();
+    const userAcl = buildAccessControlList({ user: user._id });
+    const club = buildClub();
+    const player = buildPlayer({ club: club._id });
+    const report = buildReport({ player: player._id });
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertClubs([club]),
+      insertPlayers([player]),
+      insertReports([report]),
+    ]);
+
+    const data = buildGrantAccessForm({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      assetToAddType: 'report',
+      assetToAddId: report._id,
+    });
+
+    const response = await api.patch('access-control-lists/grant-access', data);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.reports).toContainEqual(report._id.toHexString());
+    expect(response.data.data.players).toContainEqual(player._id.toHexString());
     expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
   });
 });
