@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
-import { Club, ClubBasicInfo, ClubsFilterData } from '../types/clubs';
+import { Club, ClubBasicInfo, ClubDTO, ClubsFilterData } from '../types/clubs';
 import {
   ApiError,
   ApiResponse,
@@ -104,4 +104,58 @@ export function useClub(id: string) {
     onError: (err: ApiError) =>
       setAlert({ msg: err.response.data.error, type: 'error' }),
   });
+}
+
+// Create new club
+async function createClub(clubData: ClubDTO): Promise<ApiResponse<Club>> {
+  const { data } = await axios.post<ApiResponse<Club>>(
+    '/api/v1/clubs',
+    clubData,
+  );
+  return data;
+}
+
+export function useCreateClub() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation((values: ClubDTO) => createClub(values), {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('clubs');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
+// Update club
+type UpdateClubArgs = { clubId: string; clubData: ClubDTO };
+
+async function updateClub({
+  clubId,
+  clubData,
+}: UpdateClubArgs): Promise<ApiResponse<Club>> {
+  const { data } = await axios.put<ApiResponse<Club>>(
+    `/api/v1/clubs/${clubId}`,
+    clubData,
+  );
+  return data;
+}
+
+export function useUpdateClub(clubId: string) {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(
+    (values: ClubDTO) => updateClub({ clubId, clubData: values }),
+    {
+      onSuccess: (data) => {
+        setAlert({ msg: data.message, type: 'success' });
+        queryClient.invalidateQueries('clubs');
+      },
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
 }

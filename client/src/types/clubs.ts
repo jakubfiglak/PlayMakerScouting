@@ -1,4 +1,4 @@
-import { SortingOrder, PaginatedData, Voivodeship } from './common';
+import { Voivodeship } from './common';
 
 export type Division =
   | 'Ekstraklasa'
@@ -21,7 +21,7 @@ export type Club = {
 
 export type ClubBasicInfo = Pick<Club, 'id' | 'name'>;
 
-export type ClubsFormData = Omit<Club, 'id' | 'division' | 'voivodeship'> & {
+export type ClubDTO = Omit<Club, 'id' | 'division' | 'voivodeship'> & {
   voivodeship: Voivodeship | 'Zagranica' | '';
   division: Division | '';
 };
@@ -31,49 +31,3 @@ export type ClubsFilterData = {
   division: Division | '';
   voivodeship: string;
 };
-
-export type GrantAccessFormData = {
-  user: string;
-  club: string;
-};
-
-export type GrantAccessArgs = { clubId: string; userId: string };
-
-export type GetClubs = (
-  page: number,
-  limit: number,
-  sort: string,
-  order: SortingOrder,
-  filters: ClubsFilterData,
-  my?: boolean,
-) => void;
-
-export type State = {
-  clubsData: PaginatedData<Club>;
-  clubsList: ClubBasicInfo[];
-  current: Club | null;
-  loading: boolean;
-  error: string | null;
-  message: string | null;
-  setLoading: () => void;
-  getClubs: GetClubs;
-  getClubsList: () => void;
-  getClub: (id: string) => void;
-  addClub: (club: ClubsFormData) => void;
-  editClub: (id: string, club: ClubsFormData) => void;
-  grantAccess: ({ clubId, userId }: GrantAccessArgs) => void;
-  setCurrent: (club: Club) => void;
-  clearCurrent: () => void;
-};
-
-export type Action =
-  | { type: 'SET_LOADING' }
-  | { type: 'SET_CURRENT'; payload: Club }
-  | { type: 'CLEAR_CURRENT' }
-  | { type: 'CLUBS_ERROR'; payload: string }
-  | { type: 'GET_CLUBS_SUCCESS'; payload: PaginatedData<Club> }
-  | { type: 'GET_CLUBS_LIST_SUCCESS'; payload: ClubBasicInfo[] }
-  | { type: 'GET_CLUB_SUCCESS'; payload: Club }
-  | { type: 'CREATE_CLUB_SUCCESS'; payload: { club: Club; message: string } }
-  | { type: 'UPDATE_CLUB_SUCCESS'; payload: { club: Club; message: string } }
-  | { type: 'GRANT_ACCESS_SUCCESS'; payload: { message: string } };

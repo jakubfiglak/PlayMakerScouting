@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { Voivodeship } from '../../types/common';
-import { PlayersFormData, Position, Foot } from '../../types/players';
-import { ClubsFormData, Division } from '../../types/clubs';
+import { PlayerDTO, Position, Foot } from '../../types/players';
+import { ClubDTO, Division } from '../../types/clubs';
 
 export const passwordValidationSchema = yup
   .string()
@@ -12,7 +12,7 @@ export const passwordValidationSchema = yup
   )
   .required('Podaj hasło');
 
-export const playersFormValidationSchema: yup.ObjectSchema<PlayersFormData> = yup
+export const playersFormValidationSchema: yup.ObjectSchema<PlayerDTO> = yup
   .object({
     firstName: yup.string().required('Podaj imię zawodnika'),
     lastName: yup.string().required('Podaj nazwisko zawodnika'),
@@ -32,7 +32,7 @@ export const playersFormValidationSchema: yup.ObjectSchema<PlayersFormData> = yu
   })
   .defined();
 
-export const clubsFormValidationSchema: yup.ObjectSchema<ClubsFormData> = yup
+export const clubsFormValidationSchema: yup.ObjectSchema<ClubDTO> = yup
   .object({
     name: yup.string().required('Podaj nazwę klubu'),
     division: yup.mixed<Division>().required('Podaj poziom rozgrywkowy klubu'),

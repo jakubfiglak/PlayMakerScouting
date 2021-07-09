@@ -7,7 +7,7 @@ import { FormModal } from '../../components/FormModal';
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
 import { DivisionSelect } from '../../components/selects/DivisionSelect';
 // Types
-import { ClubsFormData } from '../../types/clubs';
+import { ClubDTO } from '../../types/clubs';
 // Utils & data
 import { clubsFormInitialValues } from '../../data/forms/initialValues';
 import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
@@ -15,7 +15,7 @@ import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
 type Props = {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: ClubsFormData) => void;
+  onSubmit: (data: ClubDTO) => void;
 };
 
 export const AddClubModal = ({ onClose, onSubmit, open }: Props) => {

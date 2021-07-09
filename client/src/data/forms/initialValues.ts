@@ -1,7 +1,7 @@
-import { PlayersFormData } from '../../types/players';
-import { ClubsFormData } from '../../types/clubs';
+import { PlayerDTO } from '../../types/players';
+import { ClubDTO } from '../../types/clubs';
 
-export const playersFormInitialValues: PlayersFormData = {
+export const playersFormInitialValues: PlayerDTO = {
   firstName: '',
   lastName: '',
   club: '',
@@ -16,7 +16,7 @@ export const playersFormInitialValues: PlayersFormData = {
   transfermarktProfileURL: '',
 };
 
-export const clubsFormInitialValues: ClubsFormData = {
+export const clubsFormInitialValues: ClubDTO = {
   name: '',
   division: '',
   voivodeship: '',

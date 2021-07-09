@@ -5,7 +5,7 @@ import playersReducer from './playersReducer';
 import {
   State,
   PlayersFilterData,
-  PlayersFormData,
+  PlayerDTO,
   Player,
   GrantAccessArgs,
 } from '../../types/players';
@@ -124,7 +124,7 @@ export const PlayersState: React.FC = ({ children }) => {
   };
 
   // Create new player
-  const addPlayer = async (player: PlayersFormData) => {
+  const addPlayer = async (player: PlayerDTO) => {
     setLoading();
 
     try {
@@ -186,7 +186,7 @@ export const PlayersState: React.FC = ({ children }) => {
   };
 
   // Update player details
-  const editPlayer = async (id: string, data: PlayersFormData) => {
+  const editPlayer = async (id: string, data: PlayerDTO) => {
     setLoading();
 
     try {

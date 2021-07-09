@@ -10,7 +10,7 @@ import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Types
 import { ClubBasicInfo } from '../../types/clubs';
-import { Player, PlayersFormData } from '../../types/players';
+import { Player, PlayerDTO } from '../../types/players';
 // Utils & data
 import { playersFormValidationSchema } from '../../data/forms/validationSchemas';
 import { playersFormInitialValues } from '../../data/forms/initialValues';
@@ -18,7 +18,7 @@ import { playersFormInitialValues } from '../../data/forms/initialValues';
 type Props = {
   clubsData: ClubBasicInfo[];
   current: Player | null;
-  onSubmit: (data: PlayersFormData) => void;
+  onSubmit: (data: PlayerDTO) => void;
   onAddClubClick: () => void;
   onCancelClick: () => void;
 };
@@ -30,7 +30,7 @@ export const PlayersForm = ({
   onAddClubClick,
   onCancelClick,
 }: Props) => {
-  const initialValues: PlayersFormData = current
+  const initialValues: PlayerDTO = current
     ? {
         firstName: current.firstName,
         lastName: current.lastName,

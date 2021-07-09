@@ -7,7 +7,6 @@ import { Alerts } from './components/Alerts';
 import { ErrorPage } from './pages/Error/ErrorPage';
 import theme from './theme/theme';
 import { AppRoutes } from './routes/AppRoutes';
-import { ClubsState } from './context/clubs/ClubsState';
 import { OrdersState } from './context/orders/OrdersState';
 import { PlayersState } from './context/players/PlayersState';
 import { ReportsState } from './context/reports/ReportsState';
@@ -21,17 +20,15 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <Alerts />
-          <ClubsState>
-            <PlayersState>
-              <OrdersState>
-                <ReportsState>
-                  <UsersState>
-                    <AppRoutes />
-                  </UsersState>
-                </ReportsState>
-              </OrdersState>
-            </PlayersState>
-          </ClubsState>
+          <PlayersState>
+            <OrdersState>
+              <ReportsState>
+                <UsersState>
+                  <AppRoutes />
+                </UsersState>
+              </ReportsState>
+            </OrdersState>
+          </PlayersState>
         </ThemeProvider>
         <ReactQueryDevtools />
       </QueryClientProvider>

@@ -9,7 +9,7 @@ import { FootSelect } from '../selects/FootSelect';
 import { ClubsCombo } from '../selects/ClubsCombo';
 // Types
 import { ClubBasicInfo } from '../../types/clubs';
-import { PlayersFormData } from '../../types/players';
+import { PlayerDTO } from '../../types/players';
 // Utils & data
 import { playersFormValidationSchema } from '../../data/forms/validationSchemas';
 import { playersFormInitialValues } from '../../data/forms/initialValues';
@@ -18,7 +18,7 @@ type Props = {
   clubsData: ClubBasicInfo[];
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: PlayersFormData) => void;
+  onSubmit: (data: PlayerDTO) => void;
 };
 
 export const AddPlayerModal = ({

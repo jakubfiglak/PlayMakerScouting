@@ -20,10 +20,10 @@ import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useReports, useSetReportStatus } from '../../hooks/reports';
+import { useClubsList } from '../../hooks/clubs';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
-import { useClubsState } from '../../context/clubs/useClubsState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useSettingsState } from '../../context/settings/useSettingsState';
@@ -60,7 +60,7 @@ export const ReportsPage = () => {
     ordersList,
   } = useOrdersState();
 
-  const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
 
   const { setAlert } = useAlertsState();
 
@@ -98,7 +98,6 @@ export const ReportsPage = () => {
 
   useEffect(() => {
     getPlayersList();
-    getClubsList();
     if (user.role !== 'scout') {
       getOrdersList();
     }
@@ -203,7 +202,7 @@ export const ReportsPage = () => {
           />
         )}
         <AddPlayerModal
-          clubsData={clubsList}
+          clubsData={clubs || []}
           onClose={() => setIsAddPlayerModalOpen(false)}
           onSubmit={addPlayer}
           open={isAddPlayerModalOpen}

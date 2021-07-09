@@ -8,19 +8,19 @@ import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Types
-import { Club, ClubsFormData } from '../../types/clubs';
+import { Club, ClubDTO } from '../../types/clubs';
 // Utils & data
 import { clubsFormInitialValues } from '../../data/forms/initialValues';
 import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
 
 type Props = {
   current: Club | null;
-  onSubmit: (data: ClubsFormData) => void;
+  onSubmit: (data: ClubDTO) => void;
   onCancelClick: () => void;
 };
 
 export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
-  const initialValues: ClubsFormData = current
+  const initialValues: ClubDTO = current
     ? {
         name: current.name,
         voivodeship: current.voivodeship,

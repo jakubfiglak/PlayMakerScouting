@@ -17,9 +17,9 @@ import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useOrders, useRejectOrder } from '../../hooks/orders';
+import { useClubsList } from '../../hooks/clubs';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
-import { useClubsState } from '../../context/clubs/useClubsState';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
@@ -41,7 +41,7 @@ export const OrdersPage = () => {
     addPlayer,
   } = usePlayersState();
 
-  const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
 
   const user = useAuthenticatedUser();
 
@@ -78,7 +78,6 @@ export const OrdersPage = () => {
 
   useEffect(() => {
     getPlayersList();
-    getClubsList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -133,7 +132,7 @@ export const OrdersPage = () => {
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
           />
           <AddPlayerModal
-            clubsData={clubsList}
+            clubsData={clubs || []}
             onClose={() => setIsAddPlayerModalOpen(false)}
             onSubmit={addPlayer}
             open={isAddPlayerModalOpen}
