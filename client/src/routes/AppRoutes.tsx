@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { AdminPage } from '../pages/Admin/AdminPage';
 import { ClubsPage } from '../pages/Clubs/ClubsPage';
+import { ClubPage } from '../pages/Club/ClubPage';
 import { DashboardPage } from '../pages/Dashboard/DashboardPage';
 import { HomePage } from '../pages/Home/HomePage';
 import { LoginPage } from '../pages/Login/LoginPage';
@@ -55,10 +56,17 @@ export const AppRoutes = () => {
           <PlayerPage />
         </ProtectedRoute>
         <ProtectedRoute
+          exact
           path="/clubs"
           allowedRoles={['admin', 'playmaker-scout', 'scout']}
         >
           <ClubsPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/clubs/:id"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <ClubPage />
         </ProtectedRoute>
         <ProtectedRoute
           exact

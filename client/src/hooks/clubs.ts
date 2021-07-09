@@ -85,3 +85,23 @@ export function useClubsList() {
       setAlert({ msg: err.response.data.error, type: 'error' }),
   });
 }
+
+// Get single club
+async function getClub(id: string): Promise<Club> {
+  const { data } = await axios.get<ApiResponse<Club>>(`/api/v1/clubs/${id}`);
+  return data.data;
+}
+
+export function useClub(id: string) {
+  const { setAlert } = useAlertsState();
+  const queryClient = useQueryClient();
+
+  return useQuery(['clubs', id], () => getClub(id), {
+    initialData: () => {
+      const cacheClubs: Club[] = queryClient.getQueryData('clubs') || [];
+      return cacheClubs.find((club) => club.id === id);
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
