@@ -14,6 +14,7 @@ import { Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
+import { useClubs } from '../../hooks/clubs';
 import { useClubsState } from '../../context/clubs/useClubsState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
@@ -48,6 +49,14 @@ export const ClubsPage = () => {
     voivodeship: '',
   });
 
+  const { data: clubs, isLoading } = useClubs({
+    page: page + 1,
+    limit: rowsPerPage,
+    sort: sortBy,
+    order,
+    filters,
+  });
+
   const handleSetCurrent = (club: Club) => {
     setCurrent(club);
     setActiveTab(1);
@@ -69,17 +78,9 @@ export const ClubsPage = () => {
     clearCurrent();
   };
 
-  useEffect(
-    () => {
-      getClubs(page + 1, rowsPerPage, sortBy, order, filters);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [page, rowsPerPage, sortBy, order, filters],
-  );
-
   return (
     <MainTemplate>
-      {loading && <Loader />}
+      {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
           <Tab label="Kluby" id="clubs-0" aria-controls="clubs-0" />
@@ -97,8 +98,8 @@ export const ClubsPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          clubs={clubsData.docs}
-          total={clubsData.totalDocs}
+          clubs={clubs?.docs || []}
+          total={clubs?.totalDocs || 0}
           handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>

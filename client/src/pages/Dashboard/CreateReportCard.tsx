@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    background: theme.palette.success.light,
+    background: theme.palette.secondary.main,
   },
   avatar: {
     backgroundColor: theme.palette.primary.main,

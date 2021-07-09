@@ -15,7 +15,7 @@ const options = {
       path: 'playerCurrentClub',
     },
   ],
-  highestRatedSort: '-avgRating',
+  highestRatedSort: '-percentageRating',
   latestSort: '-createdAt',
   forbiddenUpdates: [
     'player',
