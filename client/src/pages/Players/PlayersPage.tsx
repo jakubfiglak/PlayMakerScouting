@@ -118,7 +118,7 @@ export const PlayersPage = () => {
           handleSort={handleSort}
           players={players?.docs || []}
           total={players?.totalDocs || 0}
-          handleSetCurrent={handleSetCurrent}
+          onEditClick={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">

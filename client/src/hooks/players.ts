@@ -9,7 +9,6 @@ import {
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 
-// Get all players with pagination
 type PaginatedPlayers = PaginatedData<Player>;
 type GetPlayersResposne = ApiResponse<PaginatedPlayers>;
 type GetPlayersArgs = {
@@ -19,7 +18,15 @@ type GetPlayersArgs = {
   order: SortingOrder;
   filters: PlayersFilterData;
 };
+type GetClubsPlayersArgs = {
+  clubId: string;
+  page?: number;
+  limit?: number;
+  sort?: string;
+  order: SortingOrder;
+};
 
+// Get all players with pagination
 async function getPlayers({
   page = 1,
   limit = 20,
@@ -64,6 +71,41 @@ export function usePlayers({
   return useQuery<PaginatedPlayers, ApiError>(
     ['players', { page, limit, sort, order, filters }],
     () => getPlayers({ page, limit, sort, order, filters }),
+    {
+      keepPreviousData: true,
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
+}
+
+// Get all players for a club with pagination
+async function getClubsPlayers({
+  clubId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetClubsPlayersArgs): Promise<PaginatedPlayers> {
+  const orderSign = order === 'desc' ? '-' : '';
+  const playersURI = `/api/v1/clubs/${clubId}/players?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+  const { data } = await axios.get<GetPlayersResposne>(playersURI);
+  return data.data;
+}
+
+export function useClubsPlayers({
+  clubId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetClubsPlayersArgs) {
+  const { setAlert } = useAlertsState();
+
+  return useQuery<PaginatedPlayers, ApiError>(
+    ['players', { clubId }, { page, limit, sort, order }],
+    () => getClubsPlayers({ clubId, page, limit, sort, order }),
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
