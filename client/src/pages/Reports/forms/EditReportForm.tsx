@@ -20,13 +20,13 @@ import { RatingsStep } from './RatingsStep';
 import { ReportBasicInfo } from '../../Report/ReportBasicInfo';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Types
-import { Report, ReportFormData, Skill } from '../../../types/reports';
+import { Report, ReportDTO, Skill } from '../../../types/reports';
 import { validationSchema } from './validationSchema';
 
 type Props = {
   report: Report;
   onReset: () => void;
-  onSubmit: (id: string, data: ReportFormData) => void;
+  onSubmit: (data: ReportDTO) => void;
 };
 
 export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
@@ -59,12 +59,11 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
       <Formik
         initialValues={getInitialStateFromCurrent(report)}
         validationSchema={validationSchema}
-        onSubmit={(data, { resetForm }) => {
-          onSubmit(report.id, data);
-          console.log(data);
+        onSubmit={(data) => {
+          onSubmit(data);
         }}
       >
-        {({ errors, touched, handleReset, values }) => (
+        {({ handleReset }) => (
           <Form>
             <RatingsStep
               ratings={mapSkillsToRatingType(report.skills)}
@@ -111,7 +110,7 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
   );
 };
 
-function getInitialStateFromCurrent(report: Report): ReportFormData {
+function getInitialStateFromCurrent(report: Report): ReportDTO {
   const {
     id,
     docNumber,

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
@@ -29,7 +29,7 @@ import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
-import { useReportsState } from '../../context/reports/useReportsState';
+import { useReport } from '../../hooks/reports';
 import { useSettingsState } from '../../context/settings/useSettingsState';
 // Utils & data
 import { groupSkillsByCategory } from '../../utils/groupSkillsByCategory';
@@ -47,9 +47,9 @@ export const ReportPage = () => {
 
   const classes = useStyles({ background: defaultReportBackgroundImageUrl });
 
-  const { loading, getReport, reportData, setCurrent } = useReportsState();
-
   const { id } = params;
+
+  const { data: report, isLoading } = useReport(id);
 
   const handlePrint = useReactToPrint({
     content: () => ref.current,
@@ -57,15 +57,10 @@ export const ReportPage = () => {
     documentTitle: `PlaymakerReport_${id}`,
   });
 
-  useEffect(() => {
-    getReport(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
   return (
     <MainTemplate>
-      {loading && <Loader />}
-      {reportData && (
+      {isLoading && <Loader />}
+      {report && (
         <>
           <div className={classes.headerContainer}>
             <Button
@@ -77,9 +72,9 @@ export const ReportPage = () => {
             >
               Wróć do listy raportów
             </Button>
-            <PageHeading title={`Raport nr ${reportData.docNumber}`} />
+            <PageHeading title={`Raport nr ${report.docNumber}`} />
             <div>
-              Status: <StatusChip status={reportData.status} />
+              Status: <StatusChip status={report.status} />
             </div>
             <div className={classes.buttonsContainer}>
               <Button
@@ -91,13 +86,15 @@ export const ReportPage = () => {
                 Drukuj
               </Button>
               <Button
-                to={{ pathname: '/reports', state: { setActiveTab: 1 } }}
+                to={{
+                  pathname: '/reports',
+                  state: { activeTab: 1, report },
+                }}
                 component={RouterLink}
                 variant="contained"
                 color="primary"
-                onClick={() => setCurrent(reportData)}
                 startIcon={<EditIcon />}
-                disabled={reportData.status === 'closed'}
+                disabled={report.status === 'closed'}
               >
                 Edytuj
               </Button>
@@ -106,14 +103,14 @@ export const ReportPage = () => {
           <Card className={classes.card}>
             <CardContent>
               <ReportBasicInfo
-                player={reportData.player}
-                match={reportData.match}
-                scout={reportData.scout}
-                order={reportData.order}
-                playerCurrentClub={reportData.playerCurrentClub}
-                positionPlayed={reportData.positionPlayed}
-                shirtNo={reportData.shirtNo}
-                createdAt={reportData.createdAt}
+                player={report.player}
+                match={report.match}
+                scout={report.scout}
+                order={report.order}
+                playerCurrentClub={report.playerCurrentClub}
+                positionPlayed={report.positionPlayed}
+                shirtNo={report.shirtNo}
+                createdAt={report.createdAt}
               />
             </CardContent>
           </Card>
@@ -127,21 +124,21 @@ export const ReportPage = () => {
             </AccordionSummary>
             <AccordionDetails>
               <ReportMatchStats
-                minutesPlayed={reportData.minutesPlayed}
-                assists={reportData.assists}
-                goals={reportData.goals}
-                yellowCards={reportData.yellowCards}
-                redCards={reportData.redCards}
+                minutesPlayed={report.minutesPlayed}
+                assists={report.assists}
+                goals={report.goals}
+                yellowCards={report.yellowCards}
+                redCards={report.redCards}
               />
             </AccordionDetails>
           </Accordion>
-          {Object.entries(groupSkillsByCategory(reportData.skills)).map(
+          {Object.entries(groupSkillsByCategory(report.skills)).map(
             ([key, value]) => (
               <SkillsAccordion
                 key={key}
                 category={key as SkillsCategories}
                 skills={value || []}
-                maxRatingScore={reportData.maxRatingScore}
+                maxRatingScore={report.maxRatingScore}
               />
             ),
           )}
@@ -155,18 +152,18 @@ export const ReportPage = () => {
             </AccordionSummary>
             <AccordionDetails className={classes.accordionDetails}>
               <ReportSummary
-                summary={reportData.summary}
-                finalRating={reportData.finalRating}
-                avgRating={reportData.avgRating}
-                skills={reportData.skills}
-                maxRatingScore={reportData.maxRatingScore}
-                percentageRating={reportData.percentageRating}
+                summary={report.summary}
+                finalRating={report.finalRating}
+                avgRating={report.avgRating}
+                skills={report.skills}
+                maxRatingScore={report.maxRatingScore}
+                percentageRating={report.percentageRating}
               />
             </AccordionDetails>
           </Accordion>
           <div className={classes.print}>
             <div ref={ref}>
-              <PrinteableReport report={reportData} />
+              <PrinteableReport report={report} />
             </div>
           </div>
         </>

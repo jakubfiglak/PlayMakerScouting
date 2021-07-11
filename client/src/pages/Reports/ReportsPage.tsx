@@ -13,34 +13,36 @@ import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Types
-import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
+import { Report, ReportDTO, ReportsFilterData } from '../../types/reports';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useReports } from '../../hooks/reports';
+import {
+  useReports,
+  useCreateReport,
+  useUpdateReport,
+} from '../../hooks/reports';
 import { useClubsList } from '../../hooks/clubs';
 import { usePlayersList, useCreatePlayer } from '../../hooks/players';
 import { useOrdersList } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
-import { useReportsState } from '../../context/reports/useReportsState';
+
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
-type LocationState = { setActiveTab: number };
+type LocationState = { activeTab: number; report: Report };
 
 export const ReportsPage = () => {
   const { state } = useLocation<LocationState | null>();
+  const [currentReport, setCurrentReport] = useState<Report | null>(null);
 
   const {
-    loading,
-    getReports,
-    reportsData,
-    setCurrent,
-    addReport,
-    editReport,
-    clearCurrent,
-    current,
-  } = useReportsState();
-
+    mutate: createReport,
+    isLoading: createReportLoading,
+  } = useCreateReport();
+  const {
+    mutate: updateReport,
+    isLoading: updateReportLoading,
+  } = useUpdateReport(currentReport?.id || '');
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { data: players, isLoading: playersLoading } = usePlayersList();
   const { data: orders, isLoading: ordersLoading } = useOrdersList();
@@ -80,35 +82,40 @@ export const ReportsPage = () => {
   });
 
   useEffect(() => {
-    if (state?.setActiveTab) {
-      setActiveTab(state.setActiveTab);
+    if (state) {
+      setActiveTab(state.activeTab);
+      setCurrentReport(state.report);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state?.setActiveTab]);
+  }, [setActiveTab, state]);
 
   const handleSetCurrent = (report: Report) => {
-    setCurrent(report);
+    setCurrentReport(report);
     setActiveTab(1);
   };
 
-  const onAddReport = (data: ReportFormData) => {
-    addReport(data);
+  const onAddReport = (data: ReportDTO) => {
+    createReport(data);
     setActiveTab(0);
   };
 
   const handleEditFormReset = () => {
     setActiveTab(0);
     setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
-    clearCurrent();
+    setCurrentReport(null);
   };
+
+  const isLoading =
+    clubsLoading ||
+    ordersLoading ||
+    createReportLoading ||
+    updateReportLoading ||
+    playersLoading ||
+    createPlayerLoading ||
+    reportsLoading;
 
   return (
     <MainTemplate>
-      {(loading ||
-        playersLoading ||
-        clubsLoading ||
-        ordersLoading ||
-        reportsLoading) && <Loader />}
+      {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
           <Tab label="Raporty" id="reports-0" aria-controls="reports-0" />
@@ -137,16 +144,16 @@ export const ReportsPage = () => {
       <TabPanel value={activeTab} index={1} title="reports">
         <PageHeading
           title={
-            current
-              ? `Edycja raportu nr ${current.docNumber}`
+            currentReport
+              ? `Edycja raportu nr ${currentReport.docNumber}`
               : 'Tworzenie nowego raportu'
           }
         />
-        {current ? (
+        {currentReport ? (
           <EditReportForm
-            report={current}
+            report={currentReport}
             onReset={handleEditFormReset}
-            onSubmit={editReport}
+            onSubmit={updateReport}
           />
         ) : (
           <NewReportForm

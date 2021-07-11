@@ -4,7 +4,6 @@ import { Formik, Form, Field } from 'formik';
 import { TextField, FormControl } from '@material-ui/core';
 // Custom components
 import { RoleSelect } from '../../components/selects/RoleSelect';
-import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
 import { FormContainer } from '../../components/FormContainer';

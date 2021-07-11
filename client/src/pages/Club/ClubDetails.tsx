@@ -14,8 +14,6 @@ import {
 import { Security as ClubsIcon } from '@material-ui/icons';
 // Types
 import { Club } from '../../types/clubs';
-// Utils & data
-import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   club: Club;

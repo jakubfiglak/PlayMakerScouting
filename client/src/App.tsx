@@ -7,7 +7,6 @@ import { Alerts } from './components/Alerts';
 import { ErrorPage } from './pages/Error/ErrorPage';
 import theme from './theme/theme';
 import { AppRoutes } from './routes/AppRoutes';
-import { ReportsState } from './context/reports/ReportsState';
 
 const queryClient = new QueryClient();
 
@@ -17,9 +16,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <Alerts />
-          <ReportsState>
-            <AppRoutes />
-          </ReportsState>
+          <AppRoutes />
         </ThemeProvider>
         <ReactQueryDevtools />
       </QueryClientProvider>
