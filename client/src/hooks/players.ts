@@ -126,10 +126,14 @@ async function getPlayersList(): Promise<PlayerBasicInfo[]> {
 export function usePlayersList() {
   const { setAlert } = useAlertsState();
 
-  return useQuery<PlayerBasicInfo[], ApiError>('playersList', getPlayersList, {
-    onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
-  });
+  return useQuery<PlayerBasicInfo[], ApiError>(
+    ['players', 'list'],
+    getPlayersList,
+    {
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
 }
 
 // Get single player

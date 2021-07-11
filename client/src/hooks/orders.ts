@@ -76,7 +76,7 @@ export function useOrders({
 // Get orders list
 async function getOrdersList(): Promise<OrderBasicInfo[]> {
   const { data } = await axios.get<ApiResponse<OrderBasicInfo[]>>(
-    '/api/v1/clubs/list',
+    '/api/v1/orders/mylist',
   );
   return data.data;
 }

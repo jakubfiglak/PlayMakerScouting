@@ -8,7 +8,6 @@ import { ErrorPage } from './pages/Error/ErrorPage';
 import theme from './theme/theme';
 import { AppRoutes } from './routes/AppRoutes';
 import { ReportsState } from './context/reports/ReportsState';
-import { UsersState } from './context/users/UsersState';
 
 const queryClient = new QueryClient();
 
@@ -19,9 +18,7 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <Alerts />
           <ReportsState>
-            <UsersState>
-              <AppRoutes />
-            </UsersState>
+            <AppRoutes />
           </ReportsState>
         </ThemeProvider>
         <ReactQueryDevtools />
