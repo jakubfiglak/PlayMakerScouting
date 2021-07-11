@@ -20,9 +20,9 @@ import { useTable } from '../../hooks/useTable';
 import { useReports, useSetReportStatus } from '../../hooks/reports';
 import { useClubsList } from '../../hooks/clubs';
 import { usePlayersList, useCreatePlayer } from '../../hooks/players';
+import { useOrdersList } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
-import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 type LocationState = { setActiveTab: number };
@@ -41,14 +41,9 @@ export const ReportsPage = () => {
     current,
   } = useReportsState();
 
-  const {
-    loading: ordersLoading,
-    getOrdersList,
-    ordersList,
-  } = useOrdersState();
-
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { data: players, isLoading: playersLoading } = usePlayersList();
+  const { data: orders, isLoading: ordersLoading } = useOrdersList();
   const {
     mutate: createPlayer,
     isLoading: createPlayerLoading,
@@ -87,13 +82,6 @@ export const ReportsPage = () => {
     mutate: setReportStatus,
     isLoading: setStatusLoading,
   } = useSetReportStatus();
-
-  useEffect(() => {
-    if (user.role !== 'scout') {
-      getOrdersList();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (state?.setActiveTab) {
@@ -170,7 +158,7 @@ export const ReportsPage = () => {
           <NewReportForm
             isOrderOptionDisabled={user.role === 'scout'}
             playersList={players || []}
-            ordersList={ordersList}
+            ordersList={orders || []}
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
             onSubmit={onAddReport}
           />

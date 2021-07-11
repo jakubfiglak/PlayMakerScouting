@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // MUI components
 import { Button, makeStyles, Theme } from '@material-ui/core';
@@ -9,7 +9,7 @@ import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
-import { useOrdersState } from '../../context/orders/useOrdersState';
+import { useOrder, useAcceptOrder, useCloseOrder } from '../../hooks/orders';
 
 type ParamTypes = {
   id: string;
@@ -19,24 +19,21 @@ export const OrderPage = () => {
   const classes = useStyles();
   const params = useParams<ParamTypes>();
   const user = useAuthenticatedUser();
-  const {
-    loading,
-    orderData,
-    getOrder,
-    acceptOrder,
-    closeOrder,
-  } = useOrdersState();
 
   const { id } = params;
 
-  useEffect(() => {
-    getOrder(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  const { data: order, isLoading: orderLoading } = useOrder(id);
+  const {
+    mutate: acceptOrder,
+    isLoading: acceptOrderLoading,
+  } = useAcceptOrder();
+  const { mutate: closeOrder, isLoading: closeOrderLoading } = useCloseOrder();
+
+  const isLoading = orderLoading || acceptOrderLoading || closeOrderLoading;
 
   return (
     <MainTemplate>
-      {loading && <Loader />}
+      {isLoading && <Loader />}
       <div className={classes.container}>
         <Button
           to="/orders"
@@ -47,11 +44,11 @@ export const OrderPage = () => {
         >
           Wróć do listy zleceń
         </Button>
-        <PageHeading title={`Zlecenie obserwacji nr ${orderData?.docNumber}`} />
+        <PageHeading title={`Zlecenie obserwacji nr ${order?.docNumber}`} />
       </div>
-      {orderData && (
+      {order && (
         <OrderDetails
-          order={orderData}
+          order={order}
           acceptOrder={acceptOrder}
           closeOrder={closeOrder}
           areAdminOptionsEnabled={user.role === 'admin'}

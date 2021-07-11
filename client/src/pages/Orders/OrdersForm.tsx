@@ -9,11 +9,11 @@ import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Types
 import { PlayerBasicInfo } from '../../types/players';
-import { OrderFormData } from '../../types/orders';
+import { OrderDTO } from '../../types/orders';
 
 type Props = {
   playersData: PlayerBasicInfo[];
-  onSubmit: (data: OrderFormData) => void;
+  onSubmit: (data: OrderDTO) => void;
   onAddPlayerClick: () => void;
 };
 
@@ -67,7 +67,7 @@ export const OrdersForm = ({
   );
 };
 
-const validationSchema: yup.ObjectSchema<OrderFormData> = yup
+const validationSchema: yup.ObjectSchema<OrderDTO> = yup
   .object({
     player: yup.string().required('Wybierz zawodnika'),
     notes: yup.string().notRequired(),
