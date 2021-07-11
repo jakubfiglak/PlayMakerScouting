@@ -19,9 +19,9 @@ import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useReports, useSetReportStatus } from '../../hooks/reports';
 import { useClubsList } from '../../hooks/clubs';
+import { usePlayersList, useCreatePlayer } from '../../hooks/players';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
-import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
@@ -42,19 +42,17 @@ export const ReportsPage = () => {
   } = useReportsState();
 
   const {
-    loading: playersLoading,
-    getPlayersList,
-    playersList,
-    addPlayer,
-  } = usePlayersState();
-
-  const {
     loading: ordersLoading,
     getOrdersList,
     ordersList,
   } = useOrdersState();
 
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
+  const { data: players, isLoading: playersLoading } = usePlayersList();
+  const {
+    mutate: createPlayer,
+    isLoading: createPlayerLoading,
+  } = useCreatePlayer();
 
   const { setAlert } = useAlertsState();
 
@@ -91,7 +89,6 @@ export const ReportsPage = () => {
   } = useSetReportStatus();
 
   useEffect(() => {
-    getPlayersList();
     if (user.role !== 'scout') {
       getOrdersList();
     }
@@ -137,7 +134,10 @@ export const ReportsPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="reports">
         <PageHeading title="Baza raportów" />
-        <ReportsFilterForm playersData={playersList} setFilters={setFilters} />
+        <ReportsFilterForm
+          playersData={players || []}
+          setFilters={setFilters}
+        />
         <ReportsTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -169,7 +169,7 @@ export const ReportsPage = () => {
         ) : (
           <NewReportForm
             isOrderOptionDisabled={user.role === 'scout'}
-            playersList={playersList}
+            playersList={players || []}
             ordersList={ordersList}
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
             onSubmit={onAddReport}
@@ -178,7 +178,7 @@ export const ReportsPage = () => {
         <AddPlayerModal
           clubsData={clubs || []}
           onClose={() => setIsAddPlayerModalOpen(false)}
-          onSubmit={addPlayer}
+          onSubmit={createPlayer}
           open={isAddPlayerModalOpen}
         />
       </TabPanel>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // MUI components
 import {
   Avatar,
@@ -62,7 +63,9 @@ export const PlayerDetails = ({ player }: Props) => {
           <Grid item xs={12}>
             <Typography>
               <strong>Klub: </strong>
-              {club.name} ({getLabel(club.division)})
+              <Link component={RouterLink} to={`/clubs/${club.id}`}>
+                {club.name} ({getLabel(club.division)})
+              </Link>
             </Typography>
           </Grid>
           <Grid item xs={12}>

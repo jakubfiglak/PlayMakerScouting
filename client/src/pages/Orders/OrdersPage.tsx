@@ -15,10 +15,10 @@ import { OrderFormData, OrdersFilterData } from '../../types/orders';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
+import { usePlayersList, useCreatePlayer } from '../../hooks/players';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useOrders, useRejectOrder } from '../../hooks/orders';
 import { useClubsList } from '../../hooks/clubs';
-import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
@@ -34,14 +34,12 @@ export const OrdersPage = () => {
     deleteOrder,
   } = useOrdersState();
 
-  const {
-    loading: playersLoading,
-    getPlayersList,
-    playersList,
-    addPlayer,
-  } = usePlayersState();
-
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
+  const { data: players, isLoading: playersLoading } = usePlayersList();
+  const {
+    mutate: createPlayer,
+    isLoading: createPlayerLoading,
+  } = useCreatePlayer();
 
   const user = useAuthenticatedUser();
 
@@ -76,11 +74,6 @@ export const OrdersPage = () => {
 
   const { mutate: rejectOrder } = useRejectOrder();
 
-  useEffect(() => {
-    getPlayersList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const isAdmin = user.role === 'admin';
 
   const handleAddOrder = (data: OrderFormData) => {
@@ -90,7 +83,10 @@ export const OrdersPage = () => {
 
   return (
     <MainTemplate>
-      {(loading || playersLoading || clubsLoading) && <Loader />}
+      {(ordersLoading ||
+        playersLoading ||
+        clubsLoading ||
+        createPlayerLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
           <Tab label="Zlecenia" id="orders-0" aria-controls="orders-0" />
@@ -105,7 +101,7 @@ export const OrdersPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="orders">
         <PageHeading title="Baza zleceń" />
-        <OrdersFilterForm playersData={playersList} setFilters={setFilters} />
+        <OrdersFilterForm playersData={players || []} setFilters={setFilters} />
         <OrdersTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -127,14 +123,14 @@ export const OrdersPage = () => {
         <TabPanel value={activeTab} index={1} title="orders-form">
           <PageHeading title="Tworzenie nowego zlecenia" />
           <OrdersForm
-            playersData={playersList}
+            playersData={players || []}
             onSubmit={handleAddOrder}
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
           />
           <AddPlayerModal
             clubsData={clubs || []}
             onClose={() => setIsAddPlayerModalOpen(false)}
-            onSubmit={addPlayer}
+            onSubmit={createPlayer}
             open={isAddPlayerModalOpen}
           />
         </TabPanel>
