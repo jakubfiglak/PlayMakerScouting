@@ -18,8 +18,6 @@ import {
   Add as AddIcon,
 } from '@material-ui/icons';
 // Custom components
-import { PlayerAccessForm } from './PlayerAccessForm';
-import { ClubAccessForm } from './ClubAccessForm';
 import { PageHeading } from '../../components/PageHeading';
 import { GrantAccessForm } from './GrantAccessForm';
 

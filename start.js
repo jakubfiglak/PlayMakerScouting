@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const Sentry = require('@sentry/node');
+const Tracing = require('@sentry/tracing');
 const errorHandler = require('./middleware/error');
 // Route files
 const auth = require('./routes/auth');
@@ -22,6 +24,15 @@ const reportBackgroundImages = require('./routes/reportBackgroundImages');
 const startServer = (port = process.env.PORT || 5000) => {
   const app = express();
 
+  Sentry.init({
+    dsn: process.env.SENTRY,
+    integrations: [
+      new Sentry.Integrations.Http({ tracing: true }),
+      new Tracing.Integrations.Express({ app }),
+    ],
+    tracesSampleRate: 1,
+  });
+
   // Body parser
   app.use(express.json());
 
@@ -35,6 +46,10 @@ const startServer = (port = process.env.PORT || 5000) => {
 
   // Prevent XSS attacks
   app.use(xss());
+
+  // Sentry
+  app.use(Sentry.Handlers.requestHandler());
+  app.use(Sentry.Handlers.tracingHandler());
 
   // Mount routers
   app.use('/api/v1/auth', auth);
@@ -59,6 +74,8 @@ const startServer = (port = process.env.PORT || 5000) => {
       res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     );
   }
+
+  app.use(Sentry.Handlers.errorHandler());
 
   app.use(errorHandler);
   const server = app.listen(
