@@ -25,9 +25,9 @@ import { formatDate } from '../../utils/dates';
 
 type Props = {
   reports: Report[];
-  handleEditClick: (report: Report) => void;
-  handlePrintClick: (report: Report) => void;
-  handleSetStatusClick: ({ id, status }: SetReportStatusArgs) => void;
+  onEditClick?: (report: Report) => void;
+  onPrintClick: (report: Report) => void;
+  onSetStatusClick: ({ id, status }: SetReportStatusArgs) => void;
 } & CommonTableProps;
 
 const headCells = [
@@ -51,9 +51,9 @@ export const ReportsTable = ({
   handleSort,
   total,
   reports,
-  handleEditClick,
-  handlePrintClick,
-  handleSetStatusClick,
+  onEditClick,
+  onPrintClick,
+  onSetStatusClick,
 }: Props) => {
   const classes = useStyles();
 
@@ -93,19 +93,21 @@ export const ReportsTable = ({
                     </IconButton>
                   </Link>
                 </Tooltip>
-                <Tooltip title="Edytuj">
-                  <IconButton
-                    aria-label="edit report"
-                    onClick={() => handleEditClick(report)}
-                    disabled={status === 'closed'}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
+                {onEditClick ? (
+                  <Tooltip title="Edytuj">
+                    <IconButton
+                      aria-label="edit report"
+                      onClick={() => onEditClick(report)}
+                      disabled={status === 'closed'}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : null}
                 <Tooltip title="Drukuj">
                   <IconButton
                     aria-label="print report"
-                    onClick={() => handlePrintClick(report)}
+                    onClick={() => onPrintClick(report)}
                   >
                     <PrintIcon />
                   </IconButton>
@@ -114,9 +116,7 @@ export const ReportsTable = ({
                   <Tooltip title="Zamknij raport">
                     <IconButton
                       aria-label="close report"
-                      onClick={() =>
-                        handleSetStatusClick({ id, status: 'closed' })
-                      }
+                      onClick={() => onSetStatusClick({ id, status: 'closed' })}
                     >
                       <CloseIcon />
                     </IconButton>
@@ -126,7 +126,7 @@ export const ReportsTable = ({
                     <IconButton
                       aria-label="open report"
                       onClick={() =>
-                        handleSetStatusClick({ id, status: 'in-prep' })
+                        onSetStatusClick({ id, status: 'in-prep' })
                       }
                     >
                       <OpenIcon />

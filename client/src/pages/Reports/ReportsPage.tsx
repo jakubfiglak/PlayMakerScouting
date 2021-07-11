@@ -166,9 +166,9 @@ export const ReportsPage = () => {
           handleSort={handleSort}
           total={reports?.totalDocs || 0}
           reports={reports?.docs || []}
-          handleEditClick={handleSetCurrent}
-          handlePrintClick={handlePrintClick}
-          handleSetStatusClick={setReportStatus}
+          onEditClick={handleSetCurrent}
+          onPrintClick={handlePrintClick}
+          onSetStatusClick={setReportStatus}
         />
         {current && (
           <div className={classes.print}>

@@ -6,24 +6,17 @@ import {
   ApiResponse,
   PaginatedData,
   SortingOrder,
+  GetPaginatedDataArgs,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 
 type PaginatedPlayers = PaginatedData<Player>;
 type GetPlayersResposne = ApiResponse<PaginatedPlayers>;
-type GetPlayersArgs = {
-  page?: number;
-  limit?: number;
-  sort?: string;
-  order: SortingOrder;
+type GetPlayersArgs = GetPaginatedDataArgs & {
   filters: PlayersFilterData;
 };
-type GetClubsPlayersArgs = {
+type GetClubsPlayersArgs = GetPaginatedDataArgs & {
   clubId: string;
-  page?: number;
-  limit?: number;
-  sort?: string;
-  order: SortingOrder;
 };
 
 // Get all players with pagination

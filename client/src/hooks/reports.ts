@@ -10,21 +10,18 @@ import {
   ApiError,
   ApiResponse,
   PaginatedData,
-  SortingOrder,
+  GetPaginatedDataArgs,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 
-// Get all reports with pagination
 type PaginatedReports = PaginatedData<Report>;
 type GetReportsResponse = ApiResponse<PaginatedReports>;
-type GetReportsArgs = {
-  page?: number;
-  limit?: number;
-  sort?: string;
-  order: SortingOrder;
+type GetReportsArgs = GetPaginatedDataArgs & {
   filters: ReportsFilterData;
 };
+type GetPlayersReportsArgs = GetPaginatedDataArgs & { playerId: string };
 
+// Get all reports with pagination
 async function getReports({
   page = 1,
   limit = 20,
@@ -57,6 +54,41 @@ export function useReports({
   return useQuery<PaginatedReports, ApiError>(
     ['reports', { page, limit, sort, order, filters }],
     () => getReports({ page, limit, sort, order, filters }),
+    {
+      keepPreviousData: true,
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
+}
+
+// Get all reports for a player with pagination
+async function getPlayersReports({
+  playerId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetPlayersReportsArgs): Promise<PaginatedReports> {
+  const orderSign = order === 'desc' ? '-' : '';
+  const reportsURI = `/api/v1/players/${playerId}/reports?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+  const { data } = await axios.get<GetReportsResponse>(reportsURI);
+  return data.data;
+}
+
+export function usePlayersReports({
+  playerId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetPlayersReportsArgs) {
+  const { setAlert } = useAlertsState();
+
+  return useQuery<PaginatedReports, ApiError>(
+    ['reports', { playerId }, { page, limit, sort, order }],
+    () => getPlayersReports({ playerId, page, limit, sort, order }),
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
