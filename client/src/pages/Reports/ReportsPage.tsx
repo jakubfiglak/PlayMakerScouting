@@ -98,6 +98,12 @@ export const ReportsPage = () => {
     setActiveTab(0);
   };
 
+  function onUpdateReport(data: ReportDTO) {
+    updateReport(data);
+    setActiveTab(0);
+    setCurrentReport(null);
+  }
+
   const handleEditFormReset = () => {
     setActiveTab(0);
     setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
@@ -153,7 +159,7 @@ export const ReportsPage = () => {
           <EditReportForm
             report={currentReport}
             onReset={handleEditFormReset}
-            onSubmit={updateReport}
+            onSubmit={onUpdateReport}
           />
         ) : (
           <NewReportForm
