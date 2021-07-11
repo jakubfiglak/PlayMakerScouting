@@ -59,7 +59,7 @@ export const PlayerPage = () => {
 
   return (
     <MainTemplate>
-      {(loading || reportsLoading) && <Loader />}
+      {(loading || reportsLoading || setStatusLoading) && <Loader />}
       <div className={classes.container}>
         <Button
           to="/players"
@@ -79,7 +79,7 @@ export const PlayerPage = () => {
         align="center"
         className={classes.title}
       >
-        Zawodnicy
+        Raporty
       </Typography>
       <ReportsTable
         page={page}
@@ -91,7 +91,7 @@ export const PlayerPage = () => {
         handleSort={handleSort}
         reports={reports?.docs || []}
         total={reports?.totalDocs || 0}
-        onPrintClick={handlePrintClick}
+        // onPrintClick={handlePrintClick}
         onSetStatusClick={setReportStatus}
       />
     </MainTemplate>

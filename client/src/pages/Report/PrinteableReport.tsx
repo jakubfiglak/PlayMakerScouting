@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import clsx from 'clsx';
 // MUI components
 import {
@@ -170,15 +170,14 @@ export const PrinteableReport = ({ report }: Props) => {
       </section>
       <Divider className={classes.divider} />
       {Object.entries(groupSkillsByCategory(skills)).map(([key, value]) => (
-        <>
+        <Fragment key={key}>
           <SkillsPrintSection
             category={key as SkillsCategories}
-            key={key}
             maxRatingScore={maxRatingScore}
             skills={value || []}
           />
           <Divider className={classes.divider} />
-        </>
+        </Fragment>
       ))}
       <section>
         <Typography variant="h6" align="center" className={classes.heading}>

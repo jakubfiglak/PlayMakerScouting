@@ -1,14 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useReactToPrint } from 'react-to-print';
 // MUI components
-import { AppBar, Tabs, Tab, makeStyles, Theme } from '@material-ui/core';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { ReportsTable } from './ReportsTable';
 import { ReportsFilterForm } from './ReportsFilterForm';
 import { NewReportForm } from './forms/NewReportForm';
 import { EditReportForm } from './forms/EditReportForm';
-import { PrinteableReport } from '../Report/PrinteableReport';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
@@ -26,14 +24,10 @@ import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
-import { useSettingsState } from '../../context/settings/useSettingsState';
 
 type LocationState = { setActiveTab: number };
 
 export const ReportsPage = () => {
-  const { defaultReportBackgroundImageUrl } = useSettingsState();
-  const classes = useStyles({ background: defaultReportBackgroundImageUrl });
-  const ref = useRef<HTMLDivElement | null>(null);
   const { state } = useLocation<LocationState | null>();
 
   const {
@@ -116,18 +110,6 @@ export const ReportsPage = () => {
     setActiveTab(1);
   };
 
-  const handlePrint = useReactToPrint({
-    content: () => ref.current,
-    documentTitle: 'Playmaker-Report',
-    bodyClass: classes.pageBody,
-    onAfterPrint: () => clearCurrent(),
-  }) as () => void;
-
-  const handlePrintClick = (report: Report) => {
-    setCurrent(report);
-    setTimeout(() => handlePrint(), 100);
-  };
-
   const onAddReport = (data: ReportFormData) => {
     addReport(data);
     setActiveTab(0);
@@ -167,16 +149,8 @@ export const ReportsPage = () => {
           total={reports?.totalDocs || 0}
           reports={reports?.docs || []}
           onEditClick={handleSetCurrent}
-          onPrintClick={handlePrintClick}
           onSetStatusClick={setReportStatus}
         />
-        {current && (
-          <div className={classes.print}>
-            <div ref={ref}>
-              <PrinteableReport report={current} />
-            </div>
-          </div>
-        )}
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
         <PageHeading
@@ -211,19 +185,3 @@ export const ReportsPage = () => {
     </MainTemplate>
   );
 };
-
-type StyleProps = {
-  background: string;
-};
-
-const useStyles = makeStyles<Theme, StyleProps>(() => ({
-  print: {
-    overflow: 'hidden',
-    height: 0,
-  },
-  pageBody: (props) => ({
-    backgroundImage: `url(${props.background})`,
-    backgroundSize: 'contain',
-    backgroundRepeat: 'no-repeat',
-  }),
-}));

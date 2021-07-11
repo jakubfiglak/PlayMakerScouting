@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
 // MUI components
-import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
+import {
+  IconButton,
+  Tooltip,
+  Link,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
 // MUI icons
 import {
   Search as SearchIcon,
@@ -13,9 +20,13 @@ import {
 // Custom components
 import { FinalRatingChip } from './FinalRatingChip';
 import { StatusChip } from './StatusChip';
+import { PrinteableReport } from '../Report/PrinteableReport';
 import { Table } from '../../components/table/Table';
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
+// Hooks
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+import { useSettingsState } from '../../context/settings/useSettingsState';
 // Types
 import { Report } from '../../types/reports';
 import { CommonTableProps } from '../../types/common';
@@ -26,7 +37,6 @@ import { formatDate } from '../../utils/dates';
 type Props = {
   reports: Report[];
   onEditClick?: (report: Report) => void;
-  onPrintClick: (report: Report) => void;
   onSetStatusClick: ({ id, status }: SetReportStatusArgs) => void;
 } & CommonTableProps;
 
@@ -52,10 +62,28 @@ export const ReportsTable = ({
   total,
   reports,
   onEditClick,
-  onPrintClick,
   onSetStatusClick,
 }: Props) => {
-  const classes = useStyles();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isPrintActive, setPrintActive] = useState(false);
+  const { defaultReportBackgroundImageUrl } = useSettingsState();
+
+  const classes = useStyles({ background: defaultReportBackgroundImageUrl });
+  const user = useAuthenticatedUser();
+
+  const isAdmin = user.role === 'admin';
+
+  const handlePrint = useReactToPrint({
+    content: () => ref.current,
+    bodyClass: classes.pageBody,
+    documentTitle: 'PlaymakerReport',
+    onAfterPrint: () => setPrintActive(false),
+  }) as () => void;
+
+  function onPrintClick() {
+    setPrintActive(true);
+    setTimeout(() => handlePrint(), 100);
+  }
 
   return (
     <Table
@@ -105,10 +133,7 @@ export const ReportsTable = ({
                   </Tooltip>
                 ) : null}
                 <Tooltip title="Drukuj">
-                  <IconButton
-                    aria-label="print report"
-                    onClick={() => onPrintClick(report)}
-                  >
+                  <IconButton aria-label="print report" onClick={onPrintClick}>
                     <PrintIcon />
                   </IconButton>
                 </Tooltip>
@@ -135,9 +160,20 @@ export const ReportsTable = ({
                 )}
               </div>
             </StyledTableCell>
-            <StyledTableCell>{`${player.firstName} ${player.lastName}`}</StyledTableCell>
             <StyledTableCell>
-              {`${scout.firstName} ${scout.lastName}`}
+              <Link
+                component={RouterLink}
+                to={`/players/${player.id}`}
+              >{`${player.firstName} ${player.lastName}`}</Link>
+            </StyledTableCell>
+            <StyledTableCell>
+              {isAdmin ? (
+                <Link component={RouterLink} to={`/users/${scout.id}`}>
+                  {`${scout.firstName} ${scout.lastName}`}
+                </Link>
+              ) : (
+                <>{`${scout.firstName} ${scout.lastName}`}</>
+              )}
             </StyledTableCell>
             <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
             <StyledTableCell>
@@ -151,6 +187,15 @@ export const ReportsTable = ({
             <StyledTableCell>
               <FinalRatingChip finalRating={finalRating} />
             </StyledTableCell>
+            {isPrintActive ? (
+              <StyledTableCell>
+                <div className={classes.print}>
+                  <div ref={ref}>
+                    <PrinteableReport report={report} />
+                  </div>
+                </div>
+              </StyledTableCell>
+            ) : null}
           </StyledTableRow>
         );
       })}
@@ -158,8 +203,21 @@ export const ReportsTable = ({
   );
 };
 
-const useStyles = makeStyles(() => ({
+type StyleProps = {
+  background: string;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>(() => ({
   buttonsContainer: {
     display: 'flex',
   },
+  print: {
+    overflow: 'hidden',
+    height: 0,
+  },
+  pageBody: (props) => ({
+    backgroundImage: `url(${props.background})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+  }),
 }));
