@@ -1,25 +1,4 @@
 const jwt = require('jsonwebtoken');
-const emailService = require('../email/email.service');
-const User = require('../users/user.model');
-
-async function registerUser({ reqBody, host }) {
-  const { email, confirmationCode } = reqBody;
-
-  const user = await User.create(reqBody);
-
-  const confirmationURL = `http://${host}/confirm/${confirmationCode}`;
-
-  await emailService.sendEmail({
-    to: email,
-    subject: 'Aktywuj swoje konto w aplikacji PlaymakerPro Scouting',
-    text: `Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w link ${confirmationURL}`,
-    html: `<h2>Witaj ${user.firstName}</h2>
-            <p>Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w <a href="${confirmationURL}">link</a></p>
-          `,
-  });
-
-  return user;
-}
 
 async function verifyUser(user) {
   let editedUser = user;
@@ -64,7 +43,6 @@ async function updateDetails({ user, reqBody }) {
 }
 
 module.exports = {
-  registerUser,
   verifyUser,
   login,
   updateDetails,

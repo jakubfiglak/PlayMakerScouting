@@ -5,7 +5,7 @@ import { Loader } from '../../components/Loader';
 // Types
 import { ReportTemplate } from '../../types/reportTemplates';
 // Hooks
-import { useDeleteReportTemplate } from '../../operations/mutations/useDeleteReportTemplate';
+import { useDeleteReportTemplate } from '../../hooks/reportTemplates';
 
 type Props = {
   template: ReportTemplate | null;

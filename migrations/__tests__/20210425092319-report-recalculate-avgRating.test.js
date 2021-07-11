@@ -17,7 +17,7 @@ beforeEach(async () => {
   await testDB.collection('reports').deleteMany();
 });
 
-test('up function should add status field', async () => {
+test('up function should calculate avgRating', async () => {
   const player1 = buildPlayer();
   await testDB.collection('players').insertOne(player1);
 

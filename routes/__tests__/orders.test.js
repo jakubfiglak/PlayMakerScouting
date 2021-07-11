@@ -3,10 +3,15 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
-const { buildClub, buildPlayer, buildOrder } = require('../../test/utils');
-const { insertClubs, insertTestUser, insertPlayers, insertOrders } = require('../../test/db-utils');
-const playersService = require('../../modules/players/players.service');
-const clubsService = require('../../modules/clubs/clubs.service');
+const { buildClub, buildPlayer, buildOrder, buildAccessControlList } = require('../../test/utils');
+const {
+  insertClubs,
+  insertTestUser,
+  insertPlayers,
+  insertOrders,
+  insertAccessControlLists,
+} = require('../../test/db-utils');
+const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
 
 let api = axios.create();
 let server;
@@ -211,9 +216,14 @@ describe('GET /api/v1/orders/:id', () => {
 describe('POST /api/v1/orders/:id/accept', () => {
   it('should return 400 error if the user is trying to accept an order with the status other than "open"', async () => {
     const player = buildPlayer();
-    await insertPlayers([player]);
     const order = buildOrder({ player: player._id, status: 'accepted' });
-    await insertOrders([order]);
+    const userAcl = buildAccessControlList({ user: testUser._id });
+
+    await Promise.all([
+      insertPlayers([player]),
+      insertOrders([order]),
+      insertAccessControlLists([userAcl]),
+    ]);
 
     const { response } = await api.post(`orders/${order._id}/accept`).catch((e) => e);
 
@@ -226,11 +236,16 @@ describe('POST /api/v1/orders/:id/accept', () => {
 
   it('should properly accept the order if the request is valid', async () => {
     const club = buildClub();
-    await insertClubs([club]);
     const player = buildPlayer({ club: club._id });
-    await insertPlayers([player]);
     const order = buildOrder({ player: player._id });
-    await insertOrders([order]);
+    const userAcl = buildAccessControlList({ user: testUser._id });
+
+    await Promise.all([
+      insertClubs([club]),
+      insertPlayers([player]),
+      insertOrders([order]),
+      insertAccessControlLists([userAcl]),
+    ]);
 
     const response = await api.post(`orders/${order._id}/accept`);
 
@@ -240,13 +255,14 @@ describe('POST /api/v1/orders/:id/accept', () => {
     expect(response.data.data.id).toBe(order._id.toHexString());
     expect(response.data.data.status).toBe('accepted');
 
-    // Check if users id has been added to players authorizedUsers array
-    const dbPlayer = await playersService.getPlayerById(player._id);
-    expect(dbPlayer.authorizedUsers).toContainEqual(testUser._id);
+    // Check if users ACL has been successfully populated with player and club id
+    const updatedAcl = await accessControlListsService.getAccessControlListForAnAsset({
+      assetType: 'user',
+      assetId: testUser._id,
+    });
 
-    // Check if users id has been added to clubs authorizedUsers array
-    const dbClub = await clubsService.getClubById(club._id);
-    expect(dbClub.authorizedUsers).toContainEqual(testUser._id);
+    expect(updatedAcl.clubs).toContainEqual(club._id);
+    expect(updatedAcl.players).toContainEqual(player._id);
   });
 });
 

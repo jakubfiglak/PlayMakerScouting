@@ -1,35 +1,53 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
 // MUI components
-import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
+import {
+  IconButton,
+  Tooltip,
+  Link,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
 // MUI icons
 import {
   Search as SearchIcon,
   Edit as EditIcon,
   Print as PrintIcon,
+  Lock as CloseIcon,
+  LockOpen as OpenIcon,
 } from '@material-ui/icons';
 // Custom components
 import { FinalRatingChip } from './FinalRatingChip';
+import { StatusChip } from './StatusChip';
+import { PrinteableReport } from '../Report/PrinteableReport';
 import { Table } from '../../components/table/Table';
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
+// Hooks
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+import { useSettingsState } from '../../context/settings/useSettingsState';
 // Types
 import { Report } from '../../types/reports';
 import { CommonTableProps } from '../../types/common';
+import { SetReportStatusArgs } from '../../hooks/reports';
 // Utils & data
 import { formatDate } from '../../utils/dates';
 
 type Props = {
   reports: Report[];
-  handleEditClick: (report: Report) => void;
-  handlePrintClick: (report: Report) => void;
+  onEditClick?: (report: Report) => void;
+  onSetStatusClick: ({ id, status }: SetReportStatusArgs) => void;
 } & CommonTableProps;
 
 const headCells = [
   { id: 'player', label: 'Zawodnik' },
   { id: 'scout', label: 'Scout' },
   { id: 'createdAt', label: 'Data utworzenia' },
-  { id: 'avgRating', label: 'Średnia ocena' },
+  { id: 'status', label: 'Status' },
+  { id: 'avgRating', label: 'Śr. ocena' },
+  { id: 'maxRatingScore', label: 'Skala ocen' },
+  { id: 'percentageRating', label: 'Ocena %' },
   { id: 'finalRating', label: 'Ocena ostateczna' },
 ];
 
@@ -43,10 +61,29 @@ export const ReportsTable = ({
   handleSort,
   total,
   reports,
-  handleEditClick,
-  handlePrintClick,
+  onEditClick,
+  onSetStatusClick,
 }: Props) => {
-  const classes = useStyles();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isPrintActive, setPrintActive] = useState(false);
+  const { defaultReportBackgroundImageUrl } = useSettingsState();
+
+  const classes = useStyles({ background: defaultReportBackgroundImageUrl });
+  const user = useAuthenticatedUser();
+
+  const isAdmin = user.role === 'admin';
+
+  const handlePrint = useReactToPrint({
+    content: () => ref.current,
+    bodyClass: classes.pageBody,
+    documentTitle: 'PlaymakerReport',
+    onAfterPrint: () => setPrintActive(false),
+  }) as () => void;
+
+  function onPrintClick() {
+    setPrintActive(true);
+    setTimeout(() => handlePrint(), 100);
+  }
 
   return (
     <Table
@@ -62,54 +99,103 @@ export const ReportsTable = ({
     >
       {reports.map((report) => {
         const {
-          id: _id,
+          id,
           player,
           scout,
           createdAt,
           avgRating,
+          maxRatingScore,
+          percentageRating,
           finalRating,
+          status,
         } = report;
 
         return (
-          <StyledTableRow key={_id}>
+          <StyledTableRow key={id}>
             <StyledTableCell padding="checkbox">
               <div className={classes.buttonsContainer}>
                 <Tooltip title="Zobacz szczegóły">
-                  <Link component={RouterLink} to={`/reports/${_id}`}>
-                    <IconButton aria-label="go to order">
+                  <Link component={RouterLink} to={`/reports/${id}`}>
+                    <IconButton aria-label="go to report">
                       <SearchIcon />
                     </IconButton>
                   </Link>
                 </Tooltip>
-                <Tooltip title="Edytuj">
-                  <IconButton
-                    aria-label="edit report"
-                    onClick={() => handleEditClick(report)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
+                {onEditClick ? (
+                  <Tooltip title="Edytuj">
+                    <IconButton
+                      aria-label="edit report"
+                      onClick={() => onEditClick(report)}
+                      disabled={status === 'closed'}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : null}
                 <Tooltip title="Drukuj">
-                  <IconButton
-                    aria-label="print report"
-                    onClick={() => handlePrintClick(report)}
-                  >
+                  <IconButton aria-label="print report" onClick={onPrintClick}>
                     <PrintIcon />
                   </IconButton>
                 </Tooltip>
+                {status === 'in-prep' ? (
+                  <Tooltip title="Zamknij raport">
+                    <IconButton
+                      aria-label="close report"
+                      onClick={() => onSetStatusClick({ id, status: 'closed' })}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Otwórz raport">
+                    <IconButton
+                      aria-label="open report"
+                      onClick={() =>
+                        onSetStatusClick({ id, status: 'in-prep' })
+                      }
+                    >
+                      <OpenIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </div>
             </StyledTableCell>
-            <StyledTableCell>{`${player.firstName} ${player.lastName}`}</StyledTableCell>
             <StyledTableCell>
-              {`${scout.firstName} ${scout.lastName}`}
+              <Link
+                component={RouterLink}
+                to={`/players/${player.id}`}
+              >{`${player.firstName} ${player.lastName}`}</Link>
+            </StyledTableCell>
+            <StyledTableCell>
+              {isAdmin ? (
+                <Link component={RouterLink} to={`/users/${scout.id}`}>
+                  {`${scout.firstName} ${scout.lastName}`}
+                </Link>
+              ) : (
+                <>{`${scout.firstName} ${scout.lastName}`}</>
+              )}
             </StyledTableCell>
             <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
-            <StyledTableCell align="right">
-              {`${avgRating.toFixed(1)}%`}
+            <StyledTableCell>
+              <StatusChip status={status} />
+            </StyledTableCell>
+            <StyledTableCell>{avgRating.toFixed(2)}</StyledTableCell>
+            <StyledTableCell>{maxRatingScore}</StyledTableCell>
+            <StyledTableCell>
+              {`${percentageRating.toFixed(1)}%`}
             </StyledTableCell>
             <StyledTableCell>
               <FinalRatingChip finalRating={finalRating} />
             </StyledTableCell>
+            {isPrintActive ? (
+              <StyledTableCell>
+                <div className={classes.print}>
+                  <div ref={ref}>
+                    <PrinteableReport report={report} />
+                  </div>
+                </div>
+              </StyledTableCell>
+            ) : null}
           </StyledTableRow>
         );
       })}
@@ -117,8 +203,21 @@ export const ReportsTable = ({
   );
 };
 
-const useStyles = makeStyles(() => ({
+type StyleProps = {
+  background: string;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>(() => ({
   buttonsContainer: {
     display: 'flex',
   },
+  print: {
+    overflow: 'hidden',
+    height: 0,
+  },
+  pageBody: (props) => ({
+    backgroundImage: `url(${props.background})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+  }),
 }));

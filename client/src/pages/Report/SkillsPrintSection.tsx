@@ -1,6 +1,6 @@
 import React from 'react';
 // MUI components
-import { Typography, makeStyles } from '@material-ui/core';
+import { Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { NewReportSkills } from './NewReportSkills';
 // Types
@@ -36,9 +36,10 @@ export const SkillsPrintSection = ({
   );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   heading: {
     fontSize: 14,
     fontWeight: 700,
+    marginBottom: theme.spacing(1),
   },
 }));

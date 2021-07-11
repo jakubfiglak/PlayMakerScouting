@@ -11,8 +11,7 @@ import { FormModal } from '../../components/FormModal';
 // Types
 import { Rating, RatingDTO, SkillsCategories } from '../../types/ratings';
 // Hooks
-import { useCreateRating } from '../../operations/mutations/useCreateRating';
-import { useUpdateRating } from '../../operations/mutations/useUpdateRating';
+import { useCreateRating, useUpdateRating } from '../../hooks/ratings';
 
 type Props = {
   current: Rating | null;

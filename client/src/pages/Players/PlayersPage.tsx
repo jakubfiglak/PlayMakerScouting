@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -11,39 +11,25 @@ import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Types
-import {
-  PlayersFilterData,
-  Player,
-  PlayersFormData,
-} from '../../types/players';
+import { PlayersFilterData, Player, PlayerDTO } from '../../types/players';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useClubsState } from '../../context/clubs/useClubsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { usePlayers } from '../../hooks/players';
+import { useClubsList, useCreateClub } from '../../hooks/clubs';
 
 export const PlayersPage = () => {
   const { setAlert } = useAlertsState();
 
   const {
-    loading,
-    getPlayers,
-    playersData: { docs, totalDocs },
     addPlayer,
     editPlayer,
     current,
     setCurrent,
     clearCurrent,
   } = usePlayersState();
-
-  const {
-    loading: clubsLoading,
-    getClubsList,
-    clubsList,
-
-    addClub,
-  } = useClubsState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -62,6 +48,16 @@ export const PlayersPage = () => {
     position: '',
   });
 
+  const { data: players, isLoading: playersLoading } = usePlayers({
+    page: page + 1,
+    limit: rowsPerPage,
+    order,
+    sort: sortBy,
+    filters,
+  });
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
+  const { mutate: createClub, isLoading: createClubLoading } = useCreateClub();
+
   const [isAddClubModalOpen, setIsAddClubModalOpen] = useState(false);
 
   const handleSetCurrent = (player: Player) => {
@@ -69,17 +65,7 @@ export const PlayersPage = () => {
     setActiveTab(1);
   };
 
-  useEffect(() => {
-    getClubsList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    getPlayers(page + 1, rowsPerPage, sortBy, order, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
-
-  const handlePlayersFormSubmit = (data: PlayersFormData) => {
+  const handlePlayersFormSubmit = (data: PlayerDTO) => {
     if (current) {
       editPlayer(current.id, data);
       setActiveTab(0);
@@ -95,14 +81,9 @@ export const PlayersPage = () => {
     clearCurrent();
   };
 
-  const handleEditCancelClick = () => {
-    clearCurrent();
-    setAlert({ msg: 'Anulowano edycję', type: 'warning' });
-  };
-
   return (
     <MainTemplate>
-      {(loading || clubsLoading) && <Loader />}
+      {(playersLoading || clubsLoading || createClubLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
           <Tab label="Zawodnicy" id="players-0" aria-controls="players-0" />
@@ -111,7 +92,7 @@ export const PlayersPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
         <PageHeading title="Baza zawodników" />
-        <PlayersFilterForm clubsData={clubsList} setFilters={setFilters} />
+        <PlayersFilterForm clubsData={clubs || []} setFilters={setFilters} />
         <PlayersTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -120,9 +101,9 @@ export const PlayersPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          players={docs}
-          total={totalDocs}
-          handleSetCurrent={handleSetCurrent}
+          players={players?.docs || []}
+          total={players?.totalDocs || 0}
+          onEditClick={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
@@ -130,16 +111,15 @@ export const PlayersPage = () => {
           title={current ? 'Edycja zawodnika' : 'Tworzenie nowego zawodnika'}
         />
         <PlayersForm
-          clubsData={clubsList}
+          clubsData={clubs || []}
           current={current}
           onSubmit={handlePlayersFormSubmit}
           onAddClubClick={() => setIsAddClubModalOpen(true)}
           onCancelClick={handleFormReset}
-          onEditCancelClick={handleEditCancelClick}
         />
         <AddClubModal
           onClose={() => setIsAddClubModalOpen(false)}
-          onSubmit={addClub}
+          onSubmit={createClub}
           open={isAddClubModalOpen}
         />
       </TabPanel>

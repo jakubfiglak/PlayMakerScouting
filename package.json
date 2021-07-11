@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "PlaymakerPro Scouting App",
   "engines": {
-    "node": "12.x",
-    "npm": "6.x"
+    "node": ">=12.x",
+    "npm": ">=6.x"
   },
   "main": "server.js",
   "scripts": {
@@ -19,6 +19,8 @@
     "destroy-ratings": "node scripts/seed-ratings -destroy",
     "seed-reportTemplates": "node scripts/seed-reportTemplates -create",
     "destroy-reportTemplates": "node scripts/seed-reportTemplates -destroy",
+    "seed-reportBackgroundImages": "node scripts/seed-reportBackgroundImages -create",
+    "destroy-reportBackgroundImages": "node scripts/seed-reportBackgroundImages -destroy",
     "import-data": "node seeder -import",
     "destroy-data": "node seeder -destroy",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client & migrate-mongo up"
@@ -28,6 +30,8 @@
   "dependencies": {
     "@meanie/mongoose-to-json": "^2.5.0",
     "@sendgrid/mail": "^7.4.2",
+    "@sentry/node": "^6.8.0",
+    "@sentry/tracing": "^6.8.0",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
@@ -53,7 +57,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.20",
     "concurrently": "^5.3.0",
-    "eslint": "7.21.0",
+    "eslint": "^7.29.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",

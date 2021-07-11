@@ -5,18 +5,18 @@ const reportsService = require('../reports/reports.service');
 
 async function getDashboardData(accessFilters) {
   const promiseArr = [
-    clubsService.getClubsCount(accessFilters.playersAndClubs),
-    playersService.getPlayersCount(accessFilters.playersAndClubs),
-    reportsService.getHighestRatedReport(accessFilters.ordersAndReports),
-    reportsService.getLatestReport(accessFilters.ordersAndReports),
-    reportsService.getReportsCount(accessFilters.ordersAndReports),
+    clubsService.getClubsCount(accessFilters.clubs),
+    playersService.getPlayersCount(accessFilters.players),
+    reportsService.getHighestRatedReport(accessFilters.reports),
+    reportsService.getLatestReport(accessFilters.reports),
+    reportsService.getReportsCount(accessFilters.reports),
     ordersService.getLatestOrder(),
     ordersService.getOrdersCountByStatus({
-      accessFilters: accessFilters.ordersAndReports,
+      accessFilters: accessFilters.orders,
       status: 'accepted',
     }),
     ordersService.getOrdersCountByStatus({
-      accessFilters: accessFilters.ordersAndReports,
+      accessFilters: accessFilters.orders,
       status: 'closed',
     }),
   ];

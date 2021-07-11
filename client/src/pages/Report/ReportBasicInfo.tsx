@@ -16,6 +16,7 @@ type Props = Pick<
   | 'createdAt'
   | 'playerCurrentClub'
   | 'positionPlayed'
+  | 'shirtNo'
 >;
 
 export const ReportBasicInfo = ({
@@ -25,6 +26,7 @@ export const ReportBasicInfo = ({
   scout,
   playerCurrentClub,
   positionPlayed,
+  shirtNo,
   createdAt,
 }: Props) => {
   return (
@@ -50,10 +52,32 @@ export const ReportBasicInfo = ({
         </Grid>
         <Grid item xs={12}>
           <Typography>
-            <strong>Mecz: </strong>
-            {`${formatDate(match.date, true)} vs. ${match.against} (${getLabel(
-              match.location,
-            )}), ${getLabel(match.competition)}`}
+            <strong>Nr na koszulce w meczu: </strong>
+            {shirtNo || 'N/A'}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            <strong>Data meczu: </strong>
+            {formatDate(match.date, true)}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            <strong>Przeciwnik: </strong>
+            {match.against}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            <strong>Rozgrywki: </strong>
+            {`${getLabel(match.competition)} (${getLabel(match.location)})`}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            <strong>Wynik meczu: </strong>
+            {match.result}
           </Typography>
         </Grid>
         {order && (

@@ -1,6 +1,10 @@
 const Report = require('./report.model');
 const resultsOptions = require('./options');
 
+function getReportById(id) {
+  return Report.findById(id);
+}
+
 async function getReportsForPlayer(playerId) {
   const reports = await Report.find({ player: playerId });
   return reports;
@@ -37,6 +41,14 @@ async function getAllReports({ query, paginationOptions, accessFilters }) {
   return reports;
 }
 
+async function getAllReportsList() {
+  const reports = await Report.find()
+    .select(resultsOptions.listSelect)
+    .populate(resultsOptions.listPopulate);
+
+  return reports;
+}
+
 async function updateReport({ report, reqBody }) {
   const editedReport = report;
 
@@ -46,9 +58,15 @@ async function updateReport({ report, reqBody }) {
     }
   });
 
-  let modifiedReport = await editedReport.save();
-  modifiedReport = await editedReport.populate(resultsOptions.populate).execPopulate();
+  const modifiedReport = await editedReport.save();
 
+  return modifiedReport;
+}
+
+async function setReportStatus({ report, status }) {
+  const editedReport = report;
+  editedReport.status = status;
+  const modifiedReport = await editedReport.save();
   return modifiedReport;
 }
 
@@ -57,12 +75,15 @@ async function deleteReport(report) {
 }
 
 module.exports = {
+  getReportById,
   getReportsForPlayer,
   getHighestRatedReport,
   getLatestReport,
   getReportsCount,
   createReport,
   getAllReports,
+  getAllReportsList,
   updateReport,
+  setReportStatus,
   deleteReport,
 };

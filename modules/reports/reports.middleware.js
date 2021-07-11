@@ -3,8 +3,6 @@ const asyncHandler = require('express-async-handler');
 const ApiError = require('../../utils/ApiError');
 const ordersService = require('../orders/orders.service');
 const playersService = require('../players/players.service');
-const getIndividualSkillsProps = require('../../utils/getIndividualSkillsProps');
-const isAdmin = require('../../utils/isAdmin');
 const setAsset = require('../../middleware/setAsset');
 const Report = require('./report.model');
 const options = require('./options');
@@ -67,32 +65,15 @@ function setCurrentClub(req, res, next) {
   next();
 }
 
-function setIndividualSkills(req, res, next) {
-  req.body.individualSkills = getIndividualSkillsProps(
-    req.body.individualSkills,
-    req.playerData.position
-  );
-  next();
-}
-
-function setAccessFilters(req, res, next) {
-  if (isAdmin(req.user.role)) {
-    req.accessFilters = {};
-    return next();
-  }
-  req.accessFilters = { scout: req.user._id };
-  next();
-}
-
 const setReport = setAsset({ name: 'report', model: Report, populate: options.populate });
 
-function checkAccessPermission(req, res, next) {
-  const isPermitted = isAdmin(req.user.role) || req.report.scout._id.toHexString() === req.user._id;
-  if (!isPermitted) {
+function canBeUpdated(req, res, next) {
+  if (req.report.status === 'closed') {
     return next(
-      new ApiError("You don't have access to the report you've requsted", httpStatus.FORBIDDEN)
+      new ApiError('Report has the status of "closed" and cannot be updated', httpStatus.FORBIDDEN)
     );
   }
+
   next();
 }
 
@@ -101,9 +82,7 @@ module.exports = {
   setOrderData,
   checkOrderStatus,
   setPlayerData,
-  setIndividualSkills,
-  setAccessFilters,
   setReport,
-  checkAccessPermission,
   setCurrentClub,
+  canBeUpdated,
 };

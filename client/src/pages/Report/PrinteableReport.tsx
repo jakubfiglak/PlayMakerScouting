@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import clsx from 'clsx';
 // MUI components
 import {
@@ -45,6 +45,8 @@ export const PrinteableReport = ({ report }: Props) => {
     maxRatingScore,
     playerCurrentClub,
     positionPlayed,
+    shirtNo,
+    percentageRating,
   } = report;
 
   return (
@@ -66,7 +68,11 @@ export const PrinteableReport = ({ report }: Props) => {
           </Typography>
           <Typography className={classes.text} gutterBottom>
             <strong>Pozycja nominalna/pozycja w meczu: </strong>
-            {`${player.position} / ${positionPlayed}`}
+            {`${getLabel(player.position)} / ${getLabel(positionPlayed)}`}
+          </Typography>
+          <Typography className={classes.text} gutterBottom>
+            <strong>Nr na koszulce w meczu: </strong>
+            {shirtNo || 'N/A'}
           </Typography>
           <div className={classes.flex}>
             <Typography className={classes.text} gutterBottom>
@@ -85,7 +91,7 @@ export const PrinteableReport = ({ report }: Props) => {
             <Typography className={classes.text} gutterBottom>
               <strong>Mecz: </strong>
               vs. {match.against} ({getLabel(match.location)}),{' '}
-              {getLabel(match.competition)}
+              {getLabel(match.competition)}, {match.result}
             </Typography>
             <Typography
               className={clsx(classes.text, classes.marginLeft)}
@@ -164,22 +170,21 @@ export const PrinteableReport = ({ report }: Props) => {
       </section>
       <Divider className={classes.divider} />
       {Object.entries(groupSkillsByCategory(skills)).map(([key, value]) => (
-        <>
+        <Fragment key={key}>
           <SkillsPrintSection
             category={key as SkillsCategories}
-            key={key}
             maxRatingScore={maxRatingScore}
             skills={value || []}
           />
           <Divider className={classes.divider} />
-        </>
+        </Fragment>
       ))}
       <section>
         <Typography variant="h6" align="center" className={classes.heading}>
           Podsumowanie
         </Typography>
         <Typography align="center" className={classes.text} gutterBottom>
-          Średnia ocen: {avgRating.toFixed(1)}%
+          Średnia ocen: {avgRating.toFixed(2)} (${percentageRating.toFixed(1)}%)
         </Typography>
         <Typography className={classes.text} gutterBottom>
           {summary}

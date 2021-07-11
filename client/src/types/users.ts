@@ -1,12 +1,20 @@
-import { User } from './auth';
+import { User, UserRole } from './auth';
+import { Voivodeship } from './common';
 
 export type UserBasicInfo = Pick<
   User,
-  'id' | 'firstName' | 'lastName' | 'email' | 'role'
+  'id' | 'firstName' | 'lastName' | 'email' | 'role' | 'team'
 >;
 
 export type AssignPlaymakerRoleData = {
   user: string;
+};
+
+export type UserFilterData = {
+  lastName: string;
+  voivodeship: Voivodeship | '';
+  city: string;
+  role: UserRole | '';
 };
 
 export type State = {

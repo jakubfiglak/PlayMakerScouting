@@ -5,7 +5,7 @@ import { Loader } from '../../components/Loader';
 // Types
 import { Rating } from '../../types/ratings';
 // Hooks
-import { useDeleteRating } from '../../operations/mutations/useDeleteRating';
+import { useDeleteRating } from '../../hooks/ratings';
 
 type Props = { rating: Rating | null; handleClose: () => void; open: boolean };
 

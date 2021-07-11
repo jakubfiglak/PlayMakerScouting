@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -10,26 +10,15 @@ import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Types
-import { Club, ClubsFilterData, ClubsFormData } from '../../types/clubs';
+import { Club, ClubsFilterData, ClubDTO } from '../../types/clubs';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useClubsState } from '../../context/clubs/useClubsState';
+import { useClubs, useCreateClub, useUpdateClub } from '../../hooks/clubs';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 export const ClubsPage = () => {
   const { setAlert } = useAlertsState();
-
-  const {
-    loading,
-    current,
-    getClubs,
-    addClub,
-    editClub,
-    clubsData,
-    setCurrent,
-    clearCurrent,
-  } = useClubsState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
@@ -48,17 +37,31 @@ export const ClubsPage = () => {
     voivodeship: '',
   });
 
+  const [currentClub, setCurrentClub] = useState<Club | null>(null);
+
+  const { data: clubs, isLoading: clubsLoading } = useClubs({
+    page: page + 1,
+    limit: rowsPerPage,
+    sort: sortBy,
+    order,
+    filters,
+  });
+  const { mutate: createClub, isLoading: createClubLoading } = useCreateClub();
+  const { mutate: updateClub, isLoading: updateClubLoading } = useUpdateClub(
+    currentClub?.id || '',
+  );
+
   const handleSetCurrent = (club: Club) => {
-    setCurrent(club);
+    setCurrentClub(club);
     setActiveTab(1);
   };
 
-  const handleSubmit = (data: ClubsFormData) => {
-    if (current) {
-      editClub(current.id, data);
+  const handleSubmit = (data: ClubDTO) => {
+    if (currentClub) {
+      updateClub(data);
       setActiveTab(0);
     } else {
-      addClub(data);
+      createClub(data);
       setActiveTab(0);
     }
   };
@@ -66,25 +69,12 @@ export const ClubsPage = () => {
   const handleFormReset = () => {
     setActiveTab(0);
     setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
-    clearCurrent();
+    setCurrentClub(null);
   };
-
-  const handleEditCancelClick = () => {
-    clearCurrent();
-    setAlert({ msg: 'Anulowano edycję', type: 'warning' });
-  };
-
-  useEffect(
-    () => {
-      getClubs(page + 1, rowsPerPage, sortBy, order, filters);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [page, rowsPerPage, sortBy, order, filters],
-  );
 
   return (
     <MainTemplate>
-      {loading && <Loader />}
+      {(clubsLoading || createClubLoading || updateClubLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
           <Tab label="Kluby" id="clubs-0" aria-controls="clubs-0" />
@@ -102,21 +92,20 @@ export const ClubsPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          clubs={clubsData.docs}
-          total={clubsData.totalDocs}
+          clubs={clubs?.docs || []}
+          total={clubs?.totalDocs || 0}
           handleSetCurrent={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">
         <PageHeading
-          title={current ? 'Edycja klubu' : 'Tworzenie nowego klubu'}
+          title={currentClub ? 'Edycja klubu' : 'Tworzenie nowego klubu'}
         />
 
         <ClubsForm
-          current={current}
+          current={currentClub}
           onSubmit={handleSubmit}
           onCancelClick={handleFormReset}
-          onEditCancelClick={handleEditCancelClick}
         />
       </TabPanel>
     </MainTemplate>

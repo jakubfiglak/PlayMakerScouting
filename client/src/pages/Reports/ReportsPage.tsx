@@ -1,17 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useReactToPrint } from 'react-to-print';
 // MUI components
-import { AppBar, Tabs, Tab, makeStyles } from '@material-ui/core';
-// Assets
-import background from '../../assets/report_background.png';
-import odra_background from '../../assets/odra_background.jpg';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { ReportsTable } from './ReportsTable';
 import { ReportsFilterForm } from './ReportsFilterForm';
 import { NewReportForm } from './forms/NewReportForm';
 import { EditReportForm } from './forms/EditReportForm';
-import { PrinteableReport } from '../Report/PrinteableReport';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
@@ -22,18 +17,17 @@ import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
+import { useReports, useSetReportStatus } from '../../hooks/reports';
+import { useClubsList } from '../../hooks/clubs';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useReportsState } from '../../context/reports/useReportsState';
 import { usePlayersState } from '../../context/players/usePlayersState';
-import { useClubsState } from '../../context/clubs/useClubsState';
 import { useOrdersState } from '../../context/orders/useOrdersState';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 type LocationState = { setActiveTab: number };
 
 export const ReportsPage = () => {
-  const classes = useStyles();
-  const ref = useRef<HTMLDivElement | null>(null);
   const { state } = useLocation<LocationState | null>();
 
   const {
@@ -60,7 +54,7 @@ export const ReportsPage = () => {
     ordersList,
   } = useOrdersState();
 
-  const { loading: clubsLoading, getClubsList, clubsList } = useClubsState();
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
 
   const { setAlert } = useAlertsState();
 
@@ -84,19 +78,25 @@ export const ReportsPage = () => {
     player: '',
   });
 
+  const { data: reports, isLoading: reportsLoading } = useReports({
+    page: page + 1,
+    limit: rowsPerPage,
+    sort: sortBy,
+    order,
+    filters,
+  });
+  const {
+    mutate: setReportStatus,
+    isLoading: setStatusLoading,
+  } = useSetReportStatus();
+
   useEffect(() => {
     getPlayersList();
-    getClubsList();
     if (user.role !== 'scout') {
       getOrdersList();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    getReports(page + 1, rowsPerPage, sortBy, order, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, sortBy, order, filters]);
 
   useEffect(() => {
     if (state?.setActiveTab) {
@@ -110,18 +110,6 @@ export const ReportsPage = () => {
     setActiveTab(1);
   };
 
-  const handlePrint = useReactToPrint({
-    content: () => ref.current,
-    documentTitle: 'Playmaker-Report',
-    bodyClass: classes.pageBody,
-    onAfterPrint: () => clearCurrent(),
-  }) as () => void;
-
-  const handlePrintClick = (report: Report) => {
-    setCurrent(report);
-    setTimeout(() => handlePrint(), 100);
-  };
-
   const onAddReport = (data: ReportFormData) => {
     addReport(data);
     setActiveTab(0);
@@ -133,16 +121,14 @@ export const ReportsPage = () => {
     clearCurrent();
   };
 
-  const handleEditCancelClick = () => {
-    clearCurrent();
-    setAlert({ msg: 'Anulowano edycję', type: 'warning' });
-  };
-
   return (
     <MainTemplate>
-      {(loading || playersLoading || clubsLoading || ordersLoading) && (
-        <Loader />
-      )}
+      {(loading ||
+        playersLoading ||
+        clubsLoading ||
+        ordersLoading ||
+        reportsLoading ||
+        setStatusLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
           <Tab label="Raporty" id="reports-0" aria-controls="reports-0" />
@@ -160,18 +146,11 @@ export const ReportsPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          total={reportsData.totalDocs}
-          reports={reportsData.docs}
-          handleEditClick={handleSetCurrent}
-          handlePrintClick={handlePrintClick}
+          total={reports?.totalDocs || 0}
+          reports={reports?.docs || []}
+          onEditClick={handleSetCurrent}
+          onSetStatusClick={setReportStatus}
         />
-        {current && (
-          <div className={classes.print}>
-            <div ref={ref}>
-              <PrinteableReport report={current} />
-            </div>
-          </div>
-        )}
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
         <PageHeading
@@ -185,7 +164,6 @@ export const ReportsPage = () => {
           <EditReportForm
             report={current}
             onReset={handleEditFormReset}
-            onEditCancelClick={handleEditCancelClick}
             onSubmit={editReport}
           />
         ) : (
@@ -198,7 +176,7 @@ export const ReportsPage = () => {
           />
         )}
         <AddPlayerModal
-          clubsData={clubsList}
+          clubsData={clubs || []}
           onClose={() => setIsAddPlayerModalOpen(false)}
           onSubmit={addPlayer}
           open={isAddPlayerModalOpen}
@@ -207,15 +185,3 @@ export const ReportsPage = () => {
     </MainTemplate>
   );
 };
-
-const useStyles = makeStyles(() => ({
-  print: {
-    overflow: 'hidden',
-    height: 0,
-  },
-  pageBody: {
-    backgroundImage: `url(${odra_background})`,
-    backgroundSize: 'contain',
-    backgroundRepeat: 'no-repeat',
-  },
-}));

@@ -26,7 +26,7 @@ export const NewReportSkills = ({
   return (
     <Grid container spacing={2}>
       {skills.map((skill) => (
-        <Grid item xs={12} key={skill.name}>
+        <Grid item xs={printeable ? 6 : 12} key={skill.name}>
           <div className={classes.container}>
             <Typography
               className={clsx({

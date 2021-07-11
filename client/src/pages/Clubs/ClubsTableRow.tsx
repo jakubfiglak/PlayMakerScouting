@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // MUI components
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
 // MUI icons
-import EditIcon from '@material-ui/icons/Edit';
+import { Edit as EditIcon, Search as SearchIcon } from '@material-ui/icons';
 // Custom components
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
@@ -15,16 +16,30 @@ type Props = {
 };
 
 export const ClubsTableRow = ({ club, handleSetCurrent }: Props) => {
-  const { name, division, voivodeship } = club;
+  const classes = useStyles();
+
+  const { id, name, division, voivodeship } = club;
 
   return (
     <StyledTableRow>
       <StyledTableCell padding="checkbox">
-        <Tooltip title="Edytuj">
-          <IconButton aria-label="edit" onClick={() => handleSetCurrent(club)}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
+        <div className={classes.buttonsContainer}>
+          <Tooltip title="Zobacz profil">
+            <Link component={RouterLink} to={`/clubs/${id}`}>
+              <IconButton aria-label="go to clubs profile">
+                <SearchIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
+          <Tooltip title="Edytuj">
+            <IconButton
+              aria-label="edit"
+              onClick={() => handleSetCurrent(club)}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
       </StyledTableCell>
       <StyledTableCell>{name}</StyledTableCell>
       <StyledTableCell>{division}</StyledTableCell>
@@ -32,3 +47,9 @@ export const ClubsTableRow = ({ club, handleSetCurrent }: Props) => {
     </StyledTableRow>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  buttonsContainer: {
+    display: 'flex',
+  },
+}));

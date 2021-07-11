@@ -10,11 +10,12 @@ const {
 } = require('../../test/utils');
 const { insertUsers, insertTestUser } = require('../../test/db-utils');
 const emailService = require('../../modules/email/email.service');
+const accessControlListService = require('../../modules/accessControlLists/accessControlLists.service');
 const User = require('../../modules/users/user.model');
 
-jest.mock('../../services/email.service.js');
+jest.mock('../../modules/email/email.service.js');
 
-emailService.sendEmail.mockImplementation((data) => data);
+emailService.sendConfirmationEmail.mockImplementation((data) => data);
 
 let api = axios.create();
 let server;
@@ -58,19 +59,18 @@ describe('POST api/v1/auth/register', () => {
     expect(response.data.error).toMatchInlineSnapshot('"Passwords do not match"');
   });
 
-  it('should return 201 status and the user object, send a confirmation email and successfully save the user to the database if request data is valid', async () => {
+  it('should return 201 status and the user object, send a confirmation email, successfully save the user to the database and create access control list for the user if request data is valid', async () => {
     const registerData = buildRegisterForm();
 
     const response = await api.post('auth/register', registerData);
 
-    expect(emailService.sendEmail).toHaveBeenCalledTimes(1);
-    expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty('to', registerData.email);
-    expect(emailService.sendEmail.mock.calls[0][0].subject).toMatchInlineSnapshot(
-      '"Aktywuj swoje konto w aplikacji PlaymakerPro Scouting"'
+    expect(emailService.sendConfirmationEmail).toHaveBeenCalledTimes(1);
+    expect(emailService.sendConfirmationEmail.mock.calls[0][0]).toHaveProperty(
+      'email',
+      registerData.email
     );
-    expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty('text');
-    expect(emailService.sendEmail.mock.calls[0][0]).toHaveProperty('html');
-
+    expect(emailService.sendConfirmationEmail.mock.calls[0][0]).toHaveProperty('username');
+    expect(emailService.sendConfirmationEmail.mock.calls[0][0]).toHaveProperty('confirmationURL');
     expect(response.status).toBe(httpStatus.CREATED);
     expect(response.data.success).toBe(true);
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new user!"');
@@ -82,12 +82,20 @@ describe('POST api/v1/auth/register', () => {
       email: registerData.email,
       role: 'scout',
       status: 'pending',
-      confirmationCode: expect.anything(),
     });
 
+    // check if the user has been successfully created
     const dbUser = await User.findById(response.data.data.id);
 
     expect(dbUser).toBeDefined();
+
+    // check if ACL has been successfully created
+    const createdAcl = await accessControlListService.getAccessControlListForAnAsset({
+      assetType: 'user',
+      assetId: response.data.data.id,
+    });
+
+    expect(createdAcl).toBeDefined();
   });
 });
 

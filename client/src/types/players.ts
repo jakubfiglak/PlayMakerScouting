@@ -42,7 +42,7 @@ export type PlayerBasicInfo = Pick<
   'id' | 'firstName' | 'lastName' | 'position' | 'club'
 >;
 
-export type PlayersFormData = Omit<Player, 'id' | 'club'> & {
+export type PlayerDTO = Omit<Player, 'id' | 'club'> & {
   club: string;
 };
 
@@ -50,6 +50,8 @@ export type PlayersFilterData = {
   lastName: string;
   club: string;
   position: string;
+  bornAfter?: number;
+  bornBefore?: number;
 };
 
 export type GrantAccessFormData = {
@@ -79,8 +81,8 @@ export type State = {
   getPlayers: GetPlayers;
   getPlayersList: () => void;
   getPlayer: (id: string) => void;
-  addPlayer: (player: PlayersFormData) => void;
-  editPlayer: (id: string, data: PlayersFormData) => void;
+  addPlayer: (player: PlayerDTO) => void;
+  editPlayer: (id: string, data: PlayerDTO) => void;
   grantAccess: ({ playerId, userId }: GrantAccessArgs) => void;
   setCurrent: (player: Player) => void;
   clearCurrent: () => void;

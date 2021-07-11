@@ -15,6 +15,13 @@ export type PaginatedData<T> = {
   nextPage: number | null;
 };
 
+export type GetPaginatedDataArgs = {
+  page?: number;
+  limit?: number;
+  sort?: string;
+  order: SortingOrder;
+};
+
 export type Voivodeship =
   | 'Zachodniopomorskie'
   | 'Lubuskie'

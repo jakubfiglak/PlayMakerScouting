@@ -8,19 +8,13 @@ const {
   getPlayer,
   updatePlayer,
   deletePlayer,
-  grantAccess,
 } = require('../modules/players/players.controller');
 const Club = require('../modules/clubs/club.model');
-const User = require('../modules/users/user.model');
 const options = require('../modules/players/options');
-const {
-  setPlayer,
-  canBeDeleted,
-  canAccessBeGranted,
-} = require('../modules/players/players.middleware');
-const { protect, authorize } = require('../middleware/auth');
+const { setPlayer, canBeDeleted } = require('../modules/players/players.middleware');
+const { protect } = require('../middleware/auth');
 const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist');
-const addAuthorToAuthorizedUsers = require('../middleware/addAuthorToAuthorizedUsers');
+const setAcls = require('../middleware/setAcls');
 const prepareQuery = require('../middleware/prepareQuery');
 const setAccessFilters = require('../middleware/setAccessFilters');
 const checkAccessPermission = require('../middleware/checkAccessPermission');
@@ -33,20 +27,17 @@ router.use('/:playerId/reports', protect, reportsRouter);
 
 router.post(
   '/',
-  [
-    protect,
-    checkIfRelatedAssetExist({ fieldName: 'club', model: Club }),
-    addAuthorToAuthorizedUsers,
-  ],
+  [protect, setAcls, checkIfRelatedAssetExist({ fieldName: 'club', model: Club })],
   createPlayer
 );
-router.get('/', [protect, prepareQuery, setAccessFilters], getPlayers);
-router.get('/list', [protect, setAccessFilters], getPlayersList);
-router.get('/:id', [protect, setPlayer, checkAccessPermission('player')], getPlayer);
+router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('player')], getPlayers);
+router.get('/list', [protect, setAcls, setAccessFilters('player')], getPlayersList);
+router.get('/:id', [protect, setAcls, setPlayer, checkAccessPermission('player')], getPlayer);
 router.put(
   '/:id',
   [
     protect,
+    setAcls,
     setPlayer,
     checkAccessPermission('player'),
     filterForbiddenUpdates(options.forbiddenUpdates),
@@ -55,19 +46,8 @@ router.put(
 );
 router.delete(
   '/:id',
-  [protect, setPlayer, checkAccessPermission('player'), canBeDeleted],
+  [protect, setAcls, setPlayer, checkAccessPermission('player'), canBeDeleted],
   deletePlayer
-);
-router.post(
-  '/:id/grantaccess',
-  [
-    protect,
-    authorize('admin'),
-    setPlayer,
-    checkIfRelatedAssetExist({ fieldName: 'user', model: User }),
-    canAccessBeGranted,
-  ],
-  grantAccess
 );
 
 module.exports = router;

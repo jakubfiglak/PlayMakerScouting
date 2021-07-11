@@ -8,7 +8,8 @@ const getEmail = faker.internet.email;
 const getPassword = faker.internet.password;
 const getRandomWord = faker.random.word;
 const getRandomText = faker.random.words;
-const getClubName = faker.company.companyName;
+const getRandomName = faker.company.companyName;
+const getRandomUrl = faker.internet.url;
 const ID = mongoose.Types.ObjectId;
 
 const password = `aB1${getPassword()}`;
@@ -52,7 +53,7 @@ const buildUpdatePasswordForm = (overrides = {}) => ({
 
 const buildClub = (overrides = {}) => ({
   _id: new ID(),
-  name: getClubName(),
+  name: getRandomName(),
   voivodeship: 'Wielkopolskie',
   division: 'Ekstraklasa',
   ...overrides,
@@ -86,7 +87,7 @@ const buildOldReport = (overrides = {}) => ({
   scout: new ID(),
   match: {
     location: 'home',
-    against: getClubName(),
+    against: getRandomName(),
     competition: 'league',
     date: new Date(),
   },
@@ -136,10 +137,12 @@ const buildReport = (overrides = {}) => ({
   positionPlayed: getRandomArrayMember(positions),
   match: {
     location: 'home',
-    against: getClubName(),
+    against: getRandomName(),
     competition: 'league',
     date: new Date(),
+    result: '1:1',
   },
+  shirtNo: 11,
   minutesPlayed: 90,
   goals: 0,
   assists: 0,
@@ -177,6 +180,37 @@ const buildReportTemplate = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildTeam = (overrides = {}) => ({
+  _id: new ID(),
+  name: getRandomName().slice(0, 30),
+  ...overrides,
+});
+
+const buildAccessControlList = (overrides = {}) => ({
+  _id: new ID(),
+  user: null,
+  team: null,
+  players: [],
+  clubs: [],
+  reports: [],
+  ...overrides,
+});
+
+const buildReportBackgroundImage = (overrides = {}) => ({
+  _id: new ID(),
+  name: getRandomName(),
+  url: getRandomUrl(),
+  ...overrides,
+});
+
+const buildGrantAccessForm = (overrides = {}) => ({
+  targetAssetType: 'user',
+  targetAssetId: new ID(),
+  assetToAddType: 'club',
+  assetToAddId: new ID(),
+  ...overrides,
+});
+
 const buildReq = (overrides = {}) => {
   const req = { body: {}, params: {}, query: {}, ...overrides };
   return req;
@@ -194,6 +228,7 @@ const buildRes = (overrides = {}) => {
 const buildNext = (impl) => jest.fn(impl).mockName('next');
 
 module.exports = {
+  ID,
   buildUser,
   buildRegisterForm,
   buildLoginForm,
@@ -205,6 +240,10 @@ module.exports = {
   buildRating,
   buildReportTemplate,
   buildOldReport,
+  buildTeam,
+  buildAccessControlList,
+  buildReportBackgroundImage,
+  buildGrantAccessForm,
   buildReq,
   buildRes,
   buildNext,

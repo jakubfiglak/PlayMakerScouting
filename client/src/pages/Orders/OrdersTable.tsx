@@ -12,7 +12,8 @@ import {
 import {
   Search as SearchIcon,
   AssignmentLate as NoteIcon,
-  CancelOutlined as CloseIcon,
+  Lock as CloseIcon,
+  CancelOutlined as RejectIcon,
   AssignmentTurnedIn as AcceptIcon,
   Delete as DeleteIcon,
 } from '@material-ui/icons';
@@ -21,6 +22,8 @@ import { OrderStatusChip } from './OrderStatusChip';
 import { Table } from '../../components/table/Table';
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
+// Hooks
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
 import { Order } from '../../types/orders';
 import { CommonTableProps } from '../../types/common';
@@ -31,6 +34,7 @@ type Props = {
   orders: Order[];
   onAcceptOrderClick: (id: string) => void;
   onCloseOrderClick: (id: string) => void;
+  onRejectOrderClick: (id: string) => void;
   onDeleteOrderClick: (id: string) => void;
   areAdminOptionsEnabled: boolean;
 } & CommonTableProps;
@@ -56,9 +60,11 @@ export const OrdersTable = ({
   onAcceptOrderClick,
   onCloseOrderClick,
   onDeleteOrderClick,
+  onRejectOrderClick,
   areAdminOptionsEnabled,
 }: Props) => {
   const classes = useStyles();
+  const user = useAuthenticatedUser();
 
   return (
     <Table
@@ -73,14 +79,14 @@ export const OrdersTable = ({
       headCells={headCells}
     >
       {orders.map((orderData) => {
-        const { id: _id, player, status, scout, createdAt, notes } = orderData;
+        const { id, player, status, scout, createdAt, notes } = orderData;
 
         return (
-          <StyledTableRow key={_id}>
+          <StyledTableRow key={id}>
             <StyledTableCell padding="checkbox">
               <div className={classes.buttonsContainer}>
                 <Tooltip title="Zobacz szczegóły">
-                  <Link component={RouterLink} to={`/orders/${_id}`}>
+                  <Link component={RouterLink} to={`/orders/${id}`}>
                     <IconButton aria-label="go to order">
                       <SearchIcon />
                     </IconButton>
@@ -91,9 +97,19 @@ export const OrdersTable = ({
                     aria-label="accept order"
                     className={classes.accept}
                     disabled={status !== 'open'}
-                    onClick={() => onAcceptOrderClick(_id)}
+                    onClick={() => onAcceptOrderClick(id)}
                   >
                     <AcceptIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Odrzuć zlecenie">
+                  <IconButton
+                    aria-label="reject order"
+                    className={classes.delete}
+                    disabled={!(status === 'accepted' && scout?.id === user.id)}
+                    onClick={() => onRejectOrderClick(id)}
+                  >
+                    <RejectIcon />
                   </IconButton>
                 </Tooltip>
                 {areAdminOptionsEnabled && (
@@ -102,8 +118,8 @@ export const OrdersTable = ({
                       <IconButton
                         aria-label="close order"
                         className={classes.delete}
-                        disabled={status === 'closed'}
-                        onClick={() => onCloseOrderClick(_id)}
+                        disabled={status !== 'accepted'}
+                        onClick={() => onCloseOrderClick(id)}
                       >
                         <CloseIcon />
                       </IconButton>
@@ -113,7 +129,7 @@ export const OrdersTable = ({
                         aria-label="delete order"
                         className={classes.delete}
                         disabled={status !== 'open'}
-                        onClick={() => onDeleteOrderClick(_id)}
+                        onClick={() => onDeleteOrderClick(id)}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -122,7 +138,11 @@ export const OrdersTable = ({
                 )}
               </div>
             </StyledTableCell>
-            <StyledTableCell>{`${player.firstName} ${player.lastName}`}</StyledTableCell>
+            <StyledTableCell>
+              <Link component={RouterLink} to={`/players/${player.id}`}>
+                {`${player.firstName} ${player.lastName}`}
+              </Link>
+            </StyledTableCell>
             <StyledTableCell>
               <OrderStatusChip status={status} />
             </StyledTableCell>

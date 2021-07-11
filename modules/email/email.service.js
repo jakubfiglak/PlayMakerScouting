@@ -10,4 +10,15 @@ async function sendEmail({ to, subject, text, html }) {
   });
 }
 
-module.exports = { sendEmail };
+function sendConfirmationEmail({ email, username, confirmationURL }) {
+  return sendEmail({
+    to: email,
+    subject: 'Aktywuj swoje konto w aplikacji PlaymakerPro Scouting',
+    text: `Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w link ${confirmationURL}`,
+    html: `<h2>Witaj ${username}</h2>
+                <p>Dziękujemy za założenie konta. Proszę potwierdź swój adres email poprzez kliknięcie w <a href="${confirmationURL}">link</a></p>
+              `,
+  });
+}
+
+module.exports = { sendEmail, sendConfirmationEmail };

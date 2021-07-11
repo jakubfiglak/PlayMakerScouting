@@ -26,16 +26,10 @@ import { validationSchema } from './validationSchema';
 type Props = {
   report: Report;
   onReset: () => void;
-  onEditCancelClick: () => void;
   onSubmit: (id: string, data: ReportFormData) => void;
 };
 
-export const EditReportForm = ({
-  report,
-  onReset,
-  onEditCancelClick,
-  onSubmit,
-}: Props) => {
+export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
   const classes = useStyles();
   const {
     player,
@@ -108,7 +102,6 @@ export const EditReportForm = ({
                   handleReset();
                   onReset();
                 }}
-                onEditCancelClick={onEditCancelClick}
               />
             </div>
           </Form>

@@ -1,14 +1,22 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+// MUI components
+import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
+// MUI icons
+import { Edit as EditIcon, Search as SearchIcon } from '@material-ui/icons/';
 // Custom components
-import { PlayersTableRow } from './PlayersTableRow';
 import { Table } from '../../components/table/Table';
+import { StyledTableCell } from '../../components/table/TableCell';
+import { StyledTableRow } from '../../components/table/TableRow';
 // Types
 import { Player } from '../../types/players';
 import { CommonTableProps } from '../../types/common';
+// Utils & data
+import { getLabel } from '../../utils/getLabel';
 
-type TableProps = {
+type Props = {
   players: Player[];
-  handleSetCurrent: (player: Player) => void;
+  onEditClick?: (player: Player) => void;
 } & CommonTableProps;
 
 const headCells = [
@@ -30,8 +38,10 @@ export const PlayersTable = ({
   handleSort,
   players,
   total,
-  handleSetCurrent,
-}: TableProps) => {
+  onEditClick,
+}: Props) => {
+  const classes = useStyles();
+
   return (
     <Table
       page={page}
@@ -44,17 +54,47 @@ export const PlayersTable = ({
       total={total}
       headCells={headCells}
     >
-      {players.map((player) => {
-        const { id } = player;
-
-        return (
-          <PlayersTableRow
-            key={id}
-            player={player}
-            handleSetCurrent={handleSetCurrent}
-          />
-        );
-      })}
+      {players.map((player) => (
+        <StyledTableRow key={player.id}>
+          <StyledTableCell padding="checkbox">
+            <div className={classes.buttonsContainer}>
+              <Tooltip title="Zobacz profil">
+                <Link component={RouterLink} to={`/players/${player.id}`}>
+                  <IconButton aria-label="go to players profile">
+                    <SearchIcon />
+                  </IconButton>
+                </Link>
+              </Tooltip>
+              {onEditClick ? (
+                <Tooltip title="Edytuj">
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => onEditClick(player)}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
+            </div>
+          </StyledTableCell>
+          <StyledTableCell>{player.lastName}</StyledTableCell>
+          <StyledTableCell>{player.firstName}</StyledTableCell>
+          <StyledTableCell>
+            <Link component={RouterLink} to={`/clubs/${player.club.id}`}>
+              {player.club.name}
+            </Link>
+          </StyledTableCell>
+          <StyledTableCell>{getLabel(player.position)}</StyledTableCell>
+          <StyledTableCell>{player.yearOfBirth}</StyledTableCell>
+          <StyledTableCell>{getLabel(player.footed)}</StyledTableCell>
+        </StyledTableRow>
+      ))}
     </Table>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  buttonsContainer: {
+    display: 'flex',
+  },
+}));

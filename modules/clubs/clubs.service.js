@@ -39,11 +39,6 @@ async function deleteClub(club) {
   await club.remove();
 }
 
-async function grantAccess({ club, userId }) {
-  club.authorizedUsers.push(userId);
-  await club.save();
-}
-
 function getClubsCount(accessFilters) {
   return Club.countDocuments(accessFilters);
 }
@@ -54,7 +49,6 @@ module.exports = {
   getAllClubsList,
   updateClub,
   deleteClub,
-  grantAccess,
   getClubById,
   getClubsCount,
 };

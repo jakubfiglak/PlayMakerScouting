@@ -13,6 +13,7 @@ export type MatchData = {
   against: string;
   competition: Competition;
   date: string;
+  result: string;
 };
 
 export type ReportStatus = 'in-prep' | 'closed';
@@ -34,6 +35,7 @@ export type Report = {
   order?: Pick<Order, 'id' | 'docNumber'>;
   match: MatchData;
   playerCurrentClub: Club;
+  shirtNo?: number;
   positionPlayed: Position;
   minutesPlayed: number;
   goals: number;
@@ -44,10 +46,16 @@ export type Report = {
   finalRating: RatingScore;
   summary: string;
   avgRating: number;
+  percentageRating: number;
   maxRatingScore: number;
   status: ReportStatus;
   createdAt: string;
 };
+
+export type ReportBasicInfo = Pick<
+  Report,
+  'id' | 'docNumber' | 'player' | 'createdAt'
+>;
 
 export type ReportFormData = {
   order?: string;
@@ -57,6 +65,7 @@ export type ReportFormData = {
   minutesPlayed: number;
   goals: number;
   assists: number;
+  shirtNo?: number;
   yellowCards: number;
   redCards: number;
   finalRating: RatingScore;

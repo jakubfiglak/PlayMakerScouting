@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
-import { AccessManagementPage } from '../pages/AccessManegement/AccessManagementPage';
+import { AdminPage } from '../pages/Admin/AdminPage';
 import { ClubsPage } from '../pages/Clubs/ClubsPage';
+import { ClubPage } from '../pages/Club/ClubPage';
 import { DashboardPage } from '../pages/Dashboard/DashboardPage';
 import { HomePage } from '../pages/Home/HomePage';
 import { LoginPage } from '../pages/Login/LoginPage';
@@ -16,6 +17,9 @@ import { ReportPage } from '../pages/Report/ReportPage';
 import { ReportsPage } from '../pages/Reports/ReportsPage';
 import { WelcomePage } from '../pages/Welcome/WelcomePage';
 import { ReportTemplatesPage } from '../pages/ReportTemplates/ReportTemplatesPage';
+import { TeamPage } from '../pages/Team/TeamPage';
+import { UserPage } from '../pages/User/UserPage';
+import { SettingsPage } from '../pages/Settings/SettingsPage';
 import { FourOFourPage } from '../pages/404/FourOFour';
 
 export const AppRoutes = () => {
@@ -52,10 +56,17 @@ export const AppRoutes = () => {
           <PlayerPage />
         </ProtectedRoute>
         <ProtectedRoute
+          exact
           path="/clubs"
           allowedRoles={['admin', 'playmaker-scout', 'scout']}
         >
           <ClubsPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/clubs/:id"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <ClubPage />
         </ProtectedRoute>
         <ProtectedRoute
           exact
@@ -83,14 +94,26 @@ export const AppRoutes = () => {
         >
           <ReportPage />
         </ProtectedRoute>
-        <ProtectedRoute path="/accessmanagement" allowedRoles={['admin']}>
-          <AccessManagementPage />
+        <ProtectedRoute path="/admin" allowedRoles={['admin']}>
+          <AdminPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/teams/:id" allowedRoles={['admin']}>
+          <TeamPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/users/:id" allowedRoles={['admin']}>
+          <UserPage />
         </ProtectedRoute>
         <ProtectedRoute
           path="/reporttemplates"
           allowedRoles={['admin', 'playmaker-scout', 'scout']}
         >
           <ReportTemplatesPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/settings"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <SettingsPage />
         </ProtectedRoute>
         <Route path="*" component={FourOFourPage} />
       </Switch>

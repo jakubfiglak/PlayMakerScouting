@@ -33,6 +33,9 @@ const ReportSchema = new Schema(
       enum: positions,
       required: 'Please add a position player actually played at',
     },
+    shirtNo: {
+      type: Number,
+    },
     match: {
       location: {
         type: String,
@@ -47,6 +50,9 @@ const ReportSchema = new Schema(
       },
       date: {
         type: Date,
+      },
+      result: {
+        type: String,
       },
     },
     minutesPlayed: {
@@ -116,6 +122,9 @@ const ReportSchema = new Schema(
       required: 'Please add report summary',
     },
     avgRating: {
+      type: Number,
+    },
+    percentageRating: {
       type: Number,
     },
     maxRatingScore: {

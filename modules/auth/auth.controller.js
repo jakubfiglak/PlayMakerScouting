@@ -1,21 +1,31 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const authService = require('./auth.service');
-const usersService = require('../users/users.service');
 const options = require('./options');
+const usersService = require('../users/users.service');
+const accessControlListsService = require('../accessControlLists/accessControlLists.service');
+const emailService = require('../email/email.service');
 
 // @desc Register user
 // @route POST /api/v1/auth/register
 // @access Public
 exports.register = asyncHandler(async (req, res) => {
-  const user = await authService.registerUser({
-    reqBody: req.body,
-    host: req.headers.host,
+  const user = await usersService.createUser(req.body);
+  await accessControlListsService.createAccessControlList({
+    user: user._id,
+  });
+
+  const confirmationURL = `http://${req.headers.host}/confirm/${req.body.confirmationCode}`;
+
+  await emailService.sendConfirmationEmail({
+    email: user.email,
+    username: user.firstName,
+    confirmationURL,
   });
 
   res.status(httpStatus.CREATED).json({
     success: true,
-    message: 'Successfully created new user!',
+    message: 'Account created successfully! Please check your email to verify your account.',
     data: user,
   });
 });

@@ -6,18 +6,15 @@ const {
   getClub,
   updateClub,
   deleteClub,
-  grantAccess,
 } = require('../modules/clubs/clubs.controller');
-const { protect, authorize } = require('../middleware/auth');
-const addAuthorToAuthorizedUsers = require('../middleware/addAuthorToAuthorizedUsers');
+const { protect } = require('../middleware/auth');
+const setAcls = require('../middleware/setAcls');
 const prepareQuery = require('../middleware/prepareQuery');
 const setAccessFilters = require('../middleware/setAccessFilters');
 const checkAccessPermission = require('../middleware/checkAccessPermission');
-const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
-const { setClub, canBeDeleted, canAccessBeGranted } = require('../modules/clubs/clubs.middleware');
+const { setClub, canBeDeleted } = require('../modules/clubs/clubs.middleware');
 const options = require('../modules/clubs/options');
-const User = require('../modules/users/user.model');
 
 const playersRouter = require('./players');
 
@@ -25,31 +22,25 @@ const router = express.Router();
 
 router.use('/:clubId/players', protect, playersRouter);
 
-router.post('/', [protect, addAuthorToAuthorizedUsers], createClub);
-router.get('/', [protect, prepareQuery, setAccessFilters], getClubs);
-router.get('/list', [protect, setAccessFilters], getClubsList);
-router.get('/:id', [protect, setClub, checkAccessPermission('club')], getClub);
+router.post('/', [protect, setAcls], createClub);
+router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('club')], getClubs);
+router.get('/list', [protect, setAcls, setAccessFilters('club')], getClubsList);
+router.get('/:id', [protect, setAcls, setClub, checkAccessPermission('club')], getClub);
 router.put(
   '/:id',
   [
     protect,
+    setAcls,
     setClub,
     checkAccessPermission('club'),
     filterForbiddenUpdates(options.forbiddenUpdates),
   ],
   updateClub
 );
-router.delete('/:id', [protect, setClub, checkAccessPermission('club'), canBeDeleted], deleteClub);
-router.post(
-  '/:id/grantaccess',
-  [
-    protect,
-    authorize('admin'),
-    setClub,
-    checkIfRelatedAssetExist({ fieldName: 'user', model: User }),
-    canAccessBeGranted,
-  ],
-  grantAccess
+router.delete(
+  '/:id',
+  [protect, setAcls, setClub, checkAccessPermission('club'), canBeDeleted],
+  deleteClub
 );
 
 module.exports = router;

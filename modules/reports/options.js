@@ -15,7 +15,7 @@ const options = {
       path: 'playerCurrentClub',
     },
   ],
-  highestRatedSort: '-avgRating',
+  highestRatedSort: '-percentageRating',
   latestSort: '-createdAt',
   forbiddenUpdates: [
     'player',
@@ -28,6 +28,8 @@ const options = {
     'createdAt',
     'updatedAt',
   ],
+  listSelect: 'player reportNo docNumber createdAt',
+  listPopulate: 'player',
 };
 
 module.exports = options;

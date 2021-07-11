@@ -16,6 +16,13 @@ function prepareQuery(req, res, next) {
   );
   const parsedQuery = JSON.parse(queryStr);
 
+  // Add case insensitivity to regex patterns
+  Object.keys(parsedQuery).forEach((key) => {
+    if (parsedQuery[key].$regex) {
+      parsedQuery[key].$options = 'i';
+    }
+  });
+
   req.query = parsedQuery;
   req.paginationOptions = {
     sort: sort || DEFAULT_SORT,

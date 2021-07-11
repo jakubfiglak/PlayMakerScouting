@@ -2,17 +2,18 @@ const httpStatus = require('http-status');
 const isAdmin = require('../utils/isAdmin');
 const ApiError = require('../utils/ApiError');
 
-function checkAccessPermission(assetName) {
+function checkAccessPermission(assetType) {
   return function (req, res, next) {
-    const { _id, role } = req.user;
+    if (isAdmin(req.user.role)) {
+      return next();
+    }
 
-    const isAssignedToTheAsset = req[assetName].authorizedUsers.includes(_id);
-    const isPermitted = isAdmin(role) || isAssignedToTheAsset;
+    const hasAccess = req.acl[`${assetType}s`].includes(req.params.id);
 
-    if (!isPermitted) {
+    if (!hasAccess) {
       return next(
         new ApiError(
-          `You don't have access to the ${assetName} you've requsted`,
+          `You don't have access to the ${assetType} you've requsted`,
           httpStatus.FORBIDDEN
         )
       );

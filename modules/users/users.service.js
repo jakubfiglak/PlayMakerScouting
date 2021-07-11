@@ -2,7 +2,7 @@ const User = require('./user.model');
 const options = require('./options');
 
 function getUserById(id) {
-  return User.findById(id);
+  return User.findById(id).populate('team');
 }
 function getUserByConfirmationCode(confirmationCode) {
   return User.findOne({ confirmationCode });
@@ -22,7 +22,7 @@ async function getAllUsers({ query, paginationOptions }) {
 }
 
 async function getAllUsersList() {
-  const users = await User.find().select(options.listSelect);
+  const users = await User.find().select(options.listSelect).populate(options.populate);
   return users;
 }
 

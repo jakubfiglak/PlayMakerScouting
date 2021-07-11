@@ -10,7 +10,12 @@ import { SkillsChart } from './SkillsChart';
 
 type Props = Pick<
   Report,
-  'summary' | 'finalRating' | 'avgRating' | 'skills' | 'maxRatingScore'
+  | 'summary'
+  | 'finalRating'
+  | 'avgRating'
+  | 'skills'
+  | 'maxRatingScore'
+  | 'percentageRating'
 >;
 
 export const ReportSummary = ({
@@ -19,6 +24,7 @@ export const ReportSummary = ({
   avgRating,
   skills,
   maxRatingScore,
+  percentageRating,
 }: Props) => {
   const classes = useStyles();
 
@@ -39,7 +45,7 @@ export const ReportSummary = ({
         </div>
         <Typography>
           <strong>Średnia ocena: </strong>
-          {`${avgRating.toFixed(1)}%`}
+          {`${avgRating.toFixed(2)} (${percentageRating.toFixed(1)}%)`}
         </Typography>
       </div>
       <div>

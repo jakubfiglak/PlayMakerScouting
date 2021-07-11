@@ -6,6 +6,9 @@ const Order = require('../modules/orders/order.model');
 const Report = require('../modules/reports/report.model');
 const Rating = require('../modules/ratings/rating.model');
 const ReportTemplate = require('../modules/reportTemplates/reportTemplate.model');
+const Team = require('../modules/teams/team.model');
+const AccessControlList = require('../modules/accessControlLists/accessControlList.model');
+const ReportBackgroundImage = require('../modules/reportBackgroundImages/reportBackgroundImage.model');
 const { buildUser } = require('./utils');
 
 const salt = bcrypt.genSaltSync(10);
@@ -30,6 +33,9 @@ const insertOrders = (orders) => Order.insertMany(orders);
 const insertReports = (reports) => Report.insertMany(reports);
 const insertRatings = (ratings) => Rating.insertMany(ratings);
 const insertReportTemplates = (reportTemplates) => ReportTemplate.insertMany(reportTemplates);
+const insertTeams = (teams) => Team.insertMany(teams);
+const insertAccessControlLists = (acls) => AccessControlList.insertMany(acls);
+const insertReportBackgroundImages = (images) => ReportBackgroundImage.insertMany(images);
 
 module.exports = {
   insertUsers,
@@ -40,4 +46,7 @@ module.exports = {
   insertReports,
   insertRatings,
   insertReportTemplates,
+  insertTeams,
+  insertAccessControlLists,
+  insertReportBackgroundImages,
 };

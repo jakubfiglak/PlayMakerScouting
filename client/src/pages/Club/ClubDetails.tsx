@@ -1,0 +1,71 @@
+import React from 'react';
+// MUI components
+import {
+  Avatar,
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  Typography,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
+// MUI icons
+import { Security as ClubsIcon } from '@material-ui/icons';
+// Types
+import { Club } from '../../types/clubs';
+// Utils & data
+import { getLabel } from '../../utils/getLabel';
+
+type Props = {
+  club: Club;
+};
+
+export const ClubDetails = ({ club }: Props) => {
+  const classes = useStyles();
+
+  const { division, name, voivodeship, lnpID } = club;
+
+  return (
+    <Card className={classes.container}>
+      <CardHeader
+        avatar={
+          <Avatar aria-label="club avatar" className={classes.avatar}>
+            <ClubsIcon />
+          </Avatar>
+        }
+        title={name}
+        titleTypographyProps={{ variant: 'h3' }}
+        subheader={division}
+      />
+      <CardContent>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Typography>
+              <strong>Województwo: </strong>
+              {voivodeship}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>
+              <strong>ID ŁNP: </strong>
+              {lnpID || '-'}
+            </Typography>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
+  );
+};
+
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    maxWidth: 500,
+    margin: '0 auto',
+  },
+  avatar: {
+    background: theme.palette.secondary.main,
+    width: 50,
+    height: 50,
+  },
+}));

@@ -19,19 +19,18 @@ import {
   Print as PrintIcon,
   Edit as EditIcon,
 } from '@material-ui/icons';
-// Assets
-import background from '../../assets/report_background.png';
-import odra_background from '../../assets/odra_background.jpg';
 // Custom components
 import { ReportMatchStats } from './ReportMatchStats';
 import { ReportBasicInfo } from './ReportBasicInfo';
 import { ReportSummary } from './ReportSummary';
 import { PrinteableReport } from './PrinteableReport';
+import { StatusChip } from '../Reports/StatusChip';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useReportsState } from '../../context/reports/useReportsState';
+import { useSettingsState } from '../../context/settings/useSettingsState';
 // Utils & data
 import { groupSkillsByCategory } from '../../utils/groupSkillsByCategory';
 import { SkillsAccordion } from './SkillsAccordion';
@@ -44,8 +43,9 @@ type ParamTypes = {
 export const ReportPage = () => {
   const params = useParams<ParamTypes>();
   const ref = useRef<HTMLDivElement | null>(null);
+  const { defaultReportBackgroundImageUrl } = useSettingsState();
 
-  const classes = useStyles();
+  const classes = useStyles({ background: defaultReportBackgroundImageUrl });
 
   const { loading, getReport, reportData, setCurrent } = useReportsState();
 
@@ -78,6 +78,9 @@ export const ReportPage = () => {
               Wróć do listy raportów
             </Button>
             <PageHeading title={`Raport nr ${reportData.docNumber}`} />
+            <div>
+              Status: <StatusChip status={reportData.status} />
+            </div>
             <div className={classes.buttonsContainer}>
               <Button
                 variant="contained"
@@ -94,6 +97,7 @@ export const ReportPage = () => {
                 color="primary"
                 onClick={() => setCurrent(reportData)}
                 startIcon={<EditIcon />}
+                disabled={reportData.status === 'closed'}
               >
                 Edytuj
               </Button>
@@ -108,6 +112,7 @@ export const ReportPage = () => {
                 order={reportData.order}
                 playerCurrentClub={reportData.playerCurrentClub}
                 positionPlayed={reportData.positionPlayed}
+                shirtNo={reportData.shirtNo}
                 createdAt={reportData.createdAt}
               />
             </CardContent>
@@ -155,6 +160,7 @@ export const ReportPage = () => {
                 avgRating={reportData.avgRating}
                 skills={reportData.skills}
                 maxRatingScore={reportData.maxRatingScore}
+                percentageRating={reportData.percentageRating}
               />
             </AccordionDetails>
           </Accordion>
@@ -169,7 +175,11 @@ export const ReportPage = () => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+type StyleProps = {
+  background: string;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
   headerContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -181,6 +191,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     gap: `${theme.spacing(1)}px`,
+    marginTop: theme.spacing(2),
   },
   link: {
     marginBottom: theme.spacing(1),
@@ -195,9 +206,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   accordionDetails: {
     flexDirection: 'column',
   },
-  pageBody: {
-    backgroundImage: `url(${odra_background})`,
+  pageBody: (props) => ({
+    backgroundImage: `url(${props.background})`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
-  },
+  }),
 }));

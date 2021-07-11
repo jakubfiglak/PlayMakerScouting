@@ -22,6 +22,8 @@ type BottomNavProps = {
 export const BottomNav = ({ activeStep, setActiveStep }: BottomNavProps) => {
   const classes = useStyles();
 
+  const disabled = activeStep <= 2;
+
   return (
     <BottomNavigation
       value={activeStep}
@@ -34,26 +36,26 @@ export const BottomNav = ({ activeStep, setActiveStep }: BottomNavProps) => {
       <BottomNavigationAction
         label="Mecz"
         icon={<BallIcon />}
-        disabled={activeStep <= 1}
-        value={2}
+        disabled={disabled}
+        value={3}
       />
       <BottomNavigationAction
         label="Notatki"
         icon={<NotesIcon />}
-        disabled={activeStep <= 1}
-        value={3}
+        disabled={disabled}
+        value={4}
       />
       <BottomNavigationAction
         label="Oceny"
         icon={<RatesIcon />}
-        disabled={activeStep <= 1}
-        value={4}
+        disabled={disabled}
+        value={5}
       />
       <BottomNavigationAction
         label="Statystyki"
         icon={<StatsIcon />}
-        disabled={activeStep <= 1}
-        value={5}
+        disabled={disabled}
+        value={6}
       />
     </BottomNavigation>
   );

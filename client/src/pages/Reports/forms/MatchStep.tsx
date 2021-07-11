@@ -1,18 +1,19 @@
 import React from 'react';
 import { useField } from 'formik';
 // MUI components
-import { Grid, TextField, FormControl } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 // Custom components
 import { CompetitionSelect } from '../../../components/selects/CompetitionSelect';
 import { MatchLocationSelect } from '../../../components/selects/MatchLocationSelect';
-import { PositionSelect } from '../../../components/selects/PositionSelect';
 
 export const MatchStep = () => {
   const [againstField, againstMeta] = useField('match.against');
   const [dateField, dateMeta] = useField('match.date');
+  const [resultField, resultMeta] = useField('match.result');
 
   const { error: againstError, touched: againstTouched } = againstMeta;
   const { error: dateError, touched: dateTouched } = dateMeta;
+  const { error: resultError, touched: resultTouched } = resultMeta;
 
   return (
     <Grid container spacing={2}>
@@ -22,7 +23,7 @@ export const MatchStep = () => {
       <Grid item xs={6}>
         <MatchLocationSelect name="match.location" />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <TextField
           {...againstField}
           id="against"
@@ -46,12 +47,15 @@ export const MatchStep = () => {
         />
       </Grid>
       <Grid item xs={6}>
-        <FormControl variant="outlined" fullWidth>
-          <PositionSelect
-            name="positionPlayed"
-            helperText="Podaj pozycję, na której zawodnik zagrał w danym meczu"
-          />
-        </FormControl>
+        <TextField
+          {...resultField}
+          id="result"
+          fullWidth
+          label="Wynik"
+          variant="outlined"
+          error={resultTouched && !!resultError}
+          helperText={resultTouched && resultError}
+        />
       </Grid>
     </Grid>
   );

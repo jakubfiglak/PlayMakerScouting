@@ -20,6 +20,7 @@ const {
   comparePasswords,
   setUser,
 } = require('../modules/auth/auth.middleware');
+
 const options = require('../modules/auth/options');
 
 const router = express.Router();

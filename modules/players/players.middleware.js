@@ -37,20 +37,4 @@ const canBeDeleted = asyncHandler(async (req, res, next) => {
   next();
 });
 
-function canAccessBeGranted(req, res, next) {
-  const userId = req.body.user;
-  const { id } = req.params;
-
-  if (req.player.authorizedUsers.includes(userId)) {
-    return next(
-      new ApiError(
-        `User with the id of ${userId} already has access to the player with the id of ${id}`,
-        httpStatus.BAD_REQUEST
-      )
-    );
-  }
-
-  next();
-}
-
-module.exports = { setPlayer, canBeDeleted, canAccessBeGranted };
+module.exports = { setPlayer, canBeDeleted };
