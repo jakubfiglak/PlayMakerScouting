@@ -18,7 +18,7 @@ import { CommonTableProps } from '../../types/common';
 import { useStyles } from './styles';
 
 type Props = CommonTableProps & {
-  headCells: { id: string; label: string }[];
+  headCells: { id: string; label: string; sortingDisabled?: boolean }[];
 };
 
 export const Table: FC<Props> = ({
