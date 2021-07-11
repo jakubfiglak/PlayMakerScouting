@@ -1,4 +1,5 @@
 const express = require('express');
+const reportsRouter = require('./reports');
 const {
   createOrder,
   getOrders,
@@ -25,6 +26,8 @@ const {
 } = require('../modules/orders/orders.middleware');
 
 const router = express.Router({ mergeParams: true });
+
+router.use('/:orderId/reports', protect, reportsRouter);
 
 router.post(
   '/',

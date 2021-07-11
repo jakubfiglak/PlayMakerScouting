@@ -17,7 +17,7 @@ import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useReports, useSetReportStatus } from '../../hooks/reports';
+import { useReports } from '../../hooks/reports';
 import { useClubsList } from '../../hooks/clubs';
 import { usePlayersList, useCreatePlayer } from '../../hooks/players';
 import { useOrdersList } from '../../hooks/orders';
@@ -78,10 +78,6 @@ export const ReportsPage = () => {
     order,
     filters,
   });
-  const {
-    mutate: setReportStatus,
-    isLoading: setStatusLoading,
-  } = useSetReportStatus();
 
   useEffect(() => {
     if (state?.setActiveTab) {
@@ -112,8 +108,7 @@ export const ReportsPage = () => {
         playersLoading ||
         clubsLoading ||
         ordersLoading ||
-        reportsLoading ||
-        setStatusLoading) && <Loader />}
+        reportsLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
           <Tab label="Raporty" id="reports-0" aria-controls="reports-0" />
@@ -137,7 +132,6 @@ export const ReportsPage = () => {
           total={reports?.totalDocs || 0}
           reports={reports?.docs || []}
           onEditClick={handleSetCurrent}
-          onSetStatusClick={setReportStatus}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">

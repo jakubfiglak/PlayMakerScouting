@@ -27,12 +27,17 @@ exports.createReport = asyncHandler(async (req, res) => {
 // @desc Get all reports
 // @route GET /api/v1/reports
 // @route GET /api/v1/players/:playerId/reports
+// @route GET /api/v1/orders/:orderId/reports
 // @access Private
 exports.getReports = asyncHandler(async (req, res) => {
-  const { playerId } = req.params;
+  const { playerId, orderId } = req.params;
 
   if (playerId) {
     req.query.player = playerId;
+  }
+
+  if (orderId) {
+    req.query.order = orderId;
   }
 
   const { query, paginationOptions, accessFilters } = req;

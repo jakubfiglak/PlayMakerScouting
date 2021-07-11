@@ -24,20 +24,21 @@ import { PrinteableReport } from '../Report/PrinteableReport';
 import { Table } from '../../components/table/Table';
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
+import { Loader } from '../../components/Loader';
 // Hooks
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useSettingsState } from '../../context/settings/useSettingsState';
+import { useSetReportStatus } from '../../hooks/reports';
+
 // Types
 import { Report } from '../../types/reports';
 import { CommonTableProps } from '../../types/common';
-import { SetReportStatusArgs } from '../../hooks/reports';
 // Utils & data
 import { formatDate } from '../../utils/dates';
 
 type Props = {
   reports: Report[];
   onEditClick?: (report: Report) => void;
-  onSetStatusClick: ({ id, status }: SetReportStatusArgs) => void;
 } & CommonTableProps;
 
 const headCells = [
@@ -62,7 +63,6 @@ export const ReportsTable = ({
   total,
   reports,
   onEditClick,
-  onSetStatusClick,
 }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isPrintActive, setPrintActive] = useState(false);
@@ -72,6 +72,11 @@ export const ReportsTable = ({
   const user = useAuthenticatedUser();
 
   const isAdmin = user.role === 'admin';
+
+  const {
+    mutate: setReportStatus,
+    isLoading: setStatusLoading,
+  } = useSetReportStatus();
 
   const handlePrint = useReactToPrint({
     content: () => ref.current,
@@ -97,6 +102,7 @@ export const ReportsTable = ({
       total={total}
       headCells={headCells}
     >
+      {setStatusLoading && <Loader />}
       {reports.map((report) => {
         const {
           id,
@@ -141,7 +147,7 @@ export const ReportsTable = ({
                   <Tooltip title="Zamknij raport">
                     <IconButton
                       aria-label="close report"
-                      onClick={() => onSetStatusClick({ id, status: 'closed' })}
+                      onClick={() => setReportStatus({ id, status: 'closed' })}
                     >
                       <CloseIcon />
                     </IconButton>
@@ -150,9 +156,7 @@ export const ReportsTable = ({
                   <Tooltip title="Otwórz raport">
                     <IconButton
                       aria-label="open report"
-                      onClick={() =>
-                        onSetStatusClick({ id, status: 'in-prep' })
-                      }
+                      onClick={() => setReportStatus({ id, status: 'in-prep' })}
                     >
                       <OpenIcon />
                     </IconButton>

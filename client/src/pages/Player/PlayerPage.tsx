@@ -10,7 +10,7 @@ import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { usePlayer } from '../../hooks/players';
-import { usePlayersReports, useSetReportStatus } from '../../hooks/reports';
+import { usePlayersReports } from '../../hooks/reports';
 import { useTable } from '../../hooks/useTable';
 
 type ParamTypes = {
@@ -33,10 +33,7 @@ export const PlayerPage = () => {
   const { id } = params;
 
   const { data: player, isLoading: playerLoading } = usePlayer(id);
-  const {
-    mutate: setReportStatus,
-    isLoading: setStatusLoading,
-  } = useSetReportStatus();
+
   const { data: reports } = usePlayersReports({
     playerId: id,
     page: page + 1,
@@ -47,7 +44,7 @@ export const PlayerPage = () => {
 
   return (
     <MainTemplate>
-      {(playerLoading || setStatusLoading) && <Loader />}
+      {playerLoading && <Loader />}
       <div className={classes.container}>
         <Button
           to="/players"
@@ -79,7 +76,6 @@ export const PlayerPage = () => {
         handleSort={handleSort}
         reports={reports?.docs || []}
         total={reports?.totalDocs || 0}
-        onSetStatusClick={setReportStatus}
       />
     </MainTemplate>
   );
