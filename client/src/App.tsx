@@ -1,8 +1,8 @@
 import React from 'react';
+import * as Sentry from '@sentry/react';
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ThemeProvider } from '@material-ui/core';
-import { ErrorBoundary } from 'react-error-boundary';
 import { Alerts } from './components/Alerts';
 import { ErrorPage } from './pages/Error/ErrorPage';
 import theme from './theme/theme';
@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <ErrorBoundary FallbackComponent={ErrorPage}>
+    <Sentry.ErrorBoundary fallback={ErrorPage}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <Alerts />
@@ -32,7 +32,7 @@ const App = () => {
         </ThemeProvider>
         <ReactQueryDevtools />
       </QueryClientProvider>
-    </ErrorBoundary>
+    </Sentry.ErrorBoundary>
   );
 };
 
