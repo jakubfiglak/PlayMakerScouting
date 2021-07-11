@@ -138,7 +138,11 @@ export const OrdersTable = ({
                 )}
               </div>
             </StyledTableCell>
-            <StyledTableCell>{`${player.firstName} ${player.lastName}`}</StyledTableCell>
+            <StyledTableCell>
+              <Link component={RouterLink} to={`/players/${player.id}`}>
+                {`${player.firstName} ${player.lastName}`}
+              </Link>
+            </StyledTableCell>
             <StyledTableCell>
               <OrderStatusChip status={status} />
             </StyledTableCell>

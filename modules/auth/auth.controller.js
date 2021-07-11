@@ -15,7 +15,7 @@ exports.register = asyncHandler(async (req, res) => {
     user: user._id,
   });
 
-  const confirmationURL = `http://${req.headers.host}/api/v1/auth/confirm/${req.body.confirmationCode}`;
+  const confirmationURL = `http://${req.headers.host}/confirm/${req.body.confirmationCode}`;
 
   await emailService.sendConfirmationEmail({
     email: user.email,
@@ -25,7 +25,7 @@ exports.register = asyncHandler(async (req, res) => {
 
   res.status(httpStatus.CREATED).json({
     success: true,
-    message: 'Successfully created new user!',
+    message: 'Account created successfully! Please check your email to verify your account.',
     data: user,
   });
 });
