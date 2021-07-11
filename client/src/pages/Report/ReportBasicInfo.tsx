@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // MUI components
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Link } from '@material-ui/core';
 // Types
 import { Report } from '../../types/reports';
 // Utils & data
@@ -35,13 +36,17 @@ export const ReportBasicInfo = ({
         <Grid item xs={12}>
           <Typography>
             <strong>Zawodnik: </strong>
-            {`${player.firstName} ${player.lastName} (ur. ${player.yearOfBirth})`}
+            <Link component={RouterLink} to={`/players/${player.id}`}>
+              {`${player.firstName} ${player.lastName} (ur. ${player.yearOfBirth})`}
+            </Link>
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography>
             <strong>Klub: </strong>
-            {`${playerCurrentClub.name} (${playerCurrentClub.division})`}
+            <Link component={RouterLink} to={`/clubs/${playerCurrentClub.id}`}>
+              {`${playerCurrentClub.name} (${playerCurrentClub.division})`}
+            </Link>
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -84,7 +89,9 @@ export const ReportBasicInfo = ({
           <Grid item xs={12}>
             <Typography>
               <strong>Nr zlecenia: </strong>
-              {order.docNumber}
+              <Link component={RouterLink} to={`/orders/${order.id}`}>
+                {order.docNumber}
+              </Link>
             </Typography>
           </Grid>
         )}

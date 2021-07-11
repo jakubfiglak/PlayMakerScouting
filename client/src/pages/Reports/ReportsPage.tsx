@@ -13,48 +13,43 @@ import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Types
-import { Report, ReportFormData, ReportsFilterData } from '../../types/reports';
+import { Report, ReportDTO, ReportsFilterData } from '../../types/reports';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useReports, useSetReportStatus } from '../../hooks/reports';
+import {
+  useReports,
+  useCreateReport,
+  useUpdateReport,
+} from '../../hooks/reports';
 import { useClubsList } from '../../hooks/clubs';
+import { usePlayersList, useCreatePlayer } from '../../hooks/players';
+import { useOrdersList } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
-import { useReportsState } from '../../context/reports/useReportsState';
-import { usePlayersState } from '../../context/players/usePlayersState';
-import { useOrdersState } from '../../context/orders/useOrdersState';
+
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
-type LocationState = { setActiveTab: number };
+type LocationState = { activeTab: number; report: Report };
 
 export const ReportsPage = () => {
   const { state } = useLocation<LocationState | null>();
+  const [currentReport, setCurrentReport] = useState<Report | null>(null);
 
   const {
-    loading,
-    getReports,
-    reportsData,
-    setCurrent,
-    addReport,
-    editReport,
-    clearCurrent,
-    current,
-  } = useReportsState();
-
+    mutate: createReport,
+    isLoading: createReportLoading,
+  } = useCreateReport();
   const {
-    loading: playersLoading,
-    getPlayersList,
-    playersList,
-    addPlayer,
-  } = usePlayersState();
-
-  const {
-    loading: ordersLoading,
-    getOrdersList,
-    ordersList,
-  } = useOrdersState();
-
+    mutate: updateReport,
+    isLoading: updateReportLoading,
+  } = useUpdateReport(currentReport?.id || '');
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
+  const { data: players, isLoading: playersLoading } = usePlayersList();
+  const { data: orders, isLoading: ordersLoading } = useOrdersList();
+  const {
+    mutate: createPlayer,
+    isLoading: createPlayerLoading,
+  } = useCreatePlayer();
 
   const { setAlert } = useAlertsState();
 
@@ -85,50 +80,48 @@ export const ReportsPage = () => {
     order,
     filters,
   });
-  const {
-    mutate: setReportStatus,
-    isLoading: setStatusLoading,
-  } = useSetReportStatus();
 
   useEffect(() => {
-    getPlayersList();
-    if (user.role !== 'scout') {
-      getOrdersList();
+    if (state) {
+      setActiveTab(state.activeTab);
+      setCurrentReport(state.report);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (state?.setActiveTab) {
-      setActiveTab(state.setActiveTab);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state?.setActiveTab]);
+  }, [setActiveTab, state]);
 
   const handleSetCurrent = (report: Report) => {
-    setCurrent(report);
+    setCurrentReport(report);
     setActiveTab(1);
   };
 
-  const onAddReport = (data: ReportFormData) => {
-    addReport(data);
+  const onAddReport = (data: ReportDTO) => {
+    createReport(data);
     setActiveTab(0);
   };
+
+  function onUpdateReport(data: ReportDTO) {
+    updateReport(data);
+    setActiveTab(0);
+    setCurrentReport(null);
+  }
 
   const handleEditFormReset = () => {
     setActiveTab(0);
     setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
-    clearCurrent();
+    setCurrentReport(null);
   };
+
+  const isLoading =
+    clubsLoading ||
+    ordersLoading ||
+    createReportLoading ||
+    updateReportLoading ||
+    playersLoading ||
+    createPlayerLoading ||
+    reportsLoading;
 
   return (
     <MainTemplate>
-      {(loading ||
-        playersLoading ||
-        clubsLoading ||
-        ordersLoading ||
-        reportsLoading ||
-        setStatusLoading) && <Loader />}
+      {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
           <Tab label="Raporty" id="reports-0" aria-controls="reports-0" />
@@ -137,7 +130,10 @@ export const ReportsPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="reports">
         <PageHeading title="Baza raportów" />
-        <ReportsFilterForm playersData={playersList} setFilters={setFilters} />
+        <ReportsFilterForm
+          playersData={players || []}
+          setFilters={setFilters}
+        />
         <ReportsTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -149,28 +145,27 @@ export const ReportsPage = () => {
           total={reports?.totalDocs || 0}
           reports={reports?.docs || []}
           onEditClick={handleSetCurrent}
-          onSetStatusClick={setReportStatus}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
         <PageHeading
           title={
-            current
-              ? `Edycja raportu nr ${current.docNumber}`
+            currentReport
+              ? `Edycja raportu nr ${currentReport.docNumber}`
               : 'Tworzenie nowego raportu'
           }
         />
-        {current ? (
+        {currentReport ? (
           <EditReportForm
-            report={current}
+            report={currentReport}
             onReset={handleEditFormReset}
-            onSubmit={editReport}
+            onSubmit={onUpdateReport}
           />
         ) : (
           <NewReportForm
             isOrderOptionDisabled={user.role === 'scout'}
-            playersList={playersList}
-            ordersList={ordersList}
+            playersList={players || []}
+            ordersList={orders || []}
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
             onSubmit={onAddReport}
           />
@@ -178,7 +173,7 @@ export const ReportsPage = () => {
         <AddPlayerModal
           clubsData={clubs || []}
           onClose={() => setIsAddPlayerModalOpen(false)}
-          onSubmit={addPlayer}
+          onSubmit={createPlayer}
           open={isAddPlayerModalOpen}
         />
       </TabPanel>

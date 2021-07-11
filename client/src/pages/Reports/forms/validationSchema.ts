@@ -4,11 +4,11 @@ import {
   Competition,
   MatchLocation,
   RatingScore,
-  ReportFormData,
+  ReportDTO,
   Skill,
 } from '../../../types/reports';
 
-export const validationSchema: yup.ObjectSchema<ReportFormData> = yup
+export const validationSchema: yup.ObjectSchema<ReportDTO> = yup
   .object({
     order: yup.string(),
     player: yup.string(),

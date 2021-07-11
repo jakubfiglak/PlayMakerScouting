@@ -15,22 +15,16 @@ import { PlayersFilterData, Player, PlayerDTO } from '../../types/players';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { usePlayersState } from '../../context/players/usePlayersState';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
-import { usePlayers } from '../../hooks/players';
+import {
+  usePlayers,
+  useCreatePlayer,
+  useUpdatePlayer,
+} from '../../hooks/players';
 import { useClubsList, useCreateClub } from '../../hooks/clubs';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 export const PlayersPage = () => {
   const { setAlert } = useAlertsState();
-
-  const {
-    addPlayer,
-    editPlayer,
-    current,
-    setCurrent,
-    clearCurrent,
-  } = usePlayersState();
-
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const [
     page,
@@ -42,6 +36,7 @@ export const PlayersPage = () => {
     handleSort,
   ] = useTable();
 
+  const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [filters, setFilters] = useState<PlayersFilterData>({
     lastName: '',
     club: '',
@@ -55,35 +50,48 @@ export const PlayersPage = () => {
     sort: sortBy,
     filters,
   });
+  const {
+    mutate: createPlayer,
+    isLoading: createPlayerLoading,
+  } = useCreatePlayer();
+  const {
+    mutate: updatePlayer,
+    isLoading: updatePlayerLoading,
+  } = useUpdatePlayer(currentPlayer?.id || '');
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { mutate: createClub, isLoading: createClubLoading } = useCreateClub();
 
   const [isAddClubModalOpen, setIsAddClubModalOpen] = useState(false);
 
-  const handleSetCurrent = (player: Player) => {
-    setCurrent(player);
+  const handleEditClick = (player: Player) => {
+    setCurrentPlayer(player);
     setActiveTab(1);
   };
 
-  const handlePlayersFormSubmit = (data: PlayerDTO) => {
-    if (current) {
-      editPlayer(current.id, data);
+  const handleSubmit = (data: PlayerDTO) => {
+    if (currentPlayer) {
+      updatePlayer(data);
       setActiveTab(0);
     } else {
-      addPlayer(data);
+      createPlayer(data);
       setActiveTab(0);
+      setCurrentPlayer(null);
     }
   };
 
   const handleFormReset = () => {
     setActiveTab(0);
     setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
-    clearCurrent();
+    setCurrentPlayer(null);
   };
 
   return (
     <MainTemplate>
-      {(playersLoading || clubsLoading || createClubLoading) && <Loader />}
+      {(playersLoading ||
+        clubsLoading ||
+        createClubLoading ||
+        createPlayerLoading ||
+        updatePlayerLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
           <Tab label="Zawodnicy" id="players-0" aria-controls="players-0" />
@@ -103,17 +111,19 @@ export const PlayersPage = () => {
           handleSort={handleSort}
           players={players?.docs || []}
           total={players?.totalDocs || 0}
-          onEditClick={handleSetCurrent}
+          onEditClick={handleEditClick}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PageHeading
-          title={current ? 'Edycja zawodnika' : 'Tworzenie nowego zawodnika'}
+          title={
+            currentPlayer ? 'Edycja zawodnika' : 'Tworzenie nowego zawodnika'
+          }
         />
         <PlayersForm
           clubsData={clubs || []}
-          current={current}
-          onSubmit={handlePlayersFormSubmit}
+          current={currentPlayer}
+          onSubmit={handleSubmit}
           onAddClubClick={() => setIsAddClubModalOpen(true)}
           onCancelClick={handleFormReset}
         />

@@ -80,7 +80,7 @@ async function getClubsList(): Promise<ClubBasicInfo[]> {
 export function useClubsList() {
   const { setAlert } = useAlertsState();
 
-  return useQuery('clubsList', getClubsList, {
+  return useQuery(['clubs', 'list'], getClubsList, {
     onError: (err: ApiError) =>
       setAlert({ msg: err.response.data.error, type: 'error' }),
   });

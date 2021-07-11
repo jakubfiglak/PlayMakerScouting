@@ -1,11 +1,15 @@
 import axios from 'axios';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
-import { Player, PlayerBasicInfo, PlayersFilterData } from '../types/players';
+import {
+  Player,
+  PlayerBasicInfo,
+  PlayerDTO,
+  PlayersFilterData,
+} from '../types/players';
 import {
   ApiError,
   ApiResponse,
   PaginatedData,
-  SortingOrder,
   GetPaginatedDataArgs,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
@@ -60,12 +64,16 @@ export function usePlayers({
   filters,
 }: GetPlayersArgs) {
   const { setAlert } = useAlertsState();
+  const queryClient = useQueryClient();
 
   return useQuery<PaginatedPlayers, ApiError>(
     ['players', { page, limit, sort, order, filters }],
     () => getPlayers({ page, limit, sort, order, filters }),
     {
       keepPreviousData: true,
+      onSuccess: (data) => {
+        queryClient.setQueryData('players', data.docs);
+      },
       onError: (err: ApiError) =>
         setAlert({ msg: err.response.data.error, type: 'error' }),
     },
@@ -118,8 +126,90 @@ async function getPlayersList(): Promise<PlayerBasicInfo[]> {
 export function usePlayersList() {
   const { setAlert } = useAlertsState();
 
-  return useQuery<PlayerBasicInfo[], ApiError>('playersList', getPlayersList, {
+  return useQuery<PlayerBasicInfo[], ApiError>(
+    ['players', 'list'],
+    getPlayersList,
+    {
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
+}
+
+// Get single player
+async function getPlayer(id: string): Promise<Player> {
+  const { data } = await axios.get<ApiResponse<Player>>(
+    `/api/v1/players/${id}`,
+  );
+  return data.data;
+}
+
+export function usePlayer(id: string) {
+  const { setAlert } = useAlertsState();
+  const queryClient = useQueryClient();
+
+  return useQuery(['players', id], () => getPlayer(id), {
+    initialData: () => {
+      const cachePlayers: Player[] = queryClient.getQueryData('players') || [];
+      return cachePlayers.find((player) => player.id === id);
+    },
     onError: (err: ApiError) =>
       setAlert({ msg: err.response.data.error, type: 'error' }),
   });
+}
+
+// Create new player
+async function createPlayer(
+  playerData: PlayerDTO,
+): Promise<ApiResponse<Player>> {
+  const { data } = await axios.post<ApiResponse<Player>>(
+    '/api/v1/players',
+    playerData,
+  );
+  return data;
+}
+
+export function useCreatePlayer() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation((values: PlayerDTO) => createPlayer(values), {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('players');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
+// Update player
+type UpdatePlayerArgs = { playerId: string; playerData: PlayerDTO };
+
+async function updatePlayer({
+  playerId,
+  playerData,
+}: UpdatePlayerArgs): Promise<ApiResponse<Player>> {
+  const { data } = await axios.put<ApiResponse<Player>>(
+    `/api/v1/players/${playerId}`,
+    playerData,
+  );
+  return data;
+}
+
+export function useUpdatePlayer(playerId: string) {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(
+    (values: PlayerDTO) => updatePlayer({ playerId, playerData: values }),
+    {
+      onSuccess: (data) => {
+        setAlert({ msg: data.message, type: 'success' });
+        queryClient.invalidateQueries('players');
+      },
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
 }

@@ -8,7 +8,7 @@ import { StyledTableCell } from './TableCell';
 import { SortingOrder } from '../../types/common';
 
 type Props = {
-  headCells: { id: string; label: string }[];
+  headCells: { id: string; label: string; sortingDisabled?: boolean }[];
   sortBy: string;
   order: SortingOrder;
   handleSort: (id: string) => void;
@@ -29,6 +29,7 @@ export const TableHeader = ({
         {headCells.map((headCell) => (
           <StyledTableCell key={headCell.id}>
             <TableSortLabel
+              disabled={headCell.sortingDisabled}
               active={sortBy === headCell.id}
               direction={sortBy === headCell.id ? order : 'asc'}
               onClick={() => handleSort(headCell.id)}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // MUI components
 import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
@@ -9,12 +9,9 @@ import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
-import { usePlayersState } from '../../context/players/usePlayersState';
-import { usePlayersReports, useSetReportStatus } from '../../hooks/reports';
-
+import { usePlayer } from '../../hooks/players';
+import { usePlayersReports } from '../../hooks/reports';
 import { useTable } from '../../hooks/useTable';
-// Types
-import { Report } from '../../types/reports';
 
 type ParamTypes = {
   id: string;
@@ -32,15 +29,12 @@ export const PlayerPage = () => {
     handleChangeRowsPerPage,
     handleSort,
   ] = useTable();
-  const { loading, playerData, getPlayer } = usePlayersState();
 
   const { id } = params;
 
-  const {
-    mutate: setReportStatus,
-    isLoading: setStatusLoading,
-  } = useSetReportStatus();
-  const { data: reports, isLoading: reportsLoading } = usePlayersReports({
+  const { data: player, isLoading: playerLoading } = usePlayer(id);
+
+  const { data: reports } = usePlayersReports({
     playerId: id,
     page: page + 1,
     order,
@@ -48,18 +42,9 @@ export const PlayerPage = () => {
     sort: sortBy,
   });
 
-  useEffect(() => {
-    getPlayer(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
-  function handlePrintClick(report: Report) {
-    console.log(report);
-  }
-
   return (
     <MainTemplate>
-      {(loading || reportsLoading || setStatusLoading) && <Loader />}
+      {playerLoading && <Loader />}
       <div className={classes.container}>
         <Button
           to="/players"
@@ -72,7 +57,7 @@ export const PlayerPage = () => {
         </Button>
         <PageHeading title="Profil zawodnika" />
       </div>
-      {playerData && <PlayerDetails player={playerData} />}
+      {player && <PlayerDetails player={player} />}
       <Typography
         variant="h6"
         component="h3"
@@ -91,8 +76,6 @@ export const PlayerPage = () => {
         handleSort={handleSort}
         reports={reports?.docs || []}
         total={reports?.totalDocs || 0}
-        // onPrintClick={handlePrintClick}
-        onSetStatusClick={setReportStatus}
       />
     </MainTemplate>
   );

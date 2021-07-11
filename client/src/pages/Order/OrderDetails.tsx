@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // MUI components
 import {
   Card,
@@ -8,6 +9,7 @@ import {
   Typography,
   IconButton,
   Grid,
+  Link,
   Tooltip,
   makeStyles,
   Theme,
@@ -39,7 +41,7 @@ export const OrderDetails = ({
   const classes = useStyles();
 
   const {
-    id: _id,
+    id,
     player,
     status,
     scout,
@@ -61,9 +63,15 @@ export const OrderDetails = ({
           </Grid>
           <Grid item xs={12}>
             <Typography>
-              <strong>Zawodnik:</strong> {player.firstName} {player.lastName},{' '}
-              {getLabel(player.position)} ({player.club.name},{' '}
-              {player.club.division})
+              <strong>Zawodnik:</strong>{' '}
+              <Link component={RouterLink} to={`/players/${player.id}`}>
+                {player.firstName} {player.lastName}
+              </Link>
+              , {getLabel(player.position)} (
+              <Link component={RouterLink} to={`/clubs/${player.club.name}`}>
+                {player.club.name}
+              </Link>
+              , {player.club.division})
             </Typography>
           </Grid>
           {scout && (
@@ -105,18 +113,18 @@ export const OrderDetails = ({
             <IconButton
               aria-label="close order"
               className={classes.delete}
-              disabled={!areAdminOptionsEnabled || status === 'closed'}
-              onClick={() => closeOrder(_id)}
+              disabled={!areAdminOptionsEnabled || status !== 'accepted'}
+              onClick={() => closeOrder(id)}
             >
               <CancelOutlinedIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Przyjmij zlecenie">
             <IconButton
-              aria-label="edit match"
+              aria-label="accept order"
               className={classes.accept}
               disabled={status !== 'open'}
-              onClick={() => acceptOrder(_id)}
+              onClick={() => acceptOrder(id)}
             >
               <AssignmentTurnedInIcon />
             </IconButton>

@@ -29,6 +29,7 @@ import { Order } from '../../types/orders';
 import { CommonTableProps } from '../../types/common';
 // Utils & data
 import { formatDate } from '../../utils/dates';
+import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   orders: Order[];
@@ -41,6 +42,8 @@ type Props = {
 
 const headCells = [
   { id: 'player', label: 'Zawodnik' },
+  { id: 'player.position', label: 'Pozycja', sortingDisabled: true },
+  { id: 'player.club', label: 'Klub', sortingDisabled: true },
   { id: 'status', label: 'Status' },
   { id: 'scout', label: 'Scout' },
   { id: 'createdAt', label: 'Data utworzenia' },
@@ -141,6 +144,12 @@ export const OrdersTable = ({
             <StyledTableCell>
               <Link component={RouterLink} to={`/players/${player.id}`}>
                 {`${player.firstName} ${player.lastName}`}
+              </Link>
+            </StyledTableCell>
+            <StyledTableCell>{getLabel(player.position)}</StyledTableCell>
+            <StyledTableCell>
+              <Link component={RouterLink} to={`/clubs/${player.club.id}`}>
+                {player.club.name}
               </Link>
             </StyledTableCell>
             <StyledTableCell>

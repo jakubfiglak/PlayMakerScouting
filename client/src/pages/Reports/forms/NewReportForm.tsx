@@ -27,7 +27,7 @@ import { useReportTemplates } from '../../../hooks/reportTemplates';
 // Types
 import { PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';
-import { ReportFormData, Skill } from '../../../types/reports';
+import { ReportDTO, Skill } from '../../../types/reports';
 import { Rating } from '../../../types/ratings';
 // Utils & data
 import { validationSchema } from './validationSchema';
@@ -38,7 +38,7 @@ type Props = {
   playersList: PlayerBasicInfo[];
   ordersList: OrderBasicInfo[];
   onAddPlayerClick: () => void;
-  onSubmit: (data: ReportFormData) => void;
+  onSubmit: (data: ReportDTO) => void;
 };
 
 export const NewReportForm = ({
@@ -231,7 +231,7 @@ function mapRatingsToRatingType(ratings: Rating[]) {
   });
 }
 
-const initialValues: Omit<ReportFormData, 'skills'> = {
+const initialValues: Omit<ReportDTO, 'skills'> = {
   order: '',
   player: '',
   positionPlayed: 'CM',
