@@ -21,7 +21,7 @@ const reportBackgroundImages = [
 ];
 
 async function seedReportBackgroundImages() {
-  await connectDB(process.env.DB_CONNECT);
+  await connectDB(process.env.PRODUCTION_DB_CONNECT);
   try {
     const created = await ReportBackgroundImage.create(reportBackgroundImages);
     console.log(created);
@@ -33,7 +33,7 @@ async function seedReportBackgroundImages() {
 }
 
 async function deleteReportBackgroundImages() {
-  await connectDB(process.env.DB_CONNECT);
+  await connectDB(process.env.PRODUCTION_DB_CONNECT);
   try {
     await ReportBackgroundImage.deleteMany();
     console.log('Report background images destroyed...'.red.inverse);

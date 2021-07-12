@@ -25,7 +25,6 @@ import {
   useCreateOrder,
 } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
-
 import { useClubsList } from '../../hooks/clubs';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
