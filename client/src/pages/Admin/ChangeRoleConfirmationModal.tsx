@@ -3,26 +3,28 @@ import React from 'react';
 import { Modal } from '../../components/Modal';
 import { Loader } from '../../components/Loader';
 // Types
-import { User } from '../../types/auth';
+import { User, UserRole } from '../../types/auth';
 // Hooks
-import { useAssignPlaymakerRole } from '../../hooks/users';
+import { useChangeRole } from '../../hooks/users';
 
 type Props = {
   user: User | null;
   handleClose: () => void;
   open: boolean;
+  roleToAssign: Omit<UserRole, 'admin'>;
 };
 
-export const AssignPlaymakerRoleConfirmationModal = ({
+export const ChangeRoleConfirmationModal = ({
   user,
   handleClose,
   open,
+  roleToAssign,
 }: Props) => {
-  const { mutate: assignPlaymakerRole, isLoading } = useAssignPlaymakerRole();
+  const { mutate: changeRole, isLoading } = useChangeRole();
 
   function handleAccept() {
     if (user) {
-      assignPlaymakerRole(user.id);
+      changeRole({ id: user.id, role: roleToAssign });
     }
     handleClose();
   }
@@ -31,7 +33,7 @@ export const AssignPlaymakerRoleConfirmationModal = ({
     <>
       {isLoading && <Loader />}
       <Modal
-        message={`Czy na pewno chcesz nadać użytkownikowi ${user?.firstName} ${user?.lastName} (${user?.email}) rolę playmaker-scout?`}
+        message={`Czy na pewno chcesz nadać użytkownikowi ${user?.firstName} ${user?.lastName} (${user?.email}) rolę ${roleToAssign}?`}
         handleAccept={handleAccept}
         handleClose={handleClose}
         open={open}

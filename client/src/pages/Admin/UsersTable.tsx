@@ -5,6 +5,7 @@ import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
 // MUI icons
 import {
   ArrowUpward as UpIcon,
+  ArrowDownward as DownIcon,
   Search as SearchIcon,
 } from '@material-ui/icons/';
 // Custom components
@@ -17,9 +18,9 @@ import { useUsers } from '../../hooks/users';
 import { useTable } from '../../hooks/useTable';
 // Types
 import { UserFilterData } from '../../types/users';
+import { User, UserRole } from '../../types/auth';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
-import { User } from '../../types/auth';
 
 type Props = {
   filters: UserFilterData;
@@ -34,6 +35,10 @@ const headCells = [
   { id: 'voivodeship', label: 'Województwo' },
   { id: 'city', label: 'Miasto' },
 ];
+
+function isPlaymakerScout(role: UserRole) {
+  return role === 'playmaker-scout';
+}
 
 export const UsersTable = ({ filters, onAssignRoleClick }: Props) => {
   const classes = useStyles();
@@ -81,13 +86,19 @@ export const UsersTable = ({ filters, onAssignRoleClick }: Props) => {
                       </IconButton>
                     </Link>
                   </Tooltip>
-                  <Tooltip title="Nadaj rolę playmaker-scout">
+                  <Tooltip
+                    title={
+                      isPlaymakerScout(user.role)
+                        ? 'Nadaj rolę scout'
+                        : 'Nadaj rolę playmaker-scout'
+                    }
+                  >
                     <IconButton
-                      aria-label="assign-playmaker-role"
+                      aria-label="change role"
                       onClick={() => onAssignRoleClick(user)}
-                      disabled={user.role !== 'scout'}
+                      disabled={user.role === 'admin'}
                     >
-                      <UpIcon />
+                      {isPlaymakerScout(user.role) ? <DownIcon /> : <UpIcon />}
                     </IconButton>
                   </Tooltip>
                 </div>

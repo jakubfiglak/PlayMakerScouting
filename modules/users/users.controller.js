@@ -37,16 +37,16 @@ exports.getUser = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc Make user a playmaker-scout
-// @route POST /api/v1/users/:id/assignplaymaker
+// @desc Change user role
+// @route POST /api/v1/users/:id/change-role
 // @access Private (admin only)
-exports.assignPlaymakerRole = asyncHandler(async (req, res) => {
+exports.changeRole = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const user = await usersService.assignPlaymakerRole(req.userData);
+  const user = await usersService.changeRole({ user: req.userData, role: req.body.role });
 
   res.status(200).json({
     success: true,
     data: user,
-    message: `Successfully assigned the role of 'playmaker-scout' to the user with the id of ${id}`,
+    message: `Successfully changed user with the id of ${id} role to ${req.body.role}`,
   });
 });
