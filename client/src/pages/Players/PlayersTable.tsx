@@ -20,8 +20,7 @@ type Props = {
 } & CommonTableProps;
 
 const headCells = [
-  { id: 'lastName', label: 'Nazwisko' },
-  { id: 'firstName', label: 'Imię' },
+  { id: 'lastName', label: 'Imię i nazwisko' },
   { id: 'club', label: 'Klub' },
   { id: 'position', label: 'Pozycja' },
   { id: 'yearOfBirth', label: 'Rok urodzenia' },
@@ -77,8 +76,11 @@ export const PlayersTable = ({
               ) : null}
             </div>
           </StyledTableCell>
-          <StyledTableCell>{player.lastName}</StyledTableCell>
-          <StyledTableCell>{player.firstName}</StyledTableCell>
+          <StyledTableCell>
+            <Link component={RouterLink} to={`/players/${player.id}`}>
+              {`${player.firstName} ${player.lastName}`}
+            </Link>
+          </StyledTableCell>
           <StyledTableCell>
             <Link component={RouterLink} to={`/clubs/${player.club.id}`}>
               {player.club.name}
