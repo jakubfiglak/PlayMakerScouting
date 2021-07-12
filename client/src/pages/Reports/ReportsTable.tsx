@@ -16,10 +16,12 @@ import {
   Print as PrintIcon,
   Lock as CloseIcon,
   LockOpen as OpenIcon,
+  Delete as DeleteIcon,
 } from '@material-ui/icons';
 // Custom components
 import { FinalRatingChip } from './FinalRatingChip';
 import { StatusChip } from './StatusChip';
+import { ReportDeleteConfirmationModal } from './ReportDeleteConfirmationModal';
 import { PrinteableReport } from '../Report/PrinteableReport';
 import { Table } from '../../components/table/Table';
 import { StyledTableCell } from '../../components/table/TableCell';
@@ -29,7 +31,6 @@ import { Loader } from '../../components/Loader';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useSettingsState } from '../../context/settings/useSettingsState';
 import { useSetReportStatus } from '../../hooks/reports';
-
 // Types
 import { Report } from '../../types/reports';
 import { CommonTableProps } from '../../types/common';
@@ -65,7 +66,11 @@ export const ReportsTable = ({
   onEditClick,
 }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [reportToPrintIdx, setReportToPrintIdx] = useState<number | null>(null);
+  const [currentReport, setCurrentReport] = useState<Report | null>(null);
+  const [
+    isDeleteReportConfirmationModalOpen,
+    setDeleteReportConfirmationModalOpen,
+  ] = useState(false);
   const { defaultReportBackgroundImageUrl } = useSettingsState();
 
   const classes = useStyles({ background: defaultReportBackgroundImageUrl });
@@ -82,12 +87,17 @@ export const ReportsTable = ({
     content: () => ref.current,
     bodyClass: classes.pageBody,
     documentTitle: 'Report',
-    onAfterPrint: () => setReportToPrintIdx(null),
+    onAfterPrint: () => setCurrentReport(null),
   }) as () => void;
 
-  function onPrintClick(idx: number) {
-    setReportToPrintIdx(idx);
+  function onPrintClick(report: Report) {
+    setCurrentReport(report);
     setTimeout(() => handlePrint(), 100);
+  }
+
+  function handleDeleteReportClick(report: Report) {
+    setCurrentReport(report);
+    setDeleteReportConfirmationModalOpen(true);
   }
 
   return (
@@ -104,7 +114,7 @@ export const ReportsTable = ({
         headCells={headCells}
       >
         {setStatusLoading && <Loader />}
-        {reports.map((report, idx) => {
+        {reports.map((report) => {
           const {
             id,
             player,
@@ -142,7 +152,7 @@ export const ReportsTable = ({
                   <Tooltip title="Drukuj">
                     <IconButton
                       aria-label="print report"
-                      onClick={() => onPrintClick(idx)}
+                      onClick={() => onPrintClick(report)}
                     >
                       <PrintIcon />
                     </IconButton>
@@ -170,6 +180,15 @@ export const ReportsTable = ({
                       </IconButton>
                     </Tooltip>
                   )}
+                  <Tooltip title="Usuń">
+                    <IconButton
+                      aria-label="delete report"
+                      onClick={() => handleDeleteReportClick(report)}
+                      disabled={!isAdmin && scout.id !== user.id}
+                    >
+                      <DeleteIcon color="error" />
+                    </IconButton>
+                  </Tooltip>
                 </div>
               </StyledTableCell>
               <StyledTableCell>
@@ -203,10 +222,18 @@ export const ReportsTable = ({
           );
         })}
       </Table>
-      {reportToPrintIdx !== null ? (
+      <ReportDeleteConfirmationModal
+        open={isDeleteReportConfirmationModalOpen}
+        report={currentReport}
+        handleClose={() => {
+          setCurrentReport(null);
+          setDeleteReportConfirmationModalOpen(false);
+        }}
+      />
+      {currentReport ? (
         <div className={classes.print}>
           <div ref={ref}>
-            <PrinteableReport report={reports[reportToPrintIdx]} />
+            <PrinteableReport report={currentReport} />
           </div>
         </div>
       ) : null}
