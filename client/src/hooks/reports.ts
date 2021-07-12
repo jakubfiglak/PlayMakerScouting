@@ -263,3 +263,25 @@ export function useSetReportStatus() {
     },
   );
 }
+
+// Delete report
+async function deleteReport(id: string): Promise<ApiResponse<string>> {
+  const { data } = await axios.delete<ApiResponse<string>>(
+    `/api/v1/reports/${id}`,
+  );
+  return data;
+}
+
+export function useDeleteReport() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation((id: string) => deleteReport(id), {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('reports');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}

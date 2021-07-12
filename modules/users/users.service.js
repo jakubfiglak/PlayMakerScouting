@@ -26,9 +26,9 @@ async function getAllUsersList() {
   return users;
 }
 
-async function assignPlaymakerRole(user) {
+async function changeRole({ user, role }) {
   const editedUser = user;
-  editedUser.role = 'playmaker-scout';
+  editedUser.role = role;
   const modifiedUser = await editedUser.save();
   return modifiedUser;
 }
@@ -40,5 +40,5 @@ module.exports = {
   getUserById,
   getAllUsers,
   getAllUsersList,
-  assignPlaymakerRole,
+  changeRole,
 };

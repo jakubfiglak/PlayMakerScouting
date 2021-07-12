@@ -3,7 +3,7 @@ const {
   getUsers,
   getUser,
   getUsersList,
-  assignPlaymakerRole,
+  changeRole,
 } = require('../modules/users/users.controller');
 const { setUser, checkRole } = require('../modules/users/users.middleware');
 const { protect, authorize } = require('../middleware/auth');
@@ -17,6 +17,6 @@ router.use(authorize('admin'));
 router.get('/', prepareQuery, getUsers);
 router.get('/list', getUsersList);
 router.get('/:id', setUser, getUser);
-router.post('/:id/assignplaymaker', [setUser, checkRole(['scout'])], assignPlaymakerRole);
+router.post('/:id/change-role', [setUser, checkRole(['scout', 'playmaker-scout'])], changeRole);
 
 module.exports = router;

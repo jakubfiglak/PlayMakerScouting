@@ -29,7 +29,7 @@ import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
-type LocationState = { activeTab: number; report: Report };
+type LocationState = { activeTab?: number; report?: Report };
 
 export const ReportsPage = () => {
   const { state } = useLocation<LocationState | null>();
@@ -82,8 +82,10 @@ export const ReportsPage = () => {
   });
 
   useEffect(() => {
-    if (state) {
+    if (state?.activeTab) {
       setActiveTab(state.activeTab);
+    }
+    if (state?.report) {
       setCurrentReport(state.report);
     }
   }, [setActiveTab, state]);

@@ -24,6 +24,8 @@ import {
   useCreateReportTemplate,
   useUpdateReportTemplate,
 } from '../../hooks/reportTemplates';
+// Utils & data
+import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   current: ReportTemplate | null;
@@ -111,7 +113,9 @@ export const ReportTemplatesFormModal = ({ current, onClose, open }: Props) => {
                               color="primary"
                             />
                           }
-                          label={`${rating.name} (${rating.category})`}
+                          label={`${rating.name} (${getLabel(
+                            rating.category,
+                          )})`}
                         />
                       ))
                     : null}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
 import { UserBasicInfo, UserFilterData } from '../types/users';
-import { User } from '../types/auth';
+import { User, UserRole } from '../types/auth';
 import {
   ApiError,
   ApiResponse,
@@ -99,24 +99,33 @@ export function useUser(id: string) {
   });
 }
 
-// Assign playmaker-scout role
-async function assignPlaymakerRole(id: string): Promise<ApiResponse<User>> {
+// Change user role
+type ChangeRoleArgs = { id: string; role: Omit<UserRole, 'admin'> };
+
+async function changeRole({
+  id,
+  role,
+}: ChangeRoleArgs): Promise<ApiResponse<User>> {
   const { data } = await axios.post<ApiResponse<User>>(
-    `/api/v1/users/${id}/assignplaymaker`,
+    `/api/v1/users/${id}/change-role`,
+    { role },
   );
   return data;
 }
 
-export function useAssignPlaymakerRole() {
+export function useChangeRole() {
   const queryClient = useQueryClient();
   const { setAlert } = useAlertsState();
 
-  return useMutation((id: string) => assignPlaymakerRole(id), {
-    onSuccess: (data: ApiResponse<User>) => {
-      setAlert({ msg: data.message, type: 'success' });
-      queryClient.invalidateQueries('users');
+  return useMutation(
+    ({ id, role }: ChangeRoleArgs) => changeRole({ id, role }),
+    {
+      onSuccess: (data: ApiResponse<User>) => {
+        setAlert({ msg: data.message, type: 'success' });
+        queryClient.invalidateQueries('users');
+      },
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
     },
-    onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
-  });
+  );
 }

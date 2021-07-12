@@ -5,13 +5,13 @@ import {
   Typography,
   AccordionDetails,
   makeStyles,
+  Theme,
 } from '@material-ui/core';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { SkillsCategories } from '../../../types/ratings';
 import { groupSkillsByCategory } from '../../../utils/groupSkillsByCategory';
 import { getLabel } from '../../../utils/getLabel';
 import { RatingInput } from './RatingInput';
-import { FormContainer } from '../../../components/FormContainer';
 
 type RatingType = {
   name: string;
@@ -38,18 +38,19 @@ export const RatingsStep = ({ ratings, maxRatingScore }: Props) => {
             <Typography className={classes.title}>{getLabel(key)}</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <FormContainer>
+            <div className={classes.container}>
               {value &&
                 value.map((rating) => (
-                  <RatingInput
-                    key={rating.name}
-                    title={rating.name}
-                    hasScore={rating.hasScore}
-                    index={ratings.findIndex((el) => el.name === rating.name)}
-                    maxRatingScore={maxRatingScore}
-                  />
+                  <div key={rating.name} className={classes.item}>
+                    <RatingInput
+                      title={rating.name}
+                      hasScore={rating.hasScore}
+                      index={ratings.findIndex((el) => el.name === rating.name)}
+                      maxRatingScore={maxRatingScore}
+                    />
+                  </div>
                 ))}
-            </FormContainer>
+            </div>
           </AccordionDetails>
         </Accordion>
       ))}
@@ -57,7 +58,13 @@ export const RatingsStep = ({ ratings, maxRatingScore }: Props) => {
   );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    width: '100%',
+  },
+  item: {
+    marginBottom: theme.spacing(2),
+  },
   title: {
     fontWeight: 'bold',
   },

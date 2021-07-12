@@ -16,7 +16,7 @@ export const CreateReportCard = () => {
   return (
     <Card>
       <Link
-        to={{ pathname: '/reports', state: { setActiveTab: 1 } }}
+        to={{ pathname: '/reports', state: { activeTab: 1 } }}
         className={classes.link}
       >
         <CardActionArea className={classes.actionArea}>
