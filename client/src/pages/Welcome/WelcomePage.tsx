@@ -22,7 +22,7 @@ export const WelcomePage = () => {
   return (
     <AuthTemplate title="Witaj">
       <p>Potwierdzenie rejestracji</p>
-      <Link to="/">Zaloguj się</Link>
+      <Link to="/login">Zaloguj się</Link>
     </AuthTemplate>
   );
 };
