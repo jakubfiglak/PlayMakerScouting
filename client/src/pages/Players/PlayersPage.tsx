@@ -41,6 +41,8 @@ export const PlayersPage = () => {
     lastName: '',
     club: '',
     position: '',
+    bornAfter: '',
+    bornBefore: '',
   });
 
   const { data: players, isLoading: playersLoading } = usePlayers({
@@ -100,7 +102,11 @@ export const PlayersPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="players">
         <PageHeading title="Baza zawodników" />
-        <PlayersFilterForm clubsData={clubs || []} setFilters={setFilters} />
+        <PlayersFilterForm
+          clubsData={clubs || []}
+          filters={filters}
+          setFilters={setFilters}
+        />
         <PlayersTable
           page={page}
           rowsPerPage={rowsPerPage}

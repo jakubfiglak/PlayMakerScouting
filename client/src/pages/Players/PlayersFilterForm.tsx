@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
 import {
@@ -20,21 +20,19 @@ import { ClubBasicInfo } from '../../types/clubs';
 
 type Props = {
   clubsData: ClubBasicInfo[];
-  setFilters: Dispatch<SetStateAction<PlayersFilterData>>;
+  filters: PlayersFilterData;
+  setFilters: (data: PlayersFilterData) => void;
 };
 
-export const PlayersFilterForm = ({ clubsData, setFilters }: Props) => {
+export const PlayersFilterForm = ({
+  clubsData,
+  filters,
+  setFilters,
+}: Props) => {
   const classes = useStyles();
 
   return (
-    <Formik
-      initialValues={{
-        lastName: '',
-        club: '',
-        position: '',
-      }}
-      onSubmit={(data) => setFilters(data)}
-    >
+    <Formik initialValues={filters} onSubmit={(data) => setFilters(data)}>
       {({ handleReset, initialValues }) => (
         <Form autoComplete="off">
           <FormContainer>

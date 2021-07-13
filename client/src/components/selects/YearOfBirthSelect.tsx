@@ -35,7 +35,7 @@ export const YearOfBirthSelect = ({ name, label, size }: Props) => {
         label={label}
         error={touched && !!error}
       >
-        <MenuItem value={undefined}>Wszystkie</MenuItem>
+        <MenuItem value={0}>Wszystkie</MenuItem>
         {yearArray.map((yob) => (
           <MenuItem value={yob} key={yob}>
             {yob}
