@@ -49,6 +49,6 @@ export type PlayersFilterData = {
   lastName: string;
   club: string;
   position: string;
-  bornAfter?: number;
-  bornBefore?: number;
+  bornAfter: string;
+  bornBefore: string;
 };

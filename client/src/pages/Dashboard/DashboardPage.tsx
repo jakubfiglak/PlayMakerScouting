@@ -39,11 +39,13 @@ export const DashboardPage = () => {
           title="Zawodników w bazie"
           count={data?.playersCount}
           icon={<PlayersIcon />}
+          linkTo="/players"
         />
         <CountCard
           title="Klubów w bazie"
           count={data?.clubsCount}
           icon={<ClubsIcon />}
+          linkTo="/clubs"
         />
         {isPrivilegedUser && (
           <>
@@ -51,11 +53,13 @@ export const DashboardPage = () => {
               title="Zrealizowane zlecenia"
               count={data?.closedOrdersCount || 0}
               icon={<OrdersIcon />}
+              linkTo="/orders"
             />
             <CountCard
               title="Zlecenia w realizacji"
               count={data?.acceptedOrdersCount || 0}
               icon={<OrdersIcon />}
+              linkTo="/orders"
             />
           </>
         )}
@@ -63,6 +67,7 @@ export const DashboardPage = () => {
           title="Sporządzonych raportów"
           count={data?.reportsCount}
           icon={<ReportsIcon />}
+          linkTo="/reports"
         />
       </div>
       <div className={classes.container}>

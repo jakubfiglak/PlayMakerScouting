@@ -16,6 +16,13 @@ import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useClubs, useCreateClub, useUpdateClub } from '../../hooks/clubs';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+
+const initialFilters: ClubsFilterData = {
+  name: '',
+  division: '',
+  voivodeship: '',
+};
 
 export const ClubsPage = () => {
   const { setAlert } = useAlertsState();
@@ -31,10 +38,9 @@ export const ClubsPage = () => {
     handleSort,
   ] = useTable();
 
-  const [filters, setFilters] = useState<ClubsFilterData>({
-    name: '',
-    division: '',
-    voivodeship: '',
+  const [filters, setFilters] = useLocalStorage<ClubsFilterData>({
+    key: 'clubsFilters',
+    initialValue: initialFilters,
   });
 
   const [currentClub, setCurrentClub] = useState<Club | null>(null);
@@ -83,7 +89,11 @@ export const ClubsPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="clubs">
         <PageHeading title="Baza klubów" />
-        <ClubsFilterForm setFilters={setFilters} />
+        <ClubsFilterForm
+          filters={filters}
+          onFilter={setFilters}
+          onClearFilters={() => setFilters(initialFilters)}
+        />
         <ClubsTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -94,7 +104,7 @@ export const ClubsPage = () => {
           handleSort={handleSort}
           clubs={clubs?.docs || []}
           total={clubs?.totalDocs || 0}
-          handleSetCurrent={handleSetCurrent}
+          onEditClick={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">

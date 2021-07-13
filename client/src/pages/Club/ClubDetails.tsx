@@ -12,6 +12,8 @@ import {
 } from '@material-ui/core';
 // MUI icons
 import { Security as ClubsIcon } from '@material-ui/icons';
+// Hooks
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
 import { Club } from '../../types/clubs';
 
@@ -21,6 +23,9 @@ type Props = {
 
 export const ClubDetails = ({ club }: Props) => {
   const classes = useStyles();
+  const user = useAuthenticatedUser();
+
+  const isAdmin = user.role === 'admin';
 
   const { division, name, voivodeship, lnpID } = club;
 
@@ -44,12 +49,14 @@ export const ClubDetails = ({ club }: Props) => {
               {voivodeship}
             </Typography>
           </Grid>
-          <Grid item xs={12}>
-            <Typography>
-              <strong>ID ŁNP: </strong>
-              {lnpID || '-'}
-            </Typography>
-          </Grid>
+          {isAdmin ? (
+            <Grid item xs={12}>
+              <Typography>
+                <strong>ID ŁNP: </strong>
+                {lnpID || '-'}
+              </Typography>
+            </Grid>
+          ) : null}
         </Grid>
       </CardContent>
     </Card>

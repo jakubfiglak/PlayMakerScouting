@@ -9,6 +9,7 @@ export const StyledTableCell = withStyles((theme: Theme) =>
     },
     body: {
       fontSize: 14,
+      color: 'inherit',
     },
   }),
 )(TableCell);

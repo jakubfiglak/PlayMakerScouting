@@ -1,14 +1,20 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+// MUI components
+import { IconButton, Tooltip } from '@material-ui/core';
+// MUI icons
+import { Edit as EditIcon } from '@material-ui/icons';
 // Custom components
+import { StyledTableCell } from '../../components/table/TableCell';
+import { StyledTableRow } from '../../components/table/TableRow';
 import { Table } from '../../components/table/Table';
-import { ClubsTableRow } from './ClubsTableRow';
 // Types
 import { Club } from '../../types/clubs';
 import { CommonTableProps } from '../../types/common';
 
 type Props = {
   clubs: Club[];
-  handleSetCurrent: (club: Club) => void;
+  onEditClick: (club: Club) => void;
 } & CommonTableProps;
 
 const headCells = [
@@ -27,8 +33,10 @@ export const ClubsTable = ({
   handleSort,
   clubs,
   total,
-  handleSetCurrent,
+  onEditClick,
 }: Props) => {
+  const history = useHistory();
+
   return (
     <Table
       page={page}
@@ -42,14 +50,29 @@ export const ClubsTable = ({
       headCells={headCells}
     >
       {clubs.map((club) => {
-        const { id: _id } = club;
-
         return (
-          <ClubsTableRow
-            key={_id}
-            club={club}
-            handleSetCurrent={handleSetCurrent}
-          />
+          <StyledTableRow
+            hover
+            key={club.id}
+            onClick={() => history.push(`/clubs/${club.id}`)}
+          >
+            <StyledTableCell padding="checkbox">
+              <Tooltip title="Edytuj">
+                <IconButton
+                  aria-label="edit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditClick(club);
+                  }}
+                >
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </StyledTableCell>
+            <StyledTableCell>{club.name}</StyledTableCell>
+            <StyledTableCell>{club.division}</StyledTableCell>
+            <StyledTableCell>{club.voivodeship}</StyledTableCell>
+          </StyledTableRow>
         );
       })}
     </Table>
