@@ -54,6 +54,15 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
             />
             <VoivodeshipSelect name="voivodeship" />
             <DivisionSelect />
+            <Field
+              name="lnpID"
+              as={TextField}
+              variant="outlined"
+              fullWidth
+              label="ID Łączy Nas Piłka"
+              error={touched.lnpID && !!errors.lnpID}
+              helperText={(touched.lnpID && errors.lnpID) || 'Pole opcjonalne'}
+            />
             <MainFormActions
               label="klub"
               isEditState={!!current}

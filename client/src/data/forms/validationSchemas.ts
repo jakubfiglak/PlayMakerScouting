@@ -39,5 +39,6 @@ export const clubsFormValidationSchema: yup.ObjectSchema<ClubDTO> = yup
     voivodeship: yup
       .mixed<Voivodeship | 'Zagranica'>()
       .required('Podaj województwo'),
+    lnpID: yup.string().notRequired(),
   })
   .defined();
