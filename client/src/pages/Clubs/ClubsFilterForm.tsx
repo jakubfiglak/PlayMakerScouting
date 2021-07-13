@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
 import { TextField } from '@material-ui/core';
@@ -11,22 +11,23 @@ import { FormContainer } from '../../components/FormContainer';
 import { ClubsFilterData } from '../../types/clubs';
 
 type Props = {
-  setFilters: Dispatch<SetStateAction<ClubsFilterData>>;
+  filters: ClubsFilterData;
+  onFilter: (data: ClubsFilterData) => void;
+  onClearFilters: () => void;
 };
 
-const initialFilters: ClubsFilterData = {
-  name: '',
-  division: '',
-  voivodeship: '',
-};
-
-export const ClubsFilterForm = ({ setFilters }: Props) => {
+export const ClubsFilterForm = ({
+  filters,
+  onFilter,
+  onClearFilters,
+}: Props) => {
   return (
     <Formik
-      initialValues={initialFilters}
-      onSubmit={(data) => setFilters(data)}
+      initialValues={filters}
+      onSubmit={(data) => onFilter(data)}
+      enableReinitialize
     >
-      {({ handleReset, initialValues }) => (
+      {() => (
         <Form autoComplete="off">
           <FormContainer>
             <Field
@@ -39,12 +40,7 @@ export const ClubsFilterForm = ({ setFilters }: Props) => {
             />
             <DivisionSelect size="small" />
             <VoivodeshipSelect name="voivodeship" size="small" />
-            <FilterFormActions
-              handleClearFilter={() => {
-                handleReset();
-                setFilters(initialValues);
-              }}
-            />
+            <FilterFormActions handleClearFilter={onClearFilters} />
           </FormContainer>
         </Form>
       )}
