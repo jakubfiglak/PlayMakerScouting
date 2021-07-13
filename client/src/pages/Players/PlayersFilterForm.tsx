@@ -21,19 +21,25 @@ import { ClubBasicInfo } from '../../types/clubs';
 type Props = {
   clubsData: ClubBasicInfo[];
   filters: PlayersFilterData;
-  setFilters: (data: PlayersFilterData) => void;
+  onFilter: (data: PlayersFilterData) => void;
+  onClearFilters: () => void;
 };
 
 export const PlayersFilterForm = ({
   clubsData,
   filters,
-  setFilters,
+  onFilter,
+  onClearFilters,
 }: Props) => {
   const classes = useStyles();
 
   return (
-    <Formik initialValues={filters} onSubmit={(data) => setFilters(data)}>
-      {({ handleReset, initialValues }) => (
+    <Formik
+      initialValues={filters}
+      onSubmit={(data) => onFilter(data)}
+      enableReinitialize
+    >
+      {() => (
         <Form autoComplete="off">
           <FormContainer>
             <Field
@@ -67,12 +73,7 @@ export const PlayersFilterForm = ({
                 size="small"
               />
             </div>
-            <FilterFormActions
-              handleClearFilter={() => {
-                handleReset();
-                setFilters(initialValues);
-              }}
-            />
+            <FilterFormActions handleClearFilter={onClearFilters} />
           </FormContainer>
         </Form>
       )}

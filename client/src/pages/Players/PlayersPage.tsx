@@ -22,6 +22,15 @@ import {
 } from '../../hooks/players';
 import { useClubsList, useCreateClub } from '../../hooks/clubs';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+
+const initialFilters: PlayersFilterData = {
+  lastName: '',
+  club: '',
+  position: '',
+  bornAfter: '',
+  bornBefore: '',
+};
 
 export const PlayersPage = () => {
   const { setAlert } = useAlertsState();
@@ -37,12 +46,9 @@ export const PlayersPage = () => {
   ] = useTable();
 
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
-  const [filters, setFilters] = useState<PlayersFilterData>({
-    lastName: '',
-    club: '',
-    position: '',
-    bornAfter: '',
-    bornBefore: '',
+  const [filters, setFilters] = useLocalStorage<PlayersFilterData>({
+    key: 'playersFilters',
+    initialValue: initialFilters,
   });
 
   const { data: players, isLoading: playersLoading } = usePlayers({
@@ -105,7 +111,8 @@ export const PlayersPage = () => {
         <PlayersFilterForm
           clubsData={clubs || []}
           filters={filters}
-          setFilters={setFilters}
+          onFilter={setFilters}
+          onClearFilters={() => setFilters(initialFilters)}
         />
         <PlayersTable
           page={page}
