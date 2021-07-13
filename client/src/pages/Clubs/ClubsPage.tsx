@@ -94,7 +94,7 @@ export const ClubsPage = () => {
           handleSort={handleSort}
           clubs={clubs?.docs || []}
           total={clubs?.totalDocs || 0}
-          handleSetCurrent={handleSetCurrent}
+          onEditClick={handleSetCurrent}
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">

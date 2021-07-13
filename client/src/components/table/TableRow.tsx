@@ -1,11 +1,11 @@
-import { withStyles, createStyles, TableRow } from '@material-ui/core';
-import { lightGray } from '../../theme/colors';
+import { withStyles, createStyles, TableRow, Theme } from '@material-ui/core';
 
-export const StyledTableRow = withStyles(() =>
+export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: lightGray,
+    hover: {
+      '&:hover': {
+        cursor: 'pointer',
+        boxShadow: theme.shadows[4],
       },
     },
   }),
