@@ -1,4 +1,3 @@
-import React from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
 import { CircularProgress } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';

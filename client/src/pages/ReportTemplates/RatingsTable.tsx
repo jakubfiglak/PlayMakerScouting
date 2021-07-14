@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { Tooltip, IconButton, makeStyles } from '@material-ui/core';
 // MUI icons
 import {

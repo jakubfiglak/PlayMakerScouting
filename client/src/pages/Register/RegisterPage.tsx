@@ -1,5 +1,3 @@
-import React from 'react';
-// Custom components
 import { RegisterForm } from './RegisterForm';
 import { AuthTemplate } from '../../templates/AuthTemplate';
 import { Loader } from '../../components/Loader';

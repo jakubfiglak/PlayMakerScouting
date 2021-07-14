@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { NewReportSkills } from './NewReportSkills';

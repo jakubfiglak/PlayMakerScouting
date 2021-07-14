@@ -1,4 +1,3 @@
-import React from 'react';
 import { useHistory } from 'react-router-dom';
 // MUI components
 import { Tooltip, IconButton } from '@material-ui/core';

@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { UsersTab } from './UsersTab';

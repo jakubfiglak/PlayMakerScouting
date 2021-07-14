@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Box, makeStyles, Theme } from '@material-ui/core';
 
 export const TabPanel: React.FC<{ index: any; value: any; title: string }> = ({

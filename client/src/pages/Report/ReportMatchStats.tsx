@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { Typography, Grid } from '@material-ui/core';
 // Types
 import { Report } from '../../types/reports';

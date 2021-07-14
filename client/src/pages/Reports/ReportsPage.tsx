@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';

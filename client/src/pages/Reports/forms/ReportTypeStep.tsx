@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, ChangeEvent } from 'react';
+import { Dispatch, SetStateAction, ChangeEvent } from 'react';
 // MUI components
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 

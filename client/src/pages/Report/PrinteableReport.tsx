@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import clsx from 'clsx';
 // MUI components
 import {

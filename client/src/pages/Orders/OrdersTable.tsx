@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 // MUI components
 import {

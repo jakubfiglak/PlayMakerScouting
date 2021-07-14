@@ -1,5 +1,3 @@
-import React from 'react';
-// Custom components
 import { PageHeading } from '../../components/PageHeading';
 import { GrantAccessForm } from './GrantAccessForm';
 

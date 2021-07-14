@@ -1,4 +1,3 @@
-import React from 'react';
 import { Radar } from 'react-chartjs-2';
 import { Skill } from '../../types/reports';
 import { yellow, yellowTransparent } from '../../theme/colors';

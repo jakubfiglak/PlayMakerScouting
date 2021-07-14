@@ -1,4 +1,3 @@
-import React from 'react';
 import { makeStyles, Theme, Avatar, Typography } from '@material-ui/core';
 import logo from '../assets/logo_square.jpg';
 

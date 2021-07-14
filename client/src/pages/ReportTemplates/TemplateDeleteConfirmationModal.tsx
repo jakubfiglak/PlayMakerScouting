@@ -1,5 +1,3 @@
-import React from 'react';
-// Custom components
 import { Modal } from '../../components/Modal';
 import { Loader } from '../../components/Loader';
 // Types

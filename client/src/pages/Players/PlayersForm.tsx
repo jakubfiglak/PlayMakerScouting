@@ -1,4 +1,3 @@
-import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
 import { TextField, FormControl } from '@material-ui/core';

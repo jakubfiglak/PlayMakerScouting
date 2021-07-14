@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 
 export const FormContainer: FC = ({ children }) => {

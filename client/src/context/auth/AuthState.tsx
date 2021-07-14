@@ -1,4 +1,5 @@
-import React, { useReducer } from 'react';
+import { useReducer } from 'react';
+import * as React from 'react';
 import { axiosJson } from '../../config/axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';

@@ -1,4 +1,3 @@
-import React from 'react';
 import clsx from 'clsx';
 // MUI components
 import { Chip, Avatar, makeStyles, Theme } from '@material-ui/core';

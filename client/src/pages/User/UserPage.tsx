@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 // Custom components
 import { UserDetails } from './UserDetails';

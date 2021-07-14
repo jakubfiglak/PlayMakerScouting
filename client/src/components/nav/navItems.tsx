@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   AccountCircle as AccountIcon,
   DirectionsRun as PlayersIcon,

@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { Button, makeStyles, Theme } from '@material-ui/core';
 
 type Props = {

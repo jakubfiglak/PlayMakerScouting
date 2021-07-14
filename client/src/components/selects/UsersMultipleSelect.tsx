@@ -1,4 +1,3 @@
-import React from 'react';
 import { useField } from 'formik';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';

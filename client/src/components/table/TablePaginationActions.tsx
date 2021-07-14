@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { IconButton } from '@material-ui/core';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
