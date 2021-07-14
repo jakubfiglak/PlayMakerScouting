@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import clsx from 'clsx';
+import QRCode from 'react-qr-code';
 // MUI components
 import {
   Typography,
@@ -28,6 +29,7 @@ export const PrinteableReport = ({ report }: Props) => {
   const classes = useStyles();
 
   const {
+    id,
     docNumber,
     player,
     match,
@@ -51,7 +53,11 @@ export const PrinteableReport = ({ report }: Props) => {
 
   return (
     <div className={classes.container}>
-      <header>
+      <header className={classes.header}>
+        <QRCode
+          value={`${process.env.REACT_APP_BASE_URL}/reports/${id}`}
+          size={64}
+        />
         <Typography variant="h6" className={classes.title} gutterBottom>
           Raport z obserwacji nr {docNumber}
         </Typography>
@@ -205,6 +211,9 @@ export const PrinteableReport = ({ report }: Props) => {
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     padding: theme.spacing(2, 4),
+  },
+  header: {
+    // display: 'flex',
   },
   title: {
     fontSize: 16,
