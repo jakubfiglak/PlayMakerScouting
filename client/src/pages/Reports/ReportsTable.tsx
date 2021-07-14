@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components
 import {
@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core';
 // MUI icons
 import {
-  Search as SearchIcon,
   Edit as EditIcon,
   Print as PrintIcon,
   Lock as CloseIcon,
@@ -65,6 +64,7 @@ export const ReportsTable = ({
   reports,
   onEditClick,
 }: Props) => {
+  const history = useHistory();
   const ref = useRef<HTMLDivElement | null>(null);
   const [currentReport, setCurrentReport] = useState<Report | null>(null);
   const [
@@ -112,6 +112,7 @@ export const ReportsTable = ({
         handleSort={handleSort}
         total={total}
         headCells={headCells}
+        actions
       >
         {setStatusLoading && <Loader />}
         {reports.map((report) => {
@@ -128,21 +129,21 @@ export const ReportsTable = ({
           } = report;
 
           return (
-            <StyledTableRow key={id}>
+            <StyledTableRow
+              key={id}
+              hover
+              onClick={() => history.push(`/reports/${report.id}`)}
+            >
               <StyledTableCell padding="checkbox">
                 <div className={classes.buttonsContainer}>
-                  <Tooltip title="Zobacz szczegóły">
-                    <Link component={RouterLink} to={`/reports/${id}`}>
-                      <IconButton aria-label="go to report">
-                        <SearchIcon />
-                      </IconButton>
-                    </Link>
-                  </Tooltip>
                   {onEditClick ? (
                     <Tooltip title="Edytuj">
                       <IconButton
                         aria-label="edit report"
-                        onClick={() => onEditClick(report)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditClick(report);
+                        }}
                         disabled={status === 'closed'}
                       >
                         <EditIcon />
@@ -152,7 +153,10 @@ export const ReportsTable = ({
                   <Tooltip title="Drukuj">
                     <IconButton
                       aria-label="print report"
-                      onClick={() => onPrintClick(report)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onPrintClick(report);
+                      }}
                     >
                       <PrintIcon />
                     </IconButton>
@@ -161,9 +165,10 @@ export const ReportsTable = ({
                     <Tooltip title="Zamknij raport">
                       <IconButton
                         aria-label="close report"
-                        onClick={() =>
-                          setReportStatus({ id, status: 'closed' })
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setReportStatus({ id, status: 'closed' });
+                        }}
                       >
                         <CloseIcon />
                       </IconButton>
@@ -172,9 +177,10 @@ export const ReportsTable = ({
                     <Tooltip title="Otwórz raport">
                       <IconButton
                         aria-label="open report"
-                        onClick={() =>
-                          setReportStatus({ id, status: 'in-prep' })
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setReportStatus({ id, status: 'in-prep' });
+                        }}
                       >
                         <OpenIcon />
                       </IconButton>
@@ -183,7 +189,10 @@ export const ReportsTable = ({
                   <Tooltip title="Usuń">
                     <IconButton
                       aria-label="delete report"
-                      onClick={() => handleDeleteReportClick(report)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteReportClick(report);
+                      }}
                       disabled={!isAdmin && scout.id !== user.id}
                     >
                       <DeleteIcon color="error" />
@@ -195,11 +204,16 @@ export const ReportsTable = ({
                 <Link
                   component={RouterLink}
                   to={`/players/${player.id}`}
+                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
                 >{`${player.firstName} ${player.lastName}`}</Link>
               </StyledTableCell>
               <StyledTableCell>
                 {isAdmin ? (
-                  <Link component={RouterLink} to={`/users/${scout.id}`}>
+                  <Link
+                    component={RouterLink}
+                    to={`/users/${scout.id}`}
+                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                  >
                     {`${scout.firstName} ${scout.lastName}`}
                   </Link>
                 ) : (

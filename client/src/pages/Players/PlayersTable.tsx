@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 // MUI components
-import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
+import { IconButton, Tooltip, Link } from '@material-ui/core';
 // MUI icons
-import { Edit as EditIcon, Search as SearchIcon } from '@material-ui/icons/';
+import { Edit as EditIcon } from '@material-ui/icons/';
 // Custom components
 import { Table } from '../../components/table/Table';
 import { StyledTableCell } from '../../components/table/TableCell';
@@ -38,8 +38,9 @@ export const PlayersTable = ({
   players,
   total,
   onEditClick,
+  actions,
 }: Props) => {
-  const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Table
@@ -52,37 +53,35 @@ export const PlayersTable = ({
       handleSort={handleSort}
       total={total}
       headCells={headCells}
+      actions={actions}
     >
       {players.map((player) => (
-        <StyledTableRow key={player.id}>
-          <StyledTableCell padding="checkbox">
-            <div className={classes.buttonsContainer}>
-              <Tooltip title="Zobacz profil">
-                <Link component={RouterLink} to={`/players/${player.id}`}>
-                  <IconButton aria-label="go to players profile">
-                    <SearchIcon />
-                  </IconButton>
-                </Link>
+        <StyledTableRow
+          key={player.id}
+          hover
+          onClick={() => history.push(`/players/${player.id}`)}
+        >
+          {onEditClick ? (
+            <StyledTableCell padding="checkbox">
+              <Tooltip title="Edytuj">
+                <IconButton
+                  aria-label="edit"
+                  onClick={() => onEditClick(player)}
+                >
+                  <EditIcon />
+                </IconButton>
               </Tooltip>
-              {onEditClick ? (
-                <Tooltip title="Edytuj">
-                  <IconButton
-                    aria-label="edit"
-                    onClick={() => onEditClick(player)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-              ) : null}
-            </div>
+            </StyledTableCell>
+          ) : null}
+          <StyledTableCell>
+            {`${player.firstName} ${player.lastName}`}
           </StyledTableCell>
           <StyledTableCell>
-            <Link component={RouterLink} to={`/players/${player.id}`}>
-              {`${player.firstName} ${player.lastName}`}
-            </Link>
-          </StyledTableCell>
-          <StyledTableCell>
-            <Link component={RouterLink} to={`/clubs/${player.club.id}`}>
+            <Link
+              component={RouterLink}
+              to={`/clubs/${player.club.id}`}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
               {player.club.name}
             </Link>
           </StyledTableCell>
@@ -94,9 +93,3 @@ export const PlayersTable = ({
     </Table>
   );
 };
-
-const useStyles = makeStyles(() => ({
-  buttonsContainer: {
-    display: 'flex',
-  },
-}));

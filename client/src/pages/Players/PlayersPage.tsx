@@ -122,6 +122,7 @@ export const PlayersPage = () => {
           players={players?.docs || []}
           total={players?.totalDocs || 0}
           onEditClick={handleEditClick}
+          actions
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">

@@ -34,6 +34,7 @@ export const ClubsTable = ({
   clubs,
   total,
   onEditClick,
+  actions,
 }: Props) => {
   const history = useHistory();
 
@@ -48,6 +49,7 @@ export const ClubsTable = ({
       handleSort={handleSort}
       total={total}
       headCells={headCells}
+      actions={actions}
     >
       {clubs.map((club) => {
         return (

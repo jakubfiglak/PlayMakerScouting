@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 // MUI components
 import {
   IconButton,
@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 // MUI icons
 import {
-  Search as SearchIcon,
   AssignmentLate as NoteIcon,
   Lock as CloseIcon,
   CancelOutlined as RejectIcon,
@@ -66,6 +65,7 @@ export const OrdersTable = ({
   onRejectOrderClick,
   areAdminOptionsEnabled,
 }: Props) => {
+  const history = useHistory();
   const classes = useStyles();
   const user = useAuthenticatedUser();
 
@@ -80,41 +80,49 @@ export const OrdersTable = ({
       handleSort={handleSort}
       total={total}
       headCells={headCells}
+      actions
     >
       {orders.map((orderData) => {
         const { id, player, status, scout, createdAt, notes } = orderData;
 
         return (
-          <StyledTableRow key={id}>
+          <StyledTableRow
+            key={id}
+            hover
+            onClick={() => history.push(`/orders/${orderData.id}`)}
+          >
             <StyledTableCell padding="checkbox">
               <div className={classes.buttonsContainer}>
-                <Tooltip title="Zobacz szczegóły">
-                  <Link component={RouterLink} to={`/orders/${id}`}>
-                    <IconButton aria-label="go to order">
-                      <SearchIcon />
+                {status === 'open' ? (
+                  <Tooltip title="Przyjmij zlecenie">
+                    <IconButton
+                      aria-label="accept order"
+                      className={classes.accept}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onAcceptOrderClick(id);
+                      }}
+                    >
+                      <AcceptIcon />
                     </IconButton>
-                  </Link>
-                </Tooltip>
-                <Tooltip title="Przyjmij zlecenie">
-                  <IconButton
-                    aria-label="accept order"
-                    className={classes.accept}
-                    disabled={status !== 'open'}
-                    onClick={() => onAcceptOrderClick(id)}
-                  >
-                    <AcceptIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Odrzuć zlecenie">
-                  <IconButton
-                    aria-label="reject order"
-                    className={classes.delete}
-                    disabled={!(status === 'accepted' && scout?.id === user.id)}
-                    onClick={() => onRejectOrderClick(id)}
-                  >
-                    <RejectIcon />
-                  </IconButton>
-                </Tooltip>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Odrzuć zlecenie">
+                    <IconButton
+                      aria-label="reject order"
+                      className={classes.delete}
+                      disabled={
+                        !(status === 'accepted' && scout?.id === user.id)
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRejectOrderClick(id);
+                      }}
+                    >
+                      <RejectIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
                 {areAdminOptionsEnabled && (
                   <>
                     <Tooltip title="Zamknij zlecenie">
@@ -122,7 +130,10 @@ export const OrdersTable = ({
                         aria-label="close order"
                         className={classes.delete}
                         disabled={status !== 'accepted'}
-                        onClick={() => onCloseOrderClick(id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onCloseOrderClick(id);
+                        }}
                       >
                         <CloseIcon />
                       </IconButton>
@@ -132,7 +143,10 @@ export const OrdersTable = ({
                         aria-label="delete order"
                         className={classes.delete}
                         disabled={status !== 'open'}
-                        onClick={() => onDeleteOrderClick(id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteOrderClick(id);
+                        }}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -142,13 +156,21 @@ export const OrdersTable = ({
               </div>
             </StyledTableCell>
             <StyledTableCell>
-              <Link component={RouterLink} to={`/players/${player.id}`}>
+              <Link
+                component={RouterLink}
+                to={`/players/${player.id}`}
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              >
                 {`${player.firstName} ${player.lastName}`}
               </Link>
             </StyledTableCell>
             <StyledTableCell>{getLabel(player.position)}</StyledTableCell>
             <StyledTableCell>
-              <Link component={RouterLink} to={`/clubs/${player.club.id}`}>
+              <Link
+                component={RouterLink}
+                to={`/clubs/${player.club.id}`}
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              >
                 {player.club.name}
               </Link>
             </StyledTableCell>

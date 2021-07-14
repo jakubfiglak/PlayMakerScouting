@@ -103,6 +103,7 @@ export const ClubsPage = () => {
           clubs={clubs?.docs || []}
           total={clubs?.totalDocs || 0}
           onEditClick={handleSetCurrent}
+          actions
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">
