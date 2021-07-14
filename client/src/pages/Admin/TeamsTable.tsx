@@ -1,9 +1,8 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 // MUI components
-import { Tooltip, IconButton, Link, makeStyles } from '@material-ui/core';
+import { Tooltip, IconButton } from '@material-ui/core';
 // MUI icons
-import { Delete as DeleteIcon, Search as SearchIcon } from '@material-ui/icons';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 // Custom components
 import { SimpleTable } from '../../components/table/SimpleTable';
 import { StyledTableCell } from '../../components/table/TableCell';
@@ -24,7 +23,7 @@ const headCells = [
 ];
 
 export const TeamsTable = ({ onDeleteClick }: Props) => {
-  const classes = useStyles();
+  const history = useHistory();
 
   const { data, isLoading } = useTeams();
 
@@ -34,25 +33,23 @@ export const TeamsTable = ({ onDeleteClick }: Props) => {
       <SimpleTable actions headCells={headCells}>
         {data
           ? data.map((team) => (
-              <StyledTableRow key={team.id}>
+              <StyledTableRow
+                key={team.id}
+                hover
+                onClick={() => history.push(`/teams/${team.id}`)}
+              >
                 <StyledTableCell padding="checkbox">
-                  <div className={classes.buttonsContainer}>
-                    <Tooltip title="Zobacz szczegóły">
-                      <Link component={RouterLink} to={`/teams/${team.id}`}>
-                        <IconButton aria-label="go to order">
-                          <SearchIcon />
-                        </IconButton>
-                      </Link>
-                    </Tooltip>
-                    <Tooltip title="Usuń">
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => onDeleteClick(team)}
-                      >
-                        <DeleteIcon color="error" />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
+                  <Tooltip title="Usuń">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteClick(team);
+                      }}
+                    >
+                      <DeleteIcon color="error" />
+                    </IconButton>
+                  </Tooltip>
                 </StyledTableCell>
                 <StyledTableCell>{team.name}</StyledTableCell>
                 <StyledTableCell>{team.members.length}</StyledTableCell>
@@ -63,9 +60,3 @@ export const TeamsTable = ({ onDeleteClick }: Props) => {
     </>
   );
 };
-
-const useStyles = makeStyles(() => ({
-  buttonsContainer: {
-    display: 'flex',
-  },
-}));

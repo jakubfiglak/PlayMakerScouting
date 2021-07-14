@@ -1,12 +1,10 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 // MUI components
-import { IconButton, Tooltip, Link, makeStyles } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 // MUI icons
 import {
   ArrowUpward as UpIcon,
   ArrowDownward as DownIcon,
-  Search as SearchIcon,
 } from '@material-ui/icons/';
 // Custom components
 import { Table } from '../../components/table/Table';
@@ -41,17 +39,15 @@ function isPlaymakerScout(role: UserRole) {
 }
 
 export const UsersTable = ({ filters, onAssignRoleClick }: Props) => {
-  const classes = useStyles();
+  const history = useHistory();
 
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('usersTable');
+
   const { data, isLoading } = useUsers({
     page: page + 1,
     limit: rowsPerPage,
@@ -74,34 +70,33 @@ export const UsersTable = ({ filters, onAssignRoleClick }: Props) => {
           handleSort={handleSort}
           total={data.totalDocs}
           headCells={headCells}
+          actions
         >
           {data.docs.map((user) => (
-            <StyledTableRow key={user.id}>
+            <StyledTableRow
+              key={user.id}
+              hover
+              onClick={() => history.push(`/users/${user.id}`)}
+            >
               <StyledTableCell padding="checkbox">
-                <div className={classes.buttonsContainer}>
-                  <Tooltip title="Zobacz profil">
-                    <Link component={RouterLink} to={`/users/${user.id}`}>
-                      <IconButton aria-label="go to users profile">
-                        <SearchIcon />
-                      </IconButton>
-                    </Link>
-                  </Tooltip>
-                  <Tooltip
-                    title={
-                      isPlaymakerScout(user.role)
-                        ? 'Nadaj rolę scout'
-                        : 'Nadaj rolę playmaker-scout'
-                    }
+                <Tooltip
+                  title={
+                    isPlaymakerScout(user.role)
+                      ? 'Nadaj rolę scout'
+                      : 'Nadaj rolę playmaker-scout'
+                  }
+                >
+                  <IconButton
+                    aria-label="change role"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAssignRoleClick(user);
+                    }}
+                    disabled={user.role === 'admin'}
                   >
-                    <IconButton
-                      aria-label="change role"
-                      onClick={() => onAssignRoleClick(user)}
-                      disabled={user.role === 'admin'}
-                    >
-                      {isPlaymakerScout(user.role) ? <DownIcon /> : <UpIcon />}
-                    </IconButton>
-                  </Tooltip>
-                </div>
+                    {isPlaymakerScout(user.role) ? <DownIcon /> : <UpIcon />}
+                  </IconButton>
+                </Tooltip>
               </StyledTableCell>
               <StyledTableCell>{user.lastName}</StyledTableCell>
               <StyledTableCell>{user.firstName}</StyledTableCell>
@@ -118,9 +113,3 @@ export const UsersTable = ({ filters, onAssignRoleClick }: Props) => {
     </>
   );
 };
-
-const useStyles = makeStyles(() => ({
-  buttonsContainer: {
-    display: 'flex',
-  },
-}));

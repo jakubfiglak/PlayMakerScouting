@@ -1,4 +1,4 @@
-import React, { useReducer, FC } from 'react';
+import { useReducer, FC } from 'react';
 import SettingsContext from './settingsContext';
 import settingsReducer from './settingsReducer';
 import { State } from './types';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -28,15 +28,13 @@ export const ClubsPage = () => {
   const { setAlert } = useAlertsState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('clubsTable');
 
   const [filters, setFilters] = useLocalStorage<ClubsFilterData>({
     key: 'clubsFilters',
@@ -105,6 +103,7 @@ export const ClubsPage = () => {
           clubs={clubs?.docs || []}
           total={clubs?.totalDocs || 0}
           onEditClick={handleSetCurrent}
+          actions
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">

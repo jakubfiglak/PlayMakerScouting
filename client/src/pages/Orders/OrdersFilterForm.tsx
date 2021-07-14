@@ -1,4 +1,3 @@
-import React, { Dispatch, SetStateAction } from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
 import { TextField, FormControl } from '@material-ui/core';
@@ -10,32 +9,27 @@ import { FormContainer } from '../../components/FormContainer';
 // Types
 import { OrdersFilterData } from '../../types/orders';
 import { PlayerBasicInfo } from '../../types/players';
-// Utils & data
-import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
-type FilterFormProps = {
+type Props = {
   playersData: PlayerBasicInfo[];
-  setFilters: Dispatch<SetStateAction<OrdersFilterData>>;
-};
-
-const initialFilters: OrdersFilterData = {
-  player: '',
-  status: 'open',
-  createdAfter: formatDateObject(yearFromNow),
-  createdBefore: formatDateObject(tomorrow),
+  filters: OrdersFilterData;
+  onFilter: (data: OrdersFilterData) => void;
+  onClearFilters: () => void;
 };
 
 export const OrdersFilterForm = ({
   playersData,
-  setFilters,
-}: FilterFormProps) => {
+  filters,
+  onFilter,
+  onClearFilters,
+}: Props) => {
   return (
     <Formik
-      initialValues={initialFilters}
+      initialValues={filters}
       enableReinitialize
-      onSubmit={(data) => setFilters(data)}
+      onSubmit={(data) => onFilter(data)}
     >
-      {({ handleReset, initialValues }) => (
+      {() => (
         <Form autoComplete="off">
           <FormContainer>
             <FormControl variant="outlined" size="small" fullWidth>
@@ -66,12 +60,7 @@ export const OrdersFilterForm = ({
               id="createdBefore"
               size="small"
             />
-            <FilterFormActions
-              handleClearFilter={() => {
-                handleReset();
-                setFilters(initialValues);
-              }}
-            />
+            <FilterFormActions handleClearFilter={onClearFilters} />
           </FormContainer>
         </Form>
       )}

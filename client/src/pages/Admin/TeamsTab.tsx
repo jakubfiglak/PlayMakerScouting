@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 // MUI components
 import { makeStyles, Fab } from '@material-ui/core';
 // MUI icons

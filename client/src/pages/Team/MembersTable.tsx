@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { Tooltip, IconButton } from '@material-ui/core';
 // MUI icons
 import { Delete as DeleteIcon } from '@material-ui/icons';

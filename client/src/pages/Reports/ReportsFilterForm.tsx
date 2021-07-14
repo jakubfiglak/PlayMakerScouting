@@ -1,4 +1,3 @@
-import React, { Dispatch, SetStateAction } from 'react';
 import { Formik, Form } from 'formik';
 // MUI components
 import { FormControl } from '@material-ui/core';
@@ -10,25 +9,26 @@ import { FormContainer } from '../../components/FormContainer';
 import { ReportsFilterData } from '../../types/reports';
 import { PlayerBasicInfo } from '../../types/players';
 
-type FilterFormProps = {
+type Props = {
   playersData: PlayerBasicInfo[];
-  setFilters: Dispatch<SetStateAction<ReportsFilterData>>;
-};
-
-const initialFilters: ReportsFilterData = {
-  player: '',
+  filters: ReportsFilterData;
+  onFilter: (data: ReportsFilterData) => void;
+  onClearFilters: () => void;
 };
 
 export const ReportsFilterForm = ({
   playersData,
-  setFilters,
-}: FilterFormProps) => {
+  filters,
+  onFilter,
+  onClearFilters,
+}: Props) => {
   return (
     <Formik
-      initialValues={initialFilters}
-      onSubmit={(data) => setFilters(data)}
+      initialValues={filters}
+      onSubmit={(data) => onFilter(data)}
+      enableReinitialize
     >
-      {({ handleReset, initialValues }) => (
+      {() => (
         <Form autoComplete="off">
           <FormContainer>
             <FormControl variant="outlined" size="small" fullWidth>
@@ -38,12 +38,7 @@ export const ReportsFilterForm = ({
                 size="small"
               />
             </FormControl>
-            <FilterFormActions
-              handleClearFilter={() => {
-                handleReset();
-                setFilters(initialValues);
-              }}
-            />
+            <FilterFormActions handleClearFilter={onClearFilters} />
           </FormContainer>
         </Form>
       )}

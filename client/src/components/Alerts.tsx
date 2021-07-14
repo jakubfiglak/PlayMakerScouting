@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { Slide, makeStyles, Theme } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 // Hooks

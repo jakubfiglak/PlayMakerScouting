@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // MUI components
 import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
@@ -23,15 +22,12 @@ export const ClubPage = () => {
 
   const { id } = params;
 
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('clubsPlayersTable');
 
   const { data: club, isLoading: clubLoading } = useClub(id);
   const { data: players, isLoading: playersLoading } = useClubsPlayers({

@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { TableHead, TableSortLabel } from '@material-ui/core';
 // Custom components
 import { StyledTableRow } from './TableRow';

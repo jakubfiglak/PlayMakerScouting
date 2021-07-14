@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { Typography } from '@material-ui/core';
 // Custom components
 import { OrdersSelect } from '../../../components/selects/OrdersSelect';

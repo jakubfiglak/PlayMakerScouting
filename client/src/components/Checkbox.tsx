@@ -1,4 +1,3 @@
-import React from 'react';
 import { useField } from 'formik';
 import { FormControlLabel, Checkbox as MUICheckbox } from '@material-ui/core';
 

@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 // Custom components
 import { MainTemplate } from '../../templates/MainTemplate';

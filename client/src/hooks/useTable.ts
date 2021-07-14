@@ -1,40 +1,58 @@
-import { useState } from 'react';
+import { useLocalStorage } from './useLocalStorage';
 import { SortingOrder } from '../types/common';
 
-export const useTable = (sort?: string, sortOrder?: SortingOrder) => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [sortBy, setSortBy] = useState(sort || '_id');
-  const [order, setOrder] = useState<SortingOrder>(sortOrder || 'desc');
+type TableSettings = {
+  page: number;
+  rowsPerPage: number;
+  sortBy: string;
+  order: SortingOrder;
+};
+
+export function useTable(key: string) {
+  const [tableSettings, setTableSettings] = useLocalStorage<TableSettings>({
+    key,
+    initialValue: {
+      page: 0,
+      rowsPerPage: 20,
+      sortBy: '_id',
+      order: 'desc',
+    },
+  });
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
-    setPage(newPage);
+    setTableSettings({
+      ...tableSettings,
+      page: newPage,
+    });
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setTableSettings({
+      ...tableSettings,
+      page: 0,
+      rowsPerPage: parseInt(event.target.value, 10),
+    });
   };
 
   const handleSort = (id: string) => {
-    setPage(0);
-    const isAsc = sortBy === id && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setSortBy(id);
+    const isAsc = tableSettings.sortBy === id && tableSettings.order === 'asc';
+    setTableSettings({
+      ...tableSettings,
+      page: 0,
+      sortBy: id,
+      order: isAsc ? 'desc' : 'asc',
+    });
   };
 
-  return [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  return {
+    tableSettings,
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] as const;
-};
+  };
+}

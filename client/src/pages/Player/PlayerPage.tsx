@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // MUI components
 import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
@@ -20,15 +19,12 @@ type ParamTypes = {
 export const PlayerPage = () => {
   const classes = useStyles();
   const params = useParams<ParamTypes>();
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('playersReportsTable');
 
   const { id } = params;
 

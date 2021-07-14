@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // MUI components
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
@@ -23,15 +22,12 @@ export const OrderPage = () => {
   const params = useParams<ParamTypes>();
   const user = useAuthenticatedUser();
 
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('ordersReportsTable');
 
   const { id } = params;
 

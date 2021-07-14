@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -35,15 +35,12 @@ const initialFilters: PlayersFilterData = {
 export const PlayersPage = () => {
   const { setAlert } = useAlertsState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('playersTable');
 
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [filters, setFilters] = useLocalStorage<PlayersFilterData>({
@@ -125,6 +122,7 @@ export const PlayersPage = () => {
           players={players?.docs || []}
           total={players?.totalDocs || 0}
           onEditClick={handleEditClick}
+          actions
         />
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">

@@ -1,4 +1,4 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
@@ -14,7 +14,7 @@ Sentry.init({
 });
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <AlertsState>
       <AuthState>
         <SettingsState>
@@ -22,6 +22,6 @@ ReactDOM.render(
         </SettingsState>
       </AuthState>
     </AlertsState>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById('root'),
 );

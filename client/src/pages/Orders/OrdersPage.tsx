@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -25,9 +25,17 @@ import {
   useCreateOrder,
 } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useClubsList } from '../../hooks/clubs';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
+
+const initialFilters: OrdersFilterData = {
+  player: '',
+  status: 'open',
+  createdAfter: formatDateObject(yearFromNow),
+  createdBefore: formatDateObject(tomorrow),
+};
 
 export const OrdersPage = () => {
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
@@ -41,23 +49,18 @@ export const OrdersPage = () => {
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('ordersTable');
 
   const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
 
-  const [filters, setFilters] = useState<OrdersFilterData>({
-    player: '',
-    status: 'open',
-    createdAfter: formatDateObject(yearFromNow),
-    createdBefore: formatDateObject(tomorrow),
+  const [filters, setFilters] = useLocalStorage<OrdersFilterData>({
+    key: 'ordersFilters',
+    initialValue: initialFilters,
   });
 
   const { data: orders, isLoading: ordersLoading } = useOrders({
@@ -121,7 +124,12 @@ export const OrdersPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="orders">
         <PageHeading title="Baza zleceń" />
-        <OrdersFilterForm playersData={players || []} setFilters={setFilters} />
+        <OrdersFilterForm
+          playersData={players || []}
+          filters={filters}
+          onFilter={setFilters}
+          onClearFilters={() => setFilters(initialFilters)}
+        />
         <OrdersTable
           page={page}
           rowsPerPage={rowsPerPage}

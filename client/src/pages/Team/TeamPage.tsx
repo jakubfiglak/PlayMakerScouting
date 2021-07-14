@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 // MUI components
 import { makeStyles, Fab } from '@material-ui/core';

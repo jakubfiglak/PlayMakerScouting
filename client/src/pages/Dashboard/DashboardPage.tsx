@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { makeStyles, Theme } from '@material-ui/core';
 // MUI icons
 import {

@@ -1,4 +1,3 @@
-import React from 'react';
 import clsx from 'clsx';
 // MUI components
 import { Typography, Grid, makeStyles, Theme } from '@material-ui/core';

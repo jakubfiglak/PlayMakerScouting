@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 // MUI components

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 // MUI components
 import {
   Table as MUITable,
@@ -32,6 +32,7 @@ export const Table: FC<Props> = ({
   handleSort,
   total,
   headCells,
+  actions,
 }) => {
   const classes = useStyles();
 
@@ -43,7 +44,7 @@ export const Table: FC<Props> = ({
           sortBy={sortBy}
           order={order}
           handleSort={handleSort}
-          actions
+          actions={actions}
         />
         <TableBody>{children}</TableBody>
         <TableFooter>

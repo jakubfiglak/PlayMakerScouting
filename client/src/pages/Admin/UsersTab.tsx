@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 // Custom components
 import { UsersTable } from './UsersTable';
 import { UsersFilterForm } from './UsersFilterForm';
 import { ChangeRoleConfirmationModal } from './ChangeRoleConfirmationModal';
 import { PageHeading } from '../../components/PageHeading';
+// Hooks
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 // Types
 import { UserFilterData } from '../../types/users';
 import { User } from '../../types/auth';
+
+const initialFilters: UserFilterData = {
+  lastName: '',
+  voivodeship: '',
+  city: '',
+  role: '',
+};
 
 export const UsersTab = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -15,11 +24,9 @@ export const UsersTab = () => {
     setAssignPlaymakerRoleConfirmationModalOpen,
   ] = useState(false);
 
-  const [filters, setFilters] = useState<UserFilterData>({
-    lastName: '',
-    voivodeship: '',
-    city: '',
-    role: '',
+  const [filters, setFilters] = useLocalStorage<UserFilterData>({
+    key: 'usersFilters',
+    initialValue: initialFilters,
   });
 
   function handleChangeRoleClick(user: User) {
@@ -37,7 +44,11 @@ export const UsersTab = () => {
   return (
     <>
       <PageHeading title="Użytkownicy" />
-      <UsersFilterForm setFilters={setFilters} />
+      <UsersFilterForm
+        filters={filters}
+        onFilter={setFilters}
+        onClearFilters={() => setFilters(initialFilters)}
+      />
       <UsersTable filters={filters} onAssignRoleClick={handleChangeRoleClick} />
       <ChangeRoleConfirmationModal
         user={currentUser}

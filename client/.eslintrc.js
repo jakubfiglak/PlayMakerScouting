@@ -32,6 +32,8 @@ module.exports = {
   ],
   plugins: ["prettier", "@typescript-eslint", "react-hooks"],
   rules: {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-wrap-multilines": ["error", {
@@ -54,6 +56,12 @@ module.exports = {
     "no-underscore-dangle": ["error", { "allow": ["_id"]}],
     "import/prefer-default-export": "off",
     "react/jsx-one-expression-per-line": "off",
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto",
+      },
+    ],
   },
 };

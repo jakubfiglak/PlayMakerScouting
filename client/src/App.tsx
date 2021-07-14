@@ -1,4 +1,3 @@
-import React from 'react';
 import * as Sentry from '@sentry/react';
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';

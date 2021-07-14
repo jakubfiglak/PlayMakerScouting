@@ -1,5 +1,3 @@
-import React from 'react';
-// MUI components
 import { Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
 // Types
 import { ReportBackgroundImage } from '../../types/reportBackgroundImages';

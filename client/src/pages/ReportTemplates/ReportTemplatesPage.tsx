@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab, Fab, makeStyles } from '@material-ui/core';
 // MUI icons
