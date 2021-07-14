@@ -17,6 +17,7 @@ import { Report, ReportDTO, ReportsFilterData } from '../../types/reports';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 import {
   useReports,
   useCreateReport,
@@ -26,10 +27,13 @@ import { useClubsList } from '../../hooks/clubs';
 import { usePlayersList, useCreatePlayer } from '../../hooks/players';
 import { useOrdersList } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
-
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 type LocationState = { activeTab?: number; report?: Report };
+
+const initialFilters: ReportsFilterData = {
+  player: '',
+};
 
 export const ReportsPage = () => {
   const { state } = useLocation<LocationState | null>();
@@ -66,8 +70,9 @@ export const ReportsPage = () => {
 
   const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
 
-  const [filters, setFilters] = useState<ReportsFilterData>({
-    player: '',
+  const [filters, setFilters] = useLocalStorage<ReportsFilterData>({
+    key: 'reportsFilters',
+    initialValue: initialFilters,
   });
 
   const { data: reports, isLoading: reportsLoading } = useReports({
@@ -131,7 +136,9 @@ export const ReportsPage = () => {
         <PageHeading title="Baza raportów" />
         <ReportsFilterForm
           playersData={players || []}
-          setFilters={setFilters}
+          filters={filters}
+          onFilter={setFilters}
+          onClearFilters={() => setFilters(initialFilters)}
         />
         <ReportsTable
           page={page}

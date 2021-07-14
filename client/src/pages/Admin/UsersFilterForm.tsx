@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Formik, Form, Field } from 'formik';
 // MUI components
 import { TextField, FormControl } from '@material-ui/core';
@@ -11,23 +11,23 @@ import { FormContainer } from '../../components/FormContainer';
 import { UserFilterData } from '../../types/users';
 
 type Props = {
-  setFilters: Dispatch<SetStateAction<UserFilterData>>;
+  filters: UserFilterData;
+  onFilter: (data: UserFilterData) => void;
+  onClearFilters: () => void;
 };
 
-export const UsersFilterForm = ({ setFilters }: Props) => {
-  const initialFilterValues: UserFilterData = {
-    lastName: '',
-    voivodeship: '',
-    city: '',
-    role: '',
-  };
-
+export const UsersFilterForm = ({
+  filters,
+  onFilter,
+  onClearFilters,
+}: Props) => {
   return (
     <Formik
-      initialValues={initialFilterValues}
-      onSubmit={(data) => setFilters(data)}
+      initialValues={filters}
+      onSubmit={(data) => onFilter(data)}
+      enableReinitialize
     >
-      {({ handleReset, initialValues }) => (
+      {() => (
         <Form autoComplete="off">
           <FormContainer>
             <Field
@@ -52,12 +52,7 @@ export const UsersFilterForm = ({ setFilters }: Props) => {
             <FormControl variant="outlined" size="small" fullWidth>
               <RoleSelect />
             </FormControl>
-            <FilterFormActions
-              handleClearFilter={() => {
-                handleReset();
-                setFilters(initialValues);
-              }}
-            />
+            <FilterFormActions handleClearFilter={onClearFilters} />
           </FormContainer>
         </Form>
       )}
