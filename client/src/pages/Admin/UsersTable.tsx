@@ -43,15 +43,13 @@ function isPlaymakerScout(role: UserRole) {
 export const UsersTable = ({ filters, onAssignRoleClick }: Props) => {
   const classes = useStyles();
 
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('usersTable');
+
   const { data, isLoading } = useUsers({
     page: page + 1,
     limit: rowsPerPage,

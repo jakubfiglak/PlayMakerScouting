@@ -35,15 +35,12 @@ const initialFilters: PlayersFilterData = {
 export const PlayersPage = () => {
   const { setAlert } = useAlertsState();
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('playersTable');
 
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [filters, setFilters] = useLocalStorage<PlayersFilterData>({

@@ -23,15 +23,12 @@ export const ClubPage = () => {
 
   const { id } = params;
 
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('clubsPlayersTable');
 
   const { data: club, isLoading: clubLoading } = useClub(id);
   const { data: players, isLoading: playersLoading } = useClubsPlayers({

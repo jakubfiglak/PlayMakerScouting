@@ -28,15 +28,13 @@ export const ClubsPage = () => {
   const { setAlert } = useAlertsState();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('clubsTable');
 
   const [filters, setFilters] = useLocalStorage<ClubsFilterData>({
     key: 'clubsFilters',

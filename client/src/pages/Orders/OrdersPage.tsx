@@ -41,15 +41,12 @@ export const OrdersPage = () => {
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('ordersTable');
 
   const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
 

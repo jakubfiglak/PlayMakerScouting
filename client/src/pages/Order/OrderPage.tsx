@@ -23,15 +23,12 @@ export const OrderPage = () => {
   const params = useParams<ParamTypes>();
   const user = useAuthenticatedUser();
 
-  const [
-    page,
-    rowsPerPage,
-    sortBy,
-    order,
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
-  ] = useTable();
+  } = useTable('ordersReportsTable');
 
   const { id } = params;
 
