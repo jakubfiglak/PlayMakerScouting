@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 // Custom components
 import { UsersTable } from './UsersTable';
 import { UsersFilterForm } from './UsersFilterForm';
