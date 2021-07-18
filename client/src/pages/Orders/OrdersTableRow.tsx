@@ -1,4 +1,3 @@
-import { useState, MouseEvent } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 // MUI components
 import { Tooltip, Link } from '@material-ui/core';
@@ -18,6 +17,7 @@ import { TableMenuItem } from '../../components/table/TableMenuItem';
 import { TableMenu } from '../../components/table/TableMenu';
 // Hooks
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+import { useTableMenu } from '../../hooks/useTableMenu';
 // Types
 import { Order } from '../../types/orders';
 // Utils & data
@@ -44,17 +44,12 @@ export const OrdersTableRow = ({
   const history = useHistory();
   const user = useAuthenticatedUser();
 
-  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
-  const isMenuOpen = Boolean(menuAnchorEl);
-
-  function handleMenuClick(e: MouseEvent<HTMLElement>) {
-    e.stopPropagation();
-    setMenuAnchorEl(e.currentTarget);
-  }
-
-  function handleMenuClose() {
-    setMenuAnchorEl(null);
-  }
+  const {
+    menuAnchorEl,
+    isMenuOpen,
+    handleMenuClick,
+    handleMenuClose,
+  } = useTableMenu();
 
   function handleMenuAction(id: string, action: (id: string) => void) {
     action(id);

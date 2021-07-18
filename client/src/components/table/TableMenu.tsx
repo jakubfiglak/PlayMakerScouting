@@ -1,5 +1,5 @@
 import { MouseEvent, FC } from 'react';
-import { IconButton, Menu, MenuList } from '@material-ui/core';
+import { IconButton, Menu, MenuList, Tooltip } from '@material-ui/core';
 import { MoreVert as MenuIcon } from '@material-ui/icons';
 
 type Props = {
@@ -18,14 +18,16 @@ export const TableMenu: FC<Props> = ({
 }) => {
   return (
     <div>
-      <IconButton
-        aria-label="open-menu"
-        aria-controls="row-menu"
-        aria-haspopup="true"
-        onClick={onMenuClick}
-      >
-        <MenuIcon />
-      </IconButton>
+      <Tooltip title="Menu">
+        <IconButton
+          aria-label="open-menu"
+          aria-controls="row-menu"
+          aria-haspopup="true"
+          onClick={onMenuClick}
+        >
+          <MenuIcon />
+        </IconButton>
+      </Tooltip>
       <Menu
         id="row-menu"
         anchorEl={menuAnchorEl}
