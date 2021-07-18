@@ -15,8 +15,8 @@ import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
 import { TableMenuItem } from '../../components/table/TableMenuItem';
 import { TableMenu } from '../../components/table/TableMenu';
+import { TableLink } from '../../components/table/TableLink';
 // Hooks
-import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useTableMenu } from '../../hooks/useTableMenu';
 // Types
 import { Order } from '../../types/orders';
@@ -31,6 +31,7 @@ type Props = {
   onRejectOrderClick: (id: string) => void;
   onDeleteOrderClick: (id: string) => void;
   areAdminOptionsEnabled: boolean;
+  canRejectOrder: boolean;
 };
 
 export const OrdersTableRow = ({
@@ -40,9 +41,9 @@ export const OrdersTableRow = ({
   onDeleteOrderClick,
   onRejectOrderClick,
   areAdminOptionsEnabled,
+  canRejectOrder,
 }: Props) => {
   const history = useHistory();
-  const user = useAuthenticatedUser();
 
   const {
     menuAnchorEl,
@@ -82,7 +83,7 @@ export const OrdersTableRow = ({
             <TableMenuItem
               icon={<RejectIcon fontSize="small" />}
               text="Odrzuć"
-              disabled={scout?.id !== user.id}
+              disabled={!canRejectOrder}
               onClick={() => {
                 handleMenuAction(id, onRejectOrderClick);
               }}
@@ -112,23 +113,15 @@ export const OrdersTableRow = ({
         </TableMenu>
       </StyledTableCell>
       <StyledTableCell>
-        <Link
-          component={RouterLink}
-          to={`/players/${player.id}`}
-          onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        >
+        <TableLink to={`/players/${player.id}`}>
           {`${player.firstName} ${player.lastName}`}
-        </Link>
+        </TableLink>
       </StyledTableCell>
       <StyledTableCell>{getLabel(player.position)}</StyledTableCell>
       <StyledTableCell>
-        <Link
-          component={RouterLink}
-          to={`/clubs/${player.club.id}`}
-          onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        >
+        <TableLink to={`/clubs/${player.club.id}`}>
           {player.club.name}
-        </Link>
+        </TableLink>
       </StyledTableCell>
       <StyledTableCell>
         <OrderStatusChip status={status} />
