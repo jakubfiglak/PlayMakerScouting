@@ -5,6 +5,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { OrdersForm } from './OrdersForm';
 import { OrdersFilterForm } from './OrdersFilterForm';
 import { OrdersTable } from './OrdersTable';
+import { OrdersTableRow } from './OrdersTableRow';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
@@ -139,13 +140,21 @@ export const OrdersPage = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
           total={orders?.totalDocs || 0}
-          orders={orders?.docs || []}
-          onAcceptOrderClick={acceptOrder}
-          onCloseOrderClick={closeOrder}
-          onDeleteOrderClick={deleteOrder}
-          onRejectOrderClick={rejectOrder}
-          areAdminOptionsEnabled={isAdmin}
-        />
+        >
+          {orders
+            ? orders.docs.map((orderData) => (
+                <OrdersTableRow
+                  key={orderData.id}
+                  order={orderData}
+                  onAcceptOrderClick={acceptOrder}
+                  onCloseOrderClick={closeOrder}
+                  onRejectOrderClick={rejectOrder}
+                  onDeleteOrderClick={deleteOrder}
+                  areAdminOptionsEnabled={isAdmin}
+                />
+              ))
+            : null}
+        </OrdersTable>
       </TabPanel>
       {isAdmin && (
         <TabPanel value={activeTab} index={1} title="orders-form">

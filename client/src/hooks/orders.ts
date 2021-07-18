@@ -167,7 +167,7 @@ export function useUpdateOrder(orderId: string) {
 // Delete order
 async function deleteOrder(id: string): Promise<ApiResponse<string>> {
   const { data } = await axios.delete<ApiResponse<string>>(
-    `/api/v1/orders/${id}/accept`,
+    `/api/v1/orders/${id}`,
   );
   return data;
 }
