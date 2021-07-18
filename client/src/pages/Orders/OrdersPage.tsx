@@ -151,7 +151,10 @@ export const OrdersPage = () => {
                   onRejectOrderClick={rejectOrder}
                   onDeleteOrderClick={deleteOrder}
                   areAdminOptionsEnabled={isAdmin}
-                  canRejectOrder={user.role !== orderData.scout?.id}
+                  canRejectOrder={
+                    user.role !== orderData.scout?.id &&
+                    orderData.status !== 'closed'
+                  }
                 />
               ))
             : null}

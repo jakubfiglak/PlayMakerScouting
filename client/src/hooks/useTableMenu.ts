@@ -13,10 +13,16 @@ export function useTableMenu() {
     setMenuAnchorEl(null);
   }
 
+  function handleMenuAction(action: () => void) {
+    action();
+    handleMenuClose();
+  }
+
   return {
     menuAnchorEl,
     isMenuOpen,
     handleMenuClick,
     handleMenuClose,
+    handleMenuAction,
   };
 }

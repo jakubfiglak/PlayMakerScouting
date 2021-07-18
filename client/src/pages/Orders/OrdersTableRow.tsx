@@ -1,6 +1,6 @@
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 // MUI components
-import { Tooltip, Link } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 // MUI icons
 import {
   AssignmentLate as NoteIcon,
@@ -50,12 +50,8 @@ export const OrdersTableRow = ({
     isMenuOpen,
     handleMenuClick,
     handleMenuClose,
+    handleMenuAction,
   } = useTableMenu();
-
-  function handleMenuAction(id: string, action: (id: string) => void) {
-    action(id);
-    handleMenuClose();
-  }
 
   const { id, scout, player, status, notes, createdAt } = order;
 
@@ -76,7 +72,7 @@ export const OrdersTableRow = ({
               icon={<AcceptIcon fontSize="small" />}
               text="Przyjmij"
               onClick={() => {
-                handleMenuAction(id, onAcceptOrderClick);
+                handleMenuAction(() => onAcceptOrderClick(id));
               }}
             />
           ) : (
@@ -85,7 +81,7 @@ export const OrdersTableRow = ({
               text="Odrzuć"
               disabled={!canRejectOrder}
               onClick={() => {
-                handleMenuAction(id, onRejectOrderClick);
+                handleMenuAction(() => onRejectOrderClick(id));
               }}
             />
           )}
@@ -95,7 +91,7 @@ export const OrdersTableRow = ({
                   icon={<CloseIcon fontSize="small" />}
                   text="Zamknij"
                   onClick={() => {
-                    handleMenuAction(id, onCloseOrderClick);
+                    handleMenuAction(() => onCloseOrderClick(id));
                   }}
                   disabled={status !== 'accepted'}
                   key="close"
@@ -104,7 +100,7 @@ export const OrdersTableRow = ({
                   icon={<DeleteIcon fontSize="small" />}
                   text="Usuń"
                   onClick={() => {
-                    handleMenuAction(id, onDeleteOrderClick);
+                    handleMenuAction(() => onDeleteOrderClick(id));
                   }}
                   key="delete"
                 />,
