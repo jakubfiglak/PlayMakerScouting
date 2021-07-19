@@ -29,7 +29,7 @@ import { useOrdersList } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 
-type LocationState = { activeTab?: number; report?: Report };
+type LocationState = { activeTab?: number; report?: Report; orderId?: string };
 
 const initialFilters: ReportsFilterData = {
   player: '',
@@ -38,6 +38,7 @@ const initialFilters: ReportsFilterData = {
 export const ReportsPage = () => {
   const { state } = useLocation<LocationState | null>();
   const [currentReport, setCurrentReport] = useState<Report | null>(null);
+  const [activeOrderId, setActiveOrderId] = useState('');
 
   const {
     mutate: createReport,
@@ -90,6 +91,9 @@ export const ReportsPage = () => {
     if (state?.report) {
       setCurrentReport(state.report);
     }
+    if (state?.orderId) {
+      setActiveOrderId(state.orderId);
+    }
   }, [setActiveTab, state]);
 
   const handleSetCurrent = (report: Report) => {
@@ -100,6 +104,7 @@ export const ReportsPage = () => {
   const onAddReport = (data: ReportDTO) => {
     createReport(data);
     setActiveTab(0);
+    setActiveOrderId('');
   };
 
   function onUpdateReport(data: ReportDTO) {
@@ -108,10 +113,11 @@ export const ReportsPage = () => {
     setCurrentReport(null);
   }
 
-  const handleEditFormReset = () => {
+  const handleFormReset = () => {
     setActiveTab(0);
     setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
     setCurrentReport(null);
+    setActiveOrderId('');
   };
 
   const isLoading =
@@ -164,7 +170,7 @@ export const ReportsPage = () => {
         {currentReport ? (
           <EditReportForm
             report={currentReport}
-            onReset={handleEditFormReset}
+            onReset={handleFormReset}
             onSubmit={onUpdateReport}
           />
         ) : (
@@ -174,6 +180,8 @@ export const ReportsPage = () => {
             ordersList={orders || []}
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
             onSubmit={onAddReport}
+            onReset={handleFormReset}
+            activeOrderId={activeOrderId}
           />
         )}
         <AddPlayerModal

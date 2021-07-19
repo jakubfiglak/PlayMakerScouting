@@ -153,8 +153,12 @@ export const OrdersPage = () => {
                   onDeleteOrderClick={deleteOrder}
                   areAdminOptionsEnabled={isAdmin}
                   canRejectOrder={
-                    user.role !== orderData.scout?.id &&
+                    user.id !== orderData.scout?.id &&
                     orderData.status !== 'closed'
+                  }
+                  canCreateReport={
+                    orderData.status === 'accepted' &&
+                    orderData.scout?.id === user.id
                   }
                 />
               ))

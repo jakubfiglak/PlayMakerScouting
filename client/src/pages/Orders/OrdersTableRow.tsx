@@ -1,6 +1,6 @@
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link as RouterLink } from 'react-router-dom';
 // MUI components
-import { Tooltip } from '@material-ui/core';
+import { Tooltip, makeStyles } from '@material-ui/core';
 // MUI icons
 import {
   AssignmentLate as NoteIcon,
@@ -8,6 +8,7 @@ import {
   CancelOutlined as RejectIcon,
   AssignmentTurnedIn as AcceptIcon,
   Delete as DeleteIcon,
+  NoteAdd as CreateReportIcon,
 } from '@material-ui/icons';
 // Custom components
 import { OrderStatusChip } from './OrderStatusChip';
@@ -32,6 +33,7 @@ type Props = {
   onDeleteOrderClick: (id: string) => void;
   areAdminOptionsEnabled: boolean;
   canRejectOrder: boolean;
+  canCreateReport: boolean;
 };
 
 export const OrdersTableRow = ({
@@ -42,8 +44,10 @@ export const OrdersTableRow = ({
   onRejectOrderClick,
   areAdminOptionsEnabled,
   canRejectOrder,
+  canCreateReport,
 }: Props) => {
   const history = useHistory();
+  const classes = useStyles();
 
   const {
     menuAnchorEl,
@@ -106,6 +110,20 @@ export const OrdersTableRow = ({
                 />,
               ]
             : null}
+          {canCreateReport ? (
+            <RouterLink
+              to={{
+                pathname: '/reports',
+                state: { activeTab: 1, orderId: id },
+              }}
+              className={classes.link}
+            >
+              <TableMenuItem
+                icon={<CreateReportIcon fontSize="small" />}
+                text="Twórz raport"
+              />
+            </RouterLink>
+          ) : null}
         </TableMenu>
       </StyledTableCell>
       <StyledTableCell>
@@ -136,3 +154,9 @@ export const OrdersTableRow = ({
     </StyledTableRow>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  link: {
+    textDecoration: 'none',
+  },
+}));
