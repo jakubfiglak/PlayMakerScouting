@@ -130,10 +130,6 @@ export const NewReportForm = ({
     },
   ];
 
-  const handleGoBack = () => {
-    setActiveStep(steps.length - 1);
-  };
-
   return (
     <>
       <Formik
