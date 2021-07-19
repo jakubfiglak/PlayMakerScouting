@@ -33,7 +33,7 @@ async function getOrders({
   filters,
 }: GetOrdersArgs): Promise<PaginatedOrders> {
   const orderSign = order === 'desc' ? '-' : '';
-  const { createdAfter, createdBefore, player, status } = filters;
+  const { createdAfter, createdBefore, player, status, scout } = filters;
   // Generate query url
   let ordersURI = `/api/v1/orders?page=${page}&limit=${limit}&sort=${orderSign}${sort}&createdAt[gte]=${createdAfter}&createdAt[lte]=${createdBefore}`;
 
@@ -41,8 +41,12 @@ async function getOrders({
     ordersURI = ordersURI.concat(`&player=${player}`);
   }
 
-  if (status) {
+  if (status !== 'all') {
     ordersURI = ordersURI.concat(`&status=${status}`);
+  }
+
+  if (scout !== 'all') {
+    ordersURI = ordersURI.concat(`&scout=${scout}`);
   }
 
   const { data } = await axios.get<GetOrdersResponse>(ordersURI);
@@ -167,7 +171,7 @@ export function useUpdateOrder(orderId: string) {
 // Delete order
 async function deleteOrder(id: string): Promise<ApiResponse<string>> {
   const { data } = await axios.delete<ApiResponse<string>>(
-    `/api/v1/orders/${id}/accept`,
+    `/api/v1/orders/${id}`,
   );
   return data;
 }

@@ -58,7 +58,7 @@ export type ReportBasicInfo = Pick<
 
 export type ReportDTO = {
   order?: string;
-  player: string;
+  player?: string;
   match: MatchData;
   positionPlayed: Position;
   minutesPlayed: number;

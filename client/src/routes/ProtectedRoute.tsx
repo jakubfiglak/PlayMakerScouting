@@ -20,7 +20,13 @@ export const ProtectedRoute: FC<Props> = ({
   return (
     <Route
       {...rest}
-      render={() => (isAllowed ? <>{children}</> : <Redirect to="/login" />)}
+      render={({ location }) =>
+        isAllowed ? (
+          children
+        ) : (
+          <Redirect to={{ pathname: '/login', state: { from: location } }} />
+        )
+      }
     />
   );
 };

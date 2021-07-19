@@ -52,7 +52,7 @@ export const PlayersCombo = ({
         const player = playersData.find((p) => p.id === option);
         if (player) {
           const { lastName, firstName, club, position } = player;
-          return `${firstName[0]}. ${lastName}, ${getLabel(position)} (${
+          return `${firstName} ${lastName}, ${getLabel(position)} (${
             club.name
           })`;
         }

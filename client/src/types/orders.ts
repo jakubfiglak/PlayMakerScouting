@@ -23,8 +23,9 @@ export type OrderDTO = {
 };
 
 export type OrdersFilterData = {
+  scout: string;
   player: string;
-  status: OrderStatus | '';
+  status: OrderStatus | 'all';
   createdAfter: string;
   createdBefore: string;
 };

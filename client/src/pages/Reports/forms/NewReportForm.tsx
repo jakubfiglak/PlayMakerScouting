@@ -39,6 +39,8 @@ type Props = {
   ordersList: OrderBasicInfo[];
   onAddPlayerClick: () => void;
   onSubmit: (data: ReportDTO) => void;
+  onReset: () => void;
+  activeOrderId: string;
 };
 
 export const NewReportForm = ({
@@ -47,20 +49,18 @@ export const NewReportForm = ({
   ordersList,
   onAddPlayerClick,
   onSubmit,
+  onReset,
+  activeOrderId,
 }: Props) => {
   const classes = useStyles();
 
-  const [
-    activeStep,
-    handleNext,
-    handleBack,
-    resetStepper,
-    setActiveStep,
-  ] = useStepper();
+  const { activeStep, handleNext, handleBack, setActiveStep } = useStepper();
 
   const { defaultReportTemplateId } = useSettingsState();
 
-  const [reportType, setReportType] = useState<'order' | 'custom'>('custom');
+  const [reportType, setReportType] = useState<'order' | 'custom'>(
+    activeOrderId ? 'order' : 'custom',
+  );
   const [selectedReportTemplateId, setSelectedReportTemplateId] = useState(
     defaultReportTemplateId,
   );
@@ -91,6 +91,7 @@ export const NewReportForm = ({
           reportType={reportType}
           setReportType={setReportType}
           isOrderOptionDisabled={isOrderOptionDisabled}
+          isPlayerOptionDisabled={!!activeOrderId}
         />
       ),
     },
@@ -129,15 +130,12 @@ export const NewReportForm = ({
     },
   ];
 
-  const handleGoBack = () => {
-    setActiveStep(steps.length - 1);
-  };
-
   return (
     <>
       <Formik
         initialValues={{
           ...initialValues,
+          order: activeOrderId,
           maxRatingScore: selectedReportTemplate
             ? selectedReportTemplate.maxRatingScore
             : 4,
@@ -178,19 +176,14 @@ export const NewReportForm = ({
                 </Step>
               ))}
             </Stepper>
-            {activeStep === steps.length && (
-              <MainFormActions
-                label="raport"
-                isEditState={false}
-                onCancelClick={() => {
-                  handleReset();
-                  resetStepper();
-                }}
-                goBack={handleGoBack}
-                activeStep={activeStep}
-                totalSteps={steps.length}
-              />
-            )}
+            <MainFormActions
+              label="raport"
+              isEditState={false}
+              onCancelClick={() => {
+                handleReset();
+                onReset();
+              }}
+            />
           </Form>
         )}
       </Formik>

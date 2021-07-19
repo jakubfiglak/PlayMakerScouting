@@ -10,7 +10,7 @@ export const FilterFormActions = ({ handleClearFilter }: Props) => {
   return (
     <div className={classes.container}>
       <Button type="submit" variant="contained" color="secondary" fullWidth>
-        Filtruj
+        Zastosuj filtry
       </Button>
       <Button
         variant="contained"
@@ -18,7 +18,7 @@ export const FilterFormActions = ({ handleClearFilter }: Props) => {
         fullWidth
         onClick={handleClearFilter}
       >
-        Wyczyść filtr
+        Wyczyść
       </Button>
     </div>
   );
