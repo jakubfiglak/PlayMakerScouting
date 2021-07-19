@@ -10,9 +10,10 @@ import {
 
 type Props = {
   size?: 'small' | 'medium';
+  isOpenOptionDisabled?: boolean;
 };
 
-export const OrderStatusSelect = ({ size }: Props) => {
+export const OrderStatusSelect = ({ size, isOpenOptionDisabled }: Props) => {
   const [field, meta] = useField('status');
 
   const { error, touched } = meta;
@@ -27,8 +28,10 @@ export const OrderStatusSelect = ({ size }: Props) => {
         label="Status"
         error={touched && !!error}
       >
-        <MenuItem value="">Wszystkie</MenuItem>
-        <MenuItem value="open">Otwarte</MenuItem>
+        <MenuItem value="all">Wszystkie</MenuItem>
+        <MenuItem value="open" disabled={isOpenOptionDisabled}>
+          Otwarte
+        </MenuItem>
         <MenuItem value="accepted">Przyjęte do realizacji</MenuItem>
         <MenuItem value="closed">Zamknięte</MenuItem>
       </Select>

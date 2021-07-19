@@ -32,6 +32,7 @@ import { useClubsList } from '../../hooks/clubs';
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
 const initialFilters: OrdersFilterData = {
+  scout: 'all',
   player: '',
   status: 'open',
   createdAfter: formatDateObject(yearFromNow),
