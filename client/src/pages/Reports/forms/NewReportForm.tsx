@@ -96,7 +96,10 @@ export const NewReportForm = ({
       ),
     },
     {
-      title: reportType === 'custom' ? 'Wybierz zawodnika' : 'Wybierz zlecenie',
+      title:
+        reportType === 'custom'
+          ? 'Informacje o zawodniku'
+          : 'Zlecenie i informacje o zawodniku',
       content:
         reportType === 'order' ? (
           <OrderStep ordersData={ordersList} />

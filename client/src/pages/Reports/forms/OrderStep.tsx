@@ -1,5 +1,6 @@
-import { Typography } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 // Custom components
+import { ExtraPlayerInfo } from './ExtraPlayerInfo';
 import { OrdersSelect } from '../../../components/selects/OrdersSelect';
 // Types
 import { OrderBasicInfo } from '../../../types/orders';
@@ -18,5 +19,12 @@ export const OrderStep = ({ ordersData }: Props) => {
       </Typography>
     );
   }
-  return <OrdersSelect ordersData={ordersData} name="order" />;
+  return (
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <OrdersSelect ordersData={ordersData} name="order" />
+      </Grid>
+      <ExtraPlayerInfo />
+    </Grid>
+  );
 };
