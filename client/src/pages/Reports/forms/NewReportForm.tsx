@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Formik, Form } from 'formik';
+import { ReactNode, useState } from 'react';
+import { Formik, Form, FormikErrors, FormikTouched } from 'formik';
 // MUI components
 import {
   Stepper,
@@ -34,6 +34,12 @@ import { Rating } from '../../../types/ratings';
 // Utils & data
 import { validationSchema } from './validationSchema';
 import { useSettingsState } from '../../../context/settings/useSettingsState';
+
+type TStep = {
+  title: string;
+  content: ReactNode;
+  errorKeys?: string[];
+};
 
 type Props = {
   isOrderOptionDisabled: boolean;
@@ -76,7 +82,7 @@ export const NewReportForm = ({
     (template) => template.id === selectedReportTemplateId,
   );
 
-  const steps = [
+  const steps: TStep[] = [
     {
       title: 'Szablon raportu',
       content: reportTemplates ? (
@@ -114,6 +120,7 @@ export const NewReportForm = ({
             onAddPlayerClick={onAddPlayerClick}
           />
         ),
+      errorKeys: ['player', 'order'],
     },
     {
       title: 'Informacje o meczu',
@@ -122,6 +129,7 @@ export const NewReportForm = ({
     {
       title: 'Notatki/podsumowanie',
       content: <SummaryStep />,
+      errorKeys: ['summary'],
     },
     {
       title: 'Oceny',
@@ -139,6 +147,7 @@ export const NewReportForm = ({
     {
       title: 'Video',
       content: <VideoStep />,
+      errorKeys: ['videoURL'],
     },
   ];
 
@@ -163,18 +172,20 @@ export const NewReportForm = ({
           resetForm();
         }}
       >
-        {({ handleReset, values }) => (
+        {({ handleReset, values, errors, touched }) => (
           <Form>
             <Stepper
               activeStep={activeStep}
               orientation="vertical"
               className={classes.root}
             >
-              {steps.map(({ title, content }) => (
-                <Step key={title}>
-                  <StepLabel>{title}</StepLabel>
+              {steps.map((step) => (
+                <Step key={step.title}>
+                  <StepLabel error={getStepError({ errors, touched, step })}>
+                    {step.title}
+                  </StepLabel>
                   <StepContent>
-                    <div className={classes.content}>{content}</div>
+                    <div className={classes.content}>{step.content}</div>
                     <StepActions
                       activeStep={activeStep}
                       totalSteps={steps.length}
@@ -244,6 +255,22 @@ function mapRatingsToRatingType(ratings: Rating[]) {
     const { name, category, score } = rating;
     return { name, category, hasScore: score };
   });
+}
+
+type GetStepErrorArgs = {
+  errors: FormikErrors<ReportDTO>;
+  touched: FormikTouched<ReportDTO>;
+  step: TStep;
+};
+
+function getStepError({ errors, touched, step }: GetStepErrorArgs) {
+  const stepErrors: string[] = [];
+  step.errorKeys?.forEach((key) => {
+    if (touched[key as keyof ReportDTO] && errors[key as keyof ReportDTO]) {
+      stepErrors.push(key);
+    }
+  });
+  return !!stepErrors.length;
 }
 
 const initialValues: Omit<ReportDTO, 'skills'> = {
