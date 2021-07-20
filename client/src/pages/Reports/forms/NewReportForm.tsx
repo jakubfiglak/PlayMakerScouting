@@ -18,6 +18,7 @@ import { SummaryStep } from './SummaryStep';
 import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
 import { RatingsStep } from './RatingsStep';
+import { VideoStep } from './VideoStep';
 import { BottomNav } from '../BottomNav';
 import { Loader } from '../../../components/Loader';
 import { ReportTemplatesSelect } from '../../../components/selects/ReportTemplatesSelect';
@@ -135,6 +136,10 @@ export const NewReportForm = ({
       title: 'Statystyki',
       content: <BasicDataStep />,
     },
+    {
+      title: 'Video',
+      content: <VideoStep />,
+    },
   ];
 
   return (
@@ -184,14 +189,16 @@ export const NewReportForm = ({
                 </Step>
               ))}
             </Stepper>
-            <MainFormActions
-              label="raport"
-              isEditState={false}
-              onCancelClick={() => {
-                handleReset();
-                onReset();
-              }}
-            />
+            <div className={classes.container}>
+              <MainFormActions
+                label="raport"
+                isEditState={false}
+                onCancelClick={() => {
+                  handleReset();
+                  onReset();
+                }}
+              />
+            </div>
           </Form>
         )}
       </Formik>
@@ -208,6 +215,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   content: {
     marginTop: theme.spacing(1),
+  },
+  container: {
+    margin: theme.spacing(2, 'auto'),
+
+    [theme.breakpoints.up('sm')]: {
+      width: '50%',
+    },
   },
 }));
 

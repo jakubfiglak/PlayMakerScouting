@@ -16,6 +16,7 @@ export const StepActions = ({
   isNextButtonDisabled,
 }: Props) => {
   const classes = useStyles();
+  const isLastStep = activeStep === totalSteps - 1;
 
   return (
     <div>
@@ -26,15 +27,17 @@ export const StepActions = ({
       >
         Wstecz
       </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleNext}
-        className={classes.button}
-        disabled={isNextButtonDisabled}
-      >
-        {activeStep === totalSteps - 1 ? 'Zapisz' : 'Dalej'}
-      </Button>
+      {isLastStep ? null : (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleNext}
+          className={classes.button}
+          disabled={isNextButtonDisabled}
+        >
+          Dalej
+        </Button>
+      )}
     </div>
   );
 };
