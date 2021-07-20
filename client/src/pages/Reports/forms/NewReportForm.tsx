@@ -19,6 +19,7 @@ import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
 import { RatingsStep } from './RatingsStep';
 import { BottomNav } from '../BottomNav';
+import { Loader } from '../../../components/Loader';
 import { ReportTemplatesSelect } from '../../../components/selects/ReportTemplatesSelect';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Hooks
@@ -65,7 +66,10 @@ export const NewReportForm = ({
     defaultReportTemplateId,
   );
 
-  const { data: reportTemplates } = useReportTemplates();
+  const {
+    data: reportTemplates,
+    isLoading: reportTemplatesLoading,
+  } = useReportTemplates();
 
   const selectedReportTemplate = reportTemplates?.find(
     (template) => template.id === selectedReportTemplateId,
@@ -135,6 +139,7 @@ export const NewReportForm = ({
 
   return (
     <>
+      {reportTemplatesLoading && <Loader />}
       <Formik
         initialValues={{
           ...initialValues,
