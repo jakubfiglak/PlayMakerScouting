@@ -42,6 +42,8 @@ export type Report = {
   yellowCards: number;
   redCards: number;
   skills: Skill[];
+  videoURL?: string;
+  videoDescription?: string;
   finalRating: RatingScore;
   summary: string;
   avgRating: number;
@@ -67,6 +69,8 @@ export type ReportDTO = {
   shirtNo?: number;
   yellowCards: number;
   redCards: number;
+  videoURL?: string;
+  videoDescription?: string;
   finalRating: RatingScore;
   maxRatingScore: number;
   summary: string;

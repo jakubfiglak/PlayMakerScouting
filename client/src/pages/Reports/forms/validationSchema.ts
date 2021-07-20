@@ -57,6 +57,8 @@ export const validationSchema: yup.ObjectSchema<ReportDTO> = yup
         .min(0, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
         .max(1, 'Liczba czerwonych kartek musi mieć wartość 0 lub 1')
         .required(),
+      videoURL: yup.string().url('Niepoprawny format url').notRequired(),
+      videoDescription: yup.string().notRequired(),
       summary: yup.string().required('Opisz występ'),
       finalRating: yup.mixed<RatingScore>(),
       skills: yup.array<Skill>().defined(),
