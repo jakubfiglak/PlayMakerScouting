@@ -20,6 +20,7 @@ import {
   usePlayers,
   useCreatePlayer,
   useUpdatePlayer,
+  useDeletePlayer,
 } from '../../hooks/players';
 import { useClubsList, useCreateClub } from '../../hooks/clubs';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
@@ -64,6 +65,10 @@ export const PlayersPage = () => {
     mutate: updatePlayer,
     isLoading: updatePlayerLoading,
   } = useUpdatePlayer(currentPlayer?.id || '');
+  const {
+    mutate: deletePlayer,
+    isLoading: deletePlayerLoading,
+  } = useDeletePlayer();
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { mutate: createClub, isLoading: createClubLoading } = useCreateClub();
 
@@ -91,13 +96,17 @@ export const PlayersPage = () => {
     setCurrentPlayer(null);
   };
 
+  const isLoading =
+    playersLoading ||
+    clubsLoading ||
+    createClubLoading ||
+    createPlayerLoading ||
+    updatePlayerLoading ||
+    deletePlayerLoading;
+
   return (
     <MainTemplate>
-      {(playersLoading ||
-        clubsLoading ||
-        createClubLoading ||
-        createPlayerLoading ||
-        updatePlayerLoading) && <Loader />}
+      {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
           <Tab label="Zawodnicy" id="players-0" aria-controls="players-0" />
@@ -130,7 +139,7 @@ export const PlayersPage = () => {
                   player={player}
                   isMenuActive
                   onEditClick={handleEditClick}
-                  onDeleteClick={(id: string) => console.log(id)}
+                  onDeleteClick={deletePlayer}
                 />
               ))
             : null}
