@@ -4,6 +4,7 @@ import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { ClubDetails } from './ClubDetails';
 import { PlayersTable } from '../Players/PlayersTable';
+import { PlayersTableRow } from '../Players/PlayersTableRow';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
@@ -70,9 +71,14 @@ export const ClubPage = () => {
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         handleSort={handleSort}
-        players={players?.docs || []}
         total={players?.totalDocs || 0}
-      />
+      >
+        {players
+          ? players.docs.map((player) => (
+              <PlayersTableRow key={player.id} player={player} />
+            ))
+          : null}
+      </PlayersTable>
     </MainTemplate>
   );
 };

@@ -4,6 +4,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { PlayersForm } from './PlayersForm';
 import { PlayersTable } from './PlayersTable';
+import { PlayersTableRow } from './PlayersTableRow';
 import { PlayersFilterForm } from './PlayersFilterForm';
 import { AddClubModal } from './AddClubModal';
 import { TabPanel } from '../../components/TabPanel';
@@ -119,11 +120,21 @@ export const PlayersPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          players={players?.docs || []}
           total={players?.totalDocs || 0}
-          onEditClick={handleEditClick}
           actions
-        />
+        >
+          {players
+            ? players.docs.map((player) => (
+                <PlayersTableRow
+                  key={player.id}
+                  player={player}
+                  isMenuActive
+                  onEditClick={handleEditClick}
+                  onDeleteClick={(id: string) => console.log(id)}
+                />
+              ))
+            : null}
+        </PlayersTable>
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PageHeading
