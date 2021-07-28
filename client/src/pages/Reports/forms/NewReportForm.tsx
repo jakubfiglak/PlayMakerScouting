@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Formik, Form } from 'formik';
+import { ReactNode, useState } from 'react';
+import { Formik, Form, FormikErrors, FormikTouched } from 'formik';
 // MUI components
 import {
   Stepper,
@@ -18,7 +18,9 @@ import { SummaryStep } from './SummaryStep';
 import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
 import { RatingsStep } from './RatingsStep';
+import { VideoStep } from './VideoStep';
 import { BottomNav } from '../BottomNav';
+import { Loader } from '../../../components/Loader';
 import { ReportTemplatesSelect } from '../../../components/selects/ReportTemplatesSelect';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Hooks
@@ -32,6 +34,12 @@ import { Rating } from '../../../types/ratings';
 // Utils & data
 import { validationSchema } from './validationSchema';
 import { useSettingsState } from '../../../context/settings/useSettingsState';
+
+type TStep = {
+  title: string;
+  content: ReactNode;
+  errorKeys?: string[];
+};
 
 type Props = {
   isOrderOptionDisabled: boolean;
@@ -65,13 +73,16 @@ export const NewReportForm = ({
     defaultReportTemplateId,
   );
 
-  const { data: reportTemplates } = useReportTemplates();
+  const {
+    data: reportTemplates,
+    isLoading: reportTemplatesLoading,
+  } = useReportTemplates();
 
   const selectedReportTemplate = reportTemplates?.find(
     (template) => template.id === selectedReportTemplateId,
   );
 
-  const steps = [
+  const steps: TStep[] = [
     {
       title: 'Szablon raportu',
       content: reportTemplates ? (
@@ -96,7 +107,10 @@ export const NewReportForm = ({
       ),
     },
     {
-      title: reportType === 'custom' ? 'Wybierz zawodnika' : 'Wybierz zlecenie',
+      title:
+        reportType === 'custom'
+          ? 'Informacje o zawodniku'
+          : 'Zlecenie i informacje o zawodniku',
       content:
         reportType === 'order' ? (
           <OrderStep ordersData={ordersList} />
@@ -106,6 +120,7 @@ export const NewReportForm = ({
             onAddPlayerClick={onAddPlayerClick}
           />
         ),
+      errorKeys: ['player', 'order'],
     },
     {
       title: 'Informacje o meczu',
@@ -114,6 +129,7 @@ export const NewReportForm = ({
     {
       title: 'Notatki/podsumowanie',
       content: <SummaryStep />,
+      errorKeys: ['summary'],
     },
     {
       title: 'Oceny',
@@ -128,10 +144,16 @@ export const NewReportForm = ({
       title: 'Statystyki',
       content: <BasicDataStep />,
     },
+    {
+      title: 'Video',
+      content: <VideoStep />,
+      errorKeys: ['videoURL'],
+    },
   ];
 
   return (
     <>
+      {reportTemplatesLoading && <Loader />}
       <Formik
         initialValues={{
           ...initialValues,
@@ -150,18 +172,20 @@ export const NewReportForm = ({
           resetForm();
         }}
       >
-        {({ handleReset, values }) => (
+        {({ handleReset, values, errors, touched }) => (
           <Form>
             <Stepper
               activeStep={activeStep}
               orientation="vertical"
               className={classes.root}
             >
-              {steps.map(({ title, content }) => (
-                <Step key={title}>
-                  <StepLabel>{title}</StepLabel>
+              {steps.map((step) => (
+                <Step key={step.title}>
+                  <StepLabel error={getStepError({ errors, touched, step })}>
+                    {step.title}
+                  </StepLabel>
                   <StepContent>
-                    <div className={classes.content}>{content}</div>
+                    <div className={classes.content}>{step.content}</div>
                     <StepActions
                       activeStep={activeStep}
                       totalSteps={steps.length}
@@ -176,14 +200,16 @@ export const NewReportForm = ({
                 </Step>
               ))}
             </Stepper>
-            <MainFormActions
-              label="raport"
-              isEditState={false}
-              onCancelClick={() => {
-                handleReset();
-                onReset();
-              }}
-            />
+            <div className={classes.container}>
+              <MainFormActions
+                label="raport"
+                isEditState={false}
+                onCancelClick={() => {
+                  handleReset();
+                  onReset();
+                }}
+              />
+            </div>
           </Form>
         )}
       </Formik>
@@ -200,6 +226,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   content: {
     marginTop: theme.spacing(1),
+  },
+  container: {
+    margin: theme.spacing(2, 'auto'),
+
+    [theme.breakpoints.up('sm')]: {
+      width: '50%',
+    },
   },
 }));
 
@@ -222,6 +255,22 @@ function mapRatingsToRatingType(ratings: Rating[]) {
     const { name, category, score } = rating;
     return { name, category, hasScore: score };
   });
+}
+
+type GetStepErrorArgs = {
+  errors: FormikErrors<ReportDTO>;
+  touched: FormikTouched<ReportDTO>;
+  step: TStep;
+};
+
+function getStepError({ errors, touched, step }: GetStepErrorArgs) {
+  const stepErrors: string[] = [];
+  step.errorKeys?.forEach((key) => {
+    if (touched[key as keyof ReportDTO] && errors[key as keyof ReportDTO]) {
+      stepErrors.push(key);
+    }
+  });
+  return !!stepErrors.length;
 }
 
 const initialValues: Omit<ReportDTO, 'skills'> = {

@@ -4,6 +4,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
 import { PlayersForm } from './PlayersForm';
 import { PlayersTable } from './PlayersTable';
+import { PlayersTableRow } from './PlayersTableRow';
 import { PlayersFilterForm } from './PlayersFilterForm';
 import { AddClubModal } from './AddClubModal';
 import { TabPanel } from '../../components/TabPanel';
@@ -19,6 +20,7 @@ import {
   usePlayers,
   useCreatePlayer,
   useUpdatePlayer,
+  useDeletePlayer,
 } from '../../hooks/players';
 import { useClubsList, useCreateClub } from '../../hooks/clubs';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
@@ -63,6 +65,10 @@ export const PlayersPage = () => {
     mutate: updatePlayer,
     isLoading: updatePlayerLoading,
   } = useUpdatePlayer(currentPlayer?.id || '');
+  const {
+    mutate: deletePlayer,
+    isLoading: deletePlayerLoading,
+  } = useDeletePlayer();
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { mutate: createClub, isLoading: createClubLoading } = useCreateClub();
 
@@ -90,13 +96,17 @@ export const PlayersPage = () => {
     setCurrentPlayer(null);
   };
 
+  const isLoading =
+    playersLoading ||
+    clubsLoading ||
+    createClubLoading ||
+    createPlayerLoading ||
+    updatePlayerLoading ||
+    deletePlayerLoading;
+
   return (
     <MainTemplate>
-      {(playersLoading ||
-        clubsLoading ||
-        createClubLoading ||
-        createPlayerLoading ||
-        updatePlayerLoading) && <Loader />}
+      {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
           <Tab label="Zawodnicy" id="players-0" aria-controls="players-0" />
@@ -119,11 +129,21 @@ export const PlayersPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          players={players?.docs || []}
           total={players?.totalDocs || 0}
-          onEditClick={handleEditClick}
           actions
-        />
+        >
+          {players
+            ? players.docs.map((player) => (
+                <PlayersTableRow
+                  key={player.id}
+                  player={player}
+                  isMenuActive
+                  onEditClick={handleEditClick}
+                  onDeleteClick={deletePlayer}
+                />
+              ))
+            : null}
+        </PlayersTable>
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="players">
         <PageHeading

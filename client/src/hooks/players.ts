@@ -213,3 +213,25 @@ export function useUpdatePlayer(playerId: string) {
     },
   );
 }
+
+// Delete player
+async function deletePlayer(id: string): Promise<ApiResponse<string>> {
+  const { data } = await axios.delete<ApiResponse<string>>(
+    `/api/v1/players/${id}`,
+  );
+  return data;
+}
+
+export function useDeletePlayer() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation((id: string) => deletePlayer(id), {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('players');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}

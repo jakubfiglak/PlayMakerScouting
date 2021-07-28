@@ -1,23 +1,10 @@
-import * as React from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
-// MUI components
-import { IconButton, Tooltip, Link } from '@material-ui/core';
-// MUI icons
-import { Edit as EditIcon } from '@material-ui/icons/';
+import { FC } from 'react';
 // Custom components
 import { Table } from '../../components/table/Table';
-import { StyledTableCell } from '../../components/table/TableCell';
-import { StyledTableRow } from '../../components/table/TableRow';
 // Types
-import { Player } from '../../types/players';
 import { CommonTableProps } from '../../types/common';
-// Utils & data
-import { getLabel } from '../../utils/getLabel';
 
-type Props = {
-  players: Player[];
-  onEditClick?: (player: Player) => void;
-} & CommonTableProps;
+type Props = CommonTableProps;
 
 const headCells = [
   { id: 'lastName', label: 'Imię i nazwisko' },
@@ -27,7 +14,7 @@ const headCells = [
   { id: 'footed', label: 'Noga' },
 ];
 
-export const PlayersTable = ({
+export const PlayersTable: FC<Props> = ({
   page,
   rowsPerPage,
   sortBy,
@@ -35,13 +22,10 @@ export const PlayersTable = ({
   handleChangePage,
   handleChangeRowsPerPage,
   handleSort,
-  players,
   total,
-  onEditClick,
   actions,
-}: Props) => {
-  const history = useHistory();
-
+  children,
+}) => {
   return (
     <Table
       page={page}
@@ -55,41 +39,7 @@ export const PlayersTable = ({
       headCells={headCells}
       actions={actions}
     >
-      {players.map((player) => (
-        <StyledTableRow
-          key={player.id}
-          hover
-          onClick={() => history.push(`/players/${player.id}`)}
-        >
-          {onEditClick ? (
-            <StyledTableCell padding="checkbox">
-              <Tooltip title="Edytuj">
-                <IconButton
-                  aria-label="edit"
-                  onClick={() => onEditClick(player)}
-                >
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-            </StyledTableCell>
-          ) : null}
-          <StyledTableCell>
-            {`${player.firstName} ${player.lastName}`}
-          </StyledTableCell>
-          <StyledTableCell>
-            <Link
-              component={RouterLink}
-              to={`/clubs/${player.club.id}`}
-              onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            >
-              {player.club.name}
-            </Link>
-          </StyledTableCell>
-          <StyledTableCell>{getLabel(player.position)}</StyledTableCell>
-          <StyledTableCell>{player.yearOfBirth}</StyledTableCell>
-          <StyledTableCell>{getLabel(player.footed)}</StyledTableCell>
-        </StyledTableRow>
-      ))}
+      {children}
     </Table>
   );
 };

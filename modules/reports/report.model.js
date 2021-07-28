@@ -112,6 +112,14 @@ const ReportSchema = new Schema(
       ],
       default: [],
     },
+    videoURL: {
+      type: String,
+      trim: true,
+    },
+    videoDescription: {
+      type: String,
+      trim: true,
+    },
     finalRating: {
       type: Number,
       required: 'Please add final rating',
