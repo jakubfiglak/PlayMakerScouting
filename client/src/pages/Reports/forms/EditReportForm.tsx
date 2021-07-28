@@ -6,6 +6,7 @@ import {
   AccordionSummary,
   Card,
   CardContent,
+  CardHeader,
   Typography,
   makeStyles,
   Theme,
@@ -64,34 +65,27 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
       >
         {({ handleReset }) => (
           <Form>
-            <RatingsStep
-              ratings={mapSkillsToRatingType(report.skills)}
-              maxRatingScore={report.maxRatingScore}
-            />
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="summary-content"
-                id="summary"
-              >
-                <Typography>Podsumowanie występu</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
+            <Card className={classes.card}>
+              <CardHeader title="Podsumowanie występu" />
+              <CardContent>
                 <SummaryStep />
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="stats-content"
-                id="stats"
-              >
-                <Typography>Statystyki</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
+              </CardContent>
+            </Card>
+            <Card className={classes.card}>
+              <CardHeader title="Statystyki" />
+              <CardContent>
                 <BasicDataStep />
-              </AccordionDetails>
-            </Accordion>
+              </CardContent>
+            </Card>
+            <Card className={classes.card}>
+              <CardHeader title="Oceny" />
+              <CardContent>
+                <RatingsStep
+                  ratings={mapSkillsToRatingType(report.skills)}
+                  maxRatingScore={report.maxRatingScore}
+                />
+              </CardContent>
+            </Card>
             <div className={classes.container}>
               <MainFormActions
                 label="raport"
