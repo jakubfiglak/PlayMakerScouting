@@ -20,6 +20,9 @@ const {
   insertTeams,
 } = require('../../test/db-utils');
 const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
+const reportsService = require('../../modules/reports/reports.service');
+const ordersService = require('../../modules/orders/orders.service');
+const playersService = require('../../modules/players/players.service');
 
 let api = axios.create();
 let server;
@@ -435,5 +438,104 @@ describe('DELETE /api/v1/clubs/:id', () => {
     expect(response.data.success).toBe(true);
     expect(response.data.message).toContain('successfully removed');
     expect(response.data.data).toBe(player._id.toHexString());
+  });
+});
+
+describe('POST /api/v1/players/merge-duplicates', () => {
+  it('should correctly merge duplicate players definitions into one', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    // Create players
+    const player1 = buildPlayer({ lnpID: '123' });
+    const player2 = buildPlayer({ lnpID: '123' });
+    const player3 = buildPlayer({ lnpID: '123' });
+    const player4 = buildPlayer({ lnpID: '345' });
+    const player5 = buildPlayer({ lnpID: '345' });
+    const player6 = buildPlayer({ lnpID: '678' });
+
+    const players = [player1, player2, player3, player4, player5, player6];
+    const playersToRemain = [player1, player4, player6];
+
+    await insertPlayers(players);
+
+    // Create 6 reports - 1 for each player
+    const reports = players.map((player) => buildReport({ player: player._id }));
+
+    // Create 6 orders - 1 for each player
+    const orders = players.map((player) => buildOrder({ player: player._id }));
+
+    await Promise.all([insertReports(reports), insertOrders(orders)]);
+
+    await api
+      .post(
+        'players/merge-duplicates',
+        {},
+        {
+          headers: { Cookie: `token=${token}` },
+        }
+      )
+      .catch((e) => e);
+
+    const reportsOperations = playersToRemain.map((player) =>
+      reportsService.getReportsForPlayer(player._id)
+    );
+    const ordersOperations = playersToRemain.map((player) =>
+      ordersService.getOrdersForPlayer(player._id)
+    );
+
+    const [
+      player1Reports,
+      player4Reports,
+      player6Reports,
+      player1Orders,
+      player4Orders,
+      player6Orders,
+    ] = await Promise.all([...reportsOperations, ...ordersOperations]);
+
+    // Check if there is correct number of reports and orders assigned to each of the players
+    expect(player1Reports.length).toBe(3);
+    expect(player4Reports.length).toBe(2);
+    expect(player6Reports.length).toBe(1);
+    expect(player1Orders.length).toBe(3);
+    expect(player4Orders.length).toBe(2);
+    expect(player6Orders.length).toBe(1);
+
+    // Check if correct reports and orders have been assigned to each player
+    const player1ReportIds = player1Reports.map((report) => report._id.toHexString());
+    const player4ReportIds = player4Reports.map((report) => report._id.toHexString());
+    const player6ReportIds = player6Reports.map((report) => report._id.toHexString());
+    const player1OrderIds = player1Orders.map((order) => order._id.toHexString());
+    const player4OrderIds = player4Orders.map((order) => order._id.toHexString());
+    const player6OrderIds = player6Orders.map((order) => order._id.toHexString());
+
+    expect(player1ReportIds).toContain(reports[0]._id.toHexString());
+    expect(player1ReportIds).toContain(reports[1]._id.toHexString());
+    expect(player1ReportIds).toContain(reports[2]._id.toHexString());
+    expect(player4ReportIds).toContain(reports[3]._id.toHexString());
+    expect(player4ReportIds).toContain(reports[4]._id.toHexString());
+    expect(player6ReportIds).toContain(reports[5]._id.toHexString());
+
+    expect(player1OrderIds).toContain(orders[0]._id.toHexString());
+    expect(player1OrderIds).toContain(orders[1]._id.toHexString());
+    expect(player1OrderIds).toContain(orders[2]._id.toHexString());
+    expect(player4OrderIds).toContain(orders[3]._id.toHexString());
+    expect(player4OrderIds).toContain(orders[4]._id.toHexString());
+    expect(player6OrderIds).toContain(orders[5]._id.toHexString());
+
+    // Check if there is correct number of reports in the database
+    const dbReports = await reportsService.getAllReportsList();
+    expect(dbReports.length).toBe(6);
+
+    // Check if there is corrent number of players left in the database
+    const dbPlayers = await playersService.getAllPlayersList({});
+    const dbPlayersIds = dbPlayers.map((player) => player._id.toHexString());
+
+    expect(dbPlayers.length).toBe(3);
+    expect(dbPlayersIds).toContain(player1._id.toHexString());
+    expect(dbPlayersIds).not.toContain(player2._id.toHexString());
+    expect(dbPlayersIds).not.toContain(player3._id.toHexString());
+    expect(dbPlayersIds).toContain(player4._id.toHexString());
+    expect(dbPlayersIds).not.toContain(player5._id.toHexString());
+    expect(dbPlayersIds).toContain(player6._id.toHexString());
   });
 });

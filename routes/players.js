@@ -8,11 +8,12 @@ const {
   getPlayer,
   updatePlayer,
   deletePlayer,
+  mergePlayersDuplicates,
 } = require('../modules/players/players.controller');
 const Club = require('../modules/clubs/club.model');
 const options = require('../modules/players/options');
 const { setPlayer, canBeDeleted } = require('../modules/players/players.middleware');
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist');
 const setAcls = require('../middleware/setAcls');
 const prepareQuery = require('../middleware/prepareQuery');
@@ -49,5 +50,6 @@ router.delete(
   [protect, setAcls, setPlayer, checkAccessPermission('player'), canBeDeleted],
   deletePlayer
 );
+router.post('/merge-duplicates', [protect, authorize('admin')], mergePlayersDuplicates);
 
 module.exports = router;

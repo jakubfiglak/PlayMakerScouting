@@ -1,5 +1,7 @@
 const Player = require('./player.model');
 const resultsOptions = require('./options');
+const Report = require('../reports/report.model');
+const Order = require('../orders/order.model');
 
 function getPlayerById(id) {
   return Player.findById(id);
@@ -59,6 +61,66 @@ function getPlayersCount(accessFilters) {
   return Player.countDocuments(accessFilters);
 }
 
+async function mergePlayersDuplicates() {
+  // Get all players grouped by LNP ID
+  const results = await Player.aggregate()
+    .lookup({ from: 'reports', localField: '_id', foreignField: 'player', as: 'reports' })
+    .lookup({ from: 'orders', localField: '_id', foreignField: 'player', as: 'orders' })
+    .group({
+      _id: '$lnpID',
+      ids: { $push: '$$ROOT._id' },
+      entities: { $push: '$$ROOT' },
+    });
+
+  // Filter out players with only one definition
+  const filteredResults = results.filter((player) => player.entities.length !== 1);
+
+  // Set the player field in related report documents to the first player entity ID
+  const reportsOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx !== 0) {
+          return entity.reports.map((report) =>
+            Report.updateOne({ _id: report._id }, { $set: { player: result.entities[0]._id } })
+          );
+        }
+        return null;
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
+  // Set the player field in related order documents to the first player entity ID
+  const ordersOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx !== 0) {
+          return entity.orders.map((order) =>
+            Order.updateOne({ _id: order._id }, { $set: { player: result.entities[0]._id } })
+          );
+        }
+        return null;
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
+  // Remove duplicate player entities
+  const playersOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx === 0) {
+          return null;
+        }
+        return Player.deleteOne({ _id: entity._id });
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
+  return Promise.all([...reportsOperations, ...ordersOperations, ...playersOperations]);
+}
+
 module.exports = {
   createPlayer,
   getAllPlayers,
@@ -69,4 +131,5 @@ module.exports = {
   getPlayerById,
   getPlayersForClub,
   getPlayersCount,
+  mergePlayersDuplicates,
 };
