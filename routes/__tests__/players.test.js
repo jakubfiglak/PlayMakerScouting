@@ -9,6 +9,7 @@ const {
   buildReport,
   buildAccessControlList,
   buildTeam,
+  buildUser,
 } = require('../../test/utils');
 const {
   insertClubs,
@@ -18,6 +19,7 @@ const {
   insertReports,
   insertAccessControlLists,
   insertTeams,
+  insertUsers,
 } = require('../../test/db-utils');
 const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
 const reportsService = require('../../modules/reports/reports.service');
@@ -458,6 +460,17 @@ describe('POST /api/v1/players/merge-duplicates', () => {
 
     await insertPlayers(players);
 
+    // Create 2 test users with their ACLs
+    const user1 = buildUser();
+    const user2 = buildUser();
+
+    const acl1 = buildAccessControlList({ user: user1._id, players: [player3._id, player5._id] });
+    const acl2 = buildAccessControlList({
+      user: user2._id,
+      players: [player2._id, player5._id, player6._id],
+    });
+    await Promise.all([insertUsers([user1, user2]), insertAccessControlLists([acl1, acl2])]);
+
     // Create 6 reports - 1 for each player
     const reports = players.map((player) => buildReport({ player: player._id }));
 
@@ -525,6 +538,19 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     // Check if there is correct number of reports in the database
     const dbReports = await reportsService.getAllReportsList();
     expect(dbReports.length).toBe(6);
+
+    // Check if acls has been successfully proccessed
+    const dbAcls = await accessControlListsService.getAllAccessControlLists();
+    console.log(dbAcls);
+    expect(dbAcls[0].players).toContainEqual(player1._id);
+    expect(dbAcls[0].players).toContainEqual(player4._id);
+    expect(dbAcls[0].players).not.toContainEqual(player3._id);
+    expect(dbAcls[0].players).not.toContainEqual(player5._id);
+    expect(dbAcls[1].players).toContainEqual(player1._id);
+    expect(dbAcls[1].players).toContainEqual(player4._id);
+    expect(dbAcls[1].players).toContainEqual(player6._id);
+    expect(dbAcls[1].players).not.toContainEqual(player2._id);
+    expect(dbAcls[1].players).not.toContainEqual(player5._id);
 
     // Check if there is corrent number of players left in the database
     const dbPlayers = await playersService.getAllPlayersList({});

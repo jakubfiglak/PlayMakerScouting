@@ -2,6 +2,7 @@ const Player = require('./player.model');
 const resultsOptions = require('./options');
 const Report = require('../reports/report.model');
 const Order = require('../orders/order.model');
+const AccessControlList = require('../accessControlLists/accessControlList.model');
 
 function getPlayerById(id) {
   return Player.findById(id);
@@ -66,6 +67,12 @@ async function mergePlayersDuplicates() {
   const results = await Player.aggregate()
     .lookup({ from: 'reports', localField: '_id', foreignField: 'player', as: 'reports' })
     .lookup({ from: 'orders', localField: '_id', foreignField: 'player', as: 'orders' })
+    .lookup({
+      from: 'accesscontrollists',
+      let: { playerId: '$_id' },
+      pipeline: [{ $match: { $expr: { $in: ['$$playerId', '$players'] } } }],
+      as: 'acls',
+    })
     .group({
       _id: '$lnpID',
       ids: { $push: '$$ROOT._id' },
@@ -105,6 +112,39 @@ async function mergePlayersDuplicates() {
     .flat(Infinity)
     .filter((operation) => operation);
 
+  // Edit access control lists - for each access control list containing
+  // the player to be removed, add the entity to be kept in the database
+  const aclsPushOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx === 0) {
+          return null;
+        }
+        return entity.acls.map((acl) =>
+          AccessControlList.updateOne(
+            { _id: acl._id },
+            { $push: { players: result.entities[0]._id } }
+          )
+        );
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
+  const aclsPullOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx === 0) {
+          return null;
+        }
+        return entity.acls.map((acl) =>
+          AccessControlList.updateOne({ _id: acl._id }, { $pull: { players: entity._id } })
+        );
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
   // Remove duplicate player entities
   const playersOperations = filteredResults
     .map((result) =>
@@ -118,7 +158,13 @@ async function mergePlayersDuplicates() {
     .flat(Infinity)
     .filter((operation) => operation);
 
-  return Promise.all([...reportsOperations, ...ordersOperations, ...playersOperations]);
+  return Promise.all([
+    ...reportsOperations,
+    ...ordersOperations,
+    ...aclsPushOperations,
+    ...aclsPullOperations,
+    ...playersOperations,
+  ]);
 }
 
 module.exports = {
