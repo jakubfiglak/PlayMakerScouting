@@ -49,7 +49,7 @@ function getClubsCount(accessFilters) {
 async function mergeClubsDuplicates() {
   // Get all players grouped by LNP ID
   const results = await Club.aggregate()
-    .match({ lnpID: { $type: 'string' } })
+    .match({ $and: [{ lnpID: { $type: 'string' } }, { lnpID: { $ne: '' } }] })
     .lookup({ from: 'players', localField: '_id', foreignField: 'club', as: 'players' })
     .lookup({
       from: 'reports',

@@ -24,6 +24,7 @@ const ClubSchema = new Schema(
     },
     lnpID: {
       type: String,
+      trim: true,
     },
     authorizedUsers: {
       type: [Schema.Types.ObjectId],

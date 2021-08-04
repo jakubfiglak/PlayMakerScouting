@@ -41,6 +41,7 @@ const PlayerSchema = new Schema(
     },
     lnpID: {
       type: String,
+      trim: true,
     },
     lnpProfileURL: {
       type: String,
