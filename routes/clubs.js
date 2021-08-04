@@ -6,8 +6,9 @@ const {
   getClub,
   updateClub,
   deleteClub,
+  mergeClubsDuplicates,
 } = require('../modules/clubs/clubs.controller');
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const setAcls = require('../middleware/setAcls');
 const prepareQuery = require('../middleware/prepareQuery');
 const setAccessFilters = require('../middleware/setAccessFilters');
@@ -42,5 +43,6 @@ router.delete(
   [protect, setAcls, setClub, checkAccessPermission('club'), canBeDeleted],
   deleteClub
 );
+router.post('/merge-duplicates', [protect, authorize('admin')], mergeClubsDuplicates);
 
 module.exports = router;

@@ -479,15 +479,13 @@ describe('POST /api/v1/players/merge-duplicates', () => {
 
     await Promise.all([insertReports(reports), insertOrders(orders)]);
 
-    await api
-      .post(
-        'players/merge-duplicates',
-        {},
-        {
-          headers: { Cookie: `token=${token}` },
-        }
-      )
-      .catch((e) => e);
+    await api.post(
+      'players/merge-duplicates',
+      {},
+      {
+        headers: { Cookie: `token=${token}` },
+      }
+    );
 
     const reportsOperations = playersToRemain.map((player) =>
       reportsService.getReportsForPlayer(player._id)
@@ -541,7 +539,7 @@ describe('POST /api/v1/players/merge-duplicates', () => {
 
     // Check if acls has been successfully proccessed
     const dbAcls = await accessControlListsService.getAllAccessControlLists();
-    console.log(dbAcls);
+
     expect(dbAcls[0].players).toContainEqual(player1._id);
     expect(dbAcls[0].players).toContainEqual(player4._id);
     expect(dbAcls[0].players).not.toContainEqual(player3._id);

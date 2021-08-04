@@ -10,6 +10,11 @@ async function getReportsForPlayer(playerId) {
   return reports;
 }
 
+async function getReportsForClub(clubId) {
+  const reports = await Report.find({ playerCurrentClub: clubId });
+  return reports;
+}
+
 function getHighestRatedReport(accessFilters) {
   return Report.find(accessFilters)
     .sort(resultsOptions.highestRatedSort)
@@ -77,6 +82,7 @@ async function deleteReport(report) {
 module.exports = {
   getReportById,
   getReportsForPlayer,
+  getReportsForClub,
   getHighestRatedReport,
   getLatestReport,
   getReportsCount,
