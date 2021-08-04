@@ -19,13 +19,18 @@ export const Modal = ({
   handleAccept,
   handleClose,
 }: ModalProps) => {
+  function onAccept() {
+    handleAccept();
+    handleClose();
+  }
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogContent>
         <DialogContentText>{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={handleAccept} autoFocus>
+        <Button color="secondary" onClick={onAccept} autoFocus>
           Tak
         </Button>
         <Button color="primary" onClick={handleClose}>
