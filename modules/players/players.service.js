@@ -65,6 +65,7 @@ function getPlayersCount(accessFilters) {
 async function mergePlayersDuplicates() {
   // Get all players grouped by LNP ID
   const results = await Player.aggregate()
+    .match({ lnpID: { $type: 'string' } })
     .lookup({ from: 'reports', localField: '_id', foreignField: 'player', as: 'reports' })
     .lookup({ from: 'orders', localField: '_id', foreignField: 'player', as: 'orders' })
     .lookup({

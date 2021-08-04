@@ -358,11 +358,13 @@ describe('POST /api/v1/clubs/merge-duplicates', () => {
     const club4 = buildClub({ lnpID: '345' });
     const club5 = buildClub({ lnpID: '345' });
     const club6 = buildClub({ lnpID: '678' });
+    const club7 = buildClub();
+    const club8 = buildClub();
 
     const clubs = [club1, club2, club3, club4, club5, club6];
     const clubsToRemain = [club1, club4, club6];
 
-    await insertClubs(clubs);
+    await insertClubs([...clubs, club7, club8]);
 
     // Create 2 test users with their ACLs
     const user1 = buildUser();
@@ -460,7 +462,7 @@ describe('POST /api/v1/clubs/merge-duplicates', () => {
     const dbClubs = await clubsService.getAllClubsList({});
     const dbClubsIds = dbClubs.map((club) => club._id.toHexString());
 
-    expect(dbClubs.length).toBe(3);
+    expect(dbClubs.length).toBe(5);
     expect(dbClubsIds).toContain(club1._id.toHexString());
     expect(dbClubsIds).not.toContain(club2._id.toHexString());
     expect(dbClubsIds).not.toContain(club3._id.toHexString());

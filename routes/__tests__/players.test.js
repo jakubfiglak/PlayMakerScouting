@@ -454,11 +454,13 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     const player4 = buildPlayer({ lnpID: '345' });
     const player5 = buildPlayer({ lnpID: '345' });
     const player6 = buildPlayer({ lnpID: '678' });
+    const player7 = buildPlayer();
+    const player8 = buildPlayer();
 
     const players = [player1, player2, player3, player4, player5, player6];
     const playersToRemain = [player1, player4, player6];
 
-    await insertPlayers(players);
+    await insertPlayers([...players, player7, player8]);
 
     // Create 2 test users with their ACLs
     const user1 = buildUser();
@@ -471,10 +473,10 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     });
     await Promise.all([insertUsers([user1, user2]), insertAccessControlLists([acl1, acl2])]);
 
-    // Create 6 reports - 1 for each player
+    // Create 6 reports - 1 for each player with lnpID defined
     const reports = players.map((player) => buildReport({ player: player._id }));
 
-    // Create 6 orders - 1 for each player
+    // Create 6 orders - 1 for each player with lnpID defined
     const orders = players.map((player) => buildOrder({ player: player._id }));
 
     await Promise.all([insertReports(reports), insertOrders(orders)]);
@@ -554,7 +556,7 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     const dbPlayers = await playersService.getAllPlayersList({});
     const dbPlayersIds = dbPlayers.map((player) => player._id.toHexString());
 
-    expect(dbPlayers.length).toBe(3);
+    expect(dbPlayers.length).toBe(5);
     expect(dbPlayersIds).toContain(player1._id.toHexString());
     expect(dbPlayersIds).not.toContain(player2._id.toHexString());
     expect(dbPlayersIds).not.toContain(player3._id.toHexString());
