@@ -31,20 +31,10 @@ router.get('/list', [protect, setAcls, setAccessFilters('club')], getClubsList);
 router.get('/:id', [protect, setAcls, setClub, checkAccessPermission('club')], getClub);
 router.put(
   '/:id',
-  [
-    protect,
-    setAcls,
-    setClub,
-    canUpdateOrDelete('club'),
-    filterForbiddenUpdates(options.forbiddenUpdates),
-  ],
+  [protect, setClub, canUpdateOrDelete('club'), filterForbiddenUpdates(options.forbiddenUpdates)],
   updateClub
 );
-router.delete(
-  '/:id',
-  [protect, setAcls, setClub, canUpdateOrDelete('club'), canBeDeleted],
-  deleteClub
-);
+router.delete('/:id', [protect, setClub, canUpdateOrDelete('club'), canBeDeleted], deleteClub);
 router.post('/merge-duplicates', [protect, authorize('admin')], mergeClubsDuplicates);
 
 module.exports = router;

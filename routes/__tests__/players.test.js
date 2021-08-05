@@ -316,8 +316,6 @@ describe('GET /api/v1/players/:id', () => {
 
 describe('PUT /api/v1/players/:id', () => {
   it('should return 404 error if the player does not exist', async () => {
-    const userAcl = buildAccessControlList({ user: testUser._id });
-    await insertAccessControlLists([userAcl]);
     const { response } = await api.put('players/NON-EXISTING-ID', {}).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);
@@ -329,27 +327,21 @@ describe('PUT /api/v1/players/:id', () => {
 
   it('should return 403 error if user is not authorized to edit player data', async () => {
     const player = buildPlayer();
-    const userAcl = buildAccessControlList({ user: testUser._id });
 
-    await Promise.all([insertPlayers([player]), insertAccessControlLists([userAcl])]);
+    await insertPlayers([player]);
 
     const { response } = await api.put(`players/${player._id}`, {}).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should properly update player data if request is valid', async () => {
     const club = buildClub();
-    const player = buildPlayer({ club: club._id });
-    const userAcl = buildAccessControlList({ user: testUser._id, players: [player._id] });
+    const player = buildPlayer({ club: club._id, author: testUser._id });
 
-    await Promise.all([
-      insertClubs([club]),
-      insertPlayers([player]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    await Promise.all([insertClubs([club]), insertPlayers([player])]);
 
     const updates = {
       firstName: 'NEW-FIRST-NAME',
@@ -368,14 +360,9 @@ describe('PUT /api/v1/players/:id', () => {
 
 describe('DELETE /api/v1/clubs/:id', () => {
   it('should return 403 error if the player is related to at least one order document', async () => {
-    const player = buildPlayer({ authorizedUsers: [testUser._id] });
-    const userAcl = buildAccessControlList({ user: testUser._id, players: player._id });
+    const player = buildPlayer({ author: testUser._id });
     const order = buildOrder({ player: player._id });
-    await Promise.all([
-      insertPlayers([player]),
-      insertOrders([order]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    await Promise.all([insertPlayers([player]), insertOrders([order])]);
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
@@ -387,14 +374,9 @@ describe('DELETE /api/v1/clubs/:id', () => {
   });
 
   it('should return 403 error if the player is related to at least one report document', async () => {
-    const player = buildPlayer();
-    const userAcl = buildAccessControlList({ user: testUser._id, players: [player._id] });
-    const report = buildReport({ scout: testUser._id, player: player._id });
-    await Promise.all([
-      insertPlayers([player]),
-      insertReports([report]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    const player = buildPlayer({ author: testUser._id });
+    const report = buildReport({ author: testUser._id, player: player._id });
+    await Promise.all([insertPlayers([player]), insertReports([report])]);
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
@@ -419,21 +401,19 @@ describe('DELETE /api/v1/clubs/:id', () => {
   });
 
   it('should return 403 error if the user is not authorized to delete a club', async () => {
-    const userAcl = buildAccessControlList({ user: testUser._id });
     const player = buildPlayer();
-    await Promise.all([insertPlayers([player]), insertAccessControlLists(userAcl)]);
+    await insertPlayers([player]);
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should delete the player if the request is valid', async () => {
-    const player = buildPlayer({ authorizedUsers: [testUser._id] });
-    const userAcl = buildAccessControlList({ user: testUser._id, players: [player._id] });
-    await Promise.all([insertPlayers([player]), insertAccessControlLists([userAcl])]);
+    const player = buildPlayer({ author: testUser._id });
+    await insertPlayers([player]);
 
     const response = await api.delete(`players/${player._id}`);
 

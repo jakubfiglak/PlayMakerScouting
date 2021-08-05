@@ -21,6 +21,7 @@ const prepareQuery = require('../middleware/prepareQuery');
 const setAccessFilters = require('../middleware/setAccessFilters');
 const checkAccessPermission = require('../middleware/checkAccessPermission');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
+const canUpdateOrDelete = require('../middleware/canUpdateOrDelete');
 
 const router = express.Router({ mergeParams: true });
 
@@ -39,16 +40,15 @@ router.put(
   '/:id',
   [
     protect,
-    setAcls,
     setPlayer,
-    checkAccessPermission('player'),
+    canUpdateOrDelete('player'),
     filterForbiddenUpdates(options.forbiddenUpdates),
   ],
   updatePlayer
 );
 router.delete(
   '/:id',
-  [protect, setAcls, setPlayer, checkAccessPermission('player'), canBeDeleted],
+  [protect, setPlayer, canUpdateOrDelete('player'), canBeDeleted],
   deletePlayer
 );
 router.post('/merge-duplicates', [protect, authorize('admin')], mergePlayersDuplicates);
