@@ -27,7 +27,7 @@ type Props = {
 export const ReportCard = ({ report, title }: Props) => {
   const classes = useStyles();
 
-  const { player, docNumber, id, scout, createdAt, avgRating } = report;
+  const { player, docNumber, id, author, createdAt, avgRating } = report;
 
   return (
     <Card className={classes.container}>
@@ -56,7 +56,7 @@ export const ReportCard = ({ report, title }: Props) => {
           <Grid item xs={12}>
             <Typography>
               <strong>Scout: </strong>
-              {scout.firstName} {scout.lastName}
+              {author.firstName} {author.lastName}
             </Typography>
           </Grid>
           <Grid item xs={12}>

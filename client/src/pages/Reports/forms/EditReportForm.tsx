@@ -35,7 +35,7 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
     player,
     match,
     order,
-    scout,
+    author,
     createdAt,
     positionPlayed,
     playerCurrentClub,
@@ -49,7 +49,7 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
             player={player}
             match={match}
             order={order}
-            scout={scout}
+            author={author}
             positionPlayed={positionPlayed}
             playerCurrentClub={playerCurrentClub}
             createdAt={createdAt}
@@ -111,7 +111,7 @@ function getInitialStateFromCurrent(report: Report): ReportDTO {
     avgRating,
     status,
     createdAt,
-    scout,
+    author,
     ...rest
   } = report;
 

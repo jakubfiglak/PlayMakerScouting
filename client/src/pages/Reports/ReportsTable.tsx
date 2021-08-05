@@ -120,7 +120,7 @@ export const ReportsTable = ({
           const {
             id,
             player,
-            scout,
+            author,
             createdAt,
             avgRating,
             maxRatingScore,
@@ -194,7 +194,7 @@ export const ReportsTable = ({
                         e.stopPropagation();
                         handleDeleteReportClick(report);
                       }}
-                      disabled={!isAdmin && scout.id !== user.id}
+                      disabled={!isAdmin && author.id !== user.id}
                     >
                       <DeleteIcon color="error" />
                     </IconButton>
@@ -212,13 +212,13 @@ export const ReportsTable = ({
                 {isAdmin ? (
                   <Link
                     component={RouterLink}
-                    to={`/users/${scout.id}`}
+                    to={`/users/${author.id}`}
                     onClick={(e: React.MouseEvent) => e.stopPropagation()}
                   >
-                    {`${scout.firstName} ${scout.lastName}`}
+                    {`${author.firstName} ${author.lastName}`}
                   </Link>
                 ) : (
-                  <>{`${scout.firstName} ${scout.lastName}`}</>
+                  <>{`${author.firstName} ${author.lastName}`}</>
                 )}
               </StyledTableCell>
               <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>

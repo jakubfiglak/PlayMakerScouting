@@ -17,11 +17,15 @@ export type Club = {
   division: Division;
   voivodeship: Voivodeship | 'Zagranica';
   lnpID?: string;
+  author: string;
 };
 
 export type ClubBasicInfo = Pick<Club, 'id' | 'name'>;
 
-export type ClubDTO = Omit<Club, 'id' | 'division' | 'voivodeship'> & {
+export type ClubDTO = Omit<
+  Club,
+  'id' | 'division' | 'voivodeship' | 'author'
+> & {
   voivodeship: Voivodeship | 'Zagranica' | '';
   division: Division | '';
 };

@@ -13,6 +13,7 @@ export type Order = {
   acceptDate?: string;
   closeDate?: string;
   notes?: string;
+  author: string;
 };
 
 export type OrderBasicInfo = Pick<Order, 'id' | 'player' | 'docNumber'>;

@@ -105,7 +105,7 @@ export const ReportPage = () => {
               <ReportBasicInfo
                 player={report.player}
                 match={report.match}
-                scout={report.scout}
+                author={report.author}
                 order={report.order}
                 playerCurrentClub={report.playerCurrentClub}
                 positionPlayed={report.positionPlayed}

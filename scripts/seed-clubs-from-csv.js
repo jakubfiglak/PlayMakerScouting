@@ -21,13 +21,15 @@ async function seedClubs() {
       const clubs = results.map((result) => ({
         name: result.team_name,
         voivodeship: result.voiv,
+        division: 'III liga',
         lnpID: result.team_id_lnp,
+        author: '5d7a514b5d2c12c7449be042',
       }));
 
-      await Promise.resolve('hello');
-      console.log(clubs);
+      const created = await Club.create(clubs);
+      console.log(created);
+      console.log('Clubs created!'.green.inverse);
       process.exit();
-      // console.log(results);
     });
 }
 

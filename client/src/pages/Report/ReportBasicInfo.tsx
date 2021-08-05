@@ -12,7 +12,7 @@ type Props = Pick<
   | 'player'
   | 'match'
   | 'order'
-  | 'scout'
+  | 'author'
   | 'createdAt'
   | 'playerCurrentClub'
   | 'positionPlayed'
@@ -23,7 +23,7 @@ export const ReportBasicInfo = ({
   player,
   match,
   order,
-  scout,
+  author,
   playerCurrentClub,
   positionPlayed,
   shirtNo,
@@ -97,7 +97,7 @@ export const ReportBasicInfo = ({
         <Grid item xs={12}>
           <Typography>
             <strong>Scout: </strong>
-            {`${scout.firstName} ${scout.lastName}`}
+            {`${author.firstName} ${author.lastName}`}
           </Typography>
         </Grid>
         <Grid item xs={12}>
