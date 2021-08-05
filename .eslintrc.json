@@ -44,6 +44,7 @@
         "ExportDeclaration": { "multiline": true, "minProperties": 3 }
       }
     ],
-    "no-return-assign": "off"
+    "no-return-assign": "off",
+    "operator-linebreak": "off"
   }
 }
