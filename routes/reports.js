@@ -23,6 +23,7 @@ const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
 const setAcls = require('../middleware/setAcls');
 const setAccessFilters = require('../middleware/setAccessFilters');
 const checkAccessPermission = require('../middleware/checkAccessPermission');
+const canUpdateOrDelete = require('../middleware/canUpdateOrDelete');
 const options = require('../modules/reports/options');
 
 const router = express.Router({ mergeParams: true });
@@ -39,19 +40,14 @@ router.put(
   '/:id',
   [
     protect,
-    setAcls,
     setReport,
-    checkAccessPermission('report'),
+    canUpdateOrDelete('report'),
     canBeUpdated,
     filterForbiddenUpdates(options.forbiddenUpdates),
   ],
   updateReport
 );
-router.patch(
-  '/:id/set-status',
-  [protect, setAcls, setReport, checkAccessPermission('report')],
-  setReportStatus
-);
-router.delete('/:id', [protect, setAcls, setReport, checkAccessPermission('report')], deleteReport);
+router.patch('/:id/set-status', [protect, setReport, canUpdateOrDelete('report')], setReportStatus);
+router.delete('/:id', [protect, setReport, canUpdateOrDelete('report')], deleteReport);
 
 module.exports = router;

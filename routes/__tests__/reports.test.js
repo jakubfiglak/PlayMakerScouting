@@ -262,30 +262,20 @@ describe('PUT /api/v1/reports/:id', () => {
     const player = buildPlayer();
     const report = buildReport({ player: player._id });
 
-    const userAcl = buildAccessControlList({ user: testUser._id });
-    await Promise.all([
-      insertPlayers([player]),
-      insertReports([report]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    await Promise.all([insertPlayers([player]), insertReports([report])]);
 
     const { response } = await api.put(`reports/${report._id}`, {}).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should return 403 error if report status is "closed"', async () => {
     const player = buildPlayer();
-    const report = buildReport({ player: player._id, status: 'closed' });
-    const userAcl = buildAccessControlList({ user: testUser._id, reports: [report._id] });
+    const report = buildReport({ player: player._id, status: 'closed', author: testUser._id });
 
-    await Promise.all([
-      insertPlayers([player]),
-      insertReports([report]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    await Promise.all([insertPlayers([player]), insertReports([report])]);
 
     const { response } = await api.put(`reports/${report._id}`, {}).catch((e) => e);
 
@@ -298,15 +288,8 @@ describe('PUT /api/v1/reports/:id', () => {
 
   it('should properly update report data if request is valid', async () => {
     const player = buildPlayer();
-    const report = buildReport({ player: player._id });
-
-    const userAcl = buildAccessControlList({ user: testUser._id, reports: [report._id] });
-
-    await Promise.all([
-      insertPlayers([player]),
-      insertReports([report]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    const report = buildReport({ player: player._id, author: testUser._id });
+    await Promise.all([insertPlayers([player]), insertReports([report])]);
 
     const updates = { minutesPlayed: 68, goals: 1 };
 
@@ -335,14 +318,9 @@ describe('PUT /api/v1/reports/:id', () => {
 describe('PATCH /api/v1/reports/:id/set-status', () => {
   it('should correctly set requested report status', async () => {
     const player = buildPlayer();
-    const report = buildReport({ player: player._id, status: 'in-prep' });
-    const userAcl = buildAccessControlList({ user: testUser._id, reports: [report._id] });
+    const report = buildReport({ player: player._id, status: 'in-prep', author: testUser._id });
 
-    await Promise.all([
-      insertPlayers([player]),
-      insertReports([report]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    await Promise.all([insertPlayers([player]), insertReports([report])]);
 
     const response = await api.patch(`reports/${report._id}/set-status`, { status: 'closed' });
 
