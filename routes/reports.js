@@ -22,7 +22,7 @@ const prepareQuery = require('../middleware/prepareQuery');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
 const setAcls = require('../middleware/setAcls');
 const setAccessFilters = require('../middleware/setAccessFilters');
-const checkAccessPermission = require('../middleware/checkAccessPermission');
+const canView = require('../middleware/canView');
 const canUpdateOrDelete = require('../middleware/canUpdateOrDelete');
 const options = require('../modules/reports/options');
 
@@ -35,7 +35,7 @@ router.post(
 );
 router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('report')], getReports);
 router.get('/list', [protect, authorize('admin')], getReportsList);
-router.get('/:id', [protect, setAcls, setReport, checkAccessPermission('report')], getReport);
+router.get('/:id', [protect, setAcls, setReport, canView('report')], getReport);
 router.put(
   '/:id',
   [

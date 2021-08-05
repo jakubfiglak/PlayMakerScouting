@@ -19,7 +19,7 @@ const setAuthor = require('../middleware/setAuthor');
 const setAcls = require('../middleware/setAcls');
 const prepareQuery = require('../middleware/prepareQuery');
 const setAccessFilters = require('../middleware/setAccessFilters');
-const checkAccessPermission = require('../middleware/checkAccessPermission');
+const canView = require('../middleware/canView');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
 const canUpdateOrDelete = require('../middleware/canUpdateOrDelete');
 
@@ -35,7 +35,7 @@ router.post(
 );
 router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('player')], getPlayers);
 router.get('/list', [protect, setAcls, setAccessFilters('player')], getPlayersList);
-router.get('/:id', [protect, setAcls, setPlayer, checkAccessPermission('player')], getPlayer);
+router.get('/:id', [protect, setAcls, setPlayer, canView('player')], getPlayer);
 router.put(
   '/:id',
   [

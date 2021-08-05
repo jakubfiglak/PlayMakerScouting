@@ -13,7 +13,7 @@ const setAcls = require('../middleware/setAcls');
 const setAuthor = require('../middleware/setAuthor');
 const prepareQuery = require('../middleware/prepareQuery');
 const setAccessFilters = require('../middleware/setAccessFilters');
-const checkAccessPermission = require('../middleware/checkAccessPermission');
+const canView = require('../middleware/canView');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
 const canUpdateOrDelete = require('../middleware/canUpdateOrDelete');
 const { setClub, canBeDeleted } = require('../modules/clubs/clubs.middleware');
@@ -28,7 +28,7 @@ router.use('/:clubId/players', protect, playersRouter);
 router.post('/', [protect, setAcls, setAuthor], createClub);
 router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('club')], getClubs);
 router.get('/list', [protect, setAcls, setAccessFilters('club')], getClubsList);
-router.get('/:id', [protect, setAcls, setClub, checkAccessPermission('club')], getClub);
+router.get('/:id', [protect, setAcls, setClub, canView('club')], getClub);
 router.put(
   '/:id',
   [protect, setClub, canUpdateOrDelete('club'), filterForbiddenUpdates(options.forbiddenUpdates)],
