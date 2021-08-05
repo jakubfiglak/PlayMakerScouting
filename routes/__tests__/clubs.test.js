@@ -44,7 +44,7 @@ beforeEach(async () => {
 afterAll(() => server.close());
 
 describe('POST api/v1/clubs', () => {
-  it('should create a club and add created club id to authors ACL and if the user belongs to a team, this teams ACL should also be populated with created club id', async () => {
+  it('should create a club with properly set author field and add created club id to authors ACL and if the user belongs to a team, this teams ACL should also be populated with created club id', async () => {
     const userAcl = buildAccessControlList({ user: testUser._id });
     await insertAccessControlLists([userAcl]);
     const team = buildTeam({ members: [testUser._id] });
@@ -60,6 +60,7 @@ describe('POST api/v1/clubs', () => {
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new club!"');
     expect(response.data.data.id).toBe(club._id.toHexString());
     expect(response.data.data.name).toBe(club.name);
+    expect(response.data.data.author).toBe(testUser._id.toHexString());
 
     // Check if the users ACL has been successfully updated
     const updatedUsersAcl = await accessControlListsService.getAccessControlListForAnAsset({

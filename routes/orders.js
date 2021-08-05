@@ -24,6 +24,7 @@ const {
   checkStatus,
   canReject,
 } = require('../modules/orders/orders.middleware');
+const setAuthor = require('../middleware/setAuthor');
 
 const router = express.Router({ mergeParams: true });
 
@@ -31,7 +32,12 @@ router.use('/:orderId/reports', protect, reportsRouter);
 
 router.post(
   '/',
-  [protect, authorize('admin'), checkIfRelatedAssetExist({ fieldName: 'player', model: Player })],
+  [
+    protect,
+    authorize('admin'),
+    checkIfRelatedAssetExist({ fieldName: 'player', model: Player }),
+    setAuthor,
+  ],
   createOrder
 );
 router.get(

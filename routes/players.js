@@ -15,6 +15,7 @@ const options = require('../modules/players/options');
 const { setPlayer, canBeDeleted } = require('../modules/players/players.middleware');
 const { protect, authorize } = require('../middleware/auth');
 const checkIfRelatedAssetExist = require('../middleware/checkIfRelatedAssetExist');
+const setAuthor = require('../middleware/setAuthor');
 const setAcls = require('../middleware/setAcls');
 const prepareQuery = require('../middleware/prepareQuery');
 const setAccessFilters = require('../middleware/setAccessFilters');
@@ -28,7 +29,7 @@ router.use('/:playerId/reports', protect, reportsRouter);
 
 router.post(
   '/',
-  [protect, setAcls, checkIfRelatedAssetExist({ fieldName: 'club', model: Club })],
+  [protect, setAcls, checkIfRelatedAssetExist({ fieldName: 'club', model: Club }), setAuthor],
   createPlayer
 );
 router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('player')], getPlayers);

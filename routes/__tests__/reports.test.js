@@ -42,7 +42,7 @@ beforeEach(async () => {
 afterAll(() => server.close());
 
 describe('POST /api/v1/reports', () => {
-  it('should create a new report, properly calculate report avg ratings, add created report id to authors ACL and if the user belongs to a team, this teams ACL should also be populated with created report id, finally it should return created report with populated data', async () => {
+  it('should create a new report with properly set author field, properly calculate report avg ratings, add created report id to authors ACL and if the user belongs to a team, this teams ACL should also be populated with created report id, finally it should return created report with populated data', async () => {
     const club = buildClub();
     const player = buildPlayer({ club: club._id });
     const userAcl = buildAccessControlList({ user: testUser._id });
@@ -64,10 +64,12 @@ describe('POST /api/v1/reports', () => {
     expect(response.data.success).toBe(true);
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new report!"');
 
+    // Check author field
+    expect(response.data.data.author).toBe(testUser._id.toHexString());
+
     // Check avg calculations
     expect(response.data.data.avgRating).toBe(4);
     expect(response.data.data.percentageRating).toBe(100);
-
     // Check if the users ACL has been successfully updated
     const updatedUsersAcl = await accessControlListsService.getAccessControlListForAnAsset({
       assetType: 'user',

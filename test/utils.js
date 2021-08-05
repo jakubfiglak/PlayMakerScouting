@@ -56,6 +56,7 @@ const buildClub = (overrides = {}) => ({
   name: getRandomName(),
   voivodeship: 'Wielkopolskie',
   division: 'Ekstraklasa',
+  author: new ID(),
   ...overrides,
 });
 
@@ -64,6 +65,7 @@ const buildPlayer = (overrides = {}) => ({
   firstName: getFirstName(),
   lastName: getLastName(),
   position: 'CM',
+  author: new ID(),
   ...overrides,
 });
 
@@ -72,6 +74,7 @@ const buildOrder = (overrides = {}) => ({
   player: new ID(),
   status: 'open',
   orderNo: 1,
+  author: new ID(),
   ...overrides,
 });
 
@@ -132,7 +135,7 @@ const buildReportRating = (overrides = {}) => ({
 const buildReport = (overrides = {}) => ({
   _id: new ID(),
   player: new ID(),
-  scout: new ID(),
+  author: new ID(),
   playerCurrentClub: new ID(),
   positionPlayed: getRandomArrayMember(positions),
   match: {

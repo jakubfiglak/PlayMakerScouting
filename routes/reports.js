@@ -10,7 +10,6 @@ const {
 } = require('../modules/reports/reports.controller');
 const { protect, authorize } = require('../middleware/auth');
 const {
-  setAuthor,
   setOrderData,
   checkOrderStatus,
   setPlayerData,
@@ -18,6 +17,7 @@ const {
   setCurrentClub,
   canBeUpdated,
 } = require('../modules/reports/reports.middleware');
+const setAuthor = require('../middleware/setAuthor');
 const prepareQuery = require('../middleware/prepareQuery');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
 const setAcls = require('../middleware/setAcls');

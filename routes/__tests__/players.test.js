@@ -60,7 +60,7 @@ describe('POST /api/v1/players', () => {
     );
   });
 
-  it('should create a player, add created player id to authors and author teams ACL and return the data with populated club name & division', async () => {
+  it('should create a player with properly set author field, add created player id to authors and author teams ACL and return the data with populated club name & division', async () => {
     const club = buildClub();
     await insertClubs([club]);
 
@@ -79,6 +79,7 @@ describe('POST /api/v1/players', () => {
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new player!"');
     expect(response.data.data.id).toBe(player._id.toHexString());
     expect(response.data.data.club).toMatchObject({ name: club.name, division: club.division });
+    expect(response.data.data.author).toBe(testUser._id.toHexString());
 
     // Check if the users ACL has been successfully updated
     const updatedUsersAcl = await accessControlListsService.getAccessControlListForAnAsset({
