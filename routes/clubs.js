@@ -15,6 +15,7 @@ const prepareQuery = require('../middleware/prepareQuery');
 const setAccessFilters = require('../middleware/setAccessFilters');
 const checkAccessPermission = require('../middleware/checkAccessPermission');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
+const canUpdateOrDelete = require('../middleware/canUpdateOrDelete');
 const { setClub, canBeDeleted } = require('../modules/clubs/clubs.middleware');
 const options = require('../modules/clubs/options');
 
@@ -34,14 +35,14 @@ router.put(
     protect,
     setAcls,
     setClub,
-    checkAccessPermission('club'),
+    canUpdateOrDelete('club'),
     filterForbiddenUpdates(options.forbiddenUpdates),
   ],
   updateClub
 );
 router.delete(
   '/:id',
-  [protect, setAcls, setClub, checkAccessPermission('club'), canBeDeleted],
+  [protect, setAcls, setClub, canUpdateOrDelete('club'), canBeDeleted],
   deleteClub
 );
 router.post('/merge-duplicates', [protect, authorize('admin')], mergeClubsDuplicates);

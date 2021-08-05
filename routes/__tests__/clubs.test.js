@@ -266,19 +266,20 @@ describe('PUT /api/v1/clubs/:id', () => {
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should properly update club data if request is valid', async () => {
-    const club = buildClub({ authorizedUsers: [testUser._id] });
+    const club = buildClub({ author: testUser._id });
     await insertClubs([club]);
 
-    const userAcl = buildAccessControlList({ user: testUser._id, clubs: [club._id] });
+    const userAcl = buildAccessControlList({ user: testUser._id });
     await insertAccessControlLists([userAcl]);
 
     const updates = { name: 'NEW-NAME' };
 
     const response = await api.put(`clubs/${club._id}`, updates);
+
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
     expect(response.data.data.name).toBe('NEW-NAME');
@@ -287,7 +288,7 @@ describe('PUT /api/v1/clubs/:id', () => {
 
 describe('DELETE /api/v1/clubs/:id', () => {
   it('should return 403 error if the club has at least one player assigned to it', async () => {
-    const club = buildClub({ authorizedUsers: [testUser._id] });
+    const club = buildClub({ author: testUser._id });
     const player = buildPlayer({ club: club._id });
     const userAcl = buildAccessControlList({ user: testUser._id, clubs: [club._id] });
     await Promise.all([
@@ -329,14 +330,14 @@ describe('DELETE /api/v1/clubs/:id', () => {
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should delete the club if the request is valid', async () => {
-    const club = buildClub({ authorizedUsers: [testUser._id] });
+    const club = buildClub({ author: testUser._id });
     await insertClubs([club]);
 
-    const userAcl = buildAccessControlList({ user: testUser._id, clubs: [club._id] });
+    const userAcl = buildAccessControlList({ user: testUser._id });
     await insertAccessControlLists([userAcl]);
 
     const response = await api.delete(`clubs/${club._id}`);

@@ -6,12 +6,8 @@ const {
   getRatings,
   updateRating,
 } = require('../modules/ratings/ratings.controller');
-const {
-  setRating,
-  setAccessFilters,
-  canAccess,
-  setAuthor,
-} = require('../modules/ratings/ratings.middleware');
+const { setRating, setAccessFilters, canAccess } = require('../modules/ratings/ratings.middleware');
+const setAuthor = require('../middleware/setAuthor');
 const { protect } = require('../middleware/auth');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
 const options = require('../modules/ratings/options');
