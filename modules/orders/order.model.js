@@ -30,6 +30,11 @@ const OrderSchema = new Schema(
     notes: {
       type: String,
     },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: 'Please add an author',
+    },
   },
   {
     timestamps: true,

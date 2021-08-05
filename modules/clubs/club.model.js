@@ -26,11 +26,10 @@ const ClubSchema = new Schema(
       type: String,
       trim: true,
     },
-    authorizedUsers: {
-      type: [Schema.Types.ObjectId],
+    author: {
+      type: Schema.Types.ObjectId,
       ref: 'User',
-      default: [],
-      private: true,
+      required: 'Please add an author',
     },
   },
   { timestamps: true }

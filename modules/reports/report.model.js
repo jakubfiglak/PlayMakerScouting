@@ -14,7 +14,7 @@ const ReportSchema = new Schema(
       ref: 'Player',
       required: 'Please add a player',
     },
-    scout: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: 'Please add a scout',

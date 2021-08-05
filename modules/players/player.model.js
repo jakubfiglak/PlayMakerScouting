@@ -52,11 +52,10 @@ const PlayerSchema = new Schema(
     transfermarktProfileURL: {
       type: String,
     },
-    authorizedUsers: {
-      type: [Schema.Types.ObjectId],
+    author: {
+      type: Schema.Types.ObjectId,
       ref: 'User',
-      default: [],
-      private: true,
+      required: 'Please add an author',
     },
   },
   {
