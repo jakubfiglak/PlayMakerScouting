@@ -13,7 +13,7 @@ const results = [];
 async function seedClubs() {
   await connectDB(process.env.DB_CONNECT);
 
-  fs.createReadStream(path.resolve(__dirname, '../data', '2021-08-05-clubs.csv'))
+  fs.createReadStream(path.resolve(__dirname, '../data', '2021-08-07-clubs.csv'))
     .pipe(csv.parse({ headers: true }))
     .on('error', (error) => console.error(error))
     .on('data', (row) => results.push(row))
