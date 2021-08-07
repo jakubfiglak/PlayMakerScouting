@@ -25,7 +25,7 @@ type Props = {
 
 export const PlayersTableRow = ({
   player,
-  isMenuActive,
+  isMenuActive = false,
   onEditClick,
   onDeleteClick,
   isEditOptionEnabled = false,

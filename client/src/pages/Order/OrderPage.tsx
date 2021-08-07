@@ -12,6 +12,7 @@ import { useTable } from '../../hooks/useTable';
 import { useOrder, useAcceptOrder, useCloseOrder } from '../../hooks/orders';
 import { useOrdersReports } from '../../hooks/reports';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
+import { ReportsTableRow } from '../Reports/ReportsTableRow';
 
 type ParamTypes = {
   id: string;
@@ -87,9 +88,14 @@ export const OrderPage = () => {
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         handleSort={handleSort}
-        reports={reports?.docs || []}
         total={reports?.totalDocs || 0}
-      />
+      >
+        {reports
+          ? reports.docs.map((report) => (
+              <ReportsTableRow key={report.id} report={report} />
+            ))
+          : null}
+      </ReportsTable>
     </MainTemplate>
   );
 };

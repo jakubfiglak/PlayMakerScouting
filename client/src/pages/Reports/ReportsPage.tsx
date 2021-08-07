@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
 // MUI components
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import { AppBar, Tabs, Tab, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { ReportsTable } from './ReportsTable';
+import { ReportsTableRow } from './ReportsTableRow';
 import { ReportsFilterForm } from './ReportsFilterForm';
+import { ReportDeleteConfirmationModal } from './ReportDeleteConfirmationModal';
 import { NewReportForm } from './forms/NewReportForm';
 import { EditReportForm } from './forms/EditReportForm';
+import { PrinteableReport } from '../Report/PrinteableReport';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
@@ -22,12 +26,14 @@ import {
   useReports,
   useCreateReport,
   useUpdateReport,
+  useSetReportStatus,
 } from '../../hooks/reports';
 import { useClubsList } from '../../hooks/clubs';
 import { usePlayersList, useCreatePlayer } from '../../hooks/players';
 import { useOrdersList } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
+import { useSettingsState } from '../../context/settings/useSettingsState';
 
 type LocationState = { activeTab?: number; report?: Report; orderId?: string };
 
@@ -37,6 +43,14 @@ const initialFilters: ReportsFilterData = {
 
 export const ReportsPage = () => {
   const { state } = useLocation<LocationState | null>();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [
+    isDeleteReportConfirmationModalOpen,
+    setDeleteReportConfirmationModalOpen,
+  ] = useState(false);
+  const { defaultReportBackgroundImageUrl } = useSettingsState();
+
+  const classes = useStyles({ background: defaultReportBackgroundImageUrl });
   const [currentReport, setCurrentReport] = useState<Report | null>(null);
   const [activeOrderId, setActiveOrderId] = useState('');
 
@@ -48,6 +62,10 @@ export const ReportsPage = () => {
     mutate: updateReport,
     isLoading: updateReportLoading,
   } = useUpdateReport(currentReport?.id || '');
+  const {
+    mutate: setReportStatus,
+    isLoading: setReportStatusLoading,
+  } = useSetReportStatus();
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { data: players, isLoading: playersLoading } = usePlayersList();
   const { data: orders, isLoading: ordersLoading } = useOrdersList();
@@ -96,18 +114,35 @@ export const ReportsPage = () => {
     }
   }, [setActiveTab, state]);
 
-  const handleSetCurrent = (report: Report) => {
+  const handlePrint = useReactToPrint({
+    content: () => ref.current,
+    bodyClass: classes.pageBody,
+    documentTitle: 'Report',
+    onAfterPrint: () => setCurrentReport(null),
+  }) as () => void;
+
+  function handlePrintClick(report: Report) {
+    setCurrentReport(report);
+    setTimeout(() => handlePrint(), 100);
+  }
+
+  function handleDeleteReportClick(report: Report) {
+    setCurrentReport(report);
+    setDeleteReportConfirmationModalOpen(true);
+  }
+
+  const handleEditClick = (report: Report) => {
     setCurrentReport(report);
     setActiveTab(1);
   };
 
-  const onAddReport = (data: ReportDTO) => {
+  const handleAddReport = (data: ReportDTO) => {
     createReport(data);
     setActiveTab(0);
     setActiveOrderId('');
   };
 
-  function onUpdateReport(data: ReportDTO) {
+  function handleUpdateReport(data: ReportDTO) {
     updateReport(data);
     setActiveTab(0);
     setCurrentReport(null);
@@ -127,6 +162,7 @@ export const ReportsPage = () => {
     updateReportLoading ||
     playersLoading ||
     createPlayerLoading ||
+    setReportStatusLoading ||
     reportsLoading;
 
   return (
@@ -147,6 +183,7 @@ export const ReportsPage = () => {
           onClearFilters={() => setFilters(initialFilters)}
         />
         <ReportsTable
+          actions
           page={page}
           rowsPerPage={rowsPerPage}
           sortBy={sortBy}
@@ -155,9 +192,47 @@ export const ReportsPage = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
           total={reports?.totalDocs || 0}
-          reports={reports?.docs || []}
-          onEditClick={handleSetCurrent}
+        >
+          {reports
+            ? reports.docs.map((report) => {
+                const areActionsEnabled =
+                  user.role === 'admin' || user.id === report.author.id;
+
+                return (
+                  <ReportsTableRow
+                    key={report.id}
+                    report={report}
+                    isMenuActive
+                    onEditClick={handleEditClick}
+                    onDeleteClick={handleDeleteReportClick}
+                    onSetStatusClick={setReportStatus}
+                    onPrintClick={handlePrintClick}
+                    isEditOptionEnabled={
+                      areActionsEnabled && report.status === 'in-prep'
+                    }
+                    isDeleteOptionEnabled={areActionsEnabled}
+                    isSetStatusOptionEnabled={areActionsEnabled}
+                    isAuthorNameClickable={user.role === 'admin'}
+                  />
+                );
+              })
+            : null}
+        </ReportsTable>
+        <ReportDeleteConfirmationModal
+          open={isDeleteReportConfirmationModalOpen}
+          report={currentReport}
+          handleClose={() => {
+            setCurrentReport(null);
+            setDeleteReportConfirmationModalOpen(false);
+          }}
         />
+        {currentReport ? (
+          <div className={classes.print}>
+            <div ref={ref}>
+              <PrinteableReport report={currentReport} />
+            </div>
+          </div>
+        ) : null}
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="reports">
         <PageHeading
@@ -171,7 +246,7 @@ export const ReportsPage = () => {
           <EditReportForm
             report={currentReport}
             onReset={handleFormReset}
-            onSubmit={onUpdateReport}
+            onSubmit={handleUpdateReport}
           />
         ) : (
           <NewReportForm
@@ -179,7 +254,7 @@ export const ReportsPage = () => {
             playersList={players || []}
             ordersList={orders || []}
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
-            onSubmit={onAddReport}
+            onSubmit={handleAddReport}
             onReset={handleFormReset}
             activeOrderId={activeOrderId}
           />
@@ -194,3 +269,22 @@ export const ReportsPage = () => {
     </MainTemplate>
   );
 };
+
+type StyleProps = {
+  background: string;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>(() => ({
+  buttonsContainer: {
+    display: 'flex',
+  },
+  print: {
+    overflow: 'hidden',
+    height: 0,
+  },
+  pageBody: (props) => ({
+    backgroundImage: `url(${props.background})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+  }),
+}));

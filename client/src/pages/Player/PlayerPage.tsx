@@ -4,6 +4,7 @@ import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { PlayerDetails } from './PlayerDetails';
 import { ReportsTable } from '../Reports/ReportsTable';
+import { ReportsTableRow } from '../Reports/ReportsTableRow';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
@@ -70,9 +71,14 @@ export const PlayerPage = () => {
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         handleSort={handleSort}
-        reports={reports?.docs || []}
         total={reports?.totalDocs || 0}
-      />
+      >
+        {reports
+          ? reports.docs.map((report) => (
+              <ReportsTableRow key={report.id} report={report} />
+            ))
+          : null}
+      </ReportsTable>
     </MainTemplate>
   );
 };
