@@ -8,7 +8,10 @@ function canUpdateOrDelete(assetType) {
       return next();
     }
 
-    const isPermitted = req[assetType].author.toHexString() === req.user._id;
+    const authorId =
+      req[assetType].author?._id.toHexString() || req[assetType].author.toHexString();
+
+    const isPermitted = authorId === req.user._id;
 
     if (!isPermitted) {
       return next(

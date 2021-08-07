@@ -57,6 +57,10 @@ const PlayerSchema = new Schema(
       ref: 'User',
       required: 'Please add an author',
     },
+    isPublic: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

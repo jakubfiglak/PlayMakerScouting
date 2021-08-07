@@ -6,7 +6,7 @@ function setAccessFilters(assetType) {
       req.accessFilters = {};
       return next();
     }
-    req.accessFilters = { _id: { $in: req.acl[`${assetType}s`] } };
+    req.accessFilters = { $or: [{ _id: { $in: req.acl[`${assetType}s`] } }, { isPublic: true }] };
     next();
   };
 }

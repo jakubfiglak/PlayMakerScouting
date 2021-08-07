@@ -97,12 +97,14 @@ describe('GET /api/v1/users/:id', () => {
   });
 });
 
-describe('/api/v1/:id/users/assignplaymaker', () => {
+describe('/api/v1/:id/users/change-role', () => {
   it('should return 400 error if user is an admin', async () => {
     const user = buildUser({ role: 'admin' });
     await insertUsers([user]);
 
-    const { response } = await api.post(`users/${user._id}/assignplaymaker`).catch((e) => e);
+    const { response } = await api
+      .post(`users/${user._id}/change-role`, { role: 'playmaker-scout' })
+      .catch((e) => e);
 
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
     expect(response.data.success).toBe(false);
@@ -111,23 +113,11 @@ describe('/api/v1/:id/users/assignplaymaker', () => {
     );
   });
 
-  it('should return 400 error if user is already a playmaker scout', async () => {
-    const user = buildUser({ role: 'playmaker-scout' });
-    await insertUsers([user]);
-
-    const { response } = await api.post(`users/${user._id}/assignplaymaker`).catch((e) => e);
-    expect(response.status).toBe(httpStatus.BAD_REQUEST);
-    expect(response.data.success).toBe(false);
-    expect(response.data.error).toMatchInlineSnapshot(
-      '"You cannot perform this operation on a user with the role of playmaker-scout"'
-    );
-  });
-
   it('should correclty assing playmaker-scout role to the user', async () => {
     const user = buildUser();
     await insertUsers([user]);
 
-    const response = await api.post(`users/${user._id}/assignplaymaker`);
+    const response = await api.post(`users/${user._id}/change-role`, { role: 'playmaker-scout' });
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);

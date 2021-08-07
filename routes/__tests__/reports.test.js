@@ -65,7 +65,7 @@ describe('POST /api/v1/reports', () => {
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new report!"');
 
     // Check author field
-    expect(response.data.data.author).toBe(testUser._id.toHexString());
+    expect(response.data.data.author.id).toBe(testUser._id.toHexString());
 
     // Check avg calculations
     expect(response.data.data.avgRating).toBe(4);
@@ -259,10 +259,19 @@ describe('GET api/v1/reports/:id', () => {
 
 describe('PUT /api/v1/reports/:id', () => {
   it('should return 403 error if user is not authorized to edit club data', async () => {
-    const player = buildPlayer();
-    const report = buildReport({ player: player._id });
+    const userAcl = buildAccessControlList({ user: testUser._id });
+    await insertAccessControlLists([userAcl]);
 
-    await Promise.all([insertPlayers([player]), insertReports([report])]);
+    const anotherUser = buildUser();
+
+    const player = buildPlayer();
+    const report = buildReport({ player: player._id, author: anotherUser._id });
+
+    await Promise.all([
+      insertUsers([anotherUser]),
+      insertPlayers([player]),
+      insertReports([report]),
+    ]);
 
     const { response } = await api.put(`reports/${report._id}`, {}).catch((e) => e);
 
@@ -272,6 +281,9 @@ describe('PUT /api/v1/reports/:id', () => {
   });
 
   it('should return 403 error if report status is "closed"', async () => {
+    const userAcl = buildAccessControlList({ user: testUser._id });
+    await insertAccessControlLists([userAcl]);
+
     const player = buildPlayer();
     const report = buildReport({ player: player._id, status: 'closed', author: testUser._id });
 
@@ -287,6 +299,9 @@ describe('PUT /api/v1/reports/:id', () => {
   });
 
   it('should properly update report data if request is valid', async () => {
+    const userAcl = buildAccessControlList({ user: testUser._id });
+    await insertAccessControlLists([userAcl]);
+
     const player = buildPlayer();
     const report = buildReport({ player: player._id, author: testUser._id });
     await Promise.all([insertPlayers([player]), insertReports([report])]);
