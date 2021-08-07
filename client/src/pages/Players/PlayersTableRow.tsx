@@ -19,6 +19,8 @@ type Props = {
   isMenuActive?: boolean;
   onEditClick?: (player: Player) => void;
   onDeleteClick?: (id: string) => void;
+  isEditOptionEnabled?: boolean;
+  isDeleteOptionEnabled?: boolean;
 };
 
 export const PlayersTableRow = ({
@@ -26,6 +28,8 @@ export const PlayersTableRow = ({
   isMenuActive,
   onEditClick,
   onDeleteClick,
+  isEditOptionEnabled = false,
+  isDeleteOptionEnabled = false,
 }: Props) => {
   const history = useHistory();
 
@@ -67,6 +71,7 @@ export const PlayersTableRow = ({
               onClick={() => {
                 handleMenuAction(() => onEditClick(player));
               }}
+              disabled={!isEditOptionEnabled}
             />
             <TableMenuItem
               icon={<DeleteIcon fontSize="small" />}
@@ -74,6 +79,7 @@ export const PlayersTableRow = ({
               onClick={() => {
                 handleMenuAction(() => onDeleteClick(id));
               }}
+              disabled={!isDeleteOptionEnabled}
             />
           </TableMenu>
         </StyledTableCell>
