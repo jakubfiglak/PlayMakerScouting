@@ -14,6 +14,7 @@ const headCells = [
   { id: 'scout', label: 'Scout' },
   { id: 'createdAt', label: 'Data utworzenia' },
   { id: 'notes', label: 'Uwagi' },
+  { id: 'reportsCount', label: 'Raportów', sortingDisabled: true },
 ];
 
 export const OrdersTable: FC<Props> = ({

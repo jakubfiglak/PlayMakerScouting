@@ -64,10 +64,20 @@ const PlayerSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
 PlayerSchema.plugin(mongoosePaginate);
 PlayerSchema.plugin(toJson);
+
+PlayerSchema.virtual('reportsCount', {
+  ref: 'Report',
+  localField: '_id',
+  foreignField: 'player',
+  justOne: false,
+  count: true,
+});
 
 module.exports = model('Player', PlayerSchema);

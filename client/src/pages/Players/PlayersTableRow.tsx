@@ -49,6 +49,7 @@ export const PlayersTableRow = ({
     position,
     yearOfBirth,
     footed,
+    reportsCount,
   } = player;
 
   return (
@@ -91,6 +92,7 @@ export const PlayersTableRow = ({
       <StyledTableCell>{getLabel(position)}</StyledTableCell>
       <StyledTableCell>{yearOfBirth}</StyledTableCell>
       <StyledTableCell>{getLabel(footed)}</StyledTableCell>
+      <StyledTableCell align="center">{reportsCount}</StyledTableCell>
     </StyledTableRow>
   );
 };

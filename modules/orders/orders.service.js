@@ -21,7 +21,7 @@ async function createOrder(orderData) {
 async function getAllOrders({ query, paginationOptions, accessFilters }) {
   const options = {
     ...paginationOptions,
-    populate: [resultsOptions.populatePlayer, resultsOptions.populateScout],
+    populate: [resultsOptions.populatePlayer, resultsOptions.populateScout, 'reportsCount'],
   };
   const modifiedQuery = { ...query, ...accessFilters };
   const orders = await Order.paginate(modifiedQuery, options);

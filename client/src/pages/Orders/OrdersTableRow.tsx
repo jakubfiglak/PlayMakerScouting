@@ -57,7 +57,7 @@ export const OrdersTableRow = ({
     handleMenuAction,
   } = useTableMenu();
 
-  const { id, scout, player, status, notes, createdAt } = order;
+  const { id, scout, player, status, notes, createdAt, reportsCount } = order;
 
   return (
     <StyledTableRow
@@ -151,6 +151,7 @@ export const OrdersTableRow = ({
           </Tooltip>
         )}
       </StyledTableCell>
+      <StyledTableCell align="center">{reportsCount}</StyledTableCell>
     </StyledTableRow>
   );
 };

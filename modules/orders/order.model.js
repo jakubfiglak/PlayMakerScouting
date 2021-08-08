@@ -52,11 +52,12 @@ OrderSchema.virtual('docNumber').get(function () {
   return `${this.orderNo.toString().padStart(4, '0')}/${date.getFullYear()}`;
 });
 
-OrderSchema.virtual('reports', {
+OrderSchema.virtual('reportsCount', {
   ref: 'Report',
   localField: '_id',
   foreignField: 'order',
   justOne: false,
+  count: true,
 });
 
 module.exports = model('Order', OrderSchema);

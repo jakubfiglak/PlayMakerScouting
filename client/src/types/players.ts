@@ -35,6 +35,7 @@ export type Player = {
   minut90ProfileURL?: string;
   transfermarktProfileURL?: string;
   author: string;
+  reportsCount: number;
 };
 
 export type PlayerBasicInfo = Pick<
@@ -42,7 +43,10 @@ export type PlayerBasicInfo = Pick<
   'id' | 'firstName' | 'lastName' | 'position' | 'club'
 >;
 
-export type PlayerDTO = Omit<Player, 'id' | 'club' | 'author'> & {
+export type PlayerDTO = Omit<
+  Player,
+  'id' | 'club' | 'author' | 'reportsCount'
+> & {
   club: string;
 };
 

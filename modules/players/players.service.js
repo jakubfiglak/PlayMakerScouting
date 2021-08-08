@@ -21,7 +21,7 @@ async function createPlayer(playerData) {
 
 async function getAllPlayers({ query, paginationOptions, accessFilters }) {
   const modifiedQuery = { ...query, ...accessFilters };
-  const options = { ...paginationOptions, populate: resultsOptions.populate };
+  const options = { ...paginationOptions, populate: [resultsOptions.populate, 'reportsCount'] };
   const players = await Player.paginate(modifiedQuery, options);
   return players;
 }
