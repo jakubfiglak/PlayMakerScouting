@@ -1,6 +1,6 @@
 import { useHistory, Link as RouterLink } from 'react-router-dom';
 // MUI components
-import { Tooltip, makeStyles } from '@material-ui/core';
+import { Tooltip, Badge, makeStyles } from '@material-ui/core';
 // MUI icons
 import {
   AssignmentLate as NoteIcon,
@@ -9,6 +9,7 @@ import {
   AssignmentTurnedIn as AcceptIcon,
   Delete as DeleteIcon,
   NoteAdd as CreateReportIcon,
+  Assessment as ReportsIcon,
 } from '@material-ui/icons';
 // Custom components
 import { OrderStatusChip } from './OrderStatusChip';
@@ -151,7 +152,11 @@ export const OrdersTableRow = ({
           </Tooltip>
         )}
       </StyledTableCell>
-      <StyledTableCell align="center">{reportsCount}</StyledTableCell>
+      <StyledTableCell align="center">
+        <Badge badgeContent={reportsCount || '0'} color="secondary">
+          <ReportsIcon />
+        </Badge>
+      </StyledTableCell>
     </StyledTableRow>
   );
 };

@@ -1,6 +1,12 @@
 import { useHistory } from 'react-router-dom';
+// MUI components
+import { Badge } from '@material-ui/core';
 // MUI icons
-import { Edit as EditIcon, Delete as DeleteIcon } from '@material-ui/icons';
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Assessment as ReportsIcon,
+} from '@material-ui/icons';
 // Custom components
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
@@ -92,7 +98,11 @@ export const PlayersTableRow = ({
       <StyledTableCell>{getLabel(position)}</StyledTableCell>
       <StyledTableCell>{yearOfBirth}</StyledTableCell>
       <StyledTableCell>{getLabel(footed)}</StyledTableCell>
-      <StyledTableCell align="center">{reportsCount}</StyledTableCell>
+      <StyledTableCell align="center">
+        <Badge badgeContent={reportsCount || '0'} color="secondary">
+          <ReportsIcon />
+        </Badge>
+      </StyledTableCell>
     </StyledTableRow>
   );
 };
