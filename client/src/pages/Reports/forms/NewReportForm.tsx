@@ -125,6 +125,7 @@ export const NewReportForm = ({
     {
       title: 'Informacje o meczu',
       content: <MatchStep />,
+      errorKeys: ['videoURL'],
     },
     {
       title: 'Notatki/podsumowanie',
@@ -143,11 +144,6 @@ export const NewReportForm = ({
     {
       title: 'Statystyki',
       content: <BasicDataStep />,
-    },
-    {
-      title: 'Video',
-      content: <VideoStep />,
-      errorKeys: ['videoURL'],
     },
   ];
 

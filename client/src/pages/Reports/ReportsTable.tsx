@@ -15,6 +15,7 @@ const headCells = [
   { id: 'maxRatingScore', label: 'Skala ocen' },
   { id: 'percentageRating', label: 'Ocena %' },
   { id: 'finalRating', label: 'Ocena ostateczna' },
+  { id: 'video', label: 'Video', sortingDisabled: true },
 ];
 
 export const ReportsTable: FC<Props> = ({

@@ -1,4 +1,6 @@
 import { useHistory } from 'react-router-dom';
+// MUI components
+import { Link, Tooltip } from '@material-ui/core';
 // MUI icons
 import {
   Edit as EditIcon,
@@ -6,6 +8,7 @@ import {
   Lock as CloseIcon,
   LockOpen as OpenIcon,
   Delete as DeleteIcon,
+  Tv as TvIcon,
 } from '@material-ui/icons';
 // Custom components
 import { FinalRatingChip } from './FinalRatingChip';
@@ -69,6 +72,8 @@ export const ReportsTableRow = ({
     percentageRating,
     maxRatingScore,
     finalRating,
+    videoURL,
+    videoDescription,
   } = report;
 
   return (
@@ -157,6 +162,20 @@ export const ReportsTableRow = ({
       <StyledTableCell>{`${percentageRating.toFixed(1)}%`}</StyledTableCell>
       <StyledTableCell>
         <FinalRatingChip finalRating={finalRating} />
+      </StyledTableCell>
+      <StyledTableCell align="center">
+        {videoURL ? (
+          <Tooltip title={videoDescription || 'video'}>
+            <Link
+              href={videoURL}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <TvIcon />
+            </Link>
+          </Tooltip>
+        ) : null}
       </StyledTableCell>
     </StyledTableRow>
   );

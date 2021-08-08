@@ -9,10 +9,19 @@ export const MatchStep = () => {
   const [againstField, againstMeta] = useField('match.against');
   const [dateField, dateMeta] = useField('match.date');
   const [resultField, resultMeta] = useField('match.result');
+  const [videoUrlField, videoUrlMeta] = useField('videoURL');
+  const [videoDescriptionField, videoDescriptionMeta] = useField(
+    'videoDescription',
+  );
 
   const { error: againstError, touched: againstTouched } = againstMeta;
   const { error: dateError, touched: dateTouched } = dateMeta;
   const { error: resultError, touched: resultTouched } = resultMeta;
+  const { error: urlError, touched: urlTouched } = videoUrlMeta;
+  const {
+    error: descriptionError,
+    touched: descriptionTouched,
+  } = videoDescriptionMeta;
 
   return (
     <Grid container spacing={2}>
@@ -54,6 +63,29 @@ export const MatchStep = () => {
           variant="outlined"
           error={resultTouched && !!resultError}
           helperText={resultTouched && resultError}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <TextField
+          {...videoUrlField}
+          variant="outlined"
+          fullWidth
+          id="videoURL"
+          label="Link do video"
+          error={urlTouched && !!urlError}
+          helperText={urlTouched && urlError}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <TextField
+          {...videoDescriptionField}
+          variant="outlined"
+          fullWidth
+          multiline
+          id="videoDescription"
+          label="Opis video"
+          error={descriptionTouched && !!descriptionError}
+          helperText={descriptionTouched && descriptionError}
         />
       </Grid>
     </Grid>
