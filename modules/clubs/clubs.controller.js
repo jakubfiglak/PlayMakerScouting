@@ -93,17 +93,14 @@ exports.deleteClub = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc Grant user with an access to a specific club
-// @route POST /api/v1/clubs/:id/grantaccess
+// @desc Merge clubs duplicates
+// @route POST /api/v1/clubs/merge-duplicates
 // @access Private (admin only)
-exports.grantAccess = asyncHandler(async (req, res) => {
-  const userId = req.body.user;
-  const clubId = req.params.id;
-
-  await clubsService.grantAccess({ club: req.club, userId });
+exports.mergeClubsDuplicates = asyncHandler(async (req, res) => {
+  await clubsService.mergeClubsDuplicates();
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: `Successfully granted the user with the id of ${userId} with the access to the club with the id of ${clubId}`,
+    message: 'Clubs duplicate definitions successfully merged!',
   });
 });

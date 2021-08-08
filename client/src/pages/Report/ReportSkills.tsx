@@ -15,11 +15,7 @@ type Props = {
   printeable?: boolean;
 };
 
-export const NewReportSkills = ({
-  skills,
-  printeable,
-  maxRatingScore,
-}: Props) => {
+export const ReportSkills = ({ skills, printeable, maxRatingScore }: Props) => {
   const classes = useStyles();
 
   return (

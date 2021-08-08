@@ -4,7 +4,7 @@ const options = {
       path: 'player',
     },
     {
-      path: 'scout',
+      path: 'author',
       select: 'firstName lastName',
     },
     {
@@ -19,7 +19,7 @@ const options = {
   latestSort: '-createdAt',
   forbiddenUpdates: [
     'player',
-    'scout',
+    'author',
     'order',
     'match',
     'individualAvg',

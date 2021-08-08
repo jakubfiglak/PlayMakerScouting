@@ -2,7 +2,7 @@ import { useField } from 'formik';
 // MUI components
 import { Grid, TextField } from '@material-ui/core';
 
-export const BasicDataStep = () => {
+export const StatsStep = () => {
   const [minutesField, minutesMeta] = useField('minutesPlayed');
   const [goalsField, goalsMeta] = useField('goals');
   const [assistsField, assistsMeta] = useField('assists');

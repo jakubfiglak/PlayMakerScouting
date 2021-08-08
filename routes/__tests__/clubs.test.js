@@ -2,15 +2,27 @@ const axios = require('axios').default;
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
-const { buildClub, buildPlayer, buildAccessControlList, buildTeam } = require('../../test/utils');
+const {
+  buildClub,
+  buildPlayer,
+  buildAccessControlList,
+  buildTeam,
+  buildUser,
+  buildReport,
+} = require('../../test/utils');
 const {
   insertClubs,
   insertTestUser,
   insertPlayers,
   insertAccessControlLists,
   insertTeams,
+  insertUsers,
+  insertReports,
 } = require('../../test/db-utils');
 const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
+const playersService = require('../../modules/players/players.service');
+const reportsService = require('../../modules/reports/reports.service');
+const clubsService = require('../../modules/clubs/clubs.service');
 
 let api = axios.create();
 let server;
@@ -32,7 +44,7 @@ beforeEach(async () => {
 afterAll(() => server.close());
 
 describe('POST api/v1/clubs', () => {
-  it('should create a club and add created club id to authors ACL and if the user belongs to a team, this teams ACL should also be populated with created club id', async () => {
+  it('should create a club with properly set author field and add created club id to authors ACL and if the user belongs to a team, this teams ACL should also be populated with created club id', async () => {
     const userAcl = buildAccessControlList({ user: testUser._id });
     await insertAccessControlLists([userAcl]);
     const team = buildTeam({ members: [testUser._id] });
@@ -48,6 +60,7 @@ describe('POST api/v1/clubs', () => {
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new club!"');
     expect(response.data.data.id).toBe(club._id.toHexString());
     expect(response.data.data.name).toBe(club.name);
+    expect(response.data.data.author).toBe(testUser._id.toHexString());
 
     // Check if the users ACL has been successfully updated
     const updatedUsersAcl = await accessControlListsService.getAccessControlListForAnAsset({
@@ -253,19 +266,20 @@ describe('PUT /api/v1/clubs/:id', () => {
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should properly update club data if request is valid', async () => {
-    const club = buildClub({ authorizedUsers: [testUser._id] });
+    const club = buildClub({ author: testUser._id });
     await insertClubs([club]);
 
-    const userAcl = buildAccessControlList({ user: testUser._id, clubs: [club._id] });
+    const userAcl = buildAccessControlList({ user: testUser._id });
     await insertAccessControlLists([userAcl]);
 
     const updates = { name: 'NEW-NAME' };
 
     const response = await api.put(`clubs/${club._id}`, updates);
+
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);
     expect(response.data.data.name).toBe('NEW-NAME');
@@ -274,7 +288,7 @@ describe('PUT /api/v1/clubs/:id', () => {
 
 describe('DELETE /api/v1/clubs/:id', () => {
   it('should return 403 error if the club has at least one player assigned to it', async () => {
-    const club = buildClub({ authorizedUsers: [testUser._id] });
+    const club = buildClub({ author: testUser._id });
     const player = buildPlayer({ club: club._id });
     const userAcl = buildAccessControlList({ user: testUser._id, clubs: [club._id] });
     await Promise.all([
@@ -316,14 +330,14 @@ describe('DELETE /api/v1/clubs/:id', () => {
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should delete the club if the request is valid', async () => {
-    const club = buildClub({ authorizedUsers: [testUser._id] });
+    const club = buildClub({ author: testUser._id });
     await insertClubs([club]);
 
-    const userAcl = buildAccessControlList({ user: testUser._id, clubs: [club._id] });
+    const userAcl = buildAccessControlList({ user: testUser._id });
     await insertAccessControlLists([userAcl]);
 
     const response = await api.delete(`clubs/${club._id}`);
@@ -332,5 +346,130 @@ describe('DELETE /api/v1/clubs/:id', () => {
     expect(response.data.success).toBe(true);
     expect(response.data.message).toContain('successfully removed');
     expect(response.data.data).toBe(club._id.toHexString());
+  });
+});
+
+describe('POST /api/v1/clubs/merge-duplicates', () => {
+  it('should correctly merge duplicate clubs definitions into one', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    // Create clubs
+    const club1 = buildClub({ lnpID: '123' });
+    const club2 = buildClub({ lnpID: '123' });
+    const club3 = buildClub({ lnpID: '123' });
+    const club4 = buildClub({ lnpID: '345' });
+    const club5 = buildClub({ lnpID: '345' });
+    const club6 = buildClub({ lnpID: '678' });
+    const club7 = buildClub();
+    const club8 = buildClub();
+
+    const clubs = [club1, club2, club3, club4, club5, club6];
+    const clubsToRemain = [club1, club4, club6];
+
+    await insertClubs([...clubs, club7, club8]);
+
+    // Create 2 test users with their ACLs
+    const user1 = buildUser();
+    const user2 = buildUser();
+
+    const acl1 = buildAccessControlList({ user: user1._id, clubs: [club3._id, club5._id] });
+    const acl2 = buildAccessControlList({
+      user: user2._id,
+      clubs: [club2._id, club5._id, club6._id],
+    });
+
+    await Promise.all([insertUsers([user1, user2]), insertAccessControlLists([acl1, acl2])]);
+
+    // Create 6 players - 1 for each club
+    const players = clubs.map((club) => buildPlayer({ club: club._id }));
+
+    // Create 6 reports - 1 for each club
+    const reports = clubs.map((club) => buildReport({ playerCurrentClub: club._id }));
+
+    await Promise.all([insertPlayers(players), insertReports(reports)]);
+
+    await api.post(
+      'clubs/merge-duplicates',
+      {},
+      {
+        headers: { Cookie: `token=${token}` },
+      }
+    );
+
+    const playersOperations = clubsToRemain.map((club) =>
+      playersService.getPlayersForClub(club._id)
+    );
+
+    const reportsOperations = clubsToRemain.map((club) =>
+      reportsService.getReportsForClub(club._id)
+    );
+
+    const [
+      club1Players,
+      club4Players,
+      club6Players,
+      club1Reports,
+      club4Reports,
+      club6Reports,
+    ] = await Promise.all([...playersOperations, ...reportsOperations]);
+
+    // Check if there is correct number of players and reports assigned to each of the clubs
+    expect(club1Players.length).toBe(3);
+    expect(club4Players.length).toBe(2);
+    expect(club6Players.length).toBe(1);
+    expect(club1Reports.length).toBe(3);
+    expect(club4Reports.length).toBe(2);
+    expect(club6Reports.length).toBe(1);
+
+    // Check if correct reports and orders have been assigned to each player
+    const club1PlayerIds = club1Players.map((club) => club._id.toHexString());
+    const club4PlayerIds = club4Players.map((club) => club._id.toHexString());
+    const club6PlayerIds = club6Players.map((club) => club._id.toHexString());
+    const club1ReportIds = club1Reports.map((report) => report._id.toHexString());
+    const club4ReportIds = club4Reports.map((report) => report._id.toHexString());
+    const club6ReportIds = club6Reports.map((report) => report._id.toHexString());
+
+    expect(club1PlayerIds).toContain(players[0]._id.toHexString());
+    expect(club1PlayerIds).toContain(players[1]._id.toHexString());
+    expect(club1PlayerIds).toContain(players[2]._id.toHexString());
+    expect(club4PlayerIds).toContain(players[3]._id.toHexString());
+    expect(club4PlayerIds).toContain(players[4]._id.toHexString());
+    expect(club6PlayerIds).toContain(players[5]._id.toHexString());
+
+    expect(club1ReportIds).toContain(reports[0]._id.toHexString());
+    expect(club1ReportIds).toContain(reports[1]._id.toHexString());
+    expect(club1ReportIds).toContain(reports[2]._id.toHexString());
+    expect(club4ReportIds).toContain(reports[3]._id.toHexString());
+    expect(club4ReportIds).toContain(reports[4]._id.toHexString());
+    expect(club6ReportIds).toContain(reports[5]._id.toHexString());
+
+    // Check if there is correct number of reports in the database
+    const dbReports = await reportsService.getAllReportsList();
+    expect(dbReports.length).toBe(6);
+
+    // Check if acls has been successfully proccessed
+    const dbAcls = await accessControlListsService.getAllAccessControlLists();
+
+    expect(dbAcls[0].clubs).toContainEqual(club1._id);
+    expect(dbAcls[0].clubs).toContainEqual(club4._id);
+    expect(dbAcls[0].clubs).not.toContainEqual(club3._id);
+    expect(dbAcls[0].clubs).not.toContainEqual(club5._id);
+    expect(dbAcls[1].clubs).toContainEqual(club1._id);
+    expect(dbAcls[1].clubs).toContainEqual(club4._id);
+    expect(dbAcls[1].clubs).toContainEqual(club6._id);
+    expect(dbAcls[1].clubs).not.toContainEqual(club2._id);
+    expect(dbAcls[1].clubs).not.toContainEqual(club5._id);
+
+    // Check if there is corrent number of clubs left in the database
+    const dbClubs = await clubsService.getAllClubsList({});
+    const dbClubsIds = dbClubs.map((club) => club._id.toHexString());
+
+    expect(dbClubs.length).toBe(5);
+    expect(dbClubsIds).toContain(club1._id.toHexString());
+    expect(dbClubsIds).not.toContain(club2._id.toHexString());
+    expect(dbClubsIds).not.toContain(club3._id.toHexString());
+    expect(dbClubsIds).toContain(club4._id.toHexString());
+    expect(dbClubsIds).not.toContain(club5._id.toHexString());
+    expect(dbClubsIds).toContain(club6._id.toHexString());
   });
 });

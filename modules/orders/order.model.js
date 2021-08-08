@@ -30,6 +30,11 @@ const OrderSchema = new Schema(
     notes: {
       type: String,
     },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: 'Please add an author',
+    },
   },
   {
     timestamps: true,
@@ -47,11 +52,12 @@ OrderSchema.virtual('docNumber').get(function () {
   return `${this.orderNo.toString().padStart(4, '0')}/${date.getFullYear()}`;
 });
 
-OrderSchema.virtual('reports', {
+OrderSchema.virtual('reportsCount', {
   ref: 'Report',
   localField: '_id',
   foreignField: 'order',
   justOne: false,
+  count: true,
 });
 
 module.exports = model('Order', OrderSchema);

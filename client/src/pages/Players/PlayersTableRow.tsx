@@ -1,6 +1,12 @@
 import { useHistory } from 'react-router-dom';
+// MUI components
+import { Badge } from '@material-ui/core';
 // MUI icons
-import { Edit as EditIcon, Delete as DeleteIcon } from '@material-ui/icons';
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Assessment as ReportsIcon,
+} from '@material-ui/icons';
 // Custom components
 import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
@@ -19,13 +25,17 @@ type Props = {
   isMenuActive?: boolean;
   onEditClick?: (player: Player) => void;
   onDeleteClick?: (id: string) => void;
+  isEditOptionEnabled?: boolean;
+  isDeleteOptionEnabled?: boolean;
 };
 
 export const PlayersTableRow = ({
   player,
-  isMenuActive,
+  isMenuActive = false,
   onEditClick,
   onDeleteClick,
+  isEditOptionEnabled = false,
+  isDeleteOptionEnabled = false,
 }: Props) => {
   const history = useHistory();
 
@@ -45,6 +55,7 @@ export const PlayersTableRow = ({
     position,
     yearOfBirth,
     footed,
+    reportsCount,
   } = player;
 
   return (
@@ -67,6 +78,7 @@ export const PlayersTableRow = ({
               onClick={() => {
                 handleMenuAction(() => onEditClick(player));
               }}
+              disabled={!isEditOptionEnabled}
             />
             <TableMenuItem
               icon={<DeleteIcon fontSize="small" />}
@@ -74,6 +86,7 @@ export const PlayersTableRow = ({
               onClick={() => {
                 handleMenuAction(() => onDeleteClick(id));
               }}
+              disabled={!isDeleteOptionEnabled}
             />
           </TableMenu>
         </StyledTableCell>
@@ -85,6 +98,11 @@ export const PlayersTableRow = ({
       <StyledTableCell>{getLabel(position)}</StyledTableCell>
       <StyledTableCell>{yearOfBirth}</StyledTableCell>
       <StyledTableCell>{getLabel(footed)}</StyledTableCell>
+      <StyledTableCell align="center">
+        <Badge badgeContent={reportsCount || '0'} color="secondary">
+          <ReportsIcon />
+        </Badge>
+      </StyledTableCell>
     </StyledTableRow>
   );
 };

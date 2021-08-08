@@ -13,12 +13,11 @@ import {
 import { ReportTypeStep } from './ReportTypeStep';
 import { OrderStep } from './OrderStep';
 import { PlayerStep } from './PlayerStep';
-import { BasicDataStep } from './BasicDataStep';
+import { StatsStep } from './StatsStep';
 import { SummaryStep } from './SummaryStep';
 import { MatchStep } from './MatchStep';
 import { StepActions } from './StepActions';
 import { RatingsStep } from './RatingsStep';
-import { VideoStep } from './VideoStep';
 import { BottomNav } from '../BottomNav';
 import { Loader } from '../../../components/Loader';
 import { ReportTemplatesSelect } from '../../../components/selects/ReportTemplatesSelect';
@@ -51,7 +50,7 @@ type Props = {
   activeOrderId: string;
 };
 
-export const NewReportForm = ({
+export const CreateReportForm = ({
   isOrderOptionDisabled,
   playersList,
   ordersList,
@@ -125,6 +124,7 @@ export const NewReportForm = ({
     {
       title: 'Informacje o meczu',
       content: <MatchStep />,
+      errorKeys: ['videoURL'],
     },
     {
       title: 'Notatki/podsumowanie',
@@ -142,12 +142,7 @@ export const NewReportForm = ({
     },
     {
       title: 'Statystyki',
-      content: <BasicDataStep />,
-    },
-    {
-      title: 'Video',
-      content: <VideoStep />,
-      errorKeys: ['videoURL'],
+      content: <StatsStep />,
     },
   ];
 

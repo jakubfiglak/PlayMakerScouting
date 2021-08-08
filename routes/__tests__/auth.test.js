@@ -73,7 +73,9 @@ describe('POST api/v1/auth/register', () => {
     expect(emailService.sendConfirmationEmail.mock.calls[0][0]).toHaveProperty('confirmationURL');
     expect(response.status).toBe(httpStatus.CREATED);
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toMatchInlineSnapshot('"Successfully created new user!"');
+    expect(response.data.message).toMatchInlineSnapshot(
+      '"Account created successfully! Please check your email to verify your account."'
+    );
     expect(response.data.data).not.toHaveProperty('password');
     expect(response.data.data).toMatchObject({
       id: expect.anything(),

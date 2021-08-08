@@ -24,12 +24,16 @@ const ClubSchema = new Schema(
     },
     lnpID: {
       type: String,
+      trim: true,
     },
-    authorizedUsers: {
-      type: [Schema.Types.ObjectId],
+    author: {
+      type: Schema.Types.ObjectId,
       ref: 'User',
-      default: [],
-      private: true,
+      required: 'Please add an author',
+    },
+    isPublic: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

@@ -5,6 +5,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { ClubsForm } from './ClubsForm';
 import { ClubsFilterForm } from './ClubsFilterForm';
 import { ClubsTable } from './ClubsTable';
+import { ClubsTableRow } from './ClubsTableRow';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
@@ -14,9 +15,15 @@ import { Club, ClubsFilterData, ClubDTO } from '../../types/clubs';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { useClubs, useCreateClub, useUpdateClub } from '../../hooks/clubs';
+import {
+  useClubs,
+  useCreateClub,
+  useDeleteClub,
+  useUpdateClub,
+} from '../../hooks/clubs';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
 const initialFilters: ClubsFilterData = {
   name: '',
@@ -26,6 +33,7 @@ const initialFilters: ClubsFilterData = {
 
 export const ClubsPage = () => {
   const { setAlert } = useAlertsState();
+  const user = useAuthenticatedUser();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
@@ -41,6 +49,11 @@ export const ClubsPage = () => {
     initialValue: initialFilters,
   });
 
+  function handleSetFilters(newFilters: ClubsFilterData) {
+    setFilters(newFilters);
+    handleChangePage(null, 0);
+  }
+
   const [currentClub, setCurrentClub] = useState<Club | null>(null);
 
   const { data: clubs, isLoading: clubsLoading } = useClubs({
@@ -54,8 +67,9 @@ export const ClubsPage = () => {
   const { mutate: updateClub, isLoading: updateClubLoading } = useUpdateClub(
     currentClub?.id || '',
   );
+  const { mutate: deleteClub, isLoading: deleteClubLoading } = useDeleteClub();
 
-  const handleSetCurrent = (club: Club) => {
+  const handleEditClick = (club: Club) => {
     setCurrentClub(club);
     setActiveTab(1);
   };
@@ -78,7 +92,10 @@ export const ClubsPage = () => {
 
   return (
     <MainTemplate>
-      {(clubsLoading || createClubLoading || updateClubLoading) && <Loader />}
+      {(clubsLoading ||
+        createClubLoading ||
+        updateClubLoading ||
+        deleteClubLoading) && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="clubs">
           <Tab label="Kluby" id="clubs-0" aria-controls="clubs-0" />
@@ -89,8 +106,8 @@ export const ClubsPage = () => {
         <PageHeading title="Baza klubów" />
         <ClubsFilterForm
           filters={filters}
-          onFilter={setFilters}
-          onClearFilters={() => setFilters(initialFilters)}
+          onFilter={handleSetFilters}
+          onClearFilters={() => handleSetFilters(initialFilters)}
         />
         <ClubsTable
           page={page}
@@ -100,11 +117,26 @@ export const ClubsPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          clubs={clubs?.docs || []}
           total={clubs?.totalDocs || 0}
-          onEditClick={handleSetCurrent}
           actions
-        />
+        >
+          {clubs
+            ? clubs.docs.map((club) => (
+                <ClubsTableRow
+                  key={club.id}
+                  club={club}
+                  onEditClick={handleEditClick}
+                  onDeleteClick={deleteClub}
+                  isEditOptionEnabled={
+                    user.role === 'admin' || user.id === club.author
+                  }
+                  isDeleteOptionEnabled={
+                    user.role === 'admin' || user.id === club.author
+                  }
+                />
+              ))
+            : null}
+        </ClubsTable>
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">
         <PageHeading

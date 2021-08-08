@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const isAdmin = require('../utils/isAdmin');
 const ApiError = require('../utils/ApiError');
 
-function checkAccessPermission(assetType) {
+function canView(assetType) {
   return function (req, res, next) {
     if (isAdmin(req.user.role)) {
       return next();
@@ -22,4 +22,4 @@ function checkAccessPermission(assetType) {
   };
 }
 
-module.exports = checkAccessPermission;
+module.exports = canView;

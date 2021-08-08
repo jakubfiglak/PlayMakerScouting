@@ -235,3 +235,25 @@ export function useDeletePlayer() {
       setAlert({ msg: err.response.data.error, type: 'error' }),
   });
 }
+
+// Merge players duplicates
+async function mergePlayersDuplicates(): Promise<ApiResponse<null>> {
+  const { data } = await axios.post<ApiResponse<null>>(
+    '/api/v1/players/merge-duplicates',
+  );
+  return data;
+}
+
+export function useMergePlayersDuplicates() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(mergePlayersDuplicates, {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('players');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}

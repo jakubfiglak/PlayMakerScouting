@@ -3,6 +3,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { UsersTab } from './UsersTab';
 import { TeamsTab } from './TeamsTab';
 import { AccessManagementTab } from './AccessManagementTab';
+import { OperationsTab } from './OperationsTab';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 // Hooks
@@ -26,6 +27,11 @@ export const AdminPage = () => {
             id="accessmanagement"
             aria-controls="accessmanagement"
           />
+          <Tab
+            label="Operacje"
+            id="databaseoperations"
+            aria-controls="databaseoperations"
+          />
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="users">
@@ -36,6 +42,9 @@ export const AdminPage = () => {
       </TabPanel>
       <TabPanel value={activeTab} index={2} title="accessmanagement">
         <AccessManagementTab />
+      </TabPanel>
+      <TabPanel value={activeTab} index={3} title="databaseoperations">
+        <OperationsTab />
       </TabPanel>
     </MainTemplate>
   );

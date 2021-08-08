@@ -31,6 +31,7 @@
     "consistent-return": "off",
     "implicit-arrow-linebreak": "off",
     "no-underscore-dangle": "off",
+    "function-paren-newline": "off",
     "object-curly-newline": [
       "off",
       {
@@ -43,6 +44,7 @@
         "ExportDeclaration": { "multiline": true, "minProperties": 3 }
       }
     ],
-    "no-return-assign": "off"
+    "no-return-assign": "off",
+    "operator-linebreak": "off"
   }
 }

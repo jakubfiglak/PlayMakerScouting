@@ -46,10 +46,10 @@ describe('POST /api/v1/orders', () => {
     expect(response.data.error).toContain('not found');
   });
 
-  it('should create a new order and return it with populated player data', async () => {
+  it('should create a new order with properly set author field and return it with populated player data', async () => {
     const player = buildPlayer();
     await insertPlayers([player]);
-    const { token } = await insertTestUser({ role: 'admin' });
+    const { token, user } = await insertTestUser({ role: 'admin' });
 
     const order = buildOrder({ player: player._id });
     const response = await api.post('orders', order, { headers: { Cookie: `token=${token}` } });
@@ -60,6 +60,7 @@ describe('POST /api/v1/orders', () => {
     expect(response.data.data.player.firstName).toBe(player.firstName);
     expect(response.data.data.player.lastName).toBe(player.lastName);
     expect(response.data.data.player.id).toBe(player._id.toHexString());
+    expect(response.data.data.author).toBe(user._id.toHexString());
   });
 });
 

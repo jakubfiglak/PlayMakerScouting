@@ -98,3 +98,15 @@ exports.deletePlayer = asyncHandler(async (req, res) => {
     data: id,
   });
 });
+
+// @desc Merge players duplicates
+// @route POST /api/v1/players/merge-duplicates
+// @access Private (admin only)
+exports.mergePlayersDuplicates = asyncHandler(async (req, res) => {
+  await playersService.mergePlayersDuplicates();
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: 'Players duplicate definitions successfully merged!',
+  });
+});

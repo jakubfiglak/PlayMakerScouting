@@ -7,11 +7,6 @@ const setAsset = require('../../middleware/setAsset');
 const Report = require('./report.model');
 const options = require('./options');
 
-function setAuthor(req, res, next) {
-  req.body.scout = req.user._id;
-  next();
-}
-
 const setOrderData = asyncHandler(async (req, res, next) => {
   const orderId = req.body.order;
   if (req.body.order) {
@@ -78,7 +73,6 @@ function canBeUpdated(req, res, next) {
 }
 
 module.exports = {
-  setAuthor,
   setOrderData,
   checkOrderStatus,
   setPlayerData,

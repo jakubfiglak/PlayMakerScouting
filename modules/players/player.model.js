@@ -41,6 +41,7 @@ const PlayerSchema = new Schema(
     },
     lnpID: {
       type: String,
+      trim: true,
     },
     lnpProfileURL: {
       type: String,
@@ -51,19 +52,32 @@ const PlayerSchema = new Schema(
     transfermarktProfileURL: {
       type: String,
     },
-    authorizedUsers: {
-      type: [Schema.Types.ObjectId],
+    author: {
+      type: Schema.Types.ObjectId,
       ref: 'User',
-      default: [],
-      private: true,
+      required: 'Please add an author',
+    },
+    isPublic: {
+      type: Boolean,
+      default: false,
     },
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
 PlayerSchema.plugin(mongoosePaginate);
 PlayerSchema.plugin(toJson);
+
+PlayerSchema.virtual('reportsCount', {
+  ref: 'Report',
+  localField: '_id',
+  foreignField: 'player',
+  justOne: false,
+  count: true,
+});
 
 module.exports = model('Player', PlayerSchema);

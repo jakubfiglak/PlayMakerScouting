@@ -9,6 +9,7 @@ const {
   buildReport,
   buildAccessControlList,
   buildTeam,
+  buildUser,
 } = require('../../test/utils');
 const {
   insertClubs,
@@ -18,8 +19,12 @@ const {
   insertReports,
   insertAccessControlLists,
   insertTeams,
+  insertUsers,
 } = require('../../test/db-utils');
 const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
+const reportsService = require('../../modules/reports/reports.service');
+const ordersService = require('../../modules/orders/orders.service');
+const playersService = require('../../modules/players/players.service');
 
 let api = axios.create();
 let server;
@@ -55,7 +60,7 @@ describe('POST /api/v1/players', () => {
     );
   });
 
-  it('should create a player, add created player id to authors and author teams ACL and return the data with populated club name & division', async () => {
+  it('should create a player with properly set author field, add created player id to authors and author teams ACL and return the data with populated club name & division', async () => {
     const club = buildClub();
     await insertClubs([club]);
 
@@ -74,6 +79,7 @@ describe('POST /api/v1/players', () => {
     expect(response.data.message).toMatchInlineSnapshot('"Successfully created new player!"');
     expect(response.data.data.id).toBe(player._id.toHexString());
     expect(response.data.data.club).toMatchObject({ name: club.name, division: club.division });
+    expect(response.data.data.author).toBe(testUser._id.toHexString());
 
     // Check if the users ACL has been successfully updated
     const updatedUsersAcl = await accessControlListsService.getAccessControlListForAnAsset({
@@ -310,8 +316,6 @@ describe('GET /api/v1/players/:id', () => {
 
 describe('PUT /api/v1/players/:id', () => {
   it('should return 404 error if the player does not exist', async () => {
-    const userAcl = buildAccessControlList({ user: testUser._id });
-    await insertAccessControlLists([userAcl]);
     const { response } = await api.put('players/NON-EXISTING-ID', {}).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);
@@ -323,27 +327,21 @@ describe('PUT /api/v1/players/:id', () => {
 
   it('should return 403 error if user is not authorized to edit player data', async () => {
     const player = buildPlayer();
-    const userAcl = buildAccessControlList({ user: testUser._id });
 
-    await Promise.all([insertPlayers([player]), insertAccessControlLists([userAcl])]);
+    await insertPlayers([player]);
 
     const { response } = await api.put(`players/${player._id}`, {}).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should properly update player data if request is valid', async () => {
     const club = buildClub();
-    const player = buildPlayer({ club: club._id });
-    const userAcl = buildAccessControlList({ user: testUser._id, players: [player._id] });
+    const player = buildPlayer({ club: club._id, author: testUser._id });
 
-    await Promise.all([
-      insertClubs([club]),
-      insertPlayers([player]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    await Promise.all([insertClubs([club]), insertPlayers([player])]);
 
     const updates = {
       firstName: 'NEW-FIRST-NAME',
@@ -362,14 +360,9 @@ describe('PUT /api/v1/players/:id', () => {
 
 describe('DELETE /api/v1/clubs/:id', () => {
   it('should return 403 error if the player is related to at least one order document', async () => {
-    const player = buildPlayer({ authorizedUsers: [testUser._id] });
-    const userAcl = buildAccessControlList({ user: testUser._id, players: player._id });
+    const player = buildPlayer({ author: testUser._id });
     const order = buildOrder({ player: player._id });
-    await Promise.all([
-      insertPlayers([player]),
-      insertOrders([order]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    await Promise.all([insertPlayers([player]), insertOrders([order])]);
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
@@ -381,14 +374,9 @@ describe('DELETE /api/v1/clubs/:id', () => {
   });
 
   it('should return 403 error if the player is related to at least one report document', async () => {
-    const player = buildPlayer();
-    const userAcl = buildAccessControlList({ user: testUser._id, players: [player._id] });
-    const report = buildReport({ scout: testUser._id, player: player._id });
-    await Promise.all([
-      insertPlayers([player]),
-      insertReports([report]),
-      insertAccessControlLists([userAcl]),
-    ]);
+    const player = buildPlayer({ author: testUser._id });
+    const report = buildReport({ author: testUser._id, player: player._id });
+    await Promise.all([insertPlayers([player]), insertReports([report])]);
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
@@ -413,21 +401,19 @@ describe('DELETE /api/v1/clubs/:id', () => {
   });
 
   it('should return 403 error if the user is not authorized to delete a club', async () => {
-    const userAcl = buildAccessControlList({ user: testUser._id });
     const player = buildPlayer();
-    await Promise.all([insertPlayers([player]), insertAccessControlLists(userAcl)]);
+    await insertPlayers([player]);
 
     const { response } = await api.delete(`players/${player._id}`).catch((e) => e);
 
     expect(response.status).toBe(httpStatus.FORBIDDEN);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toContain("You don't have access");
+    expect(response.data.error).toContain('You are not permitted');
   });
 
   it('should delete the player if the request is valid', async () => {
-    const player = buildPlayer({ authorizedUsers: [testUser._id] });
-    const userAcl = buildAccessControlList({ user: testUser._id, players: [player._id] });
-    await Promise.all([insertPlayers([player]), insertAccessControlLists([userAcl])]);
+    const player = buildPlayer({ author: testUser._id });
+    await insertPlayers([player]);
 
     const response = await api.delete(`players/${player._id}`);
 
@@ -435,5 +421,128 @@ describe('DELETE /api/v1/clubs/:id', () => {
     expect(response.data.success).toBe(true);
     expect(response.data.message).toContain('successfully removed');
     expect(response.data.data).toBe(player._id.toHexString());
+  });
+});
+
+describe('POST /api/v1/players/merge-duplicates', () => {
+  it('should correctly merge duplicate players definitions into one', async () => {
+    const { token } = await insertTestUser({ role: 'admin' });
+
+    // Create players
+    const player1 = buildPlayer({ lnpID: '123' });
+    const player2 = buildPlayer({ lnpID: '123' });
+    const player3 = buildPlayer({ lnpID: '123' });
+    const player4 = buildPlayer({ lnpID: '345' });
+    const player5 = buildPlayer({ lnpID: '345' });
+    const player6 = buildPlayer({ lnpID: '678' });
+    const player7 = buildPlayer();
+    const player8 = buildPlayer();
+
+    const players = [player1, player2, player3, player4, player5, player6];
+    const playersToRemain = [player1, player4, player6];
+
+    await insertPlayers([...players, player7, player8]);
+
+    // Create 2 test users with their ACLs
+    const user1 = buildUser();
+    const user2 = buildUser();
+
+    const acl1 = buildAccessControlList({ user: user1._id, players: [player3._id, player5._id] });
+    const acl2 = buildAccessControlList({
+      user: user2._id,
+      players: [player2._id, player5._id, player6._id],
+    });
+    await Promise.all([insertUsers([user1, user2]), insertAccessControlLists([acl1, acl2])]);
+
+    // Create 6 reports - 1 for each player with lnpID defined
+    const reports = players.map((player) => buildReport({ player: player._id }));
+
+    // Create 6 orders - 1 for each player with lnpID defined
+    const orders = players.map((player) => buildOrder({ player: player._id }));
+
+    await Promise.all([insertReports(reports), insertOrders(orders)]);
+
+    await api.post(
+      'players/merge-duplicates',
+      {},
+      {
+        headers: { Cookie: `token=${token}` },
+      }
+    );
+
+    const reportsOperations = playersToRemain.map((player) =>
+      reportsService.getReportsForPlayer(player._id)
+    );
+    const ordersOperations = playersToRemain.map((player) =>
+      ordersService.getOrdersForPlayer(player._id)
+    );
+
+    const [
+      player1Reports,
+      player4Reports,
+      player6Reports,
+      player1Orders,
+      player4Orders,
+      player6Orders,
+    ] = await Promise.all([...reportsOperations, ...ordersOperations]);
+
+    // Check if there is correct number of reports and orders assigned to each of the players
+    expect(player1Reports.length).toBe(3);
+    expect(player4Reports.length).toBe(2);
+    expect(player6Reports.length).toBe(1);
+    expect(player1Orders.length).toBe(3);
+    expect(player4Orders.length).toBe(2);
+    expect(player6Orders.length).toBe(1);
+
+    // Check if correct reports and orders have been assigned to each player
+    const player1ReportIds = player1Reports.map((report) => report._id.toHexString());
+    const player4ReportIds = player4Reports.map((report) => report._id.toHexString());
+    const player6ReportIds = player6Reports.map((report) => report._id.toHexString());
+    const player1OrderIds = player1Orders.map((order) => order._id.toHexString());
+    const player4OrderIds = player4Orders.map((order) => order._id.toHexString());
+    const player6OrderIds = player6Orders.map((order) => order._id.toHexString());
+
+    expect(player1ReportIds).toContain(reports[0]._id.toHexString());
+    expect(player1ReportIds).toContain(reports[1]._id.toHexString());
+    expect(player1ReportIds).toContain(reports[2]._id.toHexString());
+    expect(player4ReportIds).toContain(reports[3]._id.toHexString());
+    expect(player4ReportIds).toContain(reports[4]._id.toHexString());
+    expect(player6ReportIds).toContain(reports[5]._id.toHexString());
+
+    expect(player1OrderIds).toContain(orders[0]._id.toHexString());
+    expect(player1OrderIds).toContain(orders[1]._id.toHexString());
+    expect(player1OrderIds).toContain(orders[2]._id.toHexString());
+    expect(player4OrderIds).toContain(orders[3]._id.toHexString());
+    expect(player4OrderIds).toContain(orders[4]._id.toHexString());
+    expect(player6OrderIds).toContain(orders[5]._id.toHexString());
+
+    // Check if there is correct number of reports in the database
+    const dbReports = await reportsService.getAllReportsList();
+    expect(dbReports.length).toBe(6);
+
+    // Check if acls has been successfully proccessed
+    const dbAcls = await accessControlListsService.getAllAccessControlLists();
+
+    expect(dbAcls[0].players).toContainEqual(player1._id);
+    expect(dbAcls[0].players).toContainEqual(player4._id);
+    expect(dbAcls[0].players).not.toContainEqual(player3._id);
+    expect(dbAcls[0].players).not.toContainEqual(player5._id);
+    expect(dbAcls[1].players).toContainEqual(player1._id);
+    expect(dbAcls[1].players).toContainEqual(player4._id);
+    expect(dbAcls[1].players).toContainEqual(player6._id);
+    expect(dbAcls[1].players).not.toContainEqual(player2._id);
+    expect(dbAcls[1].players).not.toContainEqual(player5._id);
+
+    // Check if there is corrent number of players left in the database
+    const dbPlayers = await playersService.getAllPlayersList({});
+    const dbPlayersIds = dbPlayers.map((player) => player._id.toHexString());
+
+    expect(dbPlayers.length).toBe(5);
+    expect(dbPlayersIds).toContain(player1._id.toHexString());
+    expect(dbPlayersIds).not.toContain(player2._id.toHexString());
+    expect(dbPlayersIds).not.toContain(player3._id.toHexString());
+    expect(dbPlayersIds).toContain(player4._id.toHexString());
+    expect(dbPlayersIds).not.toContain(player5._id.toHexString());
+    expect(dbPlayersIds).toContain(player6._id.toHexString());
   });
 });

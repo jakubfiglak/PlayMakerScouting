@@ -1,20 +1,10 @@
-import { useHistory } from 'react-router-dom';
-// MUI components
-import { IconButton, Tooltip } from '@material-ui/core';
-// MUI icons
-import { Edit as EditIcon } from '@material-ui/icons';
+import { FC } from 'react';
 // Custom components
-import { StyledTableCell } from '../../components/table/TableCell';
-import { StyledTableRow } from '../../components/table/TableRow';
 import { Table } from '../../components/table/Table';
 // Types
-import { Club } from '../../types/clubs';
 import { CommonTableProps } from '../../types/common';
 
-type Props = {
-  clubs: Club[];
-  onEditClick: (club: Club) => void;
-} & CommonTableProps;
+type Props = CommonTableProps;
 
 const headCells = [
   { id: 'name', label: 'Nazwa' },
@@ -22,7 +12,7 @@ const headCells = [
   { id: 'voivodeship', label: 'Województwo' },
 ];
 
-export const ClubsTable = ({
+export const ClubsTable: FC<Props> = ({
   page,
   rowsPerPage,
   sortBy,
@@ -30,13 +20,10 @@ export const ClubsTable = ({
   handleChangePage,
   handleChangeRowsPerPage,
   handleSort,
-  clubs,
   total,
-  onEditClick,
   actions,
-}: Props) => {
-  const history = useHistory();
-
+  children,
+}) => {
   return (
     <Table
       page={page}
@@ -50,32 +37,7 @@ export const ClubsTable = ({
       headCells={headCells}
       actions={actions}
     >
-      {clubs.map((club) => {
-        return (
-          <StyledTableRow
-            hover
-            key={club.id}
-            onClick={() => history.push(`/clubs/${club.id}`)}
-          >
-            <StyledTableCell padding="checkbox">
-              <Tooltip title="Edytuj">
-                <IconButton
-                  aria-label="edit"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEditClick(club);
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-            </StyledTableCell>
-            <StyledTableCell>{club.name}</StyledTableCell>
-            <StyledTableCell>{club.division}</StyledTableCell>
-            <StyledTableCell>{club.voivodeship}</StyledTableCell>
-          </StyledTableRow>
-        );
-      })}
+      {children}
     </Table>
   );
 };

@@ -33,7 +33,7 @@ export const PrinteableReport = ({ report }: Props) => {
     docNumber,
     player,
     match,
-    scout,
+    author,
     createdAt,
     minutesPlayed,
     assists,
@@ -110,7 +110,7 @@ export const PrinteableReport = ({ report }: Props) => {
           <div className={classes.flex}>
             <Typography className={classes.text} gutterBottom>
               <strong>Scout: </strong>
-              {scout.firstName} {scout.lastName}
+              {author.firstName} {author.lastName}
             </Typography>
             <Typography
               className={clsx(classes.text, classes.marginLeft)}

@@ -159,3 +159,47 @@ export function useUpdateClub(clubId: string) {
     },
   );
 }
+
+// Delete club
+async function deleteClub(id: string): Promise<ApiResponse<string>> {
+  const { data } = await axios.delete<ApiResponse<string>>(
+    `/api/v1/clubs/${id}`,
+  );
+  return data;
+}
+
+export function useDeleteClub() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation((id: string) => deleteClub(id), {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('clubs');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
+// Merge clubs duplicates
+async function mergeClubsDuplicates(): Promise<ApiResponse<null>> {
+  const { data } = await axios.post<ApiResponse<null>>(
+    '/api/v1/clubs/merge-duplicates',
+  );
+  return data;
+}
+
+export function useMergeClubsDuplicates() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(mergeClubsDuplicates, {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('clubs');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}

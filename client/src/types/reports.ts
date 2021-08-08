@@ -30,7 +30,7 @@ export type Report = {
   id: string;
   docNumber: string;
   player: Omit<Player, 'club'>;
-  scout: Pick<User, 'id' | 'firstName' | 'lastName'>;
+  author: Pick<User, 'id' | 'firstName' | 'lastName'>;
   order?: Pick<Order, 'id' | 'docNumber'>;
   match: MatchData;
   playerCurrentClub: Club;

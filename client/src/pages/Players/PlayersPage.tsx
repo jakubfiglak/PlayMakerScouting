@@ -25,6 +25,7 @@ import {
 import { useClubsList, useCreateClub } from '../../hooks/clubs';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
 const initialFilters: PlayersFilterData = {
   lastName: '',
@@ -36,6 +37,8 @@ const initialFilters: PlayersFilterData = {
 
 export const PlayersPage = () => {
   const { setAlert } = useAlertsState();
+  const user = useAuthenticatedUser();
+
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
   const {
     tableSettings: { page, rowsPerPage, sortBy, order },
@@ -49,6 +52,11 @@ export const PlayersPage = () => {
     key: 'playersFilters',
     initialValue: initialFilters,
   });
+
+  function handleSetFilters(newFilters: PlayersFilterData) {
+    handleChangePage(null, 0);
+    setFilters(newFilters);
+  }
 
   const { data: players, isLoading: playersLoading } = usePlayers({
     page: page + 1,
@@ -118,8 +126,8 @@ export const PlayersPage = () => {
         <PlayersFilterForm
           clubsData={clubs || []}
           filters={filters}
-          onFilter={setFilters}
-          onClearFilters={() => setFilters(initialFilters)}
+          onFilter={handleSetFilters}
+          onClearFilters={() => handleSetFilters(initialFilters)}
         />
         <PlayersTable
           page={page}
@@ -140,6 +148,12 @@ export const PlayersPage = () => {
                   isMenuActive
                   onEditClick={handleEditClick}
                   onDeleteClick={deletePlayer}
+                  isEditOptionEnabled={
+                    user.role === 'admin' || user.id === player.author
+                  }
+                  isDeleteOptionEnabled={
+                    user.role === 'admin' || user.id === player.author
+                  }
                 />
               ))
             : null}

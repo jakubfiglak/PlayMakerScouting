@@ -12,6 +12,7 @@ const headCells = [
   { id: 'position', label: 'Pozycja' },
   { id: 'yearOfBirth', label: 'Rok urodzenia' },
   { id: 'footed', label: 'Noga' },
+  { id: 'reportsCount', label: 'Raporty', sortingDisabled: true },
 ];
 
 export const PlayersTable: FC<Props> = ({

@@ -11,8 +11,8 @@ function setAccessFilters(req, res, next) {
     return next();
   }
   req.accessFilters = {
-    players: { _id: { $in: req.acl.players } },
-    clubs: { _id: { $in: req.acl.clubs } },
+    players: { $or: [{ _id: { $in: req.acl.players } }, { isPublic: true }] },
+    clubs: { $or: [{ _id: { $in: req.acl.clubs } }, { isPublic: true }] },
     reports: { _id: { $in: req.acl.reports } },
     orders: { scout: req.user._id },
   };
