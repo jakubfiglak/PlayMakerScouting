@@ -8,7 +8,7 @@ import { ReportsTable } from './ReportsTable';
 import { ReportsTableRow } from './ReportsTableRow';
 import { ReportsFilterForm } from './ReportsFilterForm';
 import { ReportDeleteConfirmationModal } from './ReportDeleteConfirmationModal';
-import { NewReportForm } from './forms/NewReportForm';
+import { CreateReportForm } from './forms/CreateReportForm';
 import { EditReportForm } from './forms/EditReportForm';
 import { PrinteableReport } from '../Report/PrinteableReport';
 import { TabPanel } from '../../components/TabPanel';
@@ -249,7 +249,7 @@ export const ReportsPage = () => {
             onSubmit={handleUpdateReport}
           />
         ) : (
-          <NewReportForm
+          <CreateReportForm
             isOrderOptionDisabled={user.role === 'scout'}
             playersList={players || []}
             ordersList={orders || []}

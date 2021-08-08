@@ -28,7 +28,7 @@ export const ReportSummary = ({
 
   return (
     <>
-      <div className={classes.container}>
+      <div className={classes.textContainer}>
         <Typography>
           <strong>Podsumowanie występu</strong>
         </Typography>
@@ -59,7 +59,7 @@ export const ReportSummary = ({
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  container: {
+  textContainer: {
     display: 'flex',
     flexDirection: 'column',
     gap: `${theme.spacing(2)}px`,

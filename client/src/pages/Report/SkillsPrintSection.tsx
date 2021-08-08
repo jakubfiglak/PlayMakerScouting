@@ -1,6 +1,6 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
-import { NewReportSkills } from './NewReportSkills';
+import { ReportSkills } from './ReportSkills';
 // Types
 import { Skill } from '../../types/reports';
 import { SkillsCategories } from '../../types/ratings';
@@ -25,7 +25,7 @@ export const SkillsPrintSection = ({
       <Typography variant="h6" align="center" className={classes.heading}>
         {getLabel(category)}
       </Typography>
-      <NewReportSkills
+      <ReportSkills
         skills={skills}
         printeable
         maxRatingScore={maxRatingScore}

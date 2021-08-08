@@ -50,7 +50,7 @@ type Props = {
   activeOrderId: string;
 };
 
-export const NewReportForm = ({
+export const CreateReportForm = ({
   isOrderOptionDisabled,
   playersList,
   ordersList,

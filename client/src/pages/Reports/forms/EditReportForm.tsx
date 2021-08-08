@@ -1,17 +1,12 @@
 import { Formik, Form } from 'formik';
 // MUI components
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { Card, CardContent, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { SummaryStep } from './SummaryStep';
 import { StatsStep } from './StatsStep';
 import { RatingsStep } from './RatingsStep';
 import { ExtraPlayerInfo } from './ExtraPlayerInfo';
+import { ReportCard } from '../../Report/ReportCard';
 import { ReportBasicInfo } from '../../Report/ReportBasicInfo';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Types
@@ -44,39 +39,24 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
       >
         {({ handleReset }) => (
           <Form>
-            <Card className={classes.card}>
-              <CardHeader title="Szczegóły dot. zawodnika" />
-              <CardContent>
-                <ExtraPlayerInfo />
-              </CardContent>
-            </Card>
-            <Card className={classes.card}>
-              <CardHeader title="Informacje o meczu" />
-              <CardContent>
-                <MatchStep />
-              </CardContent>
-            </Card>
-            <Card className={classes.card}>
-              <CardHeader title="Podsumowanie występu" />
-              <CardContent>
-                <SummaryStep />
-              </CardContent>
-            </Card>
-            <Card className={classes.card}>
-              <CardHeader title="Oceny" />
-              <CardContent>
-                <RatingsStep
-                  ratings={mapSkillsToRatingType(report.skills)}
-                  maxRatingScore={report.maxRatingScore}
-                />
-              </CardContent>
-            </Card>
-            <Card className={classes.card}>
-              <CardHeader title="Statystyki" />
-              <CardContent>
-                <StatsStep />
-              </CardContent>
-            </Card>
+            <ReportCard title="Szczegóły dot. zawodnika">
+              <ExtraPlayerInfo />
+            </ReportCard>
+            <ReportCard title="Informacje o meczu">
+              <MatchStep />
+            </ReportCard>
+            <ReportCard title="Podsumowanie występu">
+              <SummaryStep />
+            </ReportCard>
+            <ReportCard title="Oceny">
+              <RatingsStep
+                ratings={mapSkillsToRatingType(report.skills)}
+                maxRatingScore={report.maxRatingScore}
+              />
+            </ReportCard>
+            <ReportCard title="Statystyki">
+              <StatsStep />
+            </ReportCard>
             <div className={classes.container}>
               <MainFormActions
                 label="raport"
