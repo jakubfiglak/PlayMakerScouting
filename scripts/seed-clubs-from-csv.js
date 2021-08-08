@@ -8,6 +8,9 @@ const Club = require('../modules/clubs/club.model');
 
 dotenv.config({ path: './config/config.env' });
 
+const prodAdminId = '6047f176c5d45231a400ef89';
+const devAdminId = '5d7a514b5d2c12c7449be042';
+
 const results = [];
 
 async function seedClubs() {
@@ -21,9 +24,10 @@ async function seedClubs() {
       const clubs = results.map((result) => ({
         name: result.team_name,
         voivodeship: result.voiv,
-        division: 'III liga',
+        division: result.league,
         lnpID: result.team_id_lnp,
-        author: '5d7a514b5d2c12c7449be042',
+        author: devAdminId,
+        isPublic: true,
       }));
 
       const created = await Club.create(clubs);
