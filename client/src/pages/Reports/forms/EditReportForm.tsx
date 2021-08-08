@@ -1,27 +1,23 @@
 import { Formik, Form } from 'formik';
 // MUI components
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Card,
   CardContent,
   CardHeader,
-  Typography,
   makeStyles,
   Theme,
 } from '@material-ui/core';
-// MUI icons
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // Custom components
 import { SummaryStep } from './SummaryStep';
-import { BasicDataStep } from './BasicDataStep';
+import { StatsStep } from './StatsStep';
 import { RatingsStep } from './RatingsStep';
+import { ExtraPlayerInfo } from './ExtraPlayerInfo';
 import { ReportBasicInfo } from '../../Report/ReportBasicInfo';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
 // Types
 import { Report, ReportDTO, Skill } from '../../../types/reports';
 import { validationSchema } from './validationSchema';
+import { MatchStep } from './MatchStep';
 
 type Props = {
   report: Report;
@@ -31,29 +27,12 @@ type Props = {
 
 export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
   const classes = useStyles();
-  const {
-    player,
-    match,
-    order,
-    author,
-    createdAt,
-    positionPlayed,
-    playerCurrentClub,
-  } = report;
 
   return (
     <>
       <Card className={classes.card}>
         <CardContent>
-          <ReportBasicInfo
-            player={player}
-            match={match}
-            order={order}
-            author={author}
-            positionPlayed={positionPlayed}
-            playerCurrentClub={playerCurrentClub}
-            createdAt={createdAt}
-          />
+          <ReportBasicInfo report={report} />
         </CardContent>
       </Card>
       <Formik
@@ -66,15 +45,21 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
         {({ handleReset }) => (
           <Form>
             <Card className={classes.card}>
-              <CardHeader title="Podsumowanie występu" />
+              <CardHeader title="Szczegóły dot. zawodnika" />
               <CardContent>
-                <SummaryStep />
+                <ExtraPlayerInfo />
               </CardContent>
             </Card>
             <Card className={classes.card}>
-              <CardHeader title="Statystyki" />
+              <CardHeader title="Informacje o meczu" />
               <CardContent>
-                <BasicDataStep />
+                <MatchStep />
+              </CardContent>
+            </Card>
+            <Card className={classes.card}>
+              <CardHeader title="Podsumowanie występu" />
+              <CardContent>
+                <SummaryStep />
               </CardContent>
             </Card>
             <Card className={classes.card}>
@@ -84,6 +69,12 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
                   ratings={mapSkillsToRatingType(report.skills)}
                   maxRatingScore={report.maxRatingScore}
                 />
+              </CardContent>
+            </Card>
+            <Card className={classes.card}>
+              <CardHeader title="Statystyki" />
+              <CardContent>
+                <StatsStep />
               </CardContent>
             </Card>
             <div className={classes.container}>

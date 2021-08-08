@@ -102,16 +102,7 @@ export const ReportPage = () => {
           </div>
           <Card className={classes.card}>
             <CardContent>
-              <ReportBasicInfo
-                player={report.player}
-                match={report.match}
-                author={report.author}
-                order={report.order}
-                playerCurrentClub={report.playerCurrentClub}
-                positionPlayed={report.positionPlayed}
-                shirtNo={report.shirtNo}
-                createdAt={report.createdAt}
-              />
+              <ReportBasicInfo report={report} />
             </CardContent>
           </Card>
           <Accordion>
