@@ -8,7 +8,9 @@ function canView(assetType) {
       return next();
     }
 
-    const hasAccess = req.acl[`${assetType}s`].includes(req.params.id);
+    const assetTypePlural = assetType === 'match' ? `${assetType}es` : `${assetType}s`;
+
+    const hasAccess = req.acl[assetTypePlural].includes(req.params.id);
 
     if (!hasAccess) {
       return next(
