@@ -3,7 +3,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const toJson = require('@meanie/mongoose-to-json');
 const calculateReportAvg = require('../../middleware/calculateReportAvg');
-const { ratingCategories, positions } = require('../../utils/data');
+const { ratingCategories, positions, competitions } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -46,7 +46,7 @@ const ReportSchema = new Schema(
       },
       competition: {
         type: String,
-        enum: ['league', 'cup', 'friendly'],
+        enum: competitions,
       },
       date: {
         type: Date,

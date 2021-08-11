@@ -35,4 +35,13 @@ const oldPositions = ['GK', 'FB', 'CB', 'CM', 'WM', 'F'];
 
 const ratingCategories = ['individual', 'teamplay', 'offense', 'defense', 'physical', 'mental'];
 
-module.exports = { voivodeships, divisions, positions, oldPositions, ratingCategories };
+const competitions = ['league', 'cup', 'friendly'];
+
+module.exports = {
+  voivodeships,
+  divisions,
+  positions,
+  oldPositions,
+  ratingCategories,
+  competitions,
+};
