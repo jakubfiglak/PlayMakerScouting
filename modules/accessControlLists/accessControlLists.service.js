@@ -1,5 +1,6 @@
 const AccessControlList = require('./accessControlList.model');
 const isAdmin = require('../../utils/isAdmin');
+const pluralizeAssetType = require('../../utils/pluralizeAssetType');
 
 function createAccessControlList(accessControlListData) {
   return AccessControlList.create(accessControlListData);
@@ -27,17 +28,20 @@ async function mergeMembersAclIntoTeamsAcl({ memberId, teamId }) {
     return [...new Set([...teamAcl[prop], ...memberAcl[prop]].map((id) => id.toHexString()))];
   }
 
-  teamAcl.players = getUniqueIdsFromAclProps('players');
-  teamAcl.clubs = getUniqueIdsFromAclProps('clubs');
-  teamAcl.reports = getUniqueIdsFromAclProps('reports');
-  teamAcl.reportBackgroundImages = getUniqueIdsFromAclProps('reportBackgroundImages');
+  const aclFields = ['players', 'clubs', 'reports', 'reportBackgroundImages', 'matches', 'notes'];
+
+  aclFields.forEach((field) => {
+    teamAcl[field] = getUniqueIdsFromAclProps(field);
+  });
 
   return teamAcl.save();
 }
 
 function grantAccessToTheAsset({ acl, assetType, assetId }) {
-  if (!acl[`${assetType}s`].includes(assetId)) {
-    acl[`${assetType}s`].push(assetId);
+  const assetTypePlural = pluralizeAssetType(assetType);
+
+  if (!acl[assetTypePlural].includes(assetId)) {
+    acl[assetTypePlural].push(assetId);
   }
 
   return acl.save();
@@ -48,7 +52,9 @@ async function grantAccessOnAssetCreation({ userRole, userAcl, teamAcl, assetTyp
     return;
   }
 
-  if (teamAcl[`${assetType}s`]) {
+  const assetTypePlural = pluralizeAssetType(assetType);
+
+  if (teamAcl[assetTypePlural]) {
     await grantAccessToTheAsset({
       acl: teamAcl,
       assetType,
@@ -94,6 +100,8 @@ async function createAclOnTeamCreation({ teamId, members }) {
   const clubIds = getUniqueIdsFromAclProps('clubs');
   const reportIds = getUniqueIdsFromAclProps('reports');
   const reportBackgroundImagesIds = getUniqueIdsFromAclProps('reportBackgroundImages');
+  const matchIds = getUniqueIdsFromAclProps('matches');
+  const noteIds = getUniqueIdsFromAclProps('notes');
 
   await createAccessControlList({
     team: teamId,
@@ -101,6 +109,8 @@ async function createAclOnTeamCreation({ teamId, members }) {
     players: playerIds,
     reports: reportIds,
     reportBackgroundImages: reportBackgroundImagesIds,
+    matches: matchIds,
+    notes: noteIds,
   });
 }
 

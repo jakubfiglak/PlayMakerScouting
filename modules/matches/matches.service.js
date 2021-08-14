@@ -11,7 +11,7 @@ async function createMatch(matchData) {
 }
 
 async function getAllMatches({ query, paginationOptions, accessFilters }) {
-  const modifiedQuery = { ...query, ...accessFilters };
+  const modifiedQuery = { $and: [query, accessFilters] };
   const matches = await Match.paginate(modifiedQuery, paginationOptions);
   return matches;
 }

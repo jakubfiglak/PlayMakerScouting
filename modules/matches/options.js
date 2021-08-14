@@ -4,6 +4,7 @@ const options = {
   },
   listSelect: 'homeTeam awayTeam competition date',
   listSort: '-date',
+  forbiddenUpdates: ['author'],
 };
 
 module.exports = options;

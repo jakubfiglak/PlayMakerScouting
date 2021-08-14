@@ -40,6 +40,16 @@ const AccessControlListSchema = new Schema(
       ref: 'Report',
       default: [],
     },
+    matches: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Match',
+      default: [],
+    },
+    notes: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Note',
+      default: [],
+    },
     reportBackgroundImages: {
       type: [Schema.Types.ObjectId],
       ref: 'ReportBackgroundImage',
