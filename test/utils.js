@@ -196,6 +196,8 @@ const buildAccessControlList = (overrides = {}) => ({
   players: [],
   clubs: [],
   reports: [],
+  matches: [],
+  notes: [],
   ...overrides,
 });
 
@@ -211,6 +213,32 @@ const buildGrantAccessForm = (overrides = {}) => ({
   targetAssetId: new ID(),
   assetToAddType: 'club',
   assetToAddId: new ID(),
+  ...overrides,
+});
+
+const buildMatch = (overrides = {}) => ({
+  _id: new ID(),
+  homeTeam: new ID(),
+  awayTeam: new ID(),
+  author: new ID(),
+  competition: 'league',
+  date: new Date(),
+  result: '1:1',
+  isPublic: false,
+  ...overrides,
+});
+
+const buildNote = (overrides = {}) => ({
+  _id: new ID(),
+  player: new ID(),
+  playerCurrentClub: new ID(),
+  author: new ID(),
+  match: new ID(),
+  positionPlayed: getRandomArrayMember(positions),
+  shirtNo: 11,
+  text: getRandomText(10),
+  maxRatingScore: 4,
+  rating: 3,
   ...overrides,
 });
 
@@ -247,6 +275,8 @@ module.exports = {
   buildAccessControlList,
   buildReportBackgroundImage,
   buildGrantAccessForm,
+  buildMatch,
+  buildNote,
   buildReq,
   buildRes,
   buildNext,
