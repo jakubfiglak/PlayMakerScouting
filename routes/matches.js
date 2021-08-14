@@ -1,4 +1,5 @@
 const express = require('express');
+const notesRouter = require('./notes');
 const {
   createMatch,
   getMatches,
@@ -22,6 +23,7 @@ const canUpdateOrDelete = require('../middleware/canUpdateOrDelete');
 
 const router = express.Router({ mergeParams: true });
 
+router.use('/:matchId/notes', protect, notesRouter);
 router.post(
   '/',
   [

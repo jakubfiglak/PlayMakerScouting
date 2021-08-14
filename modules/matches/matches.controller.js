@@ -89,7 +89,7 @@ exports.updateMatch = asyncHandler(async (req, res) => {
 // @desc Delete match
 // @route DELETE /api/v1/matches/:id
 // @access Private
-exports.deletePlayer = asyncHandler(async (req, res) => {
+exports.deleteMatch = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   await matchesService.deleteMatch(req.player);

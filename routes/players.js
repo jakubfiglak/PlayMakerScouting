@@ -1,6 +1,7 @@
 const express = require('express');
 const ordersRouter = require('./orders');
 const reportsRouter = require('./reports');
+const notesRouter = require('./notes');
 const {
   createPlayer,
   getPlayers,
@@ -27,6 +28,7 @@ const router = express.Router({ mergeParams: true });
 
 router.use('/:playerId/orders', protect, ordersRouter);
 router.use('/:playerId/reports', protect, reportsRouter);
+router.use('/:playerId/notes', protect, notesRouter);
 
 router.post(
   '/',
