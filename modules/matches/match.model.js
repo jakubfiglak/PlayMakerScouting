@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const toJson = require('@meanie/mongoose-to-json');
+const autoPopulate = require('mongoose-autopopulate');
 const options = require('./options');
 const { competitions } = require('../../utils/data');
 
@@ -54,6 +55,7 @@ const MatchSchema = new Schema(
 );
 
 MatchSchema.plugin(mongoosePaginate);
+MatchSchema.plugin(autoPopulate);
 MatchSchema.plugin(toJson);
 
 module.exports = model('Match', MatchSchema);

@@ -10,7 +10,8 @@ function canView(assetType) {
 
     const assetTypePlural = assetType === 'match' ? `${assetType}es` : `${assetType}s`;
 
-    const hasAccess = req.acl[assetTypePlural].includes(req.params.id);
+    const hasAccess =
+      req.acl[assetTypePlural].includes(req.params.id) || req[assetType].isPublic === true;
 
     if (!hasAccess) {
       return next(

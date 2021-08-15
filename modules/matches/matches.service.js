@@ -11,7 +11,12 @@ async function createMatch(matchData) {
 }
 
 async function getAllMatches({ query, paginationOptions, accessFilters }) {
-  const modifiedQuery = { $and: [query, accessFilters] };
+  const clubQuery = query.club;
+  const processedQuery = query;
+  delete processedQuery.club;
+  const modifiedQuery = clubQuery
+    ? { $and: [processedQuery, clubQuery, accessFilters] }
+    : { $and: [processedQuery, accessFilters] };
   const matches = await Match.paginate(modifiedQuery, paginationOptions);
   return matches;
 }

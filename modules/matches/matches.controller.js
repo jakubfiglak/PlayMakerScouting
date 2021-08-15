@@ -92,7 +92,7 @@ exports.updateMatch = asyncHandler(async (req, res) => {
 exports.deleteMatch = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  await matchesService.deleteMatch(req.player);
+  await matchesService.deleteMatch(req.match);
 
   res.status(httpStatus.OK).json({
     success: true,
