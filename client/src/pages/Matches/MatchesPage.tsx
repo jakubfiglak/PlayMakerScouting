@@ -18,6 +18,7 @@ import {
   useMatches,
   useCreateMatch,
   useUpdateMatch,
+  useDeleteMatch,
 } from '../../hooks/matches';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -74,7 +75,10 @@ export const MatchesPage = () => {
   const { mutate: updateMatch, isLoading: updateMatchLoading } = useUpdateMatch(
     currentMatch?.id || '',
   );
-  // const { mutate: deleteClub, isLoading: deleteClubLoading } = useDeleteClub();
+  const {
+    mutate: deleteMatch,
+    isLoading: deleteMatchLoading,
+  } = useDeleteMatch();
 
   const handleEditClick = (match: Match) => {
     setCurrentMatch(match);
@@ -82,7 +86,6 @@ export const MatchesPage = () => {
   };
 
   const handleSubmit = (data: MatchDTO) => {
-    console.log(data);
     if (currentMatch) {
       updateMatch(data);
       setActiveTab(0);
@@ -99,7 +102,11 @@ export const MatchesPage = () => {
   };
 
   const isLoading =
-    clubsLoading || matchesLoading || createMatchLoading || updateMatchLoading;
+    clubsLoading ||
+    matchesLoading ||
+    createMatchLoading ||
+    updateMatchLoading ||
+    deleteMatchLoading;
 
   return (
     <MainTemplate>
@@ -135,7 +142,7 @@ export const MatchesPage = () => {
                   key={match.id}
                   match={match}
                   onEditClick={handleEditClick}
-                  onDeleteClick={(id) => console.log(id)}
+                  onDeleteClick={deleteMatch}
                   isMenuActive
                   isEditOptionEnabled={
                     user.role === 'admin' || user.id === match.author

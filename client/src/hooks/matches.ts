@@ -120,3 +120,25 @@ export function useUpdateMatch(matchId: string) {
     },
   );
 }
+
+// Delete match
+async function deleteMatch(id: string): Promise<ApiResponse<string>> {
+  const { data } = await axios.delete<ApiResponse<string>>(
+    `/api/v1/matches/${id}`,
+  );
+  return data;
+}
+
+export function useDeleteMatch() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation((id: string) => deleteMatch(id), {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('matches');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
