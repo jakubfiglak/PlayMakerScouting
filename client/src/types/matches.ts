@@ -3,8 +3,8 @@ import { Competition } from './reports';
 
 export type Match = {
   id: string;
-  homeTeam: Pick<Club, 'id' | 'name'>;
-  awayTeam: Pick<Club, 'id' | 'name'>;
+  homeTeam: Pick<Club, 'id' | 'name' | 'division'>;
+  awayTeam: Pick<Club, 'id' | 'name' | 'division'>;
   author: string;
   competition: Competition;
   date: string;

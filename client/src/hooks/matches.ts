@@ -67,6 +67,26 @@ export function useMatches({
   );
 }
 
+// Get single match
+async function getMatch(id: string): Promise<Match> {
+  const { data } = await axios.get<ApiResponse<Match>>(`/api/v1/matches/${id}`);
+  return data.data;
+}
+
+export function useMatch(id: string) {
+  const { setAlert } = useAlertsState();
+  const queryClient = useQueryClient();
+
+  return useQuery(['matches', id], () => getMatch(id), {
+    initialData: () => {
+      const cacheMatches: Match[] = queryClient.getQueryData('matches') || [];
+      return cacheMatches.find((match) => match.id === id);
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
 // Create new match
 async function createMatch(matchData: MatchDTO): Promise<ApiResponse<Match>> {
   const { data } = await axios.post<ApiResponse<Match>>(

@@ -9,9 +9,10 @@ import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
-import { usePlayer } from '../../hooks/players';
+import { useMatch } from '../../hooks/matches';
 import { usePlayersReports } from '../../hooks/reports';
 import { useTable } from '../../hooks/useTable';
+import { MatchDetails } from './MatchDetails';
 
 type ParamTypes = {
   id: string;
@@ -29,7 +30,7 @@ export const MatchPage = () => {
 
   const { id } = params;
 
-  // const { data: player, isLoading: playerLoading } = usePlayer(id);
+  const { data: match, isLoading: matchLoading } = useMatch(id);
 
   // const { data: reports } = usePlayersReports({
   //   playerId: id,
@@ -39,9 +40,11 @@ export const MatchPage = () => {
   //   sort: sortBy,
   // });
 
+  const isLoading = matchLoading;
+
   return (
     <MainTemplate>
-      {/* {playerLoading && <Loader />} */}
+      {isLoading && <Loader />}
       <div className={classes.container}>
         <Button
           to="/matches"
@@ -54,7 +57,7 @@ export const MatchPage = () => {
         </Button>
         <PageHeading title="Szczegóły meczu" />
       </div>
-      {/* {player && <PlayerDetails player={player} />} */}
+      {match ? <MatchDetails match={match} /> : null}
       <Typography
         variant="h6"
         component="h3"

@@ -11,7 +11,7 @@ import { Match, MatchDTO } from '../../types/matches';
 import { ClubBasicInfo } from '../../types/clubs';
 import { Competition } from '../../types/reports';
 // Utils & data
-import { formatDate, formatDateObject } from '../../utils/dates';
+import { formatDateObject } from '../../utils/dates';
 import { CompetitionSelect } from '../../components/selects/CompetitionSelect';
 
 type Props = {
