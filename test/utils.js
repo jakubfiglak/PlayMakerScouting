@@ -239,6 +239,7 @@ const buildNote = (overrides = {}) => ({
   text: getRandomText(10),
   maxRatingScore: 4,
   rating: 3,
+  noteNo: 1,
   ...overrides,
 });
 

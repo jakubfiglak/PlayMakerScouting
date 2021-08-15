@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+const autoPopulate = require('mongoose-autopopulate');
 const toJson = require('@meanie/mongoose-to-json');
 const options = require('./options');
 const { positions } = require('../../utils/data');
@@ -12,17 +13,18 @@ const NoteSchema = new Schema(
     player: {
       type: Schema.Types.ObjectId,
       ref: 'Player',
-      autopopulate: { select: options.select.player },
+      autopopulate: { select: options.populate.player },
     },
     playerCurrentClub: {
       type: Schema.Types.ObjectId,
       ref: 'Club',
-      autopopulate: { select: options.select.club },
+      autopopulate: { select: options.populate.club },
     },
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: 'Please add an author',
+      autopopulate: { select: options.populate.user },
     },
     match: {
       type: Schema.Types.ObjectId,
@@ -51,6 +53,7 @@ const NoteSchema = new Schema(
 );
 
 NoteSchema.plugin(mongoosePaginate);
+NoteSchema.plugin(autoPopulate);
 NoteSchema.plugin(AutoIncrement, { inc_field: 'noteNo' });
 NoteSchema.plugin(toJson);
 

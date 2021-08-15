@@ -4,31 +4,20 @@ const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
 const {
   buildClub,
-  buildPlayer,
-  buildOrder,
-  buildReport,
   buildAccessControlList,
   buildTeam,
-  buildUser,
   buildMatch,
   buildNote,
 } = require('../../test/utils');
 const {
   insertClubs,
   insertTestUser,
-  insertPlayers,
-  insertOrders,
-  insertReports,
   insertAccessControlLists,
   insertTeams,
-  insertUsers,
   insertMatches,
   insertNotes,
 } = require('../../test/db-utils');
 const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
-const reportsService = require('../../modules/reports/reports.service');
-const ordersService = require('../../modules/orders/orders.service');
-const playersService = require('../../modules/players/players.service');
 
 let api = axios.create();
 let server;

@@ -77,7 +77,7 @@ exports.updateNote = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const note = await notesService.updateNote({
-    club: req.club,
+    note: req.note,
     reqBody: req.body,
   });
 
@@ -94,7 +94,7 @@ exports.updateNote = asyncHandler(async (req, res) => {
 exports.deleteNote = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  await notesService.deleteNote(req.club);
+  await notesService.deleteNote(req.note);
 
   res.status(httpStatus.OK).json({
     success: true,
