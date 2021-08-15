@@ -28,7 +28,7 @@ type GetMatchesArgs = {
 async function getMatches({
   page = 1,
   limit = 20,
-  sort = '-date',
+  sort = 'date',
   order,
   filters,
 }: GetMatchesArgs): Promise<PaginatedMatches> {
@@ -46,7 +46,7 @@ async function getMatches({
 export function useMatches({
   page = 1,
   limit = 20,
-  sort = '-date',
+  sort = 'date',
   order,
   filters,
 }: GetMatchesArgs) {
@@ -60,6 +60,60 @@ export function useMatches({
       keepPreviousData: true,
       onSuccess: (data) => {
         queryClient.setQueryData('matches', data.docs);
+      },
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
+}
+
+// Create new match
+async function createMatch(matchData: MatchDTO): Promise<ApiResponse<Match>> {
+  const { data } = await axios.post<ApiResponse<Match>>(
+    '/api/v1/matches',
+    matchData,
+  );
+  return data;
+}
+
+export function useCreateMatch() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation((values: MatchDTO) => createMatch(values), {
+    onSuccess: (data) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('matches');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
+// Update club
+type UpdateMatchArgs = { matchId: string; matchData: MatchDTO };
+
+async function updateMatch({
+  matchId,
+  matchData,
+}: UpdateMatchArgs): Promise<ApiResponse<Match>> {
+  const { data } = await axios.put<ApiResponse<Match>>(
+    `/api/v1/matches/${matchId}`,
+    matchData,
+  );
+  return data;
+}
+
+export function useUpdateMatch(matchId: string) {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(
+    (values: MatchDTO) => updateMatch({ matchId, matchData: values }),
+    {
+      onSuccess: (data) => {
+        setAlert({ msg: data.message, type: 'success' });
+        queryClient.invalidateQueries('matches');
       },
       onError: (err: ApiError) =>
         setAlert({ msg: err.response.data.error, type: 'error' }),

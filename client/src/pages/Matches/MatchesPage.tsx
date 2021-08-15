@@ -5,22 +5,25 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { MatchesFilterForm } from './MatchesFilterForm';
 import { MatchesTable } from './MatchesTable';
 import { MatchesTableRow } from './MatchesTableRow';
+import { MatchesForm } from './MatchesForm';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
-// Types
-import { Club, ClubsFilterData, ClubDTO } from '../../types/clubs';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useClubsList } from '../../hooks/clubs';
-import { useMatches } from '../../hooks/matches';
+import {
+  useMatches,
+  useCreateMatch,
+  useUpdateMatch,
+} from '../../hooks/matches';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
-import { Match, MatchesFilterData } from '../../types/matches';
+import { Match, MatchesFilterData, MatchDTO } from '../../types/matches';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
@@ -64,10 +67,13 @@ export const MatchesPage = () => {
     order,
     filters,
   });
-  // const { mutate: createClub, isLoading: createClubLoading } = useCreateClub();
-  // const { mutate: updateClub, isLoading: updateClubLoading } = useUpdateClub(
-  //   currentClub?.id || '',
-  // );
+  const {
+    mutate: createMatch,
+    isLoading: createMatchLoading,
+  } = useCreateMatch();
+  const { mutate: updateMatch, isLoading: updateMatchLoading } = useUpdateMatch(
+    currentMatch?.id || '',
+  );
   // const { mutate: deleteClub, isLoading: deleteClubLoading } = useDeleteClub();
 
   const handleEditClick = (match: Match) => {
@@ -75,23 +81,25 @@ export const MatchesPage = () => {
     setActiveTab(1);
   };
 
-  // const handleSubmit = (data: ClubDTO) => {
-  //   if (currentClub) {
-  //     updateClub(data);
-  //     setActiveTab(0);
-  //   } else {
-  //     createClub(data);
-  //     setActiveTab(0);
-  //   }
-  // };
+  const handleSubmit = (data: MatchDTO) => {
+    console.log(data);
+    if (currentMatch) {
+      updateMatch(data);
+      setActiveTab(0);
+    } else {
+      createMatch(data);
+      setActiveTab(0);
+    }
+  };
 
-  // const handleFormReset = () => {
-  //   setActiveTab(0);
-  //   setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
-  //   setCurrentClub(null);
-  // };
+  const handleFormReset = () => {
+    setActiveTab(0);
+    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
+    setCurrentMatch(null);
+  };
 
-  const isLoading = clubsLoading;
+  const isLoading =
+    clubsLoading || matchesLoading || createMatchLoading || updateMatchLoading;
 
   return (
     <MainTemplate>
@@ -128,6 +136,7 @@ export const MatchesPage = () => {
                   match={match}
                   onEditClick={handleEditClick}
                   onDeleteClick={(id) => console.log(id)}
+                  isMenuActive
                   isEditOptionEnabled={
                     user.role === 'admin' || user.id === match.author
                   }
@@ -140,15 +149,16 @@ export const MatchesPage = () => {
         </MatchesTable>
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="clubs">
-        {/* <PageHeading
-          title={currentClub ? 'Edycja klubu' : 'Tworzenie nowego klubu'}
+        <PageHeading
+          title={currentMatch ? 'Edycja meczu' : 'Tworzenie nowego meczu'}
         />
 
-        <ClubsForm
-          current={currentClub}
+        <MatchesForm
+          clubsData={clubs || []}
+          current={currentMatch}
           onSubmit={handleSubmit}
           onCancelClick={handleFormReset}
-        /> */}
+        />
       </TabPanel>
     </MainTemplate>
   );

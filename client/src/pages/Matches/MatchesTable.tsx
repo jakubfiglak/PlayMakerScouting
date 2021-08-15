@@ -11,7 +11,7 @@ const headCells = [
   { id: 'awayTeam', label: 'Gość' },
   { id: 'competition', label: 'Rozgrywki' },
   { id: 'date', label: 'Data' },
-  { id: 'result', label: 'Wynik' },
+  { id: 'result', label: 'Wynik', sortingDisabled: true },
   { id: 'video', label: 'Video', sortingDisabled: true },
 ];
 
