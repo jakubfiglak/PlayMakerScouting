@@ -25,7 +25,7 @@ export type MatchDTO = Pick<
   'competition' | 'date' | 'result' | 'videoURL'
 > & { homeTeam: string; awayTeam: string };
 
-export type MatchFilterData = {
+export type MatchesFilterData = {
   club: string;
   afterDate: string;
   beforeDate: string;

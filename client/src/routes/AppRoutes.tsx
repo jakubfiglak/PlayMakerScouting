@@ -19,6 +19,8 @@ import { ReportTemplatesPage } from '../pages/ReportTemplates/ReportTemplatesPag
 import { TeamPage } from '../pages/Team/TeamPage';
 import { UserPage } from '../pages/User/UserPage';
 import { SettingsPage } from '../pages/Settings/SettingsPage';
+import { MatchesPage } from '../pages/Matches/MatchesPage';
+import { MatchPage } from '../pages/Match/MatchPage';
 import { FourOFourPage } from '../pages/404/FourOFour';
 
 export const AppRoutes = () => {
@@ -113,6 +115,19 @@ export const AppRoutes = () => {
           allowedRoles={['admin', 'playmaker-scout', 'scout']}
         >
           <SettingsPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/matches"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <MatchesPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/matches/:id"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <MatchPage />
         </ProtectedRoute>
         <Route path="*" component={FourOFourPage} />
       </Switch>
