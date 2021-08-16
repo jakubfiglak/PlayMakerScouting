@@ -19,7 +19,8 @@ type Props = {
   matchesData: MatchBasicInfo[];
   current: Note | null;
   onSubmit: (data: NoteDTO) => void;
-  onCancelClick: () => void;
+  onCancelClick?: () => void;
+  fullWidth?: boolean;
 };
 
 export const NotesForm = ({
@@ -28,6 +29,7 @@ export const NotesForm = ({
   current,
   onSubmit,
   onCancelClick,
+  fullWidth,
 }: Props) => {
   const initialValues: NoteDTO = current
     ? getInitialStateFromCurrent(current)
@@ -45,7 +47,7 @@ export const NotesForm = ({
     >
       {({ errors, touched, values, handleReset }) => (
         <Form>
-          <FormContainer>
+          <FormContainer fullWidth={fullWidth}>
             <FormControl variant="outlined" fullWidth>
               <PlayersCombo
                 playersData={playersData}
@@ -101,10 +103,12 @@ export const NotesForm = ({
               multiline
             />
             <MainFormActions
-              label="mecz"
+              label="notatkę"
               isEditState={!!current}
               onCancelClick={() => {
-                onCancelClick();
+                if (onCancelClick) {
+                  onCancelClick();
+                }
                 handleReset();
               }}
             />

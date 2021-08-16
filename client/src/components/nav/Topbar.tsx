@@ -21,13 +21,19 @@ import { NavElement } from './NavElement';
 import { PlaymakerLogo } from '../PlaymakerLogo';
 // Types
 import { NavItem } from './types';
+import { QuickNoteButton } from './QuickNoteButton';
 
 type Props = {
   navElements: NavItem[];
   onLogout: () => void;
+  handleQuickNoteClick: () => void;
 };
 
-export const Topbar = ({ navElements, onLogout }: Props) => {
+export const Topbar = ({
+  navElements,
+  onLogout,
+  handleQuickNoteClick,
+}: Props) => {
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const ref = useRef<HTMLButtonElement>(null);
@@ -71,6 +77,7 @@ export const Topbar = ({ navElements, onLogout }: Props) => {
                 );
               })}
               <Divider />
+              <QuickNoteButton onClick={handleQuickNoteClick} />
               <li>
                 <ListItem button onClick={onLogout}>
                   <ListItemIcon>

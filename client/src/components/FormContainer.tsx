@@ -1,13 +1,15 @@
 import { FC } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 
-export const FormContainer: FC = ({ children }) => {
-  const classes = useStyles();
+type Props = { fullWidth?: boolean };
+
+export const FormContainer: FC<Props> = ({ children, fullWidth = false }) => {
+  const classes = useStyles({ fullWidth });
 
   return <div className={classes.container}>{children}</div>;
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles<Theme, Props>((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -20,5 +22,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: '50%',
     },
+    width: (props) => (props.fullWidth ? '100%' : undefined),
   },
 }));
