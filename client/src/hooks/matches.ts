@@ -67,6 +67,23 @@ export function useMatches({
   );
 }
 
+// Get matches list
+async function getMatchesList(): Promise<MatchBasicInfo[]> {
+  const { data } = await axios.get<ApiResponse<MatchBasicInfo[]>>(
+    '/api/v1/matches/list',
+  );
+  return data.data;
+}
+
+export function useMatchesList() {
+  const { setAlert } = useAlertsState();
+
+  return useQuery(['matches', 'list'], getMatchesList, {
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
 // Get single match
 async function getMatch(id: string): Promise<Match> {
   const { data } = await axios.get<ApiResponse<Match>>(`/api/v1/matches/${id}`);

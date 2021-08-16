@@ -6,6 +6,7 @@ import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
+import { NotesFilterForm } from './NotesFilterForm';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
@@ -15,19 +16,22 @@ import {
   useCreateMatch,
   useUpdateMatch,
   useDeleteMatch,
+  useMatchesList,
 } from '../../hooks/matches';
+import { usePlayersList } from '../../hooks/players';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
 import { Match, MatchesFilterData, MatchDTO } from '../../types/matches';
+import { NotesFilterData } from '../../types/notes';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
-const initialFilters: MatchesFilterData = {
+const initialFilters: NotesFilterData = {
+  player: '',
   club: '',
-  afterDate: formatDateObject(yearFromNow),
-  beforeDate: formatDateObject(tomorrow),
+  match: '',
 };
 
 export const NotesPage = () => {
@@ -36,24 +40,27 @@ export const NotesPage = () => {
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
 
-  // const { data: clubs, isLoading: clubsLoading } = useClubsList();
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
+  const { data: players, isLoading: playersLoading } = usePlayersList();
+  const { data: matches, isLoading: matchesLoading } = useMatchesList();
 
-  // const {
-  //   tableSettings: { page, rowsPerPage, sortBy, order },
-  //   handleChangePage,
-  //   handleChangeRowsPerPage,
-  //   handleSort,
-  // } = useTable('matchesTable');
+  const {
+    tableSettings: { page, rowsPerPage, sortBy, order },
+    handleChangePage,
+    handleChangeRowsPerPage,
+    handleSort,
+  } = useTable('notesTable');
 
-  // const [filters, setFilters] = useLocalStorage<MatchesFilterData>({
-  //   key: 'matchesFilters',
-  //   initialValue: initialFilters,
-  // });
+  const [filters, setFilters] = useLocalStorage<NotesFilterData>({
+    key: 'notesFilters',
+    initialValue: initialFilters,
+  });
 
-  // function handleSetFilters(newFilters: MatchesFilterData) {
-  //   setFilters(newFilters);
-  //   handleChangePage(null, 0);
-  // }
+  function handleSetFilters(newFilters: NotesFilterData) {
+    console.log(newFilters);
+    setFilters(newFilters);
+    handleChangePage(null, 0);
+  }
 
   // const [currentMatch, setCurrentMatch] = useState<Match | null>(null);
 
@@ -97,7 +104,7 @@ export const NotesPage = () => {
   //   setCurrentMatch(null);
   // };
 
-  const isLoading = false;
+  const isLoading = clubsLoading || playersLoading || matchesLoading;
 
   return (
     <MainTemplate>
@@ -110,13 +117,15 @@ export const NotesPage = () => {
       </AppBar>
       <TabPanel value={activeTab} index={0} title="notes">
         <PageHeading title="Baza notatek" />
-        {/* <MatchesFilterForm
+        <NotesFilterForm
+          playersData={players || []}
           clubsData={clubs || []}
+          matchesData={matches || []}
           filters={filters}
           onFilter={handleSetFilters}
           onClearFilters={() => handleSetFilters(initialFilters)}
         />
-        <MatchesTable
+        {/* <MatchesTable
           page={page}
           rowsPerPage={rowsPerPage}
           sortBy={sortBy}

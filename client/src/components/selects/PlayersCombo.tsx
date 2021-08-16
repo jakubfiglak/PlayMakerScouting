@@ -56,7 +56,7 @@ export const PlayersCombo = ({
             club.name
           })`;
         }
-        return '';
+        return 'brak';
       }}
       renderInput={(params) => (
         <TextField
