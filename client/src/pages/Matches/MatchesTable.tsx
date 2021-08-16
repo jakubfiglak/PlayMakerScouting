@@ -13,6 +13,7 @@ const headCells = [
   { id: 'date', label: 'Data' },
   { id: 'result', label: 'Wynik', sortingDisabled: true },
   { id: 'video', label: 'Video', sortingDisabled: true },
+  { id: 'notesCount', label: 'Notatki', sortingDisabled: true },
 ];
 
 export const MatchesTable: FC<Props> = ({

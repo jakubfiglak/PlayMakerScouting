@@ -58,4 +58,12 @@ MatchSchema.plugin(mongoosePaginate);
 MatchSchema.plugin(autoPopulate);
 MatchSchema.plugin(toJson);
 
+MatchSchema.virtual('notesCount', {
+  ref: 'Note',
+  localField: '_id',
+  foreignField: 'match',
+  justOne: false,
+  count: true,
+});
+
 module.exports = model('Match', MatchSchema);

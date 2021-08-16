@@ -17,7 +17,8 @@ async function getAllMatches({ query, paginationOptions, accessFilters }) {
   const modifiedQuery = clubQuery
     ? { $and: [processedQuery, clubQuery, accessFilters] }
     : { $and: [processedQuery, accessFilters] };
-  const matches = await Match.paginate(modifiedQuery, paginationOptions);
+  const queryOptions = { ...paginationOptions, populate: ['notesCount'] };
+  const matches = await Match.paginate(modifiedQuery, queryOptions);
   return matches;
 }
 

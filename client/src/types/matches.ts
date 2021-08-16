@@ -13,6 +13,7 @@ export type Match = {
   isPublic: boolean;
   createdAt: string;
   updatedAt: string;
+  notesCount: number;
 };
 
 export type MatchBasicInfo = Pick<

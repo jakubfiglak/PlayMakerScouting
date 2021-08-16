@@ -1,11 +1,12 @@
 import { useHistory } from 'react-router-dom';
 // MUI components
-import { Link } from '@material-ui/core';
+import { Link, Badge } from '@material-ui/core';
 // MUI icons
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Tv as TvIcon,
+  Note as NotesIcon,
 } from '@material-ui/icons';
 // Custom components
 import { StyledTableCell } from '../../components/table/TableCell';
@@ -48,7 +49,16 @@ export const MatchesTableRow = ({
     handleMenuAction,
   } = useTableMenu();
 
-  const { id, homeTeam, awayTeam, competition, date, result, videoURL } = match;
+  const {
+    id,
+    homeTeam,
+    awayTeam,
+    competition,
+    date,
+    result,
+    videoURL,
+    notesCount,
+  } = match;
 
   return (
     <StyledTableRow
@@ -103,6 +113,11 @@ export const MatchesTableRow = ({
             <TvIcon />
           </Link>
         ) : null}
+      </StyledTableCell>
+      <StyledTableCell align="center">
+        <Badge badgeContent={notesCount || '0'} color="secondary">
+          <NotesIcon />
+        </Badge>
       </StyledTableCell>
     </StyledTableRow>
   );
