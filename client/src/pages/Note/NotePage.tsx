@@ -1,17 +1,13 @@
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // MUI components
-import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
+import { Button, makeStyles, Theme } from '@material-ui/core';
 // Custom components
-// import { PlayerDetails } from './PlayerDetails';
-import { ReportsTable } from '../Reports/ReportsTable';
-import { ReportsTableRow } from '../Reports/ReportsTableRow';
+import { NoteDetails } from './NoteDetails';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
-import { useMatch } from '../../hooks/matches';
-import { usePlayersReports } from '../../hooks/reports';
-import { useTable } from '../../hooks/useTable';
+import { useNote } from '../../hooks/notes';
 
 type ParamTypes = {
   id: string;
@@ -20,26 +16,12 @@ type ParamTypes = {
 export const NotePage = () => {
   const classes = useStyles();
   const params = useParams<ParamTypes>();
-  const {
-    tableSettings: { page, rowsPerPage, sortBy, order },
-    handleChangePage,
-    handleChangeRowsPerPage,
-    handleSort,
-  } = useTable('playersReportsTable');
 
   const { id } = params;
 
-  const { data: match, isLoading: matchLoading } = useMatch(id);
+  const { data: note, isLoading: noteLoading } = useNote(id);
 
-  // const { data: reports } = usePlayersReports({
-  //   playerId: id,
-  //   page: page + 1,
-  //   order,
-  //   limit: rowsPerPage,
-  //   sort: sortBy,
-  // });
-
-  const isLoading = matchLoading;
+  const isLoading = noteLoading;
 
   return (
     <MainTemplate>
@@ -54,33 +36,9 @@ export const NotePage = () => {
         >
           Wróć do listy notatek
         </Button>
-        <PageHeading title="Szczegóły meczu" />
+        <PageHeading title="Szczegóły notatki" />
       </div>
-      {/* {match ? <MatchDetails match={match} /> : null} */}
-      <Typography
-        variant="h6"
-        component="h3"
-        align="center"
-        className={classes.title}
-      >
-        Notatki
-      </Typography>
-      {/* <ReportsTable
-        page={page}
-        rowsPerPage={rowsPerPage}
-        sortBy={sortBy}
-        order={order}
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
-        handleSort={handleSort}
-        total={reports?.totalDocs || 0}
-      >
-        {reports
-          ? reports.docs.map((report) => (
-              <ReportsTableRow key={report.id} report={report} />
-            ))
-          : null}
-      </ReportsTable> */}
+      {note ? <NoteDetails note={note} /> : null}
     </MainTemplate>
   );
 };

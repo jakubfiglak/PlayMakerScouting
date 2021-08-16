@@ -51,6 +51,8 @@ router.put(
     canUpdateOrDelete('note'),
     filterNullishValues,
     filterForbiddenUpdates(options.forbiddenUpdates),
+    setPlayerData,
+    setCurrentClub,
   ],
   updateNote
 );
