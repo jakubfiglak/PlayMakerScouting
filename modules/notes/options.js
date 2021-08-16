@@ -1,7 +1,7 @@
 const options = {
   populate: {
     player: 'firstName lastName',
-    club: 'name',
+    club: 'name division',
     user: 'firstName lastName',
   },
   listSelect: 'player playerCurrentClub text rating docNumber',
