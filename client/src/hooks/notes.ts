@@ -4,22 +4,18 @@ import { Note, NoteBasicInfo, NoteDTO, NotesFilterData } from '../types/notes';
 import {
   ApiError,
   ApiResponse,
+  GetPaginatedDataArgs,
   PaginatedData,
-  SortingOrder,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 
-// Get all notes with pagination
 type PaginatedNotes = PaginatedData<Note>;
 type GetNotesResponse = ApiResponse<PaginatedNotes>;
-type GetNotesArgs = {
-  page?: number;
-  limit?: number;
-  sort?: string;
-  order: SortingOrder;
-  filters: NotesFilterData;
-};
+type GetNotesArgs = GetPaginatedDataArgs & { filters: NotesFilterData };
+type GetPlayersNotesArgs = GetPaginatedDataArgs & { playerId: string };
+type GetMatchesNotesArgs = GetPaginatedDataArgs & { matchId: string };
 
+// Get all notes with pagination
 async function getNotes({
   page = 1,
   limit = 20,
@@ -67,6 +63,76 @@ export function useNotes({
       onSuccess: (data) => {
         queryClient.setQueryData('notes', data.docs);
       },
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
+}
+
+// Get all notes for a player with pagination
+async function getPlayersNotes({
+  playerId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetPlayersNotesArgs): Promise<PaginatedNotes> {
+  const orderSign = order === 'desc' ? '-' : '';
+  const notesURI = `/api/v1/players/${playerId}/notes?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+  const { data } = await axios.get<GetNotesResponse>(notesURI);
+  return data.data;
+}
+
+export function usePlayersNotes({
+  playerId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetPlayersNotesArgs) {
+  const { setAlert } = useAlertsState();
+
+  return useQuery<PaginatedNotes, ApiError>(
+    ['notes', { playerId }, { page, limit, sort, order }],
+    () => getPlayersNotes({ playerId, page, limit, sort, order }),
+    {
+      keepPreviousData: true,
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
+}
+
+// Get all notes for a match with pagination
+async function getMatchesNotes({
+  matchId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetMatchesNotesArgs): Promise<PaginatedNotes> {
+  const orderSign = order === 'desc' ? '-' : '';
+  const notesURI = `/api/v1/matches/${matchId}/notes?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+  const { data } = await axios.get<GetNotesResponse>(notesURI);
+  return data.data;
+}
+
+export function useMatchesNotes({
+  matchId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetMatchesNotesArgs) {
+  const { setAlert } = useAlertsState();
+
+  return useQuery<PaginatedNotes, ApiError>(
+    ['notes', { matchId }, { page, limit, sort, order }],
+    () => getMatchesNotes({ matchId, page, limit, sort, order }),
+    {
+      keepPreviousData: true,
       onError: (err: ApiError) =>
         setAlert({ msg: err.response.data.error, type: 'error' }),
     },
