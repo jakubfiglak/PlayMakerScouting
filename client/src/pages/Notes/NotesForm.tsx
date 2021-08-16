@@ -6,13 +6,13 @@ import { TextField, FormControl } from '@material-ui/core';
 import { RatingInput } from './RatingInput';
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { MatchesCombo } from '../../components/selects/MatchesCombo';
-import { PositionSelect } from '../../components/selects/PositionSelect';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Types
 import { Note, NoteDTO } from '../../types/notes';
 import { PlayerBasicInfo, Position } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
+import { PositionPlayedSelect } from './PositionPlayedSelect';
 
 type Props = {
   playersData: PlayerBasicInfo[];
@@ -31,18 +31,17 @@ export const NotesForm = ({
   onCancelClick,
   fullWidth,
 }: Props) => {
-  const initialValues: NoteDTO = current
-    ? getInitialStateFromCurrent(current)
-    : notesFormInitialValues;
-
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={
+        current ? getInitialStateFromCurrent(current) : notesFormInitialValues
+      }
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
         onSubmit(data);
         resetForm();
+        localStorage.removeItem('note');
       }}
     >
       {({ errors, touched, values, handleReset }) => (
@@ -50,7 +49,15 @@ export const NotesForm = ({
           <FormContainer fullWidth={fullWidth}>
             <FormControl variant="outlined" fullWidth>
               <PlayersCombo
-                playersData={playersData}
+                playersData={
+                  values.match
+                    ? getMatchesPlayers({
+                        matchId: values.match,
+                        matches: matchesData,
+                        players: playersData,
+                      })
+                    : playersData
+                }
                 name="player"
                 label="Zawodnik"
               />
@@ -69,17 +76,20 @@ export const NotesForm = ({
             />
             <FormControl variant="outlined" fullWidth>
               <MatchesCombo
-                matchesData={matchesData}
+                matchesData={
+                  values.player
+                    ? getPlayersMatches({
+                        playerId: values.player,
+                        players: playersData,
+                        matches: matchesData,
+                      })
+                    : matchesData
+                }
                 name="match"
                 label="Mecz"
               />
             </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              <PositionSelect
-                name="positionPlayed"
-                helperText="Podaj pozycję, na której zawodnik zagrał w danym meczu"
-              />
-            </FormControl>
+            <PositionPlayedSelect players={playersData} />
             <Field
               name="maxRatingScore"
               as={TextField}
@@ -160,4 +170,48 @@ function getInitialStateFromCurrent(note: Note): NoteDTO {
     player: rest.player?.id,
     match: rest.match?.id,
   };
+}
+
+type GetPlayersMatchesArgs = {
+  playerId: string;
+  players: PlayerBasicInfo[];
+  matches: MatchBasicInfo[];
+};
+
+function getPlayersMatches({
+  playerId,
+  players,
+  matches,
+}: GetPlayersMatchesArgs) {
+  const selectedPlayer = players.find((player) => player.id === playerId);
+
+  if (selectedPlayer) {
+    return matches.filter(
+      (match) =>
+        match.homeTeam.id === selectedPlayer.club.id ||
+        match.awayTeam.id === selectedPlayer.club.id,
+    );
+  }
+
+  return [];
+}
+
+type GetMatchesPlayers = {
+  matchId: string;
+  matches: MatchBasicInfo[];
+  players: PlayerBasicInfo[];
+};
+
+function getMatchesPlayers({ matchId, matches, players }: GetMatchesPlayers) {
+  const selectedMatch = matches.find((match) => match.id === matchId);
+
+  if (selectedMatch) {
+    return players.filter(
+      (player) =>
+        player.club.id === selectedMatch.homeTeam.id ||
+        player.club.id === selectedMatch.awayTeam.id,
+    );
+  }
+
+  return [];
 }
