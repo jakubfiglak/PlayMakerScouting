@@ -1,6 +1,6 @@
 const options = {
   select: {
-    club: 'name',
+    club: 'name division',
   },
   listSelect: 'homeTeam awayTeam competition date',
   listSort: '-date',
