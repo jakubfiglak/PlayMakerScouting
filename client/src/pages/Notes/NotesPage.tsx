@@ -2,11 +2,13 @@ import { useState } from 'react';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
+import { NotesTable } from './NotesTable';
+import { NotesTableRow } from './NotesTableRow';
+import { NotesFilterForm } from './NotesFilterForm';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
-import { NotesFilterForm } from './NotesFilterForm';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
@@ -18,13 +20,14 @@ import {
   useDeleteMatch,
   useMatchesList,
 } from '../../hooks/matches';
+import { useNotes } from '../../hooks/notes';
 import { usePlayersList } from '../../hooks/players';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
 import { Match, MatchesFilterData, MatchDTO } from '../../types/matches';
-import { NotesFilterData } from '../../types/notes';
+import { NotesFilterData, Note } from '../../types/notes';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
@@ -62,15 +65,15 @@ export const NotesPage = () => {
     handleChangePage(null, 0);
   }
 
-  // const [currentMatch, setCurrentMatch] = useState<Match | null>(null);
+  const [currentNote, setCurrentNote] = useState<Note | null>(null);
 
-  // const { data: matches, isLoading: matchesLoading } = useMatches({
-  //   page: page + 1,
-  //   limit: rowsPerPage,
-  //   sort: sortBy,
-  //   order,
-  //   filters,
-  // });
+  const { data: notes, isLoading: notesLoading } = useNotes({
+    page: page + 1,
+    limit: rowsPerPage,
+    sort: sortBy,
+    order,
+    filters,
+  });
   // const {
   //   mutate: createMatch,
   //   isLoading: createMatchLoading,
@@ -83,10 +86,10 @@ export const NotesPage = () => {
   //   isLoading: deleteMatchLoading,
   // } = useDeleteMatch();
 
-  // const handleEditClick = (match: Match) => {
-  //   setCurrentMatch(match);
-  //   setActiveTab(1);
-  // };
+  const handleEditClick = (note: Note) => {
+    setCurrentNote(note);
+    setActiveTab(1);
+  };
 
   // const handleSubmit = (data: MatchDTO) => {
   //   if (currentMatch) {
@@ -104,7 +107,8 @@ export const NotesPage = () => {
   //   setCurrentMatch(null);
   // };
 
-  const isLoading = clubsLoading || playersLoading || matchesLoading;
+  const isLoading =
+    notesLoading || clubsLoading || playersLoading || matchesLoading;
 
   return (
     <MainTemplate>
@@ -125,7 +129,7 @@ export const NotesPage = () => {
           onFilter={handleSetFilters}
           onClearFilters={() => handleSetFilters(initialFilters)}
         />
-        {/* <MatchesTable
+        <NotesTable
           page={page}
           rowsPerPage={rowsPerPage}
           sortBy={sortBy}
@@ -133,27 +137,27 @@ export const NotesPage = () => {
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
           handleSort={handleSort}
-          total={matches?.totalDocs || 0}
+          total={notes?.totalDocs || 0}
           actions
         >
-          {matches
-            ? matches.docs.map((match) => (
-                <MatchesTableRow
-                  key={match.id}
-                  match={match}
+          {notes
+            ? notes.docs.map((note) => (
+                <NotesTableRow
+                  key={note.id}
+                  note={note}
                   onEditClick={handleEditClick}
-                  onDeleteClick={deleteMatch}
+                  onDeleteClick={(n) => console.log(n)}
                   isMenuActive
                   isEditOptionEnabled={
-                    user.role === 'admin' || user.id === match.author
+                    user.role === 'admin' || user.id === note.author.id
                   }
                   isDeleteOptionEnabled={
-                    user.role === 'admin' || user.id === match.author
+                    user.role === 'admin' || user.id === note.author.id
                   }
                 />
               ))
             : null}
-        </MatchesTable> */}
+        </NotesTable>
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="notes">
         {/* <PageHeading
