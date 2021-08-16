@@ -30,4 +30,14 @@ function setCurrentClub(req, res, next) {
   next();
 }
 
-module.exports = { setNote, setPlayerData, setCurrentClub };
+function filterNullishValues(req, res, next) {
+  if (!req.body.player) {
+    req.body.player = undefined;
+  }
+  if (!req.body.match) {
+    req.body.match = undefined;
+  }
+  next();
+}
+
+module.exports = { setNote, setPlayerData, setCurrentClub, filterNullishValues };

@@ -5,7 +5,7 @@ const options = {
     user: 'firstName lastName',
   },
   listSelect: 'player playerCurrentClub text rating docNumber',
-  forbiddenUpdates: ['player', 'playerCurrentClub', 'author'],
+  forbiddenUpdates: ['playerCurrentClub', 'author'],
 };
 
 module.exports = options;

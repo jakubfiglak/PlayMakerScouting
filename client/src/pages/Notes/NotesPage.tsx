@@ -5,6 +5,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { NotesTable } from './NotesTable';
 import { NotesTableRow } from './NotesTableRow';
 import { NotesFilterForm } from './NotesFilterForm';
+import { NotesForm } from './NotesForm';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
@@ -13,23 +14,19 @@ import { MainTemplate } from '../../templates/MainTemplate';
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
 import { useClubsList } from '../../hooks/clubs';
+import { useMatchesList } from '../../hooks/matches';
 import {
-  useMatches,
-  useCreateMatch,
-  useUpdateMatch,
-  useDeleteMatch,
-  useMatchesList,
-} from '../../hooks/matches';
-import { useNotes } from '../../hooks/notes';
+  useCreateNote,
+  useDeleteNote,
+  useNotes,
+  useUpdateNote,
+} from '../../hooks/notes';
 import { usePlayersList } from '../../hooks/players';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
-import { Match, MatchesFilterData, MatchDTO } from '../../types/matches';
-import { NotesFilterData, Note } from '../../types/notes';
-// Utils & data
-import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
+import { NotesFilterData, Note, NoteDTO } from '../../types/notes';
 
 const initialFilters: NotesFilterData = {
   player: '',
@@ -60,7 +57,6 @@ export const NotesPage = () => {
   });
 
   function handleSetFilters(newFilters: NotesFilterData) {
-    console.log(newFilters);
     setFilters(newFilters);
     handleChangePage(null, 0);
   }
@@ -74,41 +70,41 @@ export const NotesPage = () => {
     order,
     filters,
   });
-  // const {
-  //   mutate: createMatch,
-  //   isLoading: createMatchLoading,
-  // } = useCreateMatch();
-  // const { mutate: updateMatch, isLoading: updateMatchLoading } = useUpdateMatch(
-  //   currentMatch?.id || '',
-  // );
-  // const {
-  //   mutate: deleteMatch,
-  //   isLoading: deleteMatchLoading,
-  // } = useDeleteMatch();
+  const { mutate: createNote, isLoading: createNoteLoading } = useCreateNote();
+  const { mutate: updateNote, isLoading: updateNoteLoading } = useUpdateNote(
+    currentNote?.id || '',
+  );
+  const { mutate: deleteNote, isLoading: deleteNoteLoading } = useDeleteNote();
 
   const handleEditClick = (note: Note) => {
     setCurrentNote(note);
     setActiveTab(1);
   };
 
-  // const handleSubmit = (data: MatchDTO) => {
-  //   if (currentMatch) {
-  //     updateMatch(data);
-  //     setActiveTab(0);
-  //   } else {
-  //     createMatch(data);
-  //     setActiveTab(0);
-  //   }
-  // };
+  const handleSubmit = (data: NoteDTO) => {
+    if (currentNote) {
+      updateNote(data);
+      setActiveTab(0);
+    } else {
+      createNote(data);
+      setActiveTab(0);
+    }
+  };
 
-  // const handleFormReset = () => {
-  //   setActiveTab(0);
-  //   setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
-  //   setCurrentMatch(null);
-  // };
+  const handleFormReset = () => {
+    setActiveTab(0);
+    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
+    setCurrentNote(null);
+  };
 
   const isLoading =
-    notesLoading || clubsLoading || playersLoading || matchesLoading;
+    notesLoading ||
+    clubsLoading ||
+    playersLoading ||
+    matchesLoading ||
+    createNoteLoading ||
+    updateNoteLoading ||
+    deleteNoteLoading;
 
   return (
     <MainTemplate>
@@ -146,7 +142,7 @@ export const NotesPage = () => {
                   key={note.id}
                   note={note}
                   onEditClick={handleEditClick}
-                  onDeleteClick={(n) => console.log(n)}
+                  onDeleteClick={deleteNote}
                   isMenuActive
                   isEditOptionEnabled={
                     user.role === 'admin' || user.id === note.author.id
@@ -154,22 +150,27 @@ export const NotesPage = () => {
                   isDeleteOptionEnabled={
                     user.role === 'admin' || user.id === note.author.id
                   }
+                  isAuthorNameClickable={user.role === 'admin'}
                 />
               ))
             : null}
         </NotesTable>
       </TabPanel>
       <TabPanel value={activeTab} index={1} title="notes">
-        {/* <PageHeading
-          title={currentMatch ? 'Edycja meczu' : 'Tworzenie nowego meczu'}
+        <PageHeading
+          title={
+            currentNote
+              ? `Edycja notatki nr ${currentNote.docNumber}`
+              : 'Tworzenie nowej notatki'
+          }
         />
-
-        <MatchesForm
-          clubsData={clubs || []}
-          current={currentMatch}
+        <NotesForm
+          playersData={players || []}
+          matchesData={matches || []}
+          current={currentNote}
           onSubmit={handleSubmit}
           onCancelClick={handleFormReset}
-        /> */}
+        />
       </TabPanel>
     </MainTemplate>
   );

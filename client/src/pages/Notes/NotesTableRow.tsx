@@ -20,7 +20,7 @@ type Props = {
   note: Note;
   isMenuActive?: boolean;
   onEditClick?: (note: Note) => void;
-  onDeleteClick?: (note: Note) => void;
+  onDeleteClick?: (id: string) => void;
   isEditOptionEnabled?: boolean;
   isDeleteOptionEnabled?: boolean;
   isAuthorNameClickable?: boolean;
@@ -81,7 +81,7 @@ export const NotesTableRow = ({
               icon={<DeleteIcon fontSize="small" />}
               text="Usuń"
               onClick={() => {
-                handleMenuAction(() => onDeleteClick(note));
+                handleMenuAction(() => onDeleteClick(id));
               }}
               disabled={!isDeleteOptionEnabled}
             />
@@ -119,7 +119,11 @@ export const NotesTableRow = ({
         {match ? formatDate(match.date) : 'N/A'}
       </StyledTableCell>
       <StyledTableCell>
-        {text.split(' ').slice(0, 6).join(' ')}...
+        <Tooltip title={text}>
+          <p style={{ margin: 0 }}>
+            {text.split(' ').slice(0, 6).join(' ')}...
+          </p>
+        </Tooltip>
       </StyledTableCell>
       <StyledTableCell>{rating}</StyledTableCell>
       <StyledTableCell>{maxRatingScore}</StyledTableCell>

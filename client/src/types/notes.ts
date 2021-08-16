@@ -29,8 +29,8 @@ export type NoteDTO = Pick<
   Note,
   'positionPlayed' | 'shirtNo' | 'text' | 'maxRatingScore' | 'rating'
 > & {
-  player?: string;
-  match?: string;
+  player?: string | null;
+  match?: string | null;
 };
 
 export type NotesFilterData = {

@@ -8,7 +8,12 @@ const {
   deleteNote,
 } = require('../modules/notes/notes.controller');
 const { protect, authorize } = require('../middleware/auth');
-const { setNote, setPlayerData, setCurrentClub } = require('../modules/notes/notes.middleware');
+const {
+  setNote,
+  setPlayerData,
+  setCurrentClub,
+  filterNullishValues,
+} = require('../modules/notes/notes.middleware');
 const setAuthor = require('../middleware/setAuthor');
 const prepareQuery = require('../middleware/prepareQuery');
 const checkIfRelatedAssetExists = require('../middleware/checkIfRelatedAssetExist');
@@ -28,6 +33,7 @@ router.post(
     protect,
     setAcls,
     setAuthor,
+    filterNullishValues,
     checkIfRelatedAssetExists({ fieldName: 'match', model: Match }),
     setPlayerData,
     setCurrentClub,
@@ -39,7 +45,13 @@ router.get('/list', [protect, authorize('admin')], getNotesList);
 router.get('/:id', [protect, setAcls, setNote, canView('note')], getNote);
 router.put(
   '/:id',
-  [protect, setNote, canUpdateOrDelete('note'), filterForbiddenUpdates(options.forbiddenUpdates)],
+  [
+    protect,
+    setNote,
+    canUpdateOrDelete('note'),
+    filterNullishValues,
+    filterForbiddenUpdates(options.forbiddenUpdates),
+  ],
   updateNote
 );
 router.delete('/:id', [protect, setNote, canUpdateOrDelete('note')], deleteNote);
