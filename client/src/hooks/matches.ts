@@ -9,22 +9,18 @@ import {
 import {
   ApiError,
   ApiResponse,
+  GetPaginatedDataArgs,
   PaginatedData,
   SortingOrder,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 
-// Get all matches with pagination
 type PaginatedMatches = PaginatedData<Match>;
 type GetMatchesResponse = ApiResponse<PaginatedMatches>;
-type GetMatchesArgs = {
-  page?: number;
-  limit?: number;
-  sort?: string;
-  order: SortingOrder;
-  filters: MatchesFilterData;
-};
+type GetMatchesArgs = GetPaginatedDataArgs & { filters: MatchesFilterData };
+type GetClubsMatchesArgs = GetPaginatedDataArgs & { clubId: string };
 
+// Get all matches with pagination
 async function getMatches({
   page = 1,
   limit = 20,
@@ -61,6 +57,41 @@ export function useMatches({
       onSuccess: (data) => {
         queryClient.setQueryData('matches', data.docs);
       },
+      onError: (err: ApiError) =>
+        setAlert({ msg: err.response.data.error, type: 'error' }),
+    },
+  );
+}
+
+// Get all matches for a club with pagination
+async function getClubsMatches({
+  clubId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetClubsMatchesArgs): Promise<PaginatedMatches> {
+  const orderSign = order === 'desc' ? '-' : '';
+  const matchesURI = `/api/v1/clubs/${clubId}/matches?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
+
+  const { data } = await axios.get<GetMatchesResponse>(matchesURI);
+  return data.data;
+}
+
+export function useClubsMatches({
+  clubId,
+  page = 1,
+  limit = 20,
+  sort = '_id',
+  order,
+}: GetClubsMatchesArgs) {
+  const { setAlert } = useAlertsState();
+
+  return useQuery<PaginatedMatches, ApiError>(
+    ['matches', { clubId }, { page, limit, sort, order }],
+    () => getClubsMatches({ clubId, page, limit, sort, order }),
+    {
+      keepPreviousData: true,
       onError: (err: ApiError) =>
         setAlert({ msg: err.response.data.error, type: 'error' }),
     },
