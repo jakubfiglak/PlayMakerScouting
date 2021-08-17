@@ -26,6 +26,11 @@ async function getNotesForClub(clubId) {
   return notes;
 }
 
+async function getNotesForPlayer(playerId) {
+  const notes = await Note.find({ player: playerId });
+  return notes;
+}
+
 async function getAllNotesList(accessFilters) {
   const notes = await Note.find({ ...accessFilters }).select(resultsOptions.listSelect);
 
@@ -54,6 +59,7 @@ module.exports = {
   createNote,
   getAllNotes,
   getAllNotesList,
+  getNotesForPlayer,
   getNotesForClub,
   updateNote,
   deleteNote,

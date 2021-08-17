@@ -2,6 +2,7 @@ const Player = require('./player.model');
 const resultsOptions = require('./options');
 const Report = require('../reports/report.model');
 const Order = require('../orders/order.model');
+const Note = require('../notes/note.model');
 const AccessControlList = require('../accessControlLists/accessControlList.model');
 
 function getPlayerById(id) {
@@ -70,6 +71,7 @@ async function mergePlayersDuplicates() {
   const results = await Player.aggregate()
     .match({ $and: [{ lnpID: { $type: 'string' } }, { lnpID: { $ne: '' } }] })
     .lookup({ from: 'reports', localField: '_id', foreignField: 'player', as: 'reports' })
+    .lookup({ from: 'notes', localField: '_id', foreignField: 'player', as: 'notes' })
     .lookup({ from: 'orders', localField: '_id', foreignField: 'player', as: 'orders' })
     .lookup({
       from: 'accesscontrollists',
@@ -101,6 +103,21 @@ async function mergePlayersDuplicates() {
     .flat(Infinity)
     .filter((operation) => operation);
 
+  // Set the player field in related note documents to the first player entity ID
+  const notesOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx !== 0) {
+          return entity.notes.map((note) =>
+            Note.updateOne({ _id: note._id }, { $set: { player: result.entities[0]._id } })
+          );
+        }
+        return null;
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
   // Set the player field in related order documents to the first player entity ID
   const ordersOperations = filteredResults
     .map((result) =>
@@ -115,6 +132,18 @@ async function mergePlayersDuplicates() {
     )
     .flat(Infinity)
     .filter((operation) => operation);
+
+  // If any of the entities is public, set isPublic field to true in the remaining entity
+  const playersToRemainIsPublicOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity) => ({ id: entity._id, isPublic: entity.isPublic }))
+    )
+    .map((e) =>
+      Player.updateOne(
+        { _id: e[0].id },
+        { isPublic: e.map((item) => item.isPublic).some((value) => value) }
+      )
+    );
 
   // Edit access control lists - for each access control list containing
   // the player to be removed, add the entity to be kept in the database
@@ -164,7 +193,9 @@ async function mergePlayersDuplicates() {
 
   return Promise.all([
     ...reportsOperations,
+    ...notesOperations,
     ...ordersOperations,
+    ...playersToRemainIsPublicOperations,
     ...aclsPushOperations,
     ...aclsPullOperations,
     ...playersOperations,
