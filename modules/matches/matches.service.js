@@ -22,6 +22,11 @@ async function getAllMatches({ query, paginationOptions, accessFilters }) {
   return matches;
 }
 
+async function getMatchesForClub(clubId) {
+  const notes = await Match.find({ $or: [{ homeTeam: clubId }, { awayTeam: clubId }] });
+  return notes;
+}
+
 async function getAllMatchesList(accessFilters) {
   const matches = await Match.find({ ...accessFilters })
     .select(options.listSelect)
@@ -51,6 +56,7 @@ module.exports = {
   createMatch,
   getAllMatches,
   getAllMatchesList,
+  getMatchesForClub,
   updateMatch,
   deleteMatch,
 };

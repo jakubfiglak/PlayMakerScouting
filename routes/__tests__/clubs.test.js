@@ -9,6 +9,8 @@ const {
   buildTeam,
   buildUser,
   buildReport,
+  buildNote,
+  buildMatch,
 } = require('../../test/utils');
 const {
   insertClubs,
@@ -18,11 +20,15 @@ const {
   insertTeams,
   insertUsers,
   insertReports,
+  insertNotes,
+  insertMatches,
 } = require('../../test/db-utils');
 const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
 const playersService = require('../../modules/players/players.service');
 const reportsService = require('../../modules/reports/reports.service');
 const clubsService = require('../../modules/clubs/clubs.service');
+const notesService = require('../../modules/notes/notes.service');
+const matchesService = require('../../modules/matches/matches.service');
 
 let api = axios.create();
 let server;
@@ -355,7 +361,7 @@ describe('POST /api/v1/clubs/merge-duplicates', () => {
 
     // Create clubs
     const club1 = buildClub({ lnpID: '123' });
-    const club2 = buildClub({ lnpID: '123' });
+    const club2 = buildClub({ lnpID: '123', isPublic: true });
     const club3 = buildClub({ lnpID: '123' });
     const club4 = buildClub({ lnpID: '345' });
     const club5 = buildClub({ lnpID: '345' });
@@ -386,7 +392,19 @@ describe('POST /api/v1/clubs/merge-duplicates', () => {
     // Create 6 reports - 1 for each club
     const reports = clubs.map((club) => buildReport({ playerCurrentClub: club._id }));
 
-    await Promise.all([insertPlayers(players), insertReports(reports)]);
+    // Create 6 notes - 1 for each club
+    const notes = clubs.map((club) => buildNote({ playerCurrentClub: club._id }));
+
+    // Create matches - 2 for each club (home and away)
+    const homeMatches = clubs.map((club) => buildMatch({ homeTeam: club._id }));
+    const awayMatches = clubs.map((club) => buildMatch({ awayTeam: club._id }));
+
+    await Promise.all([
+      insertPlayers(players),
+      insertReports(reports),
+      insertNotes(notes),
+      insertMatches([...homeMatches, ...awayMatches]),
+    ]);
 
     await api.post(
       'clubs/merge-duplicates',
@@ -404,6 +422,12 @@ describe('POST /api/v1/clubs/merge-duplicates', () => {
       reportsService.getReportsForClub(club._id)
     );
 
+    const notesOperations = clubsToRemain.map((club) => notesService.getNotesForClub(club._id));
+
+    const matchesOperations = clubsToRemain.map((club) =>
+      matchesService.getMatchesForClub(club._id)
+    );
+
     const [
       club1Players,
       club4Players,
@@ -411,23 +435,46 @@ describe('POST /api/v1/clubs/merge-duplicates', () => {
       club1Reports,
       club4Reports,
       club6Reports,
-    ] = await Promise.all([...playersOperations, ...reportsOperations]);
+      club1Notes,
+      club4Notes,
+      club6Notes,
+      club1Matches,
+      club4Matches,
+      club6Matches,
+    ] = await Promise.all([
+      ...playersOperations,
+      ...reportsOperations,
+      ...notesOperations,
+      ...matchesOperations,
+    ]);
 
-    // Check if there is correct number of players and reports assigned to each of the clubs
+    // Check if there is correct number of assets assigned to each of the clubs
     expect(club1Players.length).toBe(3);
     expect(club4Players.length).toBe(2);
     expect(club6Players.length).toBe(1);
     expect(club1Reports.length).toBe(3);
     expect(club4Reports.length).toBe(2);
     expect(club6Reports.length).toBe(1);
+    expect(club1Notes.length).toBe(3);
+    expect(club4Notes.length).toBe(2);
+    expect(club6Notes.length).toBe(1);
+    expect(club1Matches.length).toBe(6);
+    expect(club4Matches.length).toBe(4);
+    expect(club6Matches.length).toBe(2);
 
-    // Check if correct reports and orders have been assigned to each player
+    // Check if correct assets have been assigned to each club
     const club1PlayerIds = club1Players.map((club) => club._id.toHexString());
     const club4PlayerIds = club4Players.map((club) => club._id.toHexString());
     const club6PlayerIds = club6Players.map((club) => club._id.toHexString());
     const club1ReportIds = club1Reports.map((report) => report._id.toHexString());
     const club4ReportIds = club4Reports.map((report) => report._id.toHexString());
     const club6ReportIds = club6Reports.map((report) => report._id.toHexString());
+    const club1NoteIds = club1Notes.map((note) => note._id.toHexString());
+    const club4NoteIds = club4Notes.map((note) => note._id.toHexString());
+    const club6NoteIds = club6Notes.map((note) => note._id.toHexString());
+    const club1MatchIds = club1Matches.map((match) => match._id.toHexString());
+    const club4MatchIds = club4Matches.map((match) => match._id.toHexString());
+    const club6MatchIds = club6Matches.map((match) => match._id.toHexString());
 
     expect(club1PlayerIds).toContain(players[0]._id.toHexString());
     expect(club1PlayerIds).toContain(players[1]._id.toHexString());
@@ -443,9 +490,37 @@ describe('POST /api/v1/clubs/merge-duplicates', () => {
     expect(club4ReportIds).toContain(reports[4]._id.toHexString());
     expect(club6ReportIds).toContain(reports[5]._id.toHexString());
 
+    expect(club1NoteIds).toContain(notes[0]._id.toHexString());
+    expect(club1NoteIds).toContain(notes[1]._id.toHexString());
+    expect(club1NoteIds).toContain(notes[2]._id.toHexString());
+    expect(club4NoteIds).toContain(notes[3]._id.toHexString());
+    expect(club4NoteIds).toContain(notes[4]._id.toHexString());
+    expect(club6NoteIds).toContain(notes[5]._id.toHexString());
+
+    expect(club1MatchIds).toContain(homeMatches[0]._id.toHexString());
+    expect(club1MatchIds).toContain(homeMatches[1]._id.toHexString());
+    expect(club1MatchIds).toContain(homeMatches[2]._id.toHexString());
+    expect(club4MatchIds).toContain(homeMatches[3]._id.toHexString());
+    expect(club4MatchIds).toContain(homeMatches[4]._id.toHexString());
+    expect(club6MatchIds).toContain(homeMatches[5]._id.toHexString());
+    expect(club1MatchIds).toContain(awayMatches[0]._id.toHexString());
+    expect(club1MatchIds).toContain(awayMatches[1]._id.toHexString());
+    expect(club1MatchIds).toContain(awayMatches[2]._id.toHexString());
+    expect(club4MatchIds).toContain(awayMatches[3]._id.toHexString());
+    expect(club4MatchIds).toContain(awayMatches[4]._id.toHexString());
+    expect(club6MatchIds).toContain(awayMatches[5]._id.toHexString());
+
     // Check if there is correct number of reports in the database
     const dbReports = await reportsService.getAllReportsList();
     expect(dbReports.length).toBe(6);
+
+    // Check if there is correct number of notes in the database
+    const dbNotes = await notesService.getAllNotesList();
+    expect(dbNotes.length).toBe(6);
+
+    // Check if there is correct number of matches in the database
+    const dbMatches = await matchesService.getAllMatchesList();
+    expect(dbMatches.length).toBe(12);
 
     // Check if acls has been successfully proccessed
     const dbAcls = await accessControlListsService.getAllAccessControlLists();
@@ -471,5 +546,15 @@ describe('POST /api/v1/clubs/merge-duplicates', () => {
     expect(dbClubsIds).toContain(club4._id.toHexString());
     expect(dbClubsIds).not.toContain(club5._id.toHexString());
     expect(dbClubsIds).toContain(club6._id.toHexString());
+
+    // Check if club1 has isPublic flag set to true (inherited from club2 which is its duplicate)
+    const dbClub1 = dbClubs.find((club) => club._id.toHexString() === club1._id.toHexString());
+    expect(dbClub1.isPublic).toBe(true);
+
+    // Check if all the other clubs kept isPublic flag set to false
+    const filteredDbClubs = dbClubs.filter(
+      (club) => club._id.toHexString() !== club1._id.toHexString()
+    );
+    expect(filteredDbClubs.some((club) => club.isPublic)).toBe(false);
   });
 });
