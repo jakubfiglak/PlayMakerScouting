@@ -4,6 +4,8 @@ const ApiError = require('../../utils/ApiError');
 const accessControlListsService = require('./accessControlLists.service');
 const playersService = require('../players/players.service');
 const reportsService = require('../reports/reports.service');
+const matchesService = require('../matches/matches.service');
+const notesService = require('../notes/notes.service');
 
 const setAclByAssetData = asyncHandler(async (req, res, next) => {
   const acl = await accessControlListsService.getAccessControlListForAnAsset({
@@ -52,6 +54,71 @@ const grantAccessToRelatedAssets = asyncHandler(async (req, res, next) => {
         assetId: player.club,
       });
     }
+    return next();
+  }
+
+  if (req.body.assetToAddType === 'match') {
+    const match = await matchesService.getMatchById(req.body.assetToAddId);
+
+    await Promise.all([
+      accessControlListsService.grantAccessToTheAsset({
+        acl: req.acl,
+        assetType: 'club',
+        assetId: match.homeTeam,
+      }),
+      accessControlListsService.grantAccessToTheAsset({
+        acl: req.acl,
+        assetType: 'club',
+        assetId: match.awayTeam,
+      }),
+    ]);
+
+    return next();
+  }
+
+  if (req.body.assetToAddType === 'note') {
+    const note = await notesService.getNoteById(req.body.assetToAddId);
+
+    if (note.player) {
+      await accessControlListsService.grantAccessToTheAsset({
+        acl: req.acl,
+        assetType: 'player',
+        assetId: note.player,
+      });
+
+      const player = await playersService.getPlayerById(note.player);
+      if (player.club) {
+        await accessControlListsService.grantAccessToTheAsset({
+          acl: req.acl,
+          assetType: 'club',
+          assetId: player.club,
+        });
+      }
+    }
+
+    if (note.match) {
+      await accessControlListsService.grantAccessToTheAsset({
+        acl: req.acl,
+        assetType: 'match',
+        assetId: note.match,
+      });
+
+      const match = await matchesService.getMatchById(note.match);
+
+      await Promise.all([
+        accessControlListsService.grantAccessToTheAsset({
+          acl: req.acl,
+          assetType: 'club',
+          assetId: match.homeTeam,
+        }),
+        accessControlListsService.grantAccessToTheAsset({
+          acl: req.acl,
+          assetType: 'club',
+          assetId: match.awayTeam,
+        }),
+      ]);
+    }
+
     return next();
   }
 
