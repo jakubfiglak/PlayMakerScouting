@@ -8,6 +8,8 @@ import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { MatchesCombo } from '../../components/selects/MatchesCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
+// Hooks
+import { useAccountInfo } from '../../hooks/auth';
 // Types
 import { Note, NoteDTO } from '../../types/notes';
 import { PlayerBasicInfo, Position } from '../../types/players';
@@ -31,6 +33,18 @@ export const NotesForm = ({
   onCancelClick,
   fullWidth,
 }: Props) => {
+  const { data: account } = useAccountInfo();
+
+  const notesFormInitialValues: NoteDTO = {
+    player: '',
+    match: account?.match?.id || '',
+    positionPlayed: 'CM',
+    shirtNo: 10,
+    maxRatingScore: 4,
+    rating: 1,
+    text: '',
+  };
+
   return (
     <Formik
       initialValues={
@@ -127,16 +141,6 @@ export const NotesForm = ({
       )}
     </Formik>
   );
-};
-
-const notesFormInitialValues: NoteDTO = {
-  player: '',
-  match: '',
-  positionPlayed: 'CM',
-  shirtNo: 10,
-  maxRatingScore: 4,
-  rating: 1,
-  text: '',
 };
 
 const validationSchema: yup.ObjectSchema<NoteDTO> = yup
