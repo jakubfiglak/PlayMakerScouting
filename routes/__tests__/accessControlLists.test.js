@@ -287,8 +287,6 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
 
     const response = await api.patch('access-control-lists/grant-access', data);
 
-    console.log(response.data);
-
     expect(response.data.success).toBe(true);
     expect(response.data.message).toContain('Successfully granted');
     expect(response.data.data.matches).toContainEqual(match._id.toHexString());
