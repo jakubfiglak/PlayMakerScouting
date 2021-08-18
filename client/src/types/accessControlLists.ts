@@ -12,7 +12,7 @@ export type AccessControlList = {
 };
 
 export type TargetAssetType = 'user' | 'team';
-export type AssetToAddType = 'player' | 'club' | 'report';
+export type AssetToAddType = 'player' | 'club' | 'report' | 'match' | 'note';
 
 export type GrantAccessDTO = {
   targetAssetType: TargetAssetType;

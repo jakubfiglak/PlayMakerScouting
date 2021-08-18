@@ -14,161 +14,184 @@ import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { ReportsCombo } from '../../components/selects/ReportsCombo';
 import { TeamsCombo } from '../../components/selects/TeamsCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
+import { MatchesCombo } from '../../components/selects/MatchesCombo';
+import { NotesCombo } from '../../components/selects/NotesCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
-import { Loader } from '../../components/Loader';
-// Hooks
-import { useTeams } from '../../hooks/teams';
-import { useUsersList } from '../../hooks/users';
-import { useClubsList } from '../../hooks/clubs';
-import { useReportsList } from '../../hooks/reports';
-import { usePlayersList } from '../../hooks/players';
-import { useGrantAccess } from '../../hooks/accessControlLists';
 // Types
 import {
   GrantAccessDTO,
   TargetAssetType,
   AssetToAddType,
 } from '../../types/accessControlLists';
+import { UserBasicInfo } from '../../types/users';
+import { Team } from '../../types/teams';
+import { ClubBasicInfo } from '../../types/clubs';
+import { ReportBasicInfo } from '../../types/reports';
+import { PlayerBasicInfo } from '../../types/players';
+import { MatchBasicInfo } from '../../types/matches';
+import { NoteBasicInfo } from '../../types/notes';
 
-export const GrantAccessForm = () => {
-  const { data: users, isLoading: usersLoading } = useUsersList();
-  const { data: teams, isLoading: teamsLoading } = useTeams();
-  const { data: clubs, isLoading: clubsLoading } = useClubsList();
-  const { data: reports, isLoading: reportsLoading } = useReportsList();
-  const { data: players, isLoading: playersLoading } = usePlayersList();
-  const {
-    mutate: grantAccess,
-    isLoading: grantAccessLoading,
-  } = useGrantAccess();
+type Props = {
+  users: UserBasicInfo[];
+  teams: Team[];
+  clubs: ClubBasicInfo[];
+  reports: ReportBasicInfo[];
+  players: PlayerBasicInfo[];
+  matches: MatchBasicInfo[];
+  notes: NoteBasicInfo[];
+  onSubmit: (data: GrantAccessDTO) => void;
+};
 
+export const GrantAccessForm = ({
+  users,
+  teams,
+  clubs,
+  reports,
+  players,
+  matches,
+  notes,
+  onSubmit,
+}: Props) => {
   return (
-    <>
-      {(clubsLoading ||
-        teamsLoading ||
-        usersLoading ||
-        reportsLoading ||
-        playersLoading ||
-        grantAccessLoading) && <Loader />}
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        enableReinitialize
-        onSubmit={(data, { resetForm }) => {
-          grantAccess(data);
-          resetForm();
-        }}
-      >
-        {({ errors, touched, handleReset, values }) => (
-          <Form>
-            <FormContainer>
-              <FormControl variant="outlined" fullWidth>
-                <InputLabel id="targetAssetTypeLabel">
-                  Rodzaj zasobu, któremu chcesz nadać dostęp
-                </InputLabel>
-                <Field
-                  as={Select}
-                  name="targetAssetType"
-                  labelId="targetAssetTypeLabel"
-                  id="targetAssetType"
-                  label="Rodzaj zasobu, któremu chcesz nadać dostęp"
-                  error={touched.targetAssetType && !!errors.targetAssetType}
-                >
-                  <MenuItem value="user">scout</MenuItem>
-                  <MenuItem value="team">zespół scoutów</MenuItem>
-                </Field>
-                {touched.targetAssetType && errors.targetAssetType && (
-                  <FormHelperText>{errors.targetAssetType}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl variant="outlined" fullWidth>
-                {values.targetAssetType === 'user' ? (
-                  <UsersCombo
-                    id="targetAssetId"
-                    usersData={
-                      users?.filter((user) => user.role !== 'admin') || []
-                    }
-                    label="Wybierz użytkownika"
-                  />
-                ) : (
-                  <TeamsCombo
-                    name="targetAssetId"
-                    teamsData={teams || []}
-                    label="Wybierz zespół"
-                  />
-                )}
-              </FormControl>
-              <FormControl variant="outlined" fullWidth>
-                <InputLabel id="assetToAddTypeLabel">
-                  Rodzaj zasobu, do którego chcesz nadać dostęp
-                </InputLabel>
-                <Field
-                  as={Select}
-                  name="assetToAddType"
-                  labelId="assetToAddTypeLabel"
-                  id="assetToAddType"
-                  label="Rodzaj zasobu, do którego chcesz nadać dostęp"
-                  error={touched.assetToAddType && !!errors.assetToAddType}
-                >
-                  <MenuItem value="club">klub</MenuItem>
-                  <MenuItem value="player">zawodnik</MenuItem>
-                  <MenuItem value="report">raport</MenuItem>
-                </Field>
-                {touched.assetToAddType && errors.assetToAddType && (
-                  <FormHelperText>{errors.assetToAddType}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl variant="outlined" fullWidth>
-                {(() => {
-                  switch (values.assetToAddType) {
-                    case 'club':
-                      return (
-                        <ClubsCombo
-                          clubsData={clubs || []}
-                          label="Wybierz klub"
-                          name="assetToAddId"
-                        />
-                      );
-
-                    case 'player':
-                      return (
-                        <PlayersCombo
-                          playersData={players || []}
-                          label="Wybierz zawodnika"
-                          name="assetToAddId"
-                        />
-                      );
-
-                    case 'report':
-                      return (
-                        <ReportsCombo
-                          reportsData={reports || []}
-                          label="Wybierz raport"
-                          name="assetToAddId"
-                        />
-                      );
-
-                    default:
-                      return (
-                        <ClubsCombo
-                          clubsData={clubs || []}
-                          label="Wybierz klub"
-                          name="assetToAddId"
-                        />
-                      );
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      enableReinitialize
+      onSubmit={(data, { resetForm }) => {
+        onSubmit(data);
+        resetForm();
+      }}
+    >
+      {({ errors, touched, handleReset, values }) => (
+        <Form>
+          <FormContainer>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel id="targetAssetTypeLabel">
+                Rodzaj zasobu, któremu chcesz nadać dostęp
+              </InputLabel>
+              <Field
+                as={Select}
+                name="targetAssetType"
+                labelId="targetAssetTypeLabel"
+                id="targetAssetType"
+                label="Rodzaj zasobu, któremu chcesz nadać dostęp"
+                error={touched.targetAssetType && !!errors.targetAssetType}
+              >
+                <MenuItem value="user">scout</MenuItem>
+                <MenuItem value="team">zespół scoutów</MenuItem>
+              </Field>
+              {touched.targetAssetType && errors.targetAssetType && (
+                <FormHelperText>{errors.targetAssetType}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl variant="outlined" fullWidth>
+              {values.targetAssetType === 'user' ? (
+                <UsersCombo
+                  id="targetAssetId"
+                  usersData={
+                    users.filter((user) => user.role !== 'admin') || []
                   }
-                })()}
-              </FormControl>
-              <MainFormActions
-                label="dostęp"
-                isEditState={false}
-                onCancelClick={handleReset}
-              />
-            </FormContainer>
-          </Form>
-        )}
-      </Formik>
-    </>
+                  label="Wybierz użytkownika"
+                />
+              ) : (
+                <TeamsCombo
+                  name="targetAssetId"
+                  teamsData={teams}
+                  label="Wybierz zespół"
+                />
+              )}
+            </FormControl>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel id="assetToAddTypeLabel">
+                Rodzaj zasobu, do którego chcesz nadać dostęp
+              </InputLabel>
+              <Field
+                as={Select}
+                name="assetToAddType"
+                labelId="assetToAddTypeLabel"
+                id="assetToAddType"
+                label="Rodzaj zasobu, do którego chcesz nadać dostęp"
+                error={touched.assetToAddType && !!errors.assetToAddType}
+              >
+                <MenuItem value="club">klub</MenuItem>
+                <MenuItem value="player">zawodnik</MenuItem>
+                <MenuItem value="match">mecz</MenuItem>
+                <MenuItem value="report">raport</MenuItem>
+                <MenuItem value="note">notatka</MenuItem>
+              </Field>
+              {touched.assetToAddType && errors.assetToAddType && (
+                <FormHelperText>{errors.assetToAddType}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl variant="outlined" fullWidth>
+              {(() => {
+                switch (values.assetToAddType) {
+                  case 'club':
+                    return (
+                      <ClubsCombo
+                        clubsData={clubs}
+                        label="Wybierz klub"
+                        name="assetToAddId"
+                      />
+                    );
+
+                  case 'player':
+                    return (
+                      <PlayersCombo
+                        playersData={players}
+                        label="Wybierz zawodnika"
+                        name="assetToAddId"
+                      />
+                    );
+
+                  case 'report':
+                    return (
+                      <ReportsCombo
+                        reportsData={reports}
+                        label="Wybierz raport"
+                        name="assetToAddId"
+                      />
+                    );
+
+                  case 'match':
+                    return (
+                      <MatchesCombo
+                        matchesData={matches}
+                        label="Wybierz mecz"
+                        name="assetToAddId"
+                      />
+                    );
+
+                  case 'note':
+                    return (
+                      <NotesCombo
+                        notesData={notes}
+                        label="Wybierz notatkę"
+                        name="assetToAddId"
+                      />
+                    );
+
+                  default:
+                    return (
+                      <ClubsCombo
+                        clubsData={clubs}
+                        label="Wybierz klub"
+                        name="assetToAddId"
+                      />
+                    );
+                }
+              })()}
+            </FormControl>
+            <MainFormActions
+              label="dostęp"
+              isEditState={false}
+              onCancelClick={handleReset}
+            />
+          </FormContainer>
+        </Form>
+      )}
+    </Formik>
   );
 };
 
