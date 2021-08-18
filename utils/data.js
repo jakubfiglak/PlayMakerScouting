@@ -27,6 +27,8 @@ const divisions = [
   'Klasa A',
   'Klasa B',
   'Klasa C',
+  'CLJ',
+  'Rozgrywki juniorskie',
 ];
 
 const positions = ['GK', 'LB', 'RB', 'CB', 'LW', 'LWB', 'RW', 'RWB', 'DM', 'CM', 'CAM', 'F'];
