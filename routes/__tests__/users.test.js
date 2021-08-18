@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const startServer = require('../../start');
 const setupTestDB = require('../../test/setupTestDB');
-const { buildUser } = require('../../test/utils');
-const { insertTestUser, insertUsers } = require('../../test/db-utils');
+const { buildUser, buildMatch } = require('../../test/utils');
+const { insertTestUser, insertUsers, insertMatches } = require('../../test/db-utils');
 const usersService = require('../../modules/users/users.service');
 
 let api = axios.create();
@@ -97,7 +97,7 @@ describe('GET /api/v1/users/:id', () => {
   });
 });
 
-describe('/api/v1/:id/users/change-role', () => {
+describe('POST /api/v1/users/:id/change-role', () => {
   it('should return 400 error if user is an admin', async () => {
     const user = buildUser({ role: 'admin' });
     await insertUsers([user]);
@@ -129,5 +129,33 @@ describe('/api/v1/:id/users/change-role', () => {
     // Check if user has not been duplicated
     const users = await usersService.getAllUsersList();
     expect(users.length).toBe(2);
+  });
+});
+
+describe('PATCH /api/v1/users/go-to-the-match', () => {
+  it('should correclty set users match field to the selected match', async () => {
+    const user = buildUser();
+    const match = buildMatch();
+    await Promise.all([insertUsers([user]), insertMatches([match])]);
+
+    const response = await api.patch('users/go-to-the-match', { match: match._id });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.match.id).toBe(match._id.toHexString());
+  });
+});
+
+describe('PATCH /api/v1/users/leave-the-match', () => {
+  it('should correclty set users match field to null', async () => {
+    const match = buildMatch();
+    const user = buildUser({ match: match._id });
+    await Promise.all([insertUsers([user]), insertMatches([match])]);
+
+    const response = await api.patch('users/leave-the-match');
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.match).toBe(null);
   });
 });

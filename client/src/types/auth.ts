@@ -1,4 +1,5 @@
 import { Voivodeship } from './common';
+import type { Match } from './matches';
 import type { Team } from './teams';
 
 export type UserRole = 'admin' | 'playmaker-scout' | 'scout';
@@ -15,6 +16,7 @@ export type User = {
   activeRadius?: number;
   createdAt: string;
   team: Team | null;
+  match: Match | null;
 };
 
 export type LoginFormData = {
