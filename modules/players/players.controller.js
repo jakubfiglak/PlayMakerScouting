@@ -27,7 +27,7 @@ exports.createPlayer = asyncHandler(async (req, res) => {
 // @desc Get all players
 // @route GET /api/v1/players
 // @route GET /api/v1/clubs/:clubId/players
-// @access Private (admin only)
+// @access Private
 exports.getPlayers = asyncHandler(async (req, res) => {
   const { clubId } = req.params;
   if (clubId) {

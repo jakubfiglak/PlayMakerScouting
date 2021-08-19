@@ -19,6 +19,10 @@ import { ReportTemplatesPage } from '../pages/ReportTemplates/ReportTemplatesPag
 import { TeamPage } from '../pages/Team/TeamPage';
 import { UserPage } from '../pages/User/UserPage';
 import { SettingsPage } from '../pages/Settings/SettingsPage';
+import { MatchesPage } from '../pages/Matches/MatchesPage';
+import { MatchPage } from '../pages/Match/MatchPage';
+import { NotesPage } from '../pages/Notes/NotesPage';
+import { NotePage } from '../pages/Note/NotePage';
 import { FourOFourPage } from '../pages/404/FourOFour';
 
 export const AppRoutes = () => {
@@ -113,6 +117,32 @@ export const AppRoutes = () => {
           allowedRoles={['admin', 'playmaker-scout', 'scout']}
         >
           <SettingsPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/matches"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <MatchesPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/matches/:id"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <MatchPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/notes"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <NotesPage />
+        </ProtectedRoute>
+        <ProtectedRoute
+          path="/notes/:id"
+          allowedRoles={['admin', 'playmaker-scout', 'scout']}
+        >
+          <NotePage />
         </ProtectedRoute>
         <Route path="*" component={FourOFourPage} />
       </Switch>

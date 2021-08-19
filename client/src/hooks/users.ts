@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
-import { UserBasicInfo, UserFilterData } from '../types/users';
+import { GoToTheMatchDTO, UserBasicInfo, UserFilterData } from '../types/users';
 import { User, UserRole } from '../types/auth';
 import {
   ApiError,
@@ -128,4 +128,51 @@ export function useChangeRole() {
         setAlert({ msg: err.response.data.error, type: 'error' }),
     },
   );
+}
+
+// Go to the match
+async function goToTheMatch({
+  match,
+}: GoToTheMatchDTO): Promise<ApiResponse<User>> {
+  const { data } = await axios.patch<ApiResponse<User>>(
+    `/api/v1/users/go-to-the-match`,
+    { match },
+  );
+  return data;
+}
+
+export function useGoToTheMatch() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(({ match }: GoToTheMatchDTO) => goToTheMatch({ match }), {
+    onSuccess: (data: ApiResponse<User>) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('account');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
+}
+
+// Leave the match
+async function leaveTheMatch(): Promise<ApiResponse<User>> {
+  const { data } = await axios.patch<ApiResponse<User>>(
+    `/api/v1/users/leave-the-match`,
+  );
+  return data;
+}
+
+export function useLeaveTheMatch() {
+  const queryClient = useQueryClient();
+  const { setAlert } = useAlertsState();
+
+  return useMutation(() => leaveTheMatch(), {
+    onSuccess: (data: ApiResponse<User>) => {
+      setAlert({ msg: data.message, type: 'success' });
+      queryClient.invalidateQueries('account');
+    },
+    onError: (err: ApiError) =>
+      setAlert({ msg: err.response.data.error, type: 'error' }),
+  });
 }

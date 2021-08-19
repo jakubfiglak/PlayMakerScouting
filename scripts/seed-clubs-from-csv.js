@@ -14,7 +14,7 @@ const devAdminId = '5d7a514b5d2c12c7449be042';
 const results = [];
 
 async function seedClubs() {
-  await connectDB(process.env.DB_CONNECT);
+  await connectDB(process.env.PRODUCTION_DB_CONNECT);
 
   fs.createReadStream(path.resolve(__dirname, '../data', '2021-08-07-clubs.csv'))
     .pipe(csv.parse({ headers: true }))
@@ -26,13 +26,13 @@ async function seedClubs() {
         voivodeship: result.voiv,
         division: result.league,
         lnpID: result.team_id_lnp,
-        author: devAdminId,
+        author: prodAdminId,
         isPublic: true,
       }));
 
       const created = await Club.create(clubs);
       console.log(created);
-      console.log('Clubs created!'.green.inverse);
+      console.log(`Created ${created.length} clubs!`.green.inverse);
       process.exit();
     });
 }

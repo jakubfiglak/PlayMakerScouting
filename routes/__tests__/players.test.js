@@ -10,6 +10,7 @@ const {
   buildAccessControlList,
   buildTeam,
   buildUser,
+  buildNote,
 } = require('../../test/utils');
 const {
   insertClubs,
@@ -20,11 +21,13 @@ const {
   insertAccessControlLists,
   insertTeams,
   insertUsers,
+  insertNotes,
 } = require('../../test/db-utils');
 const accessControlListsService = require('../../modules/accessControlLists/accessControlLists.service');
 const reportsService = require('../../modules/reports/reports.service');
 const ordersService = require('../../modules/orders/orders.service');
 const playersService = require('../../modules/players/players.service');
+const notesService = require('../../modules/notes/notes.service');
 
 let api = axios.create();
 let server;
@@ -430,7 +433,7 @@ describe('POST /api/v1/players/merge-duplicates', () => {
 
     // Create players
     const player1 = buildPlayer({ lnpID: '123' });
-    const player2 = buildPlayer({ lnpID: '123' });
+    const player2 = buildPlayer({ lnpID: '123', isPublic: true });
     const player3 = buildPlayer({ lnpID: '123' });
     const player4 = buildPlayer({ lnpID: '345' });
     const player5 = buildPlayer({ lnpID: '345' });
@@ -457,10 +460,13 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     // Create 6 reports - 1 for each player with lnpID defined
     const reports = players.map((player) => buildReport({ player: player._id }));
 
+    // Create 6 note - 1 for each player with lnpID defined
+    const notes = players.map((player) => buildNote({ player: player._id }));
+
     // Create 6 orders - 1 for each player with lnpID defined
     const orders = players.map((player) => buildOrder({ player: player._id }));
 
-    await Promise.all([insertReports(reports), insertOrders(orders)]);
+    await Promise.all([insertReports(reports), insertOrders(orders), insertNotes(notes)]);
 
     await api.post(
       'players/merge-duplicates',
@@ -476,6 +482,9 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     const ordersOperations = playersToRemain.map((player) =>
       ordersService.getOrdersForPlayer(player._id)
     );
+    const notesOperations = playersToRemain.map((player) =>
+      notesService.getNotesForPlayer(player._id)
+    );
 
     const [
       player1Reports,
@@ -484,7 +493,10 @@ describe('POST /api/v1/players/merge-duplicates', () => {
       player1Orders,
       player4Orders,
       player6Orders,
-    ] = await Promise.all([...reportsOperations, ...ordersOperations]);
+      player1Notes,
+      player4Notes,
+      player6Notes,
+    ] = await Promise.all([...reportsOperations, ...ordersOperations, ...notesOperations]);
 
     // Check if there is correct number of reports and orders assigned to each of the players
     expect(player1Reports.length).toBe(3);
@@ -493,14 +505,20 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     expect(player1Orders.length).toBe(3);
     expect(player4Orders.length).toBe(2);
     expect(player6Orders.length).toBe(1);
+    expect(player1Notes.length).toBe(3);
+    expect(player4Notes.length).toBe(2);
+    expect(player6Notes.length).toBe(1);
 
-    // Check if correct reports and orders have been assigned to each player
+    // Check if correct reports, orders and notes have been assigned to each player
     const player1ReportIds = player1Reports.map((report) => report._id.toHexString());
     const player4ReportIds = player4Reports.map((report) => report._id.toHexString());
     const player6ReportIds = player6Reports.map((report) => report._id.toHexString());
     const player1OrderIds = player1Orders.map((order) => order._id.toHexString());
     const player4OrderIds = player4Orders.map((order) => order._id.toHexString());
     const player6OrderIds = player6Orders.map((order) => order._id.toHexString());
+    const player1NoteIds = player1Notes.map((note) => note._id.toHexString());
+    const player4NoteIds = player4Notes.map((note) => note._id.toHexString());
+    const player6NoteIds = player6Notes.map((note) => note._id.toHexString());
 
     expect(player1ReportIds).toContain(reports[0]._id.toHexString());
     expect(player1ReportIds).toContain(reports[1]._id.toHexString());
@@ -516,9 +534,20 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     expect(player4OrderIds).toContain(orders[4]._id.toHexString());
     expect(player6OrderIds).toContain(orders[5]._id.toHexString());
 
+    expect(player1NoteIds).toContain(notes[0]._id.toHexString());
+    expect(player1NoteIds).toContain(notes[1]._id.toHexString());
+    expect(player1NoteIds).toContain(notes[2]._id.toHexString());
+    expect(player4NoteIds).toContain(notes[3]._id.toHexString());
+    expect(player4NoteIds).toContain(notes[4]._id.toHexString());
+    expect(player6NoteIds).toContain(notes[5]._id.toHexString());
+
     // Check if there is correct number of reports in the database
     const dbReports = await reportsService.getAllReportsList();
     expect(dbReports.length).toBe(6);
+
+    // Check if there is correct number of notes in the database
+    const dbNotes = await notesService.getAllNotesList();
+    expect(dbNotes.length).toBe(6);
 
     // Check if acls has been successfully proccessed
     const dbAcls = await accessControlListsService.getAllAccessControlLists();
@@ -544,5 +573,18 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     expect(dbPlayersIds).toContain(player4._id.toHexString());
     expect(dbPlayersIds).not.toContain(player5._id.toHexString());
     expect(dbPlayersIds).toContain(player6._id.toHexString());
+
+    // Check if player1 has isPublic flag set to true
+    // (inherited from player2 which is its duplicate)
+    const dbPlayer1 = dbPlayers.find(
+      (player) => player._id.toHexString() === player1._id.toHexString()
+    );
+    expect(dbPlayer1.isPublic).toBe(true);
+
+    // Check if all the other players kept isPublic flag set to false
+    const filteredDbPlayers = dbPlayers.filter(
+      (player) => player._id.toHexString() !== player1._id.toHexString()
+    );
+    expect(filteredDbPlayers.some((player) => player.isPublic)).toBe(false);
   });
 });

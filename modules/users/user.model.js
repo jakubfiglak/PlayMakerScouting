@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
+const autoPopulate = require('mongoose-autopopulate');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -68,6 +69,11 @@ const UserSchema = new Schema(
       enum: ['pending', 'active', 'blocked'],
       default: 'pending',
     },
+    match: {
+      type: Schema.Types.ObjectId,
+      ref: 'Match',
+      autopopulate: true,
+    },
     confirmationCode: { type: String, private: true },
     resetPasswordToken: { type: String, private: true },
     resetPasswordExpires: { type: Date, private: true },
@@ -76,6 +82,7 @@ const UserSchema = new Schema(
 );
 
 UserSchema.plugin(mongoosePaginate);
+UserSchema.plugin(autoPopulate);
 UserSchema.plugin(toJson);
 
 // Encrypt the password before each model save

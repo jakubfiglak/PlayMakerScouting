@@ -27,6 +27,8 @@ const divisions = [
   'Klasa A',
   'Klasa B',
   'Klasa C',
+  'CLJ',
+  'Rozgrywki juniorskie',
 ];
 
 const positions = ['GK', 'LB', 'RB', 'CB', 'LW', 'LWB', 'RW', 'RWB', 'DM', 'CM', 'CAM', 'F'];
@@ -35,4 +37,13 @@ const oldPositions = ['GK', 'FB', 'CB', 'CM', 'WM', 'F'];
 
 const ratingCategories = ['individual', 'teamplay', 'offense', 'defense', 'physical', 'mental'];
 
-module.exports = { voivodeships, divisions, positions, oldPositions, ratingCategories };
+const competitions = ['league', 'cup', 'friendly'];
+
+module.exports = {
+  voivodeships,
+  divisions,
+  positions,
+  oldPositions,
+  ratingCategories,
+  competitions,
+};

@@ -79,5 +79,12 @@ PlayerSchema.virtual('reportsCount', {
   justOne: false,
   count: true,
 });
+PlayerSchema.virtual('notesCount', {
+  ref: 'Note',
+  localField: '_id',
+  foreignField: 'player',
+  justOne: false,
+  count: true,
+});
 
 module.exports = model('Player', PlayerSchema);

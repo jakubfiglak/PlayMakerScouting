@@ -1,7 +1,10 @@
 const Club = require('./club.model');
 const Player = require('../players/player.model');
-const Report = require('../reports/report.model.js');
+const Report = require('../reports/report.model');
+const Note = require('../notes/note.model');
+const Match = require('../matches/match.model');
 const AccessControlList = require('../accessControlLists/accessControlList.model');
+const options = require('./options');
 
 function getClubById(id) {
   return Club.findById(id);
@@ -20,8 +23,8 @@ async function getAllClubs({ query, paginationOptions, accessFilters }) {
 
 async function getAllClubsList(accessFilters) {
   const clubs = await Club.find({ ...accessFilters })
-    .select('name')
-    .sort('name');
+    .select(options.listSelect)
+    .sort(options.listSort);
   return clubs;
 }
 
@@ -56,6 +59,24 @@ async function mergeClubsDuplicates() {
       localField: '_id',
       foreignField: 'playerCurrentClub',
       as: 'reports',
+    })
+    .lookup({
+      from: 'notes',
+      localField: '_id',
+      foreignField: 'playerCurrentClub',
+      as: 'notes',
+    })
+    .lookup({
+      from: 'matches',
+      localField: '_id',
+      foreignField: 'homeTeam',
+      as: 'homeTeamMatches',
+    })
+    .lookup({
+      from: 'matches',
+      localField: '_id',
+      foreignField: 'awayTeam',
+      as: 'awayTeamMatches',
     })
     .lookup({
       from: 'accesscontrollists',
@@ -105,6 +126,63 @@ async function mergeClubsDuplicates() {
     .flat(Infinity)
     .filter((operation) => operation);
 
+  // Set the playerCurrentClub field in related note documents to the first club entity ID
+  const notesOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx === 0) {
+          return null;
+        }
+        return entity.notes.map((note) =>
+          Note.updateOne({ _id: note._id }, { $set: { playerCurrentClub: result.entities[0]._id } })
+        );
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
+  // Set the homeTeam field in related match documents to the first club entity ID
+  const homeTeamMatchesOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx === 0) {
+          return null;
+        }
+        return entity.homeTeamMatches.map((match) =>
+          Match.updateOne({ _id: match._id }, { $set: { homeTeam: result.entities[0]._id } })
+        );
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
+  // Set the awayTeam field in related match documents to the first club entity ID
+  const awayTeamMatchesOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity, idx) => {
+        if (idx === 0) {
+          return null;
+        }
+        return entity.awayTeamMatches.map((match) =>
+          Match.updateOne({ _id: match._id }, { $set: { awayTeam: result.entities[0]._id } })
+        );
+      })
+    )
+    .flat(Infinity)
+    .filter((operation) => operation);
+
+  // If any of the entities is public, set isPublic field to true in the remaining entity
+  const clubsToRemainIsPublicOperations = filteredResults
+    .map((result) =>
+      result.entities.map((entity) => ({ id: entity._id, isPublic: entity.isPublic }))
+    )
+    .map((e) =>
+      Club.updateOne(
+        { _id: e[0].id },
+        { isPublic: e.map((item) => item.isPublic).some((value) => value) }
+      )
+    );
+
   // Edit access control lists - for each access control list containing
   // the club to be removed, add the entity to be kept in the database
   const aclsPushOperations = filteredResults
@@ -139,7 +217,7 @@ async function mergeClubsDuplicates() {
     .filter((operation) => operation);
 
   // Remove duplicate club entities
-  const clubsOperations = filteredResults
+  const clubsDeleteOperations = filteredResults
     .map((result) =>
       result.entities.map((entity, idx) => {
         if (idx === 0) {
@@ -154,9 +232,13 @@ async function mergeClubsDuplicates() {
   return Promise.all([
     ...playersOperations,
     ...reportsOperations,
+    ...notesOperations,
+    ...homeTeamMatchesOperations,
+    ...awayTeamMatchesOperations,
+    ...clubsToRemainIsPublicOperations,
     ...aclsPushOperations,
     ...aclsPullOperations,
-    ...clubsOperations,
+    ...clubsDeleteOperations,
   ]);
 }
 

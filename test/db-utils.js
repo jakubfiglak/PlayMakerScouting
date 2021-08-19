@@ -9,6 +9,8 @@ const ReportTemplate = require('../modules/reportTemplates/reportTemplate.model'
 const Team = require('../modules/teams/team.model');
 const AccessControlList = require('../modules/accessControlLists/accessControlList.model');
 const ReportBackgroundImage = require('../modules/reportBackgroundImages/reportBackgroundImage.model');
+const Match = require('../modules/matches/match.model');
+const Note = require('../modules/notes/note.model');
 const { buildUser } = require('./utils');
 
 const salt = bcrypt.genSaltSync(10);
@@ -36,6 +38,8 @@ const insertReportTemplates = (reportTemplates) => ReportTemplate.insertMany(rep
 const insertTeams = (teams) => Team.insertMany(teams);
 const insertAccessControlLists = (acls) => AccessControlList.insertMany(acls);
 const insertReportBackgroundImages = (images) => ReportBackgroundImage.insertMany(images);
+const insertMatches = (matches) => Match.insertMany(matches);
+const insertNotes = (notes) => Note.insertMany(notes);
 
 module.exports = {
   insertUsers,
@@ -49,4 +53,6 @@ module.exports = {
   insertTeams,
   insertAccessControlLists,
   insertReportBackgroundImages,
+  insertMatches,
+  insertNotes,
 };

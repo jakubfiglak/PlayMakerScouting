@@ -1,9 +1,21 @@
 const httpStatus = require('http-status');
+const asyncHandler = require('express-async-handler');
 const User = require('./user.model');
 const setAsset = require('../../middleware/setAsset');
 const ApiError = require('../../utils/ApiError');
 
 const setUser = setAsset({ name: 'userData', model: User });
+
+const setCurrentUserData = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    return next(
+      new ApiError(`User not found with the id of ${req.user._id}`, httpStatus.NOT_FOUND)
+    );
+  }
+  req.userData = user;
+  next();
+});
 
 function checkRole(allowedRoles) {
   return (req, res, next) => {
@@ -21,4 +33,4 @@ function checkRole(allowedRoles) {
   };
 }
 
-module.exports = { setUser, checkRole };
+module.exports = { setUser, checkRole, setCurrentUserData };

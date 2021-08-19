@@ -6,6 +6,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Assessment as ReportsIcon,
+  Note as NotesIcon,
 } from '@material-ui/icons';
 // Custom components
 import { StyledTableCell } from '../../components/table/TableCell';
@@ -56,6 +57,7 @@ export const PlayersTableRow = ({
     yearOfBirth,
     footed,
     reportsCount,
+    notesCount,
   } = player;
 
   return (
@@ -101,6 +103,11 @@ export const PlayersTableRow = ({
       <StyledTableCell align="center">
         <Badge badgeContent={reportsCount || '0'} color="secondary">
           <ReportsIcon />
+        </Badge>
+      </StyledTableCell>
+      <StyledTableCell align="center">
+        <Badge badgeContent={notesCount || '0'} color="secondary">
+          <NotesIcon />
         </Badge>
       </StyledTableCell>
     </StyledTableRow>

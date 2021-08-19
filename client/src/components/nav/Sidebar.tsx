@@ -12,15 +12,26 @@ import {
 import { ExitToApp as LogoutIcon } from '@material-ui/icons/';
 // Custom components
 import { NavElement } from './NavElement';
+import { QuickNoteButton } from './QuickNoteButton';
+import { MatchButton } from './MatchButton';
 // Types
 import { NavItem } from './types';
 
 type Props = {
   navElements: NavItem[];
   onLogout: () => void;
+  handleQuickNoteClick: () => void;
+  handleMatchClick: () => void;
+  isAtTheMatch: boolean;
 };
 
-export const Sidebar = ({ navElements, onLogout }: Props) => {
+export const Sidebar = ({
+  navElements,
+  onLogout,
+  handleQuickNoteClick,
+  handleMatchClick,
+  isAtTheMatch,
+}: Props) => {
   const classes = useStyles();
 
   return (
@@ -40,6 +51,8 @@ export const Sidebar = ({ navElements, onLogout }: Props) => {
           return <NavElement icon={icon} text={text} to={to} key={text} />;
         })}
         <Divider />
+        <MatchButton onClick={handleMatchClick} isAtTheMatch={isAtTheMatch} />
+        <QuickNoteButton onClick={handleQuickNoteClick} />
         <li>
           <ListItem button onClick={onLogout}>
             <ListItemIcon>

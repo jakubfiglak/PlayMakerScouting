@@ -1,5 +1,5 @@
 const options = {
-  listSelect: 'name',
+  listSelect: 'name isPublic',
   listSort: 'name',
   forbiddenUpdates: ['authorizedUsers', 'createdAt', 'updatedAt'],
 };

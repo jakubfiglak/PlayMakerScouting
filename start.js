@@ -20,6 +20,8 @@ const reportTemplates = require('./routes/reportTemplates');
 const teams = require('./routes/teams');
 const accessControlLists = require('./routes/accessControlLists');
 const reportBackgroundImages = require('./routes/reportBackgroundImages');
+const matches = require('./routes/matches');
+const notes = require('./routes/notes');
 
 const startServer = (port = process.env.PORT || 5000) => {
   const app = express();
@@ -65,6 +67,8 @@ const startServer = (port = process.env.PORT || 5000) => {
   app.use('/api/v1/teams', teams);
   app.use('/api/v1/access-control-lists', accessControlLists);
   app.use('/api/v1/report-background-images', reportBackgroundImages);
+  app.use('/api/v1/matches', matches);
+  app.use('/api/v1/notes', notes);
 
   // Serve static assets in production
   if (process.env.NODE_ENV === 'production') {
@@ -72,7 +76,8 @@ const startServer = (port = process.env.PORT || 5000) => {
     app.use(express.static('client/build'));
 
     app.get('*', (req, res) =>
-      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')));
+      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    );
   }
 
   app.use(Sentry.Handlers.errorHandler());

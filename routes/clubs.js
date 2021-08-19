@@ -20,10 +20,12 @@ const { setClub, canBeDeleted } = require('../modules/clubs/clubs.middleware');
 const options = require('../modules/clubs/options');
 
 const playersRouter = require('./players');
+const matchesRouter = require('./matches');
 
 const router = express.Router();
 
 router.use('/:clubId/players', protect, playersRouter);
+router.use('/:clubId/matches', protect, matchesRouter);
 
 router.post('/', [protect, setAcls, setAuthor], createClub);
 router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('club')], getClubs);

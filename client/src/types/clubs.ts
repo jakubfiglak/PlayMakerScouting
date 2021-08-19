@@ -9,7 +9,9 @@ export type Division =
   | 'Klasa okręgowa'
   | 'Klasa A'
   | 'Klasa B'
-  | 'Klasa C';
+  | 'Klasa C'
+  | 'CLJ'
+  | 'Rozgrywki juniorskie';
 
 export type Club = {
   id: string;

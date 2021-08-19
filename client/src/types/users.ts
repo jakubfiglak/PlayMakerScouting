@@ -12,3 +12,7 @@ export type UserFilterData = {
   city: string;
   role: UserRole | '';
 };
+
+export type GoToTheMatchDTO = {
+  match: string;
+};

@@ -8,6 +8,8 @@ import {
   Home as HomeIcon,
   Create as ReportTemplatesIcon,
   PermContactCalendar as AdminIcon,
+  Sports as MatchesIcon,
+  Note as NotesIcon,
 } from '@material-ui/icons';
 import { NavItem } from './types';
 
@@ -31,9 +33,21 @@ export const navItems: NavItem[] = [
     allowedRoles: ['admin', 'playmaker-scout', 'scout'],
   },
   {
+    icon: <MatchesIcon color="error" />,
+    text: 'Mecze',
+    to: '/matches',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
+  },
+  {
     icon: <PlayersIcon color="error" />,
     text: 'Zawodnicy',
     to: '/players',
+    allowedRoles: ['admin', 'playmaker-scout', 'scout'],
+  },
+  {
+    icon: <NotesIcon color="error" />,
+    text: 'Notatki',
+    to: '/notes',
     allowedRoles: ['admin', 'playmaker-scout', 'scout'],
   },
   {

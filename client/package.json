@@ -30,6 +30,7 @@
     "formik": "^2.2.0",
     "formik-material-ui": "^3.0.1",
     "formik-material-ui-lab": "^0.0.8",
+    "formik-persist": "^1.1.0",
     "history": "^4.10.1",
     "prettier": "^2.0.5",
     "react": "^17.0.2",
