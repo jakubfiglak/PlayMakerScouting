@@ -24,12 +24,7 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
   const { setAlert } = useAlertsState();
 
   const initialValues: ClubDTO = current
-    ? {
-        name: current.name,
-        voivodeship: current.voivodeship,
-        division: current.division,
-        lnpID: current.lnpID,
-      }
+    ? getInitialStateFromCurrent(current)
     : clubsFormInitialValues;
 
   return (
@@ -83,3 +78,9 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
     </Formik>
   );
 };
+
+function getInitialStateFromCurrent(club: Club): ClubDTO {
+  const { id, author, ...rest } = club;
+
+  return rest;
+}
