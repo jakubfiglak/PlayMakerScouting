@@ -6,6 +6,8 @@ import { DivisionSelect } from '../../components/selects/DivisionSelect';
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
+// Hooks
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 // Types
 import { Club, ClubDTO } from '../../types/clubs';
 // Utils & data
@@ -19,6 +21,8 @@ type Props = {
 };
 
 export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
+  const { setAlert } = useAlertsState();
+
   const initialValues: ClubDTO = current
     ? {
         name: current.name,
@@ -68,6 +72,7 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
               onCancelClick={() => {
                 onCancelClick();
                 handleReset();
+                setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
               }}
             />
           </FormContainer>

@@ -21,7 +21,6 @@ import {
   useDeleteClub,
   useUpdateClub,
 } from '../../hooks/clubs';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
@@ -32,7 +31,6 @@ const initialFilters: ClubsFilterData = {
 };
 
 export const ClubsPage = () => {
-  const { setAlert } = useAlertsState();
   const user = useAuthenticatedUser();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
@@ -86,7 +84,6 @@ export const ClubsPage = () => {
 
   const handleFormReset = () => {
     setActiveTab(0);
-    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
     setCurrentClub(null);
   };
 

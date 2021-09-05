@@ -23,7 +23,7 @@ export const Alerts = () => {
               mountOnEnter
               unmountOnExit
             >
-              <Alert severity={type} variant="filled">
+              <Alert severity={type} variant="filled" className={classes.alert}>
                 {msg}
               </Alert>
             </Slide>
@@ -41,5 +41,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '50%',
     transform: 'translateX(-50%)',
     zIndex: 5000,
+  },
+  alert: {
+    marginBottom: theme.spacing(2),
   },
 }));
