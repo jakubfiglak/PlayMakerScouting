@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 // MUI components
-import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { PlayerDetails } from './PlayerDetails';
 import { PlayersForm } from '../Players/PlayersForm';

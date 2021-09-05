@@ -22,7 +22,6 @@ import {
   useUpdateNote,
 } from '../../hooks/notes';
 import { usePlayersList } from '../../hooks/players';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
@@ -35,7 +34,6 @@ const initialFilters: NotesFilterData = {
 };
 
 export const NotesPage = () => {
-  const { setAlert } = useAlertsState();
   const user = useAuthenticatedUser();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
@@ -93,7 +91,6 @@ export const NotesPage = () => {
 
   const handleFormReset = () => {
     setActiveTab(0);
-    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
     setCurrentNote(null);
   };
 

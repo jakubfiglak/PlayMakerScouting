@@ -20,6 +20,7 @@ type Props = {
   clubsData: ClubBasicInfo[];
   current: Player | null;
   onSubmit: (data: PlayerDTO) => void;
+  addClubOption?: boolean;
   onAddClubClick?: () => void;
   onCancelClick?: () => void;
 };
@@ -27,6 +28,7 @@ type Props = {
 export const PlayersForm = ({
   clubsData,
   current,
+  addClubOption,
   onSubmit,
   onAddClubClick,
   onCancelClick,
@@ -76,7 +78,7 @@ export const PlayersForm = ({
                 clubsData={clubsData}
                 name="club"
                 label="Klub"
-                addClubOption
+                addClubOption={addClubOption}
                 onAddClubClick={onAddClubClick}
               />
             </FormControl>
@@ -122,7 +124,6 @@ export const PlayersForm = ({
             <FormControl variant="outlined" fullWidth>
               <FootSelect />
             </FormControl>
-
             <Field
               name="lnpID"
               as={TextField}

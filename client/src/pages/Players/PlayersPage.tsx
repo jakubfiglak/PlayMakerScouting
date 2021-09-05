@@ -168,6 +168,7 @@ export const PlayersPage = () => {
           onSubmit={handleSubmit}
           onAddClubClick={() => setIsAddClubModalOpen(true)}
           onCancelClick={handleFormReset}
+          addClubOption
         />
         <AddClubModal
           onClose={() => setIsAddClubModalOpen(false)}
