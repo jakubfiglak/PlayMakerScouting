@@ -1,6 +1,6 @@
 import { Link as RouterLink } from 'react-router-dom';
 // MUI components
-import { Grid, Typography, Link } from '@material-ui/core';
+import { Grid, Typography, Link, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { StatusChip } from '../Reports/StatusChip';
 // Types
@@ -12,6 +12,8 @@ import { getLabel } from '../../utils/getLabel';
 type Props = { report: Report };
 
 export const ReportBasicInfo = ({ report }: Props) => {
+  const classes = useStyles();
+
   const {
     player,
     order,
@@ -73,11 +75,11 @@ export const ReportBasicInfo = ({ report }: Props) => {
             {`${author.firstName} ${author.lastName}`}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={classes.chipContainer}>
           <Typography>
             <strong>Status raportu: </strong>
-            <StatusChip status={status} />
           </Typography>
+          <StatusChip status={status} />
         </Grid>
         {order ? (
           <Grid item xs={12}>
@@ -99,3 +101,10 @@ export const ReportBasicInfo = ({ report }: Props) => {
     </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  chipContainer: {
+    display: 'flex',
+    gap: `${theme.spacing(1)}px`,
+  },
+}));

@@ -3,25 +3,28 @@ import { Formik, Form } from 'formik';
 import { Card, CardContent, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { SummaryStep } from './SummaryStep';
+import { MatchStep } from './MatchStep';
 import { StatsStep } from './StatsStep';
 import { RatingsStep } from './RatingsStep';
 import { ExtraPlayerInfo } from './ExtraPlayerInfo';
 import { ReportCard } from '../../Report/ReportCard';
 import { ReportBasicInfo } from '../../Report/ReportBasicInfo';
 import { MainFormActions } from '../../../components/formActions/MainFormActions';
+// Hooks
+import { useAlertsState } from '../../../context/alerts/useAlertsState';
 // Types
 import { Report, ReportDTO, Skill } from '../../../types/reports';
 import { validationSchema } from './validationSchema';
-import { MatchStep } from './MatchStep';
 
 type Props = {
   report: Report;
-  onReset: () => void;
+  onReset?: () => void;
   onSubmit: (data: ReportDTO) => void;
 };
 
 export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
   const classes = useStyles();
+  const { setAlert } = useAlertsState();
 
   return (
     <>
@@ -62,8 +65,14 @@ export const EditReportForm = ({ report, onReset, onSubmit }: Props) => {
                 label="raport"
                 isEditState
                 onCancelClick={() => {
+                  if (onReset) {
+                    onReset();
+                  }
+                  setAlert({
+                    msg: 'Zmiany zostały anulowane',
+                    type: 'warning',
+                  });
                   handleReset();
-                  onReset();
                 }}
               />
             </div>
@@ -86,10 +95,16 @@ function getInitialStateFromCurrent(report: Report): ReportDTO {
     ...rest
   } = report;
 
+  const matchDate = new Date(rest.match.date);
+
   return {
     ...rest,
     player: rest.player.id,
     order: rest.order?.id,
+    match: {
+      ...rest.match,
+      date: matchDate.toISOString().slice(0, 16),
+    },
   };
 }
 

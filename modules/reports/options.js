@@ -21,7 +21,6 @@ const options = {
     'player',
     'author',
     'order',
-    'match',
     'individualAvg',
     'teamplayAvg',
     'avgRating',
