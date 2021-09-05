@@ -135,6 +135,7 @@ export function useMatchesNotes({
       keepPreviousData: true,
       onError: (err: ApiError) =>
         setAlert({ msg: err.response.data.error, type: 'error' }),
+      enabled: matchId !== '',
     },
   );
 }

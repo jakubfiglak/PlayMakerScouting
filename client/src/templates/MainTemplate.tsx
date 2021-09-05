@@ -18,7 +18,6 @@ import { useAuthState } from '../context/auth/useAuthState';
 import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 import { usePlayersList } from '../hooks/players';
 import { useMatchesList } from '../hooks/matches';
-import { useCreateNote } from '../hooks/notes';
 import { useGoToTheMatch, useLeaveTheMatch } from '../hooks/users';
 // Utils & data
 import { navItems } from '../components/nav/navItems';
@@ -33,7 +32,6 @@ export const MainTemplate: FC = ({ children }) => {
 
   const { data: players, isLoading: playersLoading } = usePlayersList();
   const { data: matches, isLoading: matchesLoading } = useMatchesList();
-  const { mutate: createNote, isLoading: createNoteLoading } = useCreateNote();
   const {
     mutate: goToTheMatch,
     isLoading: goToTheMatchLoading,
@@ -59,7 +57,6 @@ export const MainTemplate: FC = ({ children }) => {
   const isLoading =
     playersLoading ||
     matchesLoading ||
-    createNoteLoading ||
     goToTheMatchLoading ||
     leaveTheMatchLoading ||
     accountLoading;
@@ -94,7 +91,6 @@ export const MainTemplate: FC = ({ children }) => {
           matchesData={matches || []}
           playersData={players || []}
           onClose={() => setQuickNoteModalOpen(false)}
-          onSubmit={createNote}
         />
         <GoToTheMatchFormModal
           matchesData={matches || []}
