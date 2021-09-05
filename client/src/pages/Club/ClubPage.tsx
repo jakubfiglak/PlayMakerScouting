@@ -39,6 +39,7 @@ export const ClubPage = () => {
     handleChangeRowsPerPage: handleChangePlayersTableRowsPerPage,
     handleSort: handlePlayersTableSort,
   } = useTable('clubsPlayersTable');
+
   const {
     tableSettings: matchesTableSettings,
     handleChangePage: handleChangeMatchesTablePage,
@@ -47,6 +48,7 @@ export const ClubPage = () => {
   } = useTable('clubsMatchesTable');
 
   const { data: club, isLoading: clubLoading } = useClub(id);
+
   const { data: players, isLoading: playersLoading } = useClubsPlayers({
     clubId: id,
     page: playersTableSettings.page + 1,
@@ -54,6 +56,7 @@ export const ClubPage = () => {
     order: playersTableSettings.order,
     sort: playersTableSettings.sortBy,
   });
+
   const { data: matches, isLoading: matchesLoading } = useClubsMatches({
     clubId: id,
     page: matchesTableSettings.page + 1,
@@ -61,6 +64,7 @@ export const ClubPage = () => {
     order: matchesTableSettings.order,
     sort: matchesTableSettings.sortBy,
   });
+
   const { mutate: updateClub, isLoading: updateClubLoading } = useUpdateClub(
     id,
   );
@@ -83,11 +87,7 @@ export const ClubPage = () => {
       </div>
       {club && !isEditState ? <ClubDetails club={club} /> : null}
       {club && isEditState ? (
-        <ClubsForm
-          current={club || null}
-          onCancelClick={() => setEditState(false)}
-          onSubmit={updateClub}
-        />
+        <ClubsForm current={club} onSubmit={updateClub} />
       ) : null}
       <section>
         <Typography

@@ -17,7 +17,7 @@ import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
 type Props = {
   current: Club | null;
   onSubmit: (data: ClubDTO) => void;
-  onCancelClick: () => void;
+  onCancelClick?: () => void;
 };
 
 export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
@@ -70,7 +70,9 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
               label="klub"
               isEditState={!!current}
               onCancelClick={() => {
-                onCancelClick();
+                if (onCancelClick) {
+                  onCancelClick();
+                }
                 handleReset();
                 setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
               }}

@@ -3,8 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Button, makeStyles, Theme } from '@material-ui/core';
 // MUI icons
 import { Edit as EditIcon, Cancel as CancelIcon } from '@material-ui/icons';
-// Hooks
-import { useAlertsState } from '../context/alerts/useAlertsState';
 
 type Props = {
   linkTo: string;
@@ -22,15 +20,6 @@ export const SingleAssetPageActions = ({
   onEditClick,
 }: Props) => {
   const classes = useStyles();
-  const { setAlert } = useAlertsState();
-
-  function handleEditClick() {
-    if (isEditState) {
-      onEditClick();
-      setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
-    }
-    onEditClick();
-  }
 
   return (
     <div className={classes.buttonsContainer}>
@@ -46,10 +35,10 @@ export const SingleAssetPageActions = ({
         variant="contained"
         color="secondary"
         startIcon={isEditState ? <CancelIcon /> : <EditIcon />}
-        onClick={handleEditClick}
+        onClick={onEditClick}
         disabled={isEditDisabled}
       >
-        {isEditState ? 'Anuluj edycję' : 'Edytuj'}
+        {isEditState ? 'Zakończ edycję' : 'Edytuj'}
       </Button>
     </div>
   );
