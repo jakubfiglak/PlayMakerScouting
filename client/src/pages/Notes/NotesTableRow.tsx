@@ -1,8 +1,22 @@
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 // MUI components
-import { Link, Tooltip } from '@material-ui/core';
+import {
+  IconButton,
+  TableRow,
+  TableCell,
+  Collapse,
+  Box,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
 // MUI icons
-import { Edit as EditIcon, Delete as DeleteIcon } from '@material-ui/icons';
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  KeyboardArrowUp as KeyboardArrowUpIcon,
+} from '@material-ui/icons';
 // Custom components
 import { TableLink } from '../../components/table/TableLink';
 import { TableMenu } from '../../components/table/TableMenu';
@@ -35,7 +49,9 @@ export const NotesTableRow = ({
   isDeleteOptionEnabled = false,
   isAuthorNameClickable = false,
 }: Props) => {
+  const classes = useStyles();
   const history = useHistory();
+  const [open, setOpen] = useState(false);
 
   const {
     menuAnchorEl,
@@ -57,77 +73,106 @@ export const NotesTableRow = ({
   } = note;
 
   return (
-    <StyledTableRow
-      hover
-      onClick={isMenuOpen ? undefined : () => history.push(`/notes/${id}`)}
-    >
-      {isMenuActive && onEditClick && onDeleteClick ? (
+    <>
+      <StyledTableRow
+        hover
+        onClick={isMenuOpen ? undefined : () => history.push(`/notes/${id}`)}
+        className={classes.root}
+      >
         <StyledTableCell padding="checkbox">
-          <TableMenu
-            menuAnchorEl={menuAnchorEl}
-            isMenuOpen={isMenuOpen}
-            onMenuClick={handleMenuClick}
-            onMenuClose={handleMenuClose}
+          <IconButton
+            aria-label="expand row"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(!open);
+            }}
           >
-            <TableMenuItem
-              icon={<EditIcon fontSize="small" />}
-              text="Edytuj"
-              onClick={() => {
-                handleMenuAction(() => onEditClick(note));
-              }}
-              disabled={!isEditOptionEnabled}
-            />
-            <TableMenuItem
-              icon={<DeleteIcon fontSize="small" />}
-              text="Usuń"
-              onClick={() => {
-                handleMenuAction(() => onDeleteClick(id));
-              }}
-              disabled={!isDeleteOptionEnabled}
-            />
-          </TableMenu>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
         </StyledTableCell>
-      ) : null}
-      <StyledTableCell>
-        {player ? (
-          <TableLink to={`/players/${player.id}`}>
-            {`${player.firstName} ${player.lastName}`}
-          </TableLink>
-        ) : (
-          'N/A'
-        )}
-      </StyledTableCell>
-      <StyledTableCell>
-        {isAuthorNameClickable ? (
-          <TableLink to={`/users/${author.id}`}>
-            {`${author.firstName} ${author.lastName}`}
-          </TableLink>
-        ) : (
-          <>{`${author.firstName} ${author.lastName}`}</>
-        )}
-      </StyledTableCell>
-      <StyledTableCell>
-        {match ? (
-          <TableLink to={`/matches/${match.id}`}>
-            {`${match.homeTeam.name} - ${match.awayTeam.name}`}
-          </TableLink>
-        ) : (
-          'N/A'
-        )}
-      </StyledTableCell>
-      <StyledTableCell>
-        {match ? formatDate(match.date) : 'N/A'}
-      </StyledTableCell>
-      <StyledTableCell>
-        <Tooltip title={text}>
-          <p style={{ margin: 0 }}>
-            {text.split(' ').slice(0, 6).join(' ')}...
-          </p>
-        </Tooltip>
-      </StyledTableCell>
-      <StyledTableCell>{rating}</StyledTableCell>
-      <StyledTableCell>{maxRatingScore}</StyledTableCell>
-      <StyledTableCell>{`${percentageRating.toFixed(1)}%`}</StyledTableCell>
-    </StyledTableRow>
+        {isMenuActive && onEditClick && onDeleteClick ? (
+          <StyledTableCell padding="checkbox">
+            <TableMenu
+              menuAnchorEl={menuAnchorEl}
+              isMenuOpen={isMenuOpen}
+              onMenuClick={handleMenuClick}
+              onMenuClose={handleMenuClose}
+            >
+              <TableMenuItem
+                icon={<EditIcon fontSize="small" />}
+                text="Edytuj"
+                onClick={() => {
+                  handleMenuAction(() => onEditClick(note));
+                }}
+                disabled={!isEditOptionEnabled}
+              />
+              <TableMenuItem
+                icon={<DeleteIcon fontSize="small" />}
+                text="Usuń"
+                onClick={() => {
+                  handleMenuAction(() => onDeleteClick(id));
+                }}
+                disabled={!isDeleteOptionEnabled}
+              />
+            </TableMenu>
+          </StyledTableCell>
+        ) : null}
+        <StyledTableCell>
+          {player ? (
+            <TableLink to={`/players/${player.id}`}>
+              {`${player.firstName} ${player.lastName}`}
+            </TableLink>
+          ) : (
+            'N/A'
+          )}
+        </StyledTableCell>
+        <StyledTableCell>
+          {isAuthorNameClickable ? (
+            <TableLink to={`/users/${author.id}`}>
+              {`${author.firstName} ${author.lastName}`}
+            </TableLink>
+          ) : (
+            <>{`${author.firstName} ${author.lastName}`}</>
+          )}
+        </StyledTableCell>
+        <StyledTableCell>
+          {match ? (
+            <TableLink to={`/matches/${match.id}`}>
+              {`${match.homeTeam.name} - ${match.awayTeam.name}`}
+            </TableLink>
+          ) : (
+            'N/A'
+          )}
+        </StyledTableCell>
+        <StyledTableCell>
+          {match ? formatDate(match.date) : 'N/A'}
+        </StyledTableCell>
+        <StyledTableCell>{rating}</StyledTableCell>
+        <StyledTableCell>{maxRatingScore}</StyledTableCell>
+        <StyledTableCell>{`${percentageRating.toFixed(1)}%`}</StyledTableCell>
+      </StyledTableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography variant="h6" gutterBottom>
+                Treść notatki
+              </Typography>
+              <Typography gutterBottom variant="body2">
+                {text}
+              </Typography>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
   );
 };
+
+const useStyles = makeStyles({
+  root: {
+    '& > *': {
+      borderBottom: 'unset',
+    },
+  },
+});

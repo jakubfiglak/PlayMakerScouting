@@ -33,6 +33,7 @@ export const Table: FC<Props> = ({
   total,
   headCells,
   actions,
+  collapsible,
 }) => {
   const classes = useStyles();
 
@@ -45,6 +46,7 @@ export const Table: FC<Props> = ({
           order={order}
           handleSort={handleSort}
           actions={actions}
+          collapsible={collapsible}
         />
         <TableBody>{children}</TableBody>
         <TableFooter>

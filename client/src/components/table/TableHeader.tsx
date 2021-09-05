@@ -10,6 +10,7 @@ type Props = {
   sortBy: string;
   order: SortingOrder;
   handleSort: (id: string) => void;
+  collapsible?: boolean;
   actions?: boolean;
 };
 
@@ -18,12 +19,14 @@ export const TableHeader = ({
   sortBy,
   order,
   handleSort,
+  collapsible,
   actions,
 }: Props) => {
   return (
     <TableHead>
       <StyledTableRow>
-        {actions && <StyledTableCell />}
+        {collapsible ? <StyledTableCell /> : null}
+        {actions ? <StyledTableCell /> : null}
         {headCells.map((headCell) => (
           <StyledTableCell key={headCell.id}>
             <TableSortLabel
