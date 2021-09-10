@@ -1,20 +1,24 @@
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 // MUI components
-import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { ClubDetails } from './ClubDetails';
+import { ClubsForm } from '../Clubs/ClubsForm';
 import { PlayersTable } from '../Players/PlayersTable';
 import { PlayersTableRow } from '../Players/PlayersTableRow';
 import { MatchesTable } from '../Matches/MatchesTable';
 import { MatchesTableRow } from '../Matches/MatchesTableRow';
 import { MainTemplate } from '../../templates/MainTemplate';
+import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { useTable } from '../../hooks/useTable';
-import { useClub } from '../../hooks/clubs';
+import { useClub, useUpdateClub } from '../../hooks/clubs';
 import { useClubsPlayers } from '../../hooks/players';
 import { useClubsMatches } from '../../hooks/matches';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
 type ParamTypes = {
   id: string;
@@ -23,8 +27,11 @@ type ParamTypes = {
 export const ClubPage = () => {
   const classes = useStyles();
   const params = useParams<ParamTypes>();
+  const [isEditState, setEditState] = useState(false);
 
   const { id } = params;
+
+  const user = useAuthenticatedUser();
 
   const {
     tableSettings: playersTableSettings,
@@ -32,6 +39,7 @@ export const ClubPage = () => {
     handleChangeRowsPerPage: handleChangePlayersTableRowsPerPage,
     handleSort: handlePlayersTableSort,
   } = useTable('clubsPlayersTable');
+
   const {
     tableSettings: matchesTableSettings,
     handleChangePage: handleChangeMatchesTablePage,
@@ -40,6 +48,7 @@ export const ClubPage = () => {
   } = useTable('clubsMatchesTable');
 
   const { data: club, isLoading: clubLoading } = useClub(id);
+
   const { data: players, isLoading: playersLoading } = useClubsPlayers({
     clubId: id,
     page: playersTableSettings.page + 1,
@@ -47,6 +56,7 @@ export const ClubPage = () => {
     order: playersTableSettings.order,
     sort: playersTableSettings.sortBy,
   });
+
   const { data: matches, isLoading: matchesLoading } = useClubsMatches({
     clubId: id,
     page: matchesTableSettings.page + 1,
@@ -55,24 +65,30 @@ export const ClubPage = () => {
     sort: matchesTableSettings.sortBy,
   });
 
-  const isLoading = clubLoading || playersLoading || matchesLoading;
+  const { mutate: updateClub, isLoading: updateClubLoading } = useUpdateClub(
+    id,
+  );
+
+  const isLoading =
+    clubLoading || playersLoading || matchesLoading || updateClubLoading;
 
   return (
     <MainTemplate>
       {isLoading && <Loader />}
       <div className={classes.container}>
-        <Button
-          to="/clubs"
-          component={RouterLink}
-          variant="contained"
-          color="primary"
-          className={classes.link}
-        >
-          Wróć do listy klubów
-        </Button>
-        <PageHeading title="Profil klubu" />
+        <SingleAssetPageActions
+          isEditState={isEditState}
+          linkText="Wróć do listy klubów"
+          linkTo="/clubs"
+          isEditDisabled={!(user.role === 'admin' || user.id === club?.author)}
+          onEditClick={() => setEditState(!isEditState)}
+        />
+        <PageHeading title={`Profil klubu ${club?.name}`} />
       </div>
-      {club ? <ClubDetails club={club} /> : null}
+      {club && !isEditState ? <ClubDetails club={club} /> : null}
+      {club && isEditState ? (
+        <ClubsForm current={club} onSubmit={updateClub} />
+      ) : null}
       <section>
         <Typography
           variant="h6"
@@ -136,7 +152,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  link: {
+  buttonsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: `${theme.spacing(1)}px`,
     marginBottom: theme.spacing(1),
   },
   title: {

@@ -1,20 +1,25 @@
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 // MUI components
-import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { PlayerDetails } from './PlayerDetails';
+import { PlayersForm } from '../Players/PlayersForm';
 import { ReportsTable } from '../Reports/ReportsTable';
 import { ReportsTableRow } from '../Reports/ReportsTableRow';
 import { NotesTable } from '../Notes/NotesTable';
 import { NotesTableRow } from '../Notes/NotesTableRow';
 import { MainTemplate } from '../../templates/MainTemplate';
+import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
-import { usePlayer } from '../../hooks/players';
+import { usePlayer, useUpdatePlayer } from '../../hooks/players';
+import { useClubsList } from '../../hooks/clubs';
 import { usePlayersReports } from '../../hooks/reports';
 import { usePlayersNotes } from '../../hooks/notes';
 import { useTable } from '../../hooks/useTable';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
 type ParamTypes = {
   id: string;
@@ -23,20 +28,25 @@ type ParamTypes = {
 export const PlayerPage = () => {
   const classes = useStyles();
   const params = useParams<ParamTypes>();
+  const [isEditState, setEditState] = useState(false);
+
+  const { id } = params;
+
+  const user = useAuthenticatedUser();
+
   const {
     tableSettings: reportsTableSettings,
     handleChangePage: handleReportsTableChangePage,
     handleChangeRowsPerPage: handleReportsTableChangeRowsPerPage,
     handleSort: handleReportsTableSort,
   } = useTable('playersReportsTable');
+
   const {
     tableSettings: notesTableSettings,
     handleChangePage: handleNotesTableChangePage,
     handleChangeRowsPerPage: handleNotesTableChangeRowsPerPage,
     handleSort: handleNotesTableSort,
   } = useTable('playersNotesTable');
-
-  const { id } = params;
 
   const { data: player, isLoading: playerLoading } = usePlayer(id);
 
@@ -56,24 +66,43 @@ export const PlayerPage = () => {
     sort: notesTableSettings.sortBy,
   });
 
-  const isLoading = playerLoading || reportsLoading || notesLoading;
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
+
+  const {
+    mutate: updatePlayer,
+    isLoading: updatePlayerLoading,
+  } = useUpdatePlayer(id);
+
+  const isLoading =
+    playerLoading ||
+    reportsLoading ||
+    notesLoading ||
+    updatePlayerLoading ||
+    clubsLoading;
 
   return (
     <MainTemplate>
       {isLoading && <Loader />}
       <div className={classes.container}>
-        <Button
-          to="/players"
-          component={RouterLink}
-          variant="contained"
-          color="primary"
-          className={classes.link}
-        >
-          Wróć do listy zawodników
-        </Button>
+        <SingleAssetPageActions
+          isEditState={isEditState}
+          linkText="Wróć do listy zawodników"
+          linkTo="/players"
+          isEditDisabled={
+            !(user.role === 'admin' || user.id === player?.author)
+          }
+          onEditClick={() => setEditState(!isEditState)}
+        />
         <PageHeading title="Profil zawodnika" />
       </div>
-      {player && <PlayerDetails player={player} />}
+      {player && !isEditState ? <PlayerDetails player={player} /> : null}
+      {player && isEditState ? (
+        <PlayersForm
+          current={player}
+          clubsData={clubs || []}
+          onSubmit={updatePlayer}
+        />
+      ) : null}
       <section>
         <Typography
           variant="h6"

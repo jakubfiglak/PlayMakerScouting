@@ -5,14 +5,25 @@ export type Position =
   | 'LB'
   | 'RB'
   | 'CB'
+  | 'CBL'
+  | 'CBR'
+  | 'CBM'
   | 'LW'
   | 'LWB'
   | 'RW'
   | 'RWB'
   | 'DM'
+  | 'DM/CM'
   | 'CM'
+  | 'CM/CAM'
   | 'CAM'
-  | 'F';
+  | 'LM'
+  | 'RM'
+  | 'RM/LM'
+  | 'RW/LW'
+  | 'CAM/F'
+  | 'F'
+  | 'F/W';
 
 export type Foot = 'L' | 'R' | 'both';
 

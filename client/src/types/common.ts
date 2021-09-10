@@ -55,6 +55,7 @@ export type CommonTableProps = {
   handleSort: (id: string) => void;
   total: number;
   actions?: boolean;
+  collapsible?: boolean;
 };
 
 export interface ApiError extends Error {

@@ -7,6 +7,8 @@ import { FootSelect } from '../../components/selects/FootSelect';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
+// Hooks
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 // Types
 import { ClubBasicInfo } from '../../types/clubs';
 import { Player, PlayerDTO } from '../../types/players';
@@ -18,32 +20,23 @@ type Props = {
   clubsData: ClubBasicInfo[];
   current: Player | null;
   onSubmit: (data: PlayerDTO) => void;
-  onAddClubClick: () => void;
-  onCancelClick: () => void;
+  addClubOption?: boolean;
+  onAddClubClick?: () => void;
+  onCancelClick?: () => void;
 };
 
 export const PlayersForm = ({
   clubsData,
   current,
+  addClubOption,
   onSubmit,
   onAddClubClick,
   onCancelClick,
 }: Props) => {
+  const { setAlert } = useAlertsState();
+
   const initialValues: PlayerDTO = current
-    ? {
-        firstName: current.firstName,
-        lastName: current.lastName,
-        club: current.club.id,
-        position: current.position,
-        yearOfBirth: current.yearOfBirth,
-        height: current.height,
-        weight: current.weight,
-        footed: current.footed,
-        lnpID: current.lnpID,
-        lnpProfileURL: current.lnpProfileURL,
-        minut90ProfileURL: current.minut90ProfileURL,
-        transfermarktProfileURL: current.transfermarktProfileURL,
-      }
+    ? getInitialStateFromCurrent(current)
     : playersFormInitialValues;
 
   return (
@@ -85,7 +78,7 @@ export const PlayersForm = ({
                 clubsData={clubsData}
                 name="club"
                 label="Klub"
-                addClubOption
+                addClubOption={addClubOption}
                 onAddClubClick={onAddClubClick}
               />
             </FormControl>
@@ -131,7 +124,6 @@ export const PlayersForm = ({
             <FormControl variant="outlined" fullWidth>
               <FootSelect />
             </FormControl>
-
             <Field
               name="lnpID"
               as={TextField}
@@ -185,8 +177,11 @@ export const PlayersForm = ({
               label="zawodnika"
               isEditState={!!current}
               onCancelClick={() => {
-                onCancelClick();
+                if (onCancelClick) {
+                  onCancelClick();
+                }
                 handleReset();
+                setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
               }}
             />
           </FormContainer>
@@ -195,3 +190,12 @@ export const PlayersForm = ({
     </Formik>
   );
 };
+
+function getInitialStateFromCurrent(player: Player): PlayerDTO {
+  const { id, club, author, notesCount, reportsCount, ...rest } = player;
+
+  return {
+    ...rest,
+    club: club.id,
+  };
+}

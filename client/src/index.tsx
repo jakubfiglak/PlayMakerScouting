@@ -6,6 +6,7 @@ import App from './App';
 import { AlertsState } from './context/alerts/AlertsState';
 import { AuthState } from './context/auth/AuthState';
 import { SettingsState } from './context/settings/SettingsState';
+import { DraftsState } from './context/drafts/DraftsState';
 
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY,
@@ -18,7 +19,9 @@ ReactDOM.render(
     <AlertsState>
       <AuthState>
         <SettingsState>
-          <App />
+          <DraftsState>
+            <App />
+          </DraftsState>
         </SettingsState>
       </AuthState>
     </AlertsState>

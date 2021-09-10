@@ -1,5 +1,4 @@
 import { Formik, Form, Field } from 'formik';
-import * as yup from 'yup';
 // MUI components
 import { TextField, FormControl } from '@material-ui/core';
 // Custom components
@@ -10,11 +9,19 @@ import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Hooks
 import { useAccountInfo } from '../../hooks/auth';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 // Types
 import { Note, NoteDTO } from '../../types/notes';
-import { PlayerBasicInfo, Position } from '../../types/players';
+import { PlayerBasicInfo } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
 import { PositionPlayedSelect } from './PositionPlayedSelect';
+// Utils & data
+import {
+  getInitialStateFromCurrent,
+  validationSchema,
+  getMatchesPlayers,
+  getPlayersMatches,
+} from './utils';
 
 type Props = {
   playersData: PlayerBasicInfo[];
@@ -34,6 +41,7 @@ export const NotesForm = ({
   fullWidth,
 }: Props) => {
   const { data: account } = useAccountInfo();
+  const { setAlert } = useAlertsState();
 
   const notesFormInitialValues: NoteDTO = {
     player: '',
@@ -133,6 +141,7 @@ export const NotesForm = ({
                 if (onCancelClick) {
                   onCancelClick();
                 }
+                setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
                 handleReset();
               }}
             />
@@ -142,80 +151,3 @@ export const NotesForm = ({
     </Formik>
   );
 };
-
-const validationSchema: yup.ObjectSchema<NoteDTO> = yup
-  .object({
-    player: yup.string().nullable(),
-    match: yup.string().nullable(),
-    positionPlayed: yup.mixed<Position>().required(),
-    shirtNo: yup
-      .number()
-      .min(1, 'Numer na koszulce musi być większy lub równy 1')
-      .max(99, 'Numer na koszulce musi być mniejszy lub równy 99'),
-    maxRatingScore: yup.number().min(2).max(10).required(),
-    rating: yup.number().min(1).max(10).required(),
-    text: yup.string().required('Wpisz treść notatki'),
-  })
-  .defined();
-
-function getInitialStateFromCurrent(note: Note): NoteDTO {
-  const {
-    author,
-    createdAt,
-    id,
-    docNumber,
-    percentageRating,
-    updatedAt,
-    ...rest
-  } = note;
-
-  return {
-    ...rest,
-    player: rest.player?.id,
-    match: rest.match?.id,
-  };
-}
-
-type GetPlayersMatchesArgs = {
-  playerId: string;
-  players: PlayerBasicInfo[];
-  matches: MatchBasicInfo[];
-};
-
-function getPlayersMatches({
-  playerId,
-  players,
-  matches,
-}: GetPlayersMatchesArgs) {
-  const selectedPlayer = players.find((player) => player.id === playerId);
-
-  if (selectedPlayer) {
-    return matches.filter(
-      (match) =>
-        match.homeTeam.id === selectedPlayer.club.id ||
-        match.awayTeam.id === selectedPlayer.club.id,
-    );
-  }
-
-  return [];
-}
-
-type GetMatchesPlayers = {
-  matchId: string;
-  matches: MatchBasicInfo[];
-  players: PlayerBasicInfo[];
-};
-
-function getMatchesPlayers({ matchId, matches, players }: GetMatchesPlayers) {
-  const selectedMatch = matches.find((match) => match.id === matchId);
-
-  if (selectedMatch) {
-    return players.filter(
-      (player) =>
-        player.club.id === selectedMatch.homeTeam.id ||
-        player.club.id === selectedMatch.awayTeam.id,
-    );
-  }
-
-  return [];
-}

@@ -20,7 +20,6 @@ import {
   useUpdateMatch,
   useDeleteMatch,
 } from '../../hooks/matches';
-import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
@@ -35,7 +34,6 @@ const initialFilters: MatchesFilterData = {
 };
 
 export const MatchesPage = () => {
-  const { setAlert } = useAlertsState();
   const user = useAuthenticatedUser();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
@@ -97,7 +95,6 @@ export const MatchesPage = () => {
 
   const handleFormReset = () => {
     setActiveTab(0);
-    setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
     setCurrentMatch(null);
   };
 
@@ -159,7 +156,6 @@ export const MatchesPage = () => {
         <PageHeading
           title={currentMatch ? 'Edycja meczu' : 'Tworzenie nowego meczu'}
         />
-
         <MatchesForm
           clubsData={clubs || []}
           current={currentMatch}

@@ -1,17 +1,22 @@
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 // MUI components
-import { Button, Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles, Theme } from '@material-ui/core';
 // Custom components
+import { MatchDetails } from './MatchDetails';
+import { MatchesForm } from '../Matches/MatchesForm';
 import { NotesTable } from '../Notes/NotesTable';
 import { NotesTableRow } from '../Notes/NotesTableRow';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
+import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { Loader } from '../../components/Loader';
 // Hooks
-import { useMatch } from '../../hooks/matches';
+import { useMatch, useUpdateMatch } from '../../hooks/matches';
 import { useMatchesNotes } from '../../hooks/notes';
+import { useClubsList } from '../../hooks/clubs';
 import { useTable } from '../../hooks/useTable';
-import { MatchDetails } from './MatchDetails';
+import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
 type ParamTypes = {
   id: string;
@@ -20,14 +25,18 @@ type ParamTypes = {
 export const MatchPage = () => {
   const classes = useStyles();
   const params = useParams<ParamTypes>();
+  const [isEditState, setEditState] = useState(false);
+
+  const { id } = params;
+
+  const user = useAuthenticatedUser();
+
   const {
     tableSettings: { page, rowsPerPage, sortBy, order },
     handleChangePage,
     handleChangeRowsPerPage,
     handleSort,
   } = useTable('matchesNotesTable');
-
-  const { id } = params;
 
   const { data: match, isLoading: matchLoading } = useMatch(id);
 
@@ -39,24 +48,36 @@ export const MatchPage = () => {
     sort: sortBy,
   });
 
-  const isLoading = matchLoading || notesLoading;
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
+
+  const { mutate: updateMatch, isLoading: updateMatchLoading } = useUpdateMatch(
+    id,
+  );
+
+  const isLoading =
+    matchLoading || notesLoading || updateMatchLoading || clubsLoading;
 
   return (
     <MainTemplate>
       {isLoading && <Loader />}
       <div className={classes.container}>
-        <Button
-          to="/matches"
-          component={RouterLink}
-          variant="contained"
-          color="primary"
-          className={classes.link}
-        >
-          Wróć do listy meczów
-        </Button>
+        <SingleAssetPageActions
+          isEditState={isEditState}
+          linkText="Wróć do listy meczów"
+          linkTo="/matches"
+          isEditDisabled={!(user.role === 'admin' || user.id === match?.author)}
+          onEditClick={() => setEditState(!isEditState)}
+        />
         <PageHeading title="Szczegóły meczu" />
       </div>
-      {match ? <MatchDetails match={match} /> : null}
+      {match && !isEditState ? <MatchDetails match={match} /> : null}
+      {match && isEditState ? (
+        <MatchesForm
+          current={match}
+          onSubmit={updateMatch}
+          clubsData={clubs || []}
+        />
+      ) : null}
       <section>
         <Typography
           variant="h6"
@@ -93,9 +114,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  link: {
-    marginBottom: theme.spacing(1),
   },
   title: {
     margin: theme.spacing(2),

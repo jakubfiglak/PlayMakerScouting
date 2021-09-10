@@ -11,7 +11,6 @@ const headCells = [
   { id: 'author', label: 'Autor' },
   { id: 'match', label: 'Mecz' },
   { id: 'matchDate', label: 'Data meczu', sortingDisabled: true },
-  { id: 'text', label: 'Tekst' },
   { id: 'rating', label: 'Ocena' },
   { id: 'maxRatingScore', label: 'Skala ocen' },
   { id: 'percentageRating', label: 'Ocena %' },
@@ -41,6 +40,7 @@ export const NotesTable: FC<Props> = ({
       total={total}
       headCells={headCells}
       actions={actions}
+      collapsible
     >
       {children}
     </Table>

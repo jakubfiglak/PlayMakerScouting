@@ -13,12 +13,13 @@ import { Competition } from '../../types/reports';
 // Utils & data
 import { formatDateObject } from '../../utils/dates';
 import { CompetitionSelect } from '../../components/selects/CompetitionSelect';
+import { useAlertsState } from '../../context/alerts/useAlertsState';
 
 type Props = {
   clubsData: ClubBasicInfo[];
   current: Match | null;
   onSubmit: (data: MatchDTO) => void;
-  onCancelClick: () => void;
+  onCancelClick?: () => void;
 };
 
 export const MatchesForm = ({
@@ -27,6 +28,8 @@ export const MatchesForm = ({
   onSubmit,
   onCancelClick,
 }: Props) => {
+  const { setAlert } = useAlertsState();
+
   const initialValues: MatchDTO = current
     ? getInitialStateFromCurrent(current)
     : matchesFormInitialValues;
@@ -90,8 +93,11 @@ export const MatchesForm = ({
               label="mecz"
               isEditState={!!current}
               onCancelClick={() => {
-                onCancelClick();
+                if (onCancelClick) {
+                  onCancelClick();
+                }
                 handleReset();
+                setAlert({ msg: 'Zmiany zostały anulowane', type: 'warning' });
               }}
             />
           </FormContainer>
