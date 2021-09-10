@@ -44,6 +44,7 @@ const NoteSchema = new Schema(
     maxRatingScore: { type: Number },
     rating: { type: Number },
     percentageRating: { type: Number },
+    isSeededFromPlaymakerDb: { type: Boolean, default: false },
   },
   {
     timestamps: true,
