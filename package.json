@@ -20,6 +20,8 @@
     "delete-players": "node scripts/delete-generated-players",
     "seed-matches": "node scripts/seed-matches-from-csv",
     "delete-matches": "node scripts/delete-generated-matches",
+    "seed-notes": "node scripts/seed-notes-from-csv",
+    "delete-notes": "node scripts/delete-generated-notes",
     "seed-ratings": "node scripts/seed-ratings -create",
     "destroy-ratings": "node scripts/seed-ratings -destroy",
     "seed-reportTemplates": "node scripts/seed-reportTemplates -create",
