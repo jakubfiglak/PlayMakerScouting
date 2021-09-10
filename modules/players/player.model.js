@@ -61,6 +61,10 @@ const PlayerSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isSeededFromPlaymakerDb: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

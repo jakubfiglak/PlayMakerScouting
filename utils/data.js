@@ -31,7 +31,31 @@ const divisions = [
   'Rozgrywki juniorskie',
 ];
 
-const positions = ['GK', 'LB', 'RB', 'CB', 'LW', 'LWB', 'RW', 'RWB', 'DM', 'CM', 'CAM', 'F'];
+const positions = [
+  'GK',
+  'LB',
+  'RB',
+  'CB',
+  'CBL',
+  'CBR',
+  'CBM',
+  'LW',
+  'LWB',
+  'RW',
+  'RWB',
+  'DM',
+  'DM/CM',
+  'CM',
+  'CM/CAM',
+  'CAM',
+  'LM',
+  'RM',
+  'RM/LM',
+  'RW/LW',
+  'CAM/F',
+  'F',
+  'F/W',
+];
 
 const oldPositions = ['GK', 'FB', 'CB', 'CM', 'WM', 'F'];
 
