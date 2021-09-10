@@ -147,6 +147,34 @@ describe('GET /api/v1/players', () => {
     expect(response.data.data.docs[1].lastName).toBe(player2.lastName);
   });
 
+  it('should return only the players listed in users ACL, public players and players with isSeededFromPlaymakerDb flag if user is playmaker-scout', async () => {
+    const player1 = buildPlayer();
+    const player2 = buildPlayer({ isPublic: true });
+    const player3 = buildPlayer({ isSeededFromPlaymakerDb: true });
+    const player4 = buildPlayer();
+
+    await insertPlayers([player1, player2, player3, player4]);
+    const { user, token } = await insertTestUser({ role: 'playmaker-scout' });
+
+    const userAcl = buildAccessControlList({
+      user: user._id,
+      players: [player1._id],
+    });
+    await insertAccessControlLists([userAcl]);
+
+    const response = await api.get('players', { headers: { Cookie: `token=${token}` } });
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.totalDocs).toBe(3);
+    expect(response.data.data.docs[0].id).toBe(player1._id.toHexString());
+    expect(response.data.data.docs[1].id).toBe(player2._id.toHexString());
+    expect(response.data.data.docs[2].id).toBe(player3._id.toHexString());
+    expect(response.data.data.docs[0].lastName).toBe(player1.lastName);
+    expect(response.data.data.docs[1].lastName).toBe(player2.lastName);
+    expect(response.data.data.docs[2].lastName).toBe(player3.lastName);
+  });
+
   it('should return only the players listed in teams ACL if user is not an admin and belongs to the team', async () => {
     const player1 = buildPlayer();
     const player2 = buildPlayer();
@@ -289,12 +317,30 @@ describe('GET /api/v1/players/:id', () => {
   });
 
   it('should return player data if user is authorized', async () => {
-    const player = buildPlayer({ authorizedUsers: [testUser._id] });
+    const player = buildPlayer();
     const userAcl = buildAccessControlList({ user: testUser._id, players: [player._id] });
 
     await Promise.all([insertPlayers([player]), insertAccessControlLists([userAcl])]);
 
     const response = await api.get(`players/${player._id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.data.success).toBe(true);
+    expect(response.data.data.id).toBe(player._id.toHexString());
+    expect(response.data.data.lastName).toBe(player.lastName);
+  });
+
+  it('should return player data if user is playmaker-scout and player has the flag of isSeededFromPlaymakerDb', async () => {
+    const player = buildPlayer({ isSeededFromPlaymakerDb: true });
+    const { user, token } = await insertTestUser({ role: 'playmaker-scout' });
+
+    const userAcl = buildAccessControlList({ user: user._id });
+
+    await Promise.all([insertPlayers([player]), insertAccessControlLists([userAcl])]);
+
+    const response = await api.get(`players/${player._id}`, {
+      headers: { Cookie: `token=${token}` },
+    });
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.data.success).toBe(true);

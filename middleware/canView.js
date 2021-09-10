@@ -10,8 +10,14 @@ function canView(assetType) {
 
     const assetTypePlural = assetType === 'match' ? `${assetType}es` : `${assetType}s`;
 
+    // Temporary solution - show all assets with
+    // isSeededFromPlaymakerDb flag set to true to all playmaker-scouts
+    const playmakerScoutAccess = req[assetType].isSeededFromPlaymakerDb === true;
+
     const hasAccess =
-      req.acl[assetTypePlural].includes(req.params.id) || req[assetType].isPublic === true;
+      req.acl[assetTypePlural].includes(req.params.id) ||
+      req[assetType].isPublic === true ||
+      playmakerScoutAccess;
 
     if (!hasAccess) {
       return next(
