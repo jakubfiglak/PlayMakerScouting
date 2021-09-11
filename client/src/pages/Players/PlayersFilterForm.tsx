@@ -8,7 +8,7 @@ import {
   createStyles,
 } from '@material-ui/core';
 // Custom components
-import { PositionSelect } from '../../components/selects/PositionSelect';
+import { PositionCombo } from '../../components/selects/PositionCombo';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { YearOfBirthSelect } from '../../components/selects/YearOfBirthSelect';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
@@ -58,7 +58,7 @@ export const PlayersFilterForm = ({
               />
             </FormControl>
             <FormControl variant="outlined" size="small" fullWidth>
-              <PositionSelect />
+              <PositionCombo size="small" />
             </FormControl>
             <div className={classes.container}>
               <YearOfBirthSelect

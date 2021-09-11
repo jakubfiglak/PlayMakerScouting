@@ -3,7 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import { TextField, FormControl, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { FormModal } from '../FormModal';
-import { PositionSelect } from '../selects/PositionSelect';
+import { PositionCombo } from '../selects/PositionCombo';
 import { FootSelect } from '../selects/FootSelect';
 import { ClubsCombo } from '../selects/ClubsCombo';
 // Types
@@ -71,7 +71,7 @@ export const AddPlayerModal = ({
               <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
             </FormControl>
             <FormControl variant="outlined" fullWidth>
-              <PositionSelect />
+              <PositionCombo />
             </FormControl>
             <Field
               name="yearOfBirth"

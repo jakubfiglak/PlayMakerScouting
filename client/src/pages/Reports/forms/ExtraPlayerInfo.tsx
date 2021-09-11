@@ -2,7 +2,7 @@ import { useField } from 'formik';
 // MUI components
 import { FormControl, Grid, TextField } from '@material-ui/core';
 // Types
-import { PositionSelect } from '../../../components/selects/PositionSelect';
+import { PositionCombo } from '../../../components/selects/PositionCombo';
 
 export const ExtraPlayerInfo = () => {
   const [shirtNoField, shirtNoMeta] = useField('shirtNo');
@@ -12,7 +12,7 @@ export const ExtraPlayerInfo = () => {
     <>
       <Grid item xs={12} sm={6}>
         <FormControl variant="outlined" fullWidth>
-          <PositionSelect
+          <PositionCombo
             name="positionPlayed"
             helperText="Podaj pozycję, na której zawodnik zagrał w danym meczu"
           />

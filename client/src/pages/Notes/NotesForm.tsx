@@ -14,7 +14,7 @@ import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { Note, NoteDTO } from '../../types/notes';
 import { PlayerBasicInfo } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
-import { PositionPlayedSelect } from './PositionPlayedSelect';
+import { PositionPlayedCombo } from './PositionPlayedCombo';
 // Utils & data
 import {
   getInitialStateFromCurrent,
@@ -111,7 +111,7 @@ export const NotesForm = ({
                 label="Mecz"
               />
             </FormControl>
-            <PositionPlayedSelect players={playersData} />
+            <PositionPlayedCombo players={playersData} />
             <Field
               name="maxRatingScore"
               as={TextField}
