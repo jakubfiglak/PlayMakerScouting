@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const toJson = require('@meanie/mongoose-to-json');
-const { positions } = require('../../utils/data');
+const { positions, userRoles } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -64,6 +64,10 @@ const PlayerSchema = new Schema(
     isSeededFromPlaymakerDb: {
       type: Boolean,
       default: false,
+    },
+    createdByUserWithRole: {
+      type: String,
+      enum: userRoles,
     },
   },
   {

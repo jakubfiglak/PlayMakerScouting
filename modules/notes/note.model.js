@@ -4,7 +4,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 const autoPopulate = require('mongoose-autopopulate');
 const toJson = require('@meanie/mongoose-to-json');
 const options = require('./options');
-const { positions } = require('../../utils/data');
+const { positions, userRoles } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -45,6 +45,10 @@ const NoteSchema = new Schema(
     rating: { type: Number },
     percentageRating: { type: Number },
     isSeededFromPlaymakerDb: { type: Boolean, default: false },
+    createdByUserWithRole: {
+      type: String,
+      enum: userRoles,
+    },
   },
   {
     timestamps: true,

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const toJson = require('@meanie/mongoose-to-json');
-const { voivodeships, divisions } = require('../../utils/data');
+const { voivodeships, divisions, userRoles } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -34,6 +34,10 @@ const ClubSchema = new Schema(
     isPublic: {
       type: Boolean,
       default: false,
+    },
+    createdByUserWithRole: {
+      type: String,
+      enum: userRoles,
     },
   },
   { timestamps: true }

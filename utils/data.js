@@ -63,6 +63,8 @@ const ratingCategories = ['individual', 'teamplay', 'offense', 'defense', 'physi
 
 const competitions = ['league', 'cup', 'friendly'];
 
+const userRoles = ['admin', 'playmaker-scout', 'scout'];
+
 module.exports = {
   voivodeships,
   divisions,
@@ -70,4 +72,5 @@ module.exports = {
   oldPositions,
   ratingCategories,
   competitions,
+  userRoles,
 };
