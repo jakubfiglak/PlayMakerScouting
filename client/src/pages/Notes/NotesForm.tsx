@@ -111,7 +111,10 @@ export const NotesForm = ({
                 label="Mecz"
               />
             </FormControl>
-            <PositionPlayedCombo players={playersData} />
+            <PositionPlayedCombo
+              players={playersData}
+              isEditState={!!current}
+            />
             <Field
               name="maxRatingScore"
               as={TextField}
