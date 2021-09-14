@@ -4,6 +4,7 @@ import { TextField, FormControl } from '@material-ui/core';
 // Custom components
 import { FootSelect } from '../../components/selects/FootSelect';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
+import { CountriesCombo } from '../../components/selects/CountriesCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Hooks
@@ -73,6 +74,7 @@ export const PlayersForm = ({
               error={touched.lastName && !!errors.lastName}
               helperText={touched.lastName && errors.lastName}
             />
+            <CountriesCombo />
             <FormControl variant="outlined" fullWidth>
               <ClubsCombo
                 clubsData={clubsData}

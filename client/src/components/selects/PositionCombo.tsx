@@ -33,7 +33,7 @@ export const PositionCombo = ({
         setValue(newValue);
       }}
       value={value}
-      options={positions}
+      options={[...positions]}
       getOptionLabel={(option) => getLabel(option) || 'brak'}
       renderInput={(params) => (
         <TextField

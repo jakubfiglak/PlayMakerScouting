@@ -7,21 +7,7 @@ import {
   FormControl,
   FormHelperText,
 } from '@material-ui/core';
-import { Division } from '../../types/clubs';
-
-const divisions: Division[] = [
-  'Ekstraklasa',
-  'I liga',
-  'II liga',
-  'III liga',
-  'IV liga',
-  'Klasa okręgowa',
-  'Klasa A',
-  'Klasa B',
-  'Klasa C',
-  'CLJ',
-  'Rozgrywki juniorskie',
-];
+import { divisions } from '../../utils/constants';
 
 type Props = {
   size?: 'small' | 'medium';

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const toJson = require('@meanie/mongoose-to-json');
-const { positions, userRoles } = require('../../utils/data');
+const { positions, userRoles, countryCodes } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -16,6 +16,11 @@ const PlayerSchema = new Schema(
       type: String,
       required: 'Please add a last Name',
       trim: true,
+    },
+    country: {
+      type: String,
+      enum: countryCodes,
+      required: 'please add players nationality',
     },
     club: {
       type: Schema.Types.ObjectId,

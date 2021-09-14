@@ -54,6 +54,7 @@ const buildUpdatePasswordForm = (overrides = {}) => ({
 const buildClub = (overrides = {}) => ({
   _id: new ID(),
   name: getRandomName(),
+  country: 'PL',
   voivodeship: 'Wielkopolskie',
   division: 'Ekstraklasa',
   author: new ID(),
@@ -64,6 +65,7 @@ const buildPlayer = (overrides = {}) => ({
   _id: new ID(),
   firstName: getFirstName(),
   lastName: getLastName(),
+  country: 'PL',
   position: 'CM',
   author: new ID(),
   ...overrides,

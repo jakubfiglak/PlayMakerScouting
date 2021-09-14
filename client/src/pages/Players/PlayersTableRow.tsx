@@ -20,6 +20,7 @@ import { useTableMenu } from '../../hooks/useTableMenu';
 import { Player } from '../../types/players';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
+import { getFlagEmoji } from '../../utils/countries';
 
 type Props = {
   player: Player;
@@ -58,6 +59,7 @@ export const PlayersTableRow = ({
     footed,
     reportsCount,
     notesCount,
+    country,
   } = player;
 
   return (
@@ -94,6 +96,7 @@ export const PlayersTableRow = ({
         </StyledTableCell>
       ) : null}
       <StyledTableCell>{`${firstName} ${lastName}`}</StyledTableCell>
+      <StyledTableCell>{`${getFlagEmoji(country)} ${country}`}</StyledTableCell>
       <StyledTableCell>
         <TableLink to={`/clubs/${club.id}`}>{club.name}</TableLink>
       </StyledTableCell>

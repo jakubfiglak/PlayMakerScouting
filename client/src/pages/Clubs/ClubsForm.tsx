@@ -3,7 +3,9 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from '@material-ui/core';
 // Custom components
 import { DivisionSelect } from '../../components/selects/DivisionSelect';
+import { GroupSelect } from '../../components/selects/GroupSelect';
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
+import { CountriesCombo } from '../../components/selects/CountriesCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Hooks
@@ -50,8 +52,10 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
               error={touched.name && !!errors.name}
               helperText={touched.name && errors.name}
             />
+            <CountriesCombo />
             <VoivodeshipSelect name="voivodeship" />
             <DivisionSelect />
+            <GroupSelect />
             <Field
               name="lnpID"
               as={TextField}

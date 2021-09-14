@@ -10,6 +10,8 @@ import { TableMenuItem } from '../../components/table/TableMenuItem';
 import { useTableMenu } from '../../hooks/useTableMenu';
 // Types
 import { Club } from '../../types/clubs';
+// Utils & data
+import { getFlagEmoji } from '../../utils/countries';
 
 type Props = {
   club: Club;
@@ -36,7 +38,7 @@ export const ClubsTableRow = ({
     handleMenuAction,
   } = useTableMenu();
 
-  const { id, name, division, voivodeship } = club;
+  const { id, name, division, voivodeship, country, group } = club;
 
   return (
     <StyledTableRow
@@ -70,7 +72,9 @@ export const ClubsTableRow = ({
         </TableMenu>
       </StyledTableCell>
       <StyledTableCell>{name}</StyledTableCell>
+      <StyledTableCell>{`${getFlagEmoji(country)} ${country}`}</StyledTableCell>
       <StyledTableCell>{division}</StyledTableCell>
+      <StyledTableCell>{group || 'N/A'}</StyledTableCell>
       <StyledTableCell>{voivodeship}</StyledTableCell>
     </StyledTableRow>
   );

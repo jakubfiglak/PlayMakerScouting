@@ -4,6 +4,8 @@ import { TextField, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { FormModal } from '../../components/FormModal';
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
+import { CountriesCombo } from '../../components/selects/CountriesCombo';
+import { GroupSelect } from '../../components/selects/GroupSelect';
 import { DivisionSelect } from '../../components/selects/DivisionSelect';
 // Types
 import { ClubDTO } from '../../types/clubs';
@@ -48,8 +50,10 @@ export const AddClubModal = ({ onClose, onSubmit, open }: Props) => {
               error={touched.name && !!errors.name}
               helperText={touched.name && errors.name}
             />
+            <CountriesCombo />
             <VoivodeshipSelect name="voivodeship" />
             <DivisionSelect />
+            <GroupSelect />
           </Form>
         </FormModal>
       )}
