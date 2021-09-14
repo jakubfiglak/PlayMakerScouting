@@ -12,10 +12,11 @@ function setAccessFilters(assetType) {
     }
     req.accessFilters = { $or: [{ _id: { $in: req.acl[assetTypePlural] } }, { isPublic: true }] };
 
-    // Temporary solution - show all assets with
-    // isSeededFromPlaymakerDb flag set to true to all playmaker-scouts
     if (isPlaymakerScout(req.user.role)) {
-      req.accessFilters.$or.push({ isSeededFromPlaymakerDb: true });
+      req.accessFilters.$or.push(
+        { isSeededFromPlaymakerDb: true },
+        { createdByUserWithRole: { $in: ['admin', 'playmaker-scout'] } }
+      );
     }
 
     next();
