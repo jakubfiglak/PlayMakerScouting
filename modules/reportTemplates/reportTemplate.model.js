@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const toJson = require('@meanie/mongoose-to-json');
 const autoPopulate = require('mongoose-autopopulate');
 const options = require('./options');
+const { userRoles } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -31,6 +32,10 @@ const ReportTemplateSchema = new Schema(
     private: {
       type: Boolean,
       default: true,
+    },
+    createdByUserWithRole: {
+      type: String,
+      enum: userRoles,
     },
   },
   { timestamps: true }

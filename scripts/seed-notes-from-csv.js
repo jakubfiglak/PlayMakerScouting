@@ -34,7 +34,7 @@ async function seedNotes() {
         shirtNo: result.shirtNo,
         text: result.text,
         maxRatingScore: result.maxRatingScore,
-        rating: result.maxRatingScore,
+        rating: result.rating,
         isSeededFromPlaymakerDb: true,
       }));
 

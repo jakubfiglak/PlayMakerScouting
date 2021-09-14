@@ -3,7 +3,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const toJson = require('@meanie/mongoose-to-json');
 const autoPopulate = require('mongoose-autopopulate');
 const options = require('./options');
-const { competitions } = require('../../utils/data');
+const { competitions, userRoles } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -49,6 +49,10 @@ const MatchSchema = new Schema(
     isSeededFromPlaymakerDb: {
       type: Boolean,
       default: false,
+    },
+    createdByUserWithRole: {
+      type: String,
+      enum: userRoles,
     },
   },
   {

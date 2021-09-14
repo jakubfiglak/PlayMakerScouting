@@ -1,6 +1,8 @@
 const httpStatus = require('http-status');
 const isAdmin = require('../utils/isAdmin');
 const ApiError = require('../utils/ApiError');
+const pluralizeAssetType = require('../utils/pluralizeAssetType');
+const isPlaymakerScout = require('../utils/isPlaymakerScout');
 
 function canView(assetType) {
   return function (req, res, next) {
@@ -8,16 +10,20 @@ function canView(assetType) {
       return next();
     }
 
-    const assetTypePlural = assetType === 'match' ? `${assetType}es` : `${assetType}s`;
+    const assetTypePlural = pluralizeAssetType(assetType);
 
-    // Temporary solution - show all assets with
-    // isSeededFromPlaymakerDb flag set to true to all playmaker-scouts
-    const playmakerScoutAccess = req[assetType].isSeededFromPlaymakerDb === true;
+    const playmakerScoutAccessCondtions =
+      req[assetType].isSeededFromPlaymakerDb === true ||
+      req[assetType].createdByUserWithRole === 'admin' ||
+      req[assetType].createdByUserWithRole === 'playmaker-scout';
 
-    const hasAccess =
-      req.acl[assetTypePlural].includes(req.params.id) ||
-      req[assetType].isPublic === true ||
-      playmakerScoutAccess;
+    const isInAcl = req.acl[assetTypePlural].includes(req.params.id);
+    const isPublic = req[assetType].isPublic === true;
+    const hasExtraPlaymakerScoutAccess = isPlaymakerScout(req.user.role)
+      ? playmakerScoutAccessCondtions
+      : false;
+
+    const hasAccess = isInAcl || isPublic || hasExtraPlaymakerScoutAccess;
 
     if (!hasAccess) {
       return next(

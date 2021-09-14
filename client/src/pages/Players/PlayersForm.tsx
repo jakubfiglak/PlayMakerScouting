@@ -2,7 +2,6 @@ import { Formik, Form, Field } from 'formik';
 // MUI components
 import { TextField, FormControl } from '@material-ui/core';
 // Custom components
-import { PositionSelect } from '../../components/selects/PositionSelect';
 import { FootSelect } from '../../components/selects/FootSelect';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
@@ -15,6 +14,7 @@ import { Player, PlayerDTO } from '../../types/players';
 // Utils & data
 import { playersFormValidationSchema } from '../../data/forms/validationSchemas';
 import { playersFormInitialValues } from '../../data/forms/initialValues';
+import { PositionCombo } from '../../components/selects/PositionCombo';
 
 type Props = {
   clubsData: ClubBasicInfo[];
@@ -83,7 +83,7 @@ export const PlayersForm = ({
               />
             </FormControl>
             <FormControl variant="outlined" fullWidth>
-              <PositionSelect />
+              <PositionCombo />
             </FormControl>
             <Field
               name="yearOfBirth"

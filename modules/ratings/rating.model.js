@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const toJson = require('@meanie/mongoose-to-json');
-const { ratingCategories } = require('../../utils/data');
+const { ratingCategories, userRoles } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -36,6 +36,10 @@ const RatingSchema = new Schema(
     score: {
       type: Boolean,
       default: true,
+    },
+    createdByUserWithRole: {
+      type: String,
+      enum: userRoles,
     },
   },
   { timestamps: true }

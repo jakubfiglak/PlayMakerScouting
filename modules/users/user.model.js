@@ -5,7 +5,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const toJson = require('@meanie/mongoose-to-json');
-const { voivodeships } = require('../../utils/data');
+const { voivodeships, userRoles } = require('../../utils/data');
 
 const { Schema, model } = mongoose;
 
@@ -61,7 +61,7 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['admin', 'playmaker-scout', 'scout'],
+      enum: userRoles,
       default: 'scout',
     },
     status: {
