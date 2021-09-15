@@ -87,6 +87,7 @@ export const MatchesPage = () => {
     if (currentMatch) {
       updateMatch(data);
       setActiveTab(0);
+      setCurrentMatch(null);
     } else {
       createMatch(data);
       setActiveTab(0);

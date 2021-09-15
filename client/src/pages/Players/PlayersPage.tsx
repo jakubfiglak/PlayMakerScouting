@@ -88,6 +88,7 @@ export const PlayersPage = () => {
     if (currentPlayer) {
       updatePlayer(data);
       setActiveTab(0);
+      setCurrentPlayer(null);
     } else {
       createPlayer(data);
       setActiveTab(0);

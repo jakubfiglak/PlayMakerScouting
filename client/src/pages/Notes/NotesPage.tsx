@@ -83,6 +83,7 @@ export const NotesPage = () => {
     if (currentNote) {
       updateNote(data);
       setActiveTab(0);
+      setCurrentNote(null);
     } else {
       createNote(data);
       setActiveTab(0);
