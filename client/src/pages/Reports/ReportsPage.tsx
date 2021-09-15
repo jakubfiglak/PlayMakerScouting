@@ -28,8 +28,7 @@ import {
   useUpdateReport,
   useSetReportStatus,
 } from '../../hooks/reports';
-import { useClubsList } from '../../hooks/clubs';
-import { usePlayersList, useCreatePlayer } from '../../hooks/players';
+import { usePlayersList } from '../../hooks/players';
 import { useOrdersList } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
@@ -66,13 +65,8 @@ export const ReportsPage = () => {
     mutate: setReportStatus,
     isLoading: setReportStatusLoading,
   } = useSetReportStatus();
-  const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { data: players, isLoading: playersLoading } = usePlayersList();
   const { data: orders, isLoading: ordersLoading } = useOrdersList();
-  const {
-    mutate: createPlayer,
-    isLoading: createPlayerLoading,
-  } = useCreatePlayer();
 
   const { setAlert } = useAlertsState();
 
@@ -156,12 +150,10 @@ export const ReportsPage = () => {
   };
 
   const isLoading =
-    clubsLoading ||
     ordersLoading ||
     createReportLoading ||
     updateReportLoading ||
     playersLoading ||
-    createPlayerLoading ||
     setReportStatusLoading ||
     reportsLoading;
 
@@ -260,9 +252,7 @@ export const ReportsPage = () => {
           />
         )}
         <AddPlayerModal
-          clubsData={clubs || []}
           onClose={() => setIsAddPlayerModalOpen(false)}
-          onSubmit={createPlayer}
           open={isAddPlayerModalOpen}
         />
       </TabPanel>

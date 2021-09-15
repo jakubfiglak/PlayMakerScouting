@@ -20,9 +20,15 @@ type Props = {
   current: Club | null;
   onSubmit: (data: ClubDTO) => void;
   onCancelClick?: () => void;
+  fullWidth?: boolean;
 };
 
-export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
+export const ClubsForm = ({
+  current,
+  onSubmit,
+  onCancelClick,
+  fullWidth,
+}: Props) => {
   const { setAlert } = useAlertsState();
 
   const initialValues: ClubDTO = current
@@ -41,7 +47,7 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
     >
       {({ errors, touched, handleReset }) => (
         <Form>
-          <FormContainer>
+          <FormContainer fullWidth={fullWidth}>
             <Field
               name="name"
               as={TextField}

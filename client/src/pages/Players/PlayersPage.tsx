@@ -22,7 +22,7 @@ import {
   useUpdatePlayer,
   useDeletePlayer,
 } from '../../hooks/players';
-import { useClubsList, useCreateClub } from '../../hooks/clubs';
+import { useClubsList } from '../../hooks/clubs';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 
@@ -76,7 +76,6 @@ export const PlayersPage = () => {
     isLoading: deletePlayerLoading,
   } = useDeletePlayer();
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
-  const { mutate: createClub, isLoading: createClubLoading } = useCreateClub();
 
   const [isAddClubModalOpen, setIsAddClubModalOpen] = useState(false);
 
@@ -104,7 +103,6 @@ export const PlayersPage = () => {
   const isLoading =
     playersLoading ||
     clubsLoading ||
-    createClubLoading ||
     createPlayerLoading ||
     updatePlayerLoading ||
     deletePlayerLoading;
@@ -172,7 +170,6 @@ export const PlayersPage = () => {
         />
         <AddClubModal
           onClose={() => setIsAddClubModalOpen(false)}
-          onSubmit={createClub}
           open={isAddClubModalOpen}
         />
       </TabPanel>

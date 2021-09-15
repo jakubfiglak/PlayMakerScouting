@@ -24,6 +24,7 @@ type Props = {
   addClubOption?: boolean;
   onAddClubClick?: () => void;
   onCancelClick?: () => void;
+  fullWidth?: boolean;
 };
 
 export const PlayersForm = ({
@@ -33,6 +34,7 @@ export const PlayersForm = ({
   onSubmit,
   onAddClubClick,
   onCancelClick,
+  fullWidth,
 }: Props) => {
   const { setAlert } = useAlertsState();
 
@@ -52,7 +54,7 @@ export const PlayersForm = ({
     >
       {({ errors, touched, handleReset }) => (
         <Form>
-          <FormContainer>
+          <FormContainer fullWidth={fullWidth}>
             <Field
               name="firstName"
               as={TextField}

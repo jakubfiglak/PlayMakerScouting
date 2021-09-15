@@ -1,102 +1,65 @@
-import { Formik, Form, Field } from 'formik';
 // MUI components
-import { TextField, FormControl, makeStyles, Theme } from '@material-ui/core';
+import {
+  makeStyles,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
 // Custom components
-import { FormModal } from '../FormModal';
-import { PositionCombo } from '../selects/PositionCombo';
-import { FootSelect } from '../selects/FootSelect';
-import { ClubsCombo } from '../selects/ClubsCombo';
-// Types
-import { ClubBasicInfo } from '../../types/clubs';
-import { PlayerDTO } from '../../types/players';
-// Utils & data
-import { playersFormValidationSchema } from '../../data/forms/validationSchemas';
-import { playersFormInitialValues } from '../../data/forms/initialValues';
+import { PlayersForm } from '../../pages/Players/PlayersForm';
+import { Loader } from '../Loader';
+// Hooks
+import { useCreatePlayer } from '../../hooks/players';
+import { useClubsList } from '../../hooks/clubs';
 
 type Props = {
-  clubsData: ClubBasicInfo[];
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: PlayerDTO) => void;
 };
 
-export const AddPlayerModal = ({
-  clubsData,
-  open,
-  onClose,
-  onSubmit,
-}: Props) => {
+export const AddPlayerModal = ({ open, onClose }: Props) => {
   const classes = useStyles();
 
+  const {
+    mutate: createPlayer,
+    isLoading: createPlayerLoading,
+  } = useCreatePlayer();
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
+
+  const isLoading = createPlayerLoading || clubsLoading;
+
   return (
-    <Formik
-      initialValues={playersFormInitialValues}
-      validationSchema={playersFormValidationSchema}
-      enableReinitialize
-      onSubmit={(data) => {
-        onSubmit(data);
-        onClose();
-      }}
-    >
-      {({ errors, touched, handleSubmit }) => (
-        <FormModal
-          title="Dodaj zawodnika"
-          onClose={onClose}
-          onSubmit={handleSubmit}
-          open={open}
-        >
-          <Form className={classes.container}>
-            <Field
-              name="firstName"
-              as={TextField}
-              variant="outlined"
-              autoComplete="fname"
-              fullWidth
-              label="Imię"
-              autoFocus
-              error={touched.firstName && !!errors.firstName}
-              helperText={touched.firstName && errors.firstName}
-            />
-            <Field
-              name="lastName"
-              as={TextField}
-              variant="outlined"
-              autoComplete="lname"
-              fullWidth
-              label="Nazwisko"
-              error={touched.lastName && !!errors.lastName}
-              helperText={touched.lastName && errors.lastName}
-            />
-            <FormControl variant="outlined" fullWidth>
-              <ClubsCombo clubsData={clubsData} name="club" label="Klub" />
-            </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              <PositionCombo />
-            </FormControl>
-            <Field
-              name="yearOfBirth"
-              as={TextField}
-              type="number"
-              variant="outlined"
-              fullWidth
-              label="Rok urodzenia"
-              error={touched.yearOfBirth && !!errors.yearOfBirth}
-              helperText={touched.yearOfBirth && errors.yearOfBirth}
-            />
-            <FormControl variant="outlined" fullWidth>
-              <FootSelect />
-            </FormControl>
-          </Form>
-        </FormModal>
-      )}
-    </Formik>
+    <>
+      {isLoading ? <Loader /> : null}
+      <Dialog
+        open={open}
+        onClose={onClose}
+        aria-labelledby="form-dialog-title"
+        classes={{ paper: classes.container }}
+      >
+        <DialogTitle id="form-dialog-title">Utwórz zawodnika</DialogTitle>
+        <DialogContent>
+          <PlayersForm
+            clubsData={clubs || []}
+            current={null}
+            onSubmit={createPlayer}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="primary">
+            Zamknij
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: `${theme.spacing(2)}px`,
+    width: '95%',
   },
 }));
