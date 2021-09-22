@@ -3,6 +3,11 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { AddMemberDTO, DeleteMemberDTO, Team, TeamDTO } from '../types/teams';
 import { ApiError, ApiResponse } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+} from './utils';
 
 // Get all teams
 async function getTeams(): Promise<Team[]> {
@@ -15,7 +20,10 @@ export function useTeams() {
 
   return useQuery<Team[], ApiError>('teams', getTeams, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -35,7 +43,10 @@ export function useTeam(id: string) {
       return cacheTeams.find((team) => team.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -54,11 +65,17 @@ export function useCreateTeam() {
 
   return useMutation((values: TeamDTO) => createTeam(values), {
     onSuccess: (data: ApiResponse<Team>) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({ type: 'zespół', name: data.data.name }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('teams');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -76,11 +93,17 @@ export function useDeleteTeam() {
 
   return useMutation((id: string) => deleteTeam(id), {
     onSuccess: (data: ApiResponse<string>) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'zespół', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('teams');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -106,11 +129,17 @@ export function useAddMember(teamId: string) {
     (values: AddMemberDTO) => addMember({ addMemberData: values, teamId }),
     {
       onSuccess: (data: ApiResponse<Team>) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: `Pomyślnie dodano nowego członka do zespołu ${data.data.name}`,
+          type: 'success',
+        });
         queryClient.invalidateQueries(['team', teamId]);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -138,11 +167,17 @@ export function useDeleteMember(teamId: string) {
       deleteMember({ deleteMemberData: values, teamId }),
     {
       onSuccess: (data: ApiResponse<Team>) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: `Pomyślnie usunięto członka z zespołu ${data.data.name}`,
+          type: 'success',
+        });
         queryClient.invalidateQueries(['team', teamId]);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }

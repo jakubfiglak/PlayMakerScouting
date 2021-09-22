@@ -11,9 +11,14 @@ import {
   ApiResponse,
   GetPaginatedDataArgs,
   PaginatedData,
-  SortingOrder,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
 
 type PaginatedMatches = PaginatedData<Match>;
 type GetMatchesResponse = ApiResponse<PaginatedMatches>;
@@ -58,7 +63,10 @@ export function useMatches({
         queryClient.setQueryData('matches', data.docs);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -93,7 +101,10 @@ export function useClubsMatches({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -111,7 +122,10 @@ export function useMatchesList() {
 
   return useQuery(['matches', 'list'], getMatchesList, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -131,7 +145,10 @@ export function useMatch(id: string) {
       return cacheMatches.find((match) => match.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -150,11 +167,20 @@ export function useCreateMatch() {
 
   return useMutation((values: MatchDTO) => createMatch(values), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({
+          type: 'mecz',
+          name: `${data.data.homeTeam.name} - ${data.data.awayTeam.name}`,
+        }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('matches');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -180,11 +206,20 @@ export function useUpdateMatch(matchId: string) {
     (values: MatchDTO) => updateMatch({ matchId, matchData: values }),
     {
       onSuccess: (data) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({
+            type: 'mecz',
+            name: `${data.data.homeTeam.name} - ${data.data.awayTeam.name}`,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('matches');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -203,10 +238,16 @@ export function useDeleteMatch() {
 
   return useMutation((id: string) => deleteMatch(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'mecz', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('matches');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

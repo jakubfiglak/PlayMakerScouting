@@ -9,6 +9,7 @@ import {
   SortingOrder,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import { getErrorMessage } from './utils';
 
 // Get all users with pagination
 type PaginatedUsers = PaginatedData<User>;
@@ -62,7 +63,10 @@ export function useUsers({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -80,7 +84,10 @@ export function useUsersList() {
 
   return useQuery<UserBasicInfo[], ApiError>('usersList', getUsersList, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -95,7 +102,10 @@ export function useUser(id: string) {
 
   return useQuery<User, ApiError>(['user', id], () => getUser(id), {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -121,11 +131,17 @@ export function useChangeRole() {
     ({ id, role }: ChangeRoleArgs) => changeRole({ id, role }),
     {
       onSuccess: (data: ApiResponse<User>) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: `Pomyślnie zmieniono rolę użytkownika ${data.data.lastName} ${data.data.firstName} na "${data.data.role}"`,
+          type: 'success',
+        });
         queryClient.invalidateQueries('users');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -147,11 +163,17 @@ export function useGoToTheMatch() {
 
   return useMutation(({ match }: GoToTheMatchDTO) => goToTheMatch({ match }), {
     onSuccess: (data: ApiResponse<User>) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: `Pojechałeś na mecz ${data.data.match?.homeTeam.name} - ${data.data.match?.awayTeam.name}`,
+        type: 'success',
+      });
       queryClient.invalidateQueries('account');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -168,11 +190,14 @@ export function useLeaveTheMatch() {
   const { setAlert } = useAlertsState();
 
   return useMutation(() => leaveTheMatch(), {
-    onSuccess: (data: ApiResponse<User>) => {
-      setAlert({ msg: data.message, type: 'success' });
+    onSuccess: () => {
+      setAlert({ msg: 'Pomyślnie opuściłeś mecz', type: 'success' });
       queryClient.invalidateQueries('account');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

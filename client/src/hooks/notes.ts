@@ -9,6 +9,12 @@ import {
   RatingDescription,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
 
 type PaginatedNotes = PaginatedData<Note>;
 type GetNotesResponse = ApiResponse<PaginatedNotes>;
@@ -84,7 +90,10 @@ export function useNotes({
         queryClient.setQueryData('notes', data.docs);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -119,7 +128,10 @@ export function usePlayersNotes({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -154,7 +166,10 @@ export function useMatchesNotes({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
       enabled: matchId !== '',
     },
   );
@@ -173,7 +188,10 @@ export function useNotesList() {
 
   return useQuery(['notes', 'list'], getNotesList, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -193,7 +211,10 @@ export function useNote(id: string) {
       return cacheNotes.find((note) => note.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -212,11 +233,20 @@ export function useCreateNote() {
 
   return useMutation((values: NoteDTO) => createNote(values), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({
+          type: 'notatkę',
+          name: `nr ${data.data.docNumber}`,
+        }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('notes');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -242,11 +272,20 @@ export function useUpdateNote(noteId: string) {
     (values: NoteDTO) => updateNote({ noteId, noteData: values }),
     {
       onSuccess: (data) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({
+            type: 'notatkę',
+            name: `nr ${data.data.docNumber}`,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('notes');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -265,10 +304,16 @@ export function useDeleteNote() {
 
   return useMutation((id: string) => deleteNote(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'notatkę', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('notes');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

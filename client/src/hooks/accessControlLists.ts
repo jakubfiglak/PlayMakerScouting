@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { ApiError, ApiResponse } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 import { AccessControlList, GrantAccessDTO } from '../types/accessControlLists';
+import { getErrorMessage } from './utils';
 
 // Grant access to the asset
 async function grantAccess(
@@ -23,6 +24,9 @@ export function useGrantAccess() {
       setAlert({ msg: data.message, type: 'success' });
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

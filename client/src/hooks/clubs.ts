@@ -1,5 +1,11 @@
 import axios from 'axios';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
 import { Club, ClubBasicInfo, ClubDTO, ClubsFilterData } from '../types/clubs';
 import {
   ApiError,
@@ -64,7 +70,10 @@ export function useClubs({
         queryClient.setQueryData('clubs', data.docs);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -82,7 +91,10 @@ export function useClubsList() {
 
   return useQuery(['clubs', 'list'], getClubsList, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -102,7 +114,10 @@ export function useClub(id: string) {
       return cacheClubs.find((club) => club.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -121,11 +136,17 @@ export function useCreateClub() {
 
   return useMutation((values: ClubDTO) => createClub(values), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({ type: 'klub', name: data.data.name }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('clubs');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -151,11 +172,17 @@ export function useUpdateClub(clubId: string) {
     (values: ClubDTO) => updateClub({ clubId, clubData: values }),
     {
       onSuccess: (data) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({ type: 'klub', name: data.data.name }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('clubs');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -174,11 +201,17 @@ export function useDeleteClub() {
 
   return useMutation((id: string) => deleteClub(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'klub', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('clubs');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -195,11 +228,17 @@ export function useMergeClubsDuplicates() {
   const { setAlert } = useAlertsState();
 
   return useMutation(mergeClubsDuplicates, {
-    onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+    onSuccess: () => {
+      setAlert({
+        msg: `Pomyślnie scalono duplikaty definicji klubów`,
+        type: 'success',
+      });
       queryClient.invalidateQueries('clubs');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

@@ -15,6 +15,13 @@ import {
   RatingDescription,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
+import { getLabel } from '../utils/getLabel';
 
 type PaginatedReports = PaginatedData<Report>;
 type GetReportsResponse = ApiResponse<PaginatedReports>;
@@ -88,7 +95,10 @@ export function useReports({
         queryClient.setQueryData('reports', data.docs);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -123,7 +133,10 @@ export function usePlayersReports({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -158,7 +171,10 @@ export function useOrdersReports({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -176,7 +192,10 @@ export function useReportsList() {
 
   return useQuery<ReportBasicInfo[], ApiError>('reportsList', getReportsList, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -198,7 +217,10 @@ export function useReport(id: string) {
       return cacheReports.find((report) => report.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -219,11 +241,20 @@ export function useCreateReport() {
 
   return useMutation((values: ReportDTO) => createReport(values), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getUpdateSuccessMessage({
+          type: 'raport',
+          name: `nr ${data.data.docNumber}`,
+        }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('reports');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -249,11 +280,20 @@ export function useUpdateReport(reportId: string) {
     (values: ReportDTO) => updateReport({ reportId, reportData: values }),
     {
       onSuccess: (data) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({
+            type: 'raport',
+            name: `nr ${data.data.docNumber}`,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('reports');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -280,11 +320,19 @@ export function useSetReportStatus() {
     ({ id, status }: SetReportStatusArgs) => setReportStatus({ id, status }),
     {
       onSuccess: (data: ApiResponse<Report>) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: `Pomyślnie zmieniono status raportu na ${getLabel(
+            data.data.status,
+          )}`,
+          type: 'success',
+        });
         queryClient.invalidateQueries('reports');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -303,10 +351,16 @@ export function useDeleteReport() {
 
   return useMutation((id: string) => deleteReport(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'raport', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('reports');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

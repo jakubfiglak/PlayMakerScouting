@@ -3,6 +3,12 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Rating, RatingDTO } from '../types/ratings';
 import { ApiError, ApiResponse } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
 
 // Get all ratings
 async function getRatings(): Promise<Rating[]> {
@@ -15,7 +21,10 @@ export function useRatings() {
 
   return useQuery<Rating[], ApiError>('ratings', getRatings, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -36,11 +45,17 @@ export function useCreateRating() {
 
   return useMutation((values: RatingDTO) => createRating(values), {
     onSuccess: (data: ApiResponse<Rating>) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({ type: 'cechę', name: data.data.name }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('ratings');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -66,11 +81,17 @@ export function useUpdateRating() {
     ({ id, ratingData }: Args) => updateRating({ id, ratingData }),
     {
       onSuccess: (data: ApiResponse<Rating>) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({ type: 'cechę', name: data.data.name }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('ratings');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -89,10 +110,16 @@ export function useDeleteRating() {
 
   return useMutation((values: string) => deleteRating(values), {
     onSuccess: (data: Response) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'cechę', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('ratings');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

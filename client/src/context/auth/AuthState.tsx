@@ -12,6 +12,8 @@ import {
   User,
 } from '../../types/auth';
 import { useAlertsState } from '../alerts/useAlertsState';
+import { ApiError } from '../../types/common';
+import { getErrorMessage } from '../../hooks/utils';
 
 export const AuthState: React.FC = ({ children }) => {
   const { setAlert } = useAlertsState();
@@ -51,18 +53,25 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/auth/register', formData);
-      setAlert({ msg: res.data.message, type: 'success' });
+      setAlert({
+        msg:
+          'Rejestracja przebiegła pomyślnie. Na Twój adres email wysłaliśmy link weryfikacyjny',
+        type: 'success',
+      });
 
       dispatch({
         type: 'REGISTER_SUCCESS',
         payload: { message: res.data.message },
       });
     } catch (err) {
-      setAlert({ msg: err.response.data.error, type: 'error' });
+      setAlert({
+        msg: getErrorMessage((err as ApiError).response.data.error),
+        type: 'error',
+      });
 
       dispatch({
         type: 'AUTH_ERROR',
-        payload: err.response.data.error,
+        payload: (err as ApiError).response.data.error,
       });
     }
   };
@@ -73,18 +82,25 @@ export const AuthState: React.FC = ({ children }) => {
       const res = await axiosJson.get(
         `/api/v1/auth/confirm/${confirmationCode}`,
       );
-      setAlert({ msg: res.data.message, type: 'success' });
+      setAlert({
+        msg:
+          'Weryfikacja przebiegła pomyślnie, możesz się zalogować na swoje konto.',
+        type: 'success',
+      });
 
       dispatch({
         type: 'CONFIRMATION_SUCCESS',
         payload: { message: res.data.message },
       });
     } catch (err) {
-      setAlert({ msg: err.response.data.error, type: 'error' });
+      setAlert({
+        msg: getErrorMessage((err as ApiError).response.data.error),
+        type: 'error',
+      });
 
       dispatch({
         type: 'AUTH_ERROR',
-        payload: err.response.data.error,
+        payload: (err as ApiError).response.data.error,
       });
     }
   };
@@ -95,7 +111,7 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.post('/api/v1/auth/login', formData);
-      setAlert({ msg: res.data.message, type: 'success' });
+      setAlert({ msg: 'Zalogowano pomyślnie!', type: 'success' });
 
       dispatch({
         type: 'LOGIN_SUCCESS',
@@ -108,11 +124,14 @@ export const AuthState: React.FC = ({ children }) => {
         },
       });
     } catch (err) {
-      setAlert({ msg: err.response.data.error, type: 'error' });
+      setAlert({
+        msg: getErrorMessage((err as ApiError).response.data.error),
+        type: 'error',
+      });
 
       dispatch({
         type: 'AUTH_ERROR',
-        payload: err.response.data.error,
+        payload: (err as ApiError).response.data.error,
       });
     }
   };
@@ -123,18 +142,21 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put('/api/v1/auth/updatepassword', formData);
-      setAlert({ msg: res.data.message, type: 'success' });
+      setAlert({ msg: 'Hasło zmienione pomyślnie!', type: 'success' });
 
       dispatch({
         type: 'UPDATE_PASSWORD_SUCCESS',
         payload: { expiresAt: res.data.expiresAt, message: res.data.message },
       });
     } catch (err) {
-      setAlert({ msg: err.response.data.error, type: 'error' });
+      setAlert({
+        msg: getErrorMessage((err as ApiError).response.data.error),
+        type: 'error',
+      });
 
       dispatch({
         type: 'AUTH_ERROR',
-        payload: err.response.data.error,
+        payload: (err as ApiError).response.data.error,
       });
     }
   };
@@ -152,18 +174,24 @@ export const AuthState: React.FC = ({ children }) => {
 
     try {
       const res = await axiosJson.put('/api/v1/auth/updatedetails', formData);
-      setAlert({ msg: res.data.message, type: 'success' });
+      setAlert({
+        msg: 'Dane konta zaktualizowane pomyślnie!',
+        type: 'success',
+      });
 
       dispatch({
         type: 'EDIT_SUCCESS',
         payload: { user: res.data.data, message: res.data.message },
       });
     } catch (err) {
-      setAlert({ msg: err.response.data.error, type: 'error' });
+      setAlert({
+        msg: getErrorMessage((err as ApiError).response.data.error),
+        type: 'error',
+      });
 
       dispatch({
         type: 'EDIT_ERROR',
-        payload: err.response.data.error,
+        payload: (err as ApiError).response.data.error,
       });
     }
   };
