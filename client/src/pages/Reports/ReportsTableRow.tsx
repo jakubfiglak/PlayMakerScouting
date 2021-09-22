@@ -68,9 +68,6 @@ export const ReportsTableRow = ({
     author,
     player,
     createdAt,
-    avgRating,
-    percentageRating,
-    maxRatingScore,
     finalRating,
     videoURL,
     videoDescription,
@@ -141,8 +138,25 @@ export const ReportsTableRow = ({
       ) : null}
       <StyledTableCell>
         <TableLink to={`/players/${player.id}`}>
-          {`${player.firstName} ${player.lastName}`}
+          {`${player.firstName} ${player.lastName} (ur. ${player.yearOfBirth})`}
         </TableLink>
+      </StyledTableCell>
+      <StyledTableCell>
+        <FinalRatingChip finalRating={finalRating} />
+      </StyledTableCell>
+      <StyledTableCell>
+        {videoURL ? (
+          <Tooltip title={videoDescription || 'video'}>
+            <Link
+              href={videoURL}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <TvIcon />
+            </Link>
+          </Tooltip>
+        ) : null}
       </StyledTableCell>
       <StyledTableCell>
         {isAuthorNameClickable ? (
@@ -156,26 +170,6 @@ export const ReportsTableRow = ({
       <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
       <StyledTableCell>
         <StatusChip status={status} />
-      </StyledTableCell>
-      <StyledTableCell>{avgRating.toFixed(2)}</StyledTableCell>
-      <StyledTableCell>{maxRatingScore}</StyledTableCell>
-      <StyledTableCell>{`${percentageRating.toFixed(1)}%`}</StyledTableCell>
-      <StyledTableCell>
-        <FinalRatingChip finalRating={finalRating} />
-      </StyledTableCell>
-      <StyledTableCell align="center">
-        {videoURL ? (
-          <Tooltip title={videoDescription || 'video'}>
-            <Link
-              href={videoURL}
-              onClick={(e: React.MouseEvent) => e.stopPropagation()}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <TvIcon />
-            </Link>
-          </Tooltip>
-        ) : null}
       </StyledTableCell>
     </StyledTableRow>
   );

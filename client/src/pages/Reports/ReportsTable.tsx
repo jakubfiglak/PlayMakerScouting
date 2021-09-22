@@ -8,14 +8,11 @@ type Props = CommonTableProps;
 
 const headCells = [
   { id: 'player', label: 'Zawodnik' },
+  { id: 'finalRating', label: 'Ocena ostateczna' },
+  { id: 'videoURL', label: 'Video' },
   { id: 'scout', label: 'Scout' },
   { id: 'createdAt', label: 'Data utworzenia' },
   { id: 'status', label: 'Status' },
-  { id: 'avgRating', label: 'Śr. ocena' },
-  { id: 'maxRatingScore', label: 'Skala ocen' },
-  { id: 'percentageRating', label: 'Ocena %' },
-  { id: 'finalRating', label: 'Ocena ostateczna' },
-  { id: 'video', label: 'Video', sortingDisabled: true },
 ];
 
 export const ReportsTable: FC<Props> = ({
