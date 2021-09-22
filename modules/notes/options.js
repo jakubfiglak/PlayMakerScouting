@@ -1,6 +1,6 @@
 const options = {
   populate: {
-    player: 'firstName lastName',
+    player: 'firstName lastName yearOfBirth',
     club: 'name division',
     user: 'firstName lastName',
   },

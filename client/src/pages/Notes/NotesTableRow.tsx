@@ -29,6 +29,7 @@ import { useTableMenu } from '../../hooks/useTableMenu';
 import { Note } from '../../types/notes';
 // Utils & data
 import { formatDate } from '../../utils/dates';
+import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   note: Note;
@@ -70,6 +71,9 @@ export const NotesTableRow = ({
     rating,
     maxRatingScore,
     percentageRating,
+    createdAt,
+    shirtNo,
+    playerCurrentClub,
   } = note;
 
   return (
@@ -120,7 +124,21 @@ export const NotesTableRow = ({
         <StyledTableCell>
           {player ? (
             <TableLink to={`/players/${player.id}`}>
-              {`${player.firstName} ${player.lastName}`}
+              {`${player.firstName} ${player.lastName} (ur. ${player.yearOfBirth})`}
+            </TableLink>
+          ) : (
+            'N/A'
+          )}
+        </StyledTableCell>
+        <StyledTableCell>{`${rating}/${maxRatingScore} (${percentageRating.toFixed(
+          1,
+        )}%)`}</StyledTableCell>
+        <StyledTableCell>
+          {match ? (
+            <TableLink to={`/matches/${match.id}`}>
+              {`${match.homeTeam.name} - ${match.awayTeam.name} (${formatDate(
+                match.date,
+              )})`}
             </TableLink>
           ) : (
             'N/A'
@@ -135,28 +153,16 @@ export const NotesTableRow = ({
             <>{`${author.firstName} ${author.lastName}`}</>
           )}
         </StyledTableCell>
-        <StyledTableCell>
-          {match ? (
-            <TableLink to={`/matches/${match.id}`}>
-              {`${match.homeTeam.name} - ${match.awayTeam.name}`}
-            </TableLink>
-          ) : (
-            'N/A'
-          )}
-        </StyledTableCell>
-        <StyledTableCell>
-          {match ? formatDate(match.date) : 'N/A'}
-        </StyledTableCell>
-        <StyledTableCell>{rating}</StyledTableCell>
-        <StyledTableCell>{maxRatingScore}</StyledTableCell>
-        <StyledTableCell>{`${percentageRating.toFixed(1)}%`}</StyledTableCell>
+        <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
       </StyledTableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom>
-                Treść notatki
+                {`Nr ${shirtNo || 'N/A'}, ${
+                  player ? getLabel(player.position) : 'N/A'
+                } (${playerCurrentClub ? playerCurrentClub.name : 'N/A'})`}
               </Typography>
               <Typography gutterBottom variant="body2">
                 {text}

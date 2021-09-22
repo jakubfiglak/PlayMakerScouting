@@ -5,7 +5,7 @@ import { Match } from './matches';
 
 export type Note = {
   id: string;
-  player?: Pick<Player, 'id' | 'firstName' | 'lastName'>;
+  player?: Player;
   playerCurrentClub?: Pick<Club, 'id' | 'name' | 'division'>;
   author: Pick<User, 'id' | 'firstName' | 'lastName'>;
   match?: Match;
