@@ -6,7 +6,12 @@ const {
   getRatings,
   updateRating,
 } = require('../modules/ratings/ratings.controller');
-const { setRating, setAccessFilters, canAccess } = require('../modules/ratings/ratings.middleware');
+const {
+  setRating,
+  setAccessFilters,
+  canAccess,
+  canBeDeleted,
+} = require('../modules/ratings/ratings.middleware');
 const setAuthor = require('../middleware/setAuthor');
 const { protect } = require('../middleware/auth');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
@@ -22,6 +27,6 @@ router.put(
   [protect, setRating, canAccess, filterForbiddenUpdates(options.forbiddenUpdates)],
   updateRating
 );
-router.delete('/:id', [protect, setRating, canAccess], deleteRating);
+router.delete('/:id', [protect, setRating, canAccess, canBeDeleted], deleteRating);
 
 module.exports = router;

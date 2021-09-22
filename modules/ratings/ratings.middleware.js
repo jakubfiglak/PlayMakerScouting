@@ -1,5 +1,7 @@
+const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const Rating = require('./rating.model');
+const reportTemplatesService = require('../reportTemplates/reportTemplates.service');
 const setAsset = require('../../middleware/setAsset');
 const ApiError = require('../../utils/ApiError');
 const isAdmin = require('../../utils/isAdmin');
@@ -30,4 +32,21 @@ function canAccess(req, res, next) {
   next();
 }
 
-module.exports = { setRating, setAccessFilters, canAccess };
+const canBeDeleted = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const reportTemplates = await reportTemplatesService.getReportTemplatesByRating(id);
+
+  if (reportTemplates.length > 0) {
+    return next(
+      new ApiError(
+        'You cannot delete a rating with existing relations to reportTemplate documents',
+        httpStatus.FORBIDDEN
+      )
+    );
+  }
+
+  next();
+});
+
+module.exports = { setRating, setAccessFilters, canAccess, canBeDeleted };
