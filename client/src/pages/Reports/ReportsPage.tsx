@@ -30,6 +30,7 @@ import {
 } from '../../hooks/reports';
 import { usePlayersList } from '../../hooks/players';
 import { useOrdersList } from '../../hooks/orders';
+import { useClubsList } from '../../hooks/clubs';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useSettingsState } from '../../context/settings/useSettingsState';
@@ -38,6 +39,8 @@ type LocationState = { activeTab?: number; report?: Report; orderId?: string };
 
 const initialFilters: ReportsFilterData = {
   player: '',
+  club: '',
+  rating: 'all',
 };
 
 export const ReportsPage = () => {
@@ -67,6 +70,7 @@ export const ReportsPage = () => {
   } = useSetReportStatus();
   const { data: players, isLoading: playersLoading } = usePlayersList();
   const { data: orders, isLoading: ordersLoading } = useOrdersList();
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
 
   const { setAlert } = useAlertsState();
 
@@ -155,7 +159,8 @@ export const ReportsPage = () => {
     updateReportLoading ||
     playersLoading ||
     setReportStatusLoading ||
-    reportsLoading;
+    reportsLoading ||
+    clubsLoading;
 
   return (
     <MainTemplate>
@@ -170,6 +175,7 @@ export const ReportsPage = () => {
         <PageHeading title="Baza raportów" />
         <ReportsFilterForm
           playersData={players || []}
+          clubsData={clubs || []}
           filters={filters}
           onFilter={setFilters}
           onClearFilters={() => setFilters(initialFilters)}

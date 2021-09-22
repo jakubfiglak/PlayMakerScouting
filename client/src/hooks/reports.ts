@@ -12,6 +12,7 @@ import {
   ApiResponse,
   PaginatedData,
   GetPaginatedDataArgs,
+  RatingDescription,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 
@@ -24,6 +25,21 @@ type GetPlayersReportsArgs = GetPaginatedDataArgs & { playerId: string };
 type GetOrdersReportsArgs = GetPaginatedDataArgs & { orderId: string };
 
 // Get all reports with pagination
+function getQueryStringFromRating(rating: RatingDescription) {
+  switch (rating) {
+    case 'negative':
+      return '&finalRating=1';
+    case 'unknown':
+      return '&finalRating=2';
+    case 'observe':
+      return '&finalRating=3';
+    case 'positive':
+      return '&finalRating=4';
+    default:
+      return '';
+  }
+}
+
 async function getReports({
   page = 1,
   limit = 20,
@@ -32,12 +48,21 @@ async function getReports({
   filters,
 }: GetReportsArgs): Promise<PaginatedReports> {
   const orderSign = order === 'desc' ? '-' : '';
+  const { club, player, rating } = filters;
 
   // Generate query url
   let reportsURI = `/api/v1/reports?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
 
-  if (filters.player) {
-    reportsURI = reportsURI.concat(`&player=${filters.player}`);
+  if (player) {
+    reportsURI = reportsURI.concat(`&player=${player}`);
+  }
+
+  if (club) {
+    reportsURI = reportsURI.concat(`&playerCurrentClub=${club}`);
+  }
+
+  if (rating !== 'all') {
+    reportsURI = reportsURI.concat(getQueryStringFromRating(rating));
   }
 
   const { data } = await axios.get<GetReportsResponse>(reportsURI);

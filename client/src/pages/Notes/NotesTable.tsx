@@ -10,7 +10,7 @@ const headCells = [
   { id: 'player', label: 'Zawodnik' },
   { id: 'percentageRating', label: 'Ocena' },
   { id: 'match', label: 'Mecz' },
-  { id: 'author', label: 'Skaut' },
+  { id: 'author', label: 'Scout' },
   { id: 'createdAt', label: 'Data utworzenia' },
 ];
 

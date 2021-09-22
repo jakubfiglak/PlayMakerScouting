@@ -3,6 +3,7 @@ import { Player, Position } from './players';
 import { Order } from './orders';
 import { Club } from './clubs';
 import { SkillsCategories } from './ratings';
+import { RatingDescription } from './common';
 
 export type RatingScore = 1 | 2 | 3 | 4;
 export type MatchLocation = 'home' | 'away';
@@ -79,4 +80,6 @@ export type ReportDTO = {
 
 export type ReportsFilterData = {
   player: string;
+  club: string;
+  rating: RatingDescription | 'all';
 };
