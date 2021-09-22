@@ -7,6 +7,7 @@ type Props = {
   width?: number;
   height?: number;
   maxRatingScore: number;
+  displayShortName?: boolean;
 };
 
 export const SkillsChart = ({
@@ -14,6 +15,7 @@ export const SkillsChart = ({
   width,
   height,
   maxRatingScore,
+  displayShortName,
 }: Props) => {
   const options = {
     maintainAspectRatio: false,
@@ -29,7 +31,11 @@ export const SkillsChart = ({
   };
 
   const data = {
-    labels: skills.map((skill) => skill.name.toUpperCase()),
+    labels: skills.map((skill) =>
+      displayShortName
+        ? skill.shortName.toUpperCase()
+        : skill.name.toUpperCase(),
+    ),
     datasets: [
       {
         data: skills.map((skill) => skill.score),

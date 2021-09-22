@@ -39,6 +39,7 @@ export const ReportsTable: FC<Props> = ({
       total={total}
       headCells={headCells}
       actions={actions}
+      collapsible
     >
       {children}
     </Table>
