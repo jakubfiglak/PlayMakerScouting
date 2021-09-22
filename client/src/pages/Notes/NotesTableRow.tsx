@@ -18,6 +18,7 @@ import {
   KeyboardArrowUp as KeyboardArrowUpIcon,
 } from '@material-ui/icons';
 // Custom components
+import { FinalRatingChip } from '../Reports/FinalRatingChip';
 import { TableLink } from '../../components/table/TableLink';
 import { TableMenu } from '../../components/table/TableMenu';
 import { TableMenuItem } from '../../components/table/TableMenuItem';
@@ -27,6 +28,7 @@ import { StyledTableRow } from '../../components/table/TableRow';
 import { useTableMenu } from '../../hooks/useTableMenu';
 // Types
 import { Note } from '../../types/notes';
+import { RatingScore } from '../../types/reports';
 // Utils & data
 import { formatDate } from '../../utils/dates';
 import { getLabel } from '../../utils/getLabel';
@@ -68,8 +70,6 @@ export const NotesTableRow = ({
     author,
     match,
     text,
-    rating,
-    maxRatingScore,
     percentageRating,
     createdAt,
     shirtNo,
@@ -130,9 +130,16 @@ export const NotesTableRow = ({
             'N/A'
           )}
         </StyledTableCell>
-        <StyledTableCell>{`${rating}/${maxRatingScore} (${percentageRating.toFixed(
-          1,
-        )}%)`}</StyledTableCell>
+        <StyledTableCell>
+          <FinalRatingChip
+            finalRating={
+              parseInt(
+                ((percentageRating * 4) / 100).toFixed(),
+                10,
+              ) as RatingScore
+            }
+          />
+        </StyledTableCell>
         <StyledTableCell>
           {match ? (
             <TableLink to={`/matches/${match.id}`}>
