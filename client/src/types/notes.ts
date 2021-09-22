@@ -2,6 +2,7 @@ import { Club } from './clubs';
 import { Player, Position } from './players';
 import { User } from './auth';
 import { Match } from './matches';
+import { RatingDescription } from './common';
 
 export type Note = {
   id: string;
@@ -37,4 +38,5 @@ export type NotesFilterData = {
   player: string;
   club: string;
   match: string;
+  rating: RatingDescription | 'all';
 };

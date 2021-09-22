@@ -6,6 +6,7 @@ import {
   ApiResponse,
   GetPaginatedDataArgs,
   PaginatedData,
+  RatingDescription,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 
@@ -16,6 +17,21 @@ type GetPlayersNotesArgs = GetPaginatedDataArgs & { playerId: string };
 type GetMatchesNotesArgs = GetPaginatedDataArgs & { matchId: string };
 
 // Get all notes with pagination
+function getQueryStringFromRating(rating: RatingDescription) {
+  switch (rating) {
+    case 'negative':
+      return '&percentageRating[gte]=0&percentageRating[lte]=25';
+    case 'unknown':
+      return '&percentageRating[gt]=25&percentageRating[lte]=50';
+    case 'observe':
+      return '&percentageRating[gt]=50&percentageRating[lte]=75';
+    case 'positive':
+      return '&percentageRating[gt]=75';
+    default:
+      return '';
+  }
+}
+
 async function getNotes({
   page = 1,
   limit = 20,
@@ -24,7 +40,7 @@ async function getNotes({
   filters,
 }: GetNotesArgs): Promise<PaginatedNotes> {
   const orderSign = order === 'desc' ? '-' : '';
-  const { player, club, match } = filters;
+  const { player, club, match, rating } = filters;
 
   // Generate query url
   let notesURI = `/api/v1/notes?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
@@ -39,6 +55,10 @@ async function getNotes({
 
   if (match) {
     notesURI = notesURI.concat(`&match=${match}`);
+  }
+
+  if (rating !== 'all') {
+    notesURI = notesURI.concat(getQueryStringFromRating(rating));
   }
 
   const { data } = await axios.get<GetNotesResponse>(notesURI);

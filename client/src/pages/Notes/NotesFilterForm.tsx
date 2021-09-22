@@ -5,6 +5,7 @@ import { FormControl } from '@material-ui/core';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
 import { MatchesCombo } from '../../components/selects/MatchesCombo';
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
+import { FinalRatingSelect } from '../../components/selects/FinalRatingSelect';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Types
@@ -57,6 +58,9 @@ export const NotesFilterForm = ({
             </FormControl>
             <FormControl variant="outlined" size="small" fullWidth>
               <MatchesCombo matchesData={matchesData} size="small" />
+            </FormControl>
+            <FormControl variant="outlined" size="small" fullWidth>
+              <FinalRatingSelect />
             </FormControl>
             <FilterFormActions handleClearFilter={onClearFilters} />
           </FormContainer>

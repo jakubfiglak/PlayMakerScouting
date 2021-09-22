@@ -78,3 +78,10 @@ export const groups = [
   'Wschód',
   'Zachód',
 ] as const;
+
+export const ratingDescriptions = [
+  'negative',
+  'unknown',
+  'observe',
+  'positive',
+] as const;
