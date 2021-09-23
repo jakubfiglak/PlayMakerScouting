@@ -93,6 +93,7 @@ export const ReportsTableRow = ({
     summary,
     skills,
     maxRatingScore,
+    positionPlayed,
   } = report;
 
   return (
@@ -171,11 +172,12 @@ export const ReportsTableRow = ({
             </TableMenu>
           </StyledTableCell>
         ) : null}
-        <StyledTableCell>
+        <StyledTableCell style={{ minWidth: 200 }}>
           <TableLink to={`/players/${player.id}`}>
             {`${player.firstName} ${player.lastName} (ur. ${player.yearOfBirth})`}
           </TableLink>
         </StyledTableCell>
+        <StyledTableCell>{getLabel(positionPlayed)}</StyledTableCell>
         <StyledTableCell>
           <FinalRatingChip finalRating={finalRating} />
         </StyledTableCell>

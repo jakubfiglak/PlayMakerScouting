@@ -4,6 +4,7 @@ import { FormControl } from '@material-ui/core';
 // Custom components
 import { PlayersCombo } from '../../components/selects/PlayersCombo';
 import { ClubsCombo } from '../../components/selects/ClubsCombo';
+import { PositionCombo } from '../../components/selects/PositionCombo';
 import { FinalRatingSelect } from '../../components/selects/FinalRatingSelect';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
 import { FormContainer } from '../../components/FormContainer';
@@ -42,6 +43,9 @@ export const ReportsFilterForm = ({
                 label="Zawodnik"
                 size="small"
               />
+            </FormControl>
+            <FormControl variant="outlined" size="small" fullWidth>
+              <PositionCombo size="small" />
             </FormControl>
             <FormControl variant="outlined" size="small" fullWidth>
               <ClubsCombo

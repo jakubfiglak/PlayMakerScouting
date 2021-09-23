@@ -80,6 +80,7 @@ export type ReportDTO = {
 
 export type ReportsFilterData = {
   player: string;
+  position: Position | '';
   club: string;
   rating: RatingDescription | 'all';
 };

@@ -39,6 +39,7 @@ type LocationState = { activeTab?: number; report?: Report; orderId?: string };
 
 const initialFilters: ReportsFilterData = {
   player: '',
+  position: '',
   club: '',
   rating: 'all',
 };

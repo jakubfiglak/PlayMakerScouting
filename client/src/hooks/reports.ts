@@ -55,7 +55,7 @@ async function getReports({
   filters,
 }: GetReportsArgs): Promise<PaginatedReports> {
   const orderSign = order === 'desc' ? '-' : '';
-  const { club, player, rating } = filters;
+  const { club, player, rating, position } = filters;
 
   // Generate query url
   let reportsURI = `/api/v1/reports?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
@@ -70,6 +70,10 @@ async function getReports({
 
   if (rating !== 'all') {
     reportsURI = reportsURI.concat(getQueryStringFromRating(rating));
+  }
+
+  if (position) {
+    reportsURI = reportsURI.concat(`&positionPlayed=${position}`);
   }
 
   const { data } = await axios.get<GetReportsResponse>(reportsURI);
@@ -242,7 +246,7 @@ export function useCreateReport() {
   return useMutation((values: ReportDTO) => createReport(values), {
     onSuccess: (data) => {
       setAlert({
-        msg: getUpdateSuccessMessage({
+        msg: getCreateSuccessMessage({
           type: 'raport',
           name: `nr ${data.data.docNumber}`,
         }),

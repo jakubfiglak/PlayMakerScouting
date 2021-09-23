@@ -8,6 +8,7 @@ type Props = CommonTableProps;
 
 const headCells = [
   { id: 'player', label: 'Zawodnik' },
+  { id: 'positionPlayed', label: 'Pozycja' },
   { id: 'finalRating', label: 'Ocena ostateczna' },
   { id: 'videoURL', label: 'Video' },
   { id: 'scout', label: 'Scout' },
