@@ -46,7 +46,7 @@ async function getNotes({
   filters,
 }: GetNotesArgs): Promise<PaginatedNotes> {
   const orderSign = order === 'desc' ? '-' : '';
-  const { player, club, match, rating } = filters;
+  const { player, club, match, rating, position } = filters;
 
   // Generate query url
   let notesURI = `/api/v1/notes?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
@@ -65,6 +65,10 @@ async function getNotes({
 
   if (rating !== 'all') {
     notesURI = notesURI.concat(getQueryStringFromRating(rating));
+  }
+
+  if (position) {
+    notesURI = notesURI.concat(`&positionPlayed=${position}`);
   }
 
   const { data } = await axios.get<GetNotesResponse>(notesURI);

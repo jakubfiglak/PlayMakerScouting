@@ -36,6 +36,7 @@ export type NoteDTO = Pick<
 
 export type NotesFilterData = {
   player: string;
+  position: Position | '';
   club: string;
   match: string;
   rating: RatingDescription | 'all';

@@ -74,6 +74,7 @@ export const NotesTableRow = ({
     createdAt,
     shirtNo,
     playerCurrentClub,
+    positionPlayed,
   } = note;
 
   return (
@@ -129,6 +130,9 @@ export const NotesTableRow = ({
           ) : (
             'N/A'
           )}
+        </StyledTableCell>
+        <StyledTableCell>
+          {positionPlayed ? getLabel(positionPlayed) : 'N/A'}
         </StyledTableCell>
         <StyledTableCell>
           <FinalRatingChip

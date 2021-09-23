@@ -29,6 +29,7 @@ import { NotesFilterData, Note, NoteDTO } from '../../types/notes';
 
 const initialFilters: NotesFilterData = {
   player: '',
+  position: '',
   club: '',
   match: '',
   rating: 'all',
