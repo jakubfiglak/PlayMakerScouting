@@ -34,6 +34,7 @@ import { useClubsList } from '../../hooks/clubs';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useSettingsState } from '../../context/settings/useSettingsState';
+import { useDraftsState } from '../../context/drafts/useDraftsState';
 
 type LocationState = { activeTab?: number; report?: Report; orderId?: string };
 
@@ -52,6 +53,7 @@ export const ReportsPage = () => {
     setDeleteReportConfirmationModalOpen,
   ] = useState(false);
   const { defaultReportBackgroundImageUrl } = useSettingsState();
+  const { note } = useDraftsState();
 
   const classes = useStyles({ background: defaultReportBackgroundImageUrl });
   const [currentReport, setCurrentReport] = useState<Report | null>(null);
@@ -238,7 +240,9 @@ export const ReportsPage = () => {
           title={
             currentReport
               ? `Edycja raportu nr ${currentReport.docNumber}`
-              : 'Tworzenie nowego raportu'
+              : `Tworzenie nowego raportu ${
+                  note ? `na podstawie notatki nr ${note.docNumber}` : ''
+                }`
           }
         />
         {currentReport ? (

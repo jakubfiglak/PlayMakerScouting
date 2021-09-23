@@ -150,6 +150,9 @@ export const NotesPage = () => {
                   isDeleteOptionEnabled={
                     user.role === 'admin' || user.id === note.author.id
                   }
+                  canCreateReport={
+                    user.role === 'admin' || user.id === note.author.id
+                  }
                   isAuthorNameClickable={user.role === 'admin'}
                 />
               ))

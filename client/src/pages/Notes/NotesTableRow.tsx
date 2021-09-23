@@ -16,6 +16,7 @@ import {
   Delete as DeleteIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
+  NoteAdd as CreateReportIcon,
 } from '@material-ui/icons';
 // Custom components
 import { FinalRatingChip } from '../Reports/FinalRatingChip';
@@ -26,6 +27,7 @@ import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
 // Hooks
 import { useTableMenu } from '../../hooks/useTableMenu';
+import { useDraftsState } from '../../context/drafts/useDraftsState';
 // Types
 import { Note } from '../../types/notes';
 import { RatingScore } from '../../types/reports';
@@ -41,6 +43,7 @@ type Props = {
   isEditOptionEnabled?: boolean;
   isDeleteOptionEnabled?: boolean;
   isAuthorNameClickable?: boolean;
+  canCreateReport?: boolean;
 };
 
 export const NotesTableRow = ({
@@ -51,10 +54,13 @@ export const NotesTableRow = ({
   isEditOptionEnabled = false,
   isDeleteOptionEnabled = false,
   isAuthorNameClickable = false,
+  canCreateReport = false,
 }: Props) => {
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = useState(false);
+
+  const { setNote } = useDraftsState();
 
   const {
     menuAnchorEl,
@@ -118,6 +124,17 @@ export const NotesTableRow = ({
                   handleMenuAction(() => onDeleteClick(id));
                 }}
                 disabled={!isDeleteOptionEnabled}
+              />
+              <TableMenuItem
+                icon={<CreateReportIcon fontSize="small" />}
+                text="Twórz raport"
+                onClick={() => {
+                  handleMenuAction(() => {
+                    setNote(note);
+                    history.push('/reports', { activeTab: 1 });
+                  });
+                }}
+                disabled={!canCreateReport}
               />
             </TableMenu>
           </StyledTableCell>
