@@ -3,6 +3,7 @@ const {
   getAccessControlLists,
   getAccessControlList,
   grantAccess,
+  grantAccessMultiple,
 } = require('../modules/accessControlLists/accessControlLists.controller');
 const {
   setAclByAssetData,
@@ -19,6 +20,11 @@ router.patch(
   '/grant-access',
   [protect, authorize('admin'), setAclByAssetData, grantAccessToRelatedAssets],
   grantAccess
+);
+router.patch(
+  '/grant-access-multiple',
+  [protect, authorize('admin'), setAclByAssetData],
+  grantAccessMultiple
 );
 
 module.exports = router;

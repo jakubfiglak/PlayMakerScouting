@@ -50,3 +50,22 @@ exports.grantAccess = asyncHandler(async (req, res) => {
     data: updatedAcl,
   });
 });
+
+// @desc Grant access to multiple assets
+// @route PATCH /api/v1/access-control-lists/grant-access-multiple
+// @access Private (admin only)
+exports.grantAccessMultiple = asyncHandler(async (req, res) => {
+  const { targetAssetType, targetAssetId, assetToAddType, assetToAddIds } = req.body;
+
+  const updatedAcl = await accessControlListsService.grantAccessToMultipleAssets({
+    acl: req.acl,
+    assetType: assetToAddType,
+    assetIds: assetToAddIds,
+  });
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: `Successfully granted ${targetAssetType} id ${targetAssetId} with the access to ${assetToAddType} id ${assetToAddIds}`,
+    data: updatedAcl,
+  });
+});

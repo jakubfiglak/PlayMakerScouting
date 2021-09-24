@@ -218,6 +218,14 @@ const buildGrantAccessForm = (overrides = {}) => ({
   ...overrides,
 });
 
+const buildGrantAccessFormMultiple = (overrides = {}) => ({
+  targetAssetType: 'user',
+  targetAssetId: new ID(),
+  assetToAddType: 'club',
+  assetToAddIds: [new ID(), new ID(), new ID()],
+  ...overrides,
+});
+
 const buildMatch = (overrides = {}) => ({
   _id: new ID(),
   homeTeam: new ID(),
@@ -278,6 +286,7 @@ module.exports = {
   buildAccessControlList,
   buildReportBackgroundImage,
   buildGrantAccessForm,
+  buildGrantAccessFormMultiple,
   buildMatch,
   buildNote,
   buildReq,

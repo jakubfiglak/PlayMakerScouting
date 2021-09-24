@@ -1,5 +1,6 @@
 const Report = require('./report.model');
 const resultsOptions = require('./options');
+const uniquifyArray = require('../../utils/uniquifyArray');
 
 function getReportById(id) {
   return Report.findById(id);
@@ -79,6 +80,13 @@ async function deleteReport(report) {
   await report.remove();
 }
 
+async function getMultipleReportsPlayersAndClubs(reportIds) {
+  const reports = await Report.find({ _id: { $in: reportIds } });
+  const playerIds = reports.map((report) => report.player);
+  const clubIds = reports.map((report) => report.playerCurrentClub);
+  return { players: uniquifyArray(playerIds), clubs: uniquifyArray(clubIds) };
+}
+
 module.exports = {
   getReportById,
   getReportsForPlayer,
@@ -92,4 +100,5 @@ module.exports = {
   updateReport,
   setReportStatus,
   deleteReport,
+  getMultipleReportsPlayersAndClubs,
 };

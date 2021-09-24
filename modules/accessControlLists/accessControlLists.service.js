@@ -1,6 +1,11 @@
 const AccessControlList = require('./accessControlList.model');
-const isAdmin = require('../../utils/isAdmin');
 const pluralizeAssetType = require('../../utils/pluralizeAssetType');
+const playersService = require('../players/players.service');
+const reportsService = require('../reports/reports.service');
+const matchesService = require('../matches/matches.service');
+const notesService = require('../notes/notes.service');
+const isAdmin = require('../../utils/isAdmin');
+const uniquifyArray = require('../../utils/uniquifyArray');
 
 function createAccessControlList(accessControlListData) {
   return AccessControlList.create(accessControlListData);
@@ -114,6 +119,78 @@ async function createAclOnTeamCreation({ teamId, members }) {
   });
 }
 
+async function getPlayerRelatedAssets({ updates, playerIds }) {
+  const clubs = await playersService.getMultiplePlayersClubs(playerIds);
+  return { ...updates, clubs };
+}
+
+async function getReportRelatedAssets({ updates, reportIds }) {
+  const { players, clubs: reportClubs } = await reportsService.getMultipleReportsPlayersAndClubs(
+    reportIds
+  );
+
+  const playersClubs = await playersService.getMultiplePlayersClubs(players);
+  return { ...updates, players, clubs: uniquifyArray([...reportClubs, ...playersClubs]) };
+}
+
+async function getMatchRelatedAssets({ updates, matchIds }) {
+  const clubs = await matchesService.getMultipleMatchesClubs(matchIds);
+  return { ...updates, clubs };
+}
+
+async function getNoteRelatedAssets({ updates, noteIds }) {
+  const {
+    players,
+    clubs: noteClubs,
+    matches,
+  } = await notesService.getMultipleNotesPlayersClubsAndMatches(noteIds);
+
+  const playersClubs = await playersService.getMultiplePlayersClubs(players);
+  const matchesClubs = await matchesService.getMultipleMatchesClubs(matches);
+
+  return {
+    ...updates,
+    players,
+    matches,
+    clubs: uniquifyArray([...noteClubs, ...playersClubs, ...matchesClubs]),
+  };
+}
+
+async function grantAccessToMultipleAssets({ acl, assetType, assetIds }) {
+  const assetTypePlural = pluralizeAssetType(assetType);
+
+  let updates = { [assetTypePlural]: assetIds };
+
+  switch (assetType) {
+    case 'player':
+      updates = await getPlayerRelatedAssets({ updates, playerIds: assetIds });
+      break;
+
+    case 'report':
+      updates = await getReportRelatedAssets({ updates, reportIds: assetIds });
+      break;
+
+    case 'match':
+      updates = await getMatchRelatedAssets({ updates, matchIds: assetIds });
+      break;
+
+    case 'note':
+      updates = await getNoteRelatedAssets({ updates, noteIds: assetIds });
+      break;
+
+    default:
+      break;
+  }
+  Object.keys(updates).forEach((key) => {
+    updates[key].forEach((id) => {
+      if (!acl[key].includes(id)) {
+        acl[key].push(id);
+      }
+    });
+  });
+
+  return acl.save();
+}
 module.exports = {
   createAccessControlList,
   getAllAccessControlLists,
@@ -124,4 +201,5 @@ module.exports = {
   grantAccessOnAssetCreation,
   createAclOnTeamCreation,
   grantAccessOnOrderAcceptance,
+  grantAccessToMultipleAssets,
 };

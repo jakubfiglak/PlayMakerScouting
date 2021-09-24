@@ -9,6 +9,7 @@ const {
   buildClub,
   buildPlayer,
   buildGrantAccessForm,
+  buildGrantAccessFormMultiple,
   buildReport,
   buildMatch,
   buildNote,
@@ -294,5 +295,185 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     expect(response.data.data.clubs).toContainEqual(club2._id.toHexString());
     expect(response.data.data.players).toContainEqual(player._id.toHexString());
     expect(response.data.data.notes).toContainEqual(note._id.toHexString());
+  });
+});
+
+describe('PATCH /api/v1/access-control-lists/grant-access-multiple', () => {
+  it('should correctly grant access to players and their clubs if assetToAddType is "player"', async () => {
+    const user = buildUser();
+    const club1 = buildClub();
+    const club2 = buildClub();
+    const club3 = buildClub();
+    const player1 = buildPlayer({ club: club1._id });
+    const player2 = buildPlayer({ club: club2._id });
+    const player3 = buildPlayer({ club: club3._id });
+
+    const userAcl = buildAccessControlList({
+      user: user._id,
+      clubs: [club1._id],
+      players: [player1._id],
+    });
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertClubs([club1, club2, club3]),
+      insertPlayers([player1, player2, player3]),
+    ]);
+
+    const data = buildGrantAccessFormMultiple({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      assetToAddType: 'player',
+      assetToAddIds: [player1._id, player2._id, player3._id],
+    });
+
+    const response = await api.patch('access-control-lists/grant-access-multiple', data);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.players).toContainEqual(player1._id.toHexString());
+    expect(response.data.data.players).toContainEqual(player2._id.toHexString());
+    expect(response.data.data.players).toContainEqual(player3._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club1._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club2._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club3._id.toHexString());
+  });
+
+  it('should correctly grant access to reports and their players, playerCurrentClubs and players clubs if assetToAddType is "report"', async () => {
+    const user = buildUser();
+    const club1 = buildClub();
+    const club2 = buildClub();
+    const club3 = buildClub();
+    const player1 = buildPlayer({ club: club1._id });
+    const player2 = buildPlayer({ club: club2._id });
+    const player3 = buildPlayer({ club: club3._id });
+    const report1 = buildReport({ player: player1._id, playerCurrentClub: club1._id });
+    const report2 = buildReport({ player: player2._id, playerCurrentClub: club2._id });
+    const report3 = buildReport({ player: player3._id, playerCurrentClub: club2._id });
+    const userAcl = buildAccessControlList({
+      user: user._id,
+      clubs: [club1._id],
+      players: [player1._id],
+    });
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertClubs([club1, club2, club3]),
+      insertPlayers([player1, player2, player3]),
+      insertReports([report1, report2, report3]),
+    ]);
+
+    const data = buildGrantAccessFormMultiple({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      assetToAddType: 'report',
+      assetToAddIds: [report1._id, report2._id, report3._id],
+    });
+
+    const response = await api.patch('access-control-lists/grant-access-multiple', data);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.players).toContainEqual(player1._id.toHexString());
+    expect(response.data.data.players).toContainEqual(player2._id.toHexString());
+    expect(response.data.data.players).toContainEqual(player3._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club1._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club2._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club3._id.toHexString());
+    expect(response.data.data.reports).toContainEqual(report1._id.toHexString());
+    expect(response.data.data.reports).toContainEqual(report2._id.toHexString());
+    expect(response.data.data.reports).toContainEqual(report3._id.toHexString());
+  });
+
+  it('should correctly grant access to matches and their clubs if assetToAddType is "match"', async () => {
+    const user = buildUser();
+    const club1 = buildClub();
+    const club2 = buildClub();
+    const club3 = buildClub();
+    const match1 = buildMatch({ homeTeam: club1._id, awayTeam: club2._id });
+    const match2 = buildMatch({ homeTeam: club1._id, awayTeam: club3._id });
+    const match3 = buildMatch({ homeTeam: club3._id, awayTeam: club2._id });
+    const userAcl = buildAccessControlList({
+      user: user._id,
+      clubs: [club1._id],
+    });
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertClubs([club1, club2, club3]),
+      insertMatches([match1, match2, match3]),
+    ]);
+
+    const data = buildGrantAccessFormMultiple({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      assetToAddType: 'match',
+      assetToAddIds: [match1._id, match2._id, match3._id],
+    });
+
+    const response = await api.patch('access-control-lists/grant-access-multiple', data);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.matches).toContainEqual(match1._id.toHexString());
+    expect(response.data.data.matches).toContainEqual(match2._id.toHexString());
+    expect(response.data.data.matches).toContainEqual(match3._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club1._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club2._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club3._id.toHexString());
+  });
+
+  it('should correctly grant access to notes, their players, matches and clubs, player clubs and matches clubs if assetToAddType is "note"', async () => {
+    const user = buildUser();
+    const club1 = buildClub();
+    const club2 = buildClub();
+    const club3 = buildClub();
+    const player1 = buildPlayer({ club: club1._id });
+    const player2 = buildPlayer({ club: club2._id });
+    const match1 = buildMatch({ homeTeam: club1._id, awayTeam: club2._id });
+    const match2 = buildMatch({ homeTeam: club1._id, awayTeam: club3._id });
+    const match3 = buildMatch({ homeTeam: club3._id, awayTeam: club2._id });
+    const note1 = buildNote({
+      player: player1._id,
+      playerCurrentClub: club1._id,
+      match: match1._id,
+    });
+    const note2 = buildNote({ player: player2._id });
+    const note3 = buildNote();
+    const userAcl = buildAccessControlList({
+      user: user._id,
+      clubs: [club1._id],
+    });
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertPlayers([player1, player2]),
+      insertClubs([club1, club2, club3]),
+      insertMatches([match1, match2, match3]),
+      insertNotes([note1, note2, note3]),
+    ]);
+
+    const data = buildGrantAccessFormMultiple({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      assetToAddType: 'note',
+      assetToAddIds: [note1._id, note2._id, note3._id],
+    });
+
+    const response = await api.patch('access-control-lists/grant-access-multiple', data);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.data.players).toContainEqual(player1._id.toHexString());
+    expect(response.data.data.players).toContainEqual(player2._id.toHexString());
+    expect(response.data.data.matches).toContainEqual(match1._id.toHexString());
+    expect(response.data.data.matches).not.toContainEqual(match2._id.toHexString());
+    expect(response.data.data.matches).not.toContainEqual(match3._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club1._id.toHexString());
+    expect(response.data.data.clubs).toContainEqual(club2._id.toHexString());
+    expect(response.data.data.clubs).not.toContainEqual(club3._id.toHexString());
   });
 });
