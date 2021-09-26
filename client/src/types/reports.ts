@@ -56,7 +56,7 @@ export type Report = {
 
 export type ReportBasicInfo = Pick<
   Report,
-  'id' | 'docNumber' | 'player' | 'createdAt'
+  'id' | 'docNumber' | 'player' | 'createdAt' | 'shirtNo'
 >;
 
 export type ReportDTO = {

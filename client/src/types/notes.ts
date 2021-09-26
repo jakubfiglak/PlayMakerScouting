@@ -23,7 +23,13 @@ export type Note = {
 
 export type NoteBasicInfo = Pick<
   Note,
-  'id' | 'player' | 'playerCurrentClub' | 'text' | 'rating' | 'docNumber'
+  | 'id'
+  | 'player'
+  | 'playerCurrentClub'
+  | 'text'
+  | 'rating'
+  | 'docNumber'
+  | 'shirtNo'
 >;
 
 export type NoteDTO = Pick<

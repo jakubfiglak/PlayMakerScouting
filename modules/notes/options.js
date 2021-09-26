@@ -4,7 +4,7 @@ const options = {
     club: 'name division',
     user: 'firstName lastName',
   },
-  listSelect: 'player playerCurrentClub text rating noteNo createdAt docNumber',
+  listSelect: 'player playerCurrentClub text rating noteNo createdAt docNumber shirtNo',
   forbiddenUpdates: ['playerCurrentClub', 'author'],
 };
 

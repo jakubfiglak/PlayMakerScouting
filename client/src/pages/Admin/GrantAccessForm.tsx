@@ -31,6 +31,11 @@ import { ReportBasicInfo } from '../../types/reports';
 import { PlayerBasicInfo } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
 import { NoteBasicInfo } from '../../types/notes';
+import { ClubsMultipleSelect } from '../../components/selects/ClubsMultipleSelect';
+import { PlayersMultipleSelect } from '../../components/selects/PlayersMultipleSelect';
+import { MatchesMultipleSelect } from '../../components/selects/MatchesMultipleSelect';
+import { NotesMultipleSelect } from '../../components/selects/NotesMultipleSelect';
+import { ReportsMultipleSelect } from '../../components/selects/ReportsMultipleSelect';
 
 type Props = {
   users: UserBasicInfo[];
@@ -59,8 +64,9 @@ export const GrantAccessForm = ({
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        onSubmit(data);
-        resetForm();
+        // onSubmit(data);
+        console.log(data);
+        // resetForm();
       }}
     >
       {({ errors, touched, handleReset, values }) => (
@@ -102,86 +108,20 @@ export const GrantAccessForm = ({
                 />
               )}
             </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel id="assetToAddTypeLabel">
-                Rodzaj zasobu, do którego chcesz nadać dostęp
-              </InputLabel>
-              <Field
-                as={Select}
-                name="assetToAddType"
-                labelId="assetToAddTypeLabel"
-                id="assetToAddType"
-                label="Rodzaj zasobu, do którego chcesz nadać dostęp"
-                error={touched.assetToAddType && !!errors.assetToAddType}
-              >
-                <MenuItem value="club">klub</MenuItem>
-                <MenuItem value="player">zawodnik</MenuItem>
-                <MenuItem value="match">mecz</MenuItem>
-                <MenuItem value="report">raport</MenuItem>
-                <MenuItem value="note">notatka</MenuItem>
-              </Field>
-              {touched.assetToAddType && errors.assetToAddType && (
-                <FormHelperText>{errors.assetToAddType}</FormHelperText>
-              )}
+            <FormControl>
+              <ClubsMultipleSelect clubs={clubs} />
             </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              {(() => {
-                switch (values.assetToAddType) {
-                  case 'club':
-                    return (
-                      <ClubsCombo
-                        clubsData={clubs}
-                        label="Wybierz klub"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  case 'player':
-                    return (
-                      <PlayersCombo
-                        playersData={players}
-                        label="Wybierz zawodnika"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  case 'report':
-                    return (
-                      <ReportsCombo
-                        reportsData={reports}
-                        label="Wybierz raport"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  case 'match':
-                    return (
-                      <MatchesCombo
-                        matchesData={matches}
-                        label="Wybierz mecz"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  case 'note':
-                    return (
-                      <NotesCombo
-                        notesData={notes}
-                        label="Wybierz notatkę"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  default:
-                    return (
-                      <ClubsCombo
-                        clubsData={clubs}
-                        label="Wybierz klub"
-                        name="assetToAddId"
-                      />
-                    );
-                }
-              })()}
+            <FormControl>
+              <PlayersMultipleSelect players={players} />
+            </FormControl>
+            <FormControl>
+              <MatchesMultipleSelect matches={matches} />
+            </FormControl>
+            <FormControl>
+              <NotesMultipleSelect notes={notes} />
+            </FormControl>
+            <FormControl>
+              <ReportsMultipleSelect reports={reports} />
             </FormControl>
             <MainFormActions
               label="dostęp"
@@ -198,8 +138,11 @@ export const GrantAccessForm = ({
 const initialValues: GrantAccessDTO = {
   targetAssetType: 'user',
   targetAssetId: '',
-  assetToAddType: 'club',
-  assetToAddId: '',
+  clubs: [],
+  players: [],
+  matches: [],
+  notes: [],
+  reports: [],
 };
 
 export const validationSchema: yup.ObjectSchema<GrantAccessDTO> = yup
@@ -210,11 +153,10 @@ export const validationSchema: yup.ObjectSchema<GrantAccessDTO> = yup
     targetAssetId: yup
       .string()
       .required('Wybierz zasób, któremu chcesz nadać dostęp'),
-    assetToAddType: yup
-      .mixed<AssetToAddType>()
-      .required('Wybierz typ zasobu, do którego chcesz nadać dostęp'),
-    assetToAddId: yup
-      .string()
-      .required('Wybierz zasób, do którego chcesz nadać dostęp'),
+    clubs: yup.array<string>().defined(),
+    players: yup.array<string>().defined(),
+    matches: yup.array<string>().defined(),
+    notes: yup.array<string>().defined(),
+    reports: yup.array<string>().defined(),
   })
   .defined();

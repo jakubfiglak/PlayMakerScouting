@@ -17,6 +17,9 @@ export type AssetToAddType = 'player' | 'club' | 'report' | 'match' | 'note';
 export type GrantAccessDTO = {
   targetAssetType: TargetAssetType;
   targetAssetId: string;
-  assetToAddType: AssetToAddType;
-  assetToAddId: string;
+  clubs: string[];
+  players: string[];
+  matches: string[];
+  notes: string[];
+  reports: string[];
 };
