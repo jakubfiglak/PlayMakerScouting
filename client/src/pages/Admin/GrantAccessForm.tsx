@@ -9,20 +9,19 @@ import {
   FormHelperText,
 } from '@material-ui/core';
 // Custom components
-import { ClubsCombo } from '../../components/selects/ClubsCombo';
-import { PlayersCombo } from '../../components/selects/PlayersCombo';
-import { ReportsCombo } from '../../components/selects/ReportsCombo';
 import { TeamsCombo } from '../../components/selects/TeamsCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
-import { MatchesCombo } from '../../components/selects/MatchesCombo';
-import { NotesCombo } from '../../components/selects/NotesCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
+import { ClubsMultipleSelect } from '../../components/selects/ClubsMultipleSelect';
+import { PlayersMultipleSelect } from '../../components/selects/PlayersMultipleSelect';
+import { MatchesMultipleSelect } from '../../components/selects/MatchesMultipleSelect';
+import { NotesMultipleSelect } from '../../components/selects/NotesMultipleSelect';
+import { ReportsMultipleSelect } from '../../components/selects/ReportsMultipleSelect';
 // Types
 import {
   GrantAccessDTO,
   TargetAssetType,
-  AssetToAddType,
 } from '../../types/accessControlLists';
 import { UserBasicInfo } from '../../types/users';
 import { Team } from '../../types/teams';
@@ -31,11 +30,6 @@ import { ReportBasicInfo } from '../../types/reports';
 import { PlayerBasicInfo } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
 import { NoteBasicInfo } from '../../types/notes';
-import { ClubsMultipleSelect } from '../../components/selects/ClubsMultipleSelect';
-import { PlayersMultipleSelect } from '../../components/selects/PlayersMultipleSelect';
-import { MatchesMultipleSelect } from '../../components/selects/MatchesMultipleSelect';
-import { NotesMultipleSelect } from '../../components/selects/NotesMultipleSelect';
-import { ReportsMultipleSelect } from '../../components/selects/ReportsMultipleSelect';
 
 type Props = {
   users: UserBasicInfo[];
