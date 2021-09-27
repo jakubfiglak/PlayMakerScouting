@@ -36,17 +36,20 @@ exports.getAccessControlList = asyncHandler(async (req, res) => {
 // @route PATCH /api/v1/access-control-lists/grant-access
 // @access Private (admin only)
 exports.grantAccess = asyncHandler(async (req, res) => {
-  const { targetAssetType, targetAssetId, assetToAddType, assetToAddIds } = req.body;
+  const { clubs, players, matches, notes, reports } = req.body;
 
   const updatedAcl = await accessControlListsService.grantAccessToMultipleAssets({
     acl: req.acl,
-    assetType: assetToAddType,
-    assetIds: assetToAddIds,
+    clubs,
+    players,
+    matches,
+    notes,
+    reports,
   });
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: `Successfully granted ${targetAssetType} id ${targetAssetId} with the access to ${assetToAddType} id ${assetToAddIds}`,
+    message: 'Access successfully granted!',
     data: updatedAcl,
   });
 });

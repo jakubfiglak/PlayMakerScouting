@@ -6,6 +6,7 @@ const matchesService = require('../matches/matches.service');
 const notesService = require('../notes/notes.service');
 const isAdmin = require('../../utils/isAdmin');
 const uniquifyArray = require('../../utils/uniquifyArray');
+const mergeObjectsWithArrayValues = require('../../utils/mergeObjectsWithArrayValues');
 
 function createAccessControlList(accessControlListData) {
   return AccessControlList.create(accessControlListData);
@@ -119,26 +120,26 @@ async function createAclOnTeamCreation({ teamId, members }) {
   });
 }
 
-async function getPlayerRelatedAssets({ updates, playerIds }) {
+async function getPlayerRelatedAssets(playerIds) {
   const clubs = await playersService.getMultiplePlayersClubs(playerIds);
-  return { ...updates, clubs };
+  return { clubs };
 }
 
-async function getReportRelatedAssets({ updates, reportIds }) {
+async function getReportRelatedAssets(reportIds) {
   const { players, clubs: reportClubs } = await reportsService.getMultipleReportsPlayersAndClubs(
     reportIds
   );
 
   const playersClubs = await playersService.getMultiplePlayersClubs(players);
-  return { ...updates, players, clubs: uniquifyArray([...reportClubs, ...playersClubs]) };
+  return { players, clubs: uniquifyArray([...reportClubs, ...playersClubs]) };
 }
 
-async function getMatchRelatedAssets({ updates, matchIds }) {
+async function getMatchRelatedAssets(matchIds) {
   const clubs = await matchesService.getMultipleMatchesClubs(matchIds);
-  return { ...updates, clubs };
+  return { clubs };
 }
 
-async function getNoteRelatedAssets({ updates, noteIds }) {
+async function getNoteRelatedAssets(noteIds) {
   const {
     players,
     clubs: noteClubs,
@@ -149,38 +150,25 @@ async function getNoteRelatedAssets({ updates, noteIds }) {
   const matchesClubs = await matchesService.getMultipleMatchesClubs(matches);
 
   return {
-    ...updates,
     players,
     matches,
     clubs: uniquifyArray([...noteClubs, ...playersClubs, ...matchesClubs]),
   };
 }
 
-async function grantAccessToMultipleAssets({ acl, assetType, assetIds }) {
-  const assetTypePlural = pluralizeAssetType(assetType);
+async function grantAccessToMultipleAssets({ acl, clubs, players, matches, notes, reports }) {
+  const results = await Promise.all([
+    getPlayerRelatedAssets(players),
+    getReportRelatedAssets(reports),
+    getMatchRelatedAssets(matches),
+    getNoteRelatedAssets(notes),
+  ]);
 
-  let updates = { [assetTypePlural]: assetIds };
+  const updates = mergeObjectsWithArrayValues([
+    { clubs, players, matches, notes, reports },
+    ...results.map((result) => result),
+  ]);
 
-  switch (assetType) {
-    case 'player':
-      updates = await getPlayerRelatedAssets({ updates, playerIds: assetIds });
-      break;
-
-    case 'report':
-      updates = await getReportRelatedAssets({ updates, reportIds: assetIds });
-      break;
-
-    case 'match':
-      updates = await getMatchRelatedAssets({ updates, matchIds: assetIds });
-      break;
-
-    case 'note':
-      updates = await getNoteRelatedAssets({ updates, noteIds: assetIds });
-      break;
-
-    default:
-      break;
-  }
   Object.keys(updates).forEach((key) => {
     updates[key].forEach((id) => {
       if (!acl[key].includes(id)) {

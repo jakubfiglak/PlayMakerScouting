@@ -57,9 +57,11 @@ async function deleteNote(note) {
 
 async function getMultipleNotesPlayersClubsAndMatches(noteIds) {
   const notes = await Note.find({ _id: { $in: noteIds } });
+
   const playerIds = notes.map((note) => note.player?.id).filter((id) => id);
   const clubIds = notes.map((note) => note.playerCurrentClub?.id).filter((id) => id);
   const matchIds = notes.map((note) => note.match?.id).filter((id) => id);
+
   return {
     players: uniquifyArray(playerIds),
     clubs: uniquifyArray(clubIds),

@@ -213,16 +213,11 @@ const buildReportBackgroundImage = (overrides = {}) => ({
 const buildGrantAccessForm = (overrides = {}) => ({
   targetAssetType: 'user',
   targetAssetId: new ID(),
-  assetToAddType: 'club',
-  assetToAddId: new ID(),
-  ...overrides,
-});
-
-const buildGrantAccessFormMultiple = (overrides = {}) => ({
-  targetAssetType: 'user',
-  targetAssetId: new ID(),
-  assetToAddType: 'club',
-  assetToAddIds: [new ID(), new ID(), new ID()],
+  clubs: [],
+  players: [],
+  matches: [],
+  notes: [],
+  reports: [],
   ...overrides,
 });
 
@@ -286,7 +281,6 @@ module.exports = {
   buildAccessControlList,
   buildReportBackgroundImage,
   buildGrantAccessForm,
-  buildGrantAccessFormMultiple,
   buildMatch,
   buildNote,
   buildReq,
