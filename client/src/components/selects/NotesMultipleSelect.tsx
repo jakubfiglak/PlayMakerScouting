@@ -9,13 +9,17 @@ import { getNoteLabelById } from './utils';
 
 type Props = {
   notes: NoteBasicInfo[];
+  getDisabledOptions: () => string[];
 };
 
-export const NotesMultipleSelect = ({ notes }: Props) => {
+export const NotesMultipleSelect = ({ notes, getDisabledOptions }: Props) => {
+  const disabledOptions = getDisabledOptions();
+
   return (
     <Field
       name="notes"
       component={Autocomplete}
+      getOptionDisabled={(option: string) => disabledOptions.includes(option)}
       multiple
       limitTags={2}
       options={notes.map((note) => note.id)}

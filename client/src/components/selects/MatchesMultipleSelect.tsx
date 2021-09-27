@@ -9,13 +9,20 @@ import { formatDate } from '../../utils/dates';
 
 type Props = {
   matches: MatchBasicInfo[];
+  getDisabledOptions: () => string[];
 };
 
-export const MatchesMultipleSelect = ({ matches }: Props) => {
+export const MatchesMultipleSelect = ({
+  matches,
+  getDisabledOptions,
+}: Props) => {
+  const disabledOptions = getDisabledOptions();
+
   return (
     <Field
       name="matches"
       component={Autocomplete}
+      getOptionDisabled={(option: string) => disabledOptions.includes(option)}
       multiple
       limitTags={2}
       options={matches.map((match) => match.id)}

@@ -9,13 +9,20 @@ import { getReportLabelById } from './utils';
 
 type Props = {
   reports: ReportBasicInfo[];
+  getDisabledOptions: () => string[];
 };
 
-export const ReportsMultipleSelect = ({ reports }: Props) => {
+export const ReportsMultipleSelect = ({
+  reports,
+  getDisabledOptions,
+}: Props) => {
+  const disabledOptions = getDisabledOptions();
+
   return (
     <Field
       name="reports"
       component={Autocomplete}
+      getOptionDisabled={(option: string) => disabledOptions.includes(option)}
       multiple
       limitTags={2}
       options={reports.map((report) => report.id)}

@@ -6,12 +6,12 @@ const accessControlListsService = require('./accessControlLists.service');
 // @route GET /api/v1/access-control-lists
 // @access Private (admin only)
 exports.getAccessControlLists = asyncHandler(async (req, res) => {
-  const reportTemplates = await accessControlListsService.getAllAccessControlLists();
+  const accessControlLists = await accessControlListsService.getAllAccessControlLists();
 
   res.status(httpStatus.OK).json({
     success: true,
-    data: reportTemplates,
-    count: reportTemplates.length,
+    data: accessControlLists,
+    count: accessControlLists.length,
   });
 });
 

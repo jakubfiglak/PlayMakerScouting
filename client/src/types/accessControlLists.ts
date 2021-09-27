@@ -8,6 +8,8 @@ export type AccessControlList = {
   players: string[];
   clubs: string[];
   reports: string[];
+  matches: string[];
+  notes: string[];
   reportBackgroundImages: string[];
 };
 

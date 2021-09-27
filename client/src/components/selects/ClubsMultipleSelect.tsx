@@ -8,13 +8,17 @@ import { ClubBasicInfo } from '../../types/clubs';
 
 type Props = {
   clubs: ClubBasicInfo[];
+  getDisabledOptions: () => string[];
 };
 
-export const ClubsMultipleSelect = ({ clubs }: Props) => {
+export const ClubsMultipleSelect = ({ clubs, getDisabledOptions }: Props) => {
+  const disabledOptions = getDisabledOptions();
+
   return (
     <Field
       name="clubs"
       component={Autocomplete}
+      getOptionDisabled={(option: string) => disabledOptions.includes(option)}
       multiple
       limitTags={2}
       options={clubs.map((club) => club.id)}

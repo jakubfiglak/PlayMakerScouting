@@ -20,6 +20,7 @@ import { NotesMultipleSelect } from '../../components/selects/NotesMultipleSelec
 import { ReportsMultipleSelect } from '../../components/selects/ReportsMultipleSelect';
 // Types
 import {
+  AccessControlList,
   GrantAccessDTO,
   TargetAssetType,
 } from '../../types/accessControlLists';
@@ -30,6 +31,7 @@ import { ReportBasicInfo } from '../../types/reports';
 import { PlayerBasicInfo } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
 import { NoteBasicInfo } from '../../types/notes';
+import { getDisabledOptionsFromAcl } from './utils';
 
 type Props = {
   users: UserBasicInfo[];
@@ -39,6 +41,7 @@ type Props = {
   players: PlayerBasicInfo[];
   matches: MatchBasicInfo[];
   notes: NoteBasicInfo[];
+  accessControlLists: AccessControlList[];
   onSubmit: (data: GrantAccessDTO) => void;
 };
 
@@ -50,6 +53,7 @@ export const GrantAccessForm = ({
   players,
   matches,
   notes,
+  accessControlLists,
   onSubmit,
 }: Props) => {
   return (
@@ -58,9 +62,8 @@ export const GrantAccessForm = ({
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={(data, { resetForm }) => {
-        // onSubmit(data);
-        console.log(data);
-        // resetForm();
+        onSubmit(data);
+        resetForm();
       }}
     >
       {({ errors, touched, handleReset, values }) => (
@@ -103,22 +106,72 @@ export const GrantAccessForm = ({
               )}
             </FormControl>
             <FormControl>
-              <ClubsMultipleSelect clubs={clubs} />
+              <ClubsMultipleSelect
+                clubs={clubs}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'clubs',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
             </FormControl>
             <FormControl>
-              <PlayersMultipleSelect players={players} />
+              <PlayersMultipleSelect
+                players={players}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'players',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
             </FormControl>
             <FormControl>
-              <MatchesMultipleSelect matches={matches} />
+              <MatchesMultipleSelect
+                matches={matches}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'matches',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
             </FormControl>
             <FormControl>
-              <NotesMultipleSelect notes={notes} />
+              <NotesMultipleSelect
+                notes={notes}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'notes',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
             </FormControl>
             <FormControl>
-              <ReportsMultipleSelect reports={reports} />
+              <ReportsMultipleSelect
+                reports={reports}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'reports',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
             </FormControl>
             <MainFormActions
-              label="dostęp"
+              label="dostępy"
               isEditState={false}
               onCancelClick={handleReset}
             />
