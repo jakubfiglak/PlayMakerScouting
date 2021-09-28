@@ -1,21 +1,14 @@
-const isAdmin = require('../../utils/isAdmin');
+const getAccessFilters = require('../../utils/getAccessFilters');
 
 function setAccessFilters(req, res, next) {
-  if (isAdmin(req.user.role)) {
-    req.accessFilters = {
-      players: {},
-      clubs: {},
-      orders: {},
-      reports: {},
-    };
-    return next();
-  }
   req.accessFilters = {
-    players: { $or: [{ _id: { $in: req.acl.players } }, { isPublic: true }] },
-    clubs: { $or: [{ _id: { $in: req.acl.clubs } }, { isPublic: true }] },
-    reports: { _id: { $in: req.acl.reports } },
+    players: getAccessFilters({ assetType: 'player', userRole: req.user.role, acl: req.acl }),
+    clubs: getAccessFilters({ assetType: 'club', userRole: req.user.role, acl: req.acl }),
+    notes: getAccessFilters({ assetType: 'note', userRole: req.user.role, acl: req.acl }),
+    reports: getAccessFilters({ assetType: 'report', userRole: req.user.role, acl: req.acl }),
     orders: { scout: req.user._id },
   };
+
   next();
 }
 

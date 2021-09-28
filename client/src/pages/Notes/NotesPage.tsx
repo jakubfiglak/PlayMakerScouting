@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -27,6 +28,8 @@ import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
 import { NotesFilterData, Note, NoteDTO } from '../../types/notes';
 
+type LocationState = { activeTab?: number };
+
 const initialFilters: NotesFilterData = {
   player: '',
   position: '',
@@ -36,9 +39,16 @@ const initialFilters: NotesFilterData = {
 };
 
 export const NotesPage = () => {
+  const { state } = useLocation<LocationState | null>();
   const user = useAuthenticatedUser();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
+
+  useEffect(() => {
+    if (state?.activeTab) {
+      setActiveTab(state.activeTab);
+    }
+  }, [setActiveTab, state]);
 
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { data: players, isLoading: playersLoading } = usePlayersList();

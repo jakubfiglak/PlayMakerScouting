@@ -38,6 +38,18 @@ async function getAllNotesList(accessFilters) {
   return notes;
 }
 
+function getTotalNotesCount(accessFilters) {
+  return Note.countDocuments(accessFilters);
+}
+
+function getUsersNotesCount({ accessFilters, userId }) {
+  return Note.countDocuments({ ...accessFilters, author: userId });
+}
+
+function getLatestNote(accessFilters) {
+  return Note.find(accessFilters).sort(resultsOptions.latestSort).limit(1);
+}
+
 async function updateNote({ note, reqBody }) {
   const editedNote = note;
 
@@ -80,4 +92,7 @@ module.exports = {
   deleteNote,
   getNotesForMatch,
   getMultipleNotesPlayersClubsAndMatches,
+  getTotalNotesCount,
+  getUsersNotesCount,
+  getLatestNote,
 };

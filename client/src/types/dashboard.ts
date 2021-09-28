@@ -1,3 +1,4 @@
+import { Note } from './notes';
 import { Order } from './orders';
 import { Report } from './reports';
 
@@ -6,7 +7,11 @@ export type DashboardData = {
   playersCount: number;
   highestRatedReport: Report | null;
   latestReport: Report | null;
-  reportsCount: number;
+  totalReportsCount: number;
+  userReportsCount: number;
+  latestNote: Note | null;
+  totalNotesCount: number;
+  userNotesCount: number;
   latestOrder: Order | null;
   acceptedOrdersCount: number | null;
   closedOrdersCount: number | null;

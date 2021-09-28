@@ -30,8 +30,12 @@ function getLatestReport(accessFilters) {
     .populate(resultsOptions.populate);
 }
 
-function getReportsCount(accessFilters) {
+function getTotalReportsCount(accessFilters) {
   return Report.countDocuments(accessFilters);
+}
+
+function getUsersReportsCount({ accessFilters, userId }) {
+  return Report.countDocuments({ ...accessFilters, author: userId });
 }
 
 async function createReport(reqBody) {
@@ -93,7 +97,8 @@ module.exports = {
   getReportsForClub,
   getHighestRatedReport,
   getLatestReport,
-  getReportsCount,
+  getTotalReportsCount,
+  getUsersReportsCount,
   createReport,
   getAllReports,
   getAllReportsList,

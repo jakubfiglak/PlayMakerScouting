@@ -6,6 +6,7 @@ const options = {
   },
   listSelect: 'player playerCurrentClub text rating noteNo createdAt docNumber shirtNo',
   forbiddenUpdates: ['playerCurrentClub', 'author'],
+  latestSort: '-createdAt',
 };
 
 module.exports = options;
