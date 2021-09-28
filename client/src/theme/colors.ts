@@ -9,3 +9,8 @@ export const yellow = '#f9a930';
 export const yellowTransparent = 'rgba(249, 169, 48, 0.2)';
 export const green = '#50b33d';
 export const white = '#ffffff';
+
+export const test = 'rgb(224, 58, 60)';
+export const test2 = 'rgb(43, 43, 43)';
+export const test3 = 'rgb(27, 27, 27)';
+export const buttonColor = 'rgb(224, 58, 60)';
