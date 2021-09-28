@@ -215,7 +215,7 @@ export const ReportsTableRow = ({
             <Box margin={1}>
               <Typography variant="h6" gutterBottom>
                 {`Nr ${shirtNo || 'N/A'}, ${getLabel(player.position)} (${
-                  playerCurrentClub.name
+                  playerCurrentClub?.name || 'not found club'
                 }`}
               </Typography>
               <Typography gutterBottom variant="body2">
