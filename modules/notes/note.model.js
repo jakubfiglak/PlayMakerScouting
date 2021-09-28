@@ -13,7 +13,7 @@ const NoteSchema = new Schema(
     player: {
       type: Schema.Types.ObjectId,
       ref: 'Player',
-      autopopulate: { select: options.populate.player },
+      autopopulate: true,
     },
     playerCurrentClub: {
       type: Schema.Types.ObjectId,

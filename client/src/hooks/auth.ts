@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { User } from '../types/auth';
 import { ApiError, ApiResponse } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import { getErrorMessage } from './utils';
 
 // Get account info
 async function getAccount(): Promise<User> {
@@ -15,6 +16,9 @@ export function useAccountInfo() {
 
   return useQuery(['account'], () => getAccount(), {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

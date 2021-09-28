@@ -3,27 +3,22 @@ import { makeStyles, Theme } from '@material-ui/core';
 import {
   DirectionsRun as PlayersIcon,
   Security as ClubsIcon,
-  Assignment as OrdersIcon,
   Assessment as ReportsIcon,
+  Note as NotesIcon,
 } from '@material-ui/icons';
 // Custom components
 import { CountCard } from './CountCard';
 import { ReportCard } from './ReportCard';
-import { OrderCard } from './OrderCard';
-import { CreateReportCard } from './CreateReportCard';
-import { PageHeading } from '../../components/PageHeading';
-// Hooks
-import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
-import { useDashboardData } from '../../hooks/dashboard';
-// Utils & data
+import { NoteCard } from './NoteCard';
+import { CreateCard } from './CreateCard';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
+import { PageHeading } from '../../components/PageHeading';
+// Hooks
+import { useDashboardData } from '../../hooks/dashboard';
 
 export const DashboardPage = () => {
   const classes = useStyles();
-  const user = useAuthenticatedUser();
-
-  const isPrivilegedUser = user.role !== 'scout';
 
   const { data, isLoading } = useDashboardData();
 
@@ -32,40 +27,43 @@ export const DashboardPage = () => {
       {isLoading && <Loader />}
       <PageHeading title="Twoja aktywność" />
       <div className={classes.container}>
-        <CreateReportCard />
+        <CreateCard title="stwórz raport" linkTo="/reports" />
+        <CreateCard title="stwórz notatkę" linkTo="/notes" />
         <CountCard
           title="Zawodników w bazie"
-          count={data?.playersCount}
+          count={data?.playersCount || 0}
           icon={<PlayersIcon />}
           linkTo="/players"
         />
         <CountCard
           title="Klubów w bazie"
-          count={data?.clubsCount}
+          count={data?.clubsCount || 0}
           icon={<ClubsIcon />}
           linkTo="/clubs"
         />
-        {isPrivilegedUser && (
-          <>
-            <CountCard
-              title="Zrealizowane zlecenia"
-              count={data?.closedOrdersCount || 0}
-              icon={<OrdersIcon />}
-              linkTo="/orders"
-            />
-            <CountCard
-              title="Zlecenia w realizacji"
-              count={data?.acceptedOrdersCount || 0}
-              icon={<OrdersIcon />}
-              linkTo="/orders"
-            />
-          </>
-        )}
         <CountCard
-          title="Sporządzonych raportów"
-          count={data?.reportsCount}
+          title="Raportów w bazie"
+          count={data?.totalReportsCount || 0}
           icon={<ReportsIcon />}
           linkTo="/reports"
+        />
+        <CountCard
+          title="Sporządzonych raportów"
+          count={data?.userReportsCount || 0}
+          icon={<ReportsIcon />}
+          linkTo="/reports"
+        />
+        <CountCard
+          title="Notatek w bazie"
+          count={data?.totalNotesCount || 0}
+          icon={<NotesIcon />}
+          linkTo="/notes"
+        />
+        <CountCard
+          title="Sporządzonych notatek"
+          count={data?.userNotesCount || 0}
+          icon={<NotesIcon />}
+          linkTo="/notes"
         />
       </div>
       <div className={classes.container}>
@@ -78,8 +76,8 @@ export const DashboardPage = () => {
             report={data.highestRatedReport}
           />
         )}
-        {isPrivilegedUser && data?.latestOrder && (
-          <OrderCard title="Najnowsze zlecenie" order={data.latestOrder} />
+        {data?.latestNote && (
+          <NoteCard title="Najnowsza notatka" note={data.latestNote} />
         )}
       </div>
     </MainTemplate>
@@ -90,7 +88,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'grid',
     justifyContent: 'center',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
     gap: `${theme.spacing(2)}px`,
     marginTop: theme.spacing(2),
   },

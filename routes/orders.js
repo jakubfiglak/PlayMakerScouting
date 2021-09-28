@@ -23,6 +23,7 @@ const {
   canView,
   checkStatus,
   canReject,
+  canBeDeleted,
 } = require('../modules/orders/orders.middleware');
 const setAuthor = require('../middleware/setAuthor');
 
@@ -64,6 +65,10 @@ router.post(
   [protect, authorize('admin'), setOrder, checkStatus(['accepted'])],
   closeOrder
 );
-router.delete('/:id', [protect, authorize('admin'), setOrder, checkStatus(['open'])], deleteOrder);
+router.delete(
+  '/:id',
+  [protect, authorize('admin'), setOrder, checkStatus(['open']), canBeDeleted],
+  deleteOrder
+);
 
 module.exports = router;

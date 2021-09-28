@@ -27,7 +27,7 @@ const options = {
     'createdAt',
     'updatedAt',
   ],
-  listSelect: 'player reportNo docNumber createdAt',
+  listSelect: 'player reportNo docNumber createdAt shirtNo',
   listPopulate: 'player',
 };
 

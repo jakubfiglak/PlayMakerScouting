@@ -8,12 +8,11 @@ type Props = CommonTableProps;
 
 const headCells = [
   { id: 'player', label: 'Zawodnik' },
-  { id: 'author', label: 'Autor' },
+  { id: 'positionPlayed', label: 'Pozycja' },
+  { id: 'percentageRating', label: 'Ocena' },
   { id: 'match', label: 'Mecz' },
-  { id: 'matchDate', label: 'Data meczu', sortingDisabled: true },
-  { id: 'rating', label: 'Ocena' },
-  { id: 'maxRatingScore', label: 'Skala ocen' },
-  { id: 'percentageRating', label: 'Ocena %' },
+  { id: 'author', label: 'Scout' },
+  { id: 'createdAt', label: 'Data utworzenia' },
 ];
 
 export const NotesTable: FC<Props> = ({

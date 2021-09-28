@@ -1,66 +1,53 @@
-import { Formik, Form, Field } from 'formik';
 // MUI components
-import { TextField, makeStyles, Theme } from '@material-ui/core';
+import {
+  makeStyles,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
 // Custom components
-import { FormModal } from '../../components/FormModal';
-import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
-import { DivisionSelect } from '../../components/selects/DivisionSelect';
-// Types
-import { ClubDTO } from '../../types/clubs';
-// Utils & data
-import { clubsFormInitialValues } from '../../data/forms/initialValues';
-import { clubsFormValidationSchema } from '../../data/forms/validationSchemas';
+import { Loader } from '../../components/Loader';
+import { ClubsForm } from '../Clubs/ClubsForm';
+// Hooks
+import { useCreateClub } from '../../hooks/clubs';
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: ClubDTO) => void;
 };
 
-export const AddClubModal = ({ onClose, onSubmit, open }: Props) => {
+export const AddClubModal = ({ onClose, open }: Props) => {
   const classes = useStyles();
 
+  const { mutate: createClub, isLoading } = useCreateClub();
+
   return (
-    <Formik
-      initialValues={clubsFormInitialValues}
-      validationSchema={clubsFormValidationSchema}
-      enableReinitialize
-      onSubmit={(data) => {
-        onSubmit(data);
-        onClose();
-      }}
-    >
-      {({ errors, touched, handleSubmit }) => (
-        <FormModal
-          title="Dodaj klub"
-          onClose={onClose}
-          onSubmit={handleSubmit}
-          open={open}
-        >
-          <Form className={classes.container}>
-            <Field
-              name="name"
-              as={TextField}
-              variant="outlined"
-              fullWidth
-              label="Nazwa"
-              autoFocus
-              error={touched.name && !!errors.name}
-              helperText={touched.name && errors.name}
-            />
-            <VoivodeshipSelect name="voivodeship" />
-            <DivisionSelect />
-          </Form>
-        </FormModal>
-      )}
-    </Formik>
+    <>
+      {isLoading ? <Loader /> : null}
+      <Dialog
+        open={open}
+        onClose={onClose}
+        aria-labelledby="form-dialog-title"
+        classes={{ paper: classes.container }}
+      >
+        <DialogTitle id="form-dialog-title">Utwórz klub</DialogTitle>
+        <DialogContent>
+          <ClubsForm current={null} onSubmit={createClub} fullWidth />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="primary">
+            Zamknij
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: `${theme.spacing(2)}px`,
+    width: '95%',
   },
 }));

@@ -135,6 +135,22 @@ const labels = [
     label: 'Selekcja pozytywna',
   },
   {
+    value: 'negative',
+    label: 'Selekcja negatywna',
+  },
+  {
+    value: 'unknown',
+    label: 'Brak decyzji',
+  },
+  {
+    value: 'observe',
+    label: 'Do obserwacji',
+  },
+  {
+    value: 'positive',
+    label: 'Selekcja pozytywna',
+  },
+  {
     value: 'home',
     label: 'dom',
   },

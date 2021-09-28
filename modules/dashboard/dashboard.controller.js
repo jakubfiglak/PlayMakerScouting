@@ -6,7 +6,10 @@ const dashboardService = require('./dashboard.service');
 // @route GET /api/v1/dashboard
 // @access Private
 exports.getDashboardData = asyncHandler(async (req, res) => {
-  const data = await dashboardService.getDashboardData(req.accessFilters);
+  const data = await dashboardService.getDashboardData({
+    accessFilters: req.accessFilters,
+    userId: req.user._id,
+  });
 
   res.status(httpStatus.OK).json({
     success: true,

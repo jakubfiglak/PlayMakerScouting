@@ -12,8 +12,16 @@ import {
   ApiResponse,
   PaginatedData,
   GetPaginatedDataArgs,
+  RatingDescription,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
+import { getLabel } from '../utils/getLabel';
 
 type PaginatedReports = PaginatedData<Report>;
 type GetReportsResponse = ApiResponse<PaginatedReports>;
@@ -24,6 +32,21 @@ type GetPlayersReportsArgs = GetPaginatedDataArgs & { playerId: string };
 type GetOrdersReportsArgs = GetPaginatedDataArgs & { orderId: string };
 
 // Get all reports with pagination
+function getQueryStringFromRating(rating: RatingDescription) {
+  switch (rating) {
+    case 'negative':
+      return '&finalRating=1';
+    case 'unknown':
+      return '&finalRating=2';
+    case 'observe':
+      return '&finalRating=3';
+    case 'positive':
+      return '&finalRating=4';
+    default:
+      return '';
+  }
+}
+
 async function getReports({
   page = 1,
   limit = 20,
@@ -32,12 +55,29 @@ async function getReports({
   filters,
 }: GetReportsArgs): Promise<PaginatedReports> {
   const orderSign = order === 'desc' ? '-' : '';
+  const { club, player, rating, position, createdBy } = filters;
 
   // Generate query url
   let reportsURI = `/api/v1/reports?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
 
-  if (filters.player) {
-    reportsURI = reportsURI.concat(`&player=${filters.player}`);
+  if (player) {
+    reportsURI = reportsURI.concat(`&player=${player}`);
+  }
+
+  if (club) {
+    reportsURI = reportsURI.concat(`&playerCurrentClub=${club}`);
+  }
+
+  if (rating !== 'all') {
+    reportsURI = reportsURI.concat(getQueryStringFromRating(rating));
+  }
+
+  if (position) {
+    reportsURI = reportsURI.concat(`&positionPlayed=${position}`);
+  }
+
+  if (createdBy !== 'all') {
+    reportsURI = reportsURI.concat(`&author=${createdBy}`);
   }
 
   const { data } = await axios.get<GetReportsResponse>(reportsURI);
@@ -63,7 +103,10 @@ export function useReports({
         queryClient.setQueryData('reports', data.docs);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -98,7 +141,10 @@ export function usePlayersReports({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -133,7 +179,10 @@ export function useOrdersReports({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -151,7 +200,10 @@ export function useReportsList() {
 
   return useQuery<ReportBasicInfo[], ApiError>('reportsList', getReportsList, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -173,7 +225,10 @@ export function useReport(id: string) {
       return cacheReports.find((report) => report.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -194,11 +249,20 @@ export function useCreateReport() {
 
   return useMutation((values: ReportDTO) => createReport(values), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({
+          type: 'raport',
+          name: `nr ${data.data.docNumber}`,
+        }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('reports');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -224,11 +288,20 @@ export function useUpdateReport(reportId: string) {
     (values: ReportDTO) => updateReport({ reportId, reportData: values }),
     {
       onSuccess: (data) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({
+            type: 'raport',
+            name: `nr ${data.data.docNumber}`,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('reports');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -255,11 +328,19 @@ export function useSetReportStatus() {
     ({ id, status }: SetReportStatusArgs) => setReportStatus({ id, status }),
     {
       onSuccess: (data: ApiResponse<Report>) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: `Pomyślnie zmieniono status raportu na ${getLabel(
+            data.data.status,
+          )}`,
+          type: 'success',
+        });
         queryClient.invalidateQueries('reports');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -278,10 +359,16 @@ export function useDeleteReport() {
 
   return useMutation((id: string) => deleteReport(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'raport', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('reports');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

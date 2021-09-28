@@ -6,8 +6,15 @@ import {
   ApiResponse,
   GetPaginatedDataArgs,
   PaginatedData,
+  RatingDescription,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
 
 type PaginatedNotes = PaginatedData<Note>;
 type GetNotesResponse = ApiResponse<PaginatedNotes>;
@@ -16,6 +23,21 @@ type GetPlayersNotesArgs = GetPaginatedDataArgs & { playerId: string };
 type GetMatchesNotesArgs = GetPaginatedDataArgs & { matchId: string };
 
 // Get all notes with pagination
+function getQueryStringFromRating(rating: RatingDescription) {
+  switch (rating) {
+    case 'negative':
+      return '&percentageRating[gte]=0&percentageRating[lte]=25';
+    case 'unknown':
+      return '&percentageRating[gt]=25&percentageRating[lte]=50';
+    case 'observe':
+      return '&percentageRating[gt]=50&percentageRating[lte]=75';
+    case 'positive':
+      return '&percentageRating[gt]=75';
+    default:
+      return '';
+  }
+}
+
 async function getNotes({
   page = 1,
   limit = 20,
@@ -24,7 +46,7 @@ async function getNotes({
   filters,
 }: GetNotesArgs): Promise<PaginatedNotes> {
   const orderSign = order === 'desc' ? '-' : '';
-  const { player, club, match } = filters;
+  const { player, club, match, rating, position, createdBy } = filters;
 
   // Generate query url
   let notesURI = `/api/v1/notes?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
@@ -39,6 +61,18 @@ async function getNotes({
 
   if (match) {
     notesURI = notesURI.concat(`&match=${match}`);
+  }
+
+  if (rating !== 'all') {
+    notesURI = notesURI.concat(getQueryStringFromRating(rating));
+  }
+
+  if (position) {
+    notesURI = notesURI.concat(`&positionPlayed=${position}`);
+  }
+
+  if (createdBy !== 'all') {
+    notesURI = notesURI.concat(`&author=${createdBy}`);
   }
 
   const { data } = await axios.get<GetNotesResponse>(notesURI);
@@ -64,7 +98,10 @@ export function useNotes({
         queryClient.setQueryData('notes', data.docs);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -99,7 +136,10 @@ export function usePlayersNotes({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -134,7 +174,10 @@ export function useMatchesNotes({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
       enabled: matchId !== '',
     },
   );
@@ -153,7 +196,10 @@ export function useNotesList() {
 
   return useQuery(['notes', 'list'], getNotesList, {
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -173,7 +219,10 @@ export function useNote(id: string) {
       return cacheNotes.find((note) => note.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -192,11 +241,20 @@ export function useCreateNote() {
 
   return useMutation((values: NoteDTO) => createNote(values), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({
+          type: 'notatkę',
+          name: `nr ${data.data.docNumber}`,
+        }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('notes');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -222,11 +280,20 @@ export function useUpdateNote(noteId: string) {
     (values: NoteDTO) => updateNote({ noteId, noteData: values }),
     {
       onSuccess: (data) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({
+            type: 'notatkę',
+            name: `nr ${data.data.docNumber}`,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('notes');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -245,10 +312,16 @@ export function useDeleteNote() {
 
   return useMutation((id: string) => deleteNote(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'notatkę', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('notes');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

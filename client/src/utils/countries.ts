@@ -253,3 +253,9 @@ export const countries = {
 export function getCountryName(code: keyof typeof countries): string {
   return countries[code];
 }
+
+export function getFlagEmoji(code: keyof typeof countries): string {
+  return code
+    .toUpperCase()
+    .replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
+}

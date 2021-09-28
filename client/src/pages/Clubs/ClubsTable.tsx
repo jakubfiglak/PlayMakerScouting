@@ -8,7 +8,9 @@ type Props = CommonTableProps;
 
 const headCells = [
   { id: 'name', label: 'Nazwa' },
+  { id: 'country', label: 'Kraj' },
   { id: 'division', label: 'Poziom rozgrywkowy' },
+  { id: 'group', label: 'Grupa' },
   { id: 'voivodeship', label: 'Województwo' },
 ];
 

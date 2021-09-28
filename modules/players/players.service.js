@@ -4,6 +4,7 @@ const Report = require('../reports/report.model');
 const Order = require('../orders/order.model');
 const Note = require('../notes/note.model');
 const AccessControlList = require('../accessControlLists/accessControlList.model');
+const uniquifyArray = require('../../utils/uniquifyArray');
 
 function getPlayerById(id) {
   return Player.findById(id);
@@ -64,6 +65,12 @@ async function grantAccess({ player, userId }) {
 
 function getPlayersCount(accessFilters) {
   return Player.countDocuments(accessFilters);
+}
+
+async function getMultiplePlayersClubs(playerIds) {
+  const players = await Player.find({ _id: { $in: playerIds } });
+  const clubIds = players.map((player) => player.club);
+  return uniquifyArray(clubIds);
 }
 
 async function mergePlayersDuplicates() {
@@ -213,4 +220,5 @@ module.exports = {
   getPlayersForClub,
   getPlayersCount,
   mergePlayersDuplicates,
+  getMultiplePlayersClubs,
 };

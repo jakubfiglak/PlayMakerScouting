@@ -29,6 +29,36 @@ const divisions = [
   'Klasa C',
   'CLJ',
   'Rozgrywki juniorskie',
+  'Inny/zagranica',
+];
+
+const groups = [
+  'Grupa 1',
+  'Grupa 2',
+  'Grupa 3',
+  'Grupa 4',
+  'Grupa 5',
+  'Grupa 6',
+  'Grupa 7',
+  'Grupa 8',
+  'Grupa 9',
+  'Grupa 10',
+  'Grupa 11',
+  'Grupa 12',
+  'Grupa 13',
+  'Grupa 14',
+  'Grupa A',
+  'Grupa B',
+  'Grupa C',
+  'Grupa D',
+  'Grupa I',
+  'Grupa II',
+  'Grupa III',
+  'Grupa IV',
+  'Południe',
+  'Północ',
+  'Wschód',
+  'Zachód',
 ];
 
 const positions = [
@@ -326,4 +356,5 @@ module.exports = {
   competitions,
   userRoles,
   countryCodes,
+  groups,
 };

@@ -4,6 +4,7 @@ import { ClubDTO } from '../../types/clubs';
 export const playersFormInitialValues: PlayerDTO = {
   firstName: '',
   lastName: '',
+  country: 'PL',
   club: '',
   position: 'CM',
   yearOfBirth: 2000,
@@ -18,7 +19,9 @@ export const playersFormInitialValues: PlayerDTO = {
 
 export const clubsFormInitialValues: ClubDTO = {
   name: '',
+  country: 'PL',
   division: '',
+  group: null,
   voivodeship: '',
   lnpID: '',
 };

@@ -1,4 +1,6 @@
 import { ChangeEvent } from 'react';
+import { countries } from '../utils/countries';
+import { ratingDescriptions } from '../utils/constants';
 
 export type SortingOrder = 'asc' | 'desc';
 
@@ -72,3 +74,7 @@ export type ApiResponse<T> = {
   message: string;
   data: T;
 };
+
+export type Country = keyof typeof countries;
+
+export type RatingDescription = typeof ratingDescriptions[number];

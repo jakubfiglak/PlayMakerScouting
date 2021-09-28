@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { ReportBackgroundImage } from '../types/reportBackgroundImages';
 import { ApiError, ApiResponse } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import { getErrorMessage } from './utils';
 
 // Get all report background images
 async function getReportBackgroundImages(): Promise<ReportBackgroundImage[]> {
@@ -20,7 +21,10 @@ export function useReportBackgroundImages() {
     getReportBackgroundImages,
     {
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }

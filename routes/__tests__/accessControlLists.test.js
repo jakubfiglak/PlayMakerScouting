@@ -111,8 +111,6 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     const data = buildGrantAccessForm({
       targetAssetType: 'user',
       targetAssetId: user._id,
-      assetToAddType: 'club',
-      assetToAddId: club._id,
     });
 
     const { response } = await api.patch('access-control-lists/grant-access', data).catch((e) => e);
@@ -135,14 +133,13 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     const data = buildGrantAccessForm({
       targetAssetType: 'user',
       targetAssetId: user._id,
-      assetToAddType: 'club',
-      assetToAddId: club._id,
+      clubs: [club._id],
     });
 
     const response = await api.patch('access-control-lists/grant-access', data);
 
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.message).toContain('successfully granted');
     expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
   });
 
@@ -160,14 +157,13 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     const data = buildGrantAccessForm({
       targetAssetType: 'team',
       targetAssetId: team._id,
-      assetToAddType: 'club',
-      assetToAddId: club._id,
+      clubs: [club._id],
     });
 
     const response = await api.patch('access-control-lists/grant-access', data);
 
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.message).toContain('successfully granted');
     expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
   });
 
@@ -187,14 +183,13 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     const data = buildGrantAccessForm({
       targetAssetType: 'user',
       targetAssetId: user._id,
-      assetToAddType: 'player',
-      assetToAddId: player._id,
+      players: [player._id],
     });
 
     const response = await api.patch('access-control-lists/grant-access', data);
 
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.message).toContain('successfully granted');
     expect(response.data.data.players).toContainEqual(player._id.toHexString());
     expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
   });
@@ -217,14 +212,13 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     const data = buildGrantAccessForm({
       targetAssetType: 'user',
       targetAssetId: user._id,
-      assetToAddType: 'report',
-      assetToAddId: report._id,
+      reports: [report._id],
     });
 
     const response = await api.patch('access-control-lists/grant-access', data);
 
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.message).toContain('successfully granted');
     expect(response.data.data.reports).toContainEqual(report._id.toHexString());
     expect(response.data.data.players).toContainEqual(player._id.toHexString());
     expect(response.data.data.clubs).toContainEqual(club._id.toHexString());
@@ -247,14 +241,13 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     const data = buildGrantAccessForm({
       targetAssetType: 'user',
       targetAssetId: user._id,
-      assetToAddType: 'match',
-      assetToAddId: match._id,
+      matches: [match._id],
     });
 
     const response = await api.patch('access-control-lists/grant-access', data);
 
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.message).toContain('successfully granted');
     expect(response.data.data.matches).toContainEqual(match._id.toHexString());
     expect(response.data.data.clubs).toContainEqual(club1._id.toHexString());
     expect(response.data.data.clubs).toContainEqual(club2._id.toHexString());
@@ -281,18 +274,117 @@ describe('PATCH /api/v1/access-control-lists/grant-access', () => {
     const data = buildGrantAccessForm({
       targetAssetType: 'user',
       targetAssetId: user._id,
-      assetToAddType: 'note',
-      assetToAddId: note._id,
+      notes: [note._id],
     });
 
     const response = await api.patch('access-control-lists/grant-access', data);
 
     expect(response.data.success).toBe(true);
-    expect(response.data.message).toContain('Successfully granted');
+    expect(response.data.message).toContain('successfully granted');
     expect(response.data.data.matches).toContainEqual(match._id.toHexString());
     expect(response.data.data.clubs).toContainEqual(club1._id.toHexString());
     expect(response.data.data.clubs).toContainEqual(club2._id.toHexString());
     expect(response.data.data.players).toContainEqual(player._id.toHexString());
     expect(response.data.data.notes).toContainEqual(note._id.toHexString());
+  });
+
+  it('should correctly grant access to a note with partial data', async () => {
+    const user = buildUser();
+    const userAcl = buildAccessControlList({ user: user._id });
+    const note = buildNote();
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertNotes([note]),
+    ]);
+
+    const data = buildGrantAccessForm({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      notes: [note._id],
+    });
+
+    const response = await api.patch('access-control-lists/grant-access', data).catch((e) => e);
+
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('successfully granted');
+  });
+
+  it('should correctly grant access when multiple values are passed in', async () => {
+    const user = buildUser();
+    const userAcl = buildAccessControlList({ user: user._id });
+
+    // Clubs to grant access to
+    const club1 = buildClub();
+    const club2 = buildClub();
+
+    // Players to grant access to
+    const club3 = buildClub();
+    const club4 = buildClub();
+    const player1 = buildPlayer({ club: club3._id });
+    const player2 = buildPlayer({ club: club4._id });
+
+    // Matches to grant access to
+    const club5 = buildClub();
+    const match1 = buildMatch({ homeTeam: club1._id, awayTeam: club5._id });
+    const match2 = buildMatch({ homeTeam: club4._id, awayTeam: club3._id });
+
+    // Notes to grant access to
+    const note1 = buildNote();
+    const note2 = buildNote({ match: match2._id, player: player1._id });
+
+    // Reports to grant access to
+    const report1 = buildReport({ player: player1._id, playerCurrentClub: club3._id });
+    const report2 = buildReport({ player: player2._id, playerCurrentClub: club4._id });
+
+    function getIdsArray(assetsArray) {
+      return assetsArray.map((asset) => asset._id);
+    }
+
+    const clubs = [club1, club2, club3, club4, club5];
+    const clubsIds = getIdsArray(clubs);
+    const players = [player1, player2];
+    const playersIds = getIdsArray(players);
+    const matches = [match1, match2];
+    const matchesIds = getIdsArray(matches);
+    const notes = [note1, note2];
+    const notesIds = getIdsArray(notes);
+    const reports = [report1, report2];
+    const reportsIds = getIdsArray(reports);
+
+    await Promise.all([
+      insertUsers([user]),
+      insertAccessControlLists([userAcl]),
+      insertClubs(clubs),
+      insertPlayers(players),
+      insertMatches(matches),
+      insertNotes(notes),
+      insertReports(reports),
+    ]);
+
+    const data = buildGrantAccessForm({
+      targetAssetType: 'user',
+      targetAssetId: user._id,
+      clubs: clubsIds,
+      players: playersIds,
+      matches: matchesIds,
+      notes: notesIds,
+      reports: reportsIds,
+    });
+
+    const response = await api.patch('access-control-lists/grant-access', data);
+    expect(response.data.success).toBe(true);
+    expect(response.data.message).toContain('successfully granted');
+    expect(response.data.data.clubs.length).toBe(clubs.length);
+    expect(response.data.data.clubs).toEqual(clubsIds.map((id) => id.toHexString()));
+    expect(response.data.data.players.length).toBe(players.length);
+    expect(response.data.data.players).toEqual(playersIds.map((id) => id.toHexString()));
+    expect(response.data.data.matches.length).toBe(matches.length);
+    expect(response.data.data.matches).toEqual(matchesIds.map((id) => id.toHexString()));
+    expect(response.data.data.notes.length).toBe(notes.length);
+    expect(response.data.data.notes).toEqual(notesIds.map((id) => id.toHexString()));
+    expect(response.data.data.reports.length).toBe(reports.length);
+    expect(response.data.data.reports).toEqual(reportsIds.map((id) => id.toHexString()));
   });
 });

@@ -14,6 +14,8 @@ import { Security as ClubsIcon } from '@material-ui/icons';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
 import { Club } from '../../types/clubs';
+// Utils & data
+import { getFlagEmoji, getCountryName } from '../../utils/countries';
 
 type Props = {
   club: Club;
@@ -25,7 +27,7 @@ export const ClubDetails = ({ club }: Props) => {
 
   const isAdmin = user.role === 'admin';
 
-  const { division, name, voivodeship, lnpID } = club;
+  const { division, name, voivodeship, lnpID, country, group } = club;
 
   return (
     <Card className={classes.container}>
@@ -37,10 +39,16 @@ export const ClubDetails = ({ club }: Props) => {
         }
         title={name}
         titleTypographyProps={{ variant: 'h3' }}
-        subheader={division}
+        subheader={`${division}${group ? ` (${group})` : ''}`}
       />
       <CardContent>
         <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Typography>
+              <strong>Kraj: </strong>
+              {`${getFlagEmoji(country)} ${getCountryName(country)}`}
+            </Typography>
+          </Grid>
           <Grid item xs={12}>
             <Typography>
               <strong>Województwo: </strong>

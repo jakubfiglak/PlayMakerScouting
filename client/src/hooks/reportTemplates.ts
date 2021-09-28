@@ -3,6 +3,12 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { ReportTemplate, ReportTemplateDTO } from '../types/reportTemplates';
 import { ApiError, ApiResponse } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
 
 // Get all report templates
 async function getReportTemplates(): Promise<ReportTemplate[]> {
@@ -20,7 +26,10 @@ export function useReportTemplates() {
     getReportTemplates,
     {
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -46,11 +55,20 @@ export function useCreateReportTemplate() {
     (values: ReportTemplateDTO) => createReportTemplate(values),
     {
       onSuccess: (data: Response) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getCreateSuccessMessage({
+            type: 'szablon raportu',
+            name: data.data.name,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('reportTemplates');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -77,11 +95,20 @@ export function useUpdateReportTemplate() {
     ({ id, templateData }: Args) => updateReportTemplate({ id, templateData }),
     {
       onSuccess: (data: Response) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({
+            type: 'szablon raportu',
+            name: data.data.name,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('reportTemplates');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -102,10 +129,19 @@ export function useDeleteReportTemplate() {
 
   return useMutation((id: string) => deleteReportTemplate(id), {
     onSuccess: (data: DeleteResponse) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({
+          type: 'szablon raportu',
+          id: data.data,
+        }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('reportTemplates');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

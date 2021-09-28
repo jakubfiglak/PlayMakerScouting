@@ -14,6 +14,11 @@ function getReportTemplateById(id) {
   return ReportTemplate.findById(id);
 }
 
+async function getReportTemplatesByRating(ratingId) {
+  const reportTemplates = await ReportTemplate.find({ ratings: ratingId });
+  return reportTemplates;
+}
+
 async function updateReportTemplate({ reportTemplate, reqBody }) {
   const editedReportTemplate = reportTemplate;
 
@@ -38,4 +43,5 @@ module.exports = {
   getReportTemplateById,
   updateReportTemplate,
   deleteReportTemplate,
+  getReportTemplatesByRating,
 };

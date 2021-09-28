@@ -16,8 +16,10 @@ import {
   Delete as DeleteIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
+  NoteAdd as CreateReportIcon,
 } from '@material-ui/icons';
 // Custom components
+import { FinalRatingChip } from '../Reports/FinalRatingChip';
 import { TableLink } from '../../components/table/TableLink';
 import { TableMenu } from '../../components/table/TableMenu';
 import { TableMenuItem } from '../../components/table/TableMenuItem';
@@ -25,10 +27,13 @@ import { StyledTableCell } from '../../components/table/TableCell';
 import { StyledTableRow } from '../../components/table/TableRow';
 // Hooks
 import { useTableMenu } from '../../hooks/useTableMenu';
+import { useDraftsState } from '../../context/drafts/useDraftsState';
 // Types
 import { Note } from '../../types/notes';
+import { RatingScore } from '../../types/reports';
 // Utils & data
 import { formatDate } from '../../utils/dates';
+import { getLabel } from '../../utils/getLabel';
 
 type Props = {
   note: Note;
@@ -38,6 +43,7 @@ type Props = {
   isEditOptionEnabled?: boolean;
   isDeleteOptionEnabled?: boolean;
   isAuthorNameClickable?: boolean;
+  canCreateReport?: boolean;
 };
 
 export const NotesTableRow = ({
@@ -48,10 +54,13 @@ export const NotesTableRow = ({
   isEditOptionEnabled = false,
   isDeleteOptionEnabled = false,
   isAuthorNameClickable = false,
+  canCreateReport = false,
 }: Props) => {
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = useState(false);
+
+  const { setNote } = useDraftsState();
 
   const {
     menuAnchorEl,
@@ -67,9 +76,11 @@ export const NotesTableRow = ({
     author,
     match,
     text,
-    rating,
-    maxRatingScore,
     percentageRating,
+    createdAt,
+    shirtNo,
+    playerCurrentClub,
+    positionPlayed,
   } = note;
 
   return (
@@ -114,13 +125,48 @@ export const NotesTableRow = ({
                 }}
                 disabled={!isDeleteOptionEnabled}
               />
+              <TableMenuItem
+                icon={<CreateReportIcon fontSize="small" />}
+                text="Twórz raport"
+                onClick={() => {
+                  handleMenuAction(() => {
+                    setNote(note);
+                    history.push('/reports', { activeTab: 1 });
+                  });
+                }}
+                disabled={!canCreateReport}
+              />
             </TableMenu>
           </StyledTableCell>
         ) : null}
         <StyledTableCell>
           {player ? (
             <TableLink to={`/players/${player.id}`}>
-              {`${player.firstName} ${player.lastName}`}
+              {`${player.firstName} ${player.lastName} (ur. ${player.yearOfBirth})`}
+            </TableLink>
+          ) : (
+            'N/A'
+          )}
+        </StyledTableCell>
+        <StyledTableCell>
+          {positionPlayed ? getLabel(positionPlayed) : 'N/A'}
+        </StyledTableCell>
+        <StyledTableCell>
+          <FinalRatingChip
+            finalRating={
+              parseInt(
+                ((percentageRating * 4) / 100).toFixed(),
+                10,
+              ) as RatingScore
+            }
+          />
+        </StyledTableCell>
+        <StyledTableCell>
+          {match ? (
+            <TableLink to={`/matches/${match.id}`}>
+              {`${match.homeTeam.name} - ${match.awayTeam.name} (${formatDate(
+                match.date,
+              )})`}
             </TableLink>
           ) : (
             'N/A'
@@ -135,28 +181,16 @@ export const NotesTableRow = ({
             <>{`${author.firstName} ${author.lastName}`}</>
           )}
         </StyledTableCell>
-        <StyledTableCell>
-          {match ? (
-            <TableLink to={`/matches/${match.id}`}>
-              {`${match.homeTeam.name} - ${match.awayTeam.name}`}
-            </TableLink>
-          ) : (
-            'N/A'
-          )}
-        </StyledTableCell>
-        <StyledTableCell>
-          {match ? formatDate(match.date) : 'N/A'}
-        </StyledTableCell>
-        <StyledTableCell>{rating}</StyledTableCell>
-        <StyledTableCell>{maxRatingScore}</StyledTableCell>
-        <StyledTableCell>{`${percentageRating.toFixed(1)}%`}</StyledTableCell>
+        <StyledTableCell>{formatDate(createdAt, true)}</StyledTableCell>
       </StyledTableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom>
-                Treść notatki
+                {`Nr ${shirtNo || 'N/A'}, ${
+                  player ? getLabel(player.position) : 'N/A'
+                } (${playerCurrentClub ? playerCurrentClub.name : 'N/A'})`}
               </Typography>
               <Typography gutterBottom variant="body2">
                 {text}

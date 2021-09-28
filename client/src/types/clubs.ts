@@ -1,22 +1,16 @@
-import { Voivodeship } from './common';
+import { Voivodeship, Country } from './common';
+import { groups, divisions } from '../utils/constants';
 
-export type Division =
-  | 'Ekstraklasa'
-  | 'I liga'
-  | 'II liga'
-  | 'III liga'
-  | 'IV liga'
-  | 'Klasa okręgowa'
-  | 'Klasa A'
-  | 'Klasa B'
-  | 'Klasa C'
-  | 'CLJ'
-  | 'Rozgrywki juniorskie';
+export type Division = typeof divisions[number];
+
+export type Group = typeof groups[number];
 
 export type Club = {
   id: string;
   name: string;
+  country: Country;
   division: Division;
+  group?: Group | null;
   voivodeship: Voivodeship | 'Zagranica';
   lnpID?: string;
   author: string;

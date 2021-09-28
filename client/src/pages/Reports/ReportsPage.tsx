@@ -28,17 +28,22 @@ import {
   useUpdateReport,
   useSetReportStatus,
 } from '../../hooks/reports';
-import { useClubsList } from '../../hooks/clubs';
-import { usePlayersList, useCreatePlayer } from '../../hooks/players';
+import { usePlayersList } from '../../hooks/players';
 import { useOrdersList } from '../../hooks/orders';
+import { useClubsList } from '../../hooks/clubs';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useAlertsState } from '../../context/alerts/useAlertsState';
 import { useSettingsState } from '../../context/settings/useSettingsState';
+import { useDraftsState } from '../../context/drafts/useDraftsState';
 
 type LocationState = { activeTab?: number; report?: Report; orderId?: string };
 
 const initialFilters: ReportsFilterData = {
   player: '',
+  position: '',
+  club: '',
+  rating: 'all',
+  createdBy: 'all',
 };
 
 export const ReportsPage = () => {
@@ -49,6 +54,7 @@ export const ReportsPage = () => {
     setDeleteReportConfirmationModalOpen,
   ] = useState(false);
   const { defaultReportBackgroundImageUrl } = useSettingsState();
+  const { note } = useDraftsState();
 
   const classes = useStyles({ background: defaultReportBackgroundImageUrl });
   const [currentReport, setCurrentReport] = useState<Report | null>(null);
@@ -66,13 +72,9 @@ export const ReportsPage = () => {
     mutate: setReportStatus,
     isLoading: setReportStatusLoading,
   } = useSetReportStatus();
-  const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { data: players, isLoading: playersLoading } = usePlayersList();
   const { data: orders, isLoading: ordersLoading } = useOrdersList();
-  const {
-    mutate: createPlayer,
-    isLoading: createPlayerLoading,
-  } = useCreatePlayer();
+  const { data: clubs, isLoading: clubsLoading } = useClubsList();
 
   const { setAlert } = useAlertsState();
 
@@ -156,14 +158,13 @@ export const ReportsPage = () => {
   };
 
   const isLoading =
-    clubsLoading ||
     ordersLoading ||
     createReportLoading ||
     updateReportLoading ||
     playersLoading ||
-    createPlayerLoading ||
     setReportStatusLoading ||
-    reportsLoading;
+    reportsLoading ||
+    clubsLoading;
 
   return (
     <MainTemplate>
@@ -178,6 +179,7 @@ export const ReportsPage = () => {
         <PageHeading title="Baza raportów" />
         <ReportsFilterForm
           playersData={players || []}
+          clubsData={clubs || []}
           filters={filters}
           onFilter={setFilters}
           onClearFilters={() => setFilters(initialFilters)}
@@ -239,7 +241,9 @@ export const ReportsPage = () => {
           title={
             currentReport
               ? `Edycja raportu nr ${currentReport.docNumber}`
-              : 'Tworzenie nowego raportu'
+              : `Tworzenie nowego raportu ${
+                  note ? `na podstawie notatki nr ${note.docNumber}` : ''
+                }`
           }
         />
         {currentReport ? (
@@ -260,9 +264,7 @@ export const ReportsPage = () => {
           />
         )}
         <AddPlayerModal
-          clubsData={clubs || []}
           onClose={() => setIsAddPlayerModalOpen(false)}
-          onSubmit={createPlayer}
           open={isAddPlayerModalOpen}
         />
       </TabPanel>

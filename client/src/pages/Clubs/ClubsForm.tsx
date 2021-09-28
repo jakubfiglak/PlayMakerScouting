@@ -3,7 +3,9 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from '@material-ui/core';
 // Custom components
 import { DivisionSelect } from '../../components/selects/DivisionSelect';
+import { GroupSelect } from '../../components/selects/GroupSelect';
 import { VoivodeshipSelect } from '../../components/selects/VoivodeshipSelect';
+import { CountriesCombo } from '../../components/selects/CountriesCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
 // Hooks
@@ -18,9 +20,15 @@ type Props = {
   current: Club | null;
   onSubmit: (data: ClubDTO) => void;
   onCancelClick?: () => void;
+  fullWidth?: boolean;
 };
 
-export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
+export const ClubsForm = ({
+  current,
+  onSubmit,
+  onCancelClick,
+  fullWidth,
+}: Props) => {
   const { setAlert } = useAlertsState();
 
   const initialValues: ClubDTO = current
@@ -39,7 +47,7 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
     >
       {({ errors, touched, handleReset }) => (
         <Form>
-          <FormContainer>
+          <FormContainer fullWidth={fullWidth}>
             <Field
               name="name"
               as={TextField}
@@ -50,8 +58,10 @@ export const ClubsForm = ({ current, onSubmit, onCancelClick }: Props) => {
               error={touched.name && !!errors.name}
               helperText={touched.name && errors.name}
             />
+            <CountriesCombo />
             <VoivodeshipSelect name="voivodeship" />
             <DivisionSelect />
+            <GroupSelect />
             <Field
               name="lnpID"
               as={TextField}

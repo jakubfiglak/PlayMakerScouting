@@ -6,12 +6,12 @@ const accessControlListsService = require('./accessControlLists.service');
 // @route GET /api/v1/access-control-lists
 // @access Private (admin only)
 exports.getAccessControlLists = asyncHandler(async (req, res) => {
-  const reportTemplates = await accessControlListsService.getAllAccessControlLists();
+  const accessControlLists = await accessControlListsService.getAllAccessControlLists();
 
   res.status(httpStatus.OK).json({
     success: true,
-    data: reportTemplates,
-    count: reportTemplates.length,
+    data: accessControlLists,
+    count: accessControlLists.length,
   });
 });
 
@@ -32,21 +32,24 @@ exports.getAccessControlList = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc Grant access to the asset
+// @desc Grant access to multiple assets
 // @route PATCH /api/v1/access-control-lists/grant-access
 // @access Private (admin only)
 exports.grantAccess = asyncHandler(async (req, res) => {
-  const { targetAssetType, targetAssetId, assetToAddType, assetToAddId } = req.body;
+  const { clubs, players, matches, notes, reports } = req.body;
 
-  const updatedAcl = await accessControlListsService.grantAccessToTheAsset({
+  const updatedAcl = await accessControlListsService.grantAccessToMultipleAssets({
     acl: req.acl,
-    assetType: assetToAddType,
-    assetId: assetToAddId,
+    clubs,
+    players,
+    matches,
+    notes,
+    reports,
   });
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: `Successfully granted ${targetAssetType} id ${targetAssetId} with the access to ${assetToAddType} id ${assetToAddId}`,
+    message: 'Access successfully granted!',
     data: updatedAcl,
   });
 });

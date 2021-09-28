@@ -4,6 +4,8 @@ import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 // Types
 import { NoteBasicInfo } from '../../types/notes';
+// Utils & data
+import { getNoteLabelById } from './utils';
 
 type Props = {
   notesData: NoteBasicInfo[];
@@ -28,17 +30,7 @@ export const NotesCombo = ({ notesData, name, label, size }: Props) => {
       }}
       value={value}
       options={['', ...notesData.map((note) => note.id)]}
-      getOptionLabel={(option) => {
-        const note = notesData.find((n) => n.id === option);
-        if (note) {
-          return `${
-            note.player
-              ? `${note.player.firstName} ${note.player.lastName}`
-              : ''
-          } (notatka nr ${note.docNumber})`;
-        }
-        return 'brak';
-      }}
+      getOptionLabel={(option) => getNoteLabelById(option, notesData)}
       renderInput={(params) => (
         <TextField
           {...params}

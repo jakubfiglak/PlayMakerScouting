@@ -3,8 +3,29 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { ApiError, ApiResponse } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
 import { AccessControlList, GrantAccessDTO } from '../types/accessControlLists';
+import { getErrorMessage } from './utils';
 
-// Grant access to the asset
+// Get all Access Control Lists
+async function getAccessControlLists(): Promise<AccessControlList[]> {
+  const { data } = await axios.get<ApiResponse<AccessControlList[]>>(
+    '/api/v1/access-control-lists',
+  );
+  return data.data;
+}
+
+export function useAccessControlLists() {
+  const { setAlert } = useAlertsState();
+
+  return useQuery(['accessControlLists'], getAccessControlLists, {
+    onError: (err: ApiError) =>
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
+  });
+}
+
+// Grant access
 async function grantAccess(
   grantAccessData: GrantAccessDTO,
 ): Promise<ApiResponse<AccessControlList>> {
@@ -16,13 +37,18 @@ async function grantAccess(
 }
 
 export function useGrantAccess() {
+  const queryClient = useQueryClient();
   const { setAlert } = useAlertsState();
 
   return useMutation((values: GrantAccessDTO) => grantAccess(values), {
-    onSuccess: (data: ApiResponse<AccessControlList>) => {
-      setAlert({ msg: data.message, type: 'success' });
+    onSuccess: () => {
+      setAlert({ msg: 'Pomyślnie nadano dostępy', type: 'success' });
+      queryClient.invalidateQueries('accessControlLists');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

@@ -25,14 +25,17 @@ import { MainFormActions } from '../../../components/formActions/MainFormActions
 // Hooks
 import { useStepper } from '../../../hooks/useStepper';
 import { useReportTemplates } from '../../../hooks/reportTemplates';
+import { useDraftsState } from '../../../context/drafts/useDraftsState';
 // Types
 import { PlayerBasicInfo } from '../../../types/players';
 import { OrderBasicInfo } from '../../../types/orders';
 import { ReportDTO, Skill } from '../../../types/reports';
 import { Rating } from '../../../types/ratings';
+import { Note } from '../../../types/notes';
 // Utils & data
 import { validationSchema } from './validationSchema';
 import { useSettingsState } from '../../../context/settings/useSettingsState';
+import { formatDateObject } from '../../../utils/dates';
 
 type TStep = {
   title: string;
@@ -64,6 +67,7 @@ export const CreateReportForm = ({
   const { activeStep, handleNext, handleBack, setActiveStep } = useStepper();
 
   const { defaultReportTemplateId } = useSettingsState();
+  const { note, clearDrafts } = useDraftsState();
 
   const [reportType, setReportType] = useState<'order' | 'custom'>(
     activeOrderId ? 'order' : 'custom',
@@ -146,6 +150,10 @@ export const CreateReportForm = ({
     },
   ];
 
+  const initialValues = note
+    ? getInitialStateFromNote(note)
+    : reportFormInitialValues;
+
   return (
     <>
       {reportTemplatesLoading && <Loader />}
@@ -165,6 +173,7 @@ export const CreateReportForm = ({
         onSubmit={(data, { resetForm }) => {
           onSubmit(data);
           resetForm();
+          clearDrafts();
         }}
       >
         {({ handleReset, values, errors, touched }) => (
@@ -202,6 +211,7 @@ export const CreateReportForm = ({
                 onCancelClick={() => {
                   handleReset();
                   onReset();
+                  clearDrafts();
                 }}
               />
             </div>
@@ -268,7 +278,7 @@ function getStepError({ errors, touched, step }: GetStepErrorArgs) {
   return !!stepErrors.length;
 }
 
-const initialValues: Omit<ReportDTO, 'skills'> = {
+const reportFormInitialValues: Omit<ReportDTO, 'skills'> = {
   order: '',
   player: '',
   positionPlayed: 'CM',
@@ -288,3 +298,26 @@ const initialValues: Omit<ReportDTO, 'skills'> = {
   finalRating: 1,
   maxRatingScore: 4,
 };
+
+function getInitialStateFromNote(note: Note): Omit<ReportDTO, 'skills'> {
+  const isPlayerFromHomeTeam = note.player?.club.id === note.match?.homeTeam.id;
+  const matchDate = note.match?.date ? new Date(note.match.date) : '';
+
+  return {
+    ...reportFormInitialValues,
+    player: note.player?.id,
+    positionPlayed: note.positionPlayed || 'CM',
+    match: {
+      location: isPlayerFromHomeTeam ? 'home' : 'away',
+      against:
+        (isPlayerFromHomeTeam
+          ? note.match?.awayTeam.name
+          : note.match?.homeTeam.name) || '',
+      competition: note.match?.competition || 'league',
+      date: matchDate ? `${formatDateObject(matchDate)}T00:00` : dateString,
+      result: note.match?.result || '',
+    },
+    summary: note.text,
+    shirtNo: note.shirtNo,
+  };
+}

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 // MUI components
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 // Custom components
@@ -27,16 +28,28 @@ import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 // Types
 import { NotesFilterData, Note, NoteDTO } from '../../types/notes';
 
+type LocationState = { activeTab?: number };
+
 const initialFilters: NotesFilterData = {
   player: '',
+  position: '',
   club: '',
   match: '',
+  rating: 'all',
+  createdBy: 'all',
 };
 
 export const NotesPage = () => {
+  const { state } = useLocation<LocationState | null>();
   const user = useAuthenticatedUser();
 
   const [activeTab, handleTabChange, setActiveTab] = useTabs();
+
+  useEffect(() => {
+    if (state?.activeTab) {
+      setActiveTab(state.activeTab);
+    }
+  }, [setActiveTab, state]);
 
   const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { data: players, isLoading: playersLoading } = usePlayersList();
@@ -83,6 +96,7 @@ export const NotesPage = () => {
     if (currentNote) {
       updateNote(data);
       setActiveTab(0);
+      setCurrentNote(null);
     } else {
       createNote(data);
       setActiveTab(0);
@@ -145,6 +159,9 @@ export const NotesPage = () => {
                     user.role === 'admin' || user.id === note.author.id
                   }
                   isDeleteOptionEnabled={
+                    user.role === 'admin' || user.id === note.author.id
+                  }
+                  canCreateReport={
                     user.role === 'admin' || user.id === note.author.id
                   }
                   isAuthorNameClickable={user.role === 'admin'}

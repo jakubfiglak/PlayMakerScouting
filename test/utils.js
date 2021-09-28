@@ -54,6 +54,7 @@ const buildUpdatePasswordForm = (overrides = {}) => ({
 const buildClub = (overrides = {}) => ({
   _id: new ID(),
   name: getRandomName(),
+  country: 'PL',
   voivodeship: 'Wielkopolskie',
   division: 'Ekstraklasa',
   author: new ID(),
@@ -64,6 +65,7 @@ const buildPlayer = (overrides = {}) => ({
   _id: new ID(),
   firstName: getFirstName(),
   lastName: getLastName(),
+  country: 'PL',
   position: 'CM',
   author: new ID(),
   ...overrides,
@@ -211,8 +213,11 @@ const buildReportBackgroundImage = (overrides = {}) => ({
 const buildGrantAccessForm = (overrides = {}) => ({
   targetAssetType: 'user',
   targetAssetId: new ID(),
-  assetToAddType: 'club',
-  assetToAddId: new ID(),
+  clubs: [],
+  players: [],
+  matches: [],
+  notes: [],
+  reports: [],
   ...overrides,
 });
 

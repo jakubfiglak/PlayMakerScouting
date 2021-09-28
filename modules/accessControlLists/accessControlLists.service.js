@@ -1,6 +1,12 @@
 const AccessControlList = require('./accessControlList.model');
-const isAdmin = require('../../utils/isAdmin');
 const pluralizeAssetType = require('../../utils/pluralizeAssetType');
+const playersService = require('../players/players.service');
+const reportsService = require('../reports/reports.service');
+const matchesService = require('../matches/matches.service');
+const notesService = require('../notes/notes.service');
+const isAdmin = require('../../utils/isAdmin');
+const uniquifyArray = require('../../utils/uniquifyArray');
+const mergeObjectsWithArrayValues = require('../../utils/mergeObjectsWithArrayValues');
 
 function createAccessControlList(accessControlListData) {
   return AccessControlList.create(accessControlListData);
@@ -114,6 +120,65 @@ async function createAclOnTeamCreation({ teamId, members }) {
   });
 }
 
+async function getPlayerRelatedAssets(playerIds) {
+  const clubs = await playersService.getMultiplePlayersClubs(playerIds);
+  return { clubs };
+}
+
+async function getReportRelatedAssets(reportIds) {
+  const { players, clubs: reportClubs } = await reportsService.getMultipleReportsPlayersAndClubs(
+    reportIds
+  );
+
+  const playersClubs = await playersService.getMultiplePlayersClubs(players);
+  return { players, clubs: uniquifyArray([...reportClubs, ...playersClubs]) };
+}
+
+async function getMatchRelatedAssets(matchIds) {
+  const clubs = await matchesService.getMultipleMatchesClubs(matchIds);
+  return { clubs };
+}
+
+async function getNoteRelatedAssets(noteIds) {
+  const {
+    players,
+    clubs: noteClubs,
+    matches,
+  } = await notesService.getMultipleNotesPlayersClubsAndMatches(noteIds);
+
+  const playersClubs = await playersService.getMultiplePlayersClubs(players);
+  const matchesClubs = await matchesService.getMultipleMatchesClubs(matches);
+
+  return {
+    players,
+    matches,
+    clubs: uniquifyArray([...noteClubs, ...playersClubs, ...matchesClubs]),
+  };
+}
+
+async function grantAccessToMultipleAssets({ acl, clubs, players, matches, notes, reports }) {
+  const results = await Promise.all([
+    getPlayerRelatedAssets(players),
+    getReportRelatedAssets(reports),
+    getMatchRelatedAssets(matches),
+    getNoteRelatedAssets(notes),
+  ]);
+
+  const updates = mergeObjectsWithArrayValues([
+    { clubs, players, matches, notes, reports },
+    ...results.map((result) => result),
+  ]);
+
+  Object.keys(updates).forEach((key) => {
+    updates[key].forEach((id) => {
+      if (!acl[key].includes(id)) {
+        acl[key].push(id);
+      }
+    });
+  });
+
+  return acl.save();
+}
 module.exports = {
   createAccessControlList,
   getAllAccessControlLists,
@@ -124,4 +189,5 @@ module.exports = {
   grantAccessOnAssetCreation,
   createAclOnTeamCreation,
   grantAccessOnOrderAcceptance,
+  grantAccessToMultipleAssets,
 };

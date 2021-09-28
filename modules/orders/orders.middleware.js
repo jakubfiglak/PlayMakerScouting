@@ -1,6 +1,8 @@
+const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
 const Order = require('./order.model');
 const options = require('./options');
+const reportsService = require('../reports/reports.service');
 const ApiError = require('../../utils/ApiError');
 const isAdmin = require('../../utils/isAdmin');
 const setAsset = require('../../middleware/setAsset');
@@ -60,10 +62,27 @@ const setOrder = setAsset({
   populate: [options.populatePlayer, options.populateScout],
 });
 
+const canBeDeleted = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const reports = await reportsService.getReportsForClub(id);
+  if (reports.length > 0) {
+    return next(
+      new ApiError(
+        'You cannot delete an order with existing relations to report documents',
+        httpStatus.FORBIDDEN
+      )
+    );
+  }
+
+  next();
+});
+
 module.exports = {
   canView,
   canReject,
   checkStatus,
   setAccessFilters,
   setOrder,
+  canBeDeleted,
 };

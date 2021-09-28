@@ -1,29 +1,8 @@
 import { Division } from './clubs';
+import { positions } from '../utils/constants';
+import { Country } from './common';
 
-export type Position =
-  | 'GK'
-  | 'LB'
-  | 'RB'
-  | 'CB'
-  | 'CBL'
-  | 'CBR'
-  | 'CBM'
-  | 'LW'
-  | 'LWB'
-  | 'RW'
-  | 'RWB'
-  | 'DM'
-  | 'DM/CM'
-  | 'CM'
-  | 'CM/CAM'
-  | 'CAM'
-  | 'LM'
-  | 'RM'
-  | 'RM/LM'
-  | 'RW/LW'
-  | 'CAM/F'
-  | 'F'
-  | 'F/W';
+export type Position = typeof positions[number];
 
 export type Foot = 'L' | 'R' | 'both';
 
@@ -31,6 +10,7 @@ export type Player = {
   id: string;
   firstName: string;
   lastName: string;
+  country: Country;
   position: Position;
   yearOfBirth: number;
   height?: number;

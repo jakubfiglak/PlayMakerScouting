@@ -10,7 +10,10 @@ import { useReportsList } from '../../hooks/reports';
 import { usePlayersList } from '../../hooks/players';
 import { useNotesList } from '../../hooks/notes';
 import { useMatchesList } from '../../hooks/matches';
-import { useGrantAccess } from '../../hooks/accessControlLists';
+import {
+  useAccessControlLists,
+  useGrantAccess,
+} from '../../hooks/accessControlLists';
 
 export const AccessManagementTab = () => {
   const { data: users, isLoading: usersLoading } = useUsersList();
@@ -20,6 +23,10 @@ export const AccessManagementTab = () => {
   const { data: players, isLoading: playersLoading } = usePlayersList();
   const { data: notes, isLoading: notesLoading } = useNotesList();
   const { data: matches, isLoading: matchesLoading } = useMatchesList();
+  const {
+    data: accessControlLists,
+    isLoading: accessControlListsLoading,
+  } = useAccessControlLists();
   const {
     mutate: grantAccess,
     isLoading: grantAccessLoading,
@@ -33,7 +40,8 @@ export const AccessManagementTab = () => {
     playersLoading ||
     notesLoading ||
     matchesLoading ||
-    grantAccessLoading;
+    grantAccessLoading ||
+    accessControlListsLoading;
 
   return (
     <>
@@ -47,6 +55,7 @@ export const AccessManagementTab = () => {
         players={players || []}
         matches={matches || []}
         notes={notes || []}
+        accessControlLists={accessControlLists || []}
         onSubmit={grantAccess}
       />
     </>

@@ -9,20 +9,20 @@ import {
   FormHelperText,
 } from '@material-ui/core';
 // Custom components
-import { ClubsCombo } from '../../components/selects/ClubsCombo';
-import { PlayersCombo } from '../../components/selects/PlayersCombo';
-import { ReportsCombo } from '../../components/selects/ReportsCombo';
 import { TeamsCombo } from '../../components/selects/TeamsCombo';
 import { UsersCombo } from '../../components/selects/UsersCombo';
-import { MatchesCombo } from '../../components/selects/MatchesCombo';
-import { NotesCombo } from '../../components/selects/NotesCombo';
 import { MainFormActions } from '../../components/formActions/MainFormActions';
 import { FormContainer } from '../../components/FormContainer';
+import { ClubsMultipleSelect } from '../../components/selects/ClubsMultipleSelect';
+import { PlayersMultipleSelect } from '../../components/selects/PlayersMultipleSelect';
+import { MatchesMultipleSelect } from '../../components/selects/MatchesMultipleSelect';
+import { NotesMultipleSelect } from '../../components/selects/NotesMultipleSelect';
+import { ReportsMultipleSelect } from '../../components/selects/ReportsMultipleSelect';
 // Types
 import {
+  AccessControlList,
   GrantAccessDTO,
   TargetAssetType,
-  AssetToAddType,
 } from '../../types/accessControlLists';
 import { UserBasicInfo } from '../../types/users';
 import { Team } from '../../types/teams';
@@ -31,6 +31,7 @@ import { ReportBasicInfo } from '../../types/reports';
 import { PlayerBasicInfo } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
 import { NoteBasicInfo } from '../../types/notes';
+import { getDisabledOptionsFromAcl } from './utils';
 
 type Props = {
   users: UserBasicInfo[];
@@ -40,6 +41,7 @@ type Props = {
   players: PlayerBasicInfo[];
   matches: MatchBasicInfo[];
   notes: NoteBasicInfo[];
+  accessControlLists: AccessControlList[];
   onSubmit: (data: GrantAccessDTO) => void;
 };
 
@@ -51,6 +53,7 @@ export const GrantAccessForm = ({
   players,
   matches,
   notes,
+  accessControlLists,
   onSubmit,
 }: Props) => {
   return (
@@ -102,89 +105,73 @@ export const GrantAccessForm = ({
                 />
               )}
             </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel id="assetToAddTypeLabel">
-                Rodzaj zasobu, do którego chcesz nadać dostęp
-              </InputLabel>
-              <Field
-                as={Select}
-                name="assetToAddType"
-                labelId="assetToAddTypeLabel"
-                id="assetToAddType"
-                label="Rodzaj zasobu, do którego chcesz nadać dostęp"
-                error={touched.assetToAddType && !!errors.assetToAddType}
-              >
-                <MenuItem value="club">klub</MenuItem>
-                <MenuItem value="player">zawodnik</MenuItem>
-                <MenuItem value="match">mecz</MenuItem>
-                <MenuItem value="report">raport</MenuItem>
-                <MenuItem value="note">notatka</MenuItem>
-              </Field>
-              {touched.assetToAddType && errors.assetToAddType && (
-                <FormHelperText>{errors.assetToAddType}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              {(() => {
-                switch (values.assetToAddType) {
-                  case 'club':
-                    return (
-                      <ClubsCombo
-                        clubsData={clubs}
-                        label="Wybierz klub"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  case 'player':
-                    return (
-                      <PlayersCombo
-                        playersData={players}
-                        label="Wybierz zawodnika"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  case 'report':
-                    return (
-                      <ReportsCombo
-                        reportsData={reports}
-                        label="Wybierz raport"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  case 'match':
-                    return (
-                      <MatchesCombo
-                        matchesData={matches}
-                        label="Wybierz mecz"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  case 'note':
-                    return (
-                      <NotesCombo
-                        notesData={notes}
-                        label="Wybierz notatkę"
-                        name="assetToAddId"
-                      />
-                    );
-
-                  default:
-                    return (
-                      <ClubsCombo
-                        clubsData={clubs}
-                        label="Wybierz klub"
-                        name="assetToAddId"
-                      />
-                    );
+            <FormControl>
+              <ClubsMultipleSelect
+                clubs={clubs}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'clubs',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
                 }
-              })()}
+              />
+            </FormControl>
+            <FormControl>
+              <PlayersMultipleSelect
+                players={players}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'players',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <MatchesMultipleSelect
+                matches={matches}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'matches',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <NotesMultipleSelect
+                notes={notes}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'notes',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <ReportsMultipleSelect
+                reports={reports}
+                getDisabledOptions={() =>
+                  getDisabledOptionsFromAcl({
+                    assetType: 'reports',
+                    targetAssetType: values.targetAssetType,
+                    targetAssetId: values.targetAssetId,
+                    acls: accessControlLists,
+                  })
+                }
+              />
             </FormControl>
             <MainFormActions
-              label="dostęp"
+              label="dostępy"
               isEditState={false}
               onCancelClick={handleReset}
             />
@@ -198,8 +185,11 @@ export const GrantAccessForm = ({
 const initialValues: GrantAccessDTO = {
   targetAssetType: 'user',
   targetAssetId: '',
-  assetToAddType: 'club',
-  assetToAddId: '',
+  clubs: [],
+  players: [],
+  matches: [],
+  notes: [],
+  reports: [],
 };
 
 export const validationSchema: yup.ObjectSchema<GrantAccessDTO> = yup
@@ -210,11 +200,10 @@ export const validationSchema: yup.ObjectSchema<GrantAccessDTO> = yup
     targetAssetId: yup
       .string()
       .required('Wybierz zasób, któremu chcesz nadać dostęp'),
-    assetToAddType: yup
-      .mixed<AssetToAddType>()
-      .required('Wybierz typ zasobu, do którego chcesz nadać dostęp'),
-    assetToAddId: yup
-      .string()
-      .required('Wybierz zasób, do którego chcesz nadać dostęp'),
+    clubs: yup.array<string>().defined(),
+    players: yup.array<string>().defined(),
+    matches: yup.array<string>().defined(),
+    notes: yup.array<string>().defined(),
+    reports: yup.array<string>().defined(),
   })
   .defined();

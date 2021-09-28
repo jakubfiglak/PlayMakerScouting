@@ -76,6 +76,7 @@ export const ClubsPage = () => {
     if (currentClub) {
       updateClub(data);
       setActiveTab(0);
+      setCurrentClub(null);
     } else {
       createClub(data);
       setActiveTab(0);

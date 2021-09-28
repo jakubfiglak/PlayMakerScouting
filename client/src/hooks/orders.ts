@@ -13,6 +13,12 @@ import {
   SortingOrder,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
 
 // Get all orders with pagination
 type PaginatedOrders = PaginatedData<Order>;
@@ -72,7 +78,10 @@ export function useOrders({
         queryClient.setQueryData('orders', data.docs);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -110,7 +119,10 @@ export function useOrder(id: string) {
       return cacheOrders.find((order) => order.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -129,11 +141,20 @@ export function useCreateOrder() {
 
   return useMutation((values: OrderDTO) => createOrder(values), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({
+          type: 'zlecenie',
+          name: `nr ${data.data.docNumber}`,
+        }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('orders');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -159,11 +180,20 @@ export function useUpdateOrder(orderId: string) {
     (values: OrderDTO) => updateOrder({ orderId, orderData: values }),
     {
       onSuccess: (data) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({
+            type: 'notatkę',
+            name: `nr ${data.data.docNumber}`,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('orders');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -182,11 +212,17 @@ export function useDeleteOrder() {
 
   return useMutation((id: string) => deleteOrder(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'notatkę', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('orders');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -204,11 +240,17 @@ export function useAcceptOrder() {
 
   return useMutation((id: string) => acceptOrder(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: `Pomyślnie przyjęto do realizacji zlecenie nr ${data.data.docNumber}`,
+        type: 'success',
+      });
       queryClient.invalidateQueries('orders');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -226,11 +268,17 @@ export function useRejectOrder() {
 
   return useMutation((id: string) => rejectOrder(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: `Pomyślnie odrzucono zlecenie nr ${data.data.docNumber}`,
+        type: 'success',
+      });
       queryClient.invalidateQueries('orders');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -248,10 +296,16 @@ export function useCloseOrder() {
 
   return useMutation((id: string) => closeOrder(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: `Pomyślnie zamknięto zlecenie nr ${data.data.docNumber}`,
+        type: 'success',
+      });
       queryClient.invalidateQueries('orders');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

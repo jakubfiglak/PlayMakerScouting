@@ -9,18 +9,20 @@ import {
   makeStyles,
 } from '@material-ui/core';
 
-export const CreateReportCard = () => {
+type Props = { title: string; linkTo: string };
+
+export const CreateCard = ({ title, linkTo }: Props) => {
   const classes = useStyles();
 
   return (
     <Card>
       <Link
-        to={{ pathname: '/reports', state: { activeTab: 1 } }}
+        to={{ pathname: linkTo, state: { activeTab: 1 } }}
         className={classes.link}
       >
         <CardActionArea className={classes.actionArea}>
           <CardContent className={classes.container}>
-            <Typography variant="h6">STWÓRZ RAPORT</Typography>
+            <Typography variant="h6">{title.toUpperCase()}</Typography>
             <div>
               <Avatar className={classes.avatar}>
                 <AddIcon />

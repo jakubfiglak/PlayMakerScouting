@@ -13,6 +13,12 @@ import {
   GetPaginatedDataArgs,
 } from '../types/common';
 import { useAlertsState } from '../context/alerts/useAlertsState';
+import {
+  getCreateSuccessMessage,
+  getDeleteSuccessMessage,
+  getErrorMessage,
+  getUpdateSuccessMessage,
+} from './utils';
 
 type PaginatedPlayers = PaginatedData<Player>;
 type GetPlayersResposne = ApiResponse<PaginatedPlayers>;
@@ -75,7 +81,10 @@ export function usePlayers({
         queryClient.setQueryData('players', data.docs);
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -110,7 +119,10 @@ export function useClubsPlayers({
     {
       keepPreviousData: true,
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -131,7 +143,10 @@ export function usePlayersList() {
     getPlayersList,
     {
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -154,7 +169,10 @@ export function usePlayer(id: string) {
       return cachePlayers.find((player) => player.id === id);
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -175,11 +193,20 @@ export function useCreatePlayer() {
 
   return useMutation((values: PlayerDTO) => createPlayer(values), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getCreateSuccessMessage({
+          type: 'zawodnika',
+          name: `${data.data.lastName} ${data.data.firstName}`,
+        }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('players');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -205,11 +232,20 @@ export function useUpdatePlayer(playerId: string) {
     (values: PlayerDTO) => updatePlayer({ playerId, playerData: values }),
     {
       onSuccess: (data) => {
-        setAlert({ msg: data.message, type: 'success' });
+        setAlert({
+          msg: getUpdateSuccessMessage({
+            type: 'zawodnika',
+            name: `${data.data.lastName} ${data.data.firstName}`,
+          }),
+          type: 'success',
+        });
         queryClient.invalidateQueries('players');
       },
       onError: (err: ApiError) =>
-        setAlert({ msg: err.response.data.error, type: 'error' }),
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
     },
   );
 }
@@ -228,11 +264,17 @@ export function useDeletePlayer() {
 
   return useMutation((id: string) => deletePlayer(id), {
     onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+      setAlert({
+        msg: getDeleteSuccessMessage({ type: 'zawodnika', id: data.data }),
+        type: 'success',
+      });
       queryClient.invalidateQueries('players');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }
 
@@ -249,11 +291,17 @@ export function useMergePlayersDuplicates() {
   const { setAlert } = useAlertsState();
 
   return useMutation(mergePlayersDuplicates, {
-    onSuccess: (data) => {
-      setAlert({ msg: data.message, type: 'success' });
+    onSuccess: () => {
+      setAlert({
+        msg: 'Pomyślnie scalono duplikaty definicji zawodników',
+        type: 'success',
+      });
       queryClient.invalidateQueries('players');
     },
     onError: (err: ApiError) =>
-      setAlert({ msg: err.response.data.error, type: 'error' }),
+      setAlert({
+        msg: getErrorMessage(err.response.data.error),
+        type: 'error',
+      }),
   });
 }

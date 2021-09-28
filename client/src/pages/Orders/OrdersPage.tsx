@@ -16,7 +16,7 @@ import { OrderDTO, OrdersFilterData } from '../../types/orders';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
-import { usePlayersList, useCreatePlayer } from '../../hooks/players';
+import { usePlayersList } from '../../hooks/players';
 import {
   useAcceptOrder,
   useRejectOrder,
@@ -27,7 +27,6 @@ import {
 } from '../../hooks/orders';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { useClubsList } from '../../hooks/clubs';
 // Utils & data
 import { formatDateObject, yearFromNow, tomorrow } from '../../utils/dates';
 
@@ -40,12 +39,7 @@ const initialFilters: OrdersFilterData = {
 };
 
 export const OrdersPage = () => {
-  const { data: clubs, isLoading: clubsLoading } = useClubsList();
   const { data: players, isLoading: playersLoading } = usePlayersList();
-  const {
-    mutate: createPlayer,
-    isLoading: createPlayerLoading,
-  } = useCreatePlayer();
 
   const user = useAuthenticatedUser();
 
@@ -99,10 +93,8 @@ export const OrdersPage = () => {
   };
 
   const isLoading =
-    clubsLoading ||
     playersLoading ||
     ordersLoading ||
-    createPlayerLoading ||
     createOrderLoading ||
     rejectOrderLoading ||
     acceptOrderLoading ||
@@ -174,9 +166,7 @@ export const OrdersPage = () => {
             onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
           />
           <AddPlayerModal
-            clubsData={clubs || []}
             onClose={() => setIsAddPlayerModalOpen(false)}
-            onSubmit={createPlayer}
             open={isAddPlayerModalOpen}
           />
         </TabPanel>
