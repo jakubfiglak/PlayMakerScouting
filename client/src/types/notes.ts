@@ -46,4 +46,5 @@ export type NotesFilterData = {
   club: string;
   match: string;
   rating: RatingDescription | 'all';
+  createdBy: string;
 };

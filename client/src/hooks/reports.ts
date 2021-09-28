@@ -55,7 +55,7 @@ async function getReports({
   filters,
 }: GetReportsArgs): Promise<PaginatedReports> {
   const orderSign = order === 'desc' ? '-' : '';
-  const { club, player, rating, position } = filters;
+  const { club, player, rating, position, createdBy } = filters;
 
   // Generate query url
   let reportsURI = `/api/v1/reports?page=${page}&limit=${limit}&sort=${orderSign}${sort}`;
@@ -74,6 +74,10 @@ async function getReports({
 
   if (position) {
     reportsURI = reportsURI.concat(`&positionPlayed=${position}`);
+  }
+
+  if (createdBy !== 'all') {
+    reportsURI = reportsURI.concat(`&author=${createdBy}`);
   }
 
   const { data } = await axios.get<GetReportsResponse>(reportsURI);

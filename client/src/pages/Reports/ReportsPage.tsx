@@ -43,6 +43,7 @@ const initialFilters: ReportsFilterData = {
   position: '',
   club: '',
   rating: 'all',
+  createdBy: 'all',
 };
 
 export const ReportsPage = () => {

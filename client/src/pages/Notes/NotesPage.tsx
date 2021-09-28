@@ -36,6 +36,7 @@ const initialFilters: NotesFilterData = {
   club: '',
   match: '',
   rating: 'all',
+  createdBy: 'all',
 };
 
 export const NotesPage = () => {

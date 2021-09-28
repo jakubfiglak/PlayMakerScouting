@@ -9,6 +9,7 @@ import { PositionCombo } from '../../components/selects/PositionCombo';
 import { FinalRatingSelect } from '../../components/selects/FinalRatingSelect';
 import { FilterFormActions } from '../../components/formActions/FilterFormActions';
 import { FormContainer } from '../../components/FormContainer';
+import { AuthorRadioGroup } from '../../components/selects/AuthorRadioGroup';
 // Types
 import { PlayerBasicInfo } from '../../types/players';
 import { ClubBasicInfo } from '../../types/clubs';
@@ -41,6 +42,7 @@ export const NotesFilterForm = ({
       {() => (
         <Form autoComplete="off">
           <FormContainer>
+            <AuthorRadioGroup />
             <FormControl variant="outlined" size="small" fullWidth>
               <PlayersCombo
                 playersData={playersData}

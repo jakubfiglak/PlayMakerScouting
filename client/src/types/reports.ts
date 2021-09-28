@@ -83,4 +83,5 @@ export type ReportsFilterData = {
   position: Position | '';
   club: string;
   rating: RatingDescription | 'all';
+  createdBy: string;
 };
