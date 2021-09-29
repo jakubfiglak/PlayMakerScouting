@@ -1,11 +1,12 @@
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // MUI components
-import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Button, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { OrderDetails } from './OrderDetails';
 import { ReportsTable } from '../Reports/ReportsTable';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
+import { SectionHeading } from '../../components/SectionHeading';
 import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useTable } from '../../hooks/useTable';
@@ -72,14 +73,7 @@ export const OrderPage = () => {
           areAdminOptionsEnabled={user.role === 'admin'}
         />
       )}
-      <Typography
-        variant="h6"
-        component="h3"
-        align="center"
-        className={classes.title}
-      >
-        Raporty
-      </Typography>
+      <SectionHeading title="Raporty" />
       <ReportsTable
         page={page}
         rowsPerPage={rowsPerPage}
@@ -109,8 +103,5 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   link: {
     marginBottom: theme.spacing(1),
-  },
-  title: {
-    margin: theme.spacing(2),
   },
 }));

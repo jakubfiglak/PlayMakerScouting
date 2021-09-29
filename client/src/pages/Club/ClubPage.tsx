@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 // MUI components
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { ClubDetails } from './ClubDetails';
 import { ClubsForm } from '../Clubs/ClubsForm';
@@ -12,6 +12,7 @@ import { MatchesTableRow } from '../Matches/MatchesTableRow';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { PageHeading } from '../../components/PageHeading';
+import { SectionHeading } from '../../components/SectionHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { useTable } from '../../hooks/useTable';
@@ -90,14 +91,7 @@ export const ClubPage = () => {
         <ClubsForm current={club} onSubmit={updateClub} />
       ) : null}
       <section>
-        <Typography
-          variant="h6"
-          component="h3"
-          align="center"
-          className={classes.title}
-        >
-          Zawodnicy
-        </Typography>
+        <SectionHeading title="Zawodnicy" />
         <PlayersTable
           page={playersTableSettings.page}
           rowsPerPage={playersTableSettings.rowsPerPage}
@@ -116,14 +110,7 @@ export const ClubPage = () => {
         </PlayersTable>
       </section>
       <section>
-        <Typography
-          variant="h6"
-          component="h3"
-          align="center"
-          className={classes.title}
-        >
-          Mecze
-        </Typography>
+        <SectionHeading title="Mecze" />
         <MatchesTable
           page={matchesTableSettings.page}
           rowsPerPage={matchesTableSettings.rowsPerPage}
@@ -158,8 +145,5 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     gap: `${theme.spacing(1)}px`,
     marginBottom: theme.spacing(1),
-  },
-  title: {
-    margin: theme.spacing(2),
   },
 }));

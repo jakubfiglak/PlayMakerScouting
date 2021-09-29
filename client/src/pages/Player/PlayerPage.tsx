@@ -12,6 +12,7 @@ import { NotesTableRow } from '../Notes/NotesTableRow';
 import { MainTemplate } from '../../templates/MainTemplate';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { PageHeading } from '../../components/PageHeading';
+import { SectionHeading } from '../../components/SectionHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { usePlayer, useUpdatePlayer } from '../../hooks/players';
@@ -104,14 +105,7 @@ export const PlayerPage = () => {
         />
       ) : null}
       <section>
-        <Typography
-          variant="h6"
-          component="h3"
-          align="center"
-          className={classes.title}
-        >
-          Raporty
-        </Typography>
+        <SectionHeading title="Raporty" />
         <ReportsTable
           page={reportsTableSettings.page}
           rowsPerPage={reportsTableSettings.rowsPerPage}
@@ -130,14 +124,7 @@ export const PlayerPage = () => {
         </ReportsTable>
       </section>
       <section>
-        <Typography
-          variant="h6"
-          component="h3"
-          align="center"
-          className={classes.title}
-        >
-          Notatki
-        </Typography>
+        <SectionHeading title="Notatki" />
         <NotesTable
           page={notesTableSettings.page}
           rowsPerPage={notesTableSettings.rowsPerPage}
@@ -168,8 +155,5 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   link: {
     marginBottom: theme.spacing(1),
-  },
-  title: {
-    margin: theme.spacing(2),
   },
 }));

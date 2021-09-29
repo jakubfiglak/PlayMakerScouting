@@ -2,7 +2,19 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { plPL } from '@material-ui/core/locale';
 import { black, lightGray, green, red, yellow } from './colors';
 
-const fontFamily = ['Lato', 'sans-serif'].join(',');
+const fontFamily = [
+  'Lato',
+  '-apple-system',
+  'BlinkMacSystemFont',
+  'Segoe UI',
+  'Roboto',
+  'Oxygen',
+  'Ubuntu',
+  'Cantarell',
+  'Open Sans',
+  'Helvetica Neue',
+  'sans-serif',
+].join(',');
 
 const theme = createMuiTheme(
   {
