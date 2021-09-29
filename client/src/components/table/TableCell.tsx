@@ -8,7 +8,6 @@ export const StyledTableCell = withStyles((theme: Theme) =>
       fontWeight: 'bold',
     },
     body: {
-      fontSize: 14,
       color: 'inherit',
     },
   }),

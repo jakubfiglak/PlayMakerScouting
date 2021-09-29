@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.background.default,
   },
   observe: {
-    background: theme.palette.secondary.light,
+    background: theme.palette.info.light,
   },
   positive: {
     background: theme.palette.success.light,

@@ -1,18 +1,13 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { plPL } from '@material-ui/core/locale';
-import {
-  lightGray,
-  darkGray,
-  semiGray,
-  red,
-  yellow,
-  white,
-  redTransparent,
-} from './colors';
+import { black, lightGray, green, red, yellow } from './colors';
+
+const fontFamily = ['Lato', 'sans-serif'].join(',');
 
 const theme = createMuiTheme(
   {
     typography: {
+      fontFamily,
       h2: {
         fontSize: '2rem',
         fontWeight: 'bold',
@@ -23,21 +18,22 @@ const theme = createMuiTheme(
     },
     palette: {
       primary: {
-        main: darkGray,
-        light: semiGray,
+        main: black,
       },
       secondary: {
+        main: red,
+      },
+      success: {
+        main: green,
+      },
+      info: {
         main: yellow,
       },
       error: {
         main: red,
-        light: redTransparent,
       },
       background: {
         default: lightGray,
-      },
-      common: {
-        white,
       },
     },
     overrides: {
