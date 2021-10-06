@@ -11,7 +11,6 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import { Rating } from '@material-ui/lab';
 // MUI icons
 import { Note as NoteIcon, SportsSoccer as BallIcon } from '@material-ui/icons';
 // Types
@@ -19,6 +18,7 @@ import { Note } from '../../types/notes';
 // Utils & data
 import { getLabel } from '../../utils/getLabel';
 import { formatDate } from '../../utils/dates';
+import { StyledRating } from '../../components/StyledRating';
 
 type Props = {
   note: Note;
@@ -119,7 +119,7 @@ export const NoteDetails = ({ note }: Props) => {
           <Grid item xs={12}>
             <Typography className={classes.ratingContainer}>
               <strong>Ocena: </strong>
-              <Rating
+              <StyledRating
                 value={rating}
                 max={maxRatingScore}
                 icon={<BallIcon fontSize="inherit" />}
