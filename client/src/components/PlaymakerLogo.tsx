@@ -1,19 +1,14 @@
-import { makeStyles, Theme, Avatar, Typography } from '@material-ui/core';
-import logo from '../assets/logo_square.jpg';
+import { makeStyles, Theme, Typography } from '@material-ui/core';
+import logoWhite from '../assets/logo-white.png';
 
 export const PlaymakerLogo = () => {
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
-      <Avatar
-        className={classes.avatar}
-        variant="square"
-        src={logo}
-        alt="PlaymakerPro Logo"
-      />
-      <Typography variant="h6" noWrap component="h1" className={classes.title}>
-        PlayMaker Pro Scouting
+      <img className={classes.logo} src={logoWhite} alt="PlaymakerPro Logo" />
+      <Typography variant="h5" noWrap component="h1">
+        ScoutMaker Pro
       </Typography>
     </div>
   );
@@ -25,16 +20,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  avatar: {
+  logo: {
     margin: theme.spacing(1, 1, 1, 0),
-    width: '45px',
-    height: '100%',
-    borderRadius: '50%',
-    boxShadow: theme.shadows[5],
-  },
-  title: {
-    [theme.breakpoints.down('xs')]: {
-      fontSize: 16,
-    },
+    width: '60px',
   },
 }));
