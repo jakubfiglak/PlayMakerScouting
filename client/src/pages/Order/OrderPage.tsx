@@ -7,7 +7,6 @@ import { ReportsTable } from '../Reports/ReportsTable';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { SectionHeading } from '../../components/SectionHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useTable } from '../../hooks/useTable';
 import { useOrder, useAcceptOrder, useCloseOrder } from '../../hooks/orders';
@@ -51,7 +50,7 @@ export const OrderPage = () => {
   const isLoading = orderLoading || acceptOrderLoading || closeOrderLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <Button
@@ -90,7 +89,7 @@ export const OrderPage = () => {
             ))
           : null}
       </ReportsTable>
-    </MainTemplate>
+    </>
   );
 };
 

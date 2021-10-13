@@ -18,7 +18,6 @@ import { EditReportForm } from '../Reports/forms/EditReportForm';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useReport, useUpdateReport } from '../../hooks/reports';
 import { useSettingsState } from '../../context/settings/useSettingsState';
@@ -55,7 +54,7 @@ export const ReportPage = () => {
   const isLoading = reportLoading || updateReportLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <SingleAssetPageActions
@@ -131,7 +130,7 @@ export const ReportPage = () => {
       {report && isEditState ? (
         <EditReportForm report={report} onSubmit={updateReport} />
       ) : null}
-    </MainTemplate>
+    </>
   );
 };
 

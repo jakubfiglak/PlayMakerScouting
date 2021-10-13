@@ -29,6 +29,7 @@ import { PlaymakerLogo } from '../PlaymakerLogo';
 // Types
 import { NavItem } from './types';
 import { Match } from '../../types/matches';
+import { NavList } from './NavList';
 
 type Props = {
   navElements: NavItem[];
@@ -81,8 +82,11 @@ export const Topbar = ({
               keepMounted
               open={isMenuOpen}
               onClose={() => setIsMenuOpen(false)}
+              classes={{ paper: classes.menu }}
+              // className={classes.menu}
             >
-              <List className={classes.list}>
+              <NavList />
+              {/* <List className={classes.list}>
                 {navElements.map((element) => {
                   const { icon, text, to } = element;
                   return (
@@ -112,7 +116,7 @@ export const Topbar = ({
                     />
                   </ListItem>
                 </li>
-              </List>
+              </List> */}
             </Menu>
           </div>
         </div>
@@ -150,5 +154,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   matchIcon: {
     marginRight: theme.spacing(2),
+  },
+  menu: {
+    background: theme.palette.primary.light,
   },
 }));

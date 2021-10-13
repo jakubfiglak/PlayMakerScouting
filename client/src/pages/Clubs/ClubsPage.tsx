@@ -9,7 +9,6 @@ import { ClubsTableRow } from './ClubsTableRow';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import { Club, ClubsFilterData, ClubDTO } from '../../types/clubs';
 // Hooks
@@ -89,7 +88,7 @@ export const ClubsPage = () => {
   };
 
   return (
-    <MainTemplate>
+    <>
       {(clubsLoading ||
         createClubLoading ||
         updateClubLoading ||
@@ -147,6 +146,6 @@ export const ClubsPage = () => {
           onCancelClick={handleFormReset}
         />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };

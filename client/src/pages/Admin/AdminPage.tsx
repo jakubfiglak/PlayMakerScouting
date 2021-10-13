@@ -4,7 +4,6 @@ import { UsersTab } from './UsersTab';
 import { TeamsTab } from './TeamsTab';
 import { AccessManagementTab } from './AccessManagementTab';
 import { OperationsTab } from './OperationsTab';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { TabPanel } from '../../components/TabPanel';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
@@ -13,7 +12,7 @@ export const AdminPage = () => {
   const [activeTab, handleTabChange] = useTabs();
 
   return (
-    <MainTemplate>
+    <>
       <AppBar position="static">
         <Tabs
           value={activeTab}
@@ -46,6 +45,6 @@ export const AdminPage = () => {
       <TabPanel value={activeTab} index={3} title="databaseoperations">
         <OperationsTab />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };

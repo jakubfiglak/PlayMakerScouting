@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 // MUI components
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { PlayerDetails } from './PlayerDetails';
 import { PlayersForm } from '../Players/PlayersForm';
@@ -9,7 +9,6 @@ import { ReportsTable } from '../Reports/ReportsTable';
 import { ReportsTableRow } from '../Reports/ReportsTableRow';
 import { NotesTable } from '../Notes/NotesTable';
 import { NotesTableRow } from '../Notes/NotesTableRow';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { PageHeading } from '../../components/PageHeading';
 import { SectionHeading } from '../../components/SectionHeading';
@@ -82,7 +81,7 @@ export const PlayerPage = () => {
     clubsLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <SingleAssetPageActions
@@ -142,7 +141,7 @@ export const PlayerPage = () => {
             : null}
         </NotesTable>
       </section>
-    </MainTemplate>
+    </>
   );
 };
 

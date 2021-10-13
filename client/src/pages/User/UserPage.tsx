@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 // Custom components
 import { UserDetails } from './UserDetails';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
@@ -17,10 +16,10 @@ export const UserPage = () => {
   const { data: user, isLoading } = useUser(id);
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <PageHeading title="Profil użytkownika" />
       {user ? <UserDetails user={user} /> : null}
-    </MainTemplate>
+    </>
   );
 };

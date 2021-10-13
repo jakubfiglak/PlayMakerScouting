@@ -10,7 +10,6 @@ import { AddClubModal } from './AddClubModal';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import { PlayersFilterData, Player, PlayerDTO } from '../../types/players';
 // Hooks
@@ -109,7 +108,7 @@ export const PlayersPage = () => {
     deletePlayerLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
@@ -174,6 +173,6 @@ export const PlayersPage = () => {
           open={isAddClubModalOpen}
         />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };

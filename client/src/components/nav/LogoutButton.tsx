@@ -1,15 +1,21 @@
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 // MUI Icons
 import { ExitToApp as LogoutIcon } from '@material-ui/icons/';
+import { useHistory } from 'react-router-dom';
+import { useAuthState } from '../../context/auth/useAuthState';
 
-type Props = {
-  onClick: () => void;
-};
+export const LogoutButton = () => {
+  const { logout } = useAuthState();
+  const history = useHistory();
 
-export const LogoutButton = ({ onClick }: Props) => {
+  function handleLogout() {
+    logout();
+    history.push('/login');
+  }
+
   return (
     <li>
-      <ListItem button onClick={onClick}>
+      <ListItem button onClick={handleLogout}>
         <ListItemIcon>
           <LogoutIcon color="error" />
         </ListItemIcon>

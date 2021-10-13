@@ -1,6 +1,5 @@
-import React, { FC, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import {
-  List,
   Collapse,
   ListItemIcon,
   ListItemText,

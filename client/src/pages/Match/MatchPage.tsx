@@ -7,7 +7,6 @@ import { MatchDetails } from './MatchDetails';
 import { MatchesForm } from '../Matches/MatchesForm';
 import { NotesTable } from '../Notes/NotesTable';
 import { NotesTableRow } from '../Notes/NotesTableRow';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
 import { SectionHeading } from '../../components/SectionHeading';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
@@ -59,7 +58,7 @@ export const MatchPage = () => {
     matchLoading || notesLoading || updateMatchLoading || clubsLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <SingleAssetPageActions
@@ -98,7 +97,7 @@ export const MatchPage = () => {
             : null}
         </NotesTable>
       </section>
-    </MainTemplate>
+    </>
   );
 };
 

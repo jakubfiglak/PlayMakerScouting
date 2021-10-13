@@ -9,7 +9,6 @@ import { MatchesForm } from './MatchesForm';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
@@ -107,7 +106,7 @@ export const MatchesPage = () => {
     deleteMatchLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="matches">
@@ -164,6 +163,6 @@ export const MatchesPage = () => {
           onCancelClick={handleFormReset}
         />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };

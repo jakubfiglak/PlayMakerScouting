@@ -15,7 +15,6 @@ import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
 import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import { Report, ReportDTO, ReportsFilterData } from '../../types/reports';
 // Hooks
@@ -167,7 +166,7 @@ export const ReportsPage = () => {
     clubsLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="reports">
@@ -268,7 +267,7 @@ export const ReportsPage = () => {
           open={isAddPlayerModalOpen}
         />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };
 

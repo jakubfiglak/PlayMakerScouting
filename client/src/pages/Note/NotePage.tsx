@@ -5,7 +5,6 @@ import { makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { NoteDetails } from './NoteDetails';
 import { NotesForm } from '../Notes/NotesForm';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
@@ -41,7 +40,7 @@ export const NotePage = () => {
     noteLoading || updateNoteLoading || playersLoading || matchesLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <SingleAssetPageActions
@@ -64,7 +63,7 @@ export const NotePage = () => {
           playersData={players || []}
         />
       ) : null}
-    </MainTemplate>
+    </>
   );
 };
 

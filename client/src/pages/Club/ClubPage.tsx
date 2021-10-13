@@ -9,7 +9,6 @@ import { PlayersTable } from '../Players/PlayersTable';
 import { PlayersTableRow } from '../Players/PlayersTableRow';
 import { MatchesTable } from '../Matches/MatchesTable';
 import { MatchesTableRow } from '../Matches/MatchesTableRow';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { PageHeading } from '../../components/PageHeading';
 import { SectionHeading } from '../../components/SectionHeading';
@@ -74,7 +73,7 @@ export const ClubPage = () => {
     clubLoading || playersLoading || matchesLoading || updateClubLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <SingleAssetPageActions
@@ -128,7 +127,7 @@ export const ClubPage = () => {
             : null}
         </MatchesTable>
       </section>
-    </MainTemplate>
+    </>
   );
 };
 

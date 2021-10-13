@@ -24,12 +24,14 @@ import { MatchButton } from './MatchButton';
 import { QuickNoteButton } from './QuickNoteButton';
 import { LogoutButton } from './LogoutButton';
 
+const databaseListPaths = ['/players', '/clubs', '/matches'];
+const observationListPaths = ['/reports', '/notes', '/reporttemplates'];
+const profileListPaths = ['/account', '/settings'];
+
 export const NavList = () => {
   const classes = useStyles();
   const user = useAuthenticatedUser();
   const location = useLocation();
-
-  // console.log(location);
 
   const isPrivilegedUser =
     user.role === 'admin' || user.role === 'playmaker-scout';
@@ -40,13 +42,17 @@ export const NavList = () => {
   const [isObservationListOpen, setObservationListOpen] = useState(false);
   const [isProfileListOpen, setProfileListOpen] = useState(false);
 
-  const databaseListPaths = ['/players', '/clubs', '/matches'];
-
   useEffect(() => {
     if (databaseListPaths.includes(location.pathname)) {
       setDatabaseListOpen(true);
     }
-  }, [databaseListPaths, location.pathname]);
+    if (observationListPaths.includes(location.pathname)) {
+      setObservationListOpen(true);
+    }
+    if (profileListPaths.includes(location.pathname)) {
+      setProfileListOpen(true);
+    }
+  }, [location.pathname]);
 
   return (
     <List component="nav" className={classes.list}>
@@ -133,7 +139,7 @@ export const NavList = () => {
           text="Ustawienia"
         />
       </ExpandeableNavElement>
-      <LogoutButton onClick={() => console.log('logout')} />
+      <LogoutButton />
     </List>
   );
 };
