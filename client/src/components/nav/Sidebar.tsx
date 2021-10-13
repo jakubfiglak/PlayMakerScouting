@@ -11,6 +11,7 @@ import {
 // MUI Icons
 import { ExitToApp as LogoutIcon } from '@material-ui/icons/';
 // Custom components
+import { NavList } from './NavList';
 import { NavElement } from './NavElement';
 import { QuickNoteButton } from './QuickNoteButton';
 import { MatchButton } from './MatchButton';
@@ -45,7 +46,8 @@ export const Sidebar = ({
     >
       <div className={classes.toolbar} />
       <Divider />
-      <List className={classes.list}>
+      <NavList />
+      {/* <List className={classes.list}>
         {navElements.map((element) => {
           const { icon, text, to } = element;
           return <NavElement icon={icon} text={text} to={to} key={text} />;
@@ -64,7 +66,7 @@ export const Sidebar = ({
             />
           </ListItem>
         </li>
-      </List>
+      </List> */}
     </Drawer>
   );
 };

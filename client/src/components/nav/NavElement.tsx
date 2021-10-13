@@ -48,7 +48,7 @@ export const NavElement = ({ icon, text, to, onClick }: Props) => {
 
 const useStyles = makeStyles((theme: Theme) => ({
   active: {
-    background: theme.palette.action.hover,
+    background: theme.palette.primary.light,
   },
 }));
 
