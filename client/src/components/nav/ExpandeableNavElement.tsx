@@ -4,6 +4,8 @@ import {
   ListItemIcon,
   ListItemText,
   ListItem,
+  makeStyles,
+  Theme,
 } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 
@@ -21,9 +23,11 @@ export const ExpandeableNavElement: FC<Props> = ({
   children,
   title,
 }) => {
+  const classes = useStyles();
+
   return (
     <>
-      <ListItem button onClick={handleClick}>
+      <ListItem button onClick={handleClick} className={classes.item}>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText
           primary={title}
@@ -37,3 +41,11 @@ export const ExpandeableNavElement: FC<Props> = ({
     </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  item: {
+    '&:hover': {
+      background: theme.palette.primary.light,
+    },
+  },
+}));

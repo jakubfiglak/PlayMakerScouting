@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 // MUI components
 import {
   CssBaseline,
@@ -14,17 +13,13 @@ import { Topbar } from '../components/nav/Topbar';
 import { GoToTheMatchFormModal } from '../components/GoToTheMatchFormModal';
 import { NotesFormModal } from '../pages/Notes/NotesFormModal';
 // Hooks
-import { useAuthState } from '../context/auth/useAuthState';
-import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 import { usePlayersList } from '../hooks/players';
 import { useMatchesList } from '../hooks/matches';
 import { useGoToTheMatch, useLeaveTheMatch } from '../hooks/users';
 // Utils & data
-import { navItems } from '../components/nav/navItems';
 import { useAccountInfo } from '../hooks/auth';
 
 export const MainTemplate: FC = ({ children }) => {
-  const history = useHistory();
   const classes = useStyles();
 
   const [isQuickNoteModalOpen, setQuickNoteModalOpen] = useState(false);
@@ -42,18 +37,6 @@ export const MainTemplate: FC = ({ children }) => {
   } = useLeaveTheMatch();
   const { data: account, isLoading: accountLoading } = useAccountInfo();
 
-  const { logout } = useAuthState();
-  const user = useAuthenticatedUser();
-
-  const navElements = navItems.filter((item) =>
-    item.allowedRoles.includes(user.role),
-  );
-
-  const onLogout = () => {
-    logout();
-    history.push('/login');
-  };
-
   const isLoading =
     playersLoading ||
     matchesLoading ||
@@ -70,15 +53,11 @@ export const MainTemplate: FC = ({ children }) => {
       {isLoading && <Loader />}
       <CssBaseline />
       <Topbar
-        navElements={navElements}
-        onLogout={onLogout}
         handleQuickNoteClick={() => setQuickNoteModalOpen(true)}
         handleMatchClick={handleMatchClick}
         match={account?.match || null}
       />
       <Sidebar
-        navElements={navElements}
-        onLogout={onLogout}
         handleQuickNoteClick={() => setQuickNoteModalOpen(true)}
         handleMatchClick={handleMatchClick}
         isAtTheMatch={!!account?.match}

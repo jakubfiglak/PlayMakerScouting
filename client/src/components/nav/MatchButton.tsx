@@ -1,4 +1,10 @@
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
 // MUI Icons
 import { DriveEta as GoIcon } from '@material-ui/icons/';
 
@@ -8,9 +14,11 @@ type Props = {
 };
 
 export const MatchButton = ({ onClick, isAtTheMatch }: Props) => {
+  const classes = useStyles();
+
   return (
     <li>
-      <ListItem button onClick={onClick}>
+      <ListItem button onClick={onClick} className={classes.item}>
         <ListItemIcon>
           <GoIcon color="error" />
         </ListItemIcon>
@@ -22,3 +30,11 @@ export const MatchButton = ({ onClick, isAtTheMatch }: Props) => {
     </li>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  item: {
+    '&:hover': {
+      background: theme.palette.primary.light,
+    },
+  },
+}));

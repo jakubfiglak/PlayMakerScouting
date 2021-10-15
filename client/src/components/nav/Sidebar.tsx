@@ -1,34 +1,14 @@
-import {
-  Drawer,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
-// MUI Icons
-import { ExitToApp as LogoutIcon } from '@material-ui/icons/';
+import { Drawer, Divider, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { NavList } from './NavList';
-import { NavElement } from './NavElement';
-import { QuickNoteButton } from './QuickNoteButton';
-import { MatchButton } from './MatchButton';
-// Types
-import { NavItem } from './types';
 
 type Props = {
-  navElements: NavItem[];
-  onLogout: () => void;
   handleQuickNoteClick: () => void;
   handleMatchClick: () => void;
   isAtTheMatch: boolean;
 };
 
 export const Sidebar = ({
-  navElements,
-  onLogout,
   handleQuickNoteClick,
   handleMatchClick,
   isAtTheMatch,
@@ -46,27 +26,11 @@ export const Sidebar = ({
     >
       <div className={classes.toolbar} />
       <Divider />
-      <NavList />
-      {/* <List className={classes.list}>
-        {navElements.map((element) => {
-          const { icon, text, to } = element;
-          return <NavElement icon={icon} text={text} to={to} key={text} />;
-        })}
-        <Divider />
-        <MatchButton onClick={handleMatchClick} isAtTheMatch={isAtTheMatch} />
-        <QuickNoteButton onClick={handleQuickNoteClick} />
-        <li>
-          <ListItem button onClick={onLogout}>
-            <ListItemIcon>
-              <LogoutIcon color="error" />
-            </ListItemIcon>
-            <ListItemText
-              primary="Wyloguj się"
-              primaryTypographyProps={{ variant: 'body2' }}
-            />
-          </ListItem>
-        </li>
-      </List> */}
+      <NavList
+        handleMatchClick={handleMatchClick}
+        handleQuickNoteClick={handleQuickNoteClick}
+        isAtTheMatch={isAtTheMatch}
+      />
     </Drawer>
   );
 };

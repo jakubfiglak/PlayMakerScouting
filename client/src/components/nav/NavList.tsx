@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { List, Divider, makeStyles, Theme } from '@material-ui/core';
 import {
   AccountCircle as ProfileIcon,
@@ -16,7 +16,6 @@ import {
   Storage as DatabaseIcon,
   Visibility as ObservationIcon,
 } from '@material-ui/icons';
-import { useLocation } from 'react-router-dom';
 import { NavElement } from './NavElement';
 import { ExpandeableNavElement } from './ExpandeableNavElement';
 import { useAuthenticatedUser } from '../../hooks/useAuthenticatedUser';
@@ -24,14 +23,19 @@ import { MatchButton } from './MatchButton';
 import { QuickNoteButton } from './QuickNoteButton';
 import { LogoutButton } from './LogoutButton';
 
-const databaseListPaths = ['/players', '/clubs', '/matches'];
-const observationListPaths = ['/reports', '/notes', '/reporttemplates'];
-const profileListPaths = ['/account', '/settings'];
+type Props = {
+  handleQuickNoteClick: () => void;
+  handleMatchClick: () => void;
+  isAtTheMatch: boolean;
+};
 
-export const NavList = () => {
+export const NavList = ({
+  handleQuickNoteClick,
+  handleMatchClick,
+  isAtTheMatch,
+}: Props) => {
   const classes = useStyles();
   const user = useAuthenticatedUser();
-  const location = useLocation();
 
   const isPrivilegedUser =
     user.role === 'admin' || user.role === 'playmaker-scout';
@@ -41,18 +45,6 @@ export const NavList = () => {
   const [isDatabaseListOpen, setDatabaseListOpen] = useState(false);
   const [isObservationListOpen, setObservationListOpen] = useState(false);
   const [isProfileListOpen, setProfileListOpen] = useState(false);
-
-  useEffect(() => {
-    if (databaseListPaths.includes(location.pathname)) {
-      setDatabaseListOpen(true);
-    }
-    if (observationListPaths.includes(location.pathname)) {
-      setObservationListOpen(true);
-    }
-    if (profileListPaths.includes(location.pathname)) {
-      setProfileListOpen(true);
-    }
-  }, [location.pathname]);
 
   return (
     <List component="nav" className={classes.list}>
@@ -112,8 +104,8 @@ export const NavList = () => {
           text="Zlecenia"
         />
       ) : null}
-      <MatchButton onClick={() => console.log('hello')} isAtTheMatch={false} />
-      <QuickNoteButton onClick={() => console.log('hello')} />
+      <MatchButton onClick={handleMatchClick} isAtTheMatch={isAtTheMatch} />
+      <QuickNoteButton onClick={handleQuickNoteClick} />
       {isAdmin ? (
         <NavElement
           icon={<AdminIcon color="error" />}
