@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 // MUI components
 import { Typography, Grid, makeStyles, Theme } from '@material-ui/core';
-import { Rating } from '@material-ui/lab';
 // MUI icons
 import { SportsSoccer as BallIcon } from '@material-ui/icons';
+// Custom components
+import { StyledRating } from '../../components/StyledRating';
 // Types
 import { Skill } from '../../types/reports';
 // Utils & data
@@ -31,7 +32,7 @@ export const ReportSkills = ({ skills, printeable, maxRatingScore }: Props) => {
               <strong>{getLabel(skill.name)}</strong>
             </Typography>
             {skill.score && (
-              <Rating
+              <StyledRating
                 name={`${skill.name}.rating`}
                 value={skill.score}
                 max={maxRatingScore}

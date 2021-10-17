@@ -1,4 +1,10 @@
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
 // MUI Icons
 import { NoteAdd as QuickNoteIcon } from '@material-ui/icons/';
 
@@ -8,9 +14,16 @@ type Props = {
 };
 
 export const QuickNoteButton = ({ onClick, disabled }: Props) => {
+  const classes = useStyles();
+
   return (
     <li>
-      <ListItem button onClick={onClick} disabled={disabled}>
+      <ListItem
+        button
+        onClick={onClick}
+        disabled={disabled}
+        className={classes.item}
+      >
         <ListItemIcon>
           <QuickNoteIcon color="error" />
         </ListItemIcon>
@@ -22,3 +35,11 @@ export const QuickNoteButton = ({ onClick, disabled }: Props) => {
     </li>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  item: {
+    '&:hover': {
+      background: theme.palette.primary.light,
+    },
+  },
+}));

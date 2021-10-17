@@ -7,9 +7,10 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import { Rating } from '@material-ui/lab';
 // MUI icons
 import { SportsSoccer as BallIcon } from '@material-ui/icons';
+// Custom components
+import { StyledRating } from '../../../components/StyledRating';
 
 type Props = {
   title: string;
@@ -39,7 +40,11 @@ export const RatingInput = ({
         <Grid item xs={12}>
           <div className={classes.container}>
             <Typography className={classes.title}>{title}</Typography>
-            <Rating {...ratingField} max={maxRatingScore} icon={<BallIcon />} />
+            <StyledRating
+              {...ratingField}
+              max={maxRatingScore}
+              icon={<BallIcon />}
+            />
           </div>
         </Grid>
       )}

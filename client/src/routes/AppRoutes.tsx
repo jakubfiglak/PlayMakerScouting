@@ -24,6 +24,7 @@ import { MatchPage } from '../pages/Match/MatchPage';
 import { NotesPage } from '../pages/Notes/NotesPage';
 import { NotePage } from '../pages/Note/NotePage';
 import { FourOFourPage } from '../pages/404/FourOFour';
+import { MainTemplate } from '../templates/MainTemplate';
 
 export const AppRoutes = () => {
   return (
@@ -33,117 +34,119 @@ export const AppRoutes = () => {
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
         <Route path="/confirm/:confirmationCode" component={WelcomePage} />
-        <ProtectedRoute
-          path="/dashboard"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <DashboardPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/account"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <ProfilePage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          exact
-          path="/players"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <PlayersPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/players/:id"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <PlayerPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          exact
-          path="/clubs"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <ClubsPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/clubs/:id"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <ClubPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          exact
-          path="/orders"
-          allowedRoles={['admin', 'playmaker-scout']}
-        >
-          <OrdersPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/orders/:id"
-          allowedRoles={['admin', 'playmaker-scout']}
-        >
-          <OrderPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          exact
-          path="/reports"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <ReportsPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/reports/:id"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <ReportPage />
-        </ProtectedRoute>
-        <ProtectedRoute path="/admin" allowedRoles={['admin']}>
-          <AdminPage />
-        </ProtectedRoute>
-        <ProtectedRoute path="/teams/:id" allowedRoles={['admin']}>
-          <TeamPage />
-        </ProtectedRoute>
-        <ProtectedRoute path="/users/:id" allowedRoles={['admin']}>
-          <UserPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/reporttemplates"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <ReportTemplatesPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/settings"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <SettingsPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          exact
-          path="/matches"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <MatchesPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/matches/:id"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <MatchPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          exact
-          path="/notes"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <NotesPage />
-        </ProtectedRoute>
-        <ProtectedRoute
-          path="/notes/:id"
-          allowedRoles={['admin', 'playmaker-scout', 'scout']}
-        >
-          <NotePage />
-        </ProtectedRoute>
+        <MainTemplate>
+          <ProtectedRoute
+            path="/dashboard"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <DashboardPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/account"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <ProfilePage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            exact
+            path="/players"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <PlayersPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/players/:id"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <PlayerPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            exact
+            path="/clubs"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <ClubsPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/clubs/:id"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <ClubPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            exact
+            path="/orders"
+            allowedRoles={['admin', 'playmaker-scout']}
+          >
+            <OrdersPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/orders/:id"
+            allowedRoles={['admin', 'playmaker-scout']}
+          >
+            <OrderPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            exact
+            path="/reports"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <ReportsPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/reports/:id"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <ReportPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/admin" allowedRoles={['admin']}>
+            <AdminPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/teams/:id" allowedRoles={['admin']}>
+            <TeamPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/users/:id" allowedRoles={['admin']}>
+            <UserPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/reporttemplates"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <ReportTemplatesPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/settings"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <SettingsPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            exact
+            path="/matches"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <MatchesPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/matches/:id"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <MatchPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            exact
+            path="/notes"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <NotesPage />
+          </ProtectedRoute>
+          <ProtectedRoute
+            path="/notes/:id"
+            allowedRoles={['admin', 'playmaker-scout', 'scout']}
+          >
+            <NotePage />
+          </ProtectedRoute>
+        </MainTemplate>
         <Route path="*" component={FourOFourPage} />
       </Switch>
     </Router>

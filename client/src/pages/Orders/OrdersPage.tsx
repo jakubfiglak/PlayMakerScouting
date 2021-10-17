@@ -10,7 +10,6 @@ import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { AddPlayerModal } from '../../components/modals/AddPlayerModal';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import { OrderDTO, OrdersFilterData } from '../../types/orders';
 // Hooks
@@ -102,7 +101,7 @@ export const OrdersPage = () => {
     closeOrderLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
@@ -171,6 +170,6 @@ export const OrdersPage = () => {
           />
         </TabPanel>
       )}
-    </MainTemplate>
+    </>
   );
 };

@@ -12,7 +12,6 @@ import { RatingDeleteConfirmationModal } from './RatingDeleteConfirmationModal';
 import { TemplateDeleteConfirmationModal } from './TemplateDeleteConfirmationModal';
 import { TabPanel } from '../../components/TabPanel';
 import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Types
 import { Rating } from '../../types/ratings';
 import { ReportTemplate } from '../../types/reportTemplates';
@@ -60,7 +59,7 @@ export const ReportTemplatesPage = () => {
   }
 
   return (
-    <MainTemplate>
+    <>
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="players">
           <Tab label="Cechy" id="Ratings" aria-controls="ratings" />
@@ -133,7 +132,7 @@ export const ReportTemplatesPage = () => {
           setCurrentReportTemplate(null);
         }}
       />
-    </MainTemplate>
+    </>
   );
 };
 

@@ -35,7 +35,12 @@ export const NavElement = ({ icon, text, to, onClick }: Props) => {
 
   return (
     <li>
-      <ListItem button component={renderLink} onClick={onClick}>
+      <ListItem
+        button
+        component={renderLink}
+        onClick={onClick}
+        className={classes.item}
+      >
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText
           primary={text}
@@ -47,8 +52,13 @@ export const NavElement = ({ icon, text, to, onClick }: Props) => {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
+  item: {
+    '&:hover': {
+      background: theme.palette.primary.light,
+    },
+  },
   active: {
-    background: theme.palette.action.hover,
+    background: theme.palette.primary.light,
   },
 }));
 

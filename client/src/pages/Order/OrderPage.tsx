@@ -1,12 +1,12 @@
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // MUI components
-import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Button, makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { OrderDetails } from './OrderDetails';
 import { ReportsTable } from '../Reports/ReportsTable';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
+import { SectionHeading } from '../../components/SectionHeading';
 // Hooks
 import { useTable } from '../../hooks/useTable';
 import { useOrder, useAcceptOrder, useCloseOrder } from '../../hooks/orders';
@@ -50,7 +50,7 @@ export const OrderPage = () => {
   const isLoading = orderLoading || acceptOrderLoading || closeOrderLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <Button
@@ -72,14 +72,7 @@ export const OrderPage = () => {
           areAdminOptionsEnabled={user.role === 'admin'}
         />
       )}
-      <Typography
-        variant="h6"
-        component="h3"
-        align="center"
-        className={classes.title}
-      >
-        Raporty
-      </Typography>
+      <SectionHeading title="Raporty" />
       <ReportsTable
         page={page}
         rowsPerPage={rowsPerPage}
@@ -96,7 +89,7 @@ export const OrderPage = () => {
             ))
           : null}
       </ReportsTable>
-    </MainTemplate>
+    </>
   );
 };
 
@@ -109,8 +102,5 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   link: {
     marginBottom: theme.spacing(1),
-  },
-  title: {
-    margin: theme.spacing(2),
   },
 }));

@@ -8,7 +8,6 @@ import { Add as AddIcon } from '@material-ui/icons';
 import { MembersTable } from './MembersTable';
 import { AddMemberFormModal } from './AddMemberFormModal';
 import { MemberDeleteConfirmationModal } from './MemberDeleteConfirmationModal';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
@@ -39,7 +38,7 @@ export const TeamPage = () => {
   const { data, isLoading } = useTeam(id);
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <PageHeading title={`Zespół ${data?.name}`} />
       {data ? (
@@ -70,7 +69,7 @@ export const TeamPage = () => {
         member={currentMember}
         teamId={id}
       />
-    </MainTemplate>
+    </>
   );
 };
 

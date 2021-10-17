@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 0,
     left: '50%',
     transform: 'translateX(calc(-50% + 120px))',
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.info.light,
     zIndex: 1000,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,

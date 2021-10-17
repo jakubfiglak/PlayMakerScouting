@@ -50,9 +50,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     gap: `${theme.spacing(1)}px`,
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(4),
 
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
     },
   },

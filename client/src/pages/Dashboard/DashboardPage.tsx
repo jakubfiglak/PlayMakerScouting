@@ -11,7 +11,6 @@ import { CountCard } from './CountCard';
 import { ReportCard } from './ReportCard';
 import { NoteCard } from './NoteCard';
 import { CreateCard } from './CreateCard';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 // Hooks
@@ -23,7 +22,7 @@ export const DashboardPage = () => {
   const { data, isLoading } = useDashboardData();
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <PageHeading title="Twoja aktywność" />
       <div className={classes.container}>
@@ -80,7 +79,7 @@ export const DashboardPage = () => {
           <NoteCard title="Najnowsza notatka" note={data.latestNote} />
         )}
       </div>
-    </MainTemplate>
+    </>
   );
 };
 

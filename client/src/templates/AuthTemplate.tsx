@@ -7,7 +7,7 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import logo from '../assets/logo.png';
+import logoColor from '../assets/logo-color.png';
 
 type Props = {
   title: string;
@@ -23,7 +23,7 @@ export const AuthTemplate: FC<Props> = ({ title, children }) => {
         <Avatar
           className={classes.avatar}
           variant="square"
-          src={logo}
+          src={logoColor}
           alt="PlaymakerPro Logo"
         />
         <Typography component="h1" variant="h5">

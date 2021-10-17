@@ -1,6 +1,5 @@
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 // Custom components
-import { MainTemplate } from '../../templates/MainTemplate';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
 import { ReportBackgroundImageSelect } from '../../components/selects/ReportBackgroundImageSelect';
@@ -29,7 +28,7 @@ export const SettingsPage = () => {
   } = useReportTemplates();
 
   return (
-    <MainTemplate>
+    <>
       {(backgroundImagesLoading || reportTemplatesLoading) && <Loader />}
       <PageHeading title="Ustawienia" />
       <Typography variant="h6" component="h3" className={classes.title}>
@@ -48,7 +47,7 @@ export const SettingsPage = () => {
         value={defaultReportTemplateId}
         onChange={setDefaultReportTemplateId}
       />
-    </MainTemplate>
+    </>
   );
 };
 

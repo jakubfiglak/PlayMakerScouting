@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: theme.typography.fontWeightBold,
   },
   prep: {
-    background: theme.palette.secondary.light,
+    background: theme.palette.info.light,
   },
   finished: {
     background: theme.palette.success.light,

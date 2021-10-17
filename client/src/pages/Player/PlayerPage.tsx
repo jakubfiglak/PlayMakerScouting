@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 // MUI components
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 // Custom components
 import { PlayerDetails } from './PlayerDetails';
 import { PlayersForm } from '../Players/PlayersForm';
@@ -9,9 +9,9 @@ import { ReportsTable } from '../Reports/ReportsTable';
 import { ReportsTableRow } from '../Reports/ReportsTableRow';
 import { NotesTable } from '../Notes/NotesTable';
 import { NotesTableRow } from '../Notes/NotesTableRow';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { PageHeading } from '../../components/PageHeading';
+import { SectionHeading } from '../../components/SectionHeading';
 import { Loader } from '../../components/Loader';
 // Hooks
 import { usePlayer, useUpdatePlayer } from '../../hooks/players';
@@ -81,7 +81,7 @@ export const PlayerPage = () => {
     clubsLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <SingleAssetPageActions
@@ -104,14 +104,7 @@ export const PlayerPage = () => {
         />
       ) : null}
       <section>
-        <Typography
-          variant="h6"
-          component="h3"
-          align="center"
-          className={classes.title}
-        >
-          Raporty
-        </Typography>
+        <SectionHeading title="Raporty" />
         <ReportsTable
           page={reportsTableSettings.page}
           rowsPerPage={reportsTableSettings.rowsPerPage}
@@ -130,14 +123,7 @@ export const PlayerPage = () => {
         </ReportsTable>
       </section>
       <section>
-        <Typography
-          variant="h6"
-          component="h3"
-          align="center"
-          className={classes.title}
-        >
-          Notatki
-        </Typography>
+        <SectionHeading title="Notatki" />
         <NotesTable
           page={notesTableSettings.page}
           rowsPerPage={notesTableSettings.rowsPerPage}
@@ -155,7 +141,7 @@ export const PlayerPage = () => {
             : null}
         </NotesTable>
       </section>
-    </MainTemplate>
+    </>
   );
 };
 
@@ -168,8 +154,5 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   link: {
     marginBottom: theme.spacing(1),
-  },
-  title: {
-    margin: theme.spacing(2),
   },
 }));

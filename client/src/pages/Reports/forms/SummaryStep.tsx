@@ -7,9 +7,10 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import { Rating } from '@material-ui/lab';
 // MUI icons
 import { SportsSoccer as BallIcon } from '@material-ui/icons';
+// Custom components
+import { StyledRating } from '../../../components/StyledRating';
 
 export const SummaryStep = () => {
   const classes = useStyles();
@@ -24,7 +25,7 @@ export const SummaryStep = () => {
       <Grid item xs={12}>
         <div className={classes.container}>
           <Typography className={classes.title}>Ocena ostateczna</Typography>
-          <Rating
+          <StyledRating
             {...ratingField}
             name="finalRating"
             max={4}

@@ -10,7 +10,6 @@ import { NotesForm } from './NotesForm';
 import { TabPanel } from '../../components/TabPanel';
 import { Loader } from '../../components/Loader';
 import { PageHeading } from '../../components/PageHeading';
-import { MainTemplate } from '../../templates/MainTemplate';
 // Hooks
 import { useTabs } from '../../hooks/useTabs';
 import { useTable } from '../../hooks/useTable';
@@ -118,7 +117,7 @@ export const NotesPage = () => {
     deleteNoteLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="notes">
@@ -186,6 +185,6 @@ export const NotesPage = () => {
           onCancelClick={handleFormReset}
         />
       </TabPanel>
-    </MainTemplate>
+    </>
   );
 };

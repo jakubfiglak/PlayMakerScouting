@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 // MUI components
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 // Custom components
 import { MatchDetails } from './MatchDetails';
 import { MatchesForm } from '../Matches/MatchesForm';
 import { NotesTable } from '../Notes/NotesTable';
 import { NotesTableRow } from '../Notes/NotesTableRow';
-import { MainTemplate } from '../../templates/MainTemplate';
 import { PageHeading } from '../../components/PageHeading';
+import { SectionHeading } from '../../components/SectionHeading';
 import { SingleAssetPageActions } from '../../components/SingleAssetPageActions';
 import { Loader } from '../../components/Loader';
 // Hooks
@@ -58,7 +58,7 @@ export const MatchPage = () => {
     matchLoading || notesLoading || updateMatchLoading || clubsLoading;
 
   return (
-    <MainTemplate>
+    <>
       {isLoading && <Loader />}
       <div className={classes.container}>
         <SingleAssetPageActions
@@ -79,14 +79,7 @@ export const MatchPage = () => {
         />
       ) : null}
       <section>
-        <Typography
-          variant="h6"
-          component="h3"
-          align="center"
-          className={classes.title}
-        >
-          Notatki
-        </Typography>
+        <SectionHeading title="Notatki" />
         <NotesTable
           page={page}
           rowsPerPage={rowsPerPage}
@@ -104,18 +97,15 @@ export const MatchPage = () => {
             : null}
         </NotesTable>
       </section>
-    </MainTemplate>
+    </>
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    margin: theme.spacing(2),
   },
 }));

@@ -1,46 +1,30 @@
-import { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 // MUI components
 import {
   AppBar,
   Toolbar,
   makeStyles,
   Theme,
-  Divider,
   IconButton,
   Menu,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Tooltip,
 } from '@material-ui/core';
 // MUI icons
-import {
-  Menu as MenuIcon,
-  ExitToApp as LogoutIcon,
-  Sports as MatchIcon,
-} from '@material-ui/icons';
+import { Menu as MenuIcon, Sports as MatchIcon } from '@material-ui/icons';
 // Custom components
-import { NavElement } from './NavElement';
-import { QuickNoteButton } from './QuickNoteButton';
-import { MatchButton } from './MatchButton';
 import { PlaymakerLogo } from '../PlaymakerLogo';
 // Types
-import { NavItem } from './types';
 import { Match } from '../../types/matches';
+import { NavList } from './NavList';
 
 type Props = {
-  navElements: NavItem[];
-  onLogout: () => void;
   handleQuickNoteClick: () => void;
   handleMatchClick: () => void;
   match: Match | null;
 };
 
 export const Topbar = ({
-  navElements,
-  onLogout,
   handleQuickNoteClick,
   handleMatchClick,
   match,
@@ -48,6 +32,11 @@ export const Topbar = ({
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const ref = useRef<HTMLButtonElement>(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
 
   return (
     <AppBar position="fixed" classes={{ root: classes.appBar }}>
@@ -81,38 +70,13 @@ export const Topbar = ({
               keepMounted
               open={isMenuOpen}
               onClose={() => setIsMenuOpen(false)}
+              classes={{ paper: classes.menu }}
             >
-              <List className={classes.list}>
-                {navElements.map((element) => {
-                  const { icon, text, to } = element;
-                  return (
-                    <NavElement
-                      icon={icon}
-                      text={text}
-                      to={to}
-                      key={text}
-                      onClick={() => setIsMenuOpen(false)}
-                    />
-                  );
-                })}
-                <Divider />
-                <MatchButton
-                  onClick={handleMatchClick}
-                  isAtTheMatch={!!match}
-                />
-                <QuickNoteButton onClick={handleQuickNoteClick} />
-                <li>
-                  <ListItem button onClick={onLogout}>
-                    <ListItemIcon>
-                      <LogoutIcon color="error" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Wyloguj się"
-                      primaryTypographyProps={{ variant: 'body2' }}
-                    />
-                  </ListItem>
-                </li>
-              </List>
+              <NavList
+                handleMatchClick={handleMatchClick}
+                handleQuickNoteClick={handleQuickNoteClick}
+                isAtTheMatch={!!match}
+              />
             </Menu>
           </div>
         </div>
@@ -150,5 +114,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   matchIcon: {
     marginRight: theme.spacing(2),
+  },
+  menu: {
+    background: theme.palette.primary.light,
   },
 }));

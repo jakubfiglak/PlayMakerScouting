@@ -6,24 +6,28 @@ import {
   Theme,
 } from '@material-ui/core';
 // MUI Icons
-import { DriveEta as GoIcon } from '@material-ui/icons/';
+import { ExitToApp as LogoutIcon } from '@material-ui/icons/';
+import { useHistory } from 'react-router-dom';
+import { useAuthState } from '../../context/auth/useAuthState';
 
-type Props = {
-  onClick: () => void;
-  isAtTheMatch: boolean;
-};
-
-export const MatchButton = ({ onClick, isAtTheMatch }: Props) => {
+export const LogoutButton = () => {
+  const { logout } = useAuthState();
+  const history = useHistory();
   const classes = useStyles();
+
+  function handleLogout() {
+    logout();
+    history.push('/login');
+  }
 
   return (
     <li>
-      <ListItem button onClick={onClick} className={classes.item}>
+      <ListItem button onClick={handleLogout} className={classes.item}>
         <ListItemIcon>
-          <GoIcon color="error" />
+          <LogoutIcon color="error" />
         </ListItemIcon>
         <ListItemText
-          primary={isAtTheMatch ? 'Opuść mecz' : 'Jedź na mecz'}
+          primary="Wyloguj"
           primaryTypographyProps={{ variant: 'body2' }}
         />
       </ListItem>
