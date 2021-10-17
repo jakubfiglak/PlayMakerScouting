@@ -24,7 +24,7 @@ export const ProtectedRoute: FC<Props> = ({
         isAllowed ? (
           children
         ) : (
-          <Redirect to={{ pathname: '/login', state: { from: location } }} />
+          <Redirect to={{ pathname: '/', state: { from: location } }} />
         )
       }
     />
