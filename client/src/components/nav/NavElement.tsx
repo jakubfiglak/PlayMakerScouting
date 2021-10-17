@@ -1,4 +1,4 @@
-import { useMemo, forwardRef } from 'react';
+import { useMemo, forwardRef, ReactNode } from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 // MUI components
 import {
@@ -8,10 +8,11 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core';
-// Types
-import { NavItem } from './types';
 
-type Props = Omit<NavItem, 'allowedRoles'> & {
+type Props = {
+  icon: ReactNode;
+  text: string;
+  to: string;
   onClick?: () => void;
 };
 
