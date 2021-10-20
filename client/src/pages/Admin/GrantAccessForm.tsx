@@ -30,7 +30,7 @@ import { ClubBasicInfo } from '../../types/clubs';
 import { ReportBasicInfo } from '../../types/reports';
 import { PlayerBasicInfo } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
-import { NoteBasicInfo } from '../../types/notes';
+import { Note } from '../../types/notes';
 import { getDisabledOptionsFromAcl } from './utils';
 
 type Props = {
@@ -40,7 +40,7 @@ type Props = {
   reports: ReportBasicInfo[];
   players: PlayerBasicInfo[];
   matches: MatchBasicInfo[];
-  notes: NoteBasicInfo[];
+  notes: Note[];
   accessControlLists: AccessControlList[];
   onSubmit: (data: GrantAccessDTO) => void;
 };

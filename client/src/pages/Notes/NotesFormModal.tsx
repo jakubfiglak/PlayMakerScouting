@@ -24,10 +24,13 @@ import {
   useMatchesNotes,
   useCreateNote,
   useUpdateNote,
+  useMatchesNotesList,
 } from '../../hooks/notes';
 // Types
 import { PlayerBasicInfo } from '../../types/players';
 import { MatchBasicInfo } from '../../types/matches';
+// Utils & data
+import { getNoteLabelById } from '../../components/selects/utils';
 
 type Props = {
   onClose: () => void;
@@ -47,10 +50,9 @@ export const NotesFormModal = ({
 
   const { data: account, isLoading: accountLoading } = useAccountInfo();
 
-  const { data: notes, isLoading: notesLoading } = useMatchesNotes({
-    matchId: account?.match?.id || '',
-    order: 'asc',
-  });
+  const { data: notes, isLoading: notesLoading } = useMatchesNotesList(
+    account?.match?.id || '',
+  );
 
   const { mutate: createNote, isLoading: createNoteLoading } = useCreateNote();
   const { mutate: updateNote, isLoading: updateNoteLoading } = useUpdateNote(
@@ -95,15 +97,9 @@ export const NotesFormModal = ({
                   <MenuItem value="">
                     <em>Brak</em>
                   </MenuItem>
-                  {notes.docs.map((note) => (
+                  {notes.map((note) => (
                     <MenuItem value={note.id} key={note.id}>
-                      {`${
-                        note.player
-                          ? `${note.player.firstName} ${
-                              note.player.lastName
-                            } (nr ${note.shirtNo || 'N/A'})`
-                          : `zawodnik nr ${note.shirtNo || 'N/A'}`
-                      } (notatka nr ${note.docNumber})`}
+                      {getNoteLabelById(note.id, notes)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -117,9 +113,7 @@ export const NotesFormModal = ({
             </>
           ) : null}
           <NotesForm
-            current={
-              notes?.docs.find((note) => note.id === selectedNoteId) || null
-            }
+            current={notes?.find((note) => note.id === selectedNoteId) || null}
             matchesData={matchesData}
             playersData={playersData}
             onSubmit={selectedNoteId ? updateNote : createNote}

@@ -4,11 +4,11 @@ import {
   AutocompleteRenderInputParams,
 } from 'formik-material-ui-lab';
 import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
-import { NoteBasicInfo } from '../../types/notes';
+import { Note } from '../../types/notes';
 import { getNoteLabelById } from './utils';
 
 type Props = {
-  notes: NoteBasicInfo[];
+  notes: Note[];
   getDisabledOptions: () => string[];
 };
 
