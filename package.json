@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "PlaymakerPro Scouting App",
   "engines": {
-    "node": ">=12.x",
-    "npm": ">=6.x"
+    "node": "16.x",
+    "npm": "6.x"
   },
   "main": "server.js",
   "scripts": {
