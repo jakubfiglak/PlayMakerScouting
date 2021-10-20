@@ -51,7 +51,8 @@ exports.getNotes = asyncHandler(async (req, res) => {
 // @route GET /api/v1/notes/list
 // @access Private
 exports.getNotesList = asyncHandler(async (req, res) => {
-  const notes = await notesService.getAllNotesList(req.accessFilters);
+  const { query, accessFilters } = req;
+  const notes = await notesService.getAllNotesList({ accessFilters, query });
 
   return res.status(httpStatus.OK).json({
     success: true,

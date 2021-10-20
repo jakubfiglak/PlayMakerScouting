@@ -184,10 +184,8 @@ export function useMatchesNotes({
 }
 
 // Get notes list
-async function getNotesList(): Promise<NoteBasicInfo[]> {
-  const { data } = await axios.get<ApiResponse<NoteBasicInfo[]>>(
-    '/api/v1/notes/list',
-  );
+async function getNotesList(): Promise<Note[]> {
+  const { data } = await axios.get<ApiResponse<Note[]>>('/api/v1/notes/list');
   return data.data;
 }
 
@@ -201,6 +199,31 @@ export function useNotesList() {
         type: 'error',
       }),
   });
+}
+
+// Get matches notes list
+async function getMatchesNotesList(matchId: string): Promise<Note[]> {
+  const { data } = await axios.get<ApiResponse<Note[]>>(
+    `/api/v1/notes/list?match=${matchId}`,
+  );
+  return data.data;
+}
+
+export function useMatchesNotesList(matchId: string) {
+  const { setAlert } = useAlertsState();
+
+  return useQuery(
+    ['notes', 'list', { matchId }],
+    () => getMatchesNotesList(matchId),
+    {
+      onError: (err: ApiError) =>
+        setAlert({
+          msg: getErrorMessage(err.response.data.error),
+          type: 'error',
+        }),
+      enabled: matchId !== '',
+    },
+  );
 }
 
 // Get single note
