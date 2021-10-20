@@ -1,48 +1,52 @@
 import { Link } from 'react-router-dom';
 import {
-  AppBar,
-  Toolbar,
   Typography,
   CssBaseline,
   Button,
   makeStyles,
   Theme,
 } from '@material-ui/core';
-import { PlaymakerLogo } from '../../components/PlaymakerLogo';
-import { useAuthState } from '../../context/auth/useAuthState';
-import soccerField from '../../assets/soccer_field.jpg';
+import backgroundImg from '../../assets/scouting-background.png';
+import { Header } from './Header';
+import { CtaButton } from './CtaButton';
 
 export const HomePage = () => {
   const classes = useStyles();
 
-  const { user } = useAuthState();
-
   return (
     <div className={classes.wrapper}>
       <CssBaseline />
-      <AppBar position="static">
-        <Toolbar>
-          <PlaymakerLogo />
-        </Toolbar>
-      </AppBar>
-      <main className={classes.main}>
-        <div className={classes.innerWrapper}>
-          <Typography
-            variant="h2"
-            color="inherit"
-            className={classes.mainHeading}
-          >
-            Skauting Playmaker.Pro
-          </Typography>
-          <Typography variant="h3" color="inherit">
-            Szukaj talentów, twórz raporty, podejmij współpracę z Playmaker.Pro
-          </Typography>
-          <Link to={user ? '/dashboard' : '/login'} className={classes.link}>
-            <Button variant="contained" color="secondary" size="large">
-              Start
-            </Button>
-          </Link>
-        </div>
+      <Header />
+      <main>
+        <section>
+          <div className={classes.innerWrapper}>
+            <Typography variant="h1" className={classes.heading}>
+              Wprowadź skauting na wyższy poziom!
+            </Typography>
+            <div>
+              <Typography variant="h2" align="center">
+                Wybierz jeden z 4 produktów skautingowych
+              </Typography>
+              <div className={classes.buttonsContainer}>
+                <CtaButton text="Skauting klubowy" linkTo="/" />
+                <CtaButton text="Skauting akademia" linkTo="/" />
+                <CtaButton text="Aplikacja skautingowa" linkTo="/" />
+                <CtaButton text="Analiza danych" linkTo="/" />
+              </div>
+            </div>
+          </div>
+          <div className={classes.goToApp}>
+            <Link to="/login" className={classes.link}>
+              <Button
+                color="secondary"
+                variant="contained"
+                className={classes.goToAppButton}
+              >
+                Przejdź do aplikacji
+              </Button>
+            </Link>
+          </div>
+        </section>
       </main>
     </div>
   );
@@ -50,45 +54,70 @@ export const HomePage = () => {
 
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  main: {
-    backgroundImage: `url(${soccerField})`,
+    color: theme.palette.primary.contrastText,
+    minHeight: '100vh',
+    backgroundImage: `url(${backgroundImg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
-    position: 'relative',
-    flexGrow: 1,
 
-    '&::after': {
-      content: "''",
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      top: 0,
-      left: 0,
-      background: 'rgba(51,61,74,0.6)',
+    [theme.breakpoints.down('lg')]: {
+      backgroundPosition: 'left center',
+    },
+  },
+  heading: {
+    fontWeight: theme.typography.fontWeightBold,
+    fontSize: 64,
+
+    [theme.breakpoints.down('md')]: {
+      textAlign: 'center',
+      marginBottom: theme.spacing(4),
+    },
+
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 48,
     },
   },
   innerWrapper: {
-    position: 'relative',
-    zIndex: 5,
-    height: '100%',
     display: 'flex',
-    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    textAlign: 'center',
-    color: theme.palette.background.paper,
-    padding: theme.spacing(8, 1),
+    padding: theme.spacing(6),
+    paddingTop: 300,
+
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+      paddingTop: 200,
+    },
+
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(3),
+      paddingTop: 120,
+    },
   },
-  mainHeading: {
-    textTransform: 'uppercase',
-    margin: theme.spacing(5, 0),
+  buttonsContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: theme.spacing(2),
+    marginTop: theme.spacing(4),
+  },
+  goToApp: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(6),
   },
   link: {
-    color: theme.palette.background.paper,
     textDecoration: 'none',
-    margin: theme.spacing(5, 0),
+  },
+  goToAppButton: {
+    fontSize: 16,
+    fontWeight: theme.typography.fontWeightBold,
+    background: theme.palette.primary.contrastText,
+    color: theme.palette.primary.main,
+    padding: theme.spacing(2, 6),
+
+    '&:hover': {
+      color: theme.palette.primary.contrastText,
+    },
   },
 }));

@@ -21,7 +21,6 @@ import { Loader } from '../../components/Loader';
 // Hooks
 import { useAccountInfo } from '../../hooks/auth';
 import {
-  useMatchesNotes,
   useCreateNote,
   useUpdateNote,
   useMatchesNotesList,
