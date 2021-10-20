@@ -198,7 +198,7 @@ export const AuthState: React.FC = ({ children }) => {
 
   // Check if the user is authenticated
   const isAuthenticated = () => {
-    if (!state.expiresAt) {
+    if (!state.user || !state.expiresAt) {
       return false;
     }
     return new Date().getTime() / 1000 < state.expiresAt;

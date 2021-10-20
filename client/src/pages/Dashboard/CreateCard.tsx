@@ -22,7 +22,9 @@ export const CreateCard = ({ title, linkTo }: Props) => {
       >
         <CardActionArea className={classes.actionArea}>
           <CardContent className={classes.container}>
-            <Typography variant="h6">{title.toUpperCase()}</Typography>
+            <Typography variant="h6" className={classes.text}>
+              {title.toUpperCase()}
+            </Typography>
             <div>
               <Avatar className={classes.avatar}>
                 <AddIcon />
@@ -42,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
   link: {
     textDecoration: 'none',
     color: 'inherit',
+  },
+  text: {
+    color: theme.palette.primary.contrastText,
   },
   container: {
     height: '100%',

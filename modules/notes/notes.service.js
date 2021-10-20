@@ -32,8 +32,8 @@ async function getNotesForPlayer(playerId) {
   return notes;
 }
 
-async function getAllNotesList(accessFilters) {
-  const notes = await Note.find({ ...accessFilters }).select(resultsOptions.listSelect);
+async function getAllNotesList({ query, accessFilters }) {
+  const notes = await Note.find({ ...query, ...accessFilters });
 
   return notes;
 }

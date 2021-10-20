@@ -3,12 +3,12 @@ import { useField } from 'formik';
 import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 // Types
-import { NoteBasicInfo } from '../../types/notes';
+import { Note } from '../../types/notes';
 // Utils & data
 import { getNoteLabelById } from './utils';
 
 type Props = {
-  notesData: NoteBasicInfo[];
+  notesData: Note[];
   name: string;
   label: string;
   size?: 'medium' | 'small';

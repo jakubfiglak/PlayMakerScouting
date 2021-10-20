@@ -1,8 +1,8 @@
-import { NoteBasicInfo } from '../../types/notes';
+import { Note } from '../../types/notes';
 import { ReportBasicInfo } from '../../types/reports';
 import { getLabel } from '../../utils/getLabel';
 
-export function getNoteLabelById(id: string, notes: NoteBasicInfo[]) {
+export function getNoteLabelById(id: string, notes: Note[]) {
   const note = notes.find((item) => item.id === id);
   if (note) {
     const { player, docNumber, shirtNo } = note;
