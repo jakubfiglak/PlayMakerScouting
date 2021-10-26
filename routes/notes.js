@@ -41,7 +41,7 @@ router.post(
   createNote
 );
 router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('note')], getNotes);
-router.get('/list', [prepareQuery, protect, authorize('admin')], getNotesList);
+router.get('/list', [protect, prepareQuery], getNotesList);
 router.get('/:id', [protect, setAcls, setNote, canView('note')], getNote);
 router.put(
   '/:id',
