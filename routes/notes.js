@@ -7,7 +7,7 @@ const {
   updateNote,
   deleteNote,
 } = require('../modules/notes/notes.controller');
-const { protect, authorize } = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
 const {
   setNote,
   setPlayerData,
@@ -41,7 +41,7 @@ router.post(
   createNote
 );
 router.get('/', [protect, setAcls, prepareQuery, setAccessFilters('note')], getNotes);
-router.get('/list', [protect, prepareQuery], getNotesList);
+router.get('/list', [protect, setAcls, prepareQuery, setAccessFilters('note')], getNotesList);
 router.get('/:id', [protect, setAcls, setNote, canView('note')], getNote);
 router.put(
   '/:id',

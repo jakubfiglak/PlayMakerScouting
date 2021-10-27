@@ -23,12 +23,19 @@ function prepareQuery(req, res, next) {
     }
   });
 
+  const sortingOrder = sort?.startsWith('-') ? -1 : 1;
+  const sortingString = sortingOrder === -1 ? sort?.substring(1) : sort;
+
   req.query = parsedQuery;
   req.paginationOptions = {
-    sort: sort || DEFAULT_SORT,
+    sort: DEFAULT_SORT,
     limit: limit || DEFAULT_LIMIT,
     page: page || DEFAULT_PAGE,
   };
+
+  if (sortingString) {
+    req.paginationOptions.sort = { [sortingString]: sortingOrder, _id: 1 };
+  }
 
   next();
 }
