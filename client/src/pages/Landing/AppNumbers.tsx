@@ -28,10 +28,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     textAlign: 'center',
     gap: theme.spacing(4),
+
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
   },
   divider: {
     width: 2,
     height: 50,
     background: theme.palette.primary.contrastText,
+
+    [theme.breakpoints.down('sm')]: {
+      height: 2,
+      width: '50%',
+    },
   },
 }));

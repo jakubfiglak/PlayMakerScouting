@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   button: {
     width: 350,
     padding: 16,
-    textTransform: 'none',
     fontSize: 16,
     fontWeight: theme.typography.fontWeightBold,
     display: 'flex',
