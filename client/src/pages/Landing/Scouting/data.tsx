@@ -8,6 +8,16 @@ import {
   Money as MoneyIcon,
   DoubleArrow as ScoutingIcon,
 } from '@material-ui/icons';
+import zakPhoto from '../../../assets/zak-photo.png';
+import tkoczPhoto from '../../../assets/tkocz-photo.png';
+import szmytPhoto from '../../../assets/szmyt-photo.jpg';
+import sypekPhoto from '../../../assets/sypek-photo.jpg';
+import bytomLogo from '../../../assets/bytom-logo.png';
+import odraLogo from '../../../assets/odra-logo.png';
+import podhaleLogo from '../../../assets/podhale-logo.png';
+import nielbaLogo from '../../../assets/nielba-logo.png';
+import polkowiceLogo from '../../../assets/polkowice-logo.png';
+import lubinLogo from '../../../assets/lubin-logo.png';
 
 export type Value = {
   number: string;
@@ -87,5 +97,78 @@ export const advantages: Advantage[] = [
     icon: <ScoutingIcon color="inherit" />,
     text:
       'Weryfikuj polecenia. Wskaż nazwisko, a otrzymasz maksimum informacji o wybranym zawodniku.',
+  },
+];
+
+type ClubData = {
+  name: string;
+  logo: string;
+};
+
+export type Transfer = {
+  player: {
+    name: string;
+    image: string;
+  };
+  from: ClubData;
+  to: ClubData;
+};
+
+export const transfers: Transfer[] = [
+  {
+    player: {
+      name: 'Adam Żak',
+      image: zakPhoto,
+    },
+    from: {
+      name: 'Polonia Bytom',
+      logo: bytomLogo,
+    },
+    to: {
+      name: 'Odra Opole',
+      logo: odraLogo,
+    },
+  },
+  {
+    player: {
+      name: 'Maksymilian Tkocz',
+      image: tkoczPhoto,
+    },
+    from: {
+      name: 'Podhale Nowy Targ',
+      logo: podhaleLogo,
+    },
+    to: {
+      name: 'Odra Opole',
+      logo: odraLogo,
+    },
+  },
+  {
+    player: {
+      name: 'Kajetan Szmyt',
+      image: szmytPhoto,
+    },
+    from: {
+      name: 'Nielba Wągrowiec',
+      logo: nielbaLogo,
+    },
+    to: {
+      name: 'Górnik Polkowice',
+      logo: polkowiceLogo,
+    },
+  },
+  {
+    player: {
+      name: 'Jakub Sypek',
+      image: sypekPhoto,
+    },
+    from: {
+      name: 'Zagłębie II Lubin',
+      logo: lubinLogo,
+    },
+    to: {
+      name: 'Górnik Polkowice',
+      logo: polkowiceLogo,
+    },
   },
 ];

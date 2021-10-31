@@ -1,46 +1,34 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core';
-import { advantages } from './data';
+import { transfers } from './data';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
-import { AdvantageTile } from './AdvantageTile';
+import { TransferCard } from './TransferCard';
 
-export const AdvantagesSection = () => {
+export const TransfersSection = () => {
   const classes = useStyles();
 
   return (
-    <section>
+    <section className={classes.container}>
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
-          Zalety
+          Efekty działań
         </Typography>
         <Typography className={classes.subtitle}>
-          korzystania z Scout<em>Maker</em>.pro
+          Scout<em>Maker</em>.pro
         </Typography>
+        <div className={classes.cardContainer}>
+          {transfers.map((transfer) => (
+            <TransferCard transfer={transfer} key={transfer.player.name} />
+          ))}
+        </div>
       </LayoutContentWrapper>
-      <div className={classes.shape} />
-      <div className={classes.wrapper}>
-        <LayoutContentWrapper>
-          <div className={classes.tilesContainer}>
-            {advantages.map((advantage) => (
-              <AdvantageTile advantage={advantage} key={advantage.title} />
-            ))}
-          </div>
-        </LayoutContentWrapper>
-      </div>
     </section>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  shape: {
-    width: '100%',
-    height: 30,
+  container: {
     background: '#000',
-    clipPath: `polygon(
-      0 calc(100% - 15px),
-      100% 0,
-      100% 100%,
-      0 100%
-    )`,
+    color: theme.palette.primary.contrastText,
   },
   heading: {
     fontSize: 48,
@@ -60,8 +48,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     background: '#000',
   },
-  tilesContainer: {
+  cardContainer: {
     display: 'flex',
     flexWrap: 'wrap',
+    gap: theme.spacing(4),
+    marginTop: theme.spacing(3),
   },
 }));
