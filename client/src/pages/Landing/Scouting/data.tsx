@@ -4,6 +4,9 @@ import {
   Check as RecommendationsIcon,
   Assessment as ReportsIcon,
   Note as NotesIcon,
+  AccessTime as TimeIcon,
+  Money as MoneyIcon,
+  DoubleArrow as ScoutingIcon,
 } from '@material-ui/icons';
 
 export type Value = {
@@ -12,6 +15,7 @@ export type Value = {
   icon: ReactNode;
   values: string[];
 };
+
 export const values: Value[] = [
   {
     number: '01',
@@ -50,5 +54,38 @@ export const values: Value[] = [
       'Regularny kontakt i dopasowanie do zmian kadrowych',
       'Przed każdym oknem transferowym dostarczamy okresowy raport podsumowujący',
     ],
+  },
+];
+
+export type Advantage = {
+  title: string;
+  icon: ReactNode;
+  text: string;
+};
+
+export const advantages: Advantage[] = [
+  {
+    title: 'czas',
+    icon: <TimeIcon color="inherit" />,
+    text:
+      'Rób swoje. Sprawdzenie polecanego piłkarza jest złożonym procesem. W naszym teamie zajmuje się tym 14 wyszkolonych skautów.',
+  },
+  {
+    title: 'pieniądze',
+    icon: <MoneyIcon color="inherit" />,
+    text:
+      'Oszczędność i inwestycja. Koszty niższe, niż utrzymanie jednego pracownika i potencjalny wzrost wartości w postaci utalentowanych piłkarzy. ',
+  },
+  {
+    title: 'baza danych',
+    icon: <DatabaseIcon color="inherit" />,
+    text:
+      'Analiza tworzy przewagę. Kompleksowa i usystematyzowana wiedza minimalizuje ryzyko nietrafionego transferu.',
+  },
+  {
+    title: 'skauting na zlecenie',
+    icon: <ScoutingIcon color="inherit" />,
+    text:
+      'Weryfikuj polecenia. Wskaż nazwisko, a otrzymasz maksimum informacji o wybranym zawodniku.',
   },
 ];

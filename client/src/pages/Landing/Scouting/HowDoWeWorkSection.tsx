@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     clipPath: `polygon(
       0 0,
       100% 0,
-      100% calc(100% - 5vh),
+      100% calc(100% - 20px),
       0 100%
     )`,
   },

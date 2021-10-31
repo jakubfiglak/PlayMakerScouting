@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flex: '1 1 25%',
     display: 'flex',
     flexDirection: 'column',
+    marginBottom: theme.spacing(2),
 
     [theme.breakpoints.down('lg')]: {
       flexBasis: '50%',
