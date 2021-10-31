@@ -5,7 +5,7 @@ import { ClubsPage } from '../pages/Clubs/ClubsPage';
 import { ClubPage } from '../pages/Club/ClubPage';
 import { DashboardPage } from '../pages/Dashboard/DashboardPage';
 import { HomePage } from '../pages/Landing/HomePage';
-import { ClubScoutingPage } from '../pages/Landing/ClubScoutingPage';
+import { ClubScoutingPage } from '../pages/Landing/Scouting/ClubScoutingPage';
 import { LoginPage } from '../pages/Login/LoginPage';
 import { OrderPage } from '../pages/Order/OrderPage';
 import { OrdersPage } from '../pages/Orders/OrdersPage';

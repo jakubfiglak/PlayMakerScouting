@@ -5,12 +5,12 @@ import {
   List,
   CssBaseline,
 } from '@material-ui/core';
-import backgroundImg from '../../assets/scouting-background.png';
-import phoneMockup from '../../assets/phone-mockup-activity.png';
-import { ListElement } from './ListElement';
-import { CtaButton } from './CtaButton';
-import { AppNumbers } from './AppNumbers';
-import { LayoutContentWrapper } from './LayoutContentWrapper';
+import backgroundImg from '../../../assets/scouting-background.png';
+import phoneMockup from '../../../assets/phone-mockup-activity.png';
+import { ListElement } from '../ListElement';
+import { CtaButton } from '../CtaButton';
+import { AppNumbers } from '../AppNumbers';
+import { LayoutContentWrapper } from '../LayoutContentWrapper';
 
 export const ScoutmakerSection = () => {
   const classes = useStyles();
@@ -33,7 +33,7 @@ export const ScoutmakerSection = () => {
               <ListElement text="Zlecaj indywidualną obserwację zawodnika" />
             </List>
             <div className={classes.button}>
-              <CtaButton text="Zobacz szczegóły" linkTo="/" />
+              <CtaButton text="Zobacz szczegóły" linkTo="#copy" />
             </div>
             <AppNumbers />
           </div>
