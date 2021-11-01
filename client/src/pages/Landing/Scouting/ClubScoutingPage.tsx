@@ -6,18 +6,22 @@ import { TransfersSection } from './TranfersSection';
 import { RecommendationsSection } from './RecommendationsSection';
 import { PricingSection } from './PricingSection';
 import { HistoricalDataSection } from './HistoricalDataSection';
+import { Footer } from '../Footer';
 
 export const ClubScoutingPage = () => {
   return (
-    <main>
-      <ScoutmakerSection />
-      <CopySection />
-      <HowDoWeWorkSection />
-      <AdvantagesSection />
-      <TransfersSection />
-      <RecommendationsSection />
-      <PricingSection />
-      <HistoricalDataSection />
-    </main>
+    <>
+      <main>
+        <ScoutmakerSection />
+        <CopySection />
+        <HowDoWeWorkSection />
+        <AdvantagesSection />
+        <TransfersSection />
+        <RecommendationsSection />
+        <PricingSection />
+        <HistoricalDataSection />
+      </main>
+      <Footer />
+    </>
   );
 };

@@ -22,7 +22,7 @@ export const PricingSection = () => {
 const useStyles = makeStyles((theme: Theme) => ({
   heading: {
     fontSize: 48,
-    marginBottom: theme.spacing(4),
+    padding: theme.spacing(3, 0),
 
     [theme.breakpoints.down('sm')]: {
       textAlign: 'center',

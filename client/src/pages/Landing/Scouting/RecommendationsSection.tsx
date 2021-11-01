@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   heading: {
     fontSize: 48,
+    padding: theme.spacing(3, 0),
 
     [theme.breakpoints.down('sm')]: {
       textAlign: 'center',

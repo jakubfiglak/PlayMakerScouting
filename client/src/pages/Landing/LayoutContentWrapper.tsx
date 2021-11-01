@@ -15,10 +15,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     maxWidth: 1600,
     margin: '0 auto',
-    padding: theme.spacing(2),
+    padding: theme.spacing(0, 2),
 
     [theme.breakpoints.down('xs')]: {
-      padding: theme.spacing(2, 1),
+      padding: theme.spacing(0, 1),
     },
   },
 }));

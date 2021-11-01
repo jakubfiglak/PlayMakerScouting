@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   heading: {
     fontSize: 48,
     fontWeight: theme.typography.fontWeightBold,
-    margin: theme.spacing(3, 0),
+    padding: theme.spacing(3, 0),
     textAlign: 'center',
 
     '& em': {
