@@ -1,10 +1,4 @@
-import {
-  Typography,
-  Grid,
-  Divider,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { Typography, Grid, makeStyles, Theme } from '@material-ui/core';
 import { recommendations } from './data';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
 import { RecommendationCard } from './RecommendationCard';

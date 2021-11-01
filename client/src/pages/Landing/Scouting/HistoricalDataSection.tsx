@@ -1,19 +1,22 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core';
-import { pricing } from './data';
+import { historicalDataPricing } from './data';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
 
 import { PricingGrid } from './PricingGrid';
 
-export const PricingSection = () => {
+export const HistoricalDataSection = () => {
   const classes = useStyles();
 
   return (
     <section>
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
-          Cennik
+          Dostęp do danych historycznych
         </Typography>
-        <PricingGrid pricing={pricing} summary buttonText="Zgłoś się do nas" />
+        <PricingGrid
+          pricing={historicalDataPricing}
+          buttonText="Zgłoś się po wycenę"
+        />
       </LayoutContentWrapper>
     </section>
   );

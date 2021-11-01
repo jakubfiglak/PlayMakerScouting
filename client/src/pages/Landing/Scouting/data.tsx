@@ -255,3 +255,14 @@ export const pricing: Pricing[] = [
     value: 'Wszystkie ligi PL i zagranica',
   },
 ];
+
+export const historicalDataPricing: Pricing[] = [
+  {
+    key: 'Dostęp do notatek i raportów z sezonu 19/20',
+    value: true,
+  },
+  {
+    key: 'Dostęp do notatek i raportów z sezonu 20/21',
+    value: true,
+  },
+];

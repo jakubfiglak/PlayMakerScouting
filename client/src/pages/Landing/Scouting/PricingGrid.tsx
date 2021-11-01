@@ -5,10 +5,12 @@ import { Pricing } from './data';
 
 type Props = {
   pricing: Pricing[];
+  summary?: boolean;
+  buttonText: string;
 };
 
-export const PricingGrid = ({ pricing }: Props) => {
-  const classes = useStyles();
+export const PricingGrid = ({ pricing, summary, buttonText }: Props) => {
+  const classes = useStyles({ summary });
 
   return (
     <div className={classes.container}>
@@ -21,22 +23,28 @@ export const PricingGrid = ({ pricing }: Props) => {
             </span>
           </React.Fragment>
         ))}
+
         <p className={classes.summaryTitle}>Koszt</p>
         <p className={classes.summaryValue}>od 1199 PLN</p>
+
         <div />
         <Button
           variant="contained"
           color="secondary"
           className={classes.button}
         >
-          Zgłoś się do nas
+          {buttonText}
         </Button>
       </div>
     </div>
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+type StyleProps = {
+  summary?: boolean;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => ({
   container: {
     display: 'flex',
     fontSize: 18,
@@ -44,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   keysList: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
+    gridTemplateColumns: 'repeat(2, minmax(min-content, 400px))',
     gap: theme.spacing(0, 2),
 
     '& span': {
@@ -71,20 +79,23 @@ const useStyles = makeStyles((theme: Theme) => ({
       borderBottomRightRadius: 10,
     },
   },
-  summaryTitle: {
+  summaryTitle: (props) => ({
+    display: props.summary ? 'block' : 'none',
     textAlign: 'end',
     padding: theme.spacing(0, 1),
     fontSize: 24,
     fontWeight: theme.typography.fontWeightBold,
-  },
-  summaryValue: {
+  }),
+  summaryValue: (props) => ({
+    display: props.summary ? 'block' : 'none',
     textAlign: 'center',
     padding: theme.spacing(0, 1),
     fontSize: 24,
     fontWeight: theme.typography.fontWeightBold,
-  },
-  button: {
+  }),
+  button: (props) => ({
     width: '80%',
     justifySelf: 'center',
-  },
+    marginTop: props.summary ? 0 : theme.spacing(2),
+  }),
 }));

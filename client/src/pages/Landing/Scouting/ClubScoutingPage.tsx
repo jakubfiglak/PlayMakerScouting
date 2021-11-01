@@ -5,6 +5,7 @@ import { AdvantagesSection } from './AdvantagesSection';
 import { TransfersSection } from './TranfersSection';
 import { RecommendationsSection } from './RecommendationsSection';
 import { PricingSection } from './PricingSection';
+import { HistoricalDataSection } from './HistoricalDataSection';
 
 export const ClubScoutingPage = () => {
   return (
@@ -16,6 +17,7 @@ export const ClubScoutingPage = () => {
       <TransfersSection />
       <RecommendationsSection />
       <PricingSection />
+      <HistoricalDataSection />
     </main>
   );
 };
