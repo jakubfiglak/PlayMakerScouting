@@ -4,6 +4,7 @@ import { ScoutmakerSection } from './ScoutmakerSection';
 import { AdvantagesSection } from './AdvantagesSection';
 import { TransfersSection } from './TranfersSection';
 import { RecommendationsSection } from './RecommendationsSection';
+import { PricingSection } from './PricingSection';
 
 export const ClubScoutingPage = () => {
   return (
@@ -14,6 +15,7 @@ export const ClubScoutingPage = () => {
       <AdvantagesSection />
       <TransfersSection />
       <RecommendationsSection />
+      <PricingSection />
     </main>
   );
 };

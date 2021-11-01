@@ -211,3 +211,47 @@ export const recommendations: Recommendation[] = [
     to: 'Skra Częstochowa',
   },
 ];
+
+export type Pricing = {
+  key: string;
+  value: string | number | boolean;
+};
+
+export const pricing: Pricing[] = [
+  {
+    key: 'Analiza potrzeb klubu',
+    value: true,
+  },
+  {
+    key: 'Dostosowanie szablonu raportu do wymagań',
+    value: true,
+  },
+  {
+    key: 'Dostęp do aplikacji skautingowej i jej funkcjonalności',
+    value: true,
+  },
+  {
+    key: 'Budowanie bazy skautingowej klubu',
+    value: true,
+  },
+  {
+    key: 'Dostęp do statystycznych baz danych',
+    value: true,
+  },
+  {
+    key: 'Możliwość zlecania obserwacji konkretnych zawodników',
+    value: true,
+  },
+  {
+    key: 'Skauci dedykowani dla klubu',
+    value: 4,
+  },
+  {
+    key: 'Szef działu skautingu',
+    value: 1,
+  },
+  {
+    key: 'Możliwy zakres obserwacji',
+    value: 'Wszystkie ligi PL i zagranica',
+  },
+];
