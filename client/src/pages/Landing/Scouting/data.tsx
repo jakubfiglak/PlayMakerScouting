@@ -172,3 +172,42 @@ export const transfers: Transfer[] = [
     },
   },
 ];
+
+export type Recommendation = {
+  player: string;
+  from: string;
+  to: string;
+};
+
+export const recommendations: Recommendation[] = [
+  {
+    player: 'Mateusz Łęgowski',
+    from: 'Pogoń II Szczecin',
+    to: 'Pogoń Szczecin',
+  },
+  {
+    player: 'Kacper Karasek',
+    from: 'Unia Skierniewice',
+    to: 'Widzew Łódź',
+  },
+  {
+    player: 'Szymon Szymański',
+    from: 'Rekord Bielsko-Biała',
+    to: 'Skra Częstochowa',
+  },
+  {
+    player: 'Andrzej Trubeha',
+    from: 'Legionovia Legionowo',
+    to: 'Jagiellonia Białystok',
+  },
+  {
+    player: 'Filip Arak',
+    from: 'Błonianka Błonie',
+    to: 'Skra Częstochowa',
+  },
+  {
+    player: 'Bartosz Baranowicz',
+    from: 'Górnik II Zabrze',
+    to: 'Skra Częstochowa',
+  },
+];
