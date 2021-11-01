@@ -43,24 +43,13 @@ export const TransferCard = ({ transfer }: Props) => {
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {
-    flex: '1 1 300px',
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: theme.spacing(2),
     background: theme.palette.primary.contrastText,
     color: theme.palette.primary.main,
     borderRadius: 20,
     overflow: 'hidden',
-    maxWidth: 400,
     margin: '0 auto',
-
-    [theme.breakpoints.down('lg')]: {
-      flexBasis: '50%',
-    },
-
-    [theme.breakpoints.down('sm')]: {
-      flexBasis: '100%',
-    },
   },
   imageContainer: {
     height: 300,
@@ -83,12 +72,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     gap: theme.spacing(2),
   },
   logo: {
-    width: 30,
+    height: 30,
+    marginLeft: theme.spacing(2),
   },
   club: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: theme.spacing(1),
   },
   button: {
     marginTop: 'auto',

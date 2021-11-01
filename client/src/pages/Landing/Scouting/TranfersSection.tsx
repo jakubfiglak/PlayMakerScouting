@@ -1,4 +1,4 @@
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, Grid, makeStyles, Theme } from '@material-ui/core';
 import { transfers } from './data';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
 import { TransferCard } from './TransferCard';
@@ -15,11 +15,13 @@ export const TransfersSection = () => {
         <Typography className={classes.subtitle}>
           Scout<em>Maker</em>.pro
         </Typography>
-        <div className={classes.cardContainer}>
+        <Grid container spacing={3}>
           {transfers.map((transfer) => (
-            <TransferCard transfer={transfer} key={transfer.player.name} />
+            <Grid item xl={3} md={6} sm={6} xs={12} key={transfer.player.name}>
+              <TransferCard transfer={transfer} />
+            </Grid>
           ))}
-        </div>
+        </Grid>
       </LayoutContentWrapper>
     </section>
   );
@@ -39,6 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   subtitle: {
     fontSize: 36,
+    marginBottom: theme.spacing(3),
 
     '& em': {
       color: theme.palette.secondary.main,
@@ -47,11 +50,5 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   wrapper: {
     background: '#000',
-  },
-  cardContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: theme.spacing(4),
-    marginTop: theme.spacing(3),
   },
 }));
