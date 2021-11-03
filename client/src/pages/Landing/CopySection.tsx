@@ -1,24 +1,22 @@
+import { ReactNode } from 'react';
 import { Typography, makeStyles, Theme } from '@material-ui/core';
-import { LayoutContentWrapper } from '../LayoutContentWrapper';
+import { LayoutContentWrapper } from './LayoutContentWrapper';
 
-export const CopySection = () => {
+type Props = {
+  title: ReactNode;
+  text: string;
+};
+
+export const CopySection = ({ title, text }: Props) => {
   const classes = useStyles();
 
   return (
     <section className={classes.wrapper} id="copy">
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
-          Skauting Scout<em>Maker</em>.Pro
+          {title}
         </Typography>
-        <Typography className={classes.text}>
-          Usługa skautingowa pozwalająca na monitorowanie każdej ligi
-          piłkarskiej w Polsce. Zespół wyszkolonych skautów obserwuje wskazane
-          przez klub rozgrywki i dostarcza notatki oraz raporty meczowe według
-          wybranych parametrów. Sprawozdania poszerzone są o zaawansowane bazy
-          danych statystycznych naszych analityków sportowych. ScoutMaker.pro
-          odpowiada bieżącemu zapotrzebowaniu kadrowemu oraz wpisuje się w
-          długofalowy plan budowania zespołu.{' '}
-        </Typography>
+        <Typography className={classes.text}>{text}</Typography>
       </LayoutContentWrapper>
     </section>
   );

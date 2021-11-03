@@ -18,3 +18,13 @@ export const heroData = {
     'Buduj własną bazę skautingową',
   ],
 };
+
+export const copyData = {
+  title: (
+    <p>
+      Aplikacja Scout<em>Maker</em>.Pro
+    </p>
+  ),
+  text:
+    'Proste i intuicyjne w obsłudze narzędzie skautingowe skierowane do klubów, skautów i agencji menadżerskich. Współczesna alternatywa kartki i długopisu dostosowana do urządzeń mobilnych. Aplikacja ScoutMaker.pro systematyzuje działania skautingowe i znacznie przyspiesza przepływ informacji.',
+};

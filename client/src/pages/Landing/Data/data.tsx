@@ -18,3 +18,13 @@ export const heroData = {
     'Wykorzystaj modelowanie statystyczne do zadań specjalnych',
   ],
 };
+
+export const copyData = {
+  title: (
+    <p>
+      Analiza Danych Scout<em>Maker</em>.Pro
+    </p>
+  ),
+  text:
+    'Usługa skautingowa skierowana do klubów wszystkich szczebli rozgrywkowych w Polsce. Raporty statystyczne dostarczane przez naszych analityków sportowych sugerują najlepszych piłkarzy wybranych lig wraz z przebiegiem ich kariery oraz informacjami o współpracy z trenerami. Baza danych pozwala sprawnie filtrować zawodników z regionu. Jest narzędziem, które sprawdza się w okienkach transferowych i prześwietla przeciwników przed każdym meczem.',
+};
