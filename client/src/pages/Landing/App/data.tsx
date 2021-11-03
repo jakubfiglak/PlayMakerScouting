@@ -1,6 +1,8 @@
 import phoneMockup from '../../../assets/phone-mockup-activity.png';
+import backgroundImage from '../../../assets/scouting-background.png';
 
 export const heroData = {
+  backgroundImage,
   image: {
     src: phoneMockup,
     alt: 'App dashboard view',

@@ -15,12 +15,7 @@ export const ClubScoutingPage = () => {
     <>
       <main>
         <CssBaseline />
-        <HeroSection
-          image={heroData.image}
-          title={heroData.title}
-          features={heroData.features}
-          displayAppNumbers
-        />
+        <HeroSection {...heroData} displayAppNumbers />
         <CopySection />
         <HowDoWeWorkSection />
         <AdvantagesSection />

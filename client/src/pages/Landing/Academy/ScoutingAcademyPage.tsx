@@ -3,7 +3,7 @@ import { Footer } from '../Footer';
 import { HeroSection } from '../HeroSection';
 import { heroData } from './data';
 
-export const ScoutingAppPage = () => {
+export const ScoutingAcademyPage = () => {
   return (
     <>
       <main>

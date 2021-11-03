@@ -55,13 +55,13 @@ export const Footer = () => {
             <Link component={RouterLink} to="club-scouting">
               Skauting Klubowy
             </Link>
-            <Link component={RouterLink} to="club-scouting">
+            <Link component={RouterLink} to="scouting-app">
               Aplikacja Skautingowa
             </Link>
-            <Link component={RouterLink} to="club-scouting">
+            <Link component={RouterLink} to="data-analysis">
               Analiza Danych
             </Link>
-            <Link component={RouterLink} to="club-scouting">
+            <Link component={RouterLink} to="scouting-academy">
               Skauting Akademia
             </Link>
           </div>

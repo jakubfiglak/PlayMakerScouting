@@ -19,8 +19,10 @@ import nielbaLogo from '../../../assets/nielba-logo.png';
 import polkowiceLogo from '../../../assets/polkowice-logo.png';
 import lubinLogo from '../../../assets/lubin-logo.png';
 import phoneMockup from '../../../assets/phone-mockup-activity.png';
+import backgroundImage from '../../../assets/scouting-background.png';
 
 export const heroData = {
+  backgroundImage,
   image: {
     src: phoneMockup,
     alt: 'App dashboard view',

@@ -31,12 +31,15 @@ export const HomePage = () => {
                 </Typography>
                 <div className={classes.buttonsContainer}>
                   <CtaButton text="Skauting klubowy" linkTo="/club-scouting" />
-                  <CtaButton text="Skauting akademia" linkTo="/" />
+                  <CtaButton
+                    text="Skauting akademia"
+                    linkTo="/scouting-academy"
+                  />
                   <CtaButton
                     text="Aplikacja skautingowa"
                     linkTo="/scouting-app"
                   />
-                  <CtaButton text="Analiza danych" linkTo="/" />
+                  <CtaButton text="Analiza danych" linkTo="/data-analysis" />
                 </div>
               </div>
             </div>

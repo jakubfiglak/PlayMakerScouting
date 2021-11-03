@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 import { makeStyles, Theme, Typography, List } from '@material-ui/core';
-import backgroundImg from '../../assets/scouting-background.png';
 import { ListElement } from './ListElement';
 import { CtaButton } from './CtaButton';
 import { AppNumbers } from './AppNumbers';
 import { LayoutContentWrapper } from './LayoutContentWrapper';
 
 type Props = {
+  backgroundImage: string;
   image: {
     src: string;
     alt: string;
@@ -17,12 +17,13 @@ type Props = {
 };
 
 export const HeroSection = ({
+  backgroundImage,
   image,
   title,
   features,
   displayAppNumbers,
 }: Props) => {
-  const classes = useStyles();
+  const classes = useStyles({ backgroundImage });
 
   return (
     <section className={classes.container}>
@@ -51,17 +52,21 @@ export const HeroSection = ({
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  container: {
+type StylesProps = {
+  backgroundImage: string;
+};
+
+const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
+  container: ({ backgroundImage }) => ({
     minHeight: '100vh',
-    backgroundImage: `url(${backgroundImg})`,
+    backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
 
     [theme.breakpoints.down('lg')]: {
       backgroundPosition: 'left center',
     },
-  },
+  }),
   innerContainer: {
     display: 'flex',
     color: theme.palette.primary.contrastText,
