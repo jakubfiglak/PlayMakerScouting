@@ -18,6 +18,24 @@ import podhaleLogo from '../../../assets/podhale-logo.png';
 import nielbaLogo from '../../../assets/nielba-logo.png';
 import polkowiceLogo from '../../../assets/polkowice-logo.png';
 import lubinLogo from '../../../assets/lubin-logo.png';
+import phoneMockup from '../../../assets/phone-mockup-activity.png';
+
+export const heroData = {
+  image: {
+    src: phoneMockup,
+    alt: 'App dashboard view',
+  },
+  title: (
+    <p>
+      Scout<em>Maker</em>.pro
+    </p>
+  ),
+  features: [
+    'Korzystaj z największej bazy skautingowej w Polsce',
+    'Uzyskaj dostęp do statystyk, notatek, raportów i profili piłkarzy',
+    'Zlecaj indywidualną obserwację zawodnika',
+  ],
+};
 
 export type Value = {
   number: string;

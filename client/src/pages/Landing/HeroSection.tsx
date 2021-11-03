@@ -1,41 +1,49 @@
-import {
-  makeStyles,
-  Theme,
-  Typography,
-  List,
-  CssBaseline,
-} from '@material-ui/core';
-import backgroundImg from '../../../assets/scouting-background.png';
-import phoneMockup from '../../../assets/phone-mockup-activity.png';
-import { ListElement } from '../ListElement';
-import { CtaButton } from '../CtaButton';
-import { AppNumbers } from '../AppNumbers';
-import { LayoutContentWrapper } from '../LayoutContentWrapper';
+import { ReactNode } from 'react';
+import { makeStyles, Theme, Typography, List } from '@material-ui/core';
+import backgroundImg from '../../assets/scouting-background.png';
+import { ListElement } from './ListElement';
+import { CtaButton } from './CtaButton';
+import { AppNumbers } from './AppNumbers';
+import { LayoutContentWrapper } from './LayoutContentWrapper';
 
-export const ScoutmakerSection = () => {
+type Props = {
+  image: {
+    src: string;
+    alt: string;
+  };
+  title: ReactNode;
+  features: string[];
+  displayAppNumbers?: boolean;
+};
+
+export const HeroSection = ({
+  image,
+  title,
+  features,
+  displayAppNumbers,
+}: Props) => {
   const classes = useStyles();
 
   return (
     <section className={classes.container}>
       <LayoutContentWrapper>
-        <CssBaseline />
         <div className={classes.innerContainer}>
           <div style={{ width: '40%' }} className={classes.imageContainer}>
-            <img src={phoneMockup} alt="App dashboard view" />
+            <img src={image.src} alt={image.alt} />
           </div>
           <div className={classes.contentContainer}>
             <Typography className={classes.heading} component="h2">
-              Scout<span>Maker</span>.pro
+              {title}
             </Typography>
             <List className={classes.list}>
-              <ListElement text="Korzystaj z największej bazy skautingowej w Polsce" />
-              <ListElement text="Uzyskaj dostęp do statystyk, notatek, raportów i profili piłkarzy" />
-              <ListElement text="Zlecaj indywidualną obserwację zawodnika" />
+              {features.map((feature) => (
+                <ListElement text={feature} key={feature} />
+              ))}
             </List>
             <div className={classes.button}>
               <CtaButton text="Zobacz szczegóły" linkTo="#copy" />
             </div>
-            <AppNumbers />
+            {displayAppNumbers ? <AppNumbers /> : null}
           </div>
         </div>
       </LayoutContentWrapper>
@@ -74,8 +82,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: 48,
     fontWeight: theme.typography.fontWeightBold,
 
-    '& span': {
+    '& em': {
       color: theme.palette.secondary.main,
+      fontStyle: 'normal',
     },
 
     [theme.breakpoints.down('lg')]: {

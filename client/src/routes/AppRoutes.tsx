@@ -6,6 +6,7 @@ import { ClubPage } from '../pages/Club/ClubPage';
 import { DashboardPage } from '../pages/Dashboard/DashboardPage';
 import { HomePage } from '../pages/Landing/HomePage';
 import { ClubScoutingPage } from '../pages/Landing/Scouting/ClubScoutingPage';
+import { ScoutingAppPage } from '../pages/Landing/App/ScoutingAppPage';
 import { LoginPage } from '../pages/Login/LoginPage';
 import { OrderPage } from '../pages/Order/OrderPage';
 import { OrdersPage } from '../pages/Orders/OrdersPage';
@@ -52,6 +53,7 @@ export const AppRoutes = () => {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/club-scouting" component={ClubScoutingPage} />
+        <Route path="/scouting-app" component={ScoutingAppPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
         <Route path="/confirm/:confirmationCode" component={WelcomePage} />

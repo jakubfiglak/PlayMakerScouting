@@ -32,7 +32,10 @@ export const HomePage = () => {
                 <div className={classes.buttonsContainer}>
                   <CtaButton text="Skauting klubowy" linkTo="/club-scouting" />
                   <CtaButton text="Skauting akademia" linkTo="/" />
-                  <CtaButton text="Aplikacja skautingowa" linkTo="/" />
+                  <CtaButton
+                    text="Aplikacja skautingowa"
+                    linkTo="/scouting-app"
+                  />
                   <CtaButton text="Analiza danych" linkTo="/" />
                 </div>
               </div>
