@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { makeStyles, Theme, Typography, List } from '@material-ui/core';
 import { ListElement } from './ListElement';
 import { CtaButton } from './CtaButton';
+import { GoToSectionButton } from './GoToSectionButton';
 import { AppNumbers } from './AppNumbers';
 import { LayoutContentWrapper } from './LayoutContentWrapper';
 
@@ -42,7 +43,7 @@ export const HeroSection = ({
               ))}
             </List>
             <div className={classes.button}>
-              <CtaButton text="Zobacz szczegóły" linkTo="#copy" />
+              <GoToSectionButton text="Zobacz szczegóły" linkTo="#copy" />
             </div>
             {displayAppNumbers ? <AppNumbers /> : null}
           </div>
