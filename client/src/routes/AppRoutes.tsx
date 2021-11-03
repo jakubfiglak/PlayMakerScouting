@@ -8,6 +8,7 @@ import { HomePage } from '../pages/Landing/HomePage';
 import { ClubScoutingPage } from '../pages/Landing/Scouting/ClubScoutingPage';
 import { ScoutingAcademyPage } from '../pages/Landing/Academy/ScoutingAcademyPage';
 import { ScoutingAppPage } from '../pages/Landing/App/ScoutingAppPage';
+import { DataAnalysisPage } from '../pages/Landing/Data/DataAnalysisPage';
 import { LoginPage } from '../pages/Login/LoginPage';
 import { OrderPage } from '../pages/Order/OrderPage';
 import { OrdersPage } from '../pages/Orders/OrdersPage';
@@ -56,6 +57,7 @@ export const AppRoutes = () => {
         <Route path="/club-scouting" component={ClubScoutingPage} />
         <Route path="/scouting-app" component={ScoutingAppPage} />
         <Route path="/scouting-academy" component={ScoutingAcademyPage} />
+        <Route path="/data-analysis" component={DataAnalysisPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
         <Route path="/confirm/:confirmationCode" component={WelcomePage} />
