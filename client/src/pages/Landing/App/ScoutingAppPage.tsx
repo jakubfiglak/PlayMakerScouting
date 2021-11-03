@@ -1,4 +1,5 @@
 import { CssBaseline } from '@material-ui/core';
+import { FunctionalitySection } from './FunctionalitySection';
 import { Footer } from '../Footer';
 import { HeroSection } from '../HeroSection';
 import { CopySection } from '../CopySection';
@@ -11,6 +12,7 @@ export const ScoutingAppPage = () => {
         <CssBaseline />
         <HeroSection {...heroData} />
         <CopySection {...copyData} />
+        <FunctionalitySection />
       </main>
       <Footer />
     </>

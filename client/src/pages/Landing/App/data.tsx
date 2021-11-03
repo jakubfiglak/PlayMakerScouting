@@ -28,3 +28,31 @@ export const copyData = {
   text:
     'Proste i intuicyjne w obsłudze narzędzie skautingowe skierowane do klubów, skautów i agencji menadżerskich. Współczesna alternatywa kartki i długopisu dostosowana do urządzeń mobilnych. Aplikacja ScoutMaker.pro systematyzuje działania skautingowe i znacznie przyspiesza przepływ informacji.',
 };
+
+export const functionalities = [
+  {
+    title: 'Notatki',
+    text: 'Zapisuj krótkie notatki o wybranych piłkarzach w trakcie i po meczu',
+  },
+  {
+    title: 'Jedź na mecz',
+    text: 'Jednym kliknięciem przenieś zdarzenia meczowe do telefonu',
+  },
+  {
+    title: 'Kreator szablonów',
+    text: 'Dopasuj raporty o zawodnikach do swoich kryteriów obserwacyjnych',
+  },
+  {
+    title: 'Raporty',
+    text: 'Twórz indywidualne i szczegółowe obserwacje meczowe',
+  },
+  {
+    title: 'Współdzielenie',
+    text:
+      'Przeglądaj raporty wewnątrz klubu lub twórz i udostępniaj swoim partnerom',
+  },
+  {
+    title: 'Baza skautingowa',
+    text: 'Filtruj bazę zawodników według własnych preferencji',
+  },
+];
