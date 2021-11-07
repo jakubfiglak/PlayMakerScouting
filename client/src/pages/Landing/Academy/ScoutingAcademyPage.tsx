@@ -6,6 +6,7 @@ import { heroData, copyData, values, advantages, effects } from './data';
 import { ValuesSection } from '../ValuesSection';
 import { AdvantagesSection } from '../AdvantagesSection';
 import { EffectsSection } from './EffectsSection';
+import { PricingSection } from './PricingSection';
 
 export const ScoutingAcademyPage = () => {
   return (
@@ -17,6 +18,7 @@ export const ScoutingAcademyPage = () => {
         <ValuesSection values={values} />
         <AdvantagesSection subtitle advantages={advantages} />
         <EffectsSection effects={effects} />
+        <PricingSection />
       </main>
       <Footer />
     </>

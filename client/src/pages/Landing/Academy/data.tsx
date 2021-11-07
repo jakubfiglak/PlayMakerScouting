@@ -144,3 +144,31 @@ export const effects = [
     text: 'Wskazanie najlepszych bramkarzy w danym regionie',
   },
 ];
+
+export const oneTimeServicePricing = {
+  price: '399 pln',
+  features: [
+    { title: 'Usługa jednorazowa', value: true },
+    { title: 'Tworzenie statystycznych baz danych', value: true },
+    { title: 'Statystyczna rekomendacja zawodników', value: true },
+    { title: 'Zlecenia obserwacji', value: false },
+    { title: 'Wsparcie dla aktualnego działu skautingu', value: false },
+    { title: 'Statystyczna analiza przeciwników', value: false },
+    { title: 'Informacja o współpracy trenerów z piłkarzami', value: true },
+    { title: 'Wszystkie ligi młodzieżowe PL', value: true },
+  ],
+};
+
+export const constantCooperationPricing = {
+  price: '199 pln/miesiąc',
+  features: [
+    { title: 'Stała współpraca', value: true },
+    { title: 'Tworzenie statystycznych baz danych', value: true },
+    { title: 'Statystyczna rekomendacja zawodników', value: true },
+    { title: 'Zlecenia obserwacji', value: true },
+    { title: 'Wsparcie dla aktualnego działu skautingu', value: true },
+    { title: 'Statystyczna analiza przeciwników', value: true },
+    { title: 'Informacja o współpracy trenerów z piłkarzami', value: true },
+    { title: 'Wszystkie ligi młodzieżowe PL', value: true },
+  ],
+};
