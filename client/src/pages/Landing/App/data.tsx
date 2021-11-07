@@ -7,8 +7,8 @@ import {
   Money as MoneyIcon,
   DoubleArrow as ScoutingIcon,
 } from '@material-ui/icons';
-
 import phoneMockup from '../../../assets/phone1.png';
+import phoneMenuMockup from '../../../assets/phone2.png';
 import backgroundImage from '../../../assets/scouting-background.png';
 import { Advantage } from '../types';
 
@@ -38,6 +38,10 @@ export const copyData = {
   ),
   text:
     'Proste i intuicyjne w obsłudze narzędzie skautingowe skierowane do klubów, skautów i agencji menadżerskich. Współczesna alternatywa kartki i długopisu dostosowana do urządzeń mobilnych. Aplikacja ScoutMaker.pro systematyzuje działania skautingowe i znacznie przyspiesza przepływ informacji.',
+  image: {
+    src: phoneMenuMockup,
+    alt: 'App with menu open view',
+  },
 };
 
 export const functionalities = [

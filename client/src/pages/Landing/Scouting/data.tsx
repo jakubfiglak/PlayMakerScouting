@@ -19,6 +19,7 @@ import nielbaLogo from '../../../assets/nielba-logo.png';
 import polkowiceLogo from '../../../assets/polkowice-logo.png';
 import lubinLogo from '../../../assets/lubin-logo.png';
 import phoneMockup from '../../../assets/phone1.png';
+import phoneMenuMockup from '../../../assets/phone2.png';
 import backgroundImage from '../../../assets/scouting-background.png';
 import { Advantage } from '../types';
 
@@ -48,6 +49,10 @@ export const copyData = {
   ),
   text:
     'Usługa skautingowa pozwalająca na monitorowanie każdej ligi piłkarskiej w Polsce. Zespół wyszkolonych skautów obserwuje wskazane przez klub rozgrywki i dostarcza notatki oraz raporty meczowe według wybranych parametrów. Sprawozdania poszerzone są o zaawansowane bazy danych statystycznych naszych analityków sportowych. ScoutMaker.pro odpowiada bieżącemu zapotrzebowaniu kadrowemu oraz wpisuje się w długofalowy plan budowania zespołu.',
+  image: {
+    src: phoneMenuMockup,
+    alt: 'App with menu open view',
+  },
 };
 
 export type Value = {
