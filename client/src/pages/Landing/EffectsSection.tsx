@@ -1,18 +1,18 @@
 import { Typography, Grid, makeStyles, Theme } from '@material-ui/core';
 import { EffectCard } from './EffectCard';
-import { LayoutContentWrapper } from '../LayoutContentWrapper';
-import { Effect } from './data';
+import { LayoutContentWrapper } from './LayoutContentWrapper';
+import { Effect } from './types';
 
-type Props = { effects: Effect[] };
+type Props = { title: string; effects: Effect[] };
 
-export const EffectsSection = ({ effects }: Props) => {
+export const EffectsSection = ({ title, effects }: Props) => {
   const classes = useStyles();
 
   return (
     <section>
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
-          Zaufali nam
+          {title}
         </Typography>
         <Grid
           container
@@ -21,7 +21,14 @@ export const EffectsSection = ({ effects }: Props) => {
           className={classes.container}
         >
           {effects.map((effect) => (
-            <Grid item key={effect.name} xl={3} sm={6} xs={12}>
+            <Grid
+              item
+              key={effect.name}
+              xl={3}
+              sm={6}
+              xs={12}
+              alignItems="stretch"
+            >
               <EffectCard
                 title={effect.name}
                 text={effect.text}

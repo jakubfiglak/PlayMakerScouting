@@ -116,12 +116,6 @@ export const advantages: Advantage[] = [
   },
 ];
 
-export type Effect = {
-  logo: string;
-  name: string;
-  text: string;
-};
-
 export const effects = [
   {
     logo: bytomLogo,

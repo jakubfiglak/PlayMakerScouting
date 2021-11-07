@@ -5,7 +5,7 @@ import { CopySection } from '../CopySection';
 import { heroData, copyData, values, advantages, effects } from './data';
 import { ValuesSection } from '../ValuesSection';
 import { AdvantagesSection } from '../AdvantagesSection';
-import { EffectsSection } from './EffectsSection';
+import { EffectsSection } from '../EffectsSection';
 import { PricingSection } from './PricingSection';
 
 export const ScoutingAcademyPage = () => {
@@ -17,7 +17,7 @@ export const ScoutingAcademyPage = () => {
         <CopySection {...copyData} />
         <ValuesSection values={values} />
         <AdvantagesSection subtitle advantages={advantages} />
-        <EffectsSection effects={effects} />
+        <EffectsSection title="Zaufali nam" effects={effects} />
         <PricingSection />
       </main>
       <Footer />

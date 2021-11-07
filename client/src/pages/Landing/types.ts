@@ -12,3 +12,9 @@ export type Value = {
   icon: ReactNode;
   values: string[];
 };
+
+export type Effect = {
+  logo: string;
+  name: string;
+  text: string;
+};

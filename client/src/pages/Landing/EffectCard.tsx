@@ -18,7 +18,7 @@ export const EffectCard = ({ title, text, logo }: Props) => {
   const classes = useStyles();
 
   return (
-    <Card>
+    <Card className={classes.card}>
       <CardContent>
         <div className={classes.imageContainer}>
           <img src={logo} alt={title} className={classes.image} />
@@ -42,6 +42,12 @@ export const EffectCard = ({ title, text, logo }: Props) => {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   imageContainer: {
     display: 'flex',
     justifyContent: 'center',

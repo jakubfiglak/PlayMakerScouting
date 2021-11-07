@@ -1,6 +1,17 @@
+import {
+  Storage as DatabaseIcon,
+  AccessTime as TimeIcon,
+  Money as MoneyIcon,
+  DoubleArrow as ScoutingIcon,
+} from '@material-ui/icons';
 import image from '../../../assets/data-analysis-image.png';
 import phoneMenuMockup from '../../../assets/phone2.png';
 import backgroundImage from '../../../assets/scouting-background.png';
+import neptunLogo from '../../../assets/neptun-logo.png';
+import resoviaLogo from '../../../assets/resovia-logo.png';
+import skierniewiceLogo from '../../../assets/skierniewice-logo.png';
+import odraLogo from '../../../assets/odra-logo.png';
+import { Advantage } from '../types';
 
 export const heroData = {
   backgroundImage,
@@ -32,4 +43,105 @@ export const copyData = {
     src: phoneMenuMockup,
     alt: 'App with menu open view',
   },
+};
+
+export const advantages: Advantage[] = [
+  {
+    title: 'czas',
+    icon: <TimeIcon color="inherit" />,
+    text:
+      'Piłkarz potrzebny na wczoraj? W zależności od skomplikowania, raport analizy statystycznej możesz otrzymać jeszcze tego samego tygodnia. ',
+  },
+  {
+    title: 'pieniądze',
+    icon: <MoneyIcon color="inherit" />,
+    text:
+      'Zlecenie na każdą kieszeń. Wspólnie zdecydujemy, jaki zakres analizy da efekty oraz nie naruszy klubowego budżetu.',
+  },
+  {
+    title: 'baza danych',
+    icon: <DatabaseIcon color="inherit" />,
+    text:
+      'Analiza tworzy przewagę. Kompleksowa i usystematyzowana wiedza minimalizuje ryzyko nietrafionych decyzji i pozwala być krok przed przeciwnikami.',
+  },
+  {
+    title: 'transfery',
+    icon: <ScoutingIcon color="inherit" />,
+    text:
+      'Wzmacniaj, nie uzupełniaj. Sprawdzaj najlepszych zawodników i zwiększaj konkurencję w zespole. Stawiaj na piłkarską jakość, która spełnia oczekiwania.',
+  },
+];
+
+export const effects = [
+  {
+    logo: neptunLogo,
+    name: 'Neptun Końskie',
+    text:
+      'Przygotowanie pełnej wiedzy na temat piłkarzy z regionu przed oknem transferowym.',
+  },
+  {
+    logo: resoviaLogo,
+    name: 'Resovia Rzeszów',
+    text:
+      'Znalezienie wszystkich dziewczynek grających z chłopcami w związku z nowo otwartą akademią.',
+  },
+  {
+    logo: skierniewiceLogo,
+    name: 'Widok Skierniewice',
+    text:
+      'Znalezienie wszystkich bramkarzy z regionu o określonych parametrach.',
+  },
+  {
+    logo: odraLogo,
+    name: 'Odra Opole',
+    text:
+      'Wstępna selekcja z ponad 60 do 25 zawodników, którzy zgłosili się na testy do rezerw.',
+  },
+];
+
+export const methodology = [
+  {
+    number: '01',
+    text: 'Określ potrzeby',
+  },
+  {
+    number: '02',
+    text: 'Sprawdzamy możliwość realizacji w ciągu 24h',
+  },
+  {
+    number: '03',
+    text: 'Przedstawiamy wycenę',
+  },
+  {
+    number: '04',
+    text: 'Po akceptacji gromadzimy dane i wykonujemy analizę',
+  },
+  {
+    number: '05',
+    text: 'Analizę otrzymujesz w ciągu 3-7 dni',
+  },
+];
+
+export const oneTimeServicePricing = {
+  price: '399 pln',
+  features: [
+    { title: 'Usługa jednorazowa', value: true },
+    { title: 'Tworzenie statystycznych baz danych', value: true },
+    { title: 'Statystyczna rekomendacja zawodników', value: true },
+    { title: 'Wybór rozgrywek juniorskich/seniorskich/kobiecych', value: true },
+    { title: 'Możliwość analizy wszystkich regionów', value: true },
+    { title: 'Możliwość analizy wszystkich rozgrywek', value: true },
+  ],
+};
+
+export const constantCooperationPricing = {
+  price: '199 pln/miesiąc',
+  features: [
+    { title: 'Stała współpraca', value: true },
+    { title: 'Tworzenie statystycznych baz danych', value: true },
+    { title: 'Statystyczna rekomendacja zawodników', value: true },
+    { title: 'Wybór rozgrywek juniorskich/seniorskich/kobiecych', value: true },
+    { title: 'Możliwość analizy wszystkich regionów', value: true },
+    { title: 'Możliwość analizy wszystkich rozgrywek', value: true },
+  ],
 };
