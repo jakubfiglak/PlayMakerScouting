@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     background: '#000',
   },
   tilesContainer: {
+    padding: theme.spacing(4, 0),
     display: 'flex',
     flexWrap: 'wrap',
   },

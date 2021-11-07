@@ -98,3 +98,30 @@ export const advantages: Advantage[] = [
     text: 'Interfejs dopasowany do komputera i urządzeń mobilnych.',
   },
 ];
+
+export type Testimonial = {
+  name: string;
+  role: string;
+  text: string;
+};
+
+export const testimonials: Testimonial[] = [
+  {
+    name: 'Łukasz Cebula',
+    role: 'Analityk Odry Opole',
+    text:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium itaque commodi non cumque laboriosam delectus tempora id quod pariatur neque.',
+  },
+  {
+    name: 'Waldemar Jedynak',
+    role: 'Prezes Górnika Polkowice',
+    text:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium itaque commodi non cumque laboriosam delectus tempora id quod pariatur neque.',
+  },
+  {
+    name: 'Rafał Stryczek',
+    role: 'Skaut',
+    text:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium itaque commodi non cumque laboriosam delectus tempora id quod pariatur neque.',
+  },
+];
