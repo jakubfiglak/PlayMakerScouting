@@ -16,7 +16,7 @@ export const RecommendationsSection = () => {
         </LayoutContentWrapper>
       </div>
       <LayoutContentWrapper>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} className={classes.cardsContainer}>
           {recommendations.map((recommendation) => (
             <Grid item xl={4} md={6} sm={6} xs={12} key={recommendation.player}>
               <RecommendationCard recommendation={recommendation} />
@@ -59,5 +59,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   wrapper: {
     background: '#000',
+  },
+  cardsContainer: {
+    marginTop: theme.spacing(2),
   },
 }));

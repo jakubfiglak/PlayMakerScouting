@@ -1,8 +1,7 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core';
-import { historicalDataPricing } from './data';
+import { PricingCard } from '../PricingCard';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
-
-import { PricingGrid } from './PricingGrid';
+import { historicalDataPricing } from './data';
 
 export const HistoricalDataSection = () => {
   const classes = useStyles();
@@ -13,10 +12,13 @@ export const HistoricalDataSection = () => {
         <Typography variant="h2" className={classes.heading}>
           Dostęp do danych historycznych
         </Typography>
-        <PricingGrid
-          pricing={historicalDataPricing}
-          buttonText="Zgłoś się po wycenę"
-        />
+        <div className={classes.container}>
+          <PricingCard
+            features={historicalDataPricing.features}
+            price={historicalDataPricing.price}
+            buttonText="Zgłoś się po wycenę"
+          />
+        </div>
       </LayoutContentWrapper>
     </section>
   );
@@ -30,5 +32,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down('sm')]: {
       textAlign: 'center',
     },
+  },
+  container: {
+    maxWidth: 600,
+    margin: '0 auto',
+    marginBottom: 50,
   },
 }));

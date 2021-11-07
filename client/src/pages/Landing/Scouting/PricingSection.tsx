@@ -1,8 +1,7 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core';
-import { pricing } from './data';
+import { PricingCard } from '../PricingCard';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
-
-import { PricingGrid } from './PricingGrid';
+import { mainPricing } from './data';
 
 export const PricingSection = () => {
   const classes = useStyles();
@@ -13,7 +12,14 @@ export const PricingSection = () => {
         <Typography variant="h2" className={classes.heading}>
           Cennik
         </Typography>
-        <PricingGrid pricing={pricing} summary buttonText="Zgłoś się do nas" />
+        <div className={classes.container}>
+          <PricingCard
+            features={mainPricing.features}
+            priceFrom
+            price={mainPricing.price}
+            buttonText="Zgłoś się do nas"
+          />
+        </div>
       </LayoutContentWrapper>
     </section>
   );
@@ -27,5 +33,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down('sm')]: {
       textAlign: 'center',
     },
+  },
+  container: {
+    maxWidth: 600,
+    margin: '0 auto',
+    marginBottom: 50,
   },
 }));

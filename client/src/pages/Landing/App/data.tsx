@@ -98,3 +98,11 @@ export const advantages: Advantage[] = [
       'Weryfikuj polecenia. Wskaż nazwisko, a otrzymasz maksimum informacji o wybranym zawodniku.',
   },
 ];
+
+// Zalety aplikacji:
+
+// Intuicyjność
+// Prosta obsługa, która ułatwia pracę w każdych warunkach.
+
+// Wyświetlanie
+// Interfejs dopasowany do komputera i urządzeń mobilnych.

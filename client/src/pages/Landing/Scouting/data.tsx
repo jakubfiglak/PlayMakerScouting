@@ -242,57 +242,28 @@ export const recommendations: Recommendation[] = [
   },
 ];
 
-export type Pricing = {
-  key: string;
-  value: string | number | boolean;
+export const mainPricing = {
+  price: '1199 pln',
+  features: [
+    { title: 'Analiza potrzeb klubu', value: true },
+    { title: 'Dostosowanie szablonu raportu do wymagań', value: true },
+    { title: 'Dostęp do aplikacji skatuingowej', value: true },
+    { title: 'Budowanie bazy skautingowej klubu', value: true },
+    { title: 'Dostęp do statystycznych baz danych', value: true },
+    { title: 'Zlecanie obserwacji konkretnych zawodników', value: true },
+    { title: '4 skautów dedykowanych dla klubu', value: true },
+    { title: '1 szef działu skautingu', value: true },
+    {
+      title: 'Możliwość obserwacji wszystkich lig PL i zagranicznych',
+      value: true,
+    },
+  ],
 };
 
-export const pricing: Pricing[] = [
-  {
-    key: 'Analiza potrzeb klubu',
-    value: true,
-  },
-  {
-    key: 'Dostosowanie szablonu raportu do wymagań',
-    value: true,
-  },
-  {
-    key: 'Dostęp do aplikacji skautingowej i jej funkcjonalności',
-    value: true,
-  },
-  {
-    key: 'Budowanie bazy skautingowej klubu',
-    value: true,
-  },
-  {
-    key: 'Dostęp do statystycznych baz danych',
-    value: true,
-  },
-  {
-    key: 'Możliwość zlecania obserwacji konkretnych zawodników',
-    value: true,
-  },
-  {
-    key: 'Skauci dedykowani dla klubu',
-    value: 4,
-  },
-  {
-    key: 'Szef działu skautingu',
-    value: 1,
-  },
-  {
-    key: 'Możliwy zakres obserwacji',
-    value: 'Wszystkie ligi PL i zagranica',
-  },
-];
-
-export const historicalDataPricing: Pricing[] = [
-  {
-    key: 'Dostęp do notatek i raportów z sezonu 19/20',
-    value: true,
-  },
-  {
-    key: 'Dostęp do notatek i raportów z sezonu 20/21',
-    value: true,
-  },
-];
+export const historicalDataPricing = {
+  price: 'Zgłoś się po wycenę',
+  features: [
+    { title: 'Dostęp do notatek i raportów z sezonu 19/20', value: true },
+    { title: 'Dostęp do notatek i raportów z sezonu 20/21', value: true },
+  ],
+};
