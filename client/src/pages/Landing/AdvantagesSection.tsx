@@ -1,9 +1,14 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core';
-import { advantages } from './data';
-import { LayoutContentWrapper } from '../LayoutContentWrapper';
+import { LayoutContentWrapper } from './LayoutContentWrapper';
 import { AdvantageTile } from './AdvantageTile';
+import { Advantage } from './types';
 
-export const AdvantagesSection = () => {
+type Props = {
+  subtitle?: boolean;
+  advantages: Advantage[];
+};
+
+export const AdvantagesSection = ({ subtitle, advantages }: Props) => {
   const classes = useStyles();
 
   return (
@@ -12,9 +17,11 @@ export const AdvantagesSection = () => {
         <Typography variant="h2" className={classes.heading}>
           Zalety
         </Typography>
-        <Typography className={classes.subtitle}>
-          korzystania z Scout<em>Maker</em>.pro
-        </Typography>
+        {subtitle ? (
+          <Typography className={classes.subtitle}>
+            korzystania z Scout<em>Maker</em>.pro
+          </Typography>
+        ) : null}
       </LayoutContentWrapper>
       <div className={classes.shape} />
       <div className={classes.wrapper}>

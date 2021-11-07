@@ -1,4 +1,4 @@
-import phoneMockup from '../../../assets/phone-mockup-activity.png';
+import phoneMockup from '../../../assets/phone1.png';
 import backgroundImage from '../../../assets/academy-background.png';
 
 export const heroData = {

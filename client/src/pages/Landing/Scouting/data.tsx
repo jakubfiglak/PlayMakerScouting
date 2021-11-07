@@ -18,8 +18,9 @@ import podhaleLogo from '../../../assets/podhale-logo.png';
 import nielbaLogo from '../../../assets/nielba-logo.png';
 import polkowiceLogo from '../../../assets/polkowice-logo.png';
 import lubinLogo from '../../../assets/lubin-logo.png';
-import phoneMockup from '../../../assets/phone-mockup-activity.png';
+import phoneMockup from '../../../assets/phone1.png';
 import backgroundImage from '../../../assets/scouting-background.png';
+import { Advantage } from '../types';
 
 export const heroData = {
   backgroundImage,
@@ -96,12 +97,6 @@ export const values: Value[] = [
     ],
   },
 ];
-
-export type Advantage = {
-  title: string;
-  icon: ReactNode;
-  text: string;
-};
 
 export const advantages: Advantage[] = [
   {

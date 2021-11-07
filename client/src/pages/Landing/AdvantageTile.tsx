@@ -1,5 +1,5 @@
 import { makeStyles, Theme, Typography } from '@material-ui/core';
-import { Advantage } from './data';
+import { Advantage } from './types';
 
 type Props = {
   advantage: Advantage;

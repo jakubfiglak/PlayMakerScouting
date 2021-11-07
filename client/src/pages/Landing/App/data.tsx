@@ -1,5 +1,16 @@
-import phoneMockup from '../../../assets/phone-mockup-activity.png';
+import {
+  Storage as DatabaseIcon,
+  Check as RecommendationsIcon,
+  Assessment as ReportsIcon,
+  Note as NotesIcon,
+  AccessTime as TimeIcon,
+  Money as MoneyIcon,
+  DoubleArrow as ScoutingIcon,
+} from '@material-ui/icons';
+
+import phoneMockup from '../../../assets/phone1.png';
 import backgroundImage from '../../../assets/scouting-background.png';
+import { Advantage } from '../types';
 
 export const heroData = {
   backgroundImage,
@@ -54,5 +65,32 @@ export const functionalities = [
   {
     title: 'Baza skautingowa',
     text: 'Filtruj bazę zawodników według własnych preferencji',
+  },
+];
+
+export const advantages: Advantage[] = [
+  {
+    title: 'czas',
+    icon: <TimeIcon color="inherit" />,
+    text:
+      'Rób swoje. Sprawdzenie polecanego piłkarza jest złożonym procesem. W naszym teamie zajmuje się tym 14 wyszkolonych skautów.',
+  },
+  {
+    title: 'pieniądze',
+    icon: <MoneyIcon color="inherit" />,
+    text:
+      'Oszczędność i inwestycja. Koszty niższe, niż utrzymanie jednego pracownika i potencjalny wzrost wartości w postaci utalentowanych piłkarzy. ',
+  },
+  {
+    title: 'baza danych',
+    icon: <DatabaseIcon color="inherit" />,
+    text:
+      'Analiza tworzy przewagę. Kompleksowa i usystematyzowana wiedza minimalizuje ryzyko nietrafionego transferu.',
+  },
+  {
+    title: 'skauting na zlecenie',
+    icon: <ScoutingIcon color="inherit" />,
+    text:
+      'Weryfikuj polecenia. Wskaż nazwisko, a otrzymasz maksimum informacji o wybranym zawodniku.',
   },
 ];

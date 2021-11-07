@@ -29,8 +29,8 @@ export const HeroSection = ({
     <section className={classes.container}>
       <LayoutContentWrapper>
         <div className={classes.innerContainer}>
-          <div style={{ width: '40%' }} className={classes.imageContainer}>
-            <img src={image.src} alt={image.alt} />
+          <div className={classes.imageContainer}>
+            <img src={image.src} alt={image.alt} className={classes.image} />
           </div>
           <div className={classes.contentContainer}>
             <Typography className={classes.heading} component="h2">
@@ -71,17 +71,28 @@ const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
     display: 'flex',
     color: theme.palette.primary.contrastText,
     paddingTop: 200,
+    minHeight: '100vh',
 
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
       paddingTop: 50,
     },
   },
   imageContainer: {
     width: '40%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
 
-    [theme.breakpoints.down('lg')]: {
-      display: 'none',
+    [theme.breakpoints.down('md')]: {
+      order: 2,
+      marginTop: theme.spacing(4),
     },
+  },
+  image: {
+    width: '80%',
   },
   heading: {
     fontSize: 48,
