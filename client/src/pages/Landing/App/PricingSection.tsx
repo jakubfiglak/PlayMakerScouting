@@ -1,7 +1,7 @@
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles, Theme, Grid } from '@material-ui/core';
 import { PricingCard } from '../PricingCard';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
-import { mainPricing } from './data';
+import { oneTimeServicePricing, constantCooperationPricing } from './data';
 
 export const PricingSection = () => {
   const classes = useStyles();
@@ -14,10 +14,16 @@ export const PricingSection = () => {
         </Typography>
         <div className={classes.container}>
           <PricingCard
-            features={mainPricing.features}
+            features={oneTimeServicePricing.features}
             priceFrom
-            price={mainPricing.price}
-            buttonText="Zgłoś się do nas"
+            price={oneTimeServicePricing.price}
+            buttonText="Zapytaj o wycenę"
+          />
+          <PricingCard
+            features={constantCooperationPricing.features}
+            priceFrom
+            price={constantCooperationPricing.price}
+            buttonText="Zapytaj o wycenę"
           />
         </div>
       </LayoutContentWrapper>
@@ -35,7 +41,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   container: {
-    maxWidth: 600,
-    margin: '0 auto',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: theme.spacing(4),
+    },
   },
 }));

@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.primary.contrastText,
     position: 'relative',
     overflow: 'visible',
+    marginBottom: 50,
   },
   heading: {
     padding: theme.spacing(4, 0),

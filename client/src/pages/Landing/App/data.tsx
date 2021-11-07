@@ -1,11 +1,6 @@
 import {
   Storage as DatabaseIcon,
-  Check as RecommendationsIcon,
-  Assessment as ReportsIcon,
-  Note as NotesIcon,
   AccessTime as TimeIcon,
-  Money as MoneyIcon,
-  DoubleArrow as ScoutingIcon,
   Accessibility as IntuitiveIcon,
   PhoneIphone as MobileIcon,
 } from '@material-ui/icons';
@@ -125,3 +120,29 @@ export const testimonials: Testimonial[] = [
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium itaque commodi non cumque laboriosam delectus tempora id quod pariatur neque.',
   },
 ];
+
+export const oneTimeServicePricing = {
+  price: '399 pln',
+  features: [
+    { title: 'Usługa jednorazowa', value: true },
+    { title: 'Tworzenie statystycznych baz danych', value: true },
+    { title: 'Statystyczna rekomendacja zawodników', value: true },
+    { title: 'Zlecenia obserwacji', value: false },
+    { title: 'Wsparcie dla aktualnego działu skautingu', value: false },
+    { title: 'Statystyczna analiza przeciwników', value: false },
+    { title: 'Wszystkie ligi młodzieżowe PL', value: true },
+  ],
+};
+
+export const constantCooperationPricing = {
+  price: '199 pln/miesiąc',
+  features: [
+    { title: 'Stała współpraca', value: true },
+    { title: 'Tworzenie statystycznych baz danych', value: true },
+    { title: 'Statystyczna rekomendacja zawodników', value: true },
+    { title: 'Zlecenia obserwacji', value: true },
+    { title: 'Wsparcie dla aktualnego działu skautingu', value: true },
+    { title: 'Statystyczna analiza przeciwników', value: true },
+    { title: 'Wszystkie ligi młodzieżowe PL', value: true },
+  ],
+};
