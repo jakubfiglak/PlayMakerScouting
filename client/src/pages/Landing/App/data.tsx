@@ -6,6 +6,8 @@ import {
   AccessTime as TimeIcon,
   Money as MoneyIcon,
   DoubleArrow as ScoutingIcon,
+  Accessibility as IntuitiveIcon,
+  PhoneIphone as MobileIcon,
 } from '@material-ui/icons';
 import phoneMockup from '../../../assets/phone1.png';
 import phoneMenuMockup from '../../../assets/phone2.png';
@@ -77,32 +79,22 @@ export const advantages: Advantage[] = [
     title: 'czas',
     icon: <TimeIcon color="inherit" />,
     text:
-      'Rób swoje. Sprawdzenie polecanego piłkarza jest złożonym procesem. W naszym teamie zajmuje się tym 14 wyszkolonych skautów.',
-  },
-  {
-    title: 'pieniądze',
-    icon: <MoneyIcon color="inherit" />,
-    text:
-      'Oszczędność i inwestycja. Koszty niższe, niż utrzymanie jednego pracownika i potencjalny wzrost wartości w postaci utalentowanych piłkarzy. ',
+      'Dostosowywanie, udostępnianie i prezentacja danych w jednym narzędziu..',
   },
   {
     title: 'baza danych',
     icon: <DatabaseIcon color="inherit" />,
     text:
-      'Analiza tworzy przewagę. Kompleksowa i usystematyzowana wiedza minimalizuje ryzyko nietrafionego transferu.',
+      'Kompleksowa i usystematyzowana wiedza pomaga w zarządzaniu Twoją pracą.',
   },
   {
-    title: 'skauting na zlecenie',
-    icon: <ScoutingIcon color="inherit" />,
-    text:
-      'Weryfikuj polecenia. Wskaż nazwisko, a otrzymasz maksimum informacji o wybranym zawodniku.',
+    title: 'intuicyjność',
+    icon: <IntuitiveIcon color="inherit" />,
+    text: 'Prosta obsługa, która ułatwia pracę w każdych warunkach.',
+  },
+  {
+    title: 'Wyświetlanie',
+    icon: <MobileIcon color="inherit" />,
+    text: 'Interfejs dopasowany do komputera i urządzeń mobilnych.',
   },
 ];
-
-// Zalety aplikacji:
-
-// Intuicyjność
-// Prosta obsługa, która ułatwia pracę w każdych warunkach.
-
-// Wyświetlanie
-// Interfejs dopasowany do komputera i urządzeń mobilnych.

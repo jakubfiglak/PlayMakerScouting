@@ -3,7 +3,8 @@ import { FunctionalitySection } from './FunctionalitySection';
 import { Footer } from '../Footer';
 import { HeroSection } from '../HeroSection';
 import { CopySection } from '../CopySection';
-import { heroData, copyData } from './data';
+import { AdvantagesSection } from '../AdvantagesSection';
+import { heroData, copyData, advantages } from './data';
 
 export const ScoutingAppPage = () => {
   return (
@@ -13,6 +14,7 @@ export const ScoutingAppPage = () => {
         <HeroSection {...heroData} />
         <CopySection {...copyData} />
         <FunctionalitySection />
+        <AdvantagesSection advantages={advantages} />
       </main>
       <Footer />
     </>
