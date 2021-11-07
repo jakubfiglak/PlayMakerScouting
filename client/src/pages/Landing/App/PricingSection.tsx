@@ -1,4 +1,4 @@
-import { Typography, makeStyles, Theme, Grid } from '@material-ui/core';
+import { Typography, makeStyles, Theme } from '@material-ui/core';
 import { PricingCard } from '../PricingCard';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
 import { oneTimeServicePricing, constantCooperationPricing } from './data';

@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import {
   Storage as DatabaseIcon,
   Check as RecommendationsIcon,
@@ -21,7 +20,7 @@ import lubinLogo from '../../../assets/lubin-logo.png';
 import phoneMockup from '../../../assets/phone1.png';
 import phoneMenuMockup from '../../../assets/phone2.png';
 import backgroundImage from '../../../assets/scouting-background.png';
-import { Advantage } from '../types';
+import { Advantage, Value } from '../types';
 
 export const heroData = {
   backgroundImage,
@@ -53,13 +52,6 @@ export const copyData = {
     src: phoneMenuMockup,
     alt: 'App with menu open view',
   },
-};
-
-export type Value = {
-  number: string;
-  title: string;
-  icon: ReactNode;
-  values: string[];
 };
 
 export const values: Value[] = [

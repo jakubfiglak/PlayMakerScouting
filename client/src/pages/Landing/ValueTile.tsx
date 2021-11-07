@@ -1,5 +1,5 @@
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
-import { Value } from './data';
+import { Value } from './types';
 
 type Props = {
   value: Value;

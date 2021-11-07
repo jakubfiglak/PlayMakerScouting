@@ -5,3 +5,10 @@ export type Advantage = {
   icon: ReactNode;
   text: string;
 };
+
+export type Value = {
+  number: string;
+  title: string;
+  icon: ReactNode;
+  values: string[];
+};

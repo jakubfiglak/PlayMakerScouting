@@ -1,9 +1,11 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core';
 import { ValueTile } from './ValueTile';
-import { values } from './data';
-import { LayoutContentWrapper } from '../LayoutContentWrapper';
+import { LayoutContentWrapper } from './LayoutContentWrapper';
+import { Value } from './types';
 
-export const HowDoWeWorkSection = () => {
+type Props = { values: Value[] };
+
+export const ValuesSection = ({ values }: Props) => {
   const classes = useStyles();
 
   return (

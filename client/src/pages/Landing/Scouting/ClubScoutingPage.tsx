@@ -1,5 +1,5 @@
 import { CssBaseline } from '@material-ui/core';
-import { HowDoWeWorkSection } from './HowDoWeWorkSection';
+import { ValuesSection } from '../ValuesSection';
 import { TransfersSection } from './TranfersSection';
 import { RecommendationsSection } from './RecommendationsSection';
 import { PricingSection } from './PricingSection';
@@ -8,7 +8,7 @@ import { Footer } from '../Footer';
 import { HeroSection } from '../HeroSection';
 import { CopySection } from '../CopySection';
 import { AdvantagesSection } from '../AdvantagesSection';
-import { heroData, copyData, advantages } from './data';
+import { heroData, copyData, advantages, values } from './data';
 
 export const ClubScoutingPage = () => {
   return (
@@ -17,7 +17,7 @@ export const ClubScoutingPage = () => {
         <CssBaseline />
         <HeroSection {...heroData} displayAppNumbers />
         <CopySection {...copyData} />
-        <HowDoWeWorkSection />
+        <ValuesSection values={values} />
         <AdvantagesSection subtitle advantages={advantages} />
         <TransfersSection />
         <RecommendationsSection />
