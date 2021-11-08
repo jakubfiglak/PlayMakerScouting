@@ -64,6 +64,7 @@ export const values: Value[] = [
       'Dostarczamy kompletne dane statystyczne zawodników wraz z profilami transfermarkt',
       'Szybko i sprawnie filtruj bazę według rocznika, pozycji, ligi, regionu ',
     ],
+    link: '',
   },
   {
     number: '02',
@@ -73,6 +74,7 @@ export const values: Value[] = [
       'Tworzymy krótkie notatki o każdym zawodniku, który jest zgodny z kryteriami obserwacji',
       'Zawężamy listę do najlepszych na wskazanych pozycjach',
     ],
+    link: '',
   },
   {
     number: '03',
@@ -83,6 +85,7 @@ export const values: Value[] = [
       'Obserwujemy konkretne nazwiska na życzenie',
       'Tworzymy raporty o wyselekcjonowanych zawodnikach',
     ],
+    link: '',
   },
   {
     number: '04',
@@ -92,6 +95,7 @@ export const values: Value[] = [
       'Regularny kontakt i dopasowanie do zmian kadrowych',
       'Przed każdym oknem transferowym dostarczamy okresowy raport podsumowujący',
     ],
+    link: '',
   },
 ];
 

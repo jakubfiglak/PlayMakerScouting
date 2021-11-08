@@ -57,6 +57,7 @@ export const values: Value[] = [
       'Dostarczamy kompletne dane statystyczne zawodników',
       'Szybko i sprawnie filtruj bazę według rocznika, ligi i regionu ',
     ],
+    link: '',
   },
   {
     number: '02',
@@ -67,6 +68,7 @@ export const values: Value[] = [
       'Dostarczamy listę obserwacji najlepszych zawodników rywali',
       'Twórz notatki w aplikacji i udostępniaj je swoim współpracownikom',
     ],
+    link: '',
   },
   {
     number: '03',
@@ -77,6 +79,7 @@ export const values: Value[] = [
       'Pomagamy we wstępnej weryfikacji zgłoszeń',
       'Wspieramy kontakt  z klubem lub bezpośrednio z zawodnikiem',
     ],
+    link: '',
   },
   {
     number: '04',
@@ -86,6 +89,7 @@ export const values: Value[] = [
       'Konsultacje skuteczności naborów',
       'Monitorowanie kariery zawodników, którzy pojawili się na testach',
     ],
+    link: '',
   },
 ];
 

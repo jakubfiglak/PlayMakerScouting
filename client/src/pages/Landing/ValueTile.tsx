@@ -1,4 +1,4 @@
-import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Button, makeStyles, Theme, Typography, Link } from '@material-ui/core';
 import { Value } from './types';
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 export const ValueTile = ({ value }: Props) => {
   const classes = useStyles();
 
-  const { number, title, icon, values } = value;
+  const { number, title, icon, values, link } = value;
 
   return (
     <div className={classes.tile}>
@@ -28,9 +28,20 @@ export const ValueTile = ({ value }: Props) => {
           </li>
         ))}
       </ul>
-      <Button variant="contained" color="secondary" className={classes.button}>
-        Zobacz przykład
-      </Button>
+      <Link
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={classes.link}
+      >
+        <Button
+          variant="contained"
+          color="secondary"
+          className={classes.button}
+        >
+          Zobacz przykład
+        </Button>
+      </Link>
     </div>
   );
 };
@@ -79,9 +90,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   listItem: {
     fontSize: 18,
   },
-  button: {
-    fontSize: 18,
+  link: {
+    display: 'block',
     margin: '0 auto',
     marginTop: 'auto',
+    fontSize: 18,
+
+    '&:hover': {
+      textDecoration: 'none',
+    },
+  },
+  button: {
+    width: '100%',
   },
 }));
