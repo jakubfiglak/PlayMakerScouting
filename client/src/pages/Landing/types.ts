@@ -18,4 +18,5 @@ export type Effect = {
   logo: string;
   name: string;
   text: string;
+  link: string;
 };

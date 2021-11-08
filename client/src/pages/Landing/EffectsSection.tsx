@@ -33,6 +33,7 @@ export const EffectsSection = ({ title, effects }: Props) => {
                 title={effect.name}
                 text={effect.text}
                 logo={effect.logo}
+                link={effect.link}
               />
             </Grid>
           ))}

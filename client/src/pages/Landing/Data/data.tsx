@@ -11,7 +11,7 @@ import neptunLogo from '../../../assets/neptun-logo.png';
 import resoviaLogo from '../../../assets/resovia-logo.png';
 import skierniewiceLogo from '../../../assets/skierniewice-logo.png';
 import odraLogo from '../../../assets/odra-logo.png';
-import { Advantage } from '../types';
+import { Advantage, Effect } from '../types';
 
 export const heroData = {
   backgroundImage,
@@ -72,30 +72,38 @@ export const advantages: Advantage[] = [
   },
 ];
 
-export const effects = [
+export const effects: Effect[] = [
   {
     logo: neptunLogo,
     name: 'Neptun Końskie',
     text:
       'Przygotowanie pełnej wiedzy na temat piłkarzy z regionu przed oknem transferowym.',
+    link:
+      'https://docs.google.com/spreadsheets/d/1j3F5USvi03odeJqZFQ-M8FCzxLfE42P5/edit?usp=sharing&ouid=117557516330646294431&rtpof=true&sd=true',
   },
   {
     logo: resoviaLogo,
     name: 'Resovia Rzeszów',
     text:
       'Znalezienie wszystkich dziewczynek grających z chłopcami w związku z nowo otwartą akademią.',
+    link:
+      'https://docs.google.com/spreadsheets/d/1eUvPMT_4a6CHo661ZyoS3VJYRWRJr2fu/edit?usp=sharing&ouid=117557516330646294431&rtpof=true&sd=true',
   },
   {
     logo: skierniewiceLogo,
     name: 'Widok Skierniewice',
     text:
       'Znalezienie wszystkich bramkarzy z regionu o określonych parametrach.',
+    link:
+      'https://docs.google.com/spreadsheets/d/108PchGw8K2GSnQvpT2uzrQgLxFTDsplE/edit?usp=sharing&ouid=117557516330646294431&rtpof=true&sd=true',
   },
   {
     logo: odraLogo,
     name: 'Odra Opole',
     text:
       'Wstępna selekcja z ponad 60 do 25 zawodników, którzy zgłosili się na testy do rezerw.',
+    link:
+      'https://docs.google.com/spreadsheets/d/1U4dWPdJcyUrSLhPs1KEG2yr9rNxarHHD/edit?usp=sharing&ouid=117557516330646294431&rtpof=true&sd=true',
   },
 ];
 

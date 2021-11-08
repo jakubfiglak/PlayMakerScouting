@@ -3,6 +3,7 @@ import {
   CardContent,
   Typography,
   CardActions,
+  Link,
   Button,
   makeStyles,
   Theme,
@@ -12,9 +13,10 @@ type Props = {
   title: string;
   text: string;
   logo: string;
+  link: string;
 };
 
-export const EffectCard = ({ title, text, logo }: Props) => {
+export const EffectCard = ({ title, text, logo, link }: Props) => {
   const classes = useStyles();
 
   return (
@@ -29,13 +31,20 @@ export const EffectCard = ({ title, text, logo }: Props) => {
         <Typography className={classes.text}>{text}</Typography>
       </CardContent>
       <CardActions>
-        <Button
-          color="secondary"
-          variant="contained"
-          className={classes.button}
+        <Link
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.link}
         >
-          Zobacz
-        </Button>
+          <Button
+            color="secondary"
+            variant="contained"
+            className={classes.button}
+          >
+            Zobacz
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   );
@@ -64,6 +73,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   text: {
     fontSize: 18,
+  },
+  link: {
+    display: 'block',
+    width: '100%',
+
+    '&:hover': {
+      textDecoration: 'none',
+    },
   },
   button: {
     width: '100%',
