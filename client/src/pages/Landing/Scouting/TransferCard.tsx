@@ -1,4 +1,4 @@
-import { Typography, Button, makeStyles, Theme } from '@material-ui/core';
+import { Typography, Button, Link, makeStyles, Theme } from '@material-ui/core';
 import { Repeat as RepeatIcon } from '@material-ui/icons';
 import { Transfer } from './data';
 
@@ -9,7 +9,7 @@ type Props = {
 export const TransferCard = ({ transfer }: Props) => {
   const classes = useStyles();
 
-  const { player, from, to } = transfer;
+  const { player, from, to, reportLink } = transfer;
 
   return (
     <div className={classes.card}>
@@ -34,9 +34,20 @@ export const TransferCard = ({ transfer }: Props) => {
           <RepeatIcon />
         </div>
       </div>
-      <Button color="secondary" variant="contained" className={classes.button}>
-        Zobacz raport
-      </Button>
+      <Link
+        href={reportLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={classes.link}
+      >
+        <Button
+          color="secondary"
+          variant="contained"
+          className={classes.button}
+        >
+          Zobacz raport
+        </Button>
+      </Link>
     </div>
   );
 };
@@ -81,7 +92,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-between',
     marginBottom: theme.spacing(1),
   },
-  button: {
+  link: {
+    display: 'block',
     marginTop: 'auto',
+
+    '&:hover': {
+      textDecoration: 'none',
+    },
+  },
+  button: {
+    width: '100%',
   },
 }));

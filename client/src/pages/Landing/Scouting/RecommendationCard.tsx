@@ -1,4 +1,4 @@
-import { Typography, Button, makeStyles, Theme } from '@material-ui/core';
+import { Typography, Button, Link, makeStyles, Theme } from '@material-ui/core';
 import { Repeat as RepeatIcon } from '@material-ui/icons';
 import { Recommendation } from './data';
 
@@ -9,7 +9,7 @@ type Props = {
 export const RecommendationCard = ({ recommendation }: Props) => {
   const classes = useStyles();
 
-  const { player, from, to } = recommendation;
+  const { player, from, to, reportLink } = recommendation;
 
   return (
     <div className={classes.card}>
@@ -25,9 +25,20 @@ export const RecommendationCard = ({ recommendation }: Props) => {
           <RepeatIcon />
         </div>
       </div>
-      <Button color="secondary" variant="contained" className={classes.button}>
-        Zobacz raport
-      </Button>
+      <Link
+        href={reportLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={classes.link}
+      >
+        <Button
+          color="secondary"
+          variant="contained"
+          className={classes.button}
+        >
+          Zobacz raport
+        </Button>
+      </Link>
     </div>
   );
 };
@@ -54,8 +65,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     gap: theme.spacing(2),
   },
-  button: {
+  link: {
     marginTop: 'auto',
     alignSelf: 'flex-end',
+
+    '&:hover': {
+      textDecoration: 'none',
+    },
+  },
+  button: {
+    width: '100%',
   },
 }));

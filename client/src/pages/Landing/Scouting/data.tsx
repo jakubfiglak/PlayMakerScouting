@@ -134,6 +134,7 @@ export type Transfer = {
   };
   from: ClubData;
   to: ClubData;
+  reportLink: string;
 };
 
 export const transfers: Transfer[] = [
@@ -150,6 +151,8 @@ export const transfers: Transfer[] = [
       name: 'Odra Opole',
       logo: odraLogo,
     },
+    reportLink:
+      'https://drive.google.com/file/d/1IsRkdUEYIBXvt6zCjn_kmafVafUC49s_/view?usp=sharing',
   },
   {
     player: {
@@ -164,6 +167,8 @@ export const transfers: Transfer[] = [
       name: 'Odra Opole',
       logo: odraLogo,
     },
+    reportLink:
+      'https://drive.google.com/file/d/1k161cG--8hZaMNO2qf7bfUMDsQmI3UNi/view?usp=sharing',
   },
   {
     player: {
@@ -178,6 +183,8 @@ export const transfers: Transfer[] = [
       name: 'Górnik Polkowice',
       logo: polkowiceLogo,
     },
+    reportLink:
+      'https://drive.google.com/file/d/1Z9uArxzOJ2_T02K3Zc7Rk7mR82qT8keV/view?usp=sharing',
   },
   {
     player: {
@@ -192,6 +199,8 @@ export const transfers: Transfer[] = [
       name: 'Górnik Polkowice',
       logo: polkowiceLogo,
     },
+    reportLink:
+      'https://drive.google.com/file/d/1h5Or6CBbd-lOJKcOKoEUNyCSlwsIj2gB/view?usp=sharing',
   },
 ];
 
@@ -199,6 +208,7 @@ export type Recommendation = {
   player: string;
   from: string;
   to: string;
+  reportLink: string;
 };
 
 export const recommendations: Recommendation[] = [
@@ -206,31 +216,43 @@ export const recommendations: Recommendation[] = [
     player: 'Mateusz Łęgowski',
     from: 'Pogoń II Szczecin',
     to: 'Pogoń Szczecin',
+    reportLink:
+      'https://drive.google.com/file/d/1P7NWJhQYm2UYbe6GaKOBt4MSKEzFX4Qk/view?usp=sharing',
   },
   {
     player: 'Kacper Karasek',
     from: 'Unia Skierniewice',
     to: 'Widzew Łódź',
+    reportLink:
+      'https://drive.google.com/file/d/11bgNRXMaWDE4rBm0SupATcAaiGgEAPcy/view?usp=sharing',
   },
   {
     player: 'Szymon Szymański',
     from: 'Rekord Bielsko-Biała',
     to: 'Skra Częstochowa',
+    reportLink:
+      'https://drive.google.com/file/d/1xoSWT_0LXuoDkXJ_NyBcKl0r-DBo-kes/view?usp=sharing',
   },
   {
     player: 'Andrzej Trubeha',
     from: 'Legionovia Legionowo',
     to: 'Jagiellonia Białystok',
+    reportLink:
+      'https://drive.google.com/file/d/1-X62MjyYVvhC3HNDWgYDliGe0bTIuL5A/view?usp=sharing',
   },
   {
     player: 'Filip Arak',
     from: 'Błonianka Błonie',
     to: 'Skra Częstochowa',
+    reportLink:
+      'https://drive.google.com/file/d/1JVxPr-KTjdX9jMBTYBWLjTQu5jOceSiW/view?usp=sharing',
   },
   {
     player: 'Bartosz Baranowicz',
     from: 'Górnik II Zabrze',
     to: 'Skra Częstochowa',
+    reportLink:
+      'https://drive.google.com/file/d/1EzHQbopGGoIC-aWn5YrIjtvupsr4L1UI/view?usp=sharing',
   },
 ];
 
