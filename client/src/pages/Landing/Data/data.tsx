@@ -4,7 +4,7 @@ import {
   Money as MoneyIcon,
   DoubleArrow as ScoutingIcon,
 } from '@material-ui/icons';
-import image from '../../../assets/data-analysis-image.png';
+import phoneMockup from '../../../assets/phone1.png';
 import phoneMenuMockup from '../../../assets/phone2.png';
 import backgroundImage from '../../../assets/scouting-background.png';
 import neptunLogo from '../../../assets/neptun-logo.png';
@@ -16,7 +16,7 @@ import { Advantage, Effect } from '../types';
 export const heroData = {
   backgroundImage,
   image: {
-    src: image,
+    src: phoneMockup,
     alt: 'App dashboard view',
   },
   title: (
