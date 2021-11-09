@@ -9,45 +9,54 @@ import {
 import backgroundImg from '../../assets/scouting-background.png';
 import { Header } from './Header';
 import { CtaButton } from './CtaButton';
+import { LayoutContentWrapper } from './LayoutContentWrapper';
 
 export const HomePage = () => {
   const classes = useStyles();
 
   return (
     <div className={classes.wrapper}>
-      <CssBaseline />
-      <Header />
-      <main>
-        <section>
-          <div className={classes.innerWrapper}>
-            <Typography variant="h1" className={classes.heading}>
-              Wprowadź skauting na wyższy poziom!
-            </Typography>
-            <div>
-              <Typography variant="h2" align="center">
-                Wybierz jeden z 4 produktów skautingowych
+      <LayoutContentWrapper>
+        <CssBaseline />
+        <Header />
+        <main>
+          <section>
+            <div className={classes.innerWrapper}>
+              <Typography variant="h1" className={classes.heading}>
+                Wprowadź skauting na wyższy poziom!
               </Typography>
-              <div className={classes.buttonsContainer}>
-                <CtaButton text="Skauting klubowy" linkTo="/" />
-                <CtaButton text="Skauting akademia" linkTo="/" />
-                <CtaButton text="Aplikacja skautingowa" linkTo="/" />
-                <CtaButton text="Analiza danych" linkTo="/" />
+              <div>
+                <Typography variant="h2" align="center">
+                  Wybierz jeden z 4 produktów skautingowych
+                </Typography>
+                <div className={classes.buttonsContainer}>
+                  <CtaButton text="Skauting klubowy" linkTo="/club-scouting" />
+                  <CtaButton
+                    text="Skauting akademia"
+                    linkTo="/scouting-academy"
+                  />
+                  <CtaButton
+                    text="Aplikacja skautingowa"
+                    linkTo="/scouting-app"
+                  />
+                  <CtaButton text="Analiza danych" linkTo="/data-analysis" />
+                </div>
               </div>
             </div>
-          </div>
-          <div className={classes.goToApp}>
-            <Link to="/login" className={classes.link}>
-              <Button
-                color="secondary"
-                variant="contained"
-                className={classes.goToAppButton}
-              >
-                Przejdź do aplikacji
-              </Button>
-            </Link>
-          </div>
-        </section>
-      </main>
+            <div className={classes.goToApp}>
+              <Link to="/login" className={classes.link}>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  className={classes.goToAppButton}
+                >
+                  Przejdź do aplikacji
+                </Button>
+              </Link>
+            </div>
+          </section>
+        </main>
+      </LayoutContentWrapper>
     </div>
   );
 };
@@ -81,7 +90,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: theme.spacing(6),
     paddingTop: 300,
 
     [theme.breakpoints.down('md')]: {
