@@ -104,8 +104,8 @@ export const values: Value[] = [
     title: 'Rekomendacje',
     icon: <RecommendationsIcon />,
     values: [
-      'Regularny kontakt i dopasowanie do zmian kadrowych',
-      'Przed każdym oknem transferowym dostarczamy okresowy raport podsumowujący',
+      'Utrzymujemy regularny kontakt i elastycznie dopasowujemy się do potrzeb kadrowych',
+      'Dostarczamy okresowe raporty podsumowujące, nie tylko przed oknem transferowym',
     ],
     link:
       'https://drive.google.com/file/d/1MbPfmxE8g0CTpieYb1Z0d99YwhNAkeCq/view?usp=sharing',
