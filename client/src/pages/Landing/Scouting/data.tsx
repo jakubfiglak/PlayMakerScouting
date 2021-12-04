@@ -92,7 +92,7 @@ export const values: Value[] = [
     title: 'Raporty',
     icon: <ReportsIcon />,
     values: [
-      'Arkusz obserwacyjny dopasowany do potrzeb klubu',
+      'Dopasujemy arkusz obserwacyjny do Twoich potrzeb',
       'Obserwujemy konkretne nazwiska na życzenie',
       'Tworzymy raporty o wyselekcjonowanych zawodnikach',
     ],
