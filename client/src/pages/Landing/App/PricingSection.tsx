@@ -1,7 +1,7 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core';
 import { PricingCard } from '../PricingCard';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
-import { oneTimeServicePricing, constantCooperationPricing } from './data';
+import { variantOnePricing, variantTwoPricing } from './data';
 
 export const PricingSection = () => {
   const classes = useStyles();
@@ -14,16 +14,12 @@ export const PricingSection = () => {
         </Typography>
         <div className={classes.container}>
           <PricingCard
-            features={oneTimeServicePricing.features}
-            priceFrom
-            price={oneTimeServicePricing.price}
-            buttonText="Zapytaj o wycenę"
+            features={variantOnePricing.features}
+            price={variantOnePricing.price}
           />
           <PricingCard
-            features={constantCooperationPricing.features}
-            priceFrom
-            price={constantCooperationPricing.price}
-            buttonText="Zapytaj o wycenę"
+            features={variantTwoPricing.features}
+            price={variantTwoPricing.price}
           />
         </div>
       </LayoutContentWrapper>

@@ -19,7 +19,7 @@ type Props = {
   price: string;
   priceFrom?: boolean;
   features: { title: string; value: boolean }[];
-  buttonText: string;
+  buttonText?: string;
 };
 
 export const PricingCard = ({
@@ -57,17 +57,19 @@ export const PricingCard = ({
             </Fragment>
           ))}
         </List>
-        <div className={classes.linkContainer}>
-          <Link href="mailto:biuro@playmaker.pro" className={classes.link}>
-            <Button
-              color="secondary"
-              variant="contained"
-              className={classes.button}
-            >
-              {buttonText}
-            </Button>
-          </Link>
-        </div>
+        {buttonText ? (
+          <div className={classes.linkContainer}>
+            <Link href="mailto:biuro@playmaker.pro" className={classes.link}>
+              <Button
+                color="secondary"
+                variant="contained"
+                className={classes.button}
+              >
+                {buttonText}
+              </Button>
+            </Link>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );
