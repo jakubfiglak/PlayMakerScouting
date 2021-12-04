@@ -70,7 +70,7 @@ export const values: Value[] = [
     title: 'Analiza danych',
     icon: <DatabaseIcon />,
     values: [
-      'Określ zapotrzebowanie kadrowe',
+      'Określ zapotrzebowanie kadrowe oraz rozgrywki do obserwacji',
       'Dostarczamy kompletne dane statystyczne zawodników wraz z profilami transfermarkt',
       'Szybko i sprawnie filtruj bazę według rocznika, pozycji, ligi, regionu ',
     ],
