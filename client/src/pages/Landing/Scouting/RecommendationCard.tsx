@@ -47,10 +47,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   card: {
     display: 'flex',
     flexDirection: 'column',
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
     margin: '0 auto',
     padding: theme.spacing(2),
-    border: `1px solid ${theme.palette.primary.main}`,
+    border: `1px solid ${theme.palette.primary.contrastText}`,
     borderRadius: 5,
   },
   contentContainer: {
