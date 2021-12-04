@@ -16,7 +16,7 @@ export const ScoutingAppPage = () => {
         <HeroSection {...heroData} />
         <CopySection {...copyData} />
         <FunctionalitySection />
-        <AdvantagesSection advantages={advantages} />
+        <AdvantagesSection advantages={advantages} dark />
         <TestimonialsSection testimonials={testimonials} />
         <PricingSection />
       </main>

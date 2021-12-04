@@ -6,13 +6,14 @@ import { Advantage } from './types';
 type Props = {
   subtitle?: boolean;
   advantages: Advantage[];
+  dark?: boolean;
 };
 
-export const AdvantagesSection = ({ subtitle, advantages }: Props) => {
-  const classes = useStyles();
+export const AdvantagesSection = ({ subtitle, advantages, dark }: Props) => {
+  const classes = useStyles({ dark });
 
   return (
-    <section>
+    <section className={classes.container}>
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
           Korzyści
@@ -36,7 +37,15 @@ export const AdvantagesSection = ({ subtitle, advantages }: Props) => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+type StyleProps = {
+  dark?: boolean;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+  container: (props) => ({
+    background: props.dark ? '#000' : '',
+    color: props.dark ? theme.palette.primary.contrastText : '',
+  }),
   heading: {
     fontSize: 48,
     padding: theme.spacing(3, 0),

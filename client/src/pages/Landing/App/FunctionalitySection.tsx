@@ -6,21 +6,19 @@ export const FunctionalitySection = () => {
   const classes = useStyles();
 
   return (
-    <section>
-      <div className={classes.headingContainer}>
-        <LayoutContentWrapper>
-          <Typography variant="h2" className={classes.heading}>
-            Funkcjonalności
-          </Typography>
-        </LayoutContentWrapper>
-      </div>
+    <section className={classes.container}>
+      <LayoutContentWrapper>
+        <Typography variant="h2" className={classes.heading}>
+          Funkcjonalności
+        </Typography>
+      </LayoutContentWrapper>
       <LayoutContentWrapper>
         <Grid
           container
-          spacing={3}
+          spacing={6}
           component="ul"
           justify="space-between"
-          className={classes.container}
+          className={classes.tilesContainer}
         >
           {functionalities.map((functionality) => (
             <Grid
@@ -28,6 +26,7 @@ export const FunctionalitySection = () => {
               component="li"
               key={functionality.title}
               xl={4}
+              lg={4}
               md={6}
               sm={6}
               xs={12}
@@ -47,16 +46,8 @@ export const FunctionalitySection = () => {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  headingContainer: {
-    background: '#000',
-    color: theme.palette.primary.contrastText,
-    padding: theme.spacing(4),
-    clipPath: `polygon(
-      0 0,
-      100% 0,
-      100% calc(100% - 30px),
-      0 100%
-    )`,
+  container: {
+    paddingBottom: theme.spacing(4),
   },
   heading: {
     fontSize: 48,
@@ -72,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: theme.typography.fontWeightBold,
     marginBottom: theme.spacing(1),
   },
-  container: {
+  tilesContainer: {
     marginTop: theme.spacing(3),
   },
   text: {
