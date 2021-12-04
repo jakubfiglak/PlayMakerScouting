@@ -16,7 +16,7 @@ export const ScoutingAcademyPage = () => {
         <HeroSection {...heroData} />
         <CopySection {...copyData} />
         <ValuesSection values={values} />
-        <AdvantagesSection subtitle advantages={advantages} />
+        <AdvantagesSection subtitle advantages={advantages} dark />
         <EffectsSection title="Zaufali nam" effects={effects} />
         <PricingSection />
       </main>

@@ -9,7 +9,7 @@ export const ValuesSection = ({ values }: Props) => {
   const classes = useStyles();
 
   return (
-    <section>
+    <section className={classes.container}>
       <div className={classes.shape} />
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
@@ -28,6 +28,9 @@ export const ValuesSection = ({ values }: Props) => {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    paddingBottom: theme.spacing(4),
+  },
   shape: {
     width: '100%',
     height: 50,
