@@ -12,9 +12,6 @@ export const TransfersSection = () => {
         <Typography variant="h2" className={classes.heading}>
           Efekty działań
         </Typography>
-        <Typography className={classes.subtitle}>
-          Scout<em>Maker</em>.pro
-        </Typography>
         <Grid container spacing={3}>
           {transfers.map((transfer) => (
             <Grid item xl={3} md={6} sm={6} xs={12} key={transfer.player.name}>
@@ -38,15 +35,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
     [theme.breakpoints.down('sm')]: {
       textAlign: 'center',
-    },
-  },
-  subtitle: {
-    fontSize: 36,
-    marginBottom: theme.spacing(3),
-
-    '& em': {
-      color: theme.palette.secondary.main,
-      fontStyle: 'normal',
     },
   },
   wrapper: {
