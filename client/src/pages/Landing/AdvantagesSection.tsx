@@ -15,7 +15,7 @@ export const AdvantagesSection = ({ subtitle, advantages }: Props) => {
     <section>
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
-          Zalety
+          Korzyści
         </Typography>
         {subtitle ? (
           <Typography className={classes.subtitle}>
@@ -23,32 +23,18 @@ export const AdvantagesSection = ({ subtitle, advantages }: Props) => {
           </Typography>
         ) : null}
       </LayoutContentWrapper>
-      <div className={classes.shape} />
-      <div className={classes.wrapper}>
-        <LayoutContentWrapper>
-          <div className={classes.tilesContainer}>
-            {advantages.map((advantage) => (
-              <AdvantageTile advantage={advantage} key={advantage.title} />
-            ))}
-          </div>
-        </LayoutContentWrapper>
-      </div>
+      <LayoutContentWrapper>
+        <div className={classes.tilesContainer}>
+          {advantages.map((advantage) => (
+            <AdvantageTile advantage={advantage} key={advantage.title} />
+          ))}
+        </div>
+      </LayoutContentWrapper>
     </section>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  shape: {
-    width: '100%',
-    height: 30,
-    background: '#000',
-    clipPath: `polygon(
-      0 calc(100% - 15px),
-      100% 0,
-      100% 100%,
-      0 100%
-    )`,
-  },
   heading: {
     fontSize: 48,
     padding: theme.spacing(3, 0),
@@ -64,9 +50,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.secondary.main,
       fontStyle: 'normal',
     },
-  },
-  wrapper: {
-    background: '#000',
   },
   tilesContainer: {
     padding: theme.spacing(4, 0),

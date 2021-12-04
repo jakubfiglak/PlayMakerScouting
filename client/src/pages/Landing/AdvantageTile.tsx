@@ -25,7 +25,6 @@ export const AdvantageTile = ({ advantage }: Props) => {
 
 const useStyles = makeStyles((theme: Theme) => ({
   tile: {
-    color: theme.palette.primary.contrastText,
     flex: '1 1 25%',
     display: 'flex',
     flexDirection: 'column',
