@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textDecoration: 'none',
   },
   button: {
-    width: 350,
+    width: 280,
     padding: 16,
     fontSize: 16,
     fontWeight: theme.typography.fontWeightBold,
