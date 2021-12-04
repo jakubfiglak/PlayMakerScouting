@@ -14,7 +14,15 @@ export const TransfersSection = () => {
         </Typography>
         <Grid container spacing={3}>
           {transfers.map((transfer) => (
-            <Grid item xl={3} md={6} sm={6} xs={12} key={transfer.player.name}>
+            <Grid
+              item
+              xl={3}
+              lg={3}
+              md={6}
+              sm={6}
+              xs={12}
+              key={transfer.player.name}
+            >
               <TransferCard transfer={transfer} />
             </Grid>
           ))}

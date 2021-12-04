@@ -1,4 +1,4 @@
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles, Theme, Grid } from '@material-ui/core';
 import { LayoutContentWrapper } from './LayoutContentWrapper';
 import { AdvantageTile } from './AdvantageTile';
 import { Advantage } from './types';
@@ -24,11 +24,13 @@ export const AdvantagesSection = ({ subtitle, advantages }: Props) => {
         ) : null}
       </LayoutContentWrapper>
       <LayoutContentWrapper>
-        <div className={classes.tilesContainer}>
+        <Grid container spacing={2} className={classes.tilesContainer}>
           {advantages.map((advantage) => (
-            <AdvantageTile advantage={advantage} key={advantage.title} />
+            <Grid item xs={12} md={6} lg={3} key={advantage.title}>
+              <AdvantageTile advantage={advantage} />
+            </Grid>
           ))}
-        </div>
+        </Grid>
       </LayoutContentWrapper>
     </section>
   );
@@ -53,7 +55,5 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   tilesContainer: {
     padding: theme.spacing(4, 0),
-    display: 'flex',
-    flexWrap: 'wrap',
   },
 }));

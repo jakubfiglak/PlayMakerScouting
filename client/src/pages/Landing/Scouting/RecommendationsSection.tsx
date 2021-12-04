@@ -18,6 +18,7 @@ export const RecommendationsSection = () => {
               <Grid
                 item
                 xl={4}
+                lg={4}
                 md={6}
                 sm={6}
                 xs={12}

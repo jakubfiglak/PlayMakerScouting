@@ -1,4 +1,4 @@
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles, Theme, Grid } from '@material-ui/core';
 import { ValueTile } from './ValueTile';
 import { LayoutContentWrapper } from './LayoutContentWrapper';
 import { Value } from './types';
@@ -15,11 +15,13 @@ export const ValuesSection = ({ values }: Props) => {
         <Typography variant="h2" className={classes.heading}>
           Jak działamy?
         </Typography>
-        <div className={classes.tilesContainer}>
+        <Grid container spacing={4}>
           {values.map((value) => (
-            <ValueTile value={value} key={value.number} />
+            <Grid item xs={12} md={6} lg={3} key={value.number}>
+              <ValueTile value={value} />
+            </Grid>
           ))}
-        </div>
+        </Grid>
       </LayoutContentWrapper>
     </section>
   );
