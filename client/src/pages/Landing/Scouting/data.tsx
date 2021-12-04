@@ -84,7 +84,8 @@ export const values: Value[] = [
       'Tworzymy krótkie notatki o każdym zawodniku, który jest zgodny z kryteriami obserwacji',
       'Zawężamy listę do najlepszych na wskazanych pozycjach',
     ],
-    link: '',
+    link:
+      'https://drive.google.com/file/d/1c7Clw9Q3_HTFJHml7QNTfroMTGi3imwu/view?usp=sharing',
   },
   {
     number: '03',
@@ -95,7 +96,8 @@ export const values: Value[] = [
       'Obserwujemy konkretne nazwiska na życzenie',
       'Tworzymy raporty o wyselekcjonowanych zawodnikach',
     ],
-    link: '',
+    link:
+      'https://drive.google.com/file/d/1KzkA-VticPoDlzuqpCVRGC-q7wos8T68/view?usp=sharing',
   },
   {
     number: '04',
@@ -105,7 +107,8 @@ export const values: Value[] = [
       'Regularny kontakt i dopasowanie do zmian kadrowych',
       'Przed każdym oknem transferowym dostarczamy okresowy raport podsumowujący',
     ],
-    link: '',
+    link:
+      'https://drive.google.com/file/d/1MbPfmxE8g0CTpieYb1Z0d99YwhNAkeCq/view?usp=sharing',
   },
 ];
 
