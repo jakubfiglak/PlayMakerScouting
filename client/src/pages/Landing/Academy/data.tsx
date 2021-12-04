@@ -36,7 +36,7 @@ export const heroData = {
 export const copyData = {
   title: (
     <p>
-      Analiza Danych Scout<em>Maker</em>.Pro
+      Akademia Scout<em>Maker</em>.Pro
     </p>
   ),
   text:
