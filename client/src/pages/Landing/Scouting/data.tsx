@@ -46,8 +46,18 @@ export const copyData = {
       Skauting Scout<em>Maker</em>.Pro
     </p>
   ),
-  text:
-    'Usługa skautingowa pozwalająca na monitorowanie każdej ligi piłkarskiej w Polsce. Zespół wyszkolonych skautów obserwuje wskazane przez klub rozgrywki i dostarcza notatki oraz raporty meczowe według wybranych parametrów. Sprawozdania poszerzone są o zaawansowane bazy danych statystycznych naszych analityków sportowych. ScoutMaker.pro odpowiada bieżącemu zapotrzebowaniu kadrowemu oraz wpisuje się w długofalowy plan budowania zespołu.',
+  text: (
+    <p>
+      Usługa skautingowa pozwalająca na monitorowanie każdej ligi piłkarskiej w
+      Polsce. Zespół wyszkolonych skautów obserwuje wskazane przez klub
+      rozgrywki i dostarcza notatki oraz raporty meczowe według wybranych
+      parametrów. Sprawozdania poszerzone są o zaawansowane bazy danych
+      statystycznych naszych analityków sportowych. ScoutMaker.pro odpowiada
+      bieżącemu zapotrzebowaniu kadrowemu oraz wpisuje się w długofalowy plan
+      budowania zespołu. Wartość usługi jest niższa niż miesięczne wynagrodzenie
+      jednego piłkarza. To <em>inwestycja</em>, nie koszt.
+    </p>
+  ),
   image: {
     src: phoneMenuMockup,
     alt: 'App with menu open view',
