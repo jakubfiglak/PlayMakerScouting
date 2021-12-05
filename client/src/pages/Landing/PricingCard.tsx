@@ -87,6 +87,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(4, 0),
     marginLeft: theme.spacing(4),
     fontWeight: theme.typography.fontWeightBold,
+
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(2),
+      padding: theme.spacing(2, 0),
+      fontSize: 28,
+    },
   },
   divider: {
     background: theme.palette.primary.light,
@@ -101,6 +107,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   text: {
     fontSize: 18,
+
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 16,
+    },
   },
   buttonContainer: {
     height: 30,

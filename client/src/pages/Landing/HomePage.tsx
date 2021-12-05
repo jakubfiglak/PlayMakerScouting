@@ -96,15 +96,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   innerWrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
     minHeight: 'calc(100vh - 174px)',
-
     paddingTop: 200,
 
     [theme.breakpoints.down('md')]: {
-      flexDirection: 'column',
       paddingTop: 200,
     },
 
@@ -121,6 +116,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    },
   },
   buttonsContainer: {
     display: 'flex',
