@@ -3,7 +3,11 @@ import { PricingCard } from '../PricingCard';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
 import { historicalDataPricing } from './data';
 
-export const HistoricalDataSection = () => {
+type Props = {
+  onButtonClick?: () => void;
+};
+
+export const HistoricalDataSection = ({ onButtonClick }: Props) => {
   const classes = useStyles();
 
   return (
@@ -17,6 +21,7 @@ export const HistoricalDataSection = () => {
             features={historicalDataPricing.features}
             price={historicalDataPricing.price}
             buttonText="Zgłoś się po wycenę"
+            onButtonClick={onButtonClick}
           />
         </div>
       </LayoutContentWrapper>

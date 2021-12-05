@@ -6,14 +6,17 @@ const emailService = require('./email.service');
 // @route POST /api/v1/email
 // @access Public
 exports.sendContactForm = asyncHandler(async (req, res) => {
-  await emailService.sendContactForm({
-    from: req.body.email,
+  const message = {
+    from: req.body.from,
     subject: req.body.subject,
     text: req.body.message,
-  });
+  };
 
-  res.status(httpStatus.CREATED).json({
+  await emailService.sendContactForm(message);
+
+  res.status(httpStatus.OK).json({
     success: true,
     message: 'Successfully sent contact form!',
+    data: message,
   });
 });

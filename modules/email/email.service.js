@@ -12,10 +12,13 @@ function sendEmail({ to, subject, text, html }) {
 
 function sendContactForm({ from, subject, text }) {
   return sgMail.send({
-    to: 'jakub.figlak@gmail.com',
-    from,
+    to: 'biuro@playmaker.pro',
+    from: 'playmakerscoutingapp@gmail.com',
     subject,
-    text,
+    text: `${from} ${text}`,
+    html: `<h2>Nadawca: ${from}</h2>
+    <p>${text}</p>
+  `,
   });
 }
 

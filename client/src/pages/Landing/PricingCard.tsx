@@ -4,7 +4,6 @@ import {
   CardContent,
   Typography,
   List,
-  Link,
   Button,
   ListItem,
   ListItemIcon,
@@ -20,6 +19,7 @@ type Props = {
   priceFrom?: boolean;
   features: { title: string; value: boolean }[];
   buttonText?: string;
+  onButtonClick?: () => void;
 };
 
 export const PricingCard = ({
@@ -27,6 +27,7 @@ export const PricingCard = ({
   priceFrom,
   features,
   buttonText,
+  onButtonClick,
 }: Props) => {
   const classes = useStyles();
 
@@ -58,16 +59,15 @@ export const PricingCard = ({
           ))}
         </List>
         {buttonText ? (
-          <div className={classes.linkContainer}>
-            <Link href="mailto:biuro@playmaker.pro" className={classes.link}>
-              <Button
-                color="secondary"
-                variant="contained"
-                className={classes.button}
-              >
-                {buttonText}
-              </Button>
-            </Link>
+          <div className={classes.buttonContainer}>
+            <Button
+              color="secondary"
+              variant="contained"
+              className={classes.button}
+              onClick={onButtonClick}
+            >
+              {buttonText}
+            </Button>
           </div>
         ) : null}
       </CardContent>
@@ -102,10 +102,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   text: {
     fontSize: 18,
   },
-  linkContainer: {
+  buttonContainer: {
     height: 30,
   },
-  link: {
+  button: {
+    padding: theme.spacing(2, 4),
+    fontWeight: theme.typography.fontWeightBold,
     position: 'absolute',
     bottom: 0,
     left: '50%',
@@ -114,9 +116,5 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:hover': {
       textDecoration: 'none',
     },
-  },
-  button: {
-    padding: theme.spacing(2, 4),
-    fontWeight: theme.typography.fontWeightBold,
   },
 }));

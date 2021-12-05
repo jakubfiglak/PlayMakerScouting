@@ -2,12 +2,14 @@ import { Button, makeStyles, Theme } from '@material-ui/core';
 
 type Props = {
   label: string;
+  altActionLabel?: string;
   isEditState: boolean;
   onCancelClick: () => void;
 };
 
 export const MainFormActions = ({
   label,
+  altActionLabel,
   isEditState,
   onCancelClick,
 }: Props) => {
@@ -16,7 +18,9 @@ export const MainFormActions = ({
   return (
     <div className={classes.container}>
       <Button type="submit" fullWidth variant="contained" color="primary">
-        {isEditState ? 'Zapisz zmiany' : `Dodaj ${label}`}
+        {isEditState
+          ? 'Zapisz zmiany'
+          : `${altActionLabel || 'Dodaj'} ${label}`}
       </Button>
       <Button
         fullWidth
