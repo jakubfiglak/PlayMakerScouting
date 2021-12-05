@@ -21,7 +21,15 @@ export const TestimonialsSection = ({ testimonials }: Props) => {
           className={classes.container}
         >
           {testimonials.map((testimonial) => (
-            <Grid item key={testimonial.name} xl={4} sm={12} xs={12}>
+            <Grid
+              item
+              key={testimonial.name}
+              xl={4}
+              lg={4}
+              md={4}
+              sm={12}
+              xs={12}
+            >
               <TestimonialCard
                 title={testimonial.name}
                 subtitle={testimonial.role}

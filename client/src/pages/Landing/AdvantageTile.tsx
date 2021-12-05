@@ -25,19 +25,11 @@ export const AdvantageTile = ({ advantage }: Props) => {
 
 const useStyles = makeStyles((theme: Theme) => ({
   tile: {
-    color: theme.palette.primary.contrastText,
-    flex: '1 1 25%',
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(2),
 
-    [theme.breakpoints.down('lg')]: {
-      flexBasis: '50%',
-    },
-
     [theme.breakpoints.down('sm')]: {
-      flexGrow: 0,
-      flexBasis: '80%',
       alignItems: 'center',
       margin: '0 auto',
       marginBottom: theme.spacing(2),

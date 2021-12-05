@@ -1,4 +1,4 @@
-import { Typography, makeStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles, Theme, Grid } from '@material-ui/core';
 import { LayoutContentWrapper } from './LayoutContentWrapper';
 import { AdvantageTile } from './AdvantageTile';
 import { Advantage } from './types';
@@ -6,16 +6,17 @@ import { Advantage } from './types';
 type Props = {
   subtitle?: boolean;
   advantages: Advantage[];
+  dark?: boolean;
 };
 
-export const AdvantagesSection = ({ subtitle, advantages }: Props) => {
-  const classes = useStyles();
+export const AdvantagesSection = ({ subtitle, advantages, dark }: Props) => {
+  const classes = useStyles({ dark });
 
   return (
-    <section>
+    <section className={classes.container}>
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
-          Zalety
+          Korzyści
         </Typography>
         {subtitle ? (
           <Typography className={classes.subtitle}>
@@ -23,32 +24,28 @@ export const AdvantagesSection = ({ subtitle, advantages }: Props) => {
           </Typography>
         ) : null}
       </LayoutContentWrapper>
-      <div className={classes.shape} />
-      <div className={classes.wrapper}>
-        <LayoutContentWrapper>
-          <div className={classes.tilesContainer}>
-            {advantages.map((advantage) => (
-              <AdvantageTile advantage={advantage} key={advantage.title} />
-            ))}
-          </div>
-        </LayoutContentWrapper>
-      </div>
+      <LayoutContentWrapper>
+        <Grid container spacing={2} className={classes.tilesContainer}>
+          {advantages.map((advantage) => (
+            <Grid item xs={12} md={6} lg={3} key={advantage.title}>
+              <AdvantageTile advantage={advantage} />
+            </Grid>
+          ))}
+        </Grid>
+      </LayoutContentWrapper>
     </section>
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  shape: {
-    width: '100%',
-    height: 30,
-    background: '#000',
-    clipPath: `polygon(
-      0 calc(100% - 15px),
-      100% 0,
-      100% 100%,
-      0 100%
-    )`,
-  },
+type StyleProps = {
+  dark?: boolean;
+};
+
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+  container: (props) => ({
+    background: props.dark ? '#000' : '',
+    color: props.dark ? theme.palette.primary.contrastText : '',
+  }),
   heading: {
     fontSize: 48,
     padding: theme.spacing(3, 0),
@@ -65,12 +62,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       fontStyle: 'normal',
     },
   },
-  wrapper: {
-    background: '#000',
-  },
   tilesContainer: {
     padding: theme.spacing(4, 0),
-    display: 'flex',
-    flexWrap: 'wrap',
   },
 }));

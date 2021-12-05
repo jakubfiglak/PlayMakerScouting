@@ -22,37 +22,44 @@ export const HomePage = () => {
         <main>
           <section>
             <div className={classes.innerWrapper}>
-              <Typography variant="h1" className={classes.heading}>
-                Wprowadź skauting na wyższy poziom!
-              </Typography>
-              <div>
-                <Typography variant="h2" align="center">
-                  Wybierz jeden z 4 produktów skautingowych
-                </Typography>
-                <div className={classes.buttonsContainer}>
-                  <CtaButton text="Skauting klubowy" linkTo="/club-scouting" />
-                  <CtaButton
-                    text="Skauting akademia"
-                    linkTo="/scouting-academy"
-                  />
-                  <CtaButton
-                    text="Aplikacja skautingowa"
-                    linkTo="/scouting-app"
-                  />
-                  <CtaButton text="Analiza danych" linkTo="/data-analysis" />
+              <div className={classes.flexWrapper}>
+                <div>
+                  <Typography variant="h1" className={classes.heading}>
+                    Wprowadź skauting na wyższy poziom!
+                  </Typography>
+                </div>
+                <div>
+                  <Typography variant="h2" align="center">
+                    Wybierz jeden z 4 produktów skautingowych
+                  </Typography>
+                  <div className={classes.buttonsContainer}>
+                    <CtaButton
+                      text="Skauting klubowy"
+                      linkTo="/club-scouting"
+                    />
+                    <CtaButton
+                      text="Skauting akademia"
+                      linkTo="/scouting-academy"
+                    />
+                    <CtaButton
+                      text="Aplikacja skautingowa"
+                      linkTo="/scouting-app"
+                    />
+                    <CtaButton text="Analiza danych" linkTo="/data-analysis" />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className={classes.goToApp}>
-              <Link to="/login" className={classes.link}>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  className={classes.goToAppButton}
-                >
-                  Przejdź do aplikacji
-                </Button>
-              </Link>
+              <div className={classes.goToApp}>
+                <Link to="/login" className={classes.link}>
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    className={classes.goToAppButton}
+                  >
+                    Przejdź do aplikacji
+                  </Button>
+                </Link>
+              </div>
             </div>
           </section>
         </main>
@@ -76,10 +83,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   heading: {
     fontWeight: theme.typography.fontWeightBold,
     fontSize: 64,
+    paddingRight: theme.spacing(4),
 
     [theme.breakpoints.down('md')]: {
       textAlign: 'center',
       marginBottom: theme.spacing(4),
+      paddingRight: 0,
     },
 
     [theme.breakpoints.down('sm')]: {
@@ -88,9 +97,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   innerWrapper: {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 300,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    minHeight: 'calc(100vh - 174px)',
+
+    paddingTop: 200,
 
     [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
@@ -99,8 +110,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(3),
+      paddingTop: 150,
+    },
+
+    [theme.breakpoints.down('xs')]: {
       paddingTop: 120,
     },
+  },
+  flexWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   buttonsContainer: {
     display: 'flex',

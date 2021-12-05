@@ -3,6 +3,19 @@ const playersService = require('../players/players.service');
 const ordersService = require('../orders/orders.service');
 const reportsService = require('../reports/reports.service');
 const notesService = require('../notes/notes.service');
+const usersService = require('../users/users.service');
+
+async function getLandingData() {
+  const promiseArr = [
+    reportsService.getTotalReportsCount({}),
+    notesService.getTotalNotesCount({}),
+    usersService.getTotalUsersCount(),
+  ];
+
+  const [totalReportsCount, totalNotesCount, totalUsersCount] = await Promise.all(promiseArr);
+
+  return { totalReportsCount, totalNotesCount, totalUsersCount };
+}
 
 async function getDashboardData({ accessFilters, userId }) {
   const promiseArr = [
@@ -57,4 +70,4 @@ async function getDashboardData({ accessFilters, userId }) {
   };
 }
 
-module.exports = { getDashboardData };
+module.exports = { getDashboardData, getLandingData };

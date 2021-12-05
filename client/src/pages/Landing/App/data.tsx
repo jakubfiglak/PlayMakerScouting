@@ -121,28 +121,28 @@ export const testimonials: Testimonial[] = [
   },
 ];
 
-export const oneTimeServicePricing = {
-  price: '399 pln',
+export const variantOnePricing = {
+  price: '29 pln/miesiąc',
   features: [
-    { title: 'Usługa jednorazowa', value: true },
-    { title: 'Tworzenie statystycznych baz danych', value: true },
-    { title: 'Statystyczna rekomendacja zawodników', value: true },
-    { title: 'Zlecenia obserwacji', value: false },
-    { title: 'Wsparcie dla aktualnego działu skautingu', value: false },
-    { title: 'Statystyczna analiza przeciwników', value: false },
-    { title: 'Wszystkie ligi młodzieżowe PL', value: true },
+    { title: 'Moduł notatek', value: true },
+    { title: 'Moduł raportów', value: true },
+    { title: 'Wykresy umiejętności', value: true },
+    { title: 'Raporty w pdf', value: true },
+    { title: 'QR dla raportów', value: true },
+    { title: 'Kreator szablonów raportów', value: false },
+    { title: '1 licencja', value: true },
   ],
 };
 
-export const constantCooperationPricing = {
-  price: '199 pln/miesiąc',
+export const variantTwoPricing = {
+  price: '49 pln/miesiąc',
   features: [
-    { title: 'Stała współpraca', value: true },
-    { title: 'Tworzenie statystycznych baz danych', value: true },
-    { title: 'Statystyczna rekomendacja zawodników', value: true },
-    { title: 'Zlecenia obserwacji', value: true },
-    { title: 'Wsparcie dla aktualnego działu skautingu', value: true },
-    { title: 'Statystyczna analiza przeciwników', value: true },
-    { title: 'Wszystkie ligi młodzieżowe PL', value: true },
+    { title: 'Moduł notatek', value: true },
+    { title: 'Moduł raportów', value: true },
+    { title: 'Wykresy umiejętności', value: true },
+    { title: 'Raporty w pdf', value: true },
+    { title: 'QR dla raportów', value: true },
+    { title: 'Kreator szablonów raportów', value: true },
+    { title: 'Nieograniczona liczba licencji', value: true },
   ],
 };

@@ -13,7 +13,7 @@ export const LayoutContentWrapper = ({ children }: Props) => {
 
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
-    maxWidth: 1600,
+    maxWidth: 1200,
     margin: '0 auto',
     padding: theme.spacing(0, 2),
 

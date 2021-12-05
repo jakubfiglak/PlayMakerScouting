@@ -1,12 +1,24 @@
 const sgMail = require('../../config/sendgrid');
 
-async function sendEmail({ to, subject, text, html }) {
+function sendEmail({ to, subject, text, html }) {
   return sgMail.send({
     to,
     from: 'playmakerscoutingapp@gmail.com',
     subject,
     text,
     html,
+  });
+}
+
+function sendContactForm({ from, subject, text }) {
+  return sgMail.send({
+    to: 'biuro@playmaker.pro',
+    from: 'playmakerscoutingapp@gmail.com',
+    subject,
+    text: `${from} ${text}`,
+    html: `<h2>Nadawca: ${from}</h2>
+    <p>${text}</p>
+  `,
   });
 }
 
@@ -21,4 +33,4 @@ function sendConfirmationEmail({ email, username, confirmationURL }) {
   });
 }
 
-module.exports = { sendEmail, sendConfirmationEmail };
+module.exports = { sendEmail, sendContactForm, sendConfirmationEmail };

@@ -46,8 +46,18 @@ export const copyData = {
       Skauting Scout<em>Maker</em>.Pro
     </p>
   ),
-  text:
-    'Usługa skautingowa pozwalająca na monitorowanie każdej ligi piłkarskiej w Polsce. Zespół wyszkolonych skautów obserwuje wskazane przez klub rozgrywki i dostarcza notatki oraz raporty meczowe według wybranych parametrów. Sprawozdania poszerzone są o zaawansowane bazy danych statystycznych naszych analityków sportowych. ScoutMaker.pro odpowiada bieżącemu zapotrzebowaniu kadrowemu oraz wpisuje się w długofalowy plan budowania zespołu.',
+  text: (
+    <p>
+      Usługa skautingowa pozwalająca na monitorowanie każdej ligi piłkarskiej w
+      Polsce. Zespół wyszkolonych skautów obserwuje wskazane przez klub
+      rozgrywki i dostarcza notatki oraz raporty meczowe według wybranych
+      parametrów. Sprawozdania poszerzone są o zaawansowane bazy danych
+      statystycznych naszych analityków sportowych. ScoutMaker.pro odpowiada
+      bieżącemu zapotrzebowaniu kadrowemu oraz wpisuje się w długofalowy plan
+      budowania zespołu. Wartość usługi jest niższa niż miesięczne wynagrodzenie
+      jednego piłkarza. To <em>inwestycja</em>, nie koszt.
+    </p>
+  ),
   image: {
     src: phoneMenuMockup,
     alt: 'App with menu open view',
@@ -60,11 +70,12 @@ export const values: Value[] = [
     title: 'Analiza danych',
     icon: <DatabaseIcon />,
     values: [
-      'Określ zapotrzebowanie kadrowe',
+      'Określ zapotrzebowanie kadrowe oraz rozgrywki do obserwacji',
       'Dostarczamy kompletne dane statystyczne zawodników wraz z profilami transfermarkt',
       'Szybko i sprawnie filtruj bazę według rocznika, pozycji, ligi, regionu ',
     ],
-    link: '',
+    link:
+      'https://docs.google.com/spreadsheets/d/1zmP7uwEdXgTcHyAM0kLqZJzwHhRkXtpI/edit?usp=sharing&ouid=117557516330646294431&rtpof=true&sd=true',
   },
   {
     number: '02',
@@ -74,28 +85,31 @@ export const values: Value[] = [
       'Tworzymy krótkie notatki o każdym zawodniku, który jest zgodny z kryteriami obserwacji',
       'Zawężamy listę do najlepszych na wskazanych pozycjach',
     ],
-    link: '',
+    link:
+      'https://drive.google.com/file/d/1c7Clw9Q3_HTFJHml7QNTfroMTGi3imwu/view?usp=sharing',
   },
   {
     number: '03',
     title: 'Raporty',
     icon: <ReportsIcon />,
     values: [
-      'Arkusz obserwacyjny dopasowany do potrzeb klubu',
+      'Dopasujemy arkusz obserwacyjny do Twoich potrzeb',
       'Obserwujemy konkretne nazwiska na życzenie',
       'Tworzymy raporty o wyselekcjonowanych zawodnikach',
     ],
-    link: '',
+    link:
+      'https://drive.google.com/file/d/1KzkA-VticPoDlzuqpCVRGC-q7wos8T68/view?usp=sharing',
   },
   {
     number: '04',
     title: 'Rekomendacje',
     icon: <RecommendationsIcon />,
     values: [
-      'Regularny kontakt i dopasowanie do zmian kadrowych',
-      'Przed każdym oknem transferowym dostarczamy okresowy raport podsumowujący',
+      'Utrzymujemy regularny kontakt i elastycznie dopasowujemy się do potrzeb kadrowych',
+      'Dostarczamy okresowe raporty podsumowujące, nie tylko przed oknem transferowym',
     ],
-    link: '',
+    link:
+      'https://drive.google.com/file/d/1MbPfmxE8g0CTpieYb1Z0d99YwhNAkeCq/view?usp=sharing',
   },
 ];
 
@@ -204,7 +218,7 @@ export const transfers: Transfer[] = [
       logo: polkowiceLogo,
     },
     reportLink:
-      'https://drive.google.com/file/d/1h5Or6CBbd-lOJKcOKoEUNyCSlwsIj2gB/view?usp=sharing',
+      'https://drive.google.com/file/d/1pX2hTw-QO9BPJRpSONQjRU7sEYdET9iL/view?usp=sharing',
   },
 ];
 
@@ -256,7 +270,7 @@ export const recommendations: Recommendation[] = [
     from: 'Górnik II Zabrze',
     to: 'Skra Częstochowa',
     reportLink:
-      'https://drive.google.com/file/d/1EzHQbopGGoIC-aWn5YrIjtvupsr4L1UI/view?usp=sharing',
+      'https://drive.google.com/file/d/1e2UkW4DgFzWROx_AoK2xHMUPwJpjg4Qo/view?usp=sharing',
   },
 ];
 

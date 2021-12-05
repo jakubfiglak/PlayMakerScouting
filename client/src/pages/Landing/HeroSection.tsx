@@ -70,7 +70,6 @@ const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
   innerContainer: {
     display: 'flex',
     color: theme.palette.primary.contrastText,
-    paddingTop: 200,
     minHeight: '100vh',
 
     [theme.breakpoints.down('md')]: {
@@ -113,6 +112,7 @@ const useStyles = makeStyles<Theme, StylesProps>((theme) => ({
   contentContainer: {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     gap: 36,
     margin: '0 auto',
   },

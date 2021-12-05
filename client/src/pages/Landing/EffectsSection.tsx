@@ -9,7 +9,7 @@ export const EffectsSection = ({ title, effects }: Props) => {
   const classes = useStyles();
 
   return (
-    <section>
+    <section className={classes.container}>
       <LayoutContentWrapper>
         <Typography variant="h2" className={classes.heading}>
           {title}
@@ -18,13 +18,14 @@ export const EffectsSection = ({ title, effects }: Props) => {
           container
           spacing={3}
           justify="space-between"
-          className={classes.container}
+          className={classes.cardsContainer}
         >
           {effects.map((effect) => (
             <Grid
               item
               key={effect.name}
               xl={3}
+              lg={3}
               sm={6}
               xs={12}
               alignItems="stretch"
@@ -44,6 +45,9 @@ export const EffectsSection = ({ title, effects }: Props) => {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    paddingBottom: theme.spacing(4),
+  },
   heading: {
     fontSize: 48,
     padding: theme.spacing(3, 0),
@@ -53,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       textAlign: 'center',
     },
   },
-  container: {
+  cardsContainer: {
     marginTop: theme.spacing(3),
   },
 }));

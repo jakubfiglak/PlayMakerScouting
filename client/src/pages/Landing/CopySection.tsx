@@ -4,7 +4,7 @@ import { LayoutContentWrapper } from './LayoutContentWrapper';
 
 type Props = {
   title: ReactNode;
-  text: string;
+  text: string | ReactNode;
   image: {
     src: string;
     alt: string;
@@ -67,6 +67,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   text: {
     fontSize: 24,
+
+    '& em': {
+      color: theme.palette.secondary.main,
+      fontStyle: 'normal',
+    },
   },
   imageContainer: {
     flexBasis: '15%',

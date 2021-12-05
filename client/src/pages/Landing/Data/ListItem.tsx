@@ -21,13 +21,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing(2),
+    color: theme.palette.primary.contrastText,
   },
   number: {
     fontSize: 24,
     padding: theme.spacing(2),
     borderRadius: 10,
-    background: '#000',
-    color: theme.palette.primary.contrastText,
+    background: theme.palette.primary.contrastText,
+    color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightBold,
   },
   text: {

@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react';
+import CountUp from 'react-countup';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 
 type Props = {
   title: string;
-  count: number;
+  count?: number;
   icon: ReactNode;
 };
 
@@ -12,7 +13,9 @@ export const AppNumber = ({ title, count, icon }: Props) => {
 
   return (
     <div>
-      <Typography className={classes.count}>{count}</Typography>
+      <Typography className={classes.count}>
+        {count ? <CountUp end={count} /> : 0}
+      </Typography>
       <div className={classes.titleContainer}>
         <Typography className={classes.title}>{title}</Typography>
         {icon}

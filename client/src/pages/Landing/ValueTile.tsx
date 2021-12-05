@@ -48,33 +48,26 @@ export const ValueTile = ({ value }: Props) => {
 
 const useStyles = makeStyles((theme: Theme) => ({
   tile: {
-    flex: '1 1 25%',
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(2),
-
-    [theme.breakpoints.down('lg')]: {
-      flexBasis: '50%',
-    },
-
-    [theme.breakpoints.down('sm')]: {
-      flexBasis: '100%',
-    },
+    height: '100%',
   },
   heading: {
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing(2),
-    padding: theme.spacing(0, 3),
+    paddingLeft: theme.spacing(3),
     marginBottom: theme.spacing(2),
   },
   titleContainer: {
     display: 'flex',
-    gap: theme.spacing(1),
     alignItems: 'center',
+    gap: theme.spacing(1),
+    width: '100%',
   },
   number: {
-    fontSize: 36,
+    fontSize: 24,
     padding: theme.spacing(2),
     borderRadius: 10,
     background: '#000',
@@ -82,13 +75,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: theme.typography.fontWeightBold,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
+    fontWeight: theme.typography.fontWeightBold,
   },
   list: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(1),
   },
   listItem: {
-    fontSize: 18,
+    fontSize: 16,
   },
   link: {
     display: 'block',

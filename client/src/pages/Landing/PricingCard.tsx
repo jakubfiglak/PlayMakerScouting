@@ -4,7 +4,6 @@ import {
   CardContent,
   Typography,
   List,
-  Link,
   Button,
   ListItem,
   ListItemIcon,
@@ -19,7 +18,8 @@ type Props = {
   price: string;
   priceFrom?: boolean;
   features: { title: string; value: boolean }[];
-  buttonText: string;
+  buttonText?: string;
+  onButtonClick?: () => void;
 };
 
 export const PricingCard = ({
@@ -27,6 +27,7 @@ export const PricingCard = ({
   priceFrom,
   features,
   buttonText,
+  onButtonClick,
 }: Props) => {
   const classes = useStyles();
 
@@ -57,17 +58,18 @@ export const PricingCard = ({
             </Fragment>
           ))}
         </List>
-        <div className={classes.linkContainer}>
-          <Link href="mailto:biuro@playmaker.pro" className={classes.link}>
+        {buttonText ? (
+          <div className={classes.buttonContainer}>
             <Button
               color="secondary"
               variant="contained"
               className={classes.button}
+              onClick={onButtonClick}
             >
               {buttonText}
             </Button>
-          </Link>
-        </div>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );
@@ -100,10 +102,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   text: {
     fontSize: 18,
   },
-  linkContainer: {
+  buttonContainer: {
     height: 30,
   },
-  link: {
+  button: {
+    padding: theme.spacing(2, 4),
+    fontWeight: theme.typography.fontWeightBold,
     position: 'absolute',
     bottom: 0,
     left: '50%',
@@ -112,9 +116,5 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:hover': {
       textDecoration: 'none',
     },
-  },
-  button: {
-    padding: theme.spacing(2, 4),
-    fontWeight: theme.typography.fontWeightBold,
   },
 }));

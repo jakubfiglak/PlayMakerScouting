@@ -8,37 +8,37 @@ export const RecommendationsSection = () => {
 
   return (
     <section>
-      <div className={classes.headingContainer}>
+      <div className={classes.container}>
         <LayoutContentWrapper>
           <Typography variant="h2" className={classes.heading}>
             Pozostałe polecenia
           </Typography>
+          <Grid container spacing={3} className={classes.cardsContainer}>
+            {recommendations.map((recommendation) => (
+              <Grid
+                item
+                xl={4}
+                lg={4}
+                md={6}
+                sm={6}
+                xs={12}
+                key={recommendation.player}
+              >
+                <RecommendationCard recommendation={recommendation} />
+              </Grid>
+            ))}
+          </Grid>
         </LayoutContentWrapper>
       </div>
-      <LayoutContentWrapper>
-        <Grid container spacing={3} className={classes.cardsContainer}>
-          {recommendations.map((recommendation) => (
-            <Grid item xl={4} md={6} sm={6} xs={12} key={recommendation.player}>
-              <RecommendationCard recommendation={recommendation} />
-            </Grid>
-          ))}
-        </Grid>
-      </LayoutContentWrapper>
     </section>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  headingContainer: {
+  container: {
     background: '#000',
     color: theme.palette.primary.contrastText,
     padding: theme.spacing(4),
-    clipPath: `polygon(
-      0 0,
-      100% 0,
-      100% calc(100% - 30px),
-      0 100%
-    )`,
   },
   heading: {
     fontSize: 48,

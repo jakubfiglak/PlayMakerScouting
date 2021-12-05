@@ -3,7 +3,11 @@ import { PricingCard } from '../PricingCard';
 import { LayoutContentWrapper } from '../LayoutContentWrapper';
 import { oneTimeServicePricing, constantCooperationPricing } from './data';
 
-export const PricingSection = () => {
+type Props = {
+  onButtonClick?: () => void;
+};
+
+export const PricingSection = ({ onButtonClick }: Props) => {
   const classes = useStyles();
 
   return (
@@ -18,12 +22,14 @@ export const PricingSection = () => {
             priceFrom
             price={oneTimeServicePricing.price}
             buttonText="Zapytaj o wycenę"
+            onButtonClick={onButtonClick}
           />
           <PricingCard
             features={constantCooperationPricing.features}
             priceFrom
             price={constantCooperationPricing.price}
             buttonText="Zapytaj o wycenę"
+            onButtonClick={onButtonClick}
           />
         </div>
       </LayoutContentWrapper>

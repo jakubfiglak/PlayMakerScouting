@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CssBaseline } from '@material-ui/core';
 import { ValuesSection } from '../ValuesSection';
 import { TransfersSection } from './TranfersSection';
@@ -9,8 +10,11 @@ import { HeroSection } from '../HeroSection';
 import { CopySection } from '../CopySection';
 import { AdvantagesSection } from '../AdvantagesSection';
 import { heroData, copyData, advantages, values } from './data';
+import { ContactFormModal } from '../ContactFormModal';
 
 export const ClubScoutingPage = () => {
+  const [isContactFormModalOpen, setIsContactFormModalOpen] = useState(false);
+
   return (
     <>
       <main>
@@ -21,8 +25,14 @@ export const ClubScoutingPage = () => {
         <AdvantagesSection subtitle advantages={advantages} />
         <TransfersSection />
         <RecommendationsSection />
-        <PricingSection />
-        <HistoricalDataSection />
+        <PricingSection onButtonClick={() => setIsContactFormModalOpen(true)} />
+        <HistoricalDataSection
+          onButtonClick={() => setIsContactFormModalOpen(true)}
+        />
+        <ContactFormModal
+          open={isContactFormModalOpen}
+          onClose={() => setIsContactFormModalOpen(false)}
+        />
       </main>
       <Footer />
     </>
