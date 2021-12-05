@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-around',
     alignItems: 'center',
     gap: theme.spacing(3),
-    fontSize: 18,
+    fontSize: 16,
     flex: 1,
 
     '& a': {
@@ -148,7 +148,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   contactContainer: {
-    fontSize: 24,
+    fontSize: 18,
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
