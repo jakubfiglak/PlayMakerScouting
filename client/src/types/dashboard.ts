@@ -16,3 +16,9 @@ export type DashboardData = {
   acceptedOrdersCount: number | null;
   closedOrdersCount: number | null;
 };
+
+export type LandingData = {
+  totalReportsCount: number;
+  totalNotesCount: number;
+  totalUsersCount: number;
+};

@@ -16,3 +16,15 @@ exports.getDashboardData = asyncHandler(async (req, res) => {
     data,
   });
 });
+
+// @desc Get landing data
+// @route GET /api/v1/dashboard/landing
+// @access Public
+exports.getLandingData = asyncHandler(async (req, res) => {
+  const data = await dashboardService.getLandingData();
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data,
+  });
+});

@@ -6,17 +6,31 @@ import {
 } from '@material-ui/icons';
 import { makeStyles, Theme } from '@material-ui/core';
 import { AppNumber } from './AppNumber';
+import { useLandingData } from '../../hooks/dashboard';
 
 export const AppNumbers = () => {
   const classes = useStyles();
+  const { data } = useLandingData();
 
   return (
     <div className={classes.container}>
-      <AppNumber count={185} title="Raportów" icon={<ReportsIcon />} />
+      <AppNumber
+        count={data?.totalReportsCount}
+        title="Raportów"
+        icon={<ReportsIcon />}
+      />
       <div className={classes.divider} />
-      <AppNumber count={600} title="Notatek" icon={<NotesIcon />} />
+      <AppNumber
+        count={data?.totalNotesCount}
+        title="Notatek"
+        icon={<NotesIcon />}
+      />
       <div className={classes.divider} />
-      <AppNumber count={14} title="Skautów" icon={<ScoutsIcon />} />
+      <AppNumber
+        count={data?.totalUsersCount}
+        title="Skautów"
+        icon={<ScoutsIcon />}
+      />
     </div>
   );
 };

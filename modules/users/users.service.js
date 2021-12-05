@@ -27,6 +27,10 @@ async function getAllUsersList() {
   return users;
 }
 
+function getTotalUsersCount() {
+  return User.countDocuments();
+}
+
 async function changeRole({ user, role }) {
   const editedUser = user;
   editedUser.role = role;
@@ -58,4 +62,5 @@ module.exports = {
   changeRole,
   goToTheMatch,
   leaveTheMatch,
+  getTotalUsersCount,
 };
