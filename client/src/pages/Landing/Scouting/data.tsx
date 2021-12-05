@@ -218,7 +218,7 @@ export const transfers: Transfer[] = [
       logo: polkowiceLogo,
     },
     reportLink:
-      'https://drive.google.com/file/d/1h5Or6CBbd-lOJKcOKoEUNyCSlwsIj2gB/view?usp=sharing',
+      'https://drive.google.com/file/d/1pX2hTw-QO9BPJRpSONQjRU7sEYdET9iL/view?usp=sharing',
   },
 ];
 
@@ -270,7 +270,7 @@ export const recommendations: Recommendation[] = [
     from: 'Górnik II Zabrze',
     to: 'Skra Częstochowa',
     reportLink:
-      'https://drive.google.com/file/d/1EzHQbopGGoIC-aWn5YrIjtvupsr4L1UI/view?usp=sharing',
+      'https://drive.google.com/file/d/1e2UkW4DgFzWROx_AoK2xHMUPwJpjg4Qo/view?usp=sharing',
   },
 ];
 
