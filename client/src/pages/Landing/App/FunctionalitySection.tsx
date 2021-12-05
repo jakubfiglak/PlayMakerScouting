@@ -15,7 +15,7 @@ export const FunctionalitySection = () => {
       <LayoutContentWrapper>
         <Grid
           container
-          spacing={6}
+          spacing={4}
           component="ul"
           justify="space-between"
           className={classes.tilesContainer}

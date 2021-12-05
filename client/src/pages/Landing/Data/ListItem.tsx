@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     gap: theme.spacing(2),
     color: theme.palette.primary.contrastText,
+
+    [theme.breakpoints.down('sm')]: {
+      padding: 0,
+    },
   },
   number: {
     fontSize: 24,
