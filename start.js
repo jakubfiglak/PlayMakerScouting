@@ -22,8 +22,7 @@ const accessControlLists = require('./routes/accessControlLists');
 const reportBackgroundImages = require('./routes/reportBackgroundImages');
 const matches = require('./routes/matches');
 const notes = require('./routes/notes');
-
-// test comment
+const email = require('./routes/email');
 
 const startServer = (port = process.env.PORT || 5000) => {
   const app = express();
@@ -71,6 +70,7 @@ const startServer = (port = process.env.PORT || 5000) => {
   app.use('/api/v1/report-background-images', reportBackgroundImages);
   app.use('/api/v1/matches', matches);
   app.use('/api/v1/notes', notes);
+  app.use('/api/v1/email', email);
 
   // Serve static assets in production
   if (process.env.NODE_ENV === 'production') {
