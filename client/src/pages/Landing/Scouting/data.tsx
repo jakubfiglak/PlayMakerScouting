@@ -74,7 +74,8 @@ export const values: Value[] = [
       'Dostarczamy kompletne dane statystyczne zawodników wraz z profilami transfermarkt',
       'Szybko i sprawnie filtruj bazę według rocznika, pozycji, ligi, regionu ',
     ],
-    link: '',
+    link:
+      'https://docs.google.com/spreadsheets/d/1zmP7uwEdXgTcHyAM0kLqZJzwHhRkXtpI/edit?usp=sharing&ouid=117557516330646294431&rtpof=true&sd=true',
   },
   {
     number: '02',
