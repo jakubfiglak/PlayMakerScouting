@@ -31,6 +31,10 @@ function getTotalUsersCount() {
   return User.countDocuments();
 }
 
+function getPlaymakerScoutUsersCount() {
+  return User.countDocuments({ role: 'playmaker-scout' });
+}
+
 async function changeRole({ user, role }) {
   const editedUser = user;
   editedUser.role = role;
@@ -63,4 +67,5 @@ module.exports = {
   goToTheMatch,
   leaveTheMatch,
   getTotalUsersCount,
+  getPlaymakerScoutUsersCount,
 };

@@ -17,7 +17,7 @@ export const TestimonialCard = ({ title, subtitle, text }: Props) => {
   const classes = useStyles();
 
   return (
-    <Card>
+    <Card className={classes.container}>
       <CardHeader
         title={title}
         subheader={subtitle}
@@ -32,6 +32,9 @@ export const TestimonialCard = ({ title, subtitle, text }: Props) => {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    height: '100%',
+  },
   header: {
     background: theme.palette.secondary.main,
     color: theme.palette.primary.contrastText,

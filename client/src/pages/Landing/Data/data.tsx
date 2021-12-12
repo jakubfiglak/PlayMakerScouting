@@ -47,25 +47,25 @@ export const copyData = {
 
 export const advantages: Advantage[] = [
   {
-    title: 'czas',
+    title: 'Czas',
     icon: <TimeIcon color="inherit" />,
     text:
       'Piłkarz potrzebny na wczoraj? W zależności od skomplikowania, raport analizy statystycznej możesz otrzymać jeszcze tego samego tygodnia. ',
   },
   {
-    title: 'pieniądze',
+    title: 'Pieniądze',
     icon: <MoneyIcon color="inherit" />,
     text:
       'Zlecenie na każdą kieszeń. Wspólnie zdecydujemy, jaki zakres analizy da efekty oraz nie naruszy klubowego budżetu.',
   },
   {
-    title: 'baza danych',
+    title: 'Baza danych',
     icon: <DatabaseIcon color="inherit" />,
     text:
       'Analiza tworzy przewagę. Kompleksowa i usystematyzowana wiedza minimalizuje ryzyko nietrafionych decyzji i pozwala być krok przed przeciwnikami.',
   },
   {
-    title: 'transfery',
+    title: 'Transfery',
     icon: <ScoutingIcon color="inherit" />,
     text:
       'Wzmacniaj, nie uzupełniaj. Sprawdzaj najlepszych zawodników i zwiększaj konkurencję w zespole. Stawiaj na piłkarską jakość, która spełnia oczekiwania.',
@@ -131,7 +131,7 @@ export const methodology = [
 ];
 
 export const oneTimeServicePricing = {
-  price: '399 pln',
+  price: '499 pln',
   features: [
     { title: 'Usługa jednorazowa', value: true },
     { title: 'Tworzenie statystycznych baz danych', value: true },
@@ -143,7 +143,7 @@ export const oneTimeServicePricing = {
 };
 
 export const constantCooperationPricing = {
-  price: '199 pln/miesiąc',
+  price: '299 pln/miesiąc',
   features: [
     { title: 'Stała współpraca', value: true },
     { title: 'Tworzenie statystycznych baz danych', value: true },

@@ -66,8 +66,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   text: {
-    fontSize: 24,
-
     '& em': {
       color: theme.palette.secondary.main,
       fontStyle: 'normal',

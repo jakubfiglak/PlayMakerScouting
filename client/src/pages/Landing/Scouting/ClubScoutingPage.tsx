@@ -22,7 +22,7 @@ export const ClubScoutingPage = () => {
         <HeroSection {...heroData} displayAppNumbers />
         <CopySection {...copyData} />
         <ValuesSection values={values} />
-        <AdvantagesSection subtitle advantages={advantages} />
+        <AdvantagesSection advantages={advantages} />
         <TransfersSection />
         <RecommendationsSection />
         <PricingSection onButtonClick={() => setIsContactFormModalOpen(true)} />

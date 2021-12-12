@@ -30,8 +30,13 @@ export const ValuesSection = ({ values }: Props) => {
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     paddingBottom: theme.spacing(4),
+    overflow: 'hidden',
+    position: 'relative',
   },
   shape: {
+    position: 'absolute',
+    top: -1,
+    left: 0,
     width: '100%',
     height: 50,
     background: '#000',
@@ -44,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   heading: {
     fontSize: 48,
-    padding: theme.spacing(3, 0),
+    padding: theme.spacing(8, 0),
 
     [theme.breakpoints.down('sm')]: {
       textAlign: 'center',

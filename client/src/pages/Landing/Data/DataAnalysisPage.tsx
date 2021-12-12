@@ -19,7 +19,7 @@ export const DataAnalysisPage = () => {
         <CssBaseline />
         <HeroSection {...heroData} />
         <CopySection {...copyData} />
-        <AdvantagesSection subtitle advantages={advantages} />
+        <AdvantagesSection advantages={advantages} />
         <EffectsSection effects={effects} title="Przykłady analizy danych" />
         <HowDoWeWorkSection />
         <PricingSection onButtonClick={() => setIsContactFormModalOpen(true)} />

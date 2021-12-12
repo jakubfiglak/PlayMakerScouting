@@ -95,25 +95,25 @@ export const values: Value[] = [
 
 export const advantages: Advantage[] = [
   {
-    title: 'czas',
+    title: 'Czas',
     icon: <TimeIcon color="inherit" />,
     text:
       'Rób swoje. Organizacja naborów, zapraszanie zawodników i weryfikacja ich umiejętności to złożony proces.',
   },
   {
-    title: 'pieniądze',
+    title: 'Pieniądze',
     icon: <MoneyIcon color="inherit" />,
     text:
       'Zlecenie na każdą kieszeń. Wspólnie zdecydujemy, jaki zakres danych da efekty oraz nie naruszy klubowego budżetu. Skorzystaj z jednorazowej analizy lub długofalowej współpracy.',
   },
   {
-    title: 'baza danych',
+    title: 'Baza danych',
     icon: <DatabaseIcon color="inherit" />,
     text:
       'Informacja to pieniądz. Zaufaj wiedzy analitycznej i porównuj setki młodych piłkarzy w krótkim czasie. Sprawdź, z jakimi trenerami współpracowali i gdzie zaczerpnąć opinii.',
   },
   {
-    title: 'e-skauting',
+    title: 'E-skauting',
     icon: <ScoutingIcon color="inherit" />,
     text:
       'Przyszłość w kieszeni. Monitoruj wszystkich zawodników z wybranego regionu i zapraszaj do siebie najlepszych. Bądź krok przed przeciwnikami.',

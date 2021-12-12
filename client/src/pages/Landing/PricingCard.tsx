@@ -126,5 +126,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:hover': {
       textDecoration: 'none',
     },
+
+    [theme.breakpoints.down('xs')]: {
+      width: '80%',
+    },
   },
 }));

@@ -4,12 +4,11 @@ import { AdvantageTile } from './AdvantageTile';
 import { Advantage } from './types';
 
 type Props = {
-  subtitle?: boolean;
   advantages: Advantage[];
   dark?: boolean;
 };
 
-export const AdvantagesSection = ({ subtitle, advantages, dark }: Props) => {
+export const AdvantagesSection = ({ advantages, dark }: Props) => {
   const classes = useStyles({ dark });
 
   return (
@@ -18,11 +17,6 @@ export const AdvantagesSection = ({ subtitle, advantages, dark }: Props) => {
         <Typography variant="h2" className={classes.heading}>
           Korzyści
         </Typography>
-        {subtitle ? (
-          <Typography className={classes.subtitle}>
-            korzystania z Scout<em>Maker</em>.pro
-          </Typography>
-        ) : null}
       </LayoutContentWrapper>
       <LayoutContentWrapper>
         <Grid container spacing={2} className={classes.tilesContainer}>

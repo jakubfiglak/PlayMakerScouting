@@ -115,25 +115,25 @@ export const values: Value[] = [
 
 export const advantages: Advantage[] = [
   {
-    title: 'czas',
+    title: 'Czas',
     icon: <TimeIcon color="inherit" />,
     text:
       'Rób swoje. Sprawdzenie polecanego piłkarza jest złożonym procesem. W naszym teamie zajmuje się tym 14 wyszkolonych skautów.',
   },
   {
-    title: 'pieniądze',
+    title: 'Pieniądze',
     icon: <MoneyIcon color="inherit" />,
     text:
       'Oszczędność i inwestycja. Koszty niższe, niż utrzymanie jednego pracownika i potencjalny wzrost wartości w postaci utalentowanych piłkarzy. ',
   },
   {
-    title: 'baza danych',
+    title: 'Baza danych',
     icon: <DatabaseIcon color="inherit" />,
     text:
       'Analiza tworzy przewagę. Kompleksowa i usystematyzowana wiedza minimalizuje ryzyko nietrafionego transferu.',
   },
   {
-    title: 'skauting na zlecenie',
+    title: 'Skauting na zlecenie',
     icon: <ScoutingIcon color="inherit" />,
     text:
       'Weryfikuj polecenia. Wskaż nazwisko, a otrzymasz maksimum informacji o wybranym zawodniku.',

@@ -20,7 +20,7 @@ export const ScoutingAcademyPage = () => {
         <HeroSection {...heroData} />
         <CopySection {...copyData} />
         <ValuesSection values={values} />
-        <AdvantagesSection subtitle advantages={advantages} dark />
+        <AdvantagesSection advantages={advantages} dark />
         <EffectsSection title="Zaufali nam" effects={effects} />
         <PricingSection onButtonClick={() => setIsContactFormModalOpen(true)} />
         <ContactFormModal
