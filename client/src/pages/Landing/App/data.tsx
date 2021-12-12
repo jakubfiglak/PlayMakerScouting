@@ -71,19 +71,19 @@ export const functionalities = [
 
 export const advantages: Advantage[] = [
   {
-    title: 'czas',
+    title: 'Czas',
     icon: <TimeIcon color="inherit" />,
     text:
       'Dostosowywanie, udostępnianie i prezentacja danych w jednym narzędziu..',
   },
   {
-    title: 'baza danych',
+    title: 'Baza danych',
     icon: <DatabaseIcon color="inherit" />,
     text:
       'Kompleksowa i usystematyzowana wiedza pomaga w zarządzaniu Twoją pracą.',
   },
   {
-    title: 'intuicyjność',
+    title: 'Intuicyjność',
     icon: <IntuitiveIcon color="inherit" />,
     text: 'Prosta obsługa, która ułatwia pracę w każdych warunkach.',
   },

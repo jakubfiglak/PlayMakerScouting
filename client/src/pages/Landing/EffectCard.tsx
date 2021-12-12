@@ -28,7 +28,7 @@ export const EffectCard = ({ title, text, logo, link }: Props) => {
         <Typography variant="h4" className={classes.title}>
           {title}
         </Typography>
-        <Typography className={classes.text}>{text}</Typography>
+        <Typography>{text}</Typography>
       </CardContent>
       <CardActions>
         <Link
@@ -70,9 +70,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: theme.typography.fontWeightBold,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
-  },
-  text: {
-    fontSize: 18,
   },
   link: {
     display: 'block',

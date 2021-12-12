@@ -39,14 +39,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     gap: theme.spacing(1),
     alignItems: 'center',
-    textTransform: 'uppercase',
     marginBottom: theme.spacing(2),
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
+    fontWeight: theme.typography.fontWeightBold,
   },
   text: {
-    fontSize: 18,
     paddingRight: theme.spacing(2),
   },
 }));

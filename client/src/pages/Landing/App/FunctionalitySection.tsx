@@ -34,9 +34,7 @@ export const FunctionalitySection = () => {
               <Typography variant="h4" className={classes.title}>
                 {functionality.title}
               </Typography>
-              <Typography className={classes.text}>
-                {functionality.text}
-              </Typography>
+              <Typography>{functionality.text}</Typography>
             </Grid>
           ))}
         </Grid>
@@ -59,14 +57,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: theme.typography.fontWeightBold,
     marginBottom: theme.spacing(1),
   },
   tilesContainer: {
     marginTop: theme.spacing(3),
-  },
-  text: {
-    fontSize: 18,
   },
 }));
