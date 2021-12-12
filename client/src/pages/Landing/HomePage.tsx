@@ -132,9 +132,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     padding: theme.spacing(6),
+
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(6, 0),
+      justifyContent: 'stretch',
+    },
   },
   link: {
     textDecoration: 'none',
+
+    [theme.breakpoints.down('xs')]: {
+      flex: 1,
+    },
   },
   goToAppButton: {
     fontSize: 16,
@@ -145,6 +154,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 
     '&:hover': {
       color: theme.palette.primary.contrastText,
+    },
+
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
     },
   },
 }));
