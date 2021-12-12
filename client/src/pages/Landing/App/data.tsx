@@ -105,19 +105,19 @@ export const testimonials: Testimonial[] = [
     name: 'Łukasz Cebula',
     role: 'Analityk Odry Opole',
     text:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium itaque commodi non cumque laboriosam delectus tempora id quod pariatur neque.',
-  },
-  {
-    name: 'Waldemar Jedynak',
-    role: 'Prezes Górnika Polkowice',
-    text:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium itaque commodi non cumque laboriosam delectus tempora id quod pariatur neque.',
+      'Odra Opole była jednym z pierwszych klubów, które zawarły umowę na usługi scoutingowe z platformą Playermaker Pro. Cenimy sobie profesjonalizm, zaangażowanie i ciągłą chęć rozwoju u ludzi związanych z tym projektem. Na współpracy korzysta zarówno pierwszy zespół, jak i Akademia Odry Opole. Zakres działań jest poszerzany z każdą kolejna rundą, co z pewnością przekłada się na rozwój działu scoutingu w klubie. Z czystym sumieniem polecamy współpracę z Playmaker Pro. Dzięki aplikacji możemy w dowolnej chwili sprawdzać status prac skautów i weryfikować podesłane nam nazwiska przez ludzi z otoczenia piłkarskiego. To duże ułatwienie i oszczędność czasu. Wszystko mamy w jednym miejscu.',
   },
   {
     name: 'Rafał Stryczek',
-    role: 'Skaut',
+    role: 'Skaut "PlayMaker.Pro" oraz "Moja i Twoja Piłka"',
     text:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium itaque commodi non cumque laboriosam delectus tempora id quod pariatur neque.',
+      'Aplikacja pozwoliła mi ustrukturyzować swoje działania skautingowe. Nie potrzebuję już notesu i przepisywania notatek po meczu. Raz zapisane informacje są łatwe do filtrowania, a cała moja wiedza dostępna pod dwoma kliknięciami.',
+  },
+  {
+    name: 'Piotr Stawarczyk',
+    role: 'Piłkarz Hutnika Kraków, Skaut',
+    text:
+      'Aplikacja skautingowa PlayMaker.pro pozwala mi w jednym miejscu trzymać całą moją pracę dotyczącą obserwacji zawodników. Mogę wprowadzać krótkie notki i tworzyć obszerne raporty. Jest prosta w obsłudze i dopasowana do moich kryteriów oceny potencjału piłkarzy.',
   },
 ];
 
