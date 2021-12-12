@@ -131,7 +131,7 @@ export const methodology = [
 ];
 
 export const oneTimeServicePricing = {
-  price: '399 pln',
+  price: '499 pln',
   features: [
     { title: 'Usługa jednorazowa', value: true },
     { title: 'Tworzenie statystycznych baz danych', value: true },
@@ -143,7 +143,7 @@ export const oneTimeServicePricing = {
 };
 
 export const constantCooperationPricing = {
-  price: '199 pln/miesiąc',
+  price: '299 pln/miesiąc',
   features: [
     { title: 'Stała współpraca', value: true },
     { title: 'Tworzenie statystycznych baz danych', value: true },
