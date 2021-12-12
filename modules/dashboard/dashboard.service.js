@@ -9,7 +9,7 @@ async function getLandingData() {
   const promiseArr = [
     reportsService.getTotalReportsCount({}),
     notesService.getTotalNotesCount({}),
-    usersService.getTotalUsersCount(),
+    usersService.getPlaymakerScoutUsersCount(),
   ];
 
   const [totalReportsCount, totalNotesCount, totalUsersCount] = await Promise.all(promiseArr);
