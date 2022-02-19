@@ -10,38 +10,33 @@ dotenv.config({ path: './config/config.env' });
 
 const prodAdminId = '6047f176c5d45231a400ef89';
 const devAdminId = '5d7a514b5d2c12c7449be042';
+const devClubId = '5fdf6191eab8b362dc4b089a';
 
 const results = [];
 
 async function seedPlayers() {
   await connectDB(process.env.PRODUCTION_DB_CONNECT);
 
-  fs.createReadStream(path.resolve(__dirname, '../data', '2021-09-07-players.csv'))
+  fs.createReadStream(path.resolve(__dirname, '../data', '2022-02-19-players.csv'))
     .pipe(csv.parse({ headers: true }))
     .on('error', (error) => console.error(error))
     .on('data', (row) => results.push(row))
     .on('end', async () => {
-      const players = results.map((result) => ({
-        firstName: result.firstName,
-        lastName: result.lastName,
-        club: result.club,
-        position: result.position || 'CM',
-        yearOfBirth: result.yearOfBirth,
-        height: result.height,
-        weight: result.weight,
-        footed: result.footed || 'both',
-        lnpID: result.lnpID,
-        lnpProfileURL: result.lnpProfileURL,
-        minut90ProfileURL: result.minut90ProfileURL,
-        transfermarktProfileURL: result.transfermarktProfileURL,
-        author: result.author || prodAdminId,
-        isPublic: false,
+      const players = results.map(({ _id, ...rest }) => ({
+        ...rest,
+        country: 'PL',
+        position: rest.position || 'CM',
+        footed: rest.footed || 'R',
         isSeededFromPlaymakerDb: true,
+        isPublic: false,
+        createdByUserWithRole: 'admin',
+        firstName: rest.firstName || 'Imię',
+        // Dev overwrites
+        author: rest.author || prodAdminId,
       }));
 
       const created = await Player.create(players);
-      console.log(created);
-      console.log(`Created ${created.length} clubs!`.green.inverse);
+      console.log(`Created ${created.length} players!`.green.inverse);
       process.exit();
     });
 }
