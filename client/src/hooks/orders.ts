@@ -182,7 +182,7 @@ export function useUpdateOrder(orderId: string) {
       onSuccess: (data) => {
         setAlert({
           msg: getUpdateSuccessMessage({
-            type: 'notatkę',
+            type: 'zlecenie',
             name: `nr ${data.data.docNumber}`,
           }),
           type: 'success',
@@ -213,7 +213,7 @@ export function useDeleteOrder() {
   return useMutation((id: string) => deleteOrder(id), {
     onSuccess: (data) => {
       setAlert({
-        msg: getDeleteSuccessMessage({ type: 'notatkę', id: data.data }),
+        msg: getDeleteSuccessMessage({ type: 'zlecenie', id: data.data }),
         type: 'success',
       });
       queryClient.invalidateQueries('orders');
