@@ -4,18 +4,20 @@ import * as yup from 'yup';
 // MUI components
 import { TextField, Button, Grid, makeStyles, Theme } from '@material-ui/core';
 // Types
-import { ForgotPasswordFormData } from '../../types/auth';
+import { ResetPasswordFormData } from '../../types/auth';
+import { passwordValidationSchema } from '../../data/forms/validationSchemas';
 
 type Props = {
-  onSubmit: (data: ForgotPasswordFormData) => void;
+  onSubmit: (data: ResetPasswordFormData) => void;
 };
 
-export const ForgotPasswordForm = ({ onSubmit }: Props) => {
+export const ResetPasswordForm = ({ onSubmit }: Props) => {
   const classes = useStyles();
 
-  const formik = useFormik<ForgotPasswordFormData>({
+  const formik = useFormik<ResetPasswordFormData>({
     initialValues: {
-      email: '',
+      password: '',
+      passwordConfirm: '',
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -32,13 +34,29 @@ export const ForgotPasswordForm = ({ onSubmit }: Props) => {
         variant="outlined"
         margin="normal"
         fullWidth
-        id="email"
-        label="Email"
-        autoComplete="email"
-        autoFocus
-        {...getFieldProps('email')}
-        error={touched.email && !!errors.email}
-        helperText={touched.email && !!errors.email && errors.email}
+        label="Hasło"
+        type="password"
+        id="password"
+        autoComplete="current-password"
+        {...getFieldProps('password')}
+        error={touched.password && !!errors.password}
+        helperText={touched.password && !!errors.password && errors.password}
+      />
+      <TextField
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        label="Potwierdź hasło"
+        type="password"
+        id="passwordConfirm"
+        autoComplete="current-password"
+        {...getFieldProps('passwordConfirm')}
+        error={touched.passwordConfirm && !!errors.passwordConfirm}
+        helperText={
+          touched.passwordConfirm &&
+          !!errors.passwordConfirm &&
+          errors.passwordConfirm
+        }
       />
       <Button
         type="submit"
@@ -84,11 +102,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const validationSchema: yup.ObjectSchema<ForgotPasswordFormData> = yup
+const validationSchema: yup.ObjectSchema<ResetPasswordFormData> = yup
   .object({
-    email: yup
+    password: passwordValidationSchema,
+    passwordConfirm: yup
       .string()
-      .email('Niepoprawny adres e-mail')
-      .required('Podaj adres e-mail'),
+      .oneOf([yup.ref('password')], 'Podane hasła muszą być takie same')
+      .required('Potwierdź hasło'),
   })
   .defined();

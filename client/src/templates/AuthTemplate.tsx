@@ -26,7 +26,7 @@ export const AuthTemplate: FC<Props> = ({ title, children }) => {
           src={logoColor}
           alt="PlaymakerPro Logo"
         />
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" align="center">
           {title}
         </Typography>
         {children}
@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    textAlign: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
