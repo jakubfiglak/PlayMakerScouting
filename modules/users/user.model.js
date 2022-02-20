@@ -3,6 +3,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const autoPopulate = require('mongoose-autopopulate');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const toJson = require('@meanie/mongoose-to-json');
 const { voivodeships, userRoles } = require('../../utils/data');
@@ -107,6 +108,20 @@ UserSchema.methods.getJwt = function () {
       expiresIn: process.env.JWT_EXPIRE,
     }
   );
+};
+
+// Generate and hash password token
+UserSchema.methods.getResetPasswordToken = function () {
+  // Generate token
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  // Hash token and set to resetPasswordToken field
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+  // Set expire
+  this.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
 };
 
 // Password comparison

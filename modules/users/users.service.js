@@ -9,6 +9,10 @@ function getUserByConfirmationCode(confirmationCode) {
   return User.findOne({ confirmationCode });
 }
 
+function getUserByResetPasswordToken(resetPasswordToken) {
+  return User.findOne({ resetPasswordToken, resetPasswordExpires: { $gt: Date.now() } });
+}
+
 function createUser(reqBody) {
   return User.create(reqBody);
 }
@@ -60,6 +64,7 @@ module.exports = {
   createUser,
   getUserByEmail,
   getUserByConfirmationCode,
+  getUserByResetPasswordToken,
   getUserById,
   getAllUsers,
   getAllUsersList,

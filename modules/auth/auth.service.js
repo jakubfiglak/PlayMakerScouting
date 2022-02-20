@@ -21,6 +21,8 @@ async function updatePassword({ user, newPassword }) {
   const editedUser = user;
 
   editedUser.password = newPassword;
+  editedUser.resetPasswordToken = undefined;
+  editedUser.resetPasswordExpires = undefined;
   await editedUser.save({ validateModifiedOnly: true });
 
   const token = editedUser.getJwt();

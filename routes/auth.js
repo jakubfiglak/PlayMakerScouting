@@ -6,6 +6,8 @@ const {
   updateDetails,
   updatePassword,
   verifyUser,
+  forgotPassword,
+  resetPassword,
 } = require('../modules/auth/auth.controller');
 const { protect } = require('../middleware/auth');
 const filterForbiddenUpdates = require('../middleware/filterForbiddenUpdates');
@@ -55,6 +57,13 @@ router.put(
     checkIfPasswordsMatch({ fieldNameOne: 'newPassword', fieldNameTwo: 'newPasswordConfirm' }),
   ],
   updatePassword
+);
+
+router.post('/forgotpassword', forgotPassword);
+router.patch(
+  '/resetpassword/:resettoken',
+  checkIfPasswordsMatch({ fieldNameOne: 'password', fieldNameTwo: 'passwordConfirm' }),
+  resetPassword
 );
 
 module.exports = router;

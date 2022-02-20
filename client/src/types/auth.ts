@@ -32,6 +32,15 @@ export type RegisterFormData = {
   passwordConfirm: string;
 };
 
+export type ForgotPasswordFormData = {
+  email: string;
+};
+
+export type ResetPasswordFormData = {
+  password: string;
+  passwordConfirm: string;
+};
+
 export type EditAccountData = Pick<
   User,
   'firstName' | 'lastName' | 'activeRadius'

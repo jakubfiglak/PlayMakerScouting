@@ -26,7 +26,7 @@ export const AuthTemplate: FC<Props> = ({ title, children }) => {
           src={logoColor}
           alt="PlaymakerPro Logo"
         />
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" align="center">
           {title}
         </Typography>
         {children}

@@ -1,10 +1,12 @@
 const asyncHandler = require('express-async-handler');
 const httpStatus = require('http-status');
+const crypto = require('crypto');
 const authService = require('./auth.service');
 const options = require('./options');
 const usersService = require('../users/users.service');
 const accessControlListsService = require('../accessControlLists/accessControlLists.service');
 const emailService = require('../email/email.service');
+const ApiError = require('../../utils/ApiError');
 
 // @desc Register user
 // @route POST /api/v1/auth/register
@@ -15,7 +17,7 @@ exports.register = asyncHandler(async (req, res) => {
     user: user._id,
   });
 
-  const confirmationURL = `http://${req.headers.host}/confirm/${req.body.confirmationCode}`;
+  const confirmationURL = `${process.env.CLIENT_URL}/confirm/${req.body.confirmationCode}`;
 
   await emailService.sendConfirmationEmail({
     email: user.email,
@@ -94,6 +96,64 @@ exports.updatePassword = asyncHandler(async (req, res) => {
   const { token, expiresAt } = await authService.updatePassword({
     user: req.userData,
     newPassword: req.body.newPassword,
+  });
+
+  res.status(200).cookie('token', token, options.cookies).json({
+    success: true,
+    message: 'Password updated successfully!',
+    expiresAt,
+  });
+});
+
+// @desc Forgot password
+// @route POST /api/v1/auth/forgotpassword
+// @access Public
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+  const user = await usersService.getUserByEmail(req.body.email);
+
+  if (!user) {
+    return next(new ApiError('User does not exist!', httpStatus.NOT_FOUND));
+  }
+
+  // Get reset token
+  const resetToken = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const resetURL = `${process.env.CLIENT_URL}/resetpassword/${resetToken}`;
+
+  await emailService.sendResetPasswordEmail({
+    email: user.email,
+    username: user.firstName,
+    resetURL,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Reset password email sent!',
+    data: user,
+  });
+});
+
+// @desc Reset password
+// @route PATCH /api/v1/auth/resetpassword/:resettoken
+// @access Public
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  // Get hashed token
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.params.resettoken)
+    .digest('hex');
+
+  const user = await usersService.getUserByResetPasswordToken(resetPasswordToken);
+
+  if (!user) {
+    return next(new ApiError('Invalid token!', httpStatus.BAD_REQUEST));
+  }
+
+  const { token, expiresAt } = await authService.updatePassword({
+    user,
+    newPassword: req.body.password,
   });
 
   res.status(200).cookie('token', token, options.cookies).json({
