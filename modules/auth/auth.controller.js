@@ -120,7 +120,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${process.env.CLIENT_URL}/forgotpassword/${resetToken}`;
+  const resetURL = `${process.env.CLIENT_URL}/resetpassword/${resetToken}`;
 
   await emailService.sendResetPasswordEmail({
     email: user.email,
