@@ -84,8 +84,6 @@ export const OrdersPage = () => {
   } = useDeleteOrder();
   const { mutate: closeOrder, isLoading: closeOrderLoading } = useCloseOrder();
 
-  const isAdmin = user.role === 'admin';
-
   const handleAddOrder = (data: OrderDTO) => {
     createOrder(data);
     setActiveTab(0);
@@ -106,13 +104,7 @@ export const OrdersPage = () => {
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabChange} aria-label="orders">
           <Tab label="Zlecenia" id="orders-0" aria-controls="orders-0" />
-          {isAdmin && (
-            <Tab
-              label="Stwórz zlecenie"
-              id="orders-1"
-              aria-controls="orders-1"
-            />
-          )}
+          <Tab label="Stwórz zlecenie" id="orders-1" aria-controls="orders-1" />
         </Tabs>
       </AppBar>
       <TabPanel value={activeTab} index={0} title="orders">
@@ -142,7 +134,7 @@ export const OrdersPage = () => {
                   onCloseOrderClick={closeOrder}
                   onRejectOrderClick={rejectOrder}
                   onDeleteOrderClick={deleteOrder}
-                  areAdminOptionsEnabled={isAdmin}
+                  areAdminOptionsEnabled
                   canRejectOrder={
                     user.id !== orderData.scout?.id &&
                     orderData.status !== 'closed'
@@ -156,20 +148,18 @@ export const OrdersPage = () => {
             : null}
         </OrdersTable>
       </TabPanel>
-      {isAdmin && (
-        <TabPanel value={activeTab} index={1} title="orders-form">
-          <PageHeading title="Tworzenie nowego zlecenia" />
-          <OrdersForm
-            playersData={players || []}
-            onSubmit={handleAddOrder}
-            onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
-          />
-          <AddPlayerModal
-            onClose={() => setIsAddPlayerModalOpen(false)}
-            open={isAddPlayerModalOpen}
-          />
-        </TabPanel>
-      )}
+      <TabPanel value={activeTab} index={1} title="orders-form">
+        <PageHeading title="Tworzenie nowego zlecenia" />
+        <OrdersForm
+          playersData={players || []}
+          onSubmit={handleAddOrder}
+          onAddPlayerClick={() => setIsAddPlayerModalOpen(true)}
+        />
+        <AddPlayerModal
+          onClose={() => setIsAddPlayerModalOpen(false)}
+          open={isAddPlayerModalOpen}
+        />
+      </TabPanel>
     </>
   );
 };

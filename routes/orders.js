@@ -35,7 +35,7 @@ router.post(
   '/',
   [
     protect,
-    authorize('admin'),
+    authorize('admin', 'playmaker-scout'),
     checkIfRelatedAssetExist({ fieldName: 'player', model: Player }),
     setAuthor,
   ],
@@ -62,12 +62,12 @@ router.post(
 );
 router.post(
   '/:id/close',
-  [protect, authorize('admin'), setOrder, checkStatus(['accepted'])],
+  [protect, authorize('admin', 'playmaker-scout'), setOrder, checkStatus(['accepted'])],
   closeOrder
 );
 router.delete(
   '/:id',
-  [protect, authorize('admin'), setOrder, checkStatus(['open']), canBeDeleted],
+  [protect, authorize('admin', 'playmaker-scout'), setOrder, checkStatus(['open']), canBeDeleted],
   deleteOrder
 );
 

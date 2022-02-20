@@ -69,7 +69,7 @@ export const OrderPage = () => {
           order={orderData}
           acceptOrder={acceptOrder}
           closeOrder={closeOrder}
-          areAdminOptionsEnabled={user.role === 'admin'}
+          areAdminOptionsEnabled
         />
       )}
       <SectionHeading title="Raporty" />
