@@ -17,7 +17,7 @@ exports.register = asyncHandler(async (req, res) => {
     user: user._id,
   });
 
-  const confirmationURL = `http://${req.headers.host}/confirm/${req.body.confirmationCode}`;
+  const confirmationURL = `${process.env.CLIENT_URL}/confirm/${req.body.confirmationCode}`;
 
   await emailService.sendConfirmationEmail({
     email: user.email,
@@ -120,7 +120,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `http://${req.headers.host}/forgotpassword/${resetToken}`;
+  const resetURL = `${process.env.CLIENT_URL}/forgotpassword/${resetToken}`;
 
   await emailService.sendResetPasswordEmail({
     email: user.email,
@@ -145,11 +145,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     .update(req.params.resettoken)
     .digest('hex');
 
-  console.log(resetPasswordToken);
-
   const user = await usersService.getUserByResetPasswordToken(resetPasswordToken);
-
-  console.log(user);
 
   if (!user) {
     return next(new ApiError('Invalid token!', httpStatus.BAD_REQUEST));
