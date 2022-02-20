@@ -29,6 +29,7 @@ import { NotesPage } from '../pages/Notes/NotesPage';
 import { NotePage } from '../pages/Note/NotePage';
 import { FourOFourPage } from '../pages/404/FourOFour';
 import { MainTemplate } from '../templates/MainTemplate';
+import { ForgotPasswordPage } from '../pages/PasswordReset/ForgotPasswordPage';
 
 const regularUserProtectedRoutes = [
   '/dashboard',
@@ -60,6 +61,7 @@ export const AppRoutes = () => {
         <Route path="/data-analysis" component={DataAnalysisPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
+        <Route path="/forgotpassword" component={ForgotPasswordPage} />
         <Route path="/confirm/:confirmationCode" component={WelcomePage} />
         <ProtectedRoute
           exact
