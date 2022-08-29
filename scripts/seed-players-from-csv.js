@@ -9,22 +9,26 @@ const Player = require('../modules/players/player.model');
 dotenv.config({ path: './config/config.env' });
 
 const prodAdminId = '6047f176c5d45231a400ef89';
-const devAdminId = '5d7a514b5d2c12c7449be042';
+// const devAdminId = '5d7a514b5d2c12c7449be042';
+
+// const devDb = process.env.DB_CONNECT;
+const prodDb = process.env.PRODUCTION_DB_CONNECT;
 
 const results = [];
 
 async function seedPlayers() {
-  await connectDB(process.env.PRODUCTION_DB_CONNECT);
+  await connectDB(prodDb);
 
-  fs.createReadStream(path.resolve(__dirname, '../data', '2021-09-07-players.csv'))
+  fs.createReadStream(path.resolve(__dirname, '../data', '2022-08-24-players.csv'))
     .pipe(csv.parse({ headers: true }))
     .on('error', (error) => console.error(error))
     .on('data', (row) => results.push(row))
     .on('end', async () => {
       const players = results.map((result) => ({
-        firstName: result.firstName,
+        firstName: result.firstName || result.lastName,
         lastName: result.lastName,
         club: result.club,
+        country: result.country,
         position: result.position || 'CM',
         yearOfBirth: result.yearOfBirth,
         height: result.height,
@@ -41,7 +45,7 @@ async function seedPlayers() {
 
       const created = await Player.create(players);
       console.log(created);
-      console.log(`Created ${created.length} clubs!`.green.inverse);
+      console.log(`Created ${created.length} players!`.green.inverse);
       process.exit();
     });
 }
