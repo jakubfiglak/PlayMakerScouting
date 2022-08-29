@@ -472,18 +472,31 @@ describe('DELETE /api/v1/clubs/:id', () => {
     expect(response.data.data).toBe(player._id.toHexString());
   });
 });
-
 describe('POST /api/v1/players/merge-duplicates', () => {
   it('should correctly merge duplicate players definitions into one', async () => {
     const { token } = await insertTestUser({ role: 'admin' });
 
     // Create players
-    const player1 = buildPlayer({ lnpID: '123' });
-    const player2 = buildPlayer({ lnpID: '123', isPublic: true });
-    const player3 = buildPlayer({ lnpID: '123' });
-    const player4 = buildPlayer({ lnpID: '345' });
-    const player5 = buildPlayer({ lnpID: '345' });
-    const player6 = buildPlayer({ lnpID: '678' });
+    const player1 = buildPlayer({
+      transfermarktProfileURL: 'https://www.transfermarkt.com/kylian-mbappe/profil/spieler/342229',
+    });
+    const player2 = buildPlayer({
+      transfermarktProfileURL: 'https://www.transfermarkt.com/kylian-mbappe/profil/spieler/342229',
+      isPublic: true,
+    });
+    const player3 = buildPlayer({
+      transfermarktProfileURL: 'https://www.transfermarkt.com/kylian-mbappe/profil/spieler/342229',
+    });
+    const player4 = buildPlayer({
+      transfermarktProfileURL: 'https://www.transfermarkt.com/erling-haaland/profil/spieler/418560',
+    });
+    const player5 = buildPlayer({
+      transfermarktProfileURL: 'https://www.transfermarkt.com/erling-haaland/profil/spieler/418560',
+    });
+    const player6 = buildPlayer({
+      transfermarktProfileURL:
+        'https://www.transfermarkt.com/vinicius-junior/profil/spieler/371998',
+    });
     const player7 = buildPlayer();
     const player8 = buildPlayer();
 
@@ -503,13 +516,13 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     });
     await Promise.all([insertUsers([user1, user2]), insertAccessControlLists([acl1, acl2])]);
 
-    // Create 6 reports - 1 for each player with lnpID defined
+    // Create 6 reports - 1 for each player with transfermarktProfileURL defined
     const reports = players.map((player) => buildReport({ player: player._id }));
 
-    // Create 6 note - 1 for each player with lnpID defined
+    // Create 6 note - 1 for each player with transfermarktProfileURL defined
     const notes = players.map((player) => buildNote({ player: player._id }));
 
-    // Create 6 orders - 1 for each player with lnpID defined
+    // Create 6 orders - 1 for each player with transfermarktProfileURL defined
     const orders = players.map((player) => buildOrder({ player: player._id }));
 
     await Promise.all([insertReports(reports), insertOrders(orders), insertNotes(notes)]);
@@ -592,7 +605,7 @@ describe('POST /api/v1/players/merge-duplicates', () => {
     expect(dbReports.length).toBe(6);
 
     // Check if there is correct number of notes in the database
-    const dbNotes = await notesService.getAllNotesList();
+    const dbNotes = await notesService.getAllNotesList({ query: {}, accessFilters: {} });
     expect(dbNotes.length).toBe(6);
 
     // Check if acls has been successfully proccessed

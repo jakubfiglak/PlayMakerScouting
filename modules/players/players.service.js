@@ -74,9 +74,14 @@ async function getMultiplePlayersClubs(playerIds) {
 }
 
 async function mergePlayersDuplicates() {
-  // Get all players grouped by LNP ID
+  // Get all players grouped by Transfermarkt URL
   const results = await Player.aggregate()
-    .match({ $and: [{ lnpID: { $type: 'string' } }, { lnpID: { $ne: '' } }] })
+    .match({
+      $and: [
+        { transfermarktProfileURL: { $type: 'string' } },
+        { transfermarktProfileURL: { $ne: '' } },
+      ],
+    })
     .lookup({ from: 'reports', localField: '_id', foreignField: 'player', as: 'reports' })
     .lookup({ from: 'notes', localField: '_id', foreignField: 'player', as: 'notes' })
     .lookup({ from: 'orders', localField: '_id', foreignField: 'player', as: 'orders' })
@@ -87,7 +92,7 @@ async function mergePlayersDuplicates() {
       as: 'acls',
     })
     .group({
-      _id: '$lnpID',
+      _id: '$transfermarktProfileURL',
       ids: { $push: '$$ROOT._id' },
       entities: { $push: '$$ROOT' },
     });
