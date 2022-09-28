@@ -82,14 +82,46 @@ async function mergePlayersDuplicates() {
         { transfermarktProfileURL: { $ne: '' } },
       ],
     })
-    .lookup({ from: 'reports', localField: '_id', foreignField: 'player', as: 'reports' })
-    .lookup({ from: 'notes', localField: '_id', foreignField: 'player', as: 'notes' })
-    .lookup({ from: 'orders', localField: '_id', foreignField: 'player', as: 'orders' })
+    .lookup({
+      from: 'reports',
+      localField: '_id',
+      foreignField: 'player',
+      as: 'reports',
+      pipeline: [{ $project: { _id: 1, player: 1 } }],
+    })
+    .lookup({
+      from: 'notes',
+      localField: '_id',
+      foreignField: 'player',
+      as: 'notes',
+      pipeline: [{ $project: { _id: 1, player: 1 } }],
+    })
+    .lookup({
+      from: 'orders',
+      localField: '_id',
+      foreignField: 'player',
+      as: 'orders',
+      pipeline: [{ $project: { _id: 1, player: 1 } }],
+    })
     .lookup({
       from: 'accesscontrollists',
       let: { playerId: '$_id' },
-      pipeline: [{ $match: { $expr: { $in: ['$$playerId', '$players'] } } }],
+      pipeline: [
+        { $project: { _id: 1, players: 1 } },
+        {
+          $match: { $expr: { $in: ['$$playerId', '$players'] } },
+        },
+      ],
       as: 'acls',
+    })
+    .project({
+      _id: 1,
+      isPublic: 1,
+      transfermarktProfileURL: 1,
+      reports: 1,
+      notes: 1,
+      orders: 1,
+      acls: 1,
     })
     .group({
       _id: '$transfermarktProfileURL',

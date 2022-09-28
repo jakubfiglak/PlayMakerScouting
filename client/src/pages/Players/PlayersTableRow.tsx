@@ -98,7 +98,11 @@ export const PlayersTableRow = ({
       <StyledTableCell>{`${firstName} ${lastName}`}</StyledTableCell>
       <StyledTableCell>{`${getFlagEmoji(country)} ${country}`}</StyledTableCell>
       <StyledTableCell>
-        <TableLink to={`/clubs/${club.id}`}>{club.name}</TableLink>
+        {club ? (
+          <TableLink to={`/clubs/${club.id}`}>{club.name}</TableLink>
+        ) : (
+          '-'
+        )}
       </StyledTableCell>
       <StyledTableCell>{getLabel(position)}</StyledTableCell>
       <StyledTableCell>{yearOfBirth}</StyledTableCell>
