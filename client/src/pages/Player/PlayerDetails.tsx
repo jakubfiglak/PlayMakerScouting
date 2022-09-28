@@ -62,9 +62,13 @@ export const PlayerDetails = ({ player }: Props) => {
           <Grid item xs={12}>
             <Typography>
               <strong>Klub: </strong>
-              <Link component={RouterLink} to={`/clubs/${club.id}`}>
-                {club.name} ({getLabel(club.division)})
-              </Link>
+              {club ? (
+                <Link component={RouterLink} to={`/clubs/${club.id}`}>
+                  {club.name} ({getLabel(club.division)})
+                </Link>
+              ) : (
+                '-'
+              )}
             </Typography>
           </Grid>
           <Grid item xs={12}>
