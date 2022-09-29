@@ -51,7 +51,9 @@ export const PlayersMultipleSelect = ({
 function getPlayerLabelById(id: string, players: PlayerBasicInfo[]) {
   const player = players.find((item) => item.id === id);
   if (player) {
-    return `${player.firstName} ${player.lastName} (${player.club.name})`;
+    return `${player.firstName} ${player.lastName} ${
+      player.club ? `(${player.club.name})` : ''
+    }`;
   }
   return 'nieznany zawodnik';
 }

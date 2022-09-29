@@ -16,7 +16,7 @@ export type Player = {
   height?: number;
   weight?: number;
   footed: Foot;
-  club: {
+  club?: {
     id: string;
     name: string;
     division: Division;
