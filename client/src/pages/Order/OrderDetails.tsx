@@ -66,11 +66,17 @@ export const OrderDetails = ({
               <Link component={RouterLink} to={`/players/${player.id}`}>
                 {player.firstName} {player.lastName}
               </Link>
-              , {getLabel(player.position)} (
-              <Link component={RouterLink} to={`/clubs/${player.club.name}`}>
-                {player.club.name}
-              </Link>
-              , {player.club.division})
+              , {getLabel(player.position)}{' '}
+              {player.club ? (
+                <>
+                  <Link
+                    component={RouterLink}
+                    to={`/clubs/${player.club.name}`}
+                  >
+                    {player.club.name}, {player.club.division}
+                  </Link>
+                </>
+              ) : null}
             </Typography>
           </Grid>
           {scout && (

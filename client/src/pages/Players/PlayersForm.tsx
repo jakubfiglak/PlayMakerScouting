@@ -200,6 +200,6 @@ function getInitialStateFromCurrent(player: Player): PlayerDTO {
 
   return {
     ...rest,
-    club: club.id,
+    club: club?.id || '',
   };
 }

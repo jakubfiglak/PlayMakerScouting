@@ -52,9 +52,9 @@ export const PlayersCombo = ({
         const player = playersData.find((p) => p.id === option);
         if (player) {
           const { lastName, firstName, club, position } = player;
-          return `${firstName} ${lastName}, ${getLabel(position)} (${
-            club.name
-          })`;
+          return `${firstName} ${lastName}, ${getLabel(position)} ${
+            club ? `(${club.name})` : ''
+          }`;
         }
         return 'brak';
       }}

@@ -134,9 +134,13 @@ export const OrdersTableRow = ({
       </StyledTableCell>
       <StyledTableCell>{getLabel(player.position)}</StyledTableCell>
       <StyledTableCell>
-        <TableLink to={`/clubs/${player.club.id}`}>
-          {player.club.name}
-        </TableLink>
+        {player.club ? (
+          <TableLink to={`/clubs/${player.club.id}`}>
+            {player.club.name}
+          </TableLink>
+        ) : (
+          '-'
+        )}
       </StyledTableCell>
       <StyledTableCell>
         <OrderStatusChip status={status} />

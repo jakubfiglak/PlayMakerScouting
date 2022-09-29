@@ -300,7 +300,8 @@ const reportFormInitialValues: Omit<ReportDTO, 'skills'> = {
 };
 
 function getInitialStateFromNote(note: Note): Omit<ReportDTO, 'skills'> {
-  const isPlayerFromHomeTeam = note.player?.club.id === note.match?.homeTeam.id;
+  const isPlayerFromHomeTeam =
+    note.player?.club?.id === note.match?.homeTeam.id;
   const matchDate = note.match?.date ? new Date(note.match.date) : '';
 
   return {

@@ -52,8 +52,8 @@ export function getPlayersMatches({
   if (selectedPlayer) {
     return matches.filter(
       (match) =>
-        match.homeTeam.id === selectedPlayer.club.id ||
-        match.awayTeam.id === selectedPlayer.club.id,
+        match.homeTeam.id === selectedPlayer.club?.id ||
+        match.awayTeam.id === selectedPlayer.club?.id,
     );
   }
 
@@ -76,8 +76,8 @@ export function getMatchesPlayers({
   if (selectedMatch) {
     return players.filter(
       (player) =>
-        player.club.id === selectedMatch.homeTeam.id ||
-        player.club.id === selectedMatch.awayTeam.id,
+        player.club?.id === selectedMatch.homeTeam.id ||
+        player.club?.id === selectedMatch.awayTeam.id,
     );
   }
 
